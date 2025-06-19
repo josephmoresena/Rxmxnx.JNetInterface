@@ -1,7 +1,9 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 
 namespace Rxmxnx.JNetInterface.SourceGenerator;
 
@@ -26,14 +28,14 @@ partial struct {1}
 	/// <param name="context">Generation context.</param>
 	/// <param name="valueName">Internal absolute value field name.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static void GeneratePrimitiveToString(this ISymbol primitiveSymbol, GeneratorExecutionContext context,
+	public static void GeneratePrimitiveToString(this ISymbol primitiveSymbol, SourceProductionContext context,
 		String valueName)
 	{
 		String fileName = $"{primitiveSymbol.Name}.ToString.g.cs";
 		String source = String.Format(GenerationExtensions.PrimitiveToStringFormat, primitiveSymbol.ContainingNamespace,
 		                              primitiveSymbol.Name, valueName);
 #pragma warning disable RS1035
-		context.AddSource(fileName, source);
+		context.AddSource(fileName, SourceText.From(source, Encoding.UTF8));
 #pragma warning restore RS1035
 	}
 }

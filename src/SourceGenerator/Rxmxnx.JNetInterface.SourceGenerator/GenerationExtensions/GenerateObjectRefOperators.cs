@@ -1,7 +1,9 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 
 namespace Rxmxnx.JNetInterface.SourceGenerator;
 
@@ -67,7 +69,7 @@ partial struct {1} : IEqualityOperators<{1}, JObjectLocalRef, Boolean>
 	/// <param name="objRefSymbol">A type symbol of object reference structure.</param>
 	/// <param name="context">Generation context.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static void GenerateObjectRefOperators(this ISymbol objRefSymbol, GeneratorExecutionContext context)
+	public static void GenerateObjectRefOperators(this ISymbol objRefSymbol, SourceProductionContext context)
 	{
 		String fileName = $"{objRefSymbol.Name}.ObjRef.g.cs";
 		String equalFunction = objRefSymbol.Name.Contains("ArrayLocalRef") ?
@@ -79,7 +81,7 @@ partial struct {1} : IEqualityOperators<{1}, JObjectLocalRef, Boolean>
 		String source = String.Format(GenerationExtensions.ObjectRefFormat, objRefSymbol.ContainingNamespace,
 		                              objRefSymbol.Name, overrides);
 #pragma warning disable RS1035
-		context.AddSource(fileName, source);
+		context.AddSource(fileName, SourceText.From(source, Encoding.UTF8));
 #pragma warning restore RS1035
 	}
 }

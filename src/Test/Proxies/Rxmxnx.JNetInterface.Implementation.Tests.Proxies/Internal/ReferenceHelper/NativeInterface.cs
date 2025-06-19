@@ -556,15 +556,15 @@ internal unsafe partial class ReferenceHelper
 		=> ReferenceHelper.GetProxy(envRef)
 		                  .CallLongMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	[UnmanagedCallersOnly]
-	private static JFloat CallFloatMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
+	private static Single CallFloatMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
 		JValueWrapper* args)
 		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallFloatMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                  .CallFloatMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args).Value;
 	[UnmanagedCallersOnly]
-	private static JDouble CallDoubleMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
+	private static Double CallDoubleMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
 		JValueWrapper* args)
 		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallDoubleMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                  .CallDoubleMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args).Value;
 	[UnmanagedCallersOnly]
 	private static void CallVoidMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
 		JValueWrapper* args)
@@ -613,17 +613,17 @@ internal unsafe partial class ReferenceHelper
 		                  .CallNonVirtualLongMethod(localRef, classRef, methodId,
 		                                            (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	[UnmanagedCallersOnly]
-	private static JFloat CallNonVirtualFloatMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
+	private static Single CallNonVirtualFloatMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
 		=> ReferenceHelper.GetProxy(envRef)
 		                  .CallNonVirtualFloatMethod(localRef, classRef, methodId,
-		                                             (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                                             (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args).Value;
 	[UnmanagedCallersOnly]
-	private static JDouble CallNonVirtualDoubleMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
+	private static Double CallNonVirtualDoubleMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
 		=> ReferenceHelper.GetProxy(envRef)
 		                  .CallNonVirtualDoubleMethod(localRef, classRef, methodId,
-		                                              (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                                              (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args).Value;
 	[UnmanagedCallersOnly]
 	private static void CallNonVirtualVoidMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
@@ -735,15 +735,16 @@ internal unsafe partial class ReferenceHelper
 		=> ReferenceHelper.GetProxy(envRef)
 		                  .CallStaticLongMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	[UnmanagedCallersOnly]
-	private static JFloat CallStaticFloatMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
+	private static Single CallStaticFloatMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
 		JValueWrapper* args)
 		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallStaticFloatMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                  .CallStaticFloatMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args).Value;
 	[UnmanagedCallersOnly]
-	private static JDouble CallStaticDoubleMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
+	private static Double CallStaticDoubleMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
 		JValueWrapper* args)
 		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallStaticDoubleMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                  .CallStaticDoubleMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args)
+		                  .Value;
 	[UnmanagedCallersOnly]
 	private static void CallStaticVoidMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
 		JValueWrapper* args)

@@ -1,7 +1,9 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 
 namespace Rxmxnx.JNetInterface.SourceGenerator;
 
@@ -58,13 +60,13 @@ partial struct {1} : IWrapper<JArrayLocalRef>, IEqualityOperators<{1}, JArrayLoc
 	/// <param name="arrayRefSymbol">A type symbol of array reference structure.</param>
 	/// <param name="context">Generation context.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static void GenerateArrayRefOperators(this ISymbol arrayRefSymbol, GeneratorExecutionContext context)
+	public static void GenerateArrayRefOperators(this ISymbol arrayRefSymbol, SourceProductionContext context)
 	{
 		String fileName = $"{arrayRefSymbol.Name}.ArrayRef.g.cs";
 		String source = String.Format(GenerationExtensions.ArrayRefFormat, arrayRefSymbol.ContainingNamespace,
 		                              arrayRefSymbol.Name);
 #pragma warning disable RS1035
-		context.AddSource(fileName, source);
+		context.AddSource(fileName, SourceText.From(source, Encoding.UTF8));
 #pragma warning restore RS1035
 	}
 }

@@ -1,7 +1,9 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 
 namespace Rxmxnx.JNetInterface.SourceGenerator;
 
@@ -244,13 +246,13 @@ partial struct {1} : IFloatingPointIeee754<{1}>
 	/// <param name="underlineType">Primitive underline type.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void GenerateNumericPrimitiveFloatingPointOperators(this ISymbol numericSymbol,
-		GeneratorExecutionContext context, String underlineType)
+		SourceProductionContext context, String underlineType)
 	{
 		String fileName = $"{numericSymbol.Name}.FloatingPoint.g.cs";
 		String source = String.Format(GenerationExtensions.NumericFloatingPointOperatorsFormat,
 		                              numericSymbol.ContainingNamespace, numericSymbol.Name, underlineType);
 #pragma warning disable RS1035
-		context.AddSource(fileName, source);
+		context.AddSource(fileName, SourceText.From(source, Encoding.UTF8));
 #pragma warning restore RS1035
 	}
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
@@ -51,7 +52,7 @@ internal sealed record NativeTypeHelper
 	/// </summary>
 	/// <param name="typeSymbol">Native type symbol.</param>
 	/// <param name="interfaces">Native type symbol interfaces.</param>
-	private NativeTypeHelper(ISymbol typeSymbol, IImmutableSet<String> interfaces)
+	public NativeTypeHelper(ISymbol typeSymbol, IImmutableSet<String> interfaces)
 	{
 		this._typeSymbol = typeSymbol;
 		this._isPointer = interfaces.Contains("Rxmxnx.PInvoke.IFixedPointer");
@@ -68,7 +69,7 @@ internal sealed record NativeTypeHelper
 	/// Appends the source code for the current symbol.
 	/// </summary>
 	/// <param name="context">Generation context.</param>
-	public void AddSourceCode(GeneratorExecutionContext context)
+	public void AddSourceCode(SourceProductionContext context)
 	{
 		String valueName = this.GetInternalValueName();
 		if (!this._isPrimitive)
@@ -136,18 +137,4 @@ internal sealed record NativeTypeHelper
 			"JMethodId" => "Pointer",
 			_ => "_value",
 		};
-
-	/// <summary>
-	/// Creates a new helper if <paramref name="typeSymbol"/> is a native type.
-	/// </summary>
-	/// <param name="typeSymbol">Type symbol.</param>
-	/// <param name="interfaces">Type symbol interfaces.</param>
-	/// <returns>Created helper instance.</returns>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static NativeTypeHelper? Create(INamedTypeSymbol typeSymbol, IImmutableSet<String> interfaces)
-	{
-		if (typeSymbol.TypeKind == TypeKind.Struct && interfaces.Contains("Rxmxnx.JNetInterface.Types.INativeType"))
-			return new(typeSymbol, interfaces);
-		return default;
-	}
 }

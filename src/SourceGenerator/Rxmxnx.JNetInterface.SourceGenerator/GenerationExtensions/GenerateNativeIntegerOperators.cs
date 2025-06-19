@@ -1,7 +1,9 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 
 namespace Rxmxnx.JNetInterface.SourceGenerator;
 
@@ -79,7 +81,7 @@ partial struct {1} : IBinaryInteger<{1}>, {4}<{1}>
 	/// <param name="underlineType">Primitive underline type.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void GenerateNumericPrimitiveIntegerOperators(this ISymbol numericSymbol,
-		GeneratorExecutionContext context, String underlineType)
+		SourceProductionContext context, String underlineType)
 	{
 		String fileName = $"{numericSymbol.Name}.Integer.g.cs";
 		String signedUnsafe = numericSymbol.Name is "JChar" ? "IUnsignedNumber" : "ISignedNumber";
@@ -90,7 +92,7 @@ partial struct {1} : IBinaryInteger<{1}>, {4}<{1}>
 		                              numericSymbol.ContainingNamespace, numericSymbol.Name, underlineType, formattable,
 		                              signedUnsafe);
 #pragma warning disable RS1035
-		context.AddSource(fileName, source);
+		context.AddSource(fileName, SourceText.From(source, Encoding.UTF8));
 #pragma warning restore RS1035
 	}
 }

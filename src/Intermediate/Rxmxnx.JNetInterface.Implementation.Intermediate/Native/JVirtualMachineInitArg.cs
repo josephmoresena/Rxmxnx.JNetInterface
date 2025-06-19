@@ -44,7 +44,7 @@ public sealed class JVirtualMachineInitArg
 	public JVirtualMachineInitArg(Int32 version)
 	{
 		this._version = version;
-		this.Options = CStringSequence.Create(ReadOnlySpan<Char>.Empty); // No allocation.
+		this.Options = CStringSequence.Empty;
 	}
 
 	/// <summary>
@@ -90,23 +90,16 @@ public sealed class JVirtualMachineInitArg
 	/// <returns>A <see cref="CStringSequence"/> instance.</returns>
 	private static unsafe CStringSequence GetOptions(VirtualMachineInitArgumentValue value)
 	{
-		if (value.OptionsLength == 0) return CStringSequence.Create(ReadOnlySpan<Char>.Empty);
+		if (value.OptionsLength == 0) return CStringSequence.Empty;
 		ReadOnlySpan<VirtualMachineInitOptionValue> optionsValue = new(value.Options, value.OptionsLength);
-		CString[] options = new CString[optionsValue.Length];
-		for (Int32 i = 0; i < optionsValue.Length; i++)
-			options[i] = JVirtualMachineInitArg.GetUnsafeCString(optionsValue[i].OptionString);
-		return new(options);
-	}
-	/// <summary>
-	/// Retrieves an unsafe <see cref="CString"/> from given pointer.
-	/// </summary>
-	/// <param name="ptr">A UTF-8 string pointer.</param>
-	/// <returns>A <see cref="CString"/> instance.</returns>
-	private static CString GetUnsafeCString(ReadOnlyValPtr<Byte> ptr)
-	{
-		Int32 length = 0;
-		while ((ptr + length).Reference != default)
-			length++;
-		return CString.CreateUnsafe(ptr, length, true);
+		Span<ReadOnlyValPtr<Byte>> options = stackalloc ReadOnlyValPtr<Byte>[optionsValue.Length];
+		Int32 index = 0;
+		foreach (VirtualMachineInitOptionValue option in optionsValue)
+		{
+			if (option.OptionString.IsZero || option.OptionString.Reference == (Byte)'\0') continue;
+			options[index] = option.OptionString;
+			index++;
+		}
+		return CStringSequence.GetUnsafe(options[..index]);
 	}
 }

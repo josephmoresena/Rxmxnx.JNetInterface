@@ -79,11 +79,11 @@ internal unsafe struct InternalNativeInterface
 #pragma warning disable CS0169
 	private readonly MethodOffset _callFloatMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, JValueWrapper*, JFloat> CallFloatMethod;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, JValueWrapper*, Single> CallFloatMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callDoubleMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, JValueWrapper*, JDouble> CallDoubleMethod;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, JValueWrapper*, Double> CallDoubleMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callVoidMethodOffset;
 #pragma warning restore CS0169
@@ -126,12 +126,12 @@ internal unsafe struct InternalNativeInterface
 #pragma warning disable CS0169
 	private readonly MethodOffset _callNonVirtualFloatMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, JValueWrapper*, JFloat >
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, JValueWrapper*, Single>
 		CallNonVirtualFloatMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callNonVirtualDoubleMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, JValueWrapper*, JDouble>
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, JValueWrapper*, Double>
 		CallNonVirtualDoubleMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callNonVirtualVoidMethodOffset;
@@ -194,12 +194,12 @@ internal unsafe struct InternalNativeInterface
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticFloatMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JMethodId, JValueWrapper*, JFloat>
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JMethodId, JValueWrapper*, Single>
 		CallStaticFloatMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticDoubleMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JMethodId, JValueWrapper*, JDouble>
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JMethodId, JValueWrapper*, Double>
 		CallStaticDoubleMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticVoidMethodOffset;

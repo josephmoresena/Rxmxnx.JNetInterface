@@ -48,11 +48,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1"/>
         <PackageReference Include="xunit" Version="2.9.3"/>
+        <PackageReference Include="Xunit.SkippableFact" Version="1.5.23"/>
         <PackageReference Include="AutoFixture" Version="4.18.1"/>
         <PackageReference Include="NSubstitute" Version="5.3.0"/>
-        <PackageReference Include="xunit.runner.visualstudio" Version="3.1.0">
+        <PackageReference Include="xunit.runner.visualstudio" Version="3.1.1">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
@@ -65,5 +66,47 @@
     <ItemGroup>
         <ProjectReference Include="..\Proxies\Rxmxnx.JNetInterface.Implementation.Tests.Proxies\Rxmxnx.JNetInterface.Implementation.Tests.Proxies.csproj"/>
     </ItemGroup>
+
+    <!-- Ensure proxy libraries are built before tests -->
+    <Target Name="EnsureProxyLibrariesBuilt" BeforeTargets="Build">
+
+        <PropertyGroup>
+            <NativeProxiesSourceBasePath>..\Proxies\Native\</NativeProxiesSourceBasePath>
+            <NativeProxyOutputPath>$(MSBuildProjectDirectory)\$(OutputPath)</NativeProxyOutputPath>
+            <NativeProxyIntermediateOutputPath>$(MSBuildProjectDirectory)\$(BaseIntermediateOutputPath)</NativeProxyIntermediateOutputPath>
+            <!-- Common properties for all builds -->
+            <CommonBuildProperties>PublishDir=$(NativeProxyOutputPath);TargetFramework=net8.0;PublishAot=true</CommonBuildProperties>
+            <!-- Set RuntimeIdentifier based on current platform -->
+            <RidPrefix Condition="$([MSBuild]::IsOSPlatform('Windows'))">win</RidPrefix>
+            <RidPrefix Condition="$([MSBuild]::IsOSPlatform('OSX'))">osx</RidPrefix>
+            <RidPrefix Condition="$([MSBuild]::IsOSPlatform('Linux'))">linux</RidPrefix>
+            <RidSuffix>$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString().ToLowerInvariant())</RidSuffix>
+            <ProxyRid>$(RidPrefix)-$(RidSuffix)</ProxyRid>
+        </PropertyGroup>
+
+        <ItemGroup>
+            <NativeProxiesAssemblyNames Include="JvmProxy"/>
+            <NativeProxiesAssemblyNames Include="JvmProxy.NoCreate"/>
+            <NativeProxiesAssemblyNames Include="JvmProxy.NoVMs"/>
+            <NativeProxiesAssemblyNames Include="JvmProxy.NoCreateAndNoVMs"/>
+        </ItemGroup>
+
+        <ItemGroup>
+            <!-- Identify intermediate C# projects based on their assembly names -->
+            <NativeProxiesProjects Include="@(NativeProxiesAssemblyNames)">
+                <ProjectPath>$(NativeProxiesSourceBasePath)\%(Identity)\%(Identity).csproj</ProjectPath>
+            </NativeProxiesProjects>
+        </ItemGroup>
+
+        <!-- Build Native Proxies -->
+        <MSBuild Condition="'$(RidPrefix)' != '' And ('$(RidSuffix)' == 'x64' Or '$(RidSuffix)' == 'arm64')"
+                 Projects="@(NativeProxiesProjects->'%(ProjectPath)')"
+                 Targets="Restore"
+                 Properties="$(CommonBuildProperties);RuntimeIdentifier=$(ProxyRid)"/>
+        <MSBuild Condition="'$(RidPrefix)' != '' And ('$(RidSuffix)' == 'x64' Or '$(RidSuffix)' == 'arm64')"
+                 Projects="@(NativeProxiesProjects->'%(ProjectPath)')"
+                 Targets="Publish"
+                 Properties="$(CommonBuildProperties);RuntimeIdentifier=$(ProxyRid)"/>
+    </Target>
 
 </Project>
