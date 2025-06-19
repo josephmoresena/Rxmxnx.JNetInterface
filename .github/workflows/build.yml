@@ -205,8 +205,10 @@ jobs:
           
       - name: Build tests
         run: |
-          dotnet restore src 
-          dotnet build src --configuration Release 
+          dotnet build-server shutdown
+          dotnet restore src
+          dotnet restore src/Test/Proxies/Native/JvmProxy.NativeProxy.sln
+          dotnet build src --no-restore --configuration release --disable-build-servers /nr:false /maxcpucount:1
       - name: Windows x86 tests
         if: runner.os == 'Windows'
         run: |
