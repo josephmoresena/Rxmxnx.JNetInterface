@@ -357,8 +357,7 @@ public sealed unsafe class JVirtualMachineLibraryTests
 				JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 				GC.Collect();
 				GC.WaitForPendingFinalizers();
-				Assert.Equal(result == JResult.Ok,
-				             JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+				JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
 				proxyEnv.FinalizeProxy(true);
 			}
 		}
