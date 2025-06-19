@@ -46,8 +46,10 @@ If you only need the core functionality without linking to a JVM, install:
 dotnet add package Rxmxnx.JNetInterface.Core
 ```
 
-**Supported Frameworks:**  
-This package supports **.NET 8 and higher**. Ensure your project targets a compatible framework.
+### Framework Support
+
+This package supports **.NET 8 and later**. Ensure your project targets a compatible framework.
+
 ---  
 
 ## Overview
