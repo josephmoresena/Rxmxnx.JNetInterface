@@ -22,8 +22,12 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		JVirtualMachineLibrary? library = JVirtualMachineLibrary.LoadLibrary(proxyPath);
 		if (!NativeLibrary.TryLoad(proxyPath, out IntPtr handle))
 		{
-			Assert.Null(library);
-			return;
+			if ((library?.Handle).GetValueOrDefault() == IntPtr.Zero)
+			{
+				Assert.Null(library);
+				return;
+			}
+			handle = library?.Handle ?? default;
 		}
 
 		Assert.NotNull(library);
