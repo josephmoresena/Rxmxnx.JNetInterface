@@ -15,19 +15,16 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		OperatingSystem.IsMacOS() ? ".dylib" : ".so";
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 
-	[Fact]
+	[SkippableFact]
 	internal void SuccessTest()
 	{
 		String proxyPath = JVirtualMachineLibraryTests.GetProxyPath(JvmProxyType.Complete);
 		JVirtualMachineLibrary? library = JVirtualMachineLibrary.LoadLibrary(proxyPath);
 		if (!NativeLibrary.TryLoad(proxyPath, out IntPtr handle))
 		{
-			if ((library?.Handle).GetValueOrDefault() == IntPtr.Zero)
-			{
-				Assert.Null(library);
-				return;
-			}
-			handle = library?.Handle ?? default;
+			Skip.If((library?.Handle).GetValueOrDefault() != IntPtr.Zero, "Invalid native library loading.");
+			Assert.Null(library);
+			return;
 		}
 
 		Assert.NotNull(library);
@@ -56,7 +53,7 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		Assert.Null(library);
 	}
 
-	[Theory]
+	[SkippableTheory]
 	[InlineData(0x00010001)]
 	[InlineData(0x00010002)]
 	[InlineData(0x00010003)]
@@ -75,7 +72,7 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		JVirtualMachineLibrary? library =
 			JVirtualMachineLibrary.LoadLibrary(JVirtualMachineLibraryTests.GetProxyPath(JvmProxyType.Complete));
 
-		if (library is null) return;
+		Skip.If(library is null, "JVM library not loaded.");
 
 		delegate* unmanaged<FuncPtr<GetDefaultVirtualMachineInitArgsDelegate>, FuncPtr<CreateVirtualMachineDelegate>,
 			FuncPtr<GetCreatedJavaVMsDelegate>, void> arrangeInvocation =
@@ -133,7 +130,7 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		}
 	}
 
-	[Theory]
+	[SkippableTheory]
 	[InlineData(JResult.Ok)]
 	[InlineData(JResult.Error)]
 	[InlineData(JResult.InvalidArgumentsError)]
@@ -144,7 +141,7 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		JVirtualMachineLibrary? library =
 			JVirtualMachineLibrary.LoadLibrary(JVirtualMachineLibraryTests.GetProxyPath(JvmProxyType.Complete));
 
-		if (library is null) return;
+		Skip.If(library is null, "JVM library not loaded.");
 
 		delegate* unmanaged<FuncPtr<GetDefaultVirtualMachineInitArgsDelegate>, FuncPtr<CreateVirtualMachineDelegate>,
 			FuncPtr<GetCreatedJavaVMsDelegate>, void> arrangeInvocation =
@@ -208,7 +205,7 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		}
 	}
 
-	[Theory]
+	[SkippableTheory]
 	[InlineData(0x00010001)]
 	[InlineData(0x00010002)]
 	[InlineData(0x00010003)]
@@ -253,7 +250,7 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		JVirtualMachineLibrary? library =
 			JVirtualMachineLibrary.LoadLibrary(JVirtualMachineLibraryTests.GetProxyPath(JvmProxyType.Complete));
 
-		if (library is null) return;
+		Skip.If(library is null, "JVM library not loaded.");
 
 		delegate* unmanaged<FuncPtr<GetDefaultVirtualMachineInitArgsDelegate>, FuncPtr<CreateVirtualMachineDelegate>,
 			FuncPtr<GetCreatedJavaVMsDelegate>, void> arrangeInvocation =
@@ -326,7 +323,7 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		JVirtualMachineLibrary? library =
 			JVirtualMachineLibrary.LoadLibrary(JVirtualMachineLibraryTests.GetProxyPath(JvmProxyType.Complete));
 
-		if (library is null) return;
+		Skip.If(library is null, "JVM library not loaded.");
 
 		delegate* unmanaged<FuncPtr<GetDefaultVirtualMachineInitArgsDelegate>, FuncPtr<CreateVirtualMachineDelegate>,
 			FuncPtr<GetCreatedJavaVMsDelegate>, void> arrangeInvocation =
