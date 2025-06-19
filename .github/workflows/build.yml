@@ -198,7 +198,7 @@ jobs:
       - name: Pack main assembly
         working-directory: ./package/Rxmxnx.JNetInterface
         run: |
-          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp /p:NoIntermediateBuild=true
+          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp 
 
       - name: Create nuget.config for tests
         working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LibraryTest
