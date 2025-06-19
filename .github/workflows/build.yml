@@ -194,7 +194,7 @@ jobs:
       - name: Create core assembly
         working-directory: ./package/Rxmxnx.JNetInterface.Core
         run: |
-          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp /p:NoIntermediateBuild=true
+          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp 
       - name: Pack main assembly
         working-directory: ./package/Rxmxnx.JNetInterface
         run: |
