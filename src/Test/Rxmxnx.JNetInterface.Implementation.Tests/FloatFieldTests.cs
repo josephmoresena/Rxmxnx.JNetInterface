@@ -8,7 +8,8 @@ public sealed class FloatFieldTests
 	[SkippableFact]
 	internal void InstanceTest()
 	{
-		Skip.If(OperatingSystem.IsWindows(), "Error handling floating-point numbers due to calling convention on Windows.");
+		Skip.If(OperatingSystem.IsWindows(),
+		        "Error handling floating-point numbers due to calling convention on Windows.");
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		try
 		{
@@ -30,7 +31,8 @@ public sealed class FloatFieldTests
 	[SkippableFact]
 	internal void ExtensionTest()
 	{
-		Skip.If(OperatingSystem.IsWindows(), "Error handling floating-point numbers due to calling convention on Windows.");
+		Skip.If(OperatingSystem.IsWindows(),
+		        "Error handling floating-point numbers due to calling convention on Windows.");
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		try
 		{
@@ -53,7 +55,8 @@ public sealed class FloatFieldTests
 	[SkippableFact]
 	internal void StaticTest()
 	{
-		Skip.If(OperatingSystem.IsWindows(), "Error handling floating-point numbers due to calling convention on Windows.");
+		Skip.If(OperatingSystem.IsWindows(),
+		        "Error handling floating-point numbers due to calling convention on Windows.");
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		try
 		{

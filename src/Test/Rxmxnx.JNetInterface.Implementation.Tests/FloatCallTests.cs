@@ -5,7 +5,7 @@ public sealed class FloatCallTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 
-	[SkippableFact]
+	[SkippableTheory]
 	[InlineData(CallType.Parameterless)]
 	[InlineData(CallType.SingleObject)]
 	[InlineData(CallType.SingleValue)]
@@ -15,7 +15,8 @@ public sealed class FloatCallTests
 	[InlineData(CallType.MultipleValues)]
 	internal void InstanceTest(CallType callType)
 	{
-		Skip.If(OperatingSystem.IsWindows(), "Error handling floating-point numbers due to calling convention on Windows.");
+		Skip.If(OperatingSystem.IsWindows(),
+		        "Error handling floating-point numbers due to calling convention on Windows.");
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		try
 		{
@@ -34,7 +35,7 @@ public sealed class FloatCallTests
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
-	[SkippableFact]
+	[SkippableTheory]
 	[InlineData(CallType.Parameterless)]
 	[InlineData(CallType.SingleObject)]
 	[InlineData(CallType.SingleValue)]
@@ -44,7 +45,8 @@ public sealed class FloatCallTests
 	[InlineData(CallType.MultipleValues)]
 	internal void NonVirtualTest(CallType callType)
 	{
-		Skip.If(OperatingSystem.IsWindows(), "Error handling floating-point numbers due to calling convention on Windows.");
+		Skip.If(OperatingSystem.IsWindows(),
+		        "Error handling floating-point numbers due to calling convention on Windows.");
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		try
 		{
@@ -64,7 +66,7 @@ public sealed class FloatCallTests
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
-	[SkippableFact]
+	[SkippableTheory]
 	[InlineData(CallType.Parameterless)]
 	[InlineData(CallType.SingleObject)]
 	[InlineData(CallType.SingleValue)]
@@ -74,7 +76,8 @@ public sealed class FloatCallTests
 	[InlineData(CallType.MultipleValues)]
 	internal void StaticTest(CallType callType)
 	{
-		Skip.If(OperatingSystem.IsWindows(), "Error handling floating-point numbers due to calling convention on Windows.");
+		Skip.If(OperatingSystem.IsWindows(),
+		        "Error handling floating-point numbers due to calling convention on Windows.");
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		try
 		{

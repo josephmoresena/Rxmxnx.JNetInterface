@@ -15,7 +15,8 @@ public sealed class DoubleCallTests
 	[InlineData(CallType.MultipleValues)]
 	internal void InstanceTest(CallType callType)
 	{
-		Skip.If(OperatingSystem.IsWindows(), "Error handling floating-point numbers due to calling convention on Windows.");
+		Skip.If(OperatingSystem.IsWindows(),
+		        "Error handling floating-point numbers due to calling convention on Windows.");
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		try
 		{
@@ -44,7 +45,8 @@ public sealed class DoubleCallTests
 	[InlineData(CallType.MultipleValues)]
 	internal void NonVirtualTest(CallType callType)
 	{
-		Skip.If(OperatingSystem.IsWindows(), "Error handling floating-point numbers due to calling convention on Windows.");
+		Skip.If(OperatingSystem.IsWindows(),
+		        "Error handling floating-point numbers due to calling convention on Windows.");
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		try
 		{
@@ -74,7 +76,8 @@ public sealed class DoubleCallTests
 	[InlineData(CallType.MultipleValues)]
 	internal void StaticTest(CallType callType)
 	{
-		Skip.If(OperatingSystem.IsWindows(), "Error handling floating-point numbers due to calling convention on Windows.");
+		Skip.If(OperatingSystem.IsWindows(),
+		        "Error handling floating-point numbers due to calling convention on Windows.");
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		try
 		{
