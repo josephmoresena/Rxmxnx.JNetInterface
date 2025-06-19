@@ -44,7 +44,7 @@ public sealed class JVirtualMachineInitArg
 	public JVirtualMachineInitArg(Int32 version)
 	{
 		this._version = version;
-		this.Options = CStringSequence.Create(ReadOnlySpan<Char>.Empty); // No allocation.
+		this.Options = CStringSequence.Empty;
 	}
 
 	/// <summary>

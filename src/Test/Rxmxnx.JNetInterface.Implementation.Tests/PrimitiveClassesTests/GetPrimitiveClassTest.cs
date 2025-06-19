@@ -45,8 +45,7 @@ public partial class PrimitiveClassesTests
 			Dictionary<JClassLocalRef, JStringLocalRef> primitiveClassNameRefs =
 				PrimitiveClassesTests.GetPrimitiveClassNameRefs(proxyEnv);
 			CStringSequence primitivesClassNames =
-				CStringSequence.Create("void\0boolean\0byte\0char\0double\0float\0int\0long\0short\0\0"u8
-					                       .AsValues<Byte, Char>());
+				CStringSequence.Create("void\0boolean\0byte\0char\0double\0float\0int\0long\0short\0\0"u8);
 			using IFixedPointer.IDisposable fixedClassNames = primitivesClassNames.GetFixedPointer();
 			Dictionary<JStringLocalRef, CString> primitiveClassNames = new()
 			{
