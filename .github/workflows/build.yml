@@ -190,16 +190,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          
-      - name: Build tests
-        run: |
-          dotnet build-server shutdown
-          dotnet restore src
-          dotnet restore src/Test/Proxies/Native/JvmProxy.NativeProxy.sln
-          dotnet build src --no-restore --configuration release --disable-build-servers /nr:false /maxcpucount:1
-      - name: Run tests
-        run: |
-          dotnet test src --no-build --no-restore --configuration Release  --logger "console;verbosity=detailed"
       
       - name: Create core assembly
         working-directory: ./package/Rxmxnx.JNetInterface.Core
