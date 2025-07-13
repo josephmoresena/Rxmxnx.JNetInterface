@@ -17,8 +17,7 @@ public partial class TestCompiler
 				args.Add("-r");
 				args.Add(restoreArgs.RuntimeIdentifier);
 			}
-			args.Add($"/p:USE_NET80={restoreArgs.Version is NetVersion.Net80}");
-			args.Add($"/p:USE_NET90={restoreArgs.Version is NetVersion.Net90}");
+			args.Add($"/p:TargetFramework={restoreArgs.Version.GetTargetFramework()}");
 		}
 		public static void AppendList(RestoreNetArgs restoreArgs, Collection<String> args)
 		{
@@ -31,8 +30,7 @@ public partial class TestCompiler
 		{
 			args.Add("test");
 			args.Add(restoreArgs.ProjectFile);
-			args.Add($"/p:USE_NET80={restoreArgs.Version is NetVersion.Net80}");
-			args.Add($"/p:USE_NET90={restoreArgs.Version is NetVersion.Net90}");
+			args.Add($"/p:TargetFramework={restoreArgs.Version.GetTargetFramework()}");
 			args.Add("--logger");
 			args.Add("\"console;verbosity=detailed\"");
 		}

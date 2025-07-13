@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
         <OutputType>Exe</OutputType>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
@@ -24,7 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="2.5.1" />
+        <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="2.5.2"/>
     </ItemGroup>
 
 </Project>

@@ -1,3 +1,5 @@
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
+
 namespace Rxmxnx.JNetInterface.Tests;
 
 /// <summary>

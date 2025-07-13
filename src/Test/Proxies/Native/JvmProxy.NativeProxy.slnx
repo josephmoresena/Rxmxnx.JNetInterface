@@ -1,0 +1,10 @@
+﻿<Solution>
+  <Folder Name="/Targets/">
+    <File Path="NativeProxies.targets" />
+    <File Path="..\CommonNativeProxies.targets" />
+  </Folder>
+  <Project Path="JvmProxy.NoCreateAndNoVMs\JvmProxy.NoCreateAndNoVMs.csproj" Type="Classic C#" />
+  <Project Path="JvmProxy.NoCreate\JvmProxy.NoCreate.csproj" Type="Classic C#" />
+  <Project Path="JvmProxy.NoVMs\JvmProxy.NoVMs.csproj" Type="Classic C#" />
+  <Project Path="JvmProxy\JvmProxy.csproj" Type="Classic C#" />
+</Solution>

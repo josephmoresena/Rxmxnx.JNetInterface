@@ -1,17 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <RootNamespace>Rxmxnx.JNetInterface.Tests</RootNamespace>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <IsPackable>false</IsPackable>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage"/>
-    </ItemGroup>
+    <Import Project="..\Tests.targets"/>
 
     <ItemGroup>
         <Using Include="System.Collections"/>
@@ -47,19 +36,6 @@
         <Using Include="Rxmxnx.JNetInterface.Tests.Restricted"/>
         <Using Include="Rxmxnx.JNetInterface.Types"/>
         <Using Include="Rxmxnx.JNetInterface.Types.Metadata"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-        <PackageReference Include="xunit" Version="2.9.3"/>
-        <PackageReference Include="xunit.runner.visualstudio" Version="3.1.1">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="coverlet.collector" Version="6.0.4">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>

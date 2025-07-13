@@ -1,19 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <RootNamespace>Rxmxnx.JNetInterface</RootNamespace>
-        <Deterministic>true</Deterministic>
-        <IsTrimmable>true</IsTrimmable>
-        <IsAotCompatible>true</IsAotCompatible>
-        <DocumentationFile>./$(AssemblyName).xml</DocumentationFile>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <ExcludeXmlAssemblyFiles>false</ExcludeXmlAssemblyFiles>
-        <LangVersion>latest</LangVersion>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    </PropertyGroup>
+    <Import Project="..\Intermediate.Library.targets"/>
 
     <ItemGroup>
         <Using Include="System.Collections.Immutable"/>
@@ -36,15 +23,6 @@
         <Using Include="Rxmxnx.JNetInterface.Native.Values"/>
         <Using Include="Rxmxnx.JNetInterface.Types"/>
         <Using Include="Rxmxnx.JNetInterface.Types.Metadata"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="2.5.2" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Condition="'$(UseSourceGeneratorAssembly)' != 'true'" Include="..\..\SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netstandard2.0"/>
-        <Analyzer Condition="'$(UseSourceGeneratorAssembly)' == 'true'" Include="..\..\SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator/bin/Release/netstandard2.0/Rxmxnx.JNetInterface.SourceGenerator.dll"/>
     </ItemGroup>
 
     <ItemGroup>

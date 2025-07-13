@@ -1,19 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <RootNamespace>Rxmxnx.JNetInterface</RootNamespace>
-        <Deterministic>true</Deterministic>
-        <IsTrimmable>true</IsTrimmable>
-        <IsAotCompatible>true</IsAotCompatible>
-        <DocumentationFile>./$(AssemblyName).xml</DocumentationFile>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <ExcludeXmlAssemblyFiles>false</ExcludeXmlAssemblyFiles>
-        <LangVersion>latest</LangVersion>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    </PropertyGroup>
+    <Import Project="..\Intermediate.Library.targets"/>
 
     <ItemGroup>
         <Using Include="System.Buffers"/>
@@ -53,8 +40,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
-        <ProjectReference Condition="'$(UseSourceGeneratorAssembly)' != 'true'" Include="..\..\SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netstandard2.0"/>
-        <Analyzer Condition="'$(UseSourceGeneratorAssembly)' == 'true'" Include="..\..\SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator/bin/Release/netstandard2.0/Rxmxnx.JNetInterface.SourceGenerator.dll"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -70,18 +55,9 @@
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
             <_Parameter1>Rxmxnx.JNetInterface.Implementation.Tests</_Parameter1>
         </AssemblyAttribute>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Content Include="..\..\..\native-image\jni-config.json">
-            <Link>jni-config.json</Link>
-        </Content>
-        <Content Include="..\..\..\native-image\README.md">
-            <Link>NATIVE-IMAGE.md</Link>
-        </Content>
-        <Content Include="..\..\..\package\Rxmxnx.JNetInterface\PACKAGE.md">
-            <Link>PACKAGE.md</Link>
-        </Content>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>Rxmxnx.JNetInterface.FFI.Tests</_Parameter1>
+        </AssemblyAttribute>
     </ItemGroup>
 
 </Project>

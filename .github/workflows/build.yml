@@ -20,8 +20,9 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 9.x
-
+          dotnet-version: |
+            8.0.x
+            9.0.x
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
@@ -66,11 +67,9 @@ jobs:
           ./.sonar/scanner/dotnet-sonarscanner begin /k:"josephmoresena_Rxmxnx.JNetInterface" /o:"josephmoresena" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.scanAll=false /d:sonar.coverage.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs" /d:sonar.cpd.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs" /d:sonar.cs.vstest.reportsPaths=TestResults/*.trx /d:sonar.cs.opencover.reportsPaths=TestResults/*/coverage.opencover.xml 
           dotnet build-server shutdown
           dotnet restore src
-          dotnet restore src/Test/Proxies/Native/JvmProxy.NativeProxy.sln
-          dotnet build src --no-restore --configuration release --disable-build-servers /nr:false /maxcpucount:1
-          
-          dotnet test src --no-build --no-restore --configuration release --verbosity normal --collect:"XPlat Code Coverage" --results-directory TestResults/ --logger "trx;verbosity=detailed" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
-
+          dotnet restore src/Test/Proxies/Native/JvmProxy.NativeProxy.slnx
+          dotnet build src /p:MultipleFrameworkTest=true --no-restore --configuration Release --disable-build-servers /nr:false /maxcpucount:1
+          dotnet test src /p:MultipleFrameworkTest=true --no-build --no-restore --configuration release --verbosity normal --collect:"XPlat Code Coverage" --results-directory TestResults/ --logger "trx;verbosity=detailed" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
           ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
       - name: Pack core assembly
         working-directory: ./package/Rxmxnx.JNetInterface.Core

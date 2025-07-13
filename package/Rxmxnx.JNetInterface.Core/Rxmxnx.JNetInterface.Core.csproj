@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Rxmxnx.JNetInterface</RootNamespace>
@@ -29,10 +28,6 @@
     <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Primitives.Intermediate"/>
     <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Native.Intermediate"/>
     <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Extensions.Intermediate"/>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="2.5.2"/>
   </ItemGroup>
 
   <ItemGroup>

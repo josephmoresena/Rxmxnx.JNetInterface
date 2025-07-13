@@ -8,9 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Source
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intermediate", "Intermediate", "{A149466C-7A87-4D2C-99A5-E9CA896DCC3F}"
 	ProjectSection(SolutionItems) = preProject
-		..\README.md = ..\README.md
-		..\.github\workflows\release.yml = ..\.github\workflows\release.yml
-		..\package\Intermediate-to-Package.targets = ..\package\Intermediate-to-Package.targets
 		..\native-objects.md = ..\docs\native-objects.md
 		..\class-object.md = ..\docs\class-object.md
 		..\data-types-mapping.md = ..\docs\data-types-mapping.md
@@ -21,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intermediate", "Intermediat
 		..\jni-references.md = ..\docs\jni-references.md
 		..\data-types-metadata.md = ..\docs\data-types-metadata.md
 		..\error-handling.md = ..\docs\error-handling.md
+		Intermediate\Intermediate.Library.targets = Intermediate\Intermediate.Library.targets
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Base.Intermediate", "Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj", "{5E1EA92C-FDFA-48B2-9B36-65B4BCC946D5}"
@@ -34,6 +32,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Implementation.Intermediate", "Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj", "{263596D9-5A7A-45C2-824C-407D5D108431}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{98AF75B1-A773-4B05-82C8-D3F7865C20BE}"
+	ProjectSection(SolutionItems) = preProject
+		Test\Tests.targets = Test\Tests.targets
+		Test\CommonTests.targets = Test\CommonTests.targets
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Base.Tests", "Test\Rxmxnx.JNetInterface.Base.Tests\Rxmxnx.JNetInterface.Base.Tests.csproj", "{9B813DDC-0965-4D53-8239-99810D37332F}"
 EndProject
@@ -42,11 +44,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApplicationTest", "ApplicationTest", "{25D4B3AE-0B35-405E-A2C8-9D8678949152}"
 	ProjectSection(SolutionItems) = preProject
 		ApplicationTest\Directory.Build.props = ApplicationTest\Directory.Build.props
-		ApplicationTest\JNetInterface-NativeAot.targets = ApplicationTest\JNetInterface-NativeAot.targets
-		ApplicationTest\JNetInterface-Config.targets = ApplicationTest\JNetInterface-Config.targets
-		ApplicationTest\JNetInterface-App.targets = ApplicationTest\JNetInterface-App.targets
-		..\.github\workflows\build.yml = ..\.github\workflows\build.yml
 		ApplicationTest\README.md = ApplicationTest\README.md
+		ApplicationTest\JNetInterface-App.targets = ApplicationTest\JNetInterface-App.targets
+		ApplicationTest\JNetInterface-Config.targets = ApplicationTest\JNetInterface-Config.targets
+		ApplicationTest\JNetInterface-NativeAot.targets = ApplicationTest\JNetInterface-NativeAot.targets
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.ApplicationTest", "ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj", "{3B30C3CF-A6FF-494F-8748-61D091D01252}"
@@ -70,6 +71,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.ConsoleTest", "ApplicationTest\Rxmxnx.JNetInterface.ConsoleTest\Rxmxnx.JNetInterface.ConsoleTest.csproj", "{04630441-D09E-4566-B07F-E575FBCB2405}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Proxies", "Proxies", "{0BD9F0DE-ED40-46F7-9F5C-E1BECE87C030}"
+	ProjectSection(SolutionItems) = preProject
+		Test\Proxies\CommonNativeProxies.targets = Test\Proxies\CommonNativeProxies.targets
+		Test\Proxies\Native\NativeProxies.targets = Test\Proxies\Native\NativeProxies.targets
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.LauncherTest", "ApplicationTest\Rxmxnx.JNetInterface.LauncherTest\Rxmxnx.JNetInterface.LauncherTest.csproj", "{4A70DD94-E803-4923-8889-3F01ACFC0562}"
 EndProject
@@ -78,6 +83,49 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.ApplicationGuiTest", "ApplicationTest\Rxmxnx.JNetInterface.ApplicationGuiTest\Rxmxnx.JNetInterface.ApplicationGuiTest.csproj", "{167337A9-7A5A-4A6D-BEAC-F43DEBA5C145}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.NativeLibrary.Tests.Proxies", "Test\Proxies\Rxmxnx.JNetInterface.NativeLibrary.Tests.Proxies\Rxmxnx.JNetInterface.NativeLibrary.Tests.Proxies.csproj", "{5D88F64C-E31E-4E96-8E50-7E3E15C3C857}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Global", "Global", "{8DD3F25A-EEE5-4B1F-872A-E6C9E8DE3FC6}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\release.yml = ..\.github\workflows\release.yml
+		..\.github\workflows\build.yml = ..\.github\workflows\build.yml
+		..\.gitignore = ..\.gitignore
+		..\README.md = ..\README.md
+		..\Directory.Build.props = ..\Directory.Build.props
+		Library.targets = Library.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Package", "Package", "{5CD7551F-7AD8-470D-B982-727180ACEE70}"
+	ProjectSection(SolutionItems) = preProject
+		..\package\Intermediate-to-Package.targets = ..\package\Intermediate-to-Package.targets
+		..\package\Rxmxnx.JNetInterface\PACKAGE.md = ..\package\Rxmxnx.JNetInterface\PACKAGE.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CorePackage", "CorePackage", "{DE4D0435-6E2A-4038-A195-5E4B44ED1479}"
+	ProjectSection(SolutionItems) = preProject
+		..\package\Rxmxnx.JNetInterface.Core\PACKAGE.md = ..\package\Rxmxnx.JNetInterface.Core\PACKAGE.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NativeImage", "NativeImage", "{8911E673-E810-41DA-98CD-64C63FEFCB78}"
+	ProjectSection(SolutionItems) = preProject
+		..\native-image\README.md = ..\native-image\README.md
+		..\native-image\jni-config.json = ..\native-image\jni-config.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{BF8A893C-074F-4354-AB1E-D8B77E63A275}"
+	ProjectSection(SolutionItems) = preProject
+		..\docs\class-object.md = ..\docs\class-object.md
+		..\docs\data-types-mapping.md = ..\docs\data-types-mapping.md
+		..\docs\data-types-metadata.md = ..\docs\data-types-metadata.md
+		..\docs\direct-buffers.md = ..\docs\direct-buffers.md
+		..\docs\error-handling.md = ..\docs\error-handling.md
+		..\docs\jni-accessing.md = ..\docs\jni-accessing.md
+		..\docs\jni-classes.md = ..\docs\jni-classes.md
+		..\docs\jni-interfaces.md = ..\docs\jni-interfaces.md
+		..\docs\jni-references.md = ..\docs\jni-references.md
+		..\docs\native-objects.md = ..\docs\native-objects.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.FFI.Tests", "Test\Rxmxnx.JNetInterface.FFI.Tests\Rxmxnx.JNetInterface.FFI.Tests.csproj", "{9C968F4F-806F-4CE7-957F-FDF01153E980}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -176,6 +224,10 @@ Global
 		{5D88F64C-E31E-4E96-8E50-7E3E15C3C857}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D88F64C-E31E-4E96-8E50-7E3E15C3C857}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D88F64C-E31E-4E96-8E50-7E3E15C3C857}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C968F4F-806F-4CE7-957F-FDF01153E980}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C968F4F-806F-4CE7-957F-FDF01153E980}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C968F4F-806F-4CE7-957F-FDF01153E980}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C968F4F-806F-4CE7-957F-FDF01153E980}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DEDEE978-C19C-4E9E-8734-2ABD5A3304B3} = {50F4F862-0CEC-43BE-8863-947064F7829C}
@@ -201,5 +253,9 @@ Global
 		{E98A7866-76C8-4648-BCBC-E706DB18E5E1} = {25D4B3AE-0B35-405E-A2C8-9D8678949152}
 		{167337A9-7A5A-4A6D-BEAC-F43DEBA5C145} = {25D4B3AE-0B35-405E-A2C8-9D8678949152}
 		{5D88F64C-E31E-4E96-8E50-7E3E15C3C857} = {0BD9F0DE-ED40-46F7-9F5C-E1BECE87C030}
+		{DE4D0435-6E2A-4038-A195-5E4B44ED1479} = {5CD7551F-7AD8-470D-B982-727180ACEE70}
+		{8911E673-E810-41DA-98CD-64C63FEFCB78} = {8DD3F25A-EEE5-4B1F-872A-E6C9E8DE3FC6}
+		{BF8A893C-074F-4354-AB1E-D8B77E63A275} = {8DD3F25A-EEE5-4B1F-872A-E6C9E8DE3FC6}
+		{9C968F4F-806F-4CE7-957F-FDF01153E980} = {98AF75B1-A773-4B05-82C8-D3F7865C20BE}
 	EndGlobalSection
 EndGlobal
