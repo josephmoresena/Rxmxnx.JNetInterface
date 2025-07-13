@@ -24,8 +24,7 @@ public partial class TestCompiler
 			}
 			args.Add("/p:RestorePackages=false");
 			args.Add($"/p:BuildProjectReferences={compileArgs.BuildDependencies}");
-			args.Add($"/p:USE_NET80={compileArgs._args.Version is NetVersion.Net80}");
-			args.Add($"/p:USE_NET90={compileArgs._args.Version is NetVersion.Net90}");
+			args.Add($"/p:TargetFramework={compileArgs._args.Version.GetTargetFramework()}");
 			args.Add($"/p:JNI_LIBRARY={compileArgs.Publish.HasFlag(Publish.JniLibrary)}");
 			args.Add($"/p:PublishReadyToRun={compileArgs.Publish.HasFlag(Publish.ReadyToRun)}");
 			args.Add($"/p:NativeAOT={compileArgs.Publish.HasFlag(Publish.NativeAot)}");

@@ -272,6 +272,7 @@ jobs:
           git config --global url.https://github.com/.insteadOf git://github.com/
           git clone --single-branch --branch jnetinterface \
             https://github.com/josephmoresena/NativeAOT-AndroidHelloJniLib.git
+          rm Directory.Build.props
 
       - name: Create nuget.config for bionic-libs
         working-directory: ./NativeAOT-AndroidHelloJniLib
