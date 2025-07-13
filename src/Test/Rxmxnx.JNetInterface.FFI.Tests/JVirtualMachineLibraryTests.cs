@@ -212,16 +212,17 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		{
 			try
 			{
-				CStringSequence.Utf8View optionsView = args.Options.CreateView(false);
 				ref readonly VirtualMachineInitOptionValue options =
 					ref Unsafe.AsRef<VirtualMachineInitOptionValue>(value.Options);
 
 				Assert.Equal(0x00010006, value.Version);
-				Assert.Equal(optionsView.Count, value.OptionsLength);
+				Assert.Equal(args.Options.NonEmptyCount, value.OptionsLength);
 				Assert.Equal(args.IgnoreUnrecognized, value.IgnoreUnrecognized);
-				if (optionsView.Source is not null)
-					Assert.True(Unsafe.AreSame(in optionsView.Source.GetPinnableReference(),
+				if (!options.OptionString.IsZero)
+					Assert.True(Unsafe.AreSame(in args.Options.GetPinnableReference(),
 					                           in options.OptionString.Reference));
+				else
+					Assert.Equal(0, value.OptionsLength);
 
 				if (result != JResult.Ok)
 				{
