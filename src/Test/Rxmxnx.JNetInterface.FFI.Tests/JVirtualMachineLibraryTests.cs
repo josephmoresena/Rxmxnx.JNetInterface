@@ -190,7 +190,7 @@ public sealed unsafe class JVirtualMachineLibraryTests
 			}
 
 			using IInvokedVirtualMachine invoked = library.CreateVirtualMachine(args, out IEnvironment env);
-			
+
 			if (nativeException is not null)
 				throw new AggregateException(nativeException);
 			Assert.Equal(proxyEnv.Reference, env.Reference);
@@ -212,13 +212,16 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		{
 			try
 			{
+				CStringSequence.Utf8View optionsView = args.Options.CreateView(false);
 				ref readonly VirtualMachineInitOptionValue options =
 					ref Unsafe.AsRef<VirtualMachineInitOptionValue>(value.Options);
 
 				Assert.Equal(0x00010006, value.Version);
-				Assert.Equal(args.Options.NonEmptyCount, value.OptionsLength);
+				Assert.Equal(optionsView.Count, value.OptionsLength);
 				Assert.Equal(args.IgnoreUnrecognized, value.IgnoreUnrecognized);
-				Assert.True(Unsafe.AreSame(in args.Options.GetPinnableReference(), in options.OptionString.Reference));
+				if (optionsView.Source is not null)
+					Assert.True(Unsafe.AreSame(in optionsView.Source.GetPinnableReference(),
+					                           in options.OptionString.Reference));
 
 				if (result != JResult.Ok)
 				{
@@ -322,7 +325,7 @@ public sealed unsafe class JVirtualMachineLibraryTests
 
 			if (nativeException is not null)
 				throw new AggregateException(nativeException);
-			
+
 			Assert.Equal(jniVersion < 0x00010006 ? 0x00010006 : jniVersion, defaultValue.Version);
 			Assert.Equal(args.Options.NonEmptyCount, defaultValue.Options.Count);
 			Assert.Equal(args.Options.ToString(), defaultValue.Options.ToString());
