@@ -71,6 +71,7 @@ public sealed unsafe class JVirtualMachineLibraryTests
 	[InlineData(0x00180000)]
 	internal void GetLatestSupportedVersionTest(Int32 jniVersion)
 	{
+		Exception? nativeException = default;
 		JVirtualMachineLibrary? library =
 			JVirtualMachineLibrary.LoadLibrary(JVirtualMachineLibraryTests.GetProxyPath(JvmProxyType.Complete));
 
@@ -81,54 +82,70 @@ public sealed unsafe class JVirtualMachineLibraryTests
 				JVirtualMachineLibraryTests.GetProxyMethods(library, out delegate* unmanaged<void> reset);
 		Int32 count = 0;
 
-		reset();
-		arrangeInvocation(
-			NativeUtilities
-				.GetUnsafeFuncPtr<GetDefaultVirtualMachineInitArgsDelegate>(GetDefaultVirtualMachineInitArgs), default,
-			default);
-
-		if (jniVersion < 0x00010006)
-			Assert.Throws<JavaVersionException>(() => library.GetLatestSupportedVersion());
-		else
-			Assert.Equal(jniVersion, library.GetLatestSupportedVersion());
-
-		Assert.Equal(jniVersion switch
+		try
 		{
-			0x00010006 => 2,
-			0x00010008 => 3,
-			0x00090000 => 4,
-			0x000a0000 => 5,
-			0x00130000 => 6,
-			0x00140000 => 7,
-			0x00150000 => 8,
-			0x00180000 => 8,
-			_ => 1,
-		}, count);
+			reset();
+			arrangeInvocation(
+				NativeUtilities.GetUnsafeFuncPtr<GetDefaultVirtualMachineInitArgsDelegate>(
+					GetDefaultVirtualMachineInitArgs), default, default);
+
+			if (jniVersion < 0x00010006)
+				Assert.Throws<JavaVersionException>(() => library.GetLatestSupportedVersion());
+			else
+				Assert.Equal(jniVersion, library.GetLatestSupportedVersion());
+
+			if (nativeException is not null)
+				throw new AggregateException(nativeException);
+			Assert.Equal(jniVersion switch
+			{
+				0x00010006 => 2,
+				0x00010008 => 3,
+				0x00090000 => 4,
+				0x000a0000 => 5,
+				0x00130000 => 6,
+				0x00140000 => 7,
+				0x00150000 => 8,
+				0x00180000 => 8,
+				_ => 1,
+			}, count);
+		}
+		finally
+		{
+			reset();
+		}
 		return;
 
 		JResult GetDefaultVirtualMachineInitArgs(ref VirtualMachineInitArgumentValue initValue)
 		{
-			ref readonly VirtualMachineInitOptionValue options =
-				ref Unsafe.AsRef<VirtualMachineInitOptionValue>(initValue.Options);
-
-			if (count == 0)
-				Assert.Equal(0x00010006, initValue.Version);
-			count++;
-			Assert.True(Unsafe.IsNullRef(in options));
-			Assert.Equal(default, initValue.OptionsLength);
-			Assert.Equal(default, initValue.IgnoreUnrecognized);
-
-			if (initValue.Version > jniVersion)
-				return JResult.VersionError;
-
-			initValue = new()
+			try
 			{
-				Version = initValue.Version,
-				OptionsLength = 0,
-				Options = ReadOnlyValPtr<VirtualMachineInitOptionValue>.Zero,
-				IgnoreUnrecognized = JVirtualMachineLibraryTests.fixture.Create<Boolean>(),
-			};
-			return JResult.Ok;
+				ref readonly VirtualMachineInitOptionValue options =
+					ref Unsafe.AsRef<VirtualMachineInitOptionValue>(initValue.Options);
+
+				if (count == 0)
+					Assert.Equal(0x00010006, initValue.Version);
+				count++;
+				Assert.True(Unsafe.IsNullRef(in options));
+				Assert.Equal(default, initValue.OptionsLength);
+				Assert.Equal(default, initValue.IgnoreUnrecognized);
+
+				if (initValue.Version > jniVersion)
+					return JResult.VersionError;
+
+				initValue = new()
+				{
+					Version = initValue.Version,
+					OptionsLength = 0,
+					Options = ReadOnlyValPtr<VirtualMachineInitOptionValue>.Zero,
+					IgnoreUnrecognized = JVirtualMachineLibraryTests.fixture.Create<Boolean>(),
+				};
+				return JResult.Ok;
+			}
+			catch (Exception ex)
+			{
+				nativeException = ex;
+				return JResult.Ok;
+			}
 		}
 	}
 
@@ -140,6 +157,7 @@ public sealed unsafe class JVirtualMachineLibraryTests
 	[InlineData(JResult.VersionError)]
 	internal void CreateVirtualMachineTest(JResult result)
 	{
+		Exception? nativeException = default;
 		JVirtualMachineLibrary? library =
 			JVirtualMachineLibrary.LoadLibrary(JVirtualMachineLibraryTests.GetProxyPath(JvmProxyType.Complete));
 
@@ -166,15 +184,21 @@ public sealed unsafe class JVirtualMachineLibraryTests
 				Assert.Equal(result,
 				             Assert.Throws<JniException>(() => library.CreateVirtualMachine(args, out IEnvironment __))
 				                   .Result);
+				if (nativeException is not null)
+					throw new AggregateException(nativeException);
 				return;
 			}
 
 			using IInvokedVirtualMachine invoked = library.CreateVirtualMachine(args, out IEnvironment env);
+			
+			if (nativeException is not null)
+				throw new AggregateException(nativeException);
 			Assert.Equal(proxyEnv.Reference, env.Reference);
 			Assert.Equal(proxyEnv.VirtualMachine.Reference, invoked.Reference);
 		}
 		finally
 		{
+			reset();
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
@@ -186,24 +210,34 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		JResult CreateVirtualMachine(out JVirtualMachineRef vmRef, out JEnvironmentRef envRef,
 			in VirtualMachineInitArgumentValue value)
 		{
-			ref readonly VirtualMachineInitOptionValue options =
-				ref Unsafe.AsRef<VirtualMachineInitOptionValue>(value.Options);
-
-			Assert.Equal(0x00010006, value.Version);
-			Assert.Equal(args.Options.NonEmptyCount, value.OptionsLength);
-			Assert.Equal(args.IgnoreUnrecognized, value.IgnoreUnrecognized);
-			Assert.True(Unsafe.AreSame(in args.Options.GetPinnableReference(), in options.OptionString.Reference));
-
-			if (result != JResult.Ok)
+			try
 			{
+				ref readonly VirtualMachineInitOptionValue options =
+					ref Unsafe.AsRef<VirtualMachineInitOptionValue>(value.Options);
+
+				Assert.Equal(0x00010006, value.Version);
+				Assert.Equal(args.Options.NonEmptyCount, value.OptionsLength);
+				Assert.Equal(args.IgnoreUnrecognized, value.IgnoreUnrecognized);
+				Assert.True(Unsafe.AreSame(in args.Options.GetPinnableReference(), in options.OptionString.Reference));
+
+				if (result != JResult.Ok)
+				{
+					vmRef = default;
+					envRef = default;
+					return result;
+				}
+
+				vmRef = proxyEnv.VirtualMachine.Reference;
+				envRef = proxyEnv.Reference;
+				return JResult.Ok;
+			}
+			catch (Exception ex)
+			{
+				nativeException = ex;
 				vmRef = default;
 				envRef = default;
 				return result;
 			}
-
-			vmRef = proxyEnv.VirtualMachine.Reference;
-			envRef = proxyEnv.Reference;
-			return JResult.Ok;
 		}
 	}
 
@@ -249,6 +283,7 @@ public sealed unsafe class JVirtualMachineLibraryTests
 	[InlineData(0x00180000, JResult.Ok, true)]
 	internal void GetDefaultArgumentTest(Int32 jniVersion, JResult result = JResult.Ok, Boolean useOptions = false)
 	{
+		Exception? nativeException = default;
 		JVirtualMachineLibrary? library =
 			JVirtualMachineLibrary.LoadLibrary(JVirtualMachineLibraryTests.GetProxyPath(JvmProxyType.Complete));
 
@@ -268,44 +303,64 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		ReadOnlyValPtr<VirtualMachineInitOptionValue> optionsPtr =
 			JVirtualMachineLibraryTests.GetOptionsPtr(optionSpan, args.Options);
 
-		reset();
-		arrangeInvocation(
-			NativeUtilities
-				.GetUnsafeFuncPtr<GetDefaultVirtualMachineInitArgsDelegate>(GetDefaultVirtualMachineInitArgs), default,
-			default);
-
-		if (result != JResult.Ok)
+		try
 		{
-			Assert.Throws<JniException>(() => library.GetDefaultArgument(jniVersion));
-			return;
-		}
+			reset();
+			arrangeInvocation(
+				NativeUtilities.GetUnsafeFuncPtr<GetDefaultVirtualMachineInitArgsDelegate>(
+					GetDefaultVirtualMachineInitArgs), default, default);
 
-		JVirtualMachineInitArg defaultValue = library.GetDefaultArgument(jniVersion);
-		Assert.Equal(jniVersion < 0x00010006 ? 0x00010006 : jniVersion, defaultValue.Version);
-		Assert.Equal(args.Options.NonEmptyCount, defaultValue.Options.Count);
-		Assert.Equal(args.Options.ToString(), defaultValue.Options.ToString());
-		Assert.Equal(!useOptions, Object.ReferenceEquals(args.Options, defaultValue.Options));
-		Assert.Equal(args.IgnoreUnrecognized, defaultValue.IgnoreUnrecognized);
+			if (result != JResult.Ok)
+			{
+				Assert.Throws<JniException>(() => library.GetDefaultArgument(jniVersion));
+				if (nativeException is not null)
+					throw new AggregateException(nativeException);
+				return;
+			}
+
+			JVirtualMachineInitArg defaultValue = library.GetDefaultArgument(jniVersion);
+
+			if (nativeException is not null)
+				throw new AggregateException(nativeException);
+			
+			Assert.Equal(jniVersion < 0x00010006 ? 0x00010006 : jniVersion, defaultValue.Version);
+			Assert.Equal(args.Options.NonEmptyCount, defaultValue.Options.Count);
+			Assert.Equal(args.Options.ToString(), defaultValue.Options.ToString());
+			Assert.Equal(!useOptions, Object.ReferenceEquals(args.Options, defaultValue.Options));
+			Assert.Equal(args.IgnoreUnrecognized, defaultValue.IgnoreUnrecognized);
+		}
+		finally
+		{
+			reset();
+		}
 		return;
 
 		JResult GetDefaultVirtualMachineInitArgs(ref VirtualMachineInitArgumentValue initValue)
 		{
-			ref readonly VirtualMachineInitOptionValue options =
-				ref Unsafe.AsRef<VirtualMachineInitOptionValue>(initValue.Options);
-
-			Assert.InRange(initValue.Version, 0x00010006, Math.Max(args.Version, 0x00010006));
-			Assert.True(Unsafe.IsNullRef(in options));
-			Assert.Equal(default, initValue.OptionsLength);
-			Assert.Equal(default, initValue.IgnoreUnrecognized);
-
-			initValue = new()
+			try
 			{
-				Version = initValue.Version,
-				OptionsLength = args.Options.Count,
-				Options = optionsPtr,
-				IgnoreUnrecognized = args.IgnoreUnrecognized,
-			};
-			return result;
+				ref readonly VirtualMachineInitOptionValue options =
+					ref Unsafe.AsRef<VirtualMachineInitOptionValue>(initValue.Options);
+
+				Assert.InRange(initValue.Version, 0x00010006, Math.Max(args.Version, 0x00010006));
+				Assert.True(Unsafe.IsNullRef(in options));
+				Assert.Equal(default, initValue.OptionsLength);
+				Assert.Equal(default, initValue.IgnoreUnrecognized);
+
+				initValue = new()
+				{
+					Version = initValue.Version,
+					OptionsLength = args.Options.Count,
+					Options = optionsPtr,
+					IgnoreUnrecognized = args.IgnoreUnrecognized,
+				};
+				return result;
+			}
+			catch (Exception ex)
+			{
+				nativeException = ex;
+				return result;
+			}
 		}
 	}
 
@@ -322,6 +377,7 @@ public sealed unsafe class JVirtualMachineLibraryTests
 	[InlineData(JResult.Error, -1)]
 	internal void GetCreatedJavaVMsTest(JResult result, Int32 createdVms = 0)
 	{
+		Exception? nativeException = default;
 		JVirtualMachineLibrary? library =
 			JVirtualMachineLibrary.LoadLibrary(JVirtualMachineLibraryTests.GetProxyPath(JvmProxyType.Complete));
 
@@ -345,15 +401,21 @@ public sealed unsafe class JVirtualMachineLibraryTests
 			if (result != JResult.Ok && createdVms > 0)
 			{
 				Assert.Equal(result, Assert.Throws<JniException>(() => library.GetCreatedVirtualMachines()).Result);
+				if (nativeException is not null)
+					throw new AggregateException(nativeException);
 				return;
 			}
 
 			IVirtualMachine[] vms = library.GetCreatedVirtualMachines();
+
+			if (nativeException is not null)
+				throw new AggregateException(nativeException);
 			Assert.Equal(proxies.Length, vms.Length);
 			Assert.Equal(proxies.Select(p => p.VirtualMachine.Reference), vms.Select(v => v.Reference));
 		}
 		finally
 		{
+			reset();
 			Assert.Equal(createdVms > 0 ? 2 : 1, count);
 			foreach (NativeInterfaceProxy proxyEnv in proxies)
 			{
@@ -369,21 +431,30 @@ public sealed unsafe class JVirtualMachineLibraryTests
 
 		JResult GetCreatedJavaVMs(ValPtr<JVirtualMachineRef> vmBuf, Int32 bufLen, out Int32 nVMs)
 		{
-			nVMs = proxies.Length;
-			count++;
-
-			if (count == 1)
+			try
 			{
-				Assert.True(Unsafe.IsNullRef(ref vmBuf.Reference));
-				Assert.Equal(0, bufLen);
-				return JResult.InvalidArgumentsError;
-			}
+				nVMs = proxies.Length;
+				count++;
 
-			Span<JVirtualMachineRef> vmRefs = MemoryMarshal.CreateSpan(ref vmBuf.Reference, bufLen);
-			Assert.Equal(proxies.Length, vmRefs.Length);
-			proxies.Select(p => p.VirtualMachine.Reference).ToArray().CopyTo(vmRefs);
-			nVMs = vmRefs.Length;
-			return result;
+				if (count == 1)
+				{
+					Assert.True(Unsafe.IsNullRef(ref vmBuf.Reference));
+					Assert.Equal(0, bufLen);
+					return JResult.InvalidArgumentsError;
+				}
+
+				Span<JVirtualMachineRef> vmRefs = MemoryMarshal.CreateSpan(ref vmBuf.Reference, bufLen);
+				Assert.Equal(proxies.Length, vmRefs.Length);
+				proxies.Select(p => p.VirtualMachine.Reference).ToArray().CopyTo(vmRefs);
+				nVMs = vmRefs.Length;
+				return result;
+			}
+			catch (Exception ex)
+			{
+				nativeException = ex;
+				nVMs = -1;
+				return result;
+			}
 		}
 	}
 
