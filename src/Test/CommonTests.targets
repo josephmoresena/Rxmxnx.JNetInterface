@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework Condition="'$(MultipleFrameworkTest)' != 'true'">net9.0</TargetFramework>
-        <TargetFrameworks Condition="'$(MultipleFrameworkTest)' == 'true'">net9.0;net8.0</TargetFrameworks>
+        <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>Rxmxnx.JNetInterface.Tests</RootNamespace>
