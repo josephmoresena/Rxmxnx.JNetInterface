@@ -22,6 +22,7 @@ public partial class TestCompiler
 				args.Add("-r");
 				args.Add(compileArgs._args.RuntimeIdentifier);
 			}
+			args.Add($"/p:Launcher=true");
 			args.Add("/p:RestorePackages=false");
 			args.Add($"/p:BuildProjectReferences={compileArgs.BuildDependencies}");
 			args.Add($"/p:TargetFramework={compileArgs._args.Version.GetTargetFramework()}");

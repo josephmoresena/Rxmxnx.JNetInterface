@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <TargetFramework Condition="'$(TargetFramework)' == ''">net9.0</TargetFramework>
+        <TargetFramework Condition="'$(Launcher)' != 'true'">net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
