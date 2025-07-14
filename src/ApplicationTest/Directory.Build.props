@@ -1,10 +1,10 @@
 <Project>
     <PropertyGroup>
-        <TargetFrameworks Condition="'$(Launcher)' != 'True'">net9.0;net8.0</TargetFrameworks>
+        <TargetFramework Condition="'$(TargetFramework)' == ''">net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-        <IsTrimmable Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))">true</IsTrimmable>
+        <IsTrimmable>true</IsTrimmable>
         <TrimMode>full</TrimMode>
         <RootNamespace>Rxmxnx.JNetInterface.ApplicationTest</RootNamespace>
     </PropertyGroup>
