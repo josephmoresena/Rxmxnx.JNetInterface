@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <TargetFrameworks Condition="'$(NativeAOT)' != 'true'">net9.0;net8.0</TargetFrameworks>
+        <TargetFrameworks Condition="'$(Launcher)' != 'True'">net9.0;net8.0</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>

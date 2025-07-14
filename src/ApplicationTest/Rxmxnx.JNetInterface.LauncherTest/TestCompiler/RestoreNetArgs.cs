@@ -17,6 +17,7 @@ public partial class TestCompiler
 				args.Add("-r");
 				args.Add(restoreArgs.RuntimeIdentifier);
 			}
+			args.Add("/p:Launcher=True");
 			args.Add($"/p:TargetFramework={restoreArgs.Version.GetTargetFramework()}");
 		}
 		public static void AppendList(RestoreNetArgs restoreArgs, Collection<String> args)
@@ -30,6 +31,7 @@ public partial class TestCompiler
 		{
 			args.Add("test");
 			args.Add(restoreArgs.ProjectFile);
+			args.Add("/p:Launcher=True");
 			args.Add($"/p:TargetFramework={restoreArgs.Version.GetTargetFramework()}");
 			args.Add("--logger");
 			args.Add("\"console;verbosity=detailed\"");

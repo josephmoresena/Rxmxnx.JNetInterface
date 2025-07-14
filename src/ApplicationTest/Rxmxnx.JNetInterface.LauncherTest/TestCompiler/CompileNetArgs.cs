@@ -17,6 +17,7 @@ public partial class TestCompiler
 			args.Add(compileArgs._args.ProjectFile);
 			args.Add("-c");
 			args.Add("Release");
+			args.Add("/p:Launcher=True");
 			if (!String.IsNullOrEmpty(compileArgs._args.RuntimeIdentifier))
 			{
 				args.Add("-r");
