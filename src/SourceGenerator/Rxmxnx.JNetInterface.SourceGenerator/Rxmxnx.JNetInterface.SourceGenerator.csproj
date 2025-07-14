@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <TargetFrameworks>$(null)</TargetFrameworks>
         <RootNamespace>Rxmxnx.JNetInterface.SourceGenerator</RootNamespace>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>

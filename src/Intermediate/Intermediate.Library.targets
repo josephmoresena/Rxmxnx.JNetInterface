@@ -1,6 +1,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
     <PropertyGroup>
+        <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
         <RootNamespace>Rxmxnx.JNetInterface</RootNamespace>
         <IsPackable>false</IsPackable>
         <Deterministic>true</Deterministic>
