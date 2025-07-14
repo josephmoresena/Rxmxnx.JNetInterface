@@ -1,5 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+    <Import Project="JNetInterface-Frameworks.targets"/>
+
     <PropertyGroup>
         <OutputType>Library</OutputType>
     </PropertyGroup>

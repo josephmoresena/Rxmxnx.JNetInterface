@@ -13,6 +13,7 @@
     <File Path="ApplicationTest\JNetInterface-App.targets" />
     <File Path="ApplicationTest\JNetInterface-Config.targets" />
     <File Path="ApplicationTest\JNetInterface-NativeAot.targets" />
+    <File Path="ApplicationTest\JNetInterface-Frameworks.targets" />
   </Folder>
   <Folder Name="/Global/">
     <File Path="..\.github\workflows\release.yml" />

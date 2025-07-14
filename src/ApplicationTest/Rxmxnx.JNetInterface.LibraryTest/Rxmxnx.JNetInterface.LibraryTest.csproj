@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+    <Import Project="JNetInterface-Frameworks.targets"/>
+
     <PropertyGroup>
-        <TargetFrameworks Condition="'$(RuntimeIdentifier)' != 'linux-arm' And '$(RuntimeIdentifier)' != 'win-x86'">net9.0;net8.0</TargetFrameworks>
         <OutputType>Library</OutputType>
     </PropertyGroup>
 
