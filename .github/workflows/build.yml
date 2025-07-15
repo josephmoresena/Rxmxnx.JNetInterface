@@ -103,7 +103,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ windows-latest, ubuntu-latest, macos-latest, macos-13 ]
+        os: [ windows-latest, ubuntu-latest, macos-latest, macos-14 ]
     env:
       JNETINTERFACE_ONLY_NATIVE_TEST: false
     steps:
