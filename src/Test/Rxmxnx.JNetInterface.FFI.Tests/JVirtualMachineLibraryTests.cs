@@ -83,7 +83,6 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		Int32 count = 0;
 
 		GetDefaultVirtualMachineInitArgsDelegate getDefaultVirtualMachineInitArgs = GetDefaultVirtualMachineInitArgs;
-		GCHandle handle = GCHandle.Alloc(getDefaultVirtualMachineInitArgs, GCHandleType.Normal);
 		try
 		{
 			reset();
@@ -112,7 +111,6 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		finally
 		{
 			reset();
-			handle.Free();
 		}
 		return;
 
@@ -175,7 +173,6 @@ public sealed unsafe class JVirtualMachineLibraryTests
 
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		CreateVirtualMachineDelegate createVirtualMachine = CreateVirtualMachine;
-		GCHandle handle = GCHandle.Alloc(createVirtualMachine, GCHandleType.Normal);
 		try
 		{
 			reset();
@@ -206,7 +203,6 @@ public sealed unsafe class JVirtualMachineLibraryTests
 			GC.WaitForPendingFinalizers();
 			Assert.False(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
 			proxyEnv.FinalizeProxy(true);
-			handle.Free();
 		}
 		return;
 
@@ -311,7 +307,6 @@ public sealed unsafe class JVirtualMachineLibraryTests
 			JVirtualMachineLibraryTests.GetOptionsPtr(optionSpan, args.Options);
 
 		GetDefaultVirtualMachineInitArgsDelegate getDefaultVirtualMachineInitArgs = GetDefaultVirtualMachineInitArgs;
-		GCHandle handle = GCHandle.Alloc(getDefaultVirtualMachineInitArgs, GCHandleType.Normal);
 		try
 		{
 			reset();
@@ -339,7 +334,6 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		finally
 		{
 			reset();
-			handle.Free();
 		}
 		return;
 
@@ -397,7 +391,6 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		NativeInterfaceProxy[] proxies = createdVms > 0 ? new NativeInterfaceProxy[createdVms] : [];
 		Int32 count = 0;
 		GetCreatedJavaVMsDelegate getCreatedJavaVMs = GetCreatedJavaVMs;
-		GCHandle handle = GCHandle.Alloc(getCreatedJavaVMs, GCHandleType.Normal);
 
 		reset();
 		arrangeInvocation(default, default, getCreatedJavaVMs.GetUnsafeFuncPtr());
@@ -434,7 +427,6 @@ public sealed unsafe class JVirtualMachineLibraryTests
 				JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
 				proxyEnv.FinalizeProxy(true);
 			}
-			handle.Free();
 		}
 
 		return;
