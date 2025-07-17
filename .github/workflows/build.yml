@@ -193,7 +193,7 @@ jobs:
       - name: Build tests
         run: |
           dotnet restore src 
-          dotnet build src /p:MultipleFrameworkTest=true --configuration Release
+          dotnet build src /p:MultipleFrameworkTest=true --no-restore --configuration Release --disable-build-servers /nr:false /maxcpucount:1
           
       - name: Run tests
         run: |
