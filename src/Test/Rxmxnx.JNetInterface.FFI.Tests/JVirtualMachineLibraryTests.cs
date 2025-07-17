@@ -82,12 +82,11 @@ public sealed unsafe class JVirtualMachineLibraryTests
 				JVirtualMachineLibraryTests.GetProxyMethods(library, out delegate* unmanaged<void> reset);
 		Int32 count = 0;
 
+		GetDefaultVirtualMachineInitArgsDelegate getDefaultVirtualMachineInitArgs = GetDefaultVirtualMachineInitArgs;
 		try
 		{
 			reset();
-			arrangeInvocation(
-				NativeUtilities.GetUnsafeFuncPtr<GetDefaultVirtualMachineInitArgsDelegate>(
-					GetDefaultVirtualMachineInitArgs), default, default);
+			arrangeInvocation(getDefaultVirtualMachineInitArgs.GetUnsafeFuncPtr(), default, default);
 
 			if (jniVersion < 0x00010006)
 				Assert.Throws<JavaVersionException>(() => library.GetLatestSupportedVersion());
@@ -173,11 +172,11 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		};
 
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		CreateVirtualMachineDelegate createVirtualMachine = CreateVirtualMachine;
 		try
 		{
 			reset();
-			arrangeInvocation(
-				default, NativeUtilities.GetUnsafeFuncPtr<CreateVirtualMachineDelegate>(CreateVirtualMachine), default);
+			arrangeInvocation(default, createVirtualMachine.GetUnsafeFuncPtr(), default);
 
 			if (result != JResult.Ok)
 			{
@@ -307,12 +306,11 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		ReadOnlyValPtr<VirtualMachineInitOptionValue> optionsPtr =
 			JVirtualMachineLibraryTests.GetOptionsPtr(optionSpan, args.Options);
 
+		GetDefaultVirtualMachineInitArgsDelegate getDefaultVirtualMachineInitArgs = GetDefaultVirtualMachineInitArgs;
 		try
 		{
 			reset();
-			arrangeInvocation(
-				NativeUtilities.GetUnsafeFuncPtr<GetDefaultVirtualMachineInitArgsDelegate>(
-					GetDefaultVirtualMachineInitArgs), default, default);
+			arrangeInvocation(getDefaultVirtualMachineInitArgs.GetUnsafeFuncPtr(), default, default);
 
 			if (result != JResult.Ok)
 			{
@@ -392,10 +390,10 @@ public sealed unsafe class JVirtualMachineLibraryTests
 				JVirtualMachineLibraryTests.GetProxyMethods(library, out delegate* unmanaged<void> reset);
 		NativeInterfaceProxy[] proxies = createdVms > 0 ? new NativeInterfaceProxy[createdVms] : [];
 		Int32 count = 0;
+		GetCreatedJavaVMsDelegate getCreatedJavaVMs = GetCreatedJavaVMs;
 
 		reset();
-		arrangeInvocation(default, default,
-		                  NativeUtilities.GetUnsafeFuncPtr<GetCreatedJavaVMsDelegate>(GetCreatedJavaVMs));
+		arrangeInvocation(default, default, getCreatedJavaVMs.GetUnsafeFuncPtr());
 
 		for (Int32 i = 0; i < createdVms; i++)
 			proxies[i] = NativeInterfaceProxy.CreateProxy();
