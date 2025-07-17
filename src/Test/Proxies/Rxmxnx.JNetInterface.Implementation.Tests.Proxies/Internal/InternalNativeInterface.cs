@@ -147,8 +147,8 @@ internal unsafe struct InternalNativeInterface
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JShort> GetShortField;
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JInt> GetIntField;
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JLong> GetLongField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JFloat> GetFloatField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JDouble> GetDoubleField;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, Single> GetFloatField;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, Double> GetDoubleField;
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JObjectLocalRef, void> SetObjectField;
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JBoolean, void> SetBooleanField;
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JByte, void> SetByteField;
@@ -156,8 +156,8 @@ internal unsafe struct InternalNativeInterface
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JShort, void> SetShortField;
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JInt, void> SetIntField;
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JLong, void> SetLongField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JFloat, void> SetFloatField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JDouble, void> SetDoubleField;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, Single, void> SetFloatField;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, Double, void> SetDoubleField;
 
 	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, Byte*, Byte*, JMethodId> GetStaticMethodId;
 #pragma warning disable CS0169
@@ -214,8 +214,8 @@ internal unsafe struct InternalNativeInterface
 	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JShort> GetStaticShortField;
 	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JInt> GetStaticIntField;
 	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JLong> GetStaticLongField;
-	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JFloat> GetStaticFloatField;
-	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JDouble> GetStaticDoubleField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, Single> GetStaticFloatField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, Double> GetStaticDoubleField;
 	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JObjectLocalRef, void> SetStaticObjectField;
 	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JBoolean, void> SetStaticBooleanField;
 	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JByte, void> SetStaticByteField;
@@ -223,8 +223,8 @@ internal unsafe struct InternalNativeInterface
 	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JShort, void> SetStaticShortField;
 	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JInt, void> SetStaticIntField;
 	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JLong, void> SetStaticLongField;
-	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JFloat, void> SetStaticFloatField;
-	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JDouble, void> SetStaticDoubleField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, Single, void> SetStaticFloatField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, Double, void> SetStaticDoubleField;
 
 	public delegate* unmanaged<JEnvironmentRef, Char*, Int32, JStringLocalRef> NewString;
 	public delegate* unmanaged<JEnvironmentRef, JStringLocalRef, Int32> GetStringLength;

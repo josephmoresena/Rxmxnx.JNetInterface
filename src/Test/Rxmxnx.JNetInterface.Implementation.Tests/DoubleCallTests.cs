@@ -5,7 +5,7 @@ public sealed class DoubleCallTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 
-	[SkippableTheory]
+	[Theory]
 	[InlineData(CallType.Parameterless)]
 	[InlineData(CallType.SingleObject)]
 	[InlineData(CallType.SingleValue)]
@@ -15,8 +15,6 @@ public sealed class DoubleCallTests
 	[InlineData(CallType.MultipleValues)]
 	internal void InstanceTest(CallType callType)
 	{
-		Skip.If(OperatingSystem.IsWindows(),
-		        "Error handling floating-point numbers due to calling convention on Windows.");
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		try
 		{
@@ -35,7 +33,7 @@ public sealed class DoubleCallTests
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
-	[SkippableTheory]
+	[Theory]
 	[InlineData(CallType.Parameterless)]
 	[InlineData(CallType.SingleObject)]
 	[InlineData(CallType.SingleValue)]
@@ -45,8 +43,6 @@ public sealed class DoubleCallTests
 	[InlineData(CallType.MultipleValues)]
 	internal void NonVirtualTest(CallType callType)
 	{
-		Skip.If(OperatingSystem.IsWindows(),
-		        "Error handling floating-point numbers due to calling convention on Windows.");
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		try
 		{
@@ -66,7 +62,7 @@ public sealed class DoubleCallTests
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
-	[SkippableTheory]
+	[Theory]
 	[InlineData(CallType.Parameterless)]
 	[InlineData(CallType.SingleObject)]
 	[InlineData(CallType.SingleValue)]
@@ -76,8 +72,6 @@ public sealed class DoubleCallTests
 	[InlineData(CallType.MultipleValues)]
 	internal void StaticTest(CallType callType)
 	{
-		Skip.If(OperatingSystem.IsWindows(),
-		        "Error handling floating-point numbers due to calling convention on Windows.");
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		try
 		{

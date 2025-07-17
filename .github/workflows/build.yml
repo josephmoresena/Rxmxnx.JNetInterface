@@ -189,15 +189,24 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          
+      - name: Build tests
+        run: |
+          dotnet restore src 
+          dotnet build src /p:MultipleFrameworkTest=true --configuration Release
+          
+      - name: Run tests
+        run: |
+          dotnet test src /p:MultipleFrameworkTest=true --no-build --no-restore --configuration Release  --logger "console;verbosity=detailed"
       
       - name: Create core assembly
         working-directory: ./package/Rxmxnx.JNetInterface.Core
         run: |
-          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp 
+          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp /p:NoIntermediateBuild=true
       - name: Pack main assembly
         working-directory: ./package/Rxmxnx.JNetInterface
         run: |
-          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp 
+          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp  /p:NoIntermediateBuild=true
 
       - name: Create nuget.config for tests
         working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LibraryTest
