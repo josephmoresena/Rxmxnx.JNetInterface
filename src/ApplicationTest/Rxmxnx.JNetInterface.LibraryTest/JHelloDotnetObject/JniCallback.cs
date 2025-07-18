@@ -3,6 +3,7 @@ using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
 using Rxmxnx.JNetInterface.Native.References;
 using Rxmxnx.JNetInterface.Primitives;
+using Rxmxnx.PInvoke;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
@@ -14,11 +15,20 @@ public partial class JHelloDotnetObject
 
 		private JStringLocalRef GetHelloString(JEnvironmentRef envRef, JObjectLocalRef localRef)
 		{
-			JNativeCallAdapter callAdapter = JNativeCallAdapter
-			                                 .Create(managed.VirtualMachine, envRef, localRef, out JLocalObject jLocal)
-			                                 .Build();
-			JStringObject? result = managed.GetHelloString(jLocal);
-			return callAdapter.FinalizeCall(result);
+			try
+			{
+				JNativeCallAdapter callAdapter = JNativeCallAdapter
+				                                 .Create(managed.VirtualMachine, envRef, localRef,
+				                                         out JLocalObject jLocal).Build();
+				JStringObject? result = managed.GetHelloString(jLocal);
+				return callAdapter.FinalizeCall(result);
+			}
+			catch (Exception ex)
+			{
+				managed.Writer.WriteLine(
+					$"JHelloDotnetObject.JniCallback.GetHelloString ex: {(AotInfo.IsReflectionDisabled ? ex.Message : ex.ToString())}");
+				throw;
+			}
 		}
 		private JInt GetThreadId(JEnvironmentRef envRef, JObjectLocalRef localRef)
 		{

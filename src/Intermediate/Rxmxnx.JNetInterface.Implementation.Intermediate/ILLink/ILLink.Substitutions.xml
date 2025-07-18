@@ -197,9 +197,9 @@
                     body="remove"/>
             <!-- Library -->
             <method signature="System.Void LoadLibrary(System.String,System.Nullable&lt;System.IntPtr&gt;)"
-                    body="remove"/>
+                    body="stub"/>
             <method signature="System.Void GetJniExport(System.IntPtr,System.String,System.Boolean,System.IntPtr)"
-                    body="remove"/>
+                    body="stub"/>
         </type>
     </assembly>
 </linker>
