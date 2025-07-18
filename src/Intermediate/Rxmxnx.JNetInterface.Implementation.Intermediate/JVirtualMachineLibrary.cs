@@ -102,24 +102,26 @@ public sealed unsafe class JVirtualMachineLibrary
 	public IInvokedVirtualMachine CreateVirtualMachine(JVirtualMachineInitArg arg, out IEnvironment env)
 	{
 		CStringSequence sequence = arg.Options;
-		using IFixedPointer.IDisposable fPtr = sequence.GetFixedPointer();
-		// Avoid heap allocation.
-		Span<VirtualMachineInitOptionValue> options = stackalloc VirtualMachineInitOptionValue[sequence.NonEmptyCount];
-		arg.CopyOptions(options);
-		fixed (VirtualMachineInitOptionValue* ptr = &MemoryMarshal.GetReference(options))
+		fixed (void* _ = sequence)
 		{
-			VirtualMachineInitArgumentValue value = new()
+			Span<VirtualMachineInitOptionValue> options =
+				stackalloc VirtualMachineInitOptionValue[sequence.NonEmptyCount];
+			arg.CopyOptions(options);
+			fixed (VirtualMachineInitOptionValue* ptr = &MemoryMarshal.GetReference(options))
 			{
-				Version = arg.Version,
-				OptionsLength = options.Length,
-				Options = ptr,
-				IgnoreUnrecognized = arg.IgnoreUnrecognized,
-			};
-			JResult result =
-				this._functions.CreateVirtualMachine(out JVirtualMachineRef vmRef, out JEnvironmentRef envRef,
-				                                     in value);
-			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
-			return JVirtualMachine.GetVirtualMachine(vmRef, envRef, out env);
+				VirtualMachineInitArgumentValue value = new()
+				{
+					Version = arg.Version,
+					OptionsLength = options.Length,
+					Options = ptr,
+					IgnoreUnrecognized = arg.IgnoreUnrecognized,
+				};
+				JResult result =
+					this._functions.CreateVirtualMachine(out JVirtualMachineRef vmRef, out JEnvironmentRef envRef,
+					                                     in value);
+				ImplementationValidationUtilities.ThrowIfInvalidResult(result);
+				return JVirtualMachine.GetVirtualMachine(vmRef, envRef, out env);
+			}
 		}
 	}
 	/// <summary>
@@ -161,6 +163,7 @@ public sealed unsafe class JVirtualMachineLibrary
 	public static JVirtualMachineLibrary? LoadLibrary(String libraryPath)
 	{
 		IntPtr? handle = NativeUtilities.LoadNativeLib(libraryPath);
+		JTrace.LoadLibrary(libraryPath, handle);
 		return handle.HasValue ? JVirtualMachineLibrary.Create(handle.Value) : default;
 	}
 	/// <summary>
@@ -197,6 +200,13 @@ public sealed unsafe class JVirtualMachineLibrary
 	/// <see langword="false"/>.
 	/// </returns>
 	private static Boolean TryGetJniExport(IntPtr handle, String name, out IntPtr address)
-		=> NativeLibrary.TryGetExport(handle, name, out address) ||
-			NativeLibrary.TryGetExport(handle, name + "_Impl", out address);
+	{
+		Boolean found = NativeLibrary.TryGetExport(handle, name, out address);
+		JTrace.GetJniExport(handle, name, found, address);
+		if (found) return true;
+		String auxName = name + "_Impl";
+		found = NativeLibrary.TryGetExport(handle, auxName, out address);
+		JTrace.GetJniExport(handle, auxName, found, address);
+		return found;
+	}
 }

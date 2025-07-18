@@ -70,7 +70,9 @@ public partial class Launcher
 		}
 		protected override Task AppendJdk(IDictionary<JdkVersion, Jdk> jdks, JdkVersion version, Architecture arch)
 		{
-			if (arch == Architecture.Arm64 && version is JdkVersion.Jdk8) return Task.CompletedTask;
+			if ((arch == Architecture.Arm64 && version is JdkVersion.Jdk8) ||
+			    (this.CurrentArch is not Architecture.X86 && arch == Architecture.X86 && version is JdkVersion.Jdk6))
+				return Task.CompletedTask;
 			return base.AppendJdk(jdks, version, arch);
 		}
 		public static Windows Create(DirectoryInfo outputDirectory, out Task initTask)

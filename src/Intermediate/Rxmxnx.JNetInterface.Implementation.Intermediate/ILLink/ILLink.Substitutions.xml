@@ -195,6 +195,11 @@
                     body="stub"/>
             <method signature="System.String GetSha256Hex(System.ReadOnlySpan`1&lt;System.Byte&gt;)"
                     body="remove"/>
+            <!-- Library -->
+            <method signature="System.Void LoadLibrary(System.String,System.Nullable&lt;System.IntPtr&gt;)"
+                    body="remove"/>
+            <method signature="System.Void GetJniExport(System.IntPtr,System.String,System.Boolean,System.IntPtr)"
+                    body="remove"/>
         </type>
     </assembly>
 </linker>
