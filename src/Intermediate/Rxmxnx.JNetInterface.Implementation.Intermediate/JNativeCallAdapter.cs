@@ -19,6 +19,10 @@ public readonly ref partial struct JNativeCallAdapter
 	/// </summary>
 	/// <param name="result">Primitive result.</param>
 	/// <returns><paramref name="result"/>.</returns>
+	/// <remarks>
+	/// Note that <see cref="JDouble"/> and <see cref="JFloat"/> are not ABI-compliant types, and therefore should
+	/// not be used as valid return types for native JNI functions.
+	/// </remarks>
 	public TPrimitive FinalizeCall<TPrimitive>(TPrimitive result)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{

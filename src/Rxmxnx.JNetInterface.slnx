@@ -1,87 +1,109 @@
 ﻿<Solution>
-  <Folder Name="/ApplicationTest/">
-    <Project Path="ApplicationTest\Rxmxnx.JNetInterface.ApplicationGuiTest\Rxmxnx.JNetInterface.ApplicationGuiTest.csproj" Type="Classic C#" />
-    <Project Path="ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj" Type="Classic C#" />
-    <Project Path="ApplicationTest\Rxmxnx.JNetInterface.ConsoleTest\Rxmxnx.JNetInterface.ConsoleTest.csproj" Type="Classic C#" />
-    <Project Path="ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest.fsproj" Type="Classic F#" />
-    <Project Path="ApplicationTest\Rxmxnx.JNetInterface.LauncherTest\Rxmxnx.JNetInterface.LauncherTest.csproj" Type="Classic C#" />
-    <Project Path="ApplicationTest\Rxmxnx.JNetInterface.LibraryTest\Rxmxnx.JNetInterface.LibraryTest.csproj" Type="Classic C#" />
-    <Project Path="ApplicationTest\Rxmxnx.JNetInterface.ManagedTest\Rxmxnx.JNetInterface.ManagedTest.csproj" Type="Classic C#" />
-    <Project Path="ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest.vbproj" Type="Classic VB" />
-    <File Path="ApplicationTest\Directory.Build.props" />
-    <File Path="ApplicationTest\README.md" />
-    <File Path="ApplicationTest\JNetInterface-App.targets" />
-    <File Path="ApplicationTest\JNetInterface-Config.targets" />
-    <File Path="ApplicationTest\JNetInterface-NativeAot.targets" />
-    <File Path="ApplicationTest\JNetInterface-Frameworks.targets" />
-  </Folder>
-  <Folder Name="/Global/">
-    <File Path="..\.github\workflows\release.yml" />
-    <File Path="..\.github\workflows\build.yml" />
-    <File Path="..\.gitignore" />
-    <File Path="..\README.md" />
-    <File Path="..\Directory.Build.props" />
-    <File Path="Library.targets" />
-  </Folder>
-  <Folder Name="/Global/Documentation/">
-    <File Path="..\docs\class-object.md" />
-    <File Path="..\docs\data-types-mapping.md" />
-    <File Path="..\docs\data-types-metadata.md" />
-    <File Path="..\docs\direct-buffers.md" />
-    <File Path="..\docs\error-handling.md" />
-    <File Path="..\docs\jni-accessing.md" />
-    <File Path="..\docs\jni-classes.md" />
-    <File Path="..\docs\jni-interfaces.md" />
-    <File Path="..\docs\jni-references.md" />
-    <File Path="..\docs\native-objects.md" />
-  </Folder>
-  <Folder Name="/Global/NativeImage/">
-    <File Path="..\native-image\README.md" />
-    <File Path="..\native-image\jni-config.json" />
-  </Folder>
-  <Folder Name="/Intermediate/">
-    <Project Path="Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj" Type="Classic C#" />
-    <Project Path="Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj" Type="Classic C#" />
-    <Project Path="Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj" Type="Classic C#" />
-    <Project Path="Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj" Type="Classic C#" />
-    <Project Path="Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj" Type="Classic C#" />
-    <File Path="..\docs\native-objects.md" />
-    <File Path="..\docs\class-object.md" />
-    <File Path="..\docs\data-types-mapping.md" />
-    <File Path="..\docs\direct-buffers.md" />
-    <File Path="..\docs\jni-accessing.md" />
-    <File Path="..\docs\jni-classes.md" />
-    <File Path="..\docs\jni-interfaces.md" />
-    <File Path="..\docs\jni-references.md" />
-    <File Path="..\docs\data-types-metadata.md" />
-    <File Path="..\docs\error-handling.md" />
-    <File Path="Intermediate\Intermediate.Library.targets" />
-  </Folder>
-  <Folder Name="/Package/">
-    <File Path="..\package\Intermediate-to-Package.targets" />
-    <File Path="..\package\Rxmxnx.JNetInterface\PACKAGE.md" />
-  </Folder>
-  <Folder Name="/Package/CorePackage/">
-    <File Path="..\package\Rxmxnx.JNetInterface.Core\PACKAGE.md" />
-  </Folder>
-  <Folder Name="/SourceGenerator/">
-    <Project Path="SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj" Type="Classic C#" />
-  </Folder>
-  <Folder Name="/Test/">
-    <Project Path="Test\Rxmxnx.JNetInterface.Base.Tests\Rxmxnx.JNetInterface.Base.Tests.csproj" Type="Classic C#" />
-    <Project Path="Test\Rxmxnx.JNetInterface.Extensions.Tests\Rxmxnx.JNetInterface.Extensions.Tests.csproj" Type="Classic C#" />
-    <Project Path="Test\Rxmxnx.JNetInterface.FFI.Tests\Rxmxnx.JNetInterface.FFI.Tests.csproj" Type="Classic C#" />
-    <Project Path="Test\Rxmxnx.JNetInterface.Implementation.Tests\Rxmxnx.JNetInterface.Implementation.Tests.csproj" Type="Classic C#" />
-    <Project Path="Test\Rxmxnx.JNetInterface.Native.Tests\Rxmxnx.JNetInterface.Native.Tests.csproj" Type="Classic C#" />
-    <Project Path="Test\Rxmxnx.JNetInterface.Primitives.Tests\Rxmxnx.JNetInterface.Primitives.Tests.csproj" Type="Classic C#" />
-    <File Path="Test\Tests.targets" />
-    <File Path="Test\CommonTests.targets" />
-  </Folder>
-  <Folder Name="/Test/Proxies/">
-    <Project Path="Test\Proxies\Rxmxnx.JNetInterface.Implementation.Tests.Proxies\Rxmxnx.JNetInterface.Implementation.Tests.Proxies.csproj" Type="Classic C#" />
-    <Project Path="Test\Proxies\Rxmxnx.JNetInterface.Native.Tests.Proxies\Rxmxnx.JNetInterface.Native.Tests.Proxies.csproj" Type="Classic C#" />
-    <Project Path="Test\Proxies\Rxmxnx.JNetInterface.NativeLibrary.Tests.Proxies\Rxmxnx.JNetInterface.NativeLibrary.Tests.Proxies.csproj" Type="Classic C#" />
-    <File Path="Test\Proxies\CommonNativeProxies.targets" />
-    <File Path="Test\Proxies\Native\NativeProxies.targets" />
-  </Folder>
+    <Folder Name="/ApplicationTest/">
+        <Project
+                Path="ApplicationTest\Rxmxnx.JNetInterface.ApplicationGuiTest\Rxmxnx.JNetInterface.ApplicationGuiTest.csproj"
+                Type="Classic C#"/>
+        <Project Path="ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj"
+                 Type="Classic C#"/>
+        <Project Path="ApplicationTest\Rxmxnx.JNetInterface.ConsoleTest\Rxmxnx.JNetInterface.ConsoleTest.csproj"
+                 Type="Classic C#"/>
+        <Project
+                Path="ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest.fsproj"
+                Type="Classic F#"/>
+        <Project Path="ApplicationTest\Rxmxnx.JNetInterface.LauncherTest\Rxmxnx.JNetInterface.LauncherTest.csproj"
+                 Type="Classic C#"/>
+        <Project Path="ApplicationTest\Rxmxnx.JNetInterface.LibraryTest\Rxmxnx.JNetInterface.LibraryTest.csproj"
+                 Type="Classic C#"/>
+        <Project Path="ApplicationTest\Rxmxnx.JNetInterface.ManagedTest\Rxmxnx.JNetInterface.ManagedTest.csproj"
+                 Type="Classic C#"/>
+        <Project
+                Path="ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest.vbproj"
+                Type="Classic VB"/>
+        <File Path="ApplicationTest\Directory.Build.props"/>
+        <File Path="ApplicationTest\README.md"/>
+        <File Path="ApplicationTest\JNetInterface-App.targets"/>
+        <File Path="ApplicationTest\JNetInterface-Config.targets"/>
+        <File Path="ApplicationTest\JNetInterface-NativeAot.targets"/>
+        <File Path="ApplicationTest\JNetInterface-Frameworks.targets"/>
+    </Folder>
+    <Folder Name="/Global/">
+        <File Path="..\.github\workflows\release.yml"/>
+        <File Path="..\.github\workflows\build.yml"/>
+        <File Path="..\.gitignore"/>
+        <File Path="..\README.md"/>
+        <File Path="..\Directory.Build.props"/>
+        <File Path="Library.targets"/>
+    </Folder>
+    <Folder Name="/Global/Documentation/">
+        <File Path="..\docs\class-object.md"/>
+        <File Path="..\docs\data-types-mapping.md"/>
+        <File Path="..\docs\data-types-metadata.md"/>
+        <File Path="..\docs\direct-buffers.md"/>
+        <File Path="..\docs\error-handling.md"/>
+        <File Path="..\docs\jni-accessing.md"/>
+        <File Path="..\docs\jni-classes.md"/>
+        <File Path="..\docs\jni-interfaces.md"/>
+        <File Path="..\docs\jni-references.md"/>
+        <File Path="..\docs\native-objects.md"/>
+    </Folder>
+    <Folder Name="/Global/NativeImage/">
+        <File Path="..\native-image\README.md"/>
+        <File Path="..\native-image\jni-config.json"/>
+    </Folder>
+    <Folder Name="/Intermediate/">
+        <Project
+                Path="Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj"
+                Type="Classic C#"/>
+        <Project
+                Path="Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"
+                Type="Classic C#"/>
+        <Project
+                Path="Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"
+                Type="Classic C#"/>
+        <Project
+                Path="Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj"
+                Type="Classic C#"/>
+        <Project
+                Path="Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj"
+                Type="Classic C#"/>
+        <File Path="Intermediate\Intermediate.Library.targets"/>
+    </Folder>
+    <Folder Name="/Package/">
+        <File Path="..\package\Intermediate-to-Package.targets"/>
+        <File Path="..\package\Rxmxnx.JNetInterface\PACKAGE.md"/>
+    </Folder>
+    <Folder Name="/Package/CorePackage/">
+        <File Path="..\package\Rxmxnx.JNetInterface.Core\PACKAGE.md"/>
+    </Folder>
+    <Folder Name="/SourceGenerator/">
+        <Project Path="SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj"
+                 Type="Classic C#"/>
+    </Folder>
+    <Folder Name="/Test/">
+        <Project Path="Test\Rxmxnx.JNetInterface.Base.Tests\Rxmxnx.JNetInterface.Base.Tests.csproj" Type="Classic C#"/>
+        <Project Path="Test\Rxmxnx.JNetInterface.Extensions.Tests\Rxmxnx.JNetInterface.Extensions.Tests.csproj"
+                 Type="Classic C#"/>
+        <Project Path="Test\Rxmxnx.JNetInterface.FFI.Tests\Rxmxnx.JNetInterface.FFI.Tests.csproj" Type="Classic C#"/>
+        <Project Path="Test\Rxmxnx.JNetInterface.Implementation.Tests\Rxmxnx.JNetInterface.Implementation.Tests.csproj"
+                 Type="Classic C#"/>
+        <Project Path="Test\Rxmxnx.JNetInterface.Native.Tests\Rxmxnx.JNetInterface.Native.Tests.csproj"
+                 Type="Classic C#"/>
+        <Project Path="Test\Rxmxnx.JNetInterface.Primitives.Tests\Rxmxnx.JNetInterface.Primitives.Tests.csproj"
+                 Type="Classic C#"/>
+        <File Path="Test\Tests.targets"/>
+        <File Path="Test\CommonTests.targets"/>
+    </Folder>
+    <Folder Name="/Test/Proxies/">
+        <Project
+                Path="Test\Proxies\Rxmxnx.JNetInterface.Implementation.Tests.Proxies\Rxmxnx.JNetInterface.Implementation.Tests.Proxies.csproj"
+                Type="Classic C#"/>
+        <Project
+                Path="Test\Proxies\Rxmxnx.JNetInterface.Native.Tests.Proxies\Rxmxnx.JNetInterface.Native.Tests.Proxies.csproj"
+                Type="Classic C#"/>
+        <Project
+                Path="Test\Proxies\Rxmxnx.JNetInterface.NativeLibrary.Tests.Proxies\Rxmxnx.JNetInterface.NativeLibrary.Tests.Proxies.csproj"
+                Type="Classic C#"/>
+        <File Path="Test\Proxies\CommonNativeProxies.targets"/>
+        <File Path="Test\Proxies\Native\NativeProxies.targets"/>
+    </Folder>
 </Solution>

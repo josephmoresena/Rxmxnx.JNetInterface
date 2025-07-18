@@ -119,6 +119,7 @@ Example Java native call signatures and corresponding JNI parameters:
 | `<T> call(T a)`                                       | `JObjectLocalRef`                                                         |  
 | `<T> call(T[] a, boolean[] b)`                        | `JObjectArrayLocalRef`, `JBooleanArrayLocalRef`                           |  
 | `<T call Number> method(T a, char b)`                 | `JObjectLocalRef`, `JChar`                                                |  
+| `call(int a, double b, long c, float d)`              | `JInt`, `System.Double`, `JLong`, `System.Single`                         |  
 | `call(int a, String b, long c, int[] d, Integer[] e)` | `JInt`, `JStringLocalRef`, `JLong`, `JIntArrayLocalRef`, `JArrayLocalRef` |  
 
 *Refer to the [JNI Naming Conventions](jni-classes.md#naming-conventions).*
@@ -211,6 +212,8 @@ adapter.FinalizeCall<TElement>(JArrayObject<TElement>? result);
 ##### Notes
 
 - Methods using `IVirtualMachine` are more efficient since `Rxmxnx.JNetInterface` supports multiple JVM instances.
+- `JDouble` and `JFloat` types are not ABI-compliant and should not be used as return types or parameter types in native
+  JNI calls. Instead, use the corresponding CLR-specific types.
 - Both `JNativeCallAdapter` and `JNativeCallAdapter.Builder` are `ref struct` types, making them incompatible
   with the Visual Basic .NET language.
 - Once the `Build()` method is called, it is always required to call the `Finalize` method on the created instance.

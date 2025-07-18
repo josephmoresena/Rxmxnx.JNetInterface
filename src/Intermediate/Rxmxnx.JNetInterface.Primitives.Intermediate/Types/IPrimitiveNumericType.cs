@@ -3,9 +3,13 @@ namespace Rxmxnx.JNetInterface.Types;
 /// <summary>
 /// This interface exposes an object that represents a java primitive number.
 /// </summary>
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-internal interface IPrimitiveNumericType : IPrimitiveType
+internal unsafe interface IPrimitiveNumericType : IPrimitiveType
 {
 	/// <summary>
 	/// Retrieves the integer part of a <see cref="Single"/> value.
@@ -18,7 +22,7 @@ internal interface IPrimitiveNumericType : IPrimitiveType
 	protected static TInteger GetIntegerValue<TInteger, TFloatingPoint>(TFloatingPoint value)
 		where TInteger : unmanaged, IBinaryInteger<TInteger>
 		where TFloatingPoint : unmanaged, IFloatingPoint<TFloatingPoint>
-		=> NativeUtilities.SizeOf<TInteger>() switch
+		=> sizeof(TInteger) switch
 		{
 			<= sizeof(Int32) => TFloatingPoint.IsPositive(value) ?
 				IPrimitiveNumericType.CreateTruncating<TInteger, Int32, TFloatingPoint>(value) :

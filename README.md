@@ -9,8 +9,8 @@
 
 #### Package Information
 
-| **Core Assembly**                                                                                                                                                                                                                                                                    | **Main Assembly**                                                                                                                                                                                                                                    |
-|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Core Assembly**                                                                                                                     | **Main Assembly**                                                                                                     |
+|---------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
 | [![NuGet(Core)](https://img.shields.io/nuget/v/Rxmxnx.JNetInterface.Core)](https://www.nuget.org/packages/Rxmxnx.JNetInterface.Core/) | [![NuGet](https://img.shields.io/nuget/v/Rxmxnx.JNetInterface)](https://www.nuget.org/packages/Rxmxnx.JNetInterface/) |
 
 # Description
@@ -91,6 +91,14 @@ The table below shows how common JNI types map to `Rxmxnx.JNetInterface`.
    `IThread` is used.
 2. `JClassObject` and `JGlobal` references to classes may not have active JNI references and are loaded as needed.
 3. Definitions serve as keys for JNI access calls.
+
+**Note:** As mentioned in
+[Inconsistent Interop Behavior for Blittable Floating-Point Wrapper Structs in Windows](https://github.com/dotnet/runtime/issues/117778#issuecomment-3085491218),
+it is not possible to use `JDouble` and `JFloat` in native JNI calls due to differences with the ABI, even though these
+structs are binary-equivalent to `System.Double` and `System.Single`, respectively.
+
+Therefore, any JNI call that returns or receives a `double` or `float` value as a parameter must use the CLR native
+types when declaring methods, function pointers, or delegates.
 
 ---  
 
