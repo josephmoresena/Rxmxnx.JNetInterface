@@ -27,7 +27,8 @@ public partial class Launcher
 
 		protected override async Task<Jdk?> DownloadJdk(JdkVersion version, Architecture arch)
 		{
-			if (this.CurrentArch is Architecture.Arm64 && version is JdkVersion.Jdk6) return default;
+			if (false && this.CurrentArch is Architecture.Arm64 && version is JdkVersion.Jdk6) return default;
+			// TODO: Remove false
 
 			String jdkPath = $"jdk_{arch}_{version}";
 			if (this.GetJdk(version, arch, jdkPath) is { } result) return result;
