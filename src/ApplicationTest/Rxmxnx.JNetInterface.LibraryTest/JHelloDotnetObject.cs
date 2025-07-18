@@ -24,6 +24,7 @@ public sealed partial class JHelloDotnetObject : JLocalObject, IClassType<JHello
 	public static JClassObject LoadClass<TManaged>(IEnvironment env, Byte[] classByteCode, TManaged managed)
 		where TManaged : IManagedCallback
 	{
+		managed.Writer.WriteLine($"Loading bytecode... {classByteCode.LongLength / 1024.0:0.00} KiB");
 		JClassObject result = JClassObject.LoadClass<JHelloDotnetObject>(env, classByteCode);
 		JniCallback.RegisterNativeMethods(result, managed);
 		return result;

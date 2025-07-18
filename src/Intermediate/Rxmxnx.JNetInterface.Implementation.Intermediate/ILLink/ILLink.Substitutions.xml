@@ -196,7 +196,7 @@
             <method signature="System.String GetSha256Hex(System.ReadOnlySpan`1&lt;System.Byte&gt;)"
                     body="remove"/>
             <!-- Library -->
-            <method signature="System.Void LoadLibrary(System.String,System.Nullable&lt;System.IntPtr&gt;)"
+            <method signature="System.Void LoadLibrary(System.String,System.Nullable`1&lt;System.IntPtr&gt;)"
                     body="stub"/>
             <method signature="System.Void GetJniExport(System.IntPtr,System.String,System.Boolean,System.IntPtr)"
                     body="stub"/>
