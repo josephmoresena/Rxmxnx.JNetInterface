@@ -103,7 +103,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ windows-latest, ubuntu-latest, macos-latest, macos-13 ]
+        os: [ windows-latest, ubuntu-latest, macos-latest ]
     env:
       JNETINTERFACE_ONLY_NATIVE_TEST: false
     steps:
@@ -241,7 +241,6 @@ jobs:
             ./artifacts/*HelloJni.* 
 
       - name: Create Native Artifact Logs
-        if: runner.arch == 'X64'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ runner.os }}-Artifact-Logs

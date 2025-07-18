@@ -17,7 +17,7 @@ public partial class Launcher
 		private async Task Initialize()
 		{
 			List<Task> tasks = [];
-			Boolean isGitHub =
+			Boolean isGitHub = false &&  //TODO: Remove False
 				Boolean.TryParse(Environment.GetEnvironmentVariable("GITHUB_ACTIONS"), out Boolean gitHub) && gitHub;
 			foreach (JdkVersion version in Enum.GetValues<JdkVersion>().AsSpan())
 			{

@@ -6,10 +6,6 @@ public partial class Launcher
 	{
 		private static readonly Dictionary<JdkVersion, String> i686Url = new()
 		{
-			{
-				JdkVersion.Jdk6,
-				"https://www.atteya.net/site/en/downloads/java-jdk?download=47:java-jdk-6u45-windows-i586"
-			},
 			{ JdkVersion.Jdk8, "https://cdn.azul.com/zulu/bin/zulu8.84.0.15-ca-jdk8.0.442-win_i686.zip" },
 			{ JdkVersion.Jdk11, "https://cdn.azul.com/zulu/bin/zulu11.78.15-ca-jdk11.0.26-win_i686.zip" },
 			{ JdkVersion.Jdk17, "https://cdn.azul.com/zulu/bin/zulu17.56.15-ca-jdk17.0.14-win_i686.zip" },
