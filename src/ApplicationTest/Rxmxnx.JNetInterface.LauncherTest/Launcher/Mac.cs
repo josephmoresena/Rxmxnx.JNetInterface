@@ -19,16 +19,15 @@ public partial class Launcher
 		protected override String JavaExecutableName => "java";
 		protected override String JavaCompilerName => "javac";
 
-		public override Jdk GetMinJdk() //TODO: Remove true
-			=> true || this.CurrentArch is Architecture.X64 ? this._amd64[JdkVersion.Jdk6] : this._arm64[JdkVersion.Jdk8];
+		public override Jdk GetMinJdk()
+			=> this.CurrentArch is Architecture.X64 ? this._amd64[JdkVersion.Jdk6] : this._arm64[JdkVersion.Jdk8];
 
 		protected override String GetJavaLibraryName(JdkVersion version)
 			=> version is JdkVersion.Jdk6 ? "libserver.dylib" : "libjvm.dylib";
 
 		protected override async Task<Jdk?> DownloadJdk(JdkVersion version, Architecture arch)
 		{
-			if (false && this.CurrentArch is Architecture.Arm64 && version is JdkVersion.Jdk6) return default;
-			// TODO: Remove false
+			if (this.CurrentArch is Architecture.Arm64 && version is JdkVersion.Jdk6) return default;
 
 			String jdkPath = $"jdk_{arch}_{version}";
 			if (this.GetJdk(version, arch, jdkPath) is { } result) return result;

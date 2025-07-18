@@ -17,15 +17,10 @@ public partial class Launcher
 		private async Task Initialize()
 		{
 			List<Task> tasks = [];
-			Boolean isGitHub = false &&  //TODO: Remove False
-				Boolean.TryParse(Environment.GetEnvironmentVariable("GITHUB_ACTIONS"), out Boolean gitHub) && gitHub;
 			foreach (JdkVersion version in Enum.GetValues<JdkVersion>().AsSpan())
 			{
 				if (this.CurrentArch is Architecture.Arm64)
-				{
 					tasks.Add(this.AppendJdk(this._arm64, version, Architecture.Arm64));
-					if (isGitHub) continue;
-				}
 				tasks.Add(this.AppendJdk(this._amd64, version, Architecture.X64));
 			}
 			await Task.WhenAll(tasks);
