@@ -19,8 +19,8 @@ public partial class Launcher
 		protected override String JavaExecutableName => "java";
 		protected override String JavaCompilerName => "javac";
 
-		public override Jdk GetMinJdk() //TODO: Remove False
-			=> false && this.CurrentArch is Architecture.X64 ? this._amd64[JdkVersion.Jdk6] : this._arm64[JdkVersion.Jdk8];
+		public override Jdk GetMinJdk() //TODO: Remove true
+			=> true || this.CurrentArch is Architecture.X64 ? this._amd64[JdkVersion.Jdk6] : this._arm64[JdkVersion.Jdk8];
 
 		protected override String GetJavaLibraryName(JdkVersion version)
 			=> version is JdkVersion.Jdk6 ? "libserver.dylib" : "libjvm.dylib";

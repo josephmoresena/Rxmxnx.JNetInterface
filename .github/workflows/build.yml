@@ -229,7 +229,6 @@ jobs:
           }
 
       - name: Create Native Artifact
-        if: runner.arch == 'X64'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ runner.os }}-Artifact
