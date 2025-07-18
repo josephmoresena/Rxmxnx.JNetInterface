@@ -15,8 +15,10 @@ public readonly ref partial struct JNativeCallAdapter
 		/// </summary>
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 		/// <returns>Initial <see cref="JLocalObject"/> instance for <paramref name="localRef"/>.</returns>
-		internal JLocalObject CreateInitialObject(JObjectLocalRef localRef)
+		internal JLocalObject? CreateInitialObject(JObjectLocalRef localRef)
 		{
+			if (localRef == default) return default;
+
 			JEnvironment env = this._callAdapter._env;
 			this._callAdapter._cache.Activate(out LocalCache previous);
 			try
@@ -42,9 +44,11 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <typeparam name="TObject">A <see cref="IReferenceType"/> type.</typeparam>
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 		/// <returns>Initial <typaramref name="TObject"/> instance for <paramref name="localRef"/>.</returns>
-		internal TObject CreateInitialObject<TObject>(JObjectLocalRef localRef)
+		internal TObject? CreateInitialObject<TObject>(JObjectLocalRef localRef)
 			where TObject : JReferenceObject, IReferenceType<TObject>
 		{
+			if (localRef == default) return default;
+
 			JReferenceTypeMetadata typeMetadata = (JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TObject>();
 			if (typeMetadata.Modifier == JTypeModifier.Final) return this.CreateFinalObject<TObject>(localRef);
 			JClassObject jClass = this.GetObjectClass(localRef, out JReferenceTypeMetadata classMetadata, true);
@@ -56,8 +60,10 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 		/// <param name="validateReference">Indicates whether <paramref name="classRef"/> should be validated.</param>
 		/// <returns>Initial <see cref="JClassObject"/> instance for <paramref name="classRef"/>.</returns>
-		internal JClassObject CreateInitialClass(JClassLocalRef classRef, Boolean validateReference = false)
+		internal JClassObject? CreateInitialClass(JClassLocalRef classRef, Boolean validateReference = false)
 		{
+			if (classRef.IsDefault) return default;
+
 			JEnvironment env = this._callAdapter._env;
 			if (validateReference) this.ThrowIfNotClassObject(classRef.Value);
 			JClassObject result = env.GetReferenceTypeClass(classRef, true);

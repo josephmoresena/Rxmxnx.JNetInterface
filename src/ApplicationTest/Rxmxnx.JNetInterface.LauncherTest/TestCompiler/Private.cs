@@ -101,11 +101,7 @@ public partial class TestCompiler
 	{
 		CompileNetArgs compileArgs = new(restoreArgs, outputPath)
 		{
-			EnableTrace =
-				onlyNativeAot || restoreArgs.Version is NetVersion.Net90 && (OperatingSystem.IsWindows() ||
-					OperatingSystem.IsLinux() && arch is Architecture.Arm64), //TODO: Fix exit error code
-			BuildDependencies = true,
-			Publish = Publish.SelfContained,
+			EnableTrace = onlyNativeAot, BuildDependencies = true, Publish = Publish.SelfContained,
 		};
 
 		await TestCompiler.RestoreNet(restoreArgs);

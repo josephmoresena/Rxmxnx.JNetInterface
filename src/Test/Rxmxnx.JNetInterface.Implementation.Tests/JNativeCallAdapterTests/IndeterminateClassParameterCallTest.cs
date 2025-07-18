@@ -82,7 +82,7 @@ public partial class JNativeCallAdapterTests
 				JNativeCallAdapter.Create(JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference),
 				                          proxyEnv.Reference) :
 				JNativeCallAdapter.Create(proxyEnv.Reference);
-			adapter = adapterBuilder.WithParameter(classRef.Value, out JLocalObject jLocal).Build();
+			adapter = adapterBuilder.WithParameter(classRef.Value, out JLocalObject? jLocal).Build();
 			IVirtualMachine vm = JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference);
 			testClass = Assert.IsType<JClassObject>(jLocal);
 			Assert.Equal(vm.GetEnvironment(), adapter.Environment);
