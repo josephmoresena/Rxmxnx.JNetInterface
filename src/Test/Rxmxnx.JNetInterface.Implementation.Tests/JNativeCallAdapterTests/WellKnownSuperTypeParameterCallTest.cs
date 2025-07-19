@@ -78,7 +78,7 @@ public partial class JNativeCallAdapterTests
 			proxyEnv.CallBooleanMethod(classRef.Value, proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
 			                           ReadOnlyValPtr<JValueWrapper>.Zero).Returns(false);
 
-			_ = builder.WithParameter(localRef, out JLocalObject result);
+			_ = builder.WithParameter(localRef, out JLocalObject? result);
 
 			return Assert.IsType<JErrorObject>(result, false);
 		}
@@ -164,7 +164,7 @@ public partial class JNativeCallAdapterTests
 			proxyEnv.CallBooleanMethod(classRef.Value, proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
 			                           ReadOnlyValPtr<JValueWrapper>.Zero).Returns(false);
 
-			_ = builder.WithParameter(localRef, out JLocalObject result);
+			_ = builder.WithParameter(localRef, out JLocalObject? result);
 
 			return Assert.IsType<JProxyObject>(Assert.IsType<IInterfaceObject<JSerializableObject>>(result, false),
 			                                   false);
@@ -266,7 +266,7 @@ public partial class JNativeCallAdapterTests
 			                                       proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
 			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
 
-			_ = builder.WithParameter(localRef, out JLocalObject result);
+			_ = builder.WithParameter(localRef, out JLocalObject? result);
 			JArrayObject jArray = Assert.IsType<JArrayObject>(result, false);
 			Assert.Equal(JArrayObject<JArrayObject<JArrayObject<JArrayObject<JErrorObject>>>>.Metadata,
 			             jArray.TypeMetadata);
@@ -368,7 +368,7 @@ public partial class JNativeCallAdapterTests
 			                                       proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
 			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
 
-			_ = builder.WithParameter(localRef, out JLocalObject result);
+			_ = builder.WithParameter(localRef, out JLocalObject? result);
 			JArrayObject jArray = Assert.IsType<JArrayObject>(result, false);
 			Assert.Equal(JArrayObject<JArrayObject<JArrayObject<JArrayObject<JSerializableObject>>>>.Metadata,
 			             jArray.TypeMetadata);
@@ -470,7 +470,7 @@ public partial class JNativeCallAdapterTests
 			                                       proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
 			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
 
-			_ = builder.WithParameter(localRef, out JLocalObject result);
+			_ = builder.WithParameter(localRef, out JLocalObject? result);
 			JArrayObject jArray = Assert.IsType<JArrayObject>(result, false);
 			Assert.Equal(JArrayObject<JArrayObject<JArrayObject<JArrayObject<JEnumObject>>>>.Metadata,
 			             jArray.TypeMetadata);
