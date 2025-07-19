@@ -658,11 +658,11 @@ internal unsafe partial class ReferenceHelper
 	private static JLong GetLongField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
 		=> ReferenceHelper.GetProxy(envRef).GetLongField(localRef, fieldId);
 	[UnmanagedCallersOnly]
-	private static JFloat GetFloatField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
-		=> ReferenceHelper.GetProxy(envRef).GetFloatField(localRef, fieldId);
+	private static Single GetFloatField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
+		=> ReferenceHelper.GetProxy(envRef).GetFloatField(localRef, fieldId).Value;
 	[UnmanagedCallersOnly]
-	private static JDouble GetDoubleField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
-		=> ReferenceHelper.GetProxy(envRef).GetDoubleField(localRef, fieldId);
+	private static Double GetDoubleField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
+		=> ReferenceHelper.GetProxy(envRef).GetDoubleField(localRef, fieldId).Value;
 	[UnmanagedCallersOnly]
 	private static void SetObjectField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId,
 		JObjectLocalRef value)
@@ -687,11 +687,11 @@ internal unsafe partial class ReferenceHelper
 	private static void SetLongField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId, JLong value)
 		=> ReferenceHelper.GetProxy(envRef).SetLongField(localRef, fieldId, value);
 	[UnmanagedCallersOnly]
-	private static void SetFloatField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId, JFloat value)
+	private static void SetFloatField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId, Single value)
 		=> ReferenceHelper.GetProxy(envRef).SetFloatField(localRef, fieldId, value);
 	[UnmanagedCallersOnly]
 	private static void SetDoubleField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId,
-		JDouble value)
+		Double value)
 		=> ReferenceHelper.GetProxy(envRef).SetDoubleField(localRef, fieldId, value);
 
 	[UnmanagedCallersOnly]
@@ -787,11 +787,11 @@ internal unsafe partial class ReferenceHelper
 	private static JLong GetStaticLongField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId)
 		=> ReferenceHelper.GetProxy(envRef).GetStaticLongField(classRef, fieldId);
 	[UnmanagedCallersOnly]
-	private static JFloat GetStaticFloatField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId)
-		=> ReferenceHelper.GetProxy(envRef).GetStaticFloatField(classRef, fieldId);
+	private static Single GetStaticFloatField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId)
+		=> ReferenceHelper.GetProxy(envRef).GetStaticFloatField(classRef, fieldId).Value;
 	[UnmanagedCallersOnly]
-	private static JDouble GetStaticDoubleField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId)
-		=> ReferenceHelper.GetProxy(envRef).GetStaticDoubleField(classRef, fieldId);
+	private static Double GetStaticDoubleField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId)
+		=> ReferenceHelper.GetProxy(envRef).GetStaticDoubleField(classRef, fieldId).Value;
 	[UnmanagedCallersOnly]
 	private static void SetStaticObjectField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId,
 		JObjectLocalRef value)
@@ -821,11 +821,11 @@ internal unsafe partial class ReferenceHelper
 		=> ReferenceHelper.GetProxy(envRef).SetStaticLongField(classRef, fieldId, value);
 	[UnmanagedCallersOnly]
 	private static void SetStaticFloatField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId,
-		JFloat value)
+		Single value)
 		=> ReferenceHelper.GetProxy(envRef).SetStaticFloatField(classRef, fieldId, value);
 	[UnmanagedCallersOnly]
 	private static void SetStaticDoubleField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId,
-		JDouble value)
+		Double value)
 		=> ReferenceHelper.GetProxy(envRef).SetStaticDoubleField(classRef, fieldId, value);
 
 	[UnmanagedCallersOnly]

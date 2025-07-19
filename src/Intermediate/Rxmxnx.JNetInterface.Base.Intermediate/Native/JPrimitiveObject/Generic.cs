@@ -6,7 +6,11 @@ internal partial class JPrimitiveObject
 	/// Internal <see cref="JPrimitiveObject"/> implementation.
 	/// </summary>
 	/// <typeparam name="TValue">A <see langword="unmanaged"/> type.</typeparam>
-	public abstract partial class Generic<TValue> : JPrimitiveObject, IPrimitiveType, IPrimitiveValue<TValue>
+#if !PACKAGE
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
+	public abstract unsafe partial class Generic<TValue> : JPrimitiveObject, IPrimitiveType, IPrimitiveValue<TValue>
 		where TValue : unmanaged, IEquatable<TValue>, IComparable, IConvertible, IComparable<TValue>
 	{
 #if !PACKAGE
@@ -21,7 +25,7 @@ internal partial class JPrimitiveObject
 		/// <summary>
 		/// Size of the current type in bytes.
 		/// </summary>
-		public override Int32 SizeOf => NativeUtilities.SizeOf<TValue>();
+		public override Int32 SizeOf => sizeof(TValue);
 
 		/// <summary>
 		/// Constructor.

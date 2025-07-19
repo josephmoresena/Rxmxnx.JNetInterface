@@ -5,11 +5,9 @@ public sealed class FloatFieldTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 
-	[SkippableFact]
+	[Fact]
 	internal void InstanceTest()
 	{
-		Skip.If(OperatingSystem.IsWindows(),
-		        "Error handling floating-point numbers due to calling convention on Windows.");
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		try
 		{
@@ -28,11 +26,9 @@ public sealed class FloatFieldTests
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
-	[SkippableFact]
+	[Fact]
 	internal void ExtensionTest()
 	{
-		Skip.If(OperatingSystem.IsWindows(),
-		        "Error handling floating-point numbers due to calling convention on Windows.");
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		try
 		{
@@ -52,11 +48,9 @@ public sealed class FloatFieldTests
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
-	[SkippableFact]
+	[Fact]
 	internal void StaticTest()
 	{
-		Skip.If(OperatingSystem.IsWindows(),
-		        "Error handling floating-point numbers due to calling convention on Windows.");
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		try
 		{

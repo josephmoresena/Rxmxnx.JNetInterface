@@ -19,6 +19,10 @@ public readonly ref partial struct JNativeCallAdapter
 	/// </summary>
 	/// <param name="result">Primitive result.</param>
 	/// <returns><paramref name="result"/>.</returns>
+	/// <remarks>
+	/// Note that <see cref="JDouble"/> and <see cref="JFloat"/> are not ABI-compliant types, and therefore should
+	/// not be used as valid return types for native JNI functions.
+	/// </remarks>
 	public TPrimitive FinalizeCall<TPrimitive>(TPrimitive result)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
@@ -156,7 +160,7 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="localRef">A parameter <see cref="JObjectLocalRef"/> reference.</param>
 		/// <param name="jLocal">A <see cref="JLocalObject"/> instance from <paramref name="localRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
-		public Builder WithParameter(JObjectLocalRef localRef, out JLocalObject jLocal)
+		public Builder WithParameter(JObjectLocalRef localRef, out JLocalObject? jLocal)
 		{
 			jLocal = this.CreateInitialObject(localRef);
 			return this;
@@ -167,7 +171,7 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="classRef">A parameter <see cref="JClassLocalRef"/> reference.</param>
 		/// <param name="jClass">A <see cref="JClassObject"/> instance from <paramref name="classRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
-		public Builder WithParameter(JClassLocalRef classRef, out JClassObject jClass)
+		public Builder WithParameter(JClassLocalRef classRef, out JClassObject? jClass)
 		{
 			jClass = this.CreateInitialClass(classRef, true);
 			return this;
@@ -178,7 +182,7 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="stringRef">A parameter <see cref="JStringLocalRef"/> reference.</param>
 		/// <param name="jString">A <see cref="JStringObject"/> instance from <paramref name="stringRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
-		public Builder WithParameter(JStringLocalRef stringRef, out JStringObject jString)
+		public Builder WithParameter(JStringLocalRef stringRef, out JStringObject? jString)
 		{
 			jString = this.CreateInitialObject<JStringObject>(stringRef.Value);
 			return this;
@@ -189,7 +193,7 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="throwableRef">A parameter <see cref="JThrowableLocalRef"/> reference.</param>
 		/// <param name="jThrowable">A <see cref="JThrowableObject"/> instance from <paramref name="throwableRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
-		public Builder WithParameter(JThrowableLocalRef throwableRef, out JThrowableObject jThrowable)
+		public Builder WithParameter(JThrowableLocalRef throwableRef, out JThrowableObject? jThrowable)
 		{
 			jThrowable = this.CreateInitialObject<JThrowableObject>(throwableRef.Value);
 			return this;
@@ -200,9 +204,9 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="arrayRef">A parameter <see cref="JArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject"/> instance from <paramref name="arrayRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
-		public Builder WithParameter(JArrayLocalRef arrayRef, out JArrayObject jArray)
+		public Builder WithParameter(JArrayLocalRef arrayRef, out JArrayObject? jArray)
 		{
-			jArray = (JArrayObject)this.CreateInitialObject<JLocalObject>(arrayRef.Value);
+			jArray = (JArrayObject?)this.CreateInitialObject<JLocalObject>(arrayRef.Value);
 			return this;
 		}
 		/// <summary>
@@ -211,7 +215,7 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="arrayRef">A parameter <see cref="JBooleanArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{JBoolean}"/> instance from <paramref name="arrayRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
-		public Builder WithParameter(JBooleanArrayLocalRef arrayRef, out JArrayObject<JBoolean> jArray)
+		public Builder WithParameter(JBooleanArrayLocalRef arrayRef, out JArrayObject<JBoolean>? jArray)
 		{
 			jArray = this.CreateInitialObject<JArrayObject<JBoolean>>(arrayRef.Value);
 			return this;
@@ -222,7 +226,7 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="arrayRef">A parameter <see cref="JByteArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{JByte}"/> instance from <paramref name="arrayRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
-		public Builder WithParameter(JByteArrayLocalRef arrayRef, out JArrayObject<JByte> jArray)
+		public Builder WithParameter(JByteArrayLocalRef arrayRef, out JArrayObject<JByte>? jArray)
 		{
 			jArray = this.CreateInitialObject<JArrayObject<JByte>>(arrayRef.Value);
 			return this;
@@ -233,7 +237,7 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="arrayRef">A parameter <see cref="JCharArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{JChar}"/> instance from <paramref name="arrayRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
-		public Builder WithParameter(JCharArrayLocalRef arrayRef, out JArrayObject<JChar> jArray)
+		public Builder WithParameter(JCharArrayLocalRef arrayRef, out JArrayObject<JChar>? jArray)
 		{
 			jArray = this.CreateInitialObject<JArrayObject<JChar>>(arrayRef.Value);
 			return this;
@@ -244,7 +248,7 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="arrayRef">A parameter <see cref="JDoubleArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{JDouble}"/> instance from <paramref name="arrayRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
-		public Builder WithParameter(JDoubleArrayLocalRef arrayRef, out JArrayObject<JDouble> jArray)
+		public Builder WithParameter(JDoubleArrayLocalRef arrayRef, out JArrayObject<JDouble>? jArray)
 		{
 			jArray = this.CreateInitialObject<JArrayObject<JDouble>>(arrayRef.Value);
 			return this;
@@ -255,7 +259,7 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="arrayRef">A parameter <see cref="JFloatArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{JFloat}"/> instance from <paramref name="arrayRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
-		public Builder WithParameter(JFloatArrayLocalRef arrayRef, out JArrayObject<JFloat> jArray)
+		public Builder WithParameter(JFloatArrayLocalRef arrayRef, out JArrayObject<JFloat>? jArray)
 		{
 			jArray = this.CreateInitialObject<JArrayObject<JFloat>>(arrayRef.Value);
 			return this;
@@ -266,7 +270,7 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="arrayRef">A parameter <see cref="JIntArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{JInt}"/> instance from <paramref name="arrayRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
-		public Builder WithParameter(JIntArrayLocalRef arrayRef, out JArrayObject<JInt> jArray)
+		public Builder WithParameter(JIntArrayLocalRef arrayRef, out JArrayObject<JInt>? jArray)
 		{
 			jArray = this.CreateInitialObject<JArrayObject<JInt>>(arrayRef.Value);
 			return this;
@@ -277,7 +281,7 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="arrayRef">A parameter <see cref="JLongArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{JLong}"/> instance from <paramref name="arrayRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
-		public Builder WithParameter(JLongArrayLocalRef arrayRef, out JArrayObject<JLong> jArray)
+		public Builder WithParameter(JLongArrayLocalRef arrayRef, out JArrayObject<JLong>? jArray)
 		{
 			jArray = this.CreateInitialObject<JArrayObject<JLong>>(arrayRef.Value);
 			return this;
@@ -288,7 +292,7 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="arrayRef">A parameter <see cref="JShortArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{JShort}"/> instance from <paramref name="arrayRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
-		public Builder WithParameter(JShortArrayLocalRef arrayRef, out JArrayObject<JShort> jArray)
+		public Builder WithParameter(JShortArrayLocalRef arrayRef, out JArrayObject<JShort>? jArray)
 		{
 			jArray = this.CreateInitialObject<JArrayObject<JShort>>(arrayRef.Value);
 			return this;
@@ -299,7 +303,7 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="arrayRef">A parameter <see cref="JObjectArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{JLocalObject}"/> instance from <paramref name="arrayRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
-		public Builder WithParameter<TElement>(JObjectArrayLocalRef arrayRef, out JArrayObject<TElement> jArray)
+		public Builder WithParameter<TElement>(JObjectArrayLocalRef arrayRef, out JArrayObject<TElement>? jArray)
 			where TElement : JReferenceObject, IReferenceType<TElement>
 		{
 			jArray = this.CreateInitialObject<JArrayObject<TElement>>(arrayRef.Value);
@@ -312,19 +316,19 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="localRef">A parameter <see cref="JObjectLocalRef"/> reference.</param>
 		/// <param name="jLocal">A <typeparamref name="TObject"/> instance from <paramref name="localRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
-		public Builder WithParameter<TObject>(JObjectLocalRef localRef, out TObject jLocal)
+		public Builder WithParameter<TObject>(JObjectLocalRef localRef, out TObject? jLocal)
 			where TObject : JReferenceObject, IReferenceType<TObject>
 		{
 			if (JLocalObject.IsObjectType<TObject>())
 			{
 				Unsafe.SkipInit(out jLocal);
-				return this.WithParameter(localRef, out Unsafe.As<TObject, JLocalObject>(ref jLocal));
+				return this.WithParameter(localRef, out Unsafe.As<TObject?, JLocalObject?>(ref jLocal));
 			}
 			if (JLocalObject.IsClassType<TObject>())
 			{
 				Unsafe.SkipInit(out jLocal);
 				JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
-				return this.WithParameter(classRef, out Unsafe.As<TObject, JClassObject>(ref jLocal));
+				return this.WithParameter(classRef, out Unsafe.As<TObject?, JClassObject?>(ref jLocal));
 			}
 			jLocal = this.CreateInitialObject<TObject>(localRef);
 			return this;
@@ -335,7 +339,7 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="throwableRef">A parameter <see cref="JThrowableLocalRef"/> reference.</param>
 		/// <param name="jThrowable">A <see cref="JThrowableObject"/> instance from <paramref name="throwableRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
-		public Builder WithParameter<TThrowable>(JThrowableLocalRef throwableRef, out TThrowable jThrowable)
+		public Builder WithParameter<TThrowable>(JThrowableLocalRef throwableRef, out TThrowable? jThrowable)
 			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
 			jThrowable = this.CreateInitialObject<TThrowable>(throwableRef.Value);
@@ -348,7 +352,7 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="arrayRef">A parameter <see cref="JArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{TElement}"/> instance from <paramref name="arrayRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
-		public Builder WithParameter<TElement>(JArrayLocalRef arrayRef, out JArrayObject<TElement> jArray)
+		public Builder WithParameter<TElement>(JArrayLocalRef arrayRef, out JArrayObject<TElement>? jArray)
 			where TElement : IDataType<TElement>
 		{
 			jArray = this.CreateInitialObject<JArrayObject<TElement>>(arrayRef.Value);

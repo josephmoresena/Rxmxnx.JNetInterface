@@ -75,6 +75,16 @@ internal static class ImplementationValidationUtilities
 		throw new ArgumentException(message ?? IMessageResource.GetInstance().DisposedObject);
 	}
 	/// <summary>
+	/// Throws an exception if <paramref name="localRef"/> is default.
+	/// </summary>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+	/// <exception cref="InvalidOperationException">Throws an exception if <paramref name="localRef"/> is default.</exception>
+	public static void ThrowIfDefault(JObjectLocalRef localRef)
+	{
+		if (localRef == default)
+			throw new ArgumentException(IMessageResource.GetInstance().InvalidReferenceType("null"));
+	}
+	/// <summary>
 	/// Throws an exception if <paramref name="thread"/> is different to current thread.
 	/// </summary>
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>

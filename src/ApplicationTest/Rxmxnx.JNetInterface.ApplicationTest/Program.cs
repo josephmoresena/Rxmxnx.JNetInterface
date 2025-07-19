@@ -41,7 +41,6 @@ public static class Program
 
 		try
 		{
-			using MemoryHandle handle = helloJniByteCode.AsMemory().Pin();
 			Program.Execute(jvmLib, helloJniByteCode, jMainArgs);
 		}
 		finally

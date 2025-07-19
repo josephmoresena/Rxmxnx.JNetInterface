@@ -8,6 +8,10 @@ using IPrimitiveSignedType = IPrimitiveSignedType<JFloat, Single>;
 /// <summary>
 /// Primitive <c>float</c>. Represents a single-precision floating-point number.
 /// </summary>
+/// <remarks>
+/// This struct is not ABI-compliant, so you should avoid using it as a return or parameter type in native or
+/// interop calls.
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JFloat : INativeType, IComparable<JFloat>, IEquatable<JFloat>,
 	IPrimitiveFloatingPointType, IPrimitiveSignedType

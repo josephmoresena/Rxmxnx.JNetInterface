@@ -20,8 +20,9 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 9.x
-
+          dotnet-version: |
+            8.0.x
+            9.0.x
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
@@ -66,11 +67,9 @@ jobs:
           ./.sonar/scanner/dotnet-sonarscanner begin /k:"josephmoresena_Rxmxnx.JNetInterface" /o:"josephmoresena" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.scanAll=false /d:sonar.coverage.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs" /d:sonar.cpd.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs" /d:sonar.cs.vstest.reportsPaths=TestResults/*.trx /d:sonar.cs.opencover.reportsPaths=TestResults/*/coverage.opencover.xml 
           dotnet build-server shutdown
           dotnet restore src
-          dotnet restore src/Test/Proxies/Native/JvmProxy.NativeProxy.sln
-          dotnet build src --no-restore --configuration release --disable-build-servers /nr:false /maxcpucount:1
-          
-          dotnet test src --no-build --no-restore --configuration release --verbosity normal --collect:"XPlat Code Coverage" --results-directory TestResults/ --logger "trx;verbosity=detailed" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
-
+          dotnet restore src/Test/Proxies/Native/JvmProxy.NativeProxy.slnx
+          dotnet build src /p:MultipleFrameworkTest=true --no-restore --configuration Release --disable-build-servers /nr:false /maxcpucount:1
+          dotnet test src /p:MultipleFrameworkTest=true --no-build --no-restore --configuration release --verbosity normal --collect:"XPlat Code Coverage" --results-directory TestResults/ --logger "trx;verbosity=detailed" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
           ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
       - name: Pack core assembly
         working-directory: ./package/Rxmxnx.JNetInterface.Core
@@ -104,7 +103,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ windows-latest, ubuntu-latest, macos-latest, macos-13 ]
+        os: [ windows-latest, ubuntu-latest, macos-latest ]
     env:
       JNETINTERFACE_ONLY_NATIVE_TEST: false
     steps:
@@ -190,15 +189,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+          
       - name: Create core assembly
         working-directory: ./package/Rxmxnx.JNetInterface.Core
         run: |
-          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp 
+          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp
       - name: Pack main assembly
         working-directory: ./package/Rxmxnx.JNetInterface
         run: |
-          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp 
+          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp
 
       - name: Create nuget.config for tests
         working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LibraryTest
@@ -216,6 +215,7 @@ jobs:
           if ($IsWindows) {
             ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "compile"
           } else {
+            chmod +x Rxmxnx.JNetInterface.LauncherTest
             ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "compile"
           }
 
@@ -229,7 +229,6 @@ jobs:
           }
 
       - name: Create Native Artifact
-        if: runner.arch == 'X64'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ runner.os }}-Artifact
@@ -241,7 +240,6 @@ jobs:
             ./artifacts/*HelloJni.* 
 
       - name: Create Native Artifact Logs
-        if: runner.arch == 'X64'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ runner.os }}-Artifact-Logs
@@ -272,6 +270,7 @@ jobs:
           git config --global url.https://github.com/.insteadOf git://github.com/
           git clone --single-branch --branch jnetinterface \
             https://github.com/josephmoresena/NativeAOT-AndroidHelloJniLib.git
+          rm Directory.Build.props
 
       - name: Create nuget.config for bionic-libs
         working-directory: ./NativeAOT-AndroidHelloJniLib

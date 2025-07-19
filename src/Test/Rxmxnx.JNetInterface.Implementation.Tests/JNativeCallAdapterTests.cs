@@ -288,8 +288,8 @@ public sealed partial class JNativeCallAdapterTests
 		{
 			proxyEnv.GetObjectRefType(localRef).Returns(JReferenceType.LocalRefType);
 
-			_ = builder.WithParameter(localRef, out JModuleObject result);
-			Assert.Equal(localRef, result.Reference);
+			_ = builder.WithParameter(localRef, out JModuleObject? result);
+			Assert.Equal(localRef, result!.Reference);
 			Assert.Equal(result.Environment.ClassFeature.GetClass<JModuleObject>(), result.Class);
 			return result;
 		}
@@ -308,8 +308,8 @@ public sealed partial class JNativeCallAdapterTests
 		{
 			proxyEnv.GetObjectRefType(arrayRef.Value).Returns(JReferenceType.LocalRefType);
 
-			_ = builder.WithParameter(arrayRef, out JArrayObject<JBoolean> result);
-			Assert.Equal(arrayRef.ArrayValue, result.Reference);
+			_ = builder.WithParameter(arrayRef, out JArrayObject<JBoolean>? result);
+			Assert.Equal(arrayRef.ArrayValue, result!.Reference);
 			Assert.Equal(result.Environment.ClassFeature.GetClass<JArrayObject<JBoolean>>(), result.Object.Class);
 			return result;
 		}
@@ -328,8 +328,8 @@ public sealed partial class JNativeCallAdapterTests
 		{
 			proxyEnv.GetObjectRefType(arrayRef.Value).Returns(JReferenceType.LocalRefType);
 
-			_ = builder.WithParameter(arrayRef, out JArrayObject<JByte> result);
-			Assert.Equal(arrayRef.ArrayValue, result.Reference);
+			_ = builder.WithParameter(arrayRef, out JArrayObject<JByte>? result);
+			Assert.Equal(arrayRef.ArrayValue, result!.Reference);
 			Assert.Equal(result.Environment.ClassFeature.GetClass<JArrayObject<JByte>>(), result.Object.Class);
 			return result;
 		}
@@ -348,8 +348,8 @@ public sealed partial class JNativeCallAdapterTests
 		{
 			proxyEnv.GetObjectRefType(arrayRef.Value).Returns(JReferenceType.LocalRefType);
 
-			_ = builder.WithParameter(arrayRef, out JArrayObject<JChar> result);
-			Assert.Equal(arrayRef.ArrayValue, result.Reference);
+			_ = builder.WithParameter(arrayRef, out JArrayObject<JChar>? result);
+			Assert.Equal(arrayRef.ArrayValue, result!.Reference);
 			Assert.Equal(result.Environment.ClassFeature.GetClass<JArrayObject<JChar>>(), result.Object.Class);
 			return result;
 		}
@@ -368,8 +368,8 @@ public sealed partial class JNativeCallAdapterTests
 		{
 			proxyEnv.GetObjectRefType(arrayRef.Value).Returns(JReferenceType.LocalRefType);
 
-			_ = builder.WithParameter(arrayRef, out JArrayObject<JDouble> result);
-			Assert.Equal(arrayRef.ArrayValue, result.Reference);
+			_ = builder.WithParameter(arrayRef, out JArrayObject<JDouble>? result);
+			Assert.Equal(arrayRef.ArrayValue, result!.Reference);
 			Assert.Equal(result.Environment.ClassFeature.GetClass<JArrayObject<JDouble>>(), result.Object.Class);
 			return result;
 		}
@@ -388,8 +388,8 @@ public sealed partial class JNativeCallAdapterTests
 		{
 			proxyEnv.GetObjectRefType(arrayRef.Value).Returns(JReferenceType.LocalRefType);
 
-			_ = builder.WithParameter(arrayRef, out JArrayObject<JFloat> result);
-			Assert.Equal(arrayRef.ArrayValue, result.Reference);
+			_ = builder.WithParameter(arrayRef, out JArrayObject<JFloat>? result);
+			Assert.Equal(arrayRef.ArrayValue, result!.Reference);
 			Assert.Equal(result.Environment.ClassFeature.GetClass<JArrayObject<JFloat>>(), result.Object.Class);
 			return result;
 		}
@@ -408,8 +408,8 @@ public sealed partial class JNativeCallAdapterTests
 		{
 			proxyEnv.GetObjectRefType(arrayRef.Value).Returns(JReferenceType.LocalRefType);
 
-			_ = builder.WithParameter(arrayRef, out JArrayObject<JInt> result);
-			Assert.Equal(arrayRef.ArrayValue, result.Reference);
+			_ = builder.WithParameter(arrayRef, out JArrayObject<JInt>? result);
+			Assert.Equal(arrayRef.ArrayValue, result!.Reference);
 			Assert.Equal(result.Environment.ClassFeature.GetClass<JArrayObject<JInt>>(), result.Object.Class);
 			return result;
 		}
@@ -428,8 +428,8 @@ public sealed partial class JNativeCallAdapterTests
 		{
 			proxyEnv.GetObjectRefType(arrayRef.Value).Returns(JReferenceType.LocalRefType);
 
-			_ = builder.WithParameter(arrayRef, out JArrayObject<JLong> result);
-			Assert.Equal(arrayRef.ArrayValue, result.Reference);
+			_ = builder.WithParameter(arrayRef, out JArrayObject<JLong>? result);
+			Assert.Equal(arrayRef.ArrayValue, result!.Reference);
 			Assert.Equal(result.Environment.ClassFeature.GetClass<JArrayObject<JLong>>(), result.Object.Class);
 			return result;
 		}
@@ -448,8 +448,8 @@ public sealed partial class JNativeCallAdapterTests
 		{
 			proxyEnv.GetObjectRefType(arrayRef.Value).Returns(JReferenceType.LocalRefType);
 
-			_ = builder.WithParameter(arrayRef, out JArrayObject<JShort> result);
-			Assert.Equal(arrayRef.ArrayValue, result.Reference);
+			_ = builder.WithParameter(arrayRef, out JArrayObject<JShort>? result);
+			Assert.Equal(arrayRef.ArrayValue, result!.Reference);
 			Assert.Equal(result.Environment.ClassFeature.GetClass<JArrayObject<JShort>>(), result.Object.Class);
 			return result;
 		}
@@ -468,8 +468,8 @@ public sealed partial class JNativeCallAdapterTests
 		{
 			proxyEnv.GetObjectRefType(arrayRef.Value).Returns(JReferenceType.LocalRefType);
 
-			_ = builder.WithParameter(arrayRef, out JArrayObject<JClassObject> result);
-			Assert.Equal(arrayRef.ArrayValue, result.Reference);
+			_ = builder.WithParameter(arrayRef, out JArrayObject<JClassObject>? result);
+			Assert.Equal(arrayRef.ArrayValue, result!.Reference);
 			Assert.Equal(result.Environment.ClassFeature.GetClass<JArrayObject<JClassObject>>(), result.Object.Class);
 			return result;
 		}
@@ -501,8 +501,8 @@ public sealed partial class JNativeCallAdapterTests
 			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 
-			_ = builder.WithParameter(arrayRef, out JArrayObject result);
-			Assert.Equal(arrayRef, result.Reference);
+			_ = builder.WithParameter(arrayRef, out JArrayObject? result);
+			Assert.Equal(arrayRef, result!.Reference);
 			Assert.Equal(arrayTypeMetadata.GetClass(result.Environment), result.Class);
 			return result;
 		}
@@ -543,8 +543,8 @@ public sealed partial class JNativeCallAdapterTests
 			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 
-			_ = builder.WithParameter(arrayRef, out JArrayObject<TDataType> result);
-			Assert.Equal(arrayRef, result.Reference);
+			_ = builder.WithParameter(arrayRef, out JArrayObject<TDataType>? result);
+			Assert.Equal(arrayRef, result!.Reference);
 			Assert.Equal(arrayTypeMetadata.GetClass(result.Environment), result.Object.Class);
 			return result;
 		}
@@ -573,8 +573,8 @@ public sealed partial class JNativeCallAdapterTests
 		{
 			proxyEnv.GetObjectRefType(stringRef.Value).Returns(JReferenceType.LocalRefType);
 
-			_ = builder.WithParameter(stringRef, out JStringObject result);
-			Assert.Equal(stringRef, result.Reference);
+			_ = builder.WithParameter(stringRef, out JStringObject? result);
+			Assert.Equal(stringRef, result!.Reference);
 			Assert.Equal(result.Environment.ClassFeature.GetClass<JStringObject>(), result.Class);
 			return result;
 		}
@@ -607,8 +607,8 @@ public sealed partial class JNativeCallAdapterTests
 			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 
-			_ = builder.WithParameter(throwableRef, out JThrowableObject result);
-			Assert.Equal(throwableRef, result.Reference);
+			_ = builder.WithParameter(throwableRef, out JThrowableObject? result);
+			Assert.Equal(throwableRef, result!.Reference);
 			Assert.Equal(result.Environment.ClassFeature.GetClass<JThrowableObject>(), result.Class);
 			return result;
 		}
@@ -650,8 +650,8 @@ public sealed partial class JNativeCallAdapterTests
 			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 
-			_ = builder.WithParameter(throwableRef, out TThrowable result);
-			Assert.Equal(throwableRef, result.Reference);
+			_ = builder.WithParameter(throwableRef, out TThrowable? result);
+			Assert.Equal(throwableRef, result!.Reference);
 			Assert.Equal(result.Environment.ClassFeature.GetClass<TThrowable>(), result.Class);
 			return result;
 		}
@@ -677,8 +677,8 @@ public sealed partial class JNativeCallAdapterTests
 
 		try
 		{
-			_ = builder.WithParameter(localRef, out JLocalObject result);
-			Assert.Equal(localRef, result.Reference);
+			_ = builder.WithParameter(localRef, out JLocalObject? result);
+			Assert.Equal(localRef, result!.Reference);
 			Assert.Equal(jClass, result.Class);
 			return result;
 		}

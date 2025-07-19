@@ -49,7 +49,7 @@ public sealed class JArgumentMetadata
 	public static JArgumentMetadata Create(ReadOnlySpan<Byte> signature)
 	{
 		CommonValidationUtilities.ThrowIfInvalidObjectSignature(signature);
-		return new(CString.Create(signature), NativeUtilities.PointerSize);
+		return new(CString.Create(signature), IntPtr.Size);
 	}
 
 	/// <summary>

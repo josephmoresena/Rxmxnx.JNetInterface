@@ -1,6 +1,10 @@
 ﻿namespace Rxmxnx.JNetInterface.Native.Values;
 
-internal partial struct JValue
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
+internal unsafe partial struct JValue
 {
 	/// <summary>
 	/// Delegate. Indicates whether <paramref name="value"/> has the <see langword="default"/> value.
@@ -23,7 +27,7 @@ internal partial struct JValue
 	/// <returns><see cref="IsDefaultDelegate"/> delegate for the current process.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private static IsDefaultDelegate GetIsDefault()
-		=> NativeUtilities.SizeOf<JValue>() == NativeUtilities.PointerSize ? JValue.DefaultPointer : JValue.Default;
+		=> sizeof(JValue) == IntPtr.Size ? JValue.DefaultPointer : JValue.Default;
 	/// <summary>
 	/// Indicates whether <paramref name="jValue"/> has the <see langword="default"/> value.
 	/// </summary>

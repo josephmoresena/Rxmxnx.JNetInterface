@@ -9,9 +9,17 @@ public abstract class NioFeatureProxy : INioFeature
 	public abstract void WithDirectByteBuffer<TBuffer>(Int32 capacity, Action<TBuffer> action)
 		where TBuffer : JBufferObject;
 	public abstract void WithDirectByteBuffer<TBuffer, TState>(Int32 capacity, TState state,
-		Action<TBuffer, TState> action) where TBuffer : JBufferObject;
+		Action<TBuffer, TState> action) where TBuffer : JBufferObject
+#if NET9_0_OR_GREATER
+		where TState : allows ref struct
+#endif
+	;
 	public abstract TResult WithDirectByteBuffer<TBuffer, TResult>(Int32 capacity, Func<TBuffer, TResult> func)
 		where TBuffer : JBufferObject;
 	public abstract TResult WithDirectByteBuffer<TBuffer, TState, TResult>(Int32 capacity, TState state,
-		Func<TBuffer, TState, TResult> func) where TBuffer : JBufferObject;
+		Func<TBuffer, TState, TResult> func)
+#if NET9_0_OR_GREATER
+		where TState : allows ref struct
+#endif
+		where TBuffer : JBufferObject;
 }

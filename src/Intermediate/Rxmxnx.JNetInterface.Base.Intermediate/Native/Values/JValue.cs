@@ -68,7 +68,7 @@ internal readonly unsafe partial struct JValue : INativeType
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static JValue Create<T>(in T value) where T : unmanaged
 	{
-		CommonValidationUtilities.ThrowIfInvalidType(NativeUtilities.SizeOf<T>());
+		CommonValidationUtilities.ThrowIfInvalidType(sizeof(T));
 		Span<JValue> resultSpan = stackalloc JValue[1];
 		Span<Byte> resultByte = resultSpan.AsBytes();
 		ReadOnlySpan<Byte> source = NativeUtilities.AsBytes(value);

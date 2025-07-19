@@ -119,6 +119,7 @@ Example Java native call signatures and corresponding JNI parameters:
 | `<T> call(T a)`                                       | `JObjectLocalRef`                                                         |  
 | `<T> call(T[] a, boolean[] b)`                        | `JObjectArrayLocalRef`, `JBooleanArrayLocalRef`                           |  
 | `<T call Number> method(T a, char b)`                 | `JObjectLocalRef`, `JChar`                                                |  
+| `call(int a, double b, long c, float d)`              | `JInt`, `System.Double`, `JLong`, `System.Single`                         |  
 | `call(int a, String b, long c, int[] d, Integer[] e)` | `JInt`, `JStringLocalRef`, `JLong`, `JIntArrayLocalRef`, `JArrayLocalRef` |  
 
 *Refer to the [JNI Naming Conventions](jni-classes.md#naming-conventions).*
@@ -149,36 +150,36 @@ To use reference type argument calls, use `WithParameter` method before call `Bu
 
 - `call(String a)`:
     ```csharp
-    adapter.WithParameter(JStringLocalRef stringRefA, out JStringObject jStringA)
+    adapter.WithParameter(JStringLocalRef stringRefA, out JStringObject? jStringA)
     ```  
 - `call(Class<?> a)`:
     ```csharp
-    adapter.WithParameter(JClassLocalRef classRefA, out JClassObject jClassA)
+    adapter.WithParameter(JClassLocalRef classRefA, out JClassObject? jClassA)
     ```  
 - `call(Character a)`:
     ```csharp
-    adapter.WithParameter<JCharacterObject>(JObjectLocalRef localRefA, out JCharacterObject jCharacterA)
+    adapter.WithParameter<JCharacterObject>(JObjectLocalRef localRefA, out JCharacterObject? jCharacterA)
     ```  
 - `<T> call(T a)`:
     ```csharp
-    adapter.WithParameter(JObjectLocalRef localRefA, out JLocalObject jLocalA)
+    adapter.WithParameter(JObjectLocalRef localRefA, out JLocalObject? jLocalA)
     ```  
 - `<T> call(T[] a, boolean[] b)`:
     ```csharp
     adapter
-        .WithParameter<JLocalObject>(JArrayObjectLocalRef arrayRefA, out JArrayObject<JLocalObject> jArrayA)
-        .WithParameter(JBooleanArrayLocalRef arrayRefB, out JArrayObject<JBoolean> jArrayB)
+        .WithParameter<JLocalObject>(JArrayObjectLocalRef arrayRefA, out JArrayObject<JLocalObject>? jArrayA)
+        .WithParameter(JBooleanArrayLocalRef arrayRefB, out JArrayObject<JBoolean>? jArrayB)
     ```  
 - `<T extends Number> call(T a, char b)`:
     ```csharp
-    adapter.WithParameter<JNumberObject>(JObjectLocalRef localRefA, out JNumberObject jNumberA)
+    adapter.WithParameter<JNumberObject>(JObjectLocalRef localRefA, out JNumberObject? jNumberA)
     ```  
 - `<T extends Number> call(int a, String b, long c, int[] d, Integer[] e)`:
     ```csharp
     adapter
-        .WithParameter(JStringLocalRef stringRefB, out JStringObject jStringB)
-        .WithParameter(JIntArrayLocalRef arrayRefD, out JArrayObject<JInt> jArrayD) 
-        .WithParameter<JIntegerObject>(JArrayLocalRef arrayRefE, out JArrayObject<JIntegerObject> jArrayE)
+        .WithParameter(JStringLocalRef stringRefB, out JStringObject? jStringB)
+        .WithParameter(JIntArrayLocalRef arrayRefD, out JArrayObject<JInt>? jArrayD) 
+        .WithParameter<JIntegerObject>(JArrayLocalRef arrayRefE, out JArrayObject<JIntegerObject>? jArrayE)
     ```
 
 To finalize a call and remove the call frame:
@@ -211,6 +212,10 @@ adapter.FinalizeCall<TElement>(JArrayObject<TElement>? result);
 ##### Notes
 
 - Methods using `IVirtualMachine` are more efficient since `Rxmxnx.JNetInterface` supports multiple JVM instances.
+- `JDouble` and `JFloat` types are not ABI-compliant and should not be used as return types or parameter types in native
+  JNI calls. Instead, use the corresponding CLR-specific types.
+- The adapter creation object or class cannot be null (therefore the JNI reference cannot be 0x0), but the parameters
+  can be.
 - Both `JNativeCallAdapter` and `JNativeCallAdapter.Builder` are `ref struct` types, making them incompatible
   with the Visual Basic .NET language.
 - Once the `Build()` method is called, it is always required to call the `Finalize` method on the created instance.

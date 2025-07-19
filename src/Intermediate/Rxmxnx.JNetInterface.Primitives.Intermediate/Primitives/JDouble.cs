@@ -8,6 +8,10 @@ using IPrimitiveSignedType = IPrimitiveSignedType<JDouble, Double>;
 /// <summary>
 /// Primitive <c>double</c>. Represents a double-precision floating-point number.
 /// </summary>
+/// <remarks>
+/// This struct is not ABI-compliant, so you should avoid using it as a return or parameter type in native or
+/// interop calls.
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JDouble : INativeType, IComparable<JDouble>, IEquatable<JDouble>,
 	IPrimitiveFloatingPointType, IPrimitiveSignedType

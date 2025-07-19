@@ -26,7 +26,7 @@ public partial class JReferenceObject
 	{
 		JObjectLocalRef localRef = this.To<JObjectLocalRef>();
 		NativeUtilities.AsBytes(in localRef).CopyTo(span[offset..]);
-		offset += NativeUtilities.PointerSize;
+		offset += IntPtr.Size;
 	}
 	/// <summary>
 	/// Indicates whether the current instance is default value.

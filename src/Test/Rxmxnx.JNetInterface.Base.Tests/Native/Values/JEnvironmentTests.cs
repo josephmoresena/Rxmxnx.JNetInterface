@@ -70,9 +70,6 @@ public sealed class JEnvironmentTests
 		Assert.Equal(val1, JEnvironmentTests.GetValue(bytes1));
 		Assert.Equal(val2, JEnvironmentTests.GetValue(bytes2));
 
-		//TODO: Check equality
-		//Assert.Equal(bytes1.SequenceEqual(bytes2), val1.Reference.Equals(val2.Reference));
-		//Assert.Equal(val2.Reference, val3.Reference);
 		Assert.NotEqual(val2, val3);
 
 		Assert.Equal(val1.GetHashCode(), JEnvironmentTests.GetValue(bytes1).Pointer.GetHashCode());

@@ -18,8 +18,9 @@ public readonly ref partial struct JNativeCallAdapter
 	/// <returns>A <see cref="Builder"/> instance.</returns>
 	public static Builder Create(JEnvironmentRef envRef, JObjectLocalRef localRef, out JLocalObject jLocal)
 	{
+		ImplementationValidationUtilities.ThrowIfDefault(localRef);
 		Builder result = JNativeCallAdapter.Create(envRef);
-		jLocal = result.CreateInitialObject(localRef);
+		jLocal = result.CreateInitialObject(localRef)!;
 		return result;
 	}
 	/// <summary>
@@ -32,8 +33,9 @@ public readonly ref partial struct JNativeCallAdapter
 	/// <returns>A <see cref="Builder"/> instance.</returns>
 	public static Builder Create(JEnvironmentRef envRef, JClassLocalRef classRef, out JClassObject jClass)
 	{
+		ImplementationValidationUtilities.ThrowIfDefault(classRef.Value);
 		Builder result = JNativeCallAdapter.Create(envRef);
-		jClass = result.CreateInitialClass(classRef, true);
+		jClass = result.CreateInitialClass(classRef, true)!;
 		return result;
 	}
 
@@ -60,9 +62,9 @@ public readonly ref partial struct JNativeCallAdapter
 			JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
 			return JNativeCallAdapter.Create(envRef, classRef, out Unsafe.As<TObject, JClassObject>(ref jLocal));
 		}
-
+		ImplementationValidationUtilities.ThrowIfDefault(localRef);
 		Builder result = JNativeCallAdapter.Create(envRef);
-		jLocal = result.CreateInitialObject<TObject>(localRef);
+		jLocal = result.CreateInitialObject<TObject>(localRef)!;
 		return result;
 	}
 	/// <summary>
@@ -85,8 +87,9 @@ public readonly ref partial struct JNativeCallAdapter
 	public static Builder Create(IVirtualMachine vm, JEnvironmentRef envRef, JObjectLocalRef localRef,
 		out JLocalObject jLocal)
 	{
+		ImplementationValidationUtilities.ThrowIfDefault(localRef);
 		Builder result = JNativeCallAdapter.Create(vm, envRef);
-		jLocal = result.CreateInitialObject(localRef);
+		jLocal = result.CreateInitialObject(localRef)!;
 		return result;
 	}
 	/// <summary>
@@ -101,8 +104,9 @@ public readonly ref partial struct JNativeCallAdapter
 	public static Builder Create(IVirtualMachine vm, JEnvironmentRef envRef, JClassLocalRef classRef,
 		out JClassObject jClass)
 	{
+		ImplementationValidationUtilities.ThrowIfDefault(classRef.Value);
 		Builder result = JNativeCallAdapter.Create(vm, envRef);
-		jClass = result.CreateInitialClass(classRef, true);
+		jClass = result.CreateInitialClass(classRef, true)!;
 		return result;
 	}
 	/// <summary>
@@ -118,6 +122,7 @@ public readonly ref partial struct JNativeCallAdapter
 	public static Builder Create<TObject>(IVirtualMachine vm, JEnvironmentRef envRef, JObjectLocalRef localRef,
 		out TObject jLocal) where TObject : JLocalObject, IReferenceType<TObject>
 	{
+		ImplementationValidationUtilities.ThrowIfDefault(localRef);
 		if (JLocalObject.IsObjectType<TObject>())
 		{
 			Unsafe.SkipInit(out jLocal);
@@ -129,9 +134,9 @@ public readonly ref partial struct JNativeCallAdapter
 			JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
 			return JNativeCallAdapter.Create(vm, envRef, classRef, out Unsafe.As<TObject, JClassObject>(ref jLocal));
 		}
-
+		ImplementationValidationUtilities.ThrowIfDefault(localRef);
 		Builder result = JNativeCallAdapter.Create(vm, envRef);
-		jLocal = result.CreateInitialObject<TObject>(localRef);
+		jLocal = result.CreateInitialObject<TObject>(localRef)!;
 		return result;
 	}
 
