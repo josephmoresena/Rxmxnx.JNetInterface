@@ -22,11 +22,17 @@ public partial class JNativeCallback
 		IInterfaceObject<JAwtEventListenerObject>, IInterfaceObject<JEventListenerObject>
 	{
 		private static readonly JMethodDefinition eventDispatchedDef = (JMethodDefinition)IndeterminateCall
-			.CreateMethodDefinition("awtEventListener_eventDispatched"u8, [
-				JArgumentMetadata.Get<JLong>(),
-				JArgumentMetadata.Get<JLong>(),
-				JArgumentMetadata.Get<JAwtEventObject>(),
-			]).Definition;
+			.CreateMethodDefinition(
+				"awtEventListener_eventDispatched"u8,
+#if !NET9_0_OR_GREATER
+				[
+#endif
+					JArgumentMetadata.Get<JLong>(), JArgumentMetadata.Get<JLong>(),
+					JArgumentMetadata.Get<JAwtEventObject>()
+#if !NET9_0_OR_GREATER
+				]
+#endif
+			).Definition;
 		private static readonly JClassTypeMetadata<AwtEventListener> nestedTypeMetadata =
 			TypeMetadataBuilder<JNativeCallback>
 				.Create<AwtEventListener>("com/rxmxnx/jnetinterface/NativeCallback$NativeAWTEventListener"u8)
@@ -68,11 +74,12 @@ public partial class JNativeCallback
 			{
 				JNativeCallAdapter callAdapter = JNativeCallAdapter.Create(environmentRef)
 				                                                   .WithParameter(
-					                                                   localRef, out JAwtEventObject awtEvent).Build();
+					                                                   localRef, out JAwtEventObject? awtEvent).Build();
 
 				try
 				{
-					ws.Value.EventDispatched(awtEvent);
+					if (awtEvent is not null)
+						ws.Value.EventDispatched(awtEvent);
 				}
 				finally
 				{

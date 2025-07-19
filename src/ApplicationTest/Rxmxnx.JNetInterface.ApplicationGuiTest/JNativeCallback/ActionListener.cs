@@ -21,11 +21,17 @@ public partial class JNativeCallback
 		IInterfaceObject<JActionListenerObject>, IInterfaceObject<JEventListenerObject>
 	{
 		private static readonly JMethodDefinition actionPerformedDef = (JMethodDefinition)IndeterminateCall
-			.CreateMethodDefinition("actionListener_actionPerformed"u8, [
-				JArgumentMetadata.Get<JLong>(),
-				JArgumentMetadata.Get<JLong>(),
-				JArgumentMetadata.Get<JActionEventObject>(),
-			]).Definition;
+			.CreateMethodDefinition(
+				"actionListener_actionPerformed"u8,
+#if !NET9_0_OR_GREATER
+				[
+#endif
+					JArgumentMetadata.Get<JLong>(), JArgumentMetadata.Get<JLong>(),
+					JArgumentMetadata.Get<JActionEventObject>()
+#if !NET9_0_OR_GREATER
+				]
+#endif
+			).Definition;
 		private static readonly JClassTypeMetadata<ActionListener> nestedTypeMetadata =
 			TypeMetadataBuilder<JNativeCallback>
 				.Create<ActionListener>("com/rxmxnx/jnetinterface/NativeCallback$NativeActionListener"u8)
@@ -67,11 +73,12 @@ public partial class JNativeCallback
 			{
 				JNativeCallAdapter callAdapter = JNativeCallAdapter.Create(environmentRef)
 				                                                   .WithParameter(
-					                                                   localRef, out JActionEventObject actionEvent)
+					                                                   localRef, out JActionEventObject? actionEvent)
 				                                                   .Build();
 				try
 				{
-					ws.Value.ActionPerformed(actionEvent);
+					if (actionEvent is not null)
+						ws.Value.ActionPerformed(actionEvent);
 				}
 				finally
 				{
