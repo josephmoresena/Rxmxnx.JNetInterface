@@ -79,7 +79,7 @@ partial class JEnvironment
 		ref readonly NativeInterface nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.DeleteWeakGlobalRefInfo);
 		nativeInterface.WeakGlobalFunctions.DeleteWeakGlobalRef.DeleteRef(this.Reference, weakRef);
-		JTrace.DeleteReference(weakRef.Value, JReferenceType.GlobalRefType);
+		JTrace.DeleteReference(weakRef.Value, JReferenceType.WeakGlobalRefType);
 	}
 	/// <summary>
 	/// Retrieves field identifier for <paramref name="definition"/> in <paramref name="classRef"/>.
