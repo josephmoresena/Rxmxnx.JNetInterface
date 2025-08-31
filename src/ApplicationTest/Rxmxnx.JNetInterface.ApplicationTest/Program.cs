@@ -67,8 +67,7 @@ public static class Program
 				Options = new("-DjniLib.load.disable=true", JVirtualMachine.TraceEnabled ? "-verbose:jni" : default,
 				              JVirtualMachine.TraceEnabled ? "-verbose:class" : default,
 				              JVirtualMachine.TraceEnabled ? "-verbose:gc" : default,
-				              JVirtualMachine.TraceEnabled ? "-Xcheck:jni" : default, 
-				              "-Xrs"),
+				              JVirtualMachine.TraceEnabled ? "-Xcheck:jni" : default),
 			};
 			using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out IEnvironment env);
 			try

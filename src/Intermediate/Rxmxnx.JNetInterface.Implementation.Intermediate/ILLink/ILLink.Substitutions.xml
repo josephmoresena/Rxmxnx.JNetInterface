@@ -144,6 +144,8 @@
                     body="stub"/>
             <method signature="System.Void ReloadClass(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,Rxmxnx.JNetInterface.Lang.JClassObject,System.String)"
                     body="stub"/>
+            <method signature="System.Void DeleteReference(Rxmxnx.JNetInterface.Native.References.JLocalReference,Rxmxnx.JNetInterface.Native.JReferenceType,System.String)"
+                    body="stub"/>
             <!-- Access -->
             <method signature="System.Void GetField(Rxmxnx.JNetInterface.Native.JLocalObject,Rxmxnx.JNetInterface.Lang.JClassObject,Rxmxnx.JNetInterface.Native.Access.JFieldDefinition,System.String)"
                     body="stub"/>

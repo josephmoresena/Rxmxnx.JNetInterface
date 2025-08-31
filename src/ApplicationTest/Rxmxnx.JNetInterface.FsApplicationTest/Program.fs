@@ -20,8 +20,7 @@ let Execute (jvmLib: JVirtualMachineLibrary, classByteCode: byte[], args: string
     try
         let mutable initArgs = jvmLib.GetDefaultArgument()
 
-        initArgs <-
-            JVirtualMachineInitArg(initArgs.Version, Options = CStringSequence [ "-DjniLib.load.disable=true"; "-Xrs" ])
+        initArgs <- JVirtualMachineInitArg(initArgs.Version, Options = CStringSequence [ "-DjniLib.load.disable=true" ])
 
         let vm, env = jvmLib.CreateVirtualMachine(initArgs)
         use v = vm

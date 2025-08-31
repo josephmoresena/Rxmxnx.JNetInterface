@@ -446,4 +446,18 @@ internal static partial class JTrace
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {classRef} loaded to {jClass.ToTraceText()}.",
 		                callerMethod);
 	}
+	/// <summary>
+	/// Writes a category name and deletes <paramref name="jniReference"/> a JNI reference of
+	/// <paramref name="referenceType"/> to the trace listeners.
+	/// </summary>
+	/// <param name="jniReference">A <see cref="JObjectLocalRef"/> reference.</param>
+	/// <param name="referenceType">A <see cref="JReferenceType"/> type.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void DeleteReference(JObjectLocalRef jniReference, JReferenceType referenceType,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!JVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {jniReference} {referenceType} deleted.",
+		                callerMethod);
+	}
 }

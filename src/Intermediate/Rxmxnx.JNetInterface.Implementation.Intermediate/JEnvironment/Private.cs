@@ -235,6 +235,7 @@ partial class JEnvironment
 		ref readonly NativeInterface nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.DeleteLocalRefInfo);
 		nativeInterface.ReferenceFunctions.DeleteLocalRef.DeleteRef(this.Reference, localRef);
+		JTrace.DeleteReference(localRef, JReferenceType.LocalRefType);
 	}
 	/// <summary>
 	/// Retrieves object class reference.
