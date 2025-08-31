@@ -31,7 +31,6 @@
         <File Path="..\.github\workflows\build.yml"/>
         <File Path="..\.gitignore"/>
         <File Path="..\README.md"/>
-        <File Path="..\Directory.Build.props"/>
         <File Path="Library.targets"/>
     </Folder>
     <Folder Name="/Global/Documentation/">
@@ -71,6 +70,7 @@
     <Folder Name="/Package/">
         <File Path="..\package\Intermediate-to-Package.targets"/>
         <File Path="..\package\Rxmxnx.JNetInterface\PACKAGE.md"/>
+        <File Path="..\package\JNetInterface.Package.targets"/>
     </Folder>
     <Folder Name="/Package/CorePackage/">
         <File Path="..\package\Rxmxnx.JNetInterface.Core\PACKAGE.md"/>

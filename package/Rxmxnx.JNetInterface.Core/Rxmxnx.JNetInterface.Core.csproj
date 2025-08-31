@@ -1,27 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <RootNamespace>Rxmxnx.JNetInterface</RootNamespace>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <EnablePackageValidation>true</EnablePackageValidation>
-    <SigningKeyFile>..\Rxmxnx.JNetInterface.snk</SigningKeyFile>
-    <IntermediateSourceBasePath>..\..\src\Intermediate</IntermediateSourceBasePath>
-  </PropertyGroup>
-    
-  <!-- Validations -->
-  <PropertyGroup>
-    <ApiCompatPreserveUnnecessarySuppressions>true</ApiCompatPreserveUnnecessarySuppressions>
-    <ApiCompatRespectInternals>true</ApiCompatRespectInternals>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netstandard2.0"/>
-  </ItemGroup>
-
-  <Import Project="..\Intermediate-to-Package.targets" />
+  <Import Project="..\JNetInterface.Package.targets" />
 
   <!-- Include intermediate assemblies -->
   <ItemGroup>
@@ -29,6 +8,10 @@
     <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Primitives.Intermediate"/>
     <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Native.Intermediate"/>
     <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Extensions.Intermediate"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netstandard2.0"/>
   </ItemGroup>
 
   <ItemGroup>

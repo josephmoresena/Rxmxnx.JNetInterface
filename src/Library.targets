@@ -2,10 +2,16 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
+        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>latest</LangVersion>
+        <TrimmerSingleWarn>false</TrimmerSingleWarn>
     </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="2.7.1"/>
+    </ItemGroup>
 
 </Project>

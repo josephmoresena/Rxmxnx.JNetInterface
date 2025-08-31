@@ -31,9 +31,11 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 	/// <param name="args">Array arguments.</param>
 	public void Invoke(JClassObject mainClass,
 #if !NET9_0_OR_GREATER
-		params
+		params String?[]? args
+#else
+		String?[]? args
 #endif
-			String?[]? args)
+	)
 	{
 		IEnvironment env = mainClass.Environment;
 		using JArrayObject<JStringObject>? jArgs = JMainMethodDefinition.CreateArgsArray(env, args);
