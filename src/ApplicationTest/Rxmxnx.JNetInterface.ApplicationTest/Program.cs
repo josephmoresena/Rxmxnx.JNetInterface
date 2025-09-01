@@ -64,7 +64,8 @@ public static class Program
 #endif
 			initArgs = new(initArgs.Version)
 			{
-				Options = new("-DjniLib.load.disable=true", JVirtualMachine.TraceEnabled ? "-verbose:jni" : default,
+				Options = new("-DjniLib.load.disable=true", "-Xrs",
+				              JVirtualMachine.TraceEnabled ? "-verbose:jni" : default,
 				              JVirtualMachine.TraceEnabled ? "-verbose:class" : default,
 				              JVirtualMachine.TraceEnabled ? "-verbose:gc" : default,
 				              JVirtualMachine.TraceEnabled ? "-Xcheck:jni" : default),
