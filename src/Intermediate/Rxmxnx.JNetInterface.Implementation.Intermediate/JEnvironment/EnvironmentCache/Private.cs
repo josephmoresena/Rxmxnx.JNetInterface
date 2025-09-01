@@ -366,7 +366,7 @@ partial class JEnvironment
 			JObjectLocalRef localRef =
 				nativeInterface.InstanceMethodFunctions.MethodFunctions.CallObjectMethod.Call(
 					this.Reference, throwableRef.Value, getNameId, default);
-			if (localRef == default) this.CheckJniError();
+			this.CheckJniError();
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return new(jStringClass, localRef.Transform<JObjectLocalRef, JStringLocalRef>());
 		}

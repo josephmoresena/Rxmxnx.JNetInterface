@@ -146,18 +146,17 @@ internal static class CommonValidationUtilities
 		if (signature.IsEmpty) throw new ArgumentException(resource.InvalidSignatureMessage);
 		if (signature.Length == 1) throw new ArgumentException(resource.SignatureNotAllowed);
 
-		Byte prefix = signature[0];
-		Byte suffix = signature[^1];
+		if (signature[^1] != CommonNames.ObjectSignatureSuffixChar)
+			throw new ArgumentException(resource.InvalidSignatureMessage);
 
-		if (prefix == CommonNames.ArraySignaturePrefixChar)
-			switch (signature.Length)
-			{
-				case <= 3:
-				case > 3 when signature[1] != CommonNames.ObjectSignaturePrefixChar ||
-					suffix != CommonNames.ObjectSignatureSuffixChar:
-					throw new ArgumentException(resource.InvalidSignatureMessage);
-			}
-		else if (prefix != CommonNames.ObjectSignaturePrefixChar || suffix != CommonNames.ObjectSignatureSuffixChar)
+		Byte prefix = signature[0];
+		while (prefix == CommonNames.ArraySignaturePrefixChar && signature.Length > 2)
+		{
+			signature = signature[1..];
+			prefix = signature[0];
+		}
+
+		if (prefix != CommonNames.ObjectSignaturePrefixChar || signature.Length == 2)
 			throw new ArgumentException(resource.InvalidSignatureMessage);
 	}
 	/// <summary>
