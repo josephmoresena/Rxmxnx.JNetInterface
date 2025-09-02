@@ -17,13 +17,13 @@ internal readonly unsafe struct ReferenceFunctionSet
 	/// <remarks>
 	/// Note that local references already created in previous local frames are still valid in the current local frame.
 	/// </remarks>
-	public readonly delegate* unmanaged<JEnvironmentRef, Int32, JResult> PushLocalFrame;
+	private readonly delegate* unmanaged<IntPtr, Int32, Int32> _pushLocalFrame;
 	/// <summary>
 	/// Pointer to <c>PopLocalFrame</c> function.
 	/// Pops off the current local reference frame, frees all the local references, and returns a
 	/// local reference in the previous local reference frame for the given result object.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JObjectLocalRef> PopLocalFrame;
+	private readonly delegate* unmanaged<IntPtr, IntPtr, IntPtr> _popLocalFrame;
 
 	/// <summary>
 	/// Pointer to <c>NewGlobalRef</c> function.
@@ -45,7 +45,7 @@ internal readonly unsafe struct ReferenceFunctionSet
 	/// Pointer to <c>IsSameObject</c> function.
 	/// Tests whether two references to refer to the same Java object.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JObjectLocalRef, JBoolean> IsSameObject;
+	private readonly delegate* unmanaged<IntPtr, IntPtr, IntPtr, Byte> _isSameObject;
 	/// <summary>
 	/// Pointer to <c>NewLocalRef</c> function.
 	/// Creates a new local reference that refers to the given object.
@@ -55,5 +55,30 @@ internal readonly unsafe struct ReferenceFunctionSet
 	/// Pointer to <c>EnsureLocalCapacity</c> function.
 	/// Ensures that at least a given number of local references can be created in the current thread.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, Int32, JResult> EnsureLocalCapacity;
+	private readonly delegate* unmanaged<IntPtr, Int32, Int32> _ensureLocalCapacity;
+
+	/// <summary>
+	/// <c>PushLocalFrame</c>.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JResult PushLocalFrame(JEnvironmentRef envRef, Int32 capacity)
+		=> (JResult)this._pushLocalFrame(envRef.Pointer, capacity);
+	/// <summary>
+	/// <c>PopLocalFrame</c>.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JObjectLocalRef PopLocalFrame(JEnvironmentRef envRef, JObjectLocalRef localRef)
+		=> new(this._popLocalFrame(envRef.Pointer, localRef.Pointer));
+	/// <summary>
+	/// <c>EnsureLocalCapacity</c>.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JBoolean IsSameObject(JEnvironmentRef envRef, JObjectLocalRef localRef0, JObjectLocalRef localRef1)
+		=> this._isSameObject(envRef.Pointer, localRef0.Pointer, localRef1.Pointer) == JBoolean.TrueValue;
+	/// <summary>
+	/// <c>EnsureLocalCapacity</c>.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JResult EnsureLocalCapacity(JEnvironmentRef envRef, Int32 capacity)
+		=> (JResult)this._ensureLocalCapacity(envRef.Pointer, capacity);
 }

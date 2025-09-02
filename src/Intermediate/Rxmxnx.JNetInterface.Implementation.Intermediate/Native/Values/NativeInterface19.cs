@@ -27,7 +27,14 @@ internal readonly unsafe struct NativeInterface19 : INativeInterface<NativeInter
 	/// Pointer to <c>IsVirtualThread</c> function.
 	/// Tests whether an object is a virtual Thread.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JBoolean> IsVirtualThread;
+	public readonly delegate* unmanaged<IntPtr, IntPtr, Byte> _isVirtualThread;
+
+	/// <summary>
+	/// <c>IsVirtualThread</c>.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JBoolean IsVirtualThread(JEnvironmentRef envRef, JObjectLocalRef localRef)
+		=> this._isVirtualThread(envRef.Pointer, localRef.Pointer) == JBoolean.TrueValue;
 
 	/// <summary>
 	/// Information of <see cref="NativeInterface19.IsVirtualThread"/>

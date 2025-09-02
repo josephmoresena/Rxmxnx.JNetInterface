@@ -32,7 +32,7 @@ partial class JEnvironment
 		/// <param name="jArray">A <see cref="JReferenceObject"/> instance.</param>
 		/// <param name="index">Element index.</param>
 		/// <param name="value">Object instance.</param>
-		private unsafe void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value)
+		private void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(value);
 			jArray.ValidateObjectElement(value);
@@ -164,7 +164,7 @@ partial class JEnvironment
 		/// <param name="index">Element index.</param>
 		/// <returns>The element with <paramref name="index"/> on <paramref name="arrayRef"/>.</returns>
 		/// <returns>A <see cref="JObjectLocalRef"/> reference.</returns>
-		private unsafe JObjectLocalRef GetObjectArrayElement(JObjectArrayLocalRef arrayRef, Int32 index)
+		private JObjectLocalRef GetObjectArrayElement(JObjectArrayLocalRef arrayRef, Int32 index)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetObjectArrayElementInfo);
@@ -393,8 +393,7 @@ partial class JEnvironment
 		/// <param name="jClass">Array class.</param>
 		/// <param name="jObject">Initializer array element.</param>
 		/// <returns>Created array <see cref="JArrayLocalRef"/> reference.</returns>
-		private unsafe JArrayLocalRef NewObjectArray(Int32 length, JClassObject jClass,
-			JReferenceObject? jObject = default)
+		private JArrayLocalRef NewObjectArray(Int32 length, JClassObject jClass, JReferenceObject? jObject = default)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.NewArrayObjectInfo);

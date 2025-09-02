@@ -10,13 +10,13 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
 internal readonly unsafe struct GetAccessibleIdFunction<TAccessible>
-	where TAccessible : unmanaged, IAccessibleIdentifierType
+	where TAccessible : unmanaged, IAccessibleIdentifierType<TAccessible>
 {
 	/// <summary>
 	/// Pointer to <c>Get&lt;type&gt;ID</c> function.
 	/// </summary>
 	/// <remarks>The accessible object is determined by its name and signature.</remarks>
-	private readonly delegate* unmanaged<JEnvironmentRef, JClassLocalRef, Byte*, Byte*, IntPtr> _ptr;
+	private readonly delegate* unmanaged<IntPtr, IntPtr, Byte*, Byte*, IntPtr> _ptr;
 
 	/// <summary>
 	/// Pointer to <c>Get&lt;type&gt;ID</c> function.
@@ -27,9 +27,5 @@ internal readonly unsafe struct GetAccessibleIdFunction<TAccessible>
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TAccessible GetId(JEnvironmentRef envRef, JClassLocalRef localRef, Byte* name, Byte* descriptor)
-	{
-		TAccessible result = default;
-		Unsafe.As<TAccessible, IntPtr>(ref result) = this._ptr(envRef, localRef, name, descriptor);
-		return result;
-	}
+		=> TAccessible.New(this._ptr(envRef.Pointer, localRef.Pointer, name, descriptor));
 }

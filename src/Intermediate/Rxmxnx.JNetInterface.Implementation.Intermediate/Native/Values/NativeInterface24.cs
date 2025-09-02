@@ -27,7 +27,14 @@ internal readonly unsafe struct NativeInterface24 : INativeInterface<NativeInter
 	/// Pointer to <c>GetStringUTFLengthAsLong</c> function.
 	/// Retrieves the UTF string length as long value.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JStringLocalRef, Int64> GetStringUtfLongLength;
+	private readonly delegate* unmanaged<IntPtr, IntPtr, Int64> _getStringUtfLongLength;
+
+	/// <summary>
+	/// <c>GetStringUTFLengthAsLong</c>.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public Int64 GetStringUtfLongLength(JEnvironmentRef envRef, JStringLocalRef stringRef)
+		=> this._getStringUtfLongLength(envRef.Pointer, stringRef.Pointer);
 
 	/// <summary>
 	/// Information of <see cref="GetStringUtfLongLength"/>

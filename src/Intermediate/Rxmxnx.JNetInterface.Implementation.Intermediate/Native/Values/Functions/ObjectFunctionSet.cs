@@ -14,7 +14,7 @@ internal readonly unsafe struct ObjectFunctionSet
 	/// Pointer to <c>AllocObject</c> function.
 	/// Allocates a new Java object without invoking any of the constructors for the object.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JObjectLocalRef> AllocObject;
+	private readonly delegate* unmanaged<IntPtr, IntPtr, IntPtr> _allocObject;
 	/// <summary>
 	/// Pointers to <c>NewObject</c> functions.
 	/// Constructs a new Java object.
@@ -25,10 +25,29 @@ internal readonly unsafe struct ObjectFunctionSet
 	/// Pointer to <c>GetObjectClass</c> function.
 	/// Returns the class of an object.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef> GetObjectClass;
+	private readonly delegate* unmanaged<IntPtr, IntPtr, IntPtr> _getObjectClass;
 	/// <summary>
 	/// Pointer to <c>IsInstanceOf</c> function.
 	/// Tests whether an object is an instance of a class.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JBoolean> IsInstanceOf;
+	private readonly delegate* unmanaged<IntPtr, IntPtr, IntPtr, Byte> _isInstanceOf;
+
+	/// <summary>
+	/// <c>AllocObject</c>.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JObjectLocalRef AllocObject(JEnvironmentRef envRef, JClassLocalRef classRef)
+		=> new(this._allocObject(envRef.Pointer, classRef.Pointer));
+	/// <summary>
+	/// <c>GetObjectClass</c>.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JClassLocalRef GetObjectClass(JEnvironmentRef envRef, JObjectLocalRef localRef)
+		=> new(this._getObjectClass(envRef.Pointer, localRef.Pointer));
+	/// <summary>
+	/// <c>IsInstanceOf</c>.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JBoolean IsInstanceOf(JEnvironmentRef envRef, JObjectLocalRef localRef, JClassLocalRef classRef)
+		=> this._isInstanceOf(envRef.Pointer, localRef.Pointer, classRef.Pointer) == JBoolean.TrueValue;
 }

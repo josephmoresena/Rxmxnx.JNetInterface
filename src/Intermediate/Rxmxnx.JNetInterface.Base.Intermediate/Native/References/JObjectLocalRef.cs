@@ -18,7 +18,12 @@ public readonly partial struct JObjectLocalRef : IFixedPointer, INativeType, IWr
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
-	public JObjectLocalRef() => this.Pointer = IntPtr.Zero;
+	public JObjectLocalRef() : this(IntPtr.Zero) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JObjectLocalRef(IntPtr value) => this.Pointer = value;
 
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]

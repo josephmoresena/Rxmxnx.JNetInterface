@@ -20,15 +20,46 @@ internal readonly unsafe struct InvokeInterface
 #pragma warning restore CS0169
 
 	/// <inheritdoc cref="JInvokeInterface.DestroyJavaVmPointer"/>
-	public readonly delegate* unmanaged<JVirtualMachineRef, JResult> DestroyVirtualMachine;
+	private readonly delegate* unmanaged<IntPtr, Int32> _destroyVirtualMachine;
 	/// <inheritdoc cref="JInvokeInterface.AttachCurrentThreadPointer"/>
-	public readonly delegate* unmanaged<JVirtualMachineRef, out JEnvironmentRef, in VirtualMachineArgumentValue, JResult
-		> AttachCurrentThread;
+	private readonly delegate* unmanaged<IntPtr, void*, void*, Int32 > _attachCurrentThread;
 	/// <inheritdoc cref="JInvokeInterface.DetachCurrentThreadPointer"/>
-	public readonly delegate* unmanaged<JVirtualMachineRef, JResult> DetachCurrentThread;
+	private readonly delegate* unmanaged<IntPtr, Int32> _detachCurrentThread;
 	/// <inheritdoc cref="JInvokeInterface.GetEnvPointer"/>
-	public readonly delegate* unmanaged<JVirtualMachineRef, out JEnvironmentRef, Int32, JResult> GetEnv;
+	private readonly delegate* unmanaged<IntPtr, void*, Int32, Int32> _getEnv;
 	/// <inheritdoc cref="JInvokeInterface.AttachCurrentThreadAsDaemonPointer"/>
-	public readonly delegate* unmanaged<JVirtualMachineRef, out JEnvironmentRef, in VirtualMachineArgumentValue, JResult
-		> AttachCurrentThreadAsDaemon;
+	private readonly delegate* unmanaged<IntPtr, void*, void*, Int32 > _attachCurrentThreadAsDaemon;
+
+	/// <inheritdoc cref="JInvokeInterface.DestroyJavaVmPointer"/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JResult DestroyVirtualMachine(JVirtualMachineRef vmRef)
+		=> (JResult)this._destroyVirtualMachine(vmRef.Pointer);
+	/// <inheritdoc cref="JInvokeInterface.AttachCurrentThreadPointer"/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JResult AttachCurrentThread(JVirtualMachineRef vmRef, out JEnvironmentRef envRef,
+		in VirtualMachineArgumentValue vmArg)
+	{
+		fixed (void* envRefPtr = &envRef)
+		fixed (void* vmArgPtr = &vmArg)
+			return (JResult)this._attachCurrentThread(vmRef.Pointer, envRefPtr, vmArgPtr);
+	}
+	/// <inheritdoc cref="JInvokeInterface.DetachCurrentThreadPointer"/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JResult DetachCurrentThread(JVirtualMachineRef vmRef) => (JResult)this._destroyVirtualMachine(vmRef.Pointer);
+	/// <inheritdoc cref="JInvokeInterface.GetEnvPointer"/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JResult GetEnv(JVirtualMachineRef vmRef, out JEnvironmentRef envRef, Int32 count)
+	{
+		fixed (void* envRefPtr = &envRef)
+			return (JResult)this._getEnv(vmRef.Pointer, envRefPtr, count);
+	}
+	/// <inheritdoc cref="JInvokeInterface.AttachCurrentThreadAsDaemonPointer"/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JResult AttachCurrentThreadAsDaemon(JVirtualMachineRef vmRef, out JEnvironmentRef envRef,
+		in VirtualMachineArgumentValue vmArg)
+	{
+		fixed (void* envRefPtr = &envRef)
+		fixed (void* vmArgPtr = &vmArg)
+			return (JResult)this._attachCurrentThreadAsDaemon(vmRef.Pointer, envRefPtr, vmArgPtr);
+	}
 }

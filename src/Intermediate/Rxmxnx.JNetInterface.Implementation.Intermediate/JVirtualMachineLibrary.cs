@@ -7,56 +7,12 @@ namespace Rxmxnx.JNetInterface;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-public sealed unsafe class JVirtualMachineLibrary
+public sealed unsafe partial class JVirtualMachineLibrary
 {
-	/// <summary>
-	/// Name of <c>JNI_GetDefaultJavaVMInitArgs</c> function.
-	/// </summary>
-	private const String GetDefaultVirtualMachineInitArgsName = "JNI_GetDefaultJavaVMInitArgs";
-	/// <summary>
-	/// Name of <c>JNI_CreateJavaVM</c> function.
-	/// </summary>
-	private const String CreateVirtualMachineName = "JNI_CreateJavaVM";
-	/// <summary>
-	/// Name of <c>JNI_GetCreatedJavaVMs</c> function.
-	/// </summary>
-	private const String GetCreatedVirtualMachinesName = "JNI_GetCreatedJavaVMs";
-
-	/// <summary>
-	/// Support JNI versions.
-	/// </summary>
-	private static readonly Int32[] jniVersions =
-	[
-		0x00010006, //JNI_VERSION_1_6
-		0x00010008, //JNI_VERSION_1_8
-		0x00090000, //JNI_VERSION_9
-		0x000a0000, //JNI_VERSION_10
-		0x00130000, //JNI_VERSION_19
-		0x00140000, //JNI_VERSION_20
-		0x00150000, //JNI_VERSION_21
-		0x00180000, //JNI_VERSION_24
-	];
-
-	/// <summary>
-	/// Pointer to exported Java Library functions.
-	/// </summary>
-	private readonly InvocationFunctionSet _functions;
-
 	/// <summary>
 	/// Library handle.
 	/// </summary>
-	public IntPtr Handle { get; private init; }
-
-	/// <summary>
-	/// Private constructor.
-	/// </summary>
-	/// <param name="handle">Library handle.</param>
-	/// <param name="functions">A <see cref="InvocationFunctionSet"/> value.</param>
-	private JVirtualMachineLibrary(IntPtr handle, InvocationFunctionSet functions)
-	{
-		this.Handle = handle;
-		this._functions = functions;
-	}
+	public IntPtr Handle { get; }
 
 	/// <summary>
 	/// Retrieves the latest JNI version supported by the current library.
@@ -139,20 +95,6 @@ public sealed unsafe class JVirtualMachineLibrary
 	}
 
 	/// <summary>
-	/// Retrieves all the created <see cref="JVirtualMachineRef"/> instances.
-	/// </summary>
-	/// <param name="vmCount">Number of elements to retrieve.</param>
-	/// <param name="result">Output. JNI call result.</param>
-	/// <returns>An array of <see cref="JVirtualMachineRef"/> references.</returns>
-	private JVirtualMachineRef[] GetCreatedVirtualMachines(Int32 vmCount, out JResult result)
-	{
-		JVirtualMachineRef[] arr = new JVirtualMachineRef[vmCount];
-		fixed (JVirtualMachineRef* ptr = arr)
-			result = this._functions.GetCreatedVirtualMachines(ptr, arr.Length, out vmCount);
-		return arr;
-	}
-
-	/// <summary>
 	/// Loads a virtual machine library exposed by <paramref name="libraryPath"/>.
 	/// </summary>
 	/// <param name="libraryPath">Path to JVM library.</param>
@@ -177,36 +119,14 @@ public sealed unsafe class JVirtualMachineLibrary
 	public static JVirtualMachineLibrary? Create(IntPtr handle)
 	{
 		Span<IntPtr> functions = stackalloc IntPtr[3];
-		if (JVirtualMachineLibrary.TryGetJniExport(handle, JVirtualMachineLibrary.GetDefaultVirtualMachineInitArgsName,
+		if (JVirtualMachineLibrary.TryGetJniExport(handle, JVirtualMachineLibrary.getDefaultVirtualMachineInitArgsName,
 		                                           out functions[0]) &&
-		    JVirtualMachineLibrary.TryGetJniExport(handle, JVirtualMachineLibrary.CreateVirtualMachineName,
+		    JVirtualMachineLibrary.TryGetJniExport(handle, JVirtualMachineLibrary.createVirtualMachineName,
 		                                           out functions[1]) &&
-		    JVirtualMachineLibrary.TryGetJniExport(handle, JVirtualMachineLibrary.GetCreatedVirtualMachinesName,
+		    JVirtualMachineLibrary.TryGetJniExport(handle, JVirtualMachineLibrary.getCreatedVirtualMachinesName,
 		                                           out functions[2]))
 			return new(handle, Unsafe.As<IntPtr, InvocationFunctionSet>(ref functions[0]));
 		NativeLibrary.Free(handle);
 		return default;
-	}
-
-	/// <summary>
-	/// Gets the address of JNI exported symbol and returns a value that indicates whether
-	/// the method call succeeded.
-	/// </summary>
-	/// <param name="handle">The native JVM library OS handle.</param>
-	/// <param name="name">The name of the exported JNI symbol.</param>
-	/// <param name="address">When the method returns, contains the symbol address, if it exists.</param>
-	/// <returns>
-	/// <see langword="true"/> if the address of the exported symbol was found successfully; otherwise,
-	/// <see langword="false"/>.
-	/// </returns>
-	private static Boolean TryGetJniExport(IntPtr handle, String name, out IntPtr address)
-	{
-		Boolean found = NativeLibrary.TryGetExport(handle, name, out address);
-		JTrace.GetJniExport(handle, name, found, address);
-		if (found) return true;
-		String auxName = name + "_Impl";
-		found = NativeLibrary.TryGetExport(handle, auxName, out address);
-		JTrace.GetJniExport(handle, auxName, found, address);
-		return found;
 	}
 }

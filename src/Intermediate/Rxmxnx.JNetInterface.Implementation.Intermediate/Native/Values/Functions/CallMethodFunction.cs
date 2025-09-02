@@ -23,5 +23,12 @@ internal readonly unsafe struct CallMethodFunction<TReceiver>
 	/// <summary>
 	/// Caller <c>A</c> function.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, TReceiver, JMethodId, JValue*, void> Call;
+	private readonly delegate* unmanaged<IntPtr, IntPtr, IntPtr, void*, void> _call;
+
+	/// <summary>
+	/// <c>CallVoidMethodA</c>.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public void Call(JEnvironmentRef envRef, TReceiver receiverRef, JMethodId methodId, JValue* args)
+		=> this._call(envRef.Pointer, receiverRef.Value.Pointer, methodId.Pointer, args);
 }

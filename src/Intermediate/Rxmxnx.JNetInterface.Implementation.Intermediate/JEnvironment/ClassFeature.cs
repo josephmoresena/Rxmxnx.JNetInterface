@@ -124,7 +124,7 @@ partial class JEnvironment
 			JClassObject jClass = this.GetClass(classRef, true, kind, true);
 			return this.Register(jClass);
 		}
-		public unsafe JClassObject? GetSuperClass(JClassObject jClass)
+		public JClassObject? GetSuperClass(JClassObject jClass)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
 			if (jClass.IsPrimitive || jClass.IsInterface || jClass.Name.AsSpan().SequenceEqual(CommonNames.Object))

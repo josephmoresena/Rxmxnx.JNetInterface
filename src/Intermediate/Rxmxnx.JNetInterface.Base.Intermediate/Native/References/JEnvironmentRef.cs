@@ -27,7 +27,12 @@ public readonly partial struct JEnvironmentRef : INativeReferenceType, IReadOnly
 	/// Parameterless constructor.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JEnvironmentRef() => this._value = ReadOnlyValPtr<JEnvironmentValue>.Zero;
+	public JEnvironmentRef() : this(IntPtr.Zero) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JEnvironmentRef(IntPtr value) => this._value = (ReadOnlyValPtr<JEnvironmentValue>)value;
 
 	ref readonly JEnvironmentValue IReadOnlyReferenceable<JEnvironmentValue>.Reference => ref this.Reference;
 

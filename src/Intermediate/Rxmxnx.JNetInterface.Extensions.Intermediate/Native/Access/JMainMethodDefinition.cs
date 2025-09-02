@@ -50,7 +50,7 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 	public void Invoke(JClassObject mainClass, params ReadOnlySpan<String?> args)
 	{
 		IEnvironment env = mainClass.Environment;
-		using JArrayObject<JStringObject>? jArgs = JMainMethodDefinition.CreateArgsArray(env, args);
+		using JArrayObject<JStringObject> jArgs = JMainMethodDefinition.CreateArgsArray(env, args);
 		this.InvokeMain(mainClass, jArgs);
 	}
 #endif

@@ -6,7 +6,7 @@
 /// </summary>
 /// <remarks>This handle will be valid until the associated <c>class</c> is unloaded.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JMethodId : IAccessibleIdentifierType
+public readonly partial struct JMethodId : IAccessibleIdentifierType<JMethodId>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JMethod;
@@ -18,7 +18,13 @@ public readonly partial struct JMethodId : IAccessibleIdentifierType
 	/// Parameterless constructor.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JMethodId() => this.Pointer = IntPtr.Zero;
+	public JMethodId() : this(IntPtr.Zero) { }
+	
+	/// <summary>
+	/// Private constructor.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private JMethodId(IntPtr ptr) => this.Pointer = ptr;
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -27,4 +33,7 @@ public readonly partial struct JMethodId : IAccessibleIdentifierType
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)
 		=> obj is JMethodId methodId && this.Pointer.Equals(methodId.Pointer);
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static JMethodId IAccessibleIdentifierType<JMethodId>.New(IntPtr value) => new(value);
 }

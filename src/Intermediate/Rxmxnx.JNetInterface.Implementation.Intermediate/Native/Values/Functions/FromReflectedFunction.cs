@@ -10,13 +10,13 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
 internal readonly unsafe struct FromReflectedFunction<TAccessible>
-	where TAccessible : unmanaged, IAccessibleIdentifierType
+	where TAccessible : unmanaged, IAccessibleIdentifierType<TAccessible>
 {
 	/// <summary>
 	/// Pointer to <c>FromReflected<typeparamref name="TAccessible"/></c> function.
 	/// Converts a <c>java.lang.reflect</c> object to a <typeparamref name="TAccessible"/>.
 	/// </summary>
-	private readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, IntPtr> _ptr;
+	private readonly delegate* unmanaged<IntPtr, IntPtr, IntPtr> _ptr;
 
 	/// <summary>
 	/// Pointer to <c>FromReflected<typeparamref name="TAccessible"/></c> function.
@@ -27,9 +27,5 @@ internal readonly unsafe struct FromReflectedFunction<TAccessible>
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TAccessible FromReflected(JEnvironmentRef envRef, JObjectLocalRef localRef)
-	{
-		TAccessible result = default;
-		Unsafe.As<TAccessible, IntPtr>(ref result) = this._ptr(envRef, localRef);
-		return result;
-	}
+		=> TAccessible.New(this._ptr(envRef.Pointer, localRef.Pointer));
 }
