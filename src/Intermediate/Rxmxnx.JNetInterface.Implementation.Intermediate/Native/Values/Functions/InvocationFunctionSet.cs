@@ -26,26 +26,43 @@ internal readonly unsafe struct InvocationFunctionSet
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult GetDefaultVirtualMachineInitArgs(ref VirtualMachineInitArgumentValue initArg)
-		=> OperatingSystem.IsWindows() ?
-			this._windows.GetDefaultVirtualMachineInitArgs(ref initArg) :
-			this._unix.GetDefaultVirtualMachineInitArgs(ref initArg);
+	{
+		fixed (VirtualMachineInitArgumentValue* initArgPtr = &initArg)
+		{
+			return OperatingSystem.IsWindows() ?
+				this._windows.GetDefaultVirtualMachineInitArgs(initArgPtr) :
+				this._unix.GetDefaultVirtualMachineInitArgs(initArgPtr);
+		}
+	}
 	/// <summary>
 	/// <c>JNI_CreateJavaVM</c>.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult CreateVirtualMachine(out JVirtualMachineRef vmRef, out JEnvironmentRef envRef,
 		in VirtualMachineInitArgumentValue initArg)
-		=> OperatingSystem.IsWindows() ?
-			this._windows.CreateVirtualMachine(out vmRef, out envRef, in initArg) :
-			this._unix.CreateVirtualMachine(out vmRef, out envRef, in initArg);
+	{
+		fixed (JVirtualMachineRef* vmRefPtr = &vmRef)
+		fixed (JEnvironmentRef* envRefPtr = &envRef)
+		fixed (VirtualMachineInitArgumentValue* initArgPtr = &initArg)
+		{
+			return OperatingSystem.IsWindows() ?
+				this._windows.CreateVirtualMachine(vmRefPtr, envRefPtr, initArgPtr) :
+				this._unix.CreateVirtualMachine(vmRefPtr, envRefPtr, initArgPtr);
+		}
+	}
 	/// <summary>
 	/// <c>JNI_GetCreatedJavaVMs</c>.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult GetCreatedVirtualMachines(JVirtualMachineRef* arr, Int32 arrSize, out Int32 count)
-		=> OperatingSystem.IsWindows() ?
-			this._windows.GetCreatedVirtualMachines(arr, arrSize, out count) :
-			this._unix.GetCreatedVirtualMachines(arr, arrSize, out count);
+	{
+		fixed (Int32* countPtr = &count)
+		{
+			return OperatingSystem.IsWindows() ?
+				this._windows.GetCreatedVirtualMachines(arr, arrSize, countPtr) :
+				this._unix.GetCreatedVirtualMachines(arr, arrSize, countPtr);
+		}
+	}
 
 	/// <summary>
 	/// Windows function set.
@@ -57,19 +74,19 @@ internal readonly unsafe struct InvocationFunctionSet
 		/// Pointer to <c>JNI_GetDefaultJavaVMInitArgs</c> exported function.
 		/// Returns a default configuration for the Java VM.
 		/// </summary>
-		public readonly delegate* unmanaged[Stdcall]<ref VirtualMachineInitArgumentValue, JResult>
+		public readonly delegate* unmanaged[Stdcall]< VirtualMachineInitArgumentValue*, JResult>
 			GetDefaultVirtualMachineInitArgs;
 		/// <summary>
 		/// Pointer to <c>JNI_CreateJavaVM</c> exported function.
 		/// Loads and initializes a Java VM. The current thread becomes the main thread.
 		/// </summary>
-		public readonly delegate* unmanaged[Stdcall]<out JVirtualMachineRef, out JEnvironmentRef, in
-			VirtualMachineInitArgumentValue, JResult> CreateVirtualMachine;
+		public readonly delegate* unmanaged[Stdcall]< JVirtualMachineRef*, JEnvironmentRef*,
+			VirtualMachineInitArgumentValue*, JResult> CreateVirtualMachine;
 		/// <summary>
 		/// Pointer to <c>JNI_GetCreatedJavaVMs</c> exported function.
 		/// Returns all Java VMs that have been created.
 		/// </summary>
-		public readonly delegate* unmanaged[Stdcall]<JVirtualMachineRef*, Int32, out Int32, JResult>
+		public readonly delegate* unmanaged[Stdcall]<JVirtualMachineRef*, Int32, Int32*, JResult>
 			GetCreatedVirtualMachines;
 	}
 
@@ -83,19 +100,19 @@ internal readonly unsafe struct InvocationFunctionSet
 		/// Pointer to <c>JNI_GetDefaultJavaVMInitArgs</c> exported function.
 		/// Returns a default configuration for the Java VM.
 		/// </summary>
-		public readonly delegate* unmanaged[Cdecl]<ref VirtualMachineInitArgumentValue, JResult>
+		public readonly delegate* unmanaged[Cdecl]<VirtualMachineInitArgumentValue*, JResult>
 			GetDefaultVirtualMachineInitArgs;
 		/// <summary>
 		/// Pointer to <c>JNI_CreateJavaVM</c> exported function.
 		/// Loads and initializes a Java VM. The current thread becomes the main thread.
 		/// </summary>
-		public readonly delegate* unmanaged[Cdecl]<out JVirtualMachineRef, out JEnvironmentRef, in
-			VirtualMachineInitArgumentValue, JResult> CreateVirtualMachine;
+		public readonly delegate* unmanaged[Cdecl]<JVirtualMachineRef*, JEnvironmentRef*,
+			VirtualMachineInitArgumentValue*, JResult> CreateVirtualMachine;
 		/// <summary>
 		/// Pointer to <c>JNI_GetCreatedJavaVMs</c> exported function.
 		/// Returns all Java VMs that have been created.
 		/// </summary>
-		public readonly delegate* unmanaged[Cdecl]<JVirtualMachineRef*, Int32, out Int32, JResult>
+		public readonly delegate* unmanaged[Cdecl]<JVirtualMachineRef*, Int32, Int32*, JResult>
 			GetCreatedVirtualMachines;
 	}
 }

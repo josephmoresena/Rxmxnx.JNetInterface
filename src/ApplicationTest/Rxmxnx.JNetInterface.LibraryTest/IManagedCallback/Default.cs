@@ -53,15 +53,19 @@ public partial interface IManagedCallback
 				env.DescribeException();
 				if (e is ThrowableException te)
 				{
-					this.Writer.WriteLine($"=== {te.EnvironmentRef} thread: {te.ThreadId} === ");
+					this.Writer.WriteLine(
+						$"=== {te.EnvironmentRef} thread: {te.ThreadId} throwable: {te.ThrowableRef}=== ");
 					this.Writer.WriteLine(te.WithSafeInvoke(t => t.ToString()));
 				}
+				Console.WriteLine($"Thread throwable: {env.PendingException?.ThrowableRef}");
 			}
 			finally
 			{
 				env.PendingException = default;
-				CString message = new(() => "Thrown from C# code."u8);
+				Console.WriteLine("Throwing exception from .NET...");
+				CString message = new(() => "Thrown from .NET code."u8);
 				JThrowableObject.ThrowNew<JIllegalArgumentExceptionObject>(env, message);
+				Console.WriteLine("Exception thrown from .NET...");
 			}
 		}
 
