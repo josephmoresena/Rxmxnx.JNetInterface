@@ -118,7 +118,7 @@ partial class JEnvironment
 		/// Retrieves exception occured reference.
 		/// </summary>
 		/// <returns>Pending exception <see cref="JThrowableLocalRef"/> reference.</returns>
-		public unsafe JThrowableLocalRef GetPendingException()
+		public JThrowableLocalRef GetPendingException()
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionOccurredInfo);
@@ -187,7 +187,7 @@ partial class JEnvironment
 		/// <summary>
 		/// Clears pending JNI exception.
 		/// </summary>
-		public unsafe void ClearException()
+		public void ClearException()
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionClearInfo);

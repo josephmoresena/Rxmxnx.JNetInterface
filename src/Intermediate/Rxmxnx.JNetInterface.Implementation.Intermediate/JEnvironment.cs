@@ -71,7 +71,7 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	/// <inheritdoc/>
 	public Boolean JniSecure() => this._cache.JniSecure();
 	/// <inheritdoc/>
-	public unsafe void DescribeException()
+	public void DescribeException()
 	{
 		ref readonly NativeInterface nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionDescribeInfo);
