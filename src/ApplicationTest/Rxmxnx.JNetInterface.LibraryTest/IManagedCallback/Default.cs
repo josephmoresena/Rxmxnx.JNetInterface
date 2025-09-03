@@ -56,10 +56,10 @@ public partial interface IManagedCallback
 					this.Writer.WriteLine($"=== {te.EnvironmentRef} thread: {te.ThreadId} === ");
 					this.Writer.WriteLine(te.WithSafeInvoke(t => t.ToString()));
 				}
-				env.PendingException = default;
 			}
 			finally
 			{
+				env.PendingException = default;
 				CString message = new(() => "Thrown from C# code."u8);
 				JThrowableObject.ThrowNew<JIllegalArgumentExceptionObject>(env, message);
 			}
