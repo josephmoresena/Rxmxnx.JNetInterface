@@ -16,12 +16,13 @@ internal readonly unsafe struct ClassFunctionSet
 	/// The buffer containing the raw class data is not referenced by the <c>VM</c> after the
 	/// <c>DefineClass</c> call returns, and it may be discarded if desired.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, Byte*, IntPtr, Byte*, Int32, IntPtr> _defineClass;
+	public readonly delegate* unmanaged<JEnvironmentRef, Byte*, JObjectLocalRef, Byte*, Int32, JClassLocalRef>
+		DefineClass;
 	/// <summary>
 	/// Pointer to <c>FindClass</c> function.
 	/// Loads a locally-defined class with the specified name.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, Byte*, IntPtr> _findClass;
+	public readonly delegate* unmanaged<JEnvironmentRef, Byte*, JClassLocalRef> FindClass;
 
 	/// <summary>
 	/// Pointer to <c>FromReflectedMethod</c> function.
@@ -44,42 +45,16 @@ internal readonly unsafe struct ClassFunctionSet
 	/// Pointer to <c>GetSuperclass</c> function.
 	/// This function returns the object that represents the superclass of the specified class.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, IntPtr, IntPtr> _getSuperclass;
+	public readonly delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JClassLocalRef> GetSuperclass;
 	/// <summary>
 	/// Pointer to <c>IsAssignableFrom</c> function.
 	/// Determines whether an object of the first class can be safely cast to the second class.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, IntPtr, IntPtr, Byte> _isAssignableFrom;
+	public readonly delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JClassLocalRef, JBoolean> IsAssignableFrom;
 
 	/// <summary>
 	/// Pointer to <c>ToReflectedField</c> function.
 	/// Converts a field ID derived from a class to a <c>java.lang.reflect.Field</c> object.
 	/// </summary>
 	public readonly ToReflectedFunction<JFieldId> ToReflectedField;
-
-	/// <summary>
-	/// <c>DefineClass</c>.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JClassLocalRef DefineClass(JEnvironmentRef envRef, Byte* classNamePtr, JObjectLocalRef localRef,
-		Byte* buffPtr, Int32 buffSize)
-		=> new(this._defineClass(envRef.Pointer, classNamePtr, localRef.Pointer, buffPtr, buffSize));
-	/// <summary>
-	/// <c>FindClass</c>.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JClassLocalRef FindClass(JEnvironmentRef envRef, Byte* classNamePtr)
-		=> new(this._findClass(envRef.Pointer, classNamePtr));
-	/// <summary>
-	/// <c>GetSuperclass</c>.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JClassLocalRef GetSuperclass(JEnvironmentRef envRef, JClassLocalRef classRef)
-		=> new(this._getSuperclass(envRef.Pointer, classRef.Pointer));
-	/// <summary>
-	/// <c>IsAssignableFrom</c>.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JBoolean IsAssignableFrom(JEnvironmentRef envRef, JClassLocalRef classRef0, JClassLocalRef classRef1)
-		=> this._isAssignableFrom(envRef.Pointer, classRef0.Pointer, classRef1.Pointer) == JBoolean.TrueValue;
 }

@@ -7,7 +7,7 @@
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JIntArrayLocalRef : IArrayReferenceType<JIntArrayLocalRef>
+public readonly partial struct JIntArrayLocalRef : IArrayReferenceType
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JIntArray;
@@ -26,16 +26,7 @@ public readonly partial struct JIntArrayLocalRef : IArrayReferenceType<JIntArray
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._value.Pointer;
 
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JIntArrayLocalRef(IntPtr value) => this._value = new(value);
-
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Boolean Equals(JArrayLocalRef other) => this._value.Equals(other);
-
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	static JIntArrayLocalRef IArrayReferenceType<JIntArrayLocalRef>.New(IntPtr value) => new(value);
 }

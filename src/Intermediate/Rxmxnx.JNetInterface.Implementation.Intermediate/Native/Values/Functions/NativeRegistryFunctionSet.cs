@@ -14,24 +14,11 @@ internal readonly unsafe struct NativeRegistryFunctionSet
 	/// Pointer to <c>RegisterNatives</c> function.
 	/// Registers native methods with the specified class.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, IntPtr, void*, Int32, Int32> _registerNatives;
+	public readonly delegate* unmanaged<JEnvironmentRef, JClassLocalRef, NativeMethodValue*, Int32, JResult>
+		RegisterNatives;
 	/// <summary>
 	/// Pointer to <c>UnregisterNatives</c> function.
 	/// Unregisters native methods of a class.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, IntPtr, Int32> _unregisterNatives;
-
-	/// <summary>
-	/// <c>RegisterNatives</c>.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JResult RegisterNatives(JEnvironmentRef envRef, JClassLocalRef classRef, NativeMethodValue* method0Ptr,
-		Int32 methodCount)
-		=> (JResult)this._registerNatives(envRef.Pointer, classRef.Pointer, method0Ptr, methodCount);
-	/// <summary>
-	/// <c>UnregisterNatives</c>.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JResult UnregisterNatives(JEnvironmentRef envRef, JClassLocalRef classRef)
-		=> (JResult)this._unregisterNatives(envRef.Pointer, classRef.Pointer);
+	public readonly delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JResult> UnregisterNatives;
 }

@@ -374,7 +374,7 @@ partial class JEnvironment
 		/// Sets given <see cref="JThrowableLocalRef"/> reference as pending exception.
 		/// </summary>
 		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
-		private void Throw(JThrowableLocalRef throwableRef)
+		private unsafe void Throw(JThrowableLocalRef throwableRef)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ThrowInfo);

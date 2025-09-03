@@ -172,7 +172,7 @@ partial class JEnvironment
 	/// </summary>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 	/// <returns>A <see cref="JReferenceType"/> value.</returns>
-	internal JReferenceType GetReferenceType(JObjectLocalRef localRef)
+	internal unsafe JReferenceType GetReferenceType(JObjectLocalRef localRef)
 	{
 		ref readonly NativeInterface6 nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface6>(NativeInterface6.GetObjectRefTypeInfo);

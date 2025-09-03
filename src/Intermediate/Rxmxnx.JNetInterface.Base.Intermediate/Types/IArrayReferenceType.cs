@@ -10,16 +10,3 @@ internal interface IArrayReferenceType : IObjectReferenceType, IEquatable<JArray
 	/// </summary>
 	JArrayLocalRef ArrayValue { get; }
 }
-
-/// <summary>
-/// This interface exposes a java array local reference.
-/// </summary>
-/// <typeparam name="TArrayRef">A <see cref="IArrayReferenceType"/> type.</typeparam>
-internal interface IArrayReferenceType<out TArrayRef> : IArrayReferenceType
-	where TArrayRef : unmanaged, IArrayReferenceType<TArrayRef>
-{
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	static abstract TArrayRef New(IntPtr value);
-}

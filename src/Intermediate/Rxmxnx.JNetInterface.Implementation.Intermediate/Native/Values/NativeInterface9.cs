@@ -33,14 +33,7 @@ internal readonly unsafe struct NativeInterface9 : INativeInterface<NativeInterf
 	/// If the class represents a primitive type or <c>void</c>, then the Module object for the <c>java.base</c> module is
 	/// returned.
 	/// </remarks>
-	private readonly delegate* unmanaged<IntPtr, IntPtr, IntPtr> _getModule;
-
-	/// <summary>
-	/// <c>GetModule</c>.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JObjectLocalRef GetModule(JEnvironmentRef envRef, JClassLocalRef classRef)
-		=> new(this._getModule(envRef.Pointer, classRef.Pointer));
+	public readonly delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JObjectLocalRef> GetModule;
 
 	/// <summary>
 	/// Information of <see cref="NativeInterface9.GetModule"/>

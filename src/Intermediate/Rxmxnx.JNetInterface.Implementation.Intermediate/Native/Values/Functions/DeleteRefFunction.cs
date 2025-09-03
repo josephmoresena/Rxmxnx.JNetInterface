@@ -16,7 +16,7 @@ internal readonly unsafe struct DeleteRefFunction<TReference>
 	/// Pointer to <c>Delete<typeparamref name="TReference"/>Ref</c> function.
 	/// Deletes the given <typeparamref name="TReference"/> reference.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, IntPtr, void> _ptr;
+	private readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, void> _ptr;
 
 	/// <summary>
 	/// Pointer to <c>Delete<typeparamref name="TReference"/>Ref</c> function.
@@ -26,5 +26,5 @@ internal readonly unsafe struct DeleteRefFunction<TReference>
 	[ExcludeFromCodeCoverage]
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public void DeleteRef(JEnvironmentRef envRef, TReference objRef) => this._ptr(envRef.Pointer, objRef.Value.Pointer);
+	public void DeleteRef(JEnvironmentRef envRef, TReference objRef) => this._ptr(envRef, objRef.Value);
 }

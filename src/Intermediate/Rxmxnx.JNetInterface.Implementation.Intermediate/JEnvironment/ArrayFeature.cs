@@ -81,7 +81,7 @@ partial class JEnvironment
 				this.CreateArray(length, initialElement) :
 				this.CreateObjectArray<TElement>(jClass, length, initialElement as JReferenceObject);
 		}
-		public Int32 GetArrayLength(JReferenceObject jObject)
+		public unsafe Int32 GetArrayLength(JReferenceObject jObject)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);
 			ref readonly NativeInterface nativeInterface =
@@ -175,7 +175,7 @@ partial class JEnvironment
 			isCopy = isCopyJ.Value;
 			return result;
 		}
-		public ValPtr<Byte> GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef)
+		public unsafe ValPtr<Byte> GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetPrimitiveArrayCriticalInfo);
@@ -206,7 +206,7 @@ partial class JEnvironment
 				throw;
 			}
 		}
-		public void ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, ValPtr<Byte> criticalPtr)
+		public unsafe void ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, ValPtr<Byte> criticalPtr)
 		{
 			try
 			{

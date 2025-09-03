@@ -28,12 +28,7 @@ public readonly partial struct JVirtualMachineRef : INativeReferenceType, IReadO
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
-	public JVirtualMachineRef() : this(IntPtr.Zero) { }
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JVirtualMachineRef(IntPtr value) => this._value = (ReadOnlyValPtr<JVirtualMachineValue>)value;
+	public JVirtualMachineRef() => this._value = ReadOnlyValPtr<JVirtualMachineValue>.Zero;
 
 	ref readonly JVirtualMachineValue IReadOnlyReferenceable<JVirtualMachineValue>.Reference => ref this.Reference;
 

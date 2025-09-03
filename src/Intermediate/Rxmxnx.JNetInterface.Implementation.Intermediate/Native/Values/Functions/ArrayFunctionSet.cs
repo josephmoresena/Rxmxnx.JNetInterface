@@ -26,8 +26,7 @@ internal readonly unsafe struct ArrayFunctionSet
 	/// Pointer to <c>GetArrayLength</c> function.
 	/// Returns the number of elements in the array.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, IntPtr, Int32> _getArrayLength;
-
+	public readonly delegate* unmanaged<JEnvironmentRef, JArrayLocalRef, Int32> GetArrayLength;
 	/// <summary>
 	/// Pointers to <c>NewObjectArray</c>, <c>GetObjectArrayElement</c> and <c>SetObjectArrayElement</c> functions.
 	/// </summary>
@@ -59,11 +58,4 @@ internal readonly unsafe struct ArrayFunctionSet
 	/// <c>SetDoubleArrayRegion</c> functions.
 	/// </summary>
 	public readonly PrimitiveArrayRegionFunctionSet RegionFunctions;
-
-	/// <summary>
-	/// <c>GetArrayLength</c>.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Int32 GetArrayLength(JEnvironmentRef envRef, JArrayLocalRef arrayRef)
-		=> this._getArrayLength(envRef.Pointer, arrayRef.Pointer);
 }

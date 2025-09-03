@@ -27,14 +27,7 @@ internal readonly unsafe struct NativeInterface6 : INativeInterface<NativeInterf
 	/// Pointer to <c>GetObjectRefType</c> function.
 	/// Retrieves the type of given object reference.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, IntPtr, Int32> _getObjectRefType;
-
-	/// <summary>
-	/// <c>GetObjectRefType</c>.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JReferenceType GetObjectRefType(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> (JReferenceType)this._getObjectRefType(envRef.Pointer, localRef.Pointer);
+	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JReferenceType> GetObjectRefType;
 
 	/// <summary>
 	/// Information of <see cref="NativeInterface6.GetObjectRefType"/>

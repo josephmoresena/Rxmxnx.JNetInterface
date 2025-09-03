@@ -6,7 +6,7 @@
 /// </summary>
 /// <remarks>This handle will be valid until the associated <c>class</c> is unloaded.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JFieldId : IAccessibleIdentifierType<JFieldId>
+public readonly partial struct JFieldId : IAccessibleIdentifierType
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JField;
@@ -18,13 +18,7 @@ public readonly partial struct JFieldId : IAccessibleIdentifierType<JFieldId>
 	/// Parameterless constructor.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JFieldId() : this(IntPtr.Zero) { }
-
-	/// <summary>
-	/// Private constructor.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private JFieldId(IntPtr ptr) => this.Pointer = ptr;
+	public JFieldId() => this.Pointer = IntPtr.Zero;
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -33,7 +27,4 @@ public readonly partial struct JFieldId : IAccessibleIdentifierType<JFieldId>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)
 		=> obj is JFieldId fieldId && this.Pointer.Equals(fieldId.Pointer);
-
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	static JFieldId IAccessibleIdentifierType<JFieldId>.New(IntPtr value) => new(value);
 }

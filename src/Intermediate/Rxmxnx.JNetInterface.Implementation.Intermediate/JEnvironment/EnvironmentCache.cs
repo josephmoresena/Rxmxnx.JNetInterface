@@ -18,7 +18,7 @@ partial class JEnvironment
 		/// <summary>
 		/// Maximum number of bytes usable from stack.
 		/// </summary>
-		public Int32 MaxStackBytes { get; private set; } = EnvironmentCache.minStackBytes;
+		public Int32 MaxStackBytes { get; private set; } = EnvironmentCache.MinStackBytes;
 		/// <summary>
 		/// Amount of bytes used from stack.
 		/// </summary>
@@ -118,7 +118,7 @@ partial class JEnvironment
 		/// Retrieves exception occured reference.
 		/// </summary>
 		/// <returns>Pending exception <see cref="JThrowableLocalRef"/> reference.</returns>
-		public JThrowableLocalRef GetPendingException()
+		public unsafe JThrowableLocalRef GetPendingException()
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionOccurredInfo);
@@ -128,7 +128,7 @@ partial class JEnvironment
 		/// Checks if there is a pending JNI exception.
 		/// </summary>
 		/// <returns><see langword="true"/> if there is pending JNI exception; otherwise, <see langword="false"/>.</returns>
-		public Boolean HasPendingException()
+		public unsafe Boolean HasPendingException()
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionCheckInfo);
@@ -175,7 +175,7 @@ partial class JEnvironment
 		/// Deletes the current local reference frame.
 		/// </summary>
 		/// <param name="result">Current result.</param>
-		public void DeleteLocalFrame(JLocalObject? result)
+		public unsafe void DeleteLocalFrame(JLocalObject? result)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.PopLocalFrameInfo);
@@ -187,7 +187,7 @@ partial class JEnvironment
 		/// <summary>
 		/// Clears pending JNI exception.
 		/// </summary>
-		public void ClearException()
+		public unsafe void ClearException()
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionClearInfo);
@@ -199,8 +199,8 @@ partial class JEnvironment
 		/// <param name="value">Value.</param>
 		public void SetUsableStackBytes(Int32 value)
 		{
-			Int32 min = EnvironmentCache.minStackBytes > this.UsedStackBytes ?
-				EnvironmentCache.minStackBytes :
+			Int32 min = EnvironmentCache.MinStackBytes > this.UsedStackBytes ?
+				EnvironmentCache.MinStackBytes :
 				this.UsedStackBytes;
 			if (value < min)
 				throw new ArgumentOutOfRangeException(nameof(value),

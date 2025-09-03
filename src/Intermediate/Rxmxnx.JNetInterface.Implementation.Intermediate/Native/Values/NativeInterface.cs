@@ -80,7 +80,7 @@ internal readonly unsafe partial struct NativeInterface : INativeInterface<Nativ
 	/// Pointer to <c>GetJavaVM</c> function.
 	/// Returns the Java VM interface (used in the Invocation API) associated with the current thread.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, void*, Int32> _getVirtualMachine;
+	public readonly delegate* unmanaged<JEnvironmentRef, out JVirtualMachineRef, JResult> GetVirtualMachine;
 	/// <summary>
 	/// Pointers to <c>GetStringRegion</c> and <c>GetStringUTFRegion</c> functions.
 	/// </summary>
@@ -97,26 +97,9 @@ internal readonly unsafe partial struct NativeInterface : INativeInterface<Nativ
 	/// Pointers to <c>NewWeakGlobalRef</c> and <c>DeleteWeakGlobalRef</c> functions.
 	/// </summary>
 	public readonly WeakReferenceFunctionSet WeakGlobalFunctions;
-
 	/// <summary>
 	/// Pointer to <c>ExceptionCheck</c> function.
 	/// Checks for pending exceptions without creating a local reference to the exception object.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, Byte> _exceptionCheck;
-
-	/// <summary>
-	///     <c>ExceptionCheck</c>
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JBoolean ExceptionCheck(JEnvironmentRef envRef)
-		=> this._exceptionCheck(envRef.Pointer) == JBoolean.TrueValue;
-	/// <summary>
-	/// <c>GetJavaVM</c>.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JResult GetVirtualMachine(JEnvironmentRef envRef, out JVirtualMachineRef vmRef)
-	{
-		fixed (void* vmRefPtr = &vmRef)
-			return (JResult)this._getVirtualMachine(envRef.Pointer, vmRefPtr);
-	}
+	public readonly delegate* unmanaged<JEnvironmentRef, JBoolean> ExceptionCheck;
 }

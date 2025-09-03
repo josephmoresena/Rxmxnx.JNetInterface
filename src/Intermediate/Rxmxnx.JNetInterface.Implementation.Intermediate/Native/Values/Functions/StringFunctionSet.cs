@@ -14,7 +14,7 @@ internal readonly unsafe struct StringFunctionSet
 	/// Pointer to <c>NewString</c> function.
 	/// Constructs a new <c>java.lang.String</c> object from an array of characters.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, Char*, Int32, IntPtr> _newString;
+	public readonly delegate* unmanaged<JEnvironmentRef, Char*, Int32, JStringLocalRef> NewString;
 	/// <summary>
 	/// Pointers to <c>GetStringLength</c>, <c>GetStringChars</c> and <c>ReleaseStringChars</c>
 	/// functions.
@@ -24,25 +24,12 @@ internal readonly unsafe struct StringFunctionSet
 	/// Pointer to <c>NewStringUTF</c> function.
 	/// Constructs a new <c>java.lang.String</c> object from an array of characters.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, Byte*, IntPtr> _newStringUtf;
+	public readonly delegate* unmanaged<JEnvironmentRef, Byte*, JStringLocalRef> NewStringUtf;
 	/// <summary>
 	/// Pointers to <c>GetStringUTFLength</c>, <c>GetStringUTFChars</c> and <c>ReleaseStringUTFChars</c>
 	/// functions.
 	/// </summary>
 	public readonly StringFunctionSet<Byte> Utf8;
-
-	/// <summary>
-	/// <c>NewStringUtf</c>.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JStringLocalRef NewString(JEnvironmentRef envRef, Char* textPtr, Int32 textLength)
-		=> new(this._newString(envRef.Pointer, textPtr, textLength));
-	/// <summary>
-	/// <c>NewStringUtf</c>.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JStringLocalRef NewStringUtf(JEnvironmentRef envRef, Byte* textPtr)
-		=> new(this._newStringUtf(envRef.Pointer, textPtr));
 }
 
 /// <summary>
@@ -61,18 +48,18 @@ internal readonly unsafe struct StringFunctionSet<TChar>
 	/// Pointer to <c>GetStringLength</c> function.
 	/// Returns the length (the count of characters) of a Java string.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, IntPtr, Int32> _getLengthPtr;
+	private readonly delegate* unmanaged<JEnvironmentRef, JStringLocalRef, Int32> _getLengthPtr;
 	/// <summary>
 	/// Pointer to <c>GetStringChars</c> function.
 	/// Returns a pointer to the array of characters of the string.
 	/// </summary>
 	/// <remarks>This pointer is valid until <c>ReleaseStringChars()</c> is called.</remarks>
-	private readonly delegate* unmanaged<IntPtr, IntPtr, Byte*, void*> _getCharsPtr;
+	private readonly delegate* unmanaged<JEnvironmentRef, JStringLocalRef, out JBoolean, void*> _getCharsPtr;
 	/// <summary>
 	/// Pointer to <c>ReleaseStringChars</c> function.
 	/// Informs the <c>VM</c> that the native code no longer needs access to chars.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, IntPtr, void*, void> _releaseChars;
+	private readonly delegate* unmanaged<JEnvironmentRef, JStringLocalRef, void*, void> _releaseChars;
 
 	/// <summary>
 	/// Pointer to <c>GetStringLength</c> function.
@@ -83,7 +70,7 @@ internal readonly unsafe struct StringFunctionSet<TChar>
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Int32 GetStringLength(JEnvironmentRef envRef, JStringLocalRef stringRef)
-		=> this._getLengthPtr(envRef.Pointer, stringRef.Pointer);
+		=> this._getLengthPtr(envRef, stringRef);
 	/// <summary>
 	/// Pointer to <c>GetStringChars</c> function.
 	/// Returns a pointer to the array of characters of the string.
@@ -94,10 +81,7 @@ internal readonly unsafe struct StringFunctionSet<TChar>
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public ReadOnlyValPtr<TChar> GetStringChars(JEnvironmentRef envRef, JStringLocalRef stringRef, out JBoolean isCopy)
-	{
-		fixed (void* isCopyPtr = &isCopy)
-			return (ReadOnlyValPtr<TChar>)this._getCharsPtr(envRef.Pointer, stringRef.Pointer, (Byte*)isCopyPtr);
-	}
+		=> (ReadOnlyValPtr<TChar>)this._getCharsPtr(envRef, stringRef, out isCopy);
 	/// <summary>
 	/// Pointer to <c>ReleaseStringChars</c> function.
 	/// Informs the <c>VM</c> that the native code no longer needs access to chars.
@@ -107,5 +91,5 @@ internal readonly unsafe struct StringFunctionSet<TChar>
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void ReleaseStringChars(JEnvironmentRef envRef, JStringLocalRef stringRef, ReadOnlyValPtr<TChar> chars)
-		=> this._releaseChars(envRef.Pointer, stringRef.Pointer, chars);
+		=> this._releaseChars(envRef, stringRef, chars);
 }

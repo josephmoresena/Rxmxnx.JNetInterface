@@ -14,37 +14,18 @@ internal readonly unsafe struct ObjectArrayFunctionSet
 	/// Pointer to <c>NewObjectArray</c> function.
 	/// Constructs a new array holding objects in given class.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, Int32, IntPtr, IntPtr, IntPtr> _newObjectArray;
+	public readonly delegate* unmanaged<JEnvironmentRef, Int32, JClassLocalRef, JObjectLocalRef, JObjectArrayLocalRef>
+		NewObjectArray;
 	/// <summary>
 	/// Pointer to <c>GetObjectArrayElement</c> function.
 	/// Returns an element of an <c>Object</c> array.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, IntPtr, Int32, IntPtr> _getObjectArrayElement;
+	public readonly delegate* unmanaged<JEnvironmentRef, JObjectArrayLocalRef, Int32, JObjectLocalRef>
+		GetObjectArrayElement;
 	/// <summary>
 	/// Pointer to <c>SetObjectArrayElement</c> function.
 	/// Sets an element of an <c>Object</c> array.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, IntPtr, Int32, IntPtr, void> _setObjectArrayElement;
-
-	/// <summary>
-	/// <c>NewObjectArray</c>.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JObjectArrayLocalRef NewObjectArray(JEnvironmentRef envRef, Int32 length, JClassLocalRef classRef,
-		JObjectLocalRef localRef)
-		=> new(this._newObjectArray(envRef.Pointer, length, classRef.Pointer, localRef.Pointer));
-	/// <summary>
-	/// <c>GetObjectArrayElement</c>.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JObjectLocalRef GetObjectArrayElement(JEnvironmentRef envRef, JObjectArrayLocalRef objectArrayRef,
-		Int32 index)
-		=> new(this._getObjectArrayElement(envRef.Pointer, objectArrayRef.Pointer, index));
-	/// <summary>
-	/// <c>SetObjectArrayElement</c>.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public void SetObjectArrayElement(JEnvironmentRef envRef, JObjectArrayLocalRef objectArrayRef, Int32 index,
-		JObjectLocalRef localRef)
-		=> this._setObjectArrayElement(envRef.Pointer, objectArrayRef.Pointer, index, localRef.Pointer);
+	public readonly delegate* unmanaged<JEnvironmentRef, JObjectArrayLocalRef, Int32, JObjectLocalRef, void>
+		SetObjectArrayElement;
 }

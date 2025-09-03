@@ -24,12 +24,6 @@ public readonly partial struct JArrayLocalRef : IObjectReferenceType
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._value.Pointer;
 
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JArrayLocalRef(IntPtr value) => this._value = new(value);
-
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Int32 GetHashCode() => this._value.GetHashCode();

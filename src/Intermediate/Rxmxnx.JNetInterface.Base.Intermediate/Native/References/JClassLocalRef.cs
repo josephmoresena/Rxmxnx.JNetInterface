@@ -24,12 +24,6 @@ public readonly partial struct JClassLocalRef : IObjectReferenceType
 	public IntPtr Pointer => this._value.Pointer;
 
 	/// <summary>
-	/// Constructor.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JClassLocalRef(IntPtr pointer) => this._value = new(pointer);
-
-	/// <summary>
 	/// Converts a given <see cref="JGlobalRef"/> to <see cref="JClassLocalRef"/> instance.
 	/// </summary>
 	/// <param name="globalRef">A <see cref="JGlobalRef"/> to convert.</param>

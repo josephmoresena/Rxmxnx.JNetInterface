@@ -22,10 +22,4 @@ public readonly partial struct JThrowableLocalRef : IObjectReferenceType
 	public JObjectLocalRef Value => this._value;
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._value.Pointer;
-
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JThrowableLocalRef(IntPtr value) => this._value = new(value);
 }

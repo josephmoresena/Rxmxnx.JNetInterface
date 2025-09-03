@@ -20,46 +20,15 @@ internal readonly unsafe struct InvokeInterface
 #pragma warning restore CS0169
 
 	/// <inheritdoc cref="JInvokeInterface.DestroyJavaVmPointer"/>
-	private readonly delegate* unmanaged<IntPtr, Int32> _destroyVirtualMachine;
+	public readonly delegate* unmanaged<JVirtualMachineRef, JResult> DestroyVirtualMachine;
 	/// <inheritdoc cref="JInvokeInterface.AttachCurrentThreadPointer"/>
-	private readonly delegate* unmanaged<IntPtr, void*, void*, Int32 > _attachCurrentThread;
+	public readonly delegate* unmanaged<JVirtualMachineRef, out JEnvironmentRef, in VirtualMachineArgumentValue, JResult
+		> AttachCurrentThread;
 	/// <inheritdoc cref="JInvokeInterface.DetachCurrentThreadPointer"/>
-	private readonly delegate* unmanaged<IntPtr, Int32> _detachCurrentThread;
+	public readonly delegate* unmanaged<JVirtualMachineRef, JResult> DetachCurrentThread;
 	/// <inheritdoc cref="JInvokeInterface.GetEnvPointer"/>
-	private readonly delegate* unmanaged<IntPtr, void*, Int32, Int32> _getEnv;
+	public readonly delegate* unmanaged<JVirtualMachineRef, out JEnvironmentRef, Int32, JResult> GetEnv;
 	/// <inheritdoc cref="JInvokeInterface.AttachCurrentThreadAsDaemonPointer"/>
-	private readonly delegate* unmanaged<IntPtr, void*, void*, Int32 > _attachCurrentThreadAsDaemon;
-
-	/// <inheritdoc cref="JInvokeInterface.DestroyJavaVmPointer"/>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JResult DestroyVirtualMachine(JVirtualMachineRef vmRef)
-		=> (JResult)this._destroyVirtualMachine(vmRef.Pointer);
-	/// <inheritdoc cref="JInvokeInterface.AttachCurrentThreadPointer"/>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JResult AttachCurrentThread(JVirtualMachineRef vmRef, out JEnvironmentRef envRef,
-		in VirtualMachineArgumentValue vmArg)
-	{
-		fixed (void* envRefPtr = &envRef)
-		fixed (void* vmArgPtr = &vmArg)
-			return (JResult)this._attachCurrentThread(vmRef.Pointer, envRefPtr, vmArgPtr);
-	}
-	/// <inheritdoc cref="JInvokeInterface.DetachCurrentThreadPointer"/>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JResult DetachCurrentThread(JVirtualMachineRef vmRef) => (JResult)this._destroyVirtualMachine(vmRef.Pointer);
-	/// <inheritdoc cref="JInvokeInterface.GetEnvPointer"/>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JResult GetEnv(JVirtualMachineRef vmRef, out JEnvironmentRef envRef, Int32 count)
-	{
-		fixed (void* envRefPtr = &envRef)
-			return (JResult)this._getEnv(vmRef.Pointer, envRefPtr, count);
-	}
-	/// <inheritdoc cref="JInvokeInterface.AttachCurrentThreadAsDaemonPointer"/>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JResult AttachCurrentThreadAsDaemon(JVirtualMachineRef vmRef, out JEnvironmentRef envRef,
-		in VirtualMachineArgumentValue vmArg)
-	{
-		fixed (void* envRefPtr = &envRef)
-		fixed (void* vmArgPtr = &vmArg)
-			return (JResult)this._attachCurrentThreadAsDaemon(vmRef.Pointer, envRefPtr, vmArgPtr);
-	}
+	public readonly delegate* unmanaged<JVirtualMachineRef, out JEnvironmentRef, in VirtualMachineArgumentValue, JResult
+		> AttachCurrentThreadAsDaemon;
 }

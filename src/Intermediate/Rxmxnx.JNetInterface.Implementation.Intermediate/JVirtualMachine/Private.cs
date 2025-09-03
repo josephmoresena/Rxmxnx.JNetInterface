@@ -36,7 +36,7 @@ public partial class JVirtualMachine
 	/// Retrieves the <see cref="IEnvironment"/> instance associated with current thread.
 	/// </summary>
 	/// <returns>The <see cref="IEnvironment"/> instance associated with current thread.</returns>
-	private JEnvironment? GetEnvironment()
+	private unsafe JEnvironment? GetEnvironment()
 	{
 		JResult result = this._cache.GetInvokeInterface()
 		                     .GetEnv(this.Reference, out JEnvironmentRef envRef, 0x00010006);
@@ -88,7 +88,7 @@ public partial class JVirtualMachine
 	/// <param name="arg">Attach argument.</param>
 	/// <param name="envRef">Output. Attached thread <see cref="JEnvironmentRef"/> reference.</param>
 	/// <returns>JNI code result.</returns>
-	private static JResult AttachThread(JVirtualMachine vm, Boolean isDaemon, VirtualMachineArgumentValue arg,
+	private static unsafe JResult AttachThread(JVirtualMachine vm, Boolean isDaemon, VirtualMachineArgumentValue arg,
 		out JEnvironmentRef envRef)
 		=> !isDaemon ?
 			vm._cache.GetInvokeInterface().AttachCurrentThread(vm._cache.Reference, out envRef, in arg) :

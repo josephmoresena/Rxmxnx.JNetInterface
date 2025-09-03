@@ -16,7 +16,7 @@ partial class JEnvironment
 #endif
 	private sealed partial class EnvironmentCache : INioFeature
 	{
-		public TDirectBuffer NewDirectByteBuffer(IFixedMemory.IDisposable memory)
+		public unsafe TDirectBuffer NewDirectByteBuffer(IFixedMemory.IDisposable memory)
 		{
 			JClassObject jClass = this.GetClass<JDirectByteBufferObject>();
 			ref readonly NativeInterface4 nativeInterface =
@@ -72,7 +72,7 @@ partial class JEnvironment
 			using TBuffer buffer = (TBuffer)this.NewDirectByteBuffer(memory);
 			return func(buffer, state);
 		}
-		public IntPtr GetDirectAddress(JBufferObject buffer)
+		public unsafe IntPtr GetDirectAddress(JBufferObject buffer)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(buffer);
 			ImplementationValidationUtilities.ThrowIfDefault(buffer);
@@ -84,7 +84,7 @@ partial class JEnvironment
 			this.CheckJniError();
 			return result;
 		}
-		public Int64 GetDirectCapacity(JBufferObject buffer)
+		public unsafe Int64 GetDirectCapacity(JBufferObject buffer)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(buffer);
 			ImplementationValidationUtilities.ThrowIfDefault(buffer);

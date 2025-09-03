@@ -213,7 +213,7 @@ public partial class JVirtualMachine
 	/// <param name="vmRef">A <see cref="JVirtualMachineRef"/> reference.</param>
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 	/// <param name="thread">A <see cref="Thread"/> instance.</param>
-	internal static void DetachCurrentThread(JVirtualMachineRef vmRef, JEnvironmentRef envRef, Thread thread)
+	internal static unsafe void DetachCurrentThread(JVirtualMachineRef vmRef, JEnvironmentRef envRef, Thread thread)
 	{
 		ImplementationValidationUtilities.ThrowIfDifferentThread(envRef, thread);
 		JVirtualMachine? vm = ReferenceCache.Instance.Get(vmRef);

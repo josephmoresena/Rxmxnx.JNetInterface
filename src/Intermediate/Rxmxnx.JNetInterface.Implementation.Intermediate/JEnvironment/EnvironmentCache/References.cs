@@ -13,7 +13,7 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="capacity">Top of local references.</param>
 		/// <exception cref="JniException"/>
-		public void EnsureLocalCapacity(Int32 capacity)
+		public unsafe void EnsureLocalCapacity(Int32 capacity)
 		{
 			if (capacity <= this._objects.Capacity.GetValueOrDefault()) return;
 			ImplementationValidationUtilities.ThrowIfDifferentThread(this.Reference, this.Thread);

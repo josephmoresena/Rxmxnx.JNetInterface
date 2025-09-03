@@ -56,7 +56,7 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 		this._cache.CheckJniError();
 		action(state);
 	}
-	Boolean? IEnvironment.IsVirtual(JThreadObject jThread)
+	unsafe Boolean? IEnvironment.IsVirtual(JThreadObject jThread)
 	{
 		ImplementationValidationUtilities.ThrowIfProxy(jThread);
 		ImplementationValidationUtilities.ThrowIfDefault(jThread);
@@ -71,7 +71,7 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	/// <inheritdoc/>
 	public Boolean JniSecure() => this._cache.JniSecure();
 	/// <inheritdoc/>
-	public void DescribeException()
+	public unsafe void DescribeException()
 	{
 		ref readonly NativeInterface nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionDescribeInfo);

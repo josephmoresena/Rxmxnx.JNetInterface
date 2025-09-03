@@ -14,27 +14,12 @@ internal readonly unsafe struct PrimitiveArrayCriticalFunctionSet
 	/// Pointer to <c>GetPrimitiveArrayCritical</c> function.
 	/// Returns the body of the primitive array.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, IntPtr, Byte*, Byte*> _getPrimitiveArrayCritical;
+	public readonly delegate* unmanaged<JEnvironmentRef, JArrayLocalRef, out JBoolean, ValPtr<Byte>>
+		GetPrimitiveArrayCritical;
 	/// <summary>
 	/// Pointer to <c>ReleasePrimitiveArrayCritical</c> function.
 	/// Informs the <c>VM</c> that the native code no longer needs access to array elements.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, IntPtr, Byte*, Int32, void> _releasePrimitiveArrayCritical;
-
-	/// <summary>
-	/// <c>GetPrimitiveArrayCritical</c>.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public ValPtr<Byte> GetPrimitiveArrayCritical(JEnvironmentRef envRef, JArrayLocalRef arrayRef, out JBoolean isCopy)
-	{
-		fixed (void* isCopyPtr = &isCopy)
-			return this._getPrimitiveArrayCritical(envRef.Pointer, arrayRef.Pointer, (Byte*)isCopyPtr);
-	}
-	/// <summary>
-	/// <c>ReleasePrimitiveArrayCritical</c>.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public void ReleasePrimitiveArrayCritical(JEnvironmentRef envRef, JArrayLocalRef arrayRef, ValPtr<Byte> dataPtr,
-		JReleaseMode mode)
-		=> this._releasePrimitiveArrayCritical(envRef.Pointer, arrayRef.Pointer, dataPtr, (Int32)mode);
+	public readonly delegate* unmanaged<JEnvironmentRef, JArrayLocalRef, ValPtr<Byte>, JReleaseMode, void>
+		ReleasePrimitiveArrayCritical;
 }

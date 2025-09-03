@@ -27,37 +27,18 @@ internal readonly unsafe struct NativeInterface4 : INativeInterface<NativeInterf
 	/// Pointer to <c>NewDirectByteBuffer</c> function.
 	/// Allocates and returns a direct <c>java.nio.ByteBuffer</c> referring to the given block of memory.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, IntPtr, Int64, IntPtr> _newDirectByteBuffer;
+	public readonly delegate* unmanaged<JEnvironmentRef, IntPtr, Int64, JObjectLocalRef> NewDirectByteBuffer;
 	/// <summary>
 	/// Pointer to <c>GetDirectBufferAddress</c> function.
 	/// Fetches and returns the starting address of the memory region referenced by the given direct <c>java.nio.Buffer</c>.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, IntPtr, IntPtr> _getDirectBufferAddress;
+	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, IntPtr> GetDirectBufferAddress;
 	/// <summary>
 	/// Pointer to <c>GetDirectBufferCapacity</c> function.
 	/// Fetches and returns the capacity of the memory region referenced by the given direct <c>java.nio.Buffer</c>.
 	/// </summary>
 	/// <remarks>The capacity is the number of elements that the memory region contains.</remarks>
-	private readonly delegate* unmanaged<IntPtr, IntPtr, Int64> _getDirectBufferCapacity;
-
-	/// <summary>
-	/// <c>NewDirectByteBuffer</c>.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JObjectLocalRef NewDirectByteBuffer(JEnvironmentRef envRef, IntPtr buffPtr, Int64 buffSize)
-		=> new(this._newDirectByteBuffer(envRef.Pointer, buffPtr, buffSize));
-	/// <summary>
-	/// <c>GetDirectBufferAddress</c>.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public IntPtr GetDirectBufferAddress(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> this._getDirectBufferAddress(envRef.Pointer, localRef.Pointer);
-	/// <summary>
-	/// <c>GetDirectBufferCapacity</c>.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Int64 GetDirectBufferCapacity(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> this._getDirectBufferCapacity(envRef.Pointer, localRef.Pointer);
+	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, Int64> GetDirectBufferCapacity;
 
 	/// <summary>
 	/// Information of <see cref="NativeInterface4.NewDirectByteBuffer"/>

@@ -18,7 +18,7 @@ partial class JEnvironment
 			this.Register(this.StackTraceElementObject);
 
 			// Register user main classes.
-			foreach (ITypeInformation typeInformation in JVirtualMachine.MainClassesInformation)
+			foreach (ITypeInformation? typeInformation in JVirtualMachine.MainClassesInformation)
 			{
 				if (!this._classes.TryGetValue(typeInformation.Hash, out JClassObject? mainClass))
 					// Only creates JClassObject instance if not found in class cache.
@@ -261,7 +261,7 @@ partial class JEnvironment
 		/// <see langword="true"/> if the object referenced by <paramref name="localRef"/> is an instance
 		/// of the class referenced by <paramref name="classRef"/>; otherwise, <see langword="false"/>.
 		/// </returns>
-		private Boolean IsInstanceOf(JObjectLocalRef localRef, JClassLocalRef classRef)
+		private unsafe Boolean IsInstanceOf(JObjectLocalRef localRef, JClassLocalRef classRef)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.IsInstanceOfInfo);
@@ -414,7 +414,7 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 		/// <returns>A <see cref="JModuleObject"/> instance.</returns>
-		private JModuleObject GetModule(JClassLocalRef classRef)
+		private unsafe JModuleObject GetModule(JClassLocalRef classRef)
 		{
 			ref readonly NativeInterface9 nativeInterface =
 				ref this.GetNativeInterface<NativeInterface9>(NativeInterface9.GetModuleInfo);
@@ -471,7 +471,7 @@ partial class JEnvironment
 		/// <see langword="true"/> if <paramref name="classRef"/> is assignable to <paramref name="otherClassRef"/>;
 		/// otherwise, <see langword="false"/>.
 		/// </returns>
-		private Boolean IsAssignableFrom(JClassLocalRef classRef, JClassLocalRef otherClassRef)
+		private unsafe Boolean IsAssignableFrom(JClassLocalRef classRef, JClassLocalRef otherClassRef)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.IsAssignableFromInfo);
