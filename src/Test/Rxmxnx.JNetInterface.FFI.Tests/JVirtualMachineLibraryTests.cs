@@ -217,9 +217,9 @@ public sealed unsafe class JVirtualMachineLibraryTests
 				Assert.Equal(0x00010006, value.Version);
 				Assert.Equal(args.Options.NonEmptyCount, value.OptionsLength);
 				Assert.Equal(args.IgnoreUnrecognized, value.IgnoreUnrecognized);
-				if (!Unsafe.IsNullRef(in options) && !options.OptionString.IsZero)
-					Assert.True(Unsafe.AreSame(in args.Options.GetPinnableReference(),
-					                           in options.OptionString.Reference));
+				if (!Unsafe.IsNullRef(in options) && (ReadOnlyValPtr<Byte>)options.OptionString is
+				    { IsZero: false, } optionString)
+					Assert.True(Unsafe.AreSame(in args.Options.GetPinnableReference(), in optionString.Reference));
 				else
 					Assert.Equal(0, value.OptionsLength);
 
