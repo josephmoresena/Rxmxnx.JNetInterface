@@ -16,8 +16,8 @@ internal readonly unsafe struct ClassFunctionSet
 	/// The buffer containing the raw class data is not referenced by the <c>VM</c> after the
 	/// <c>DefineClass</c> call returns, and it may be discarded if desired.
 	/// </summary>
-	private readonly delegate* unmanaged<IntPtr, Byte*, IntPtr, Byte*, Int32, IntPtr> _defineClass;
-
+	public readonly delegate* unmanaged<JEnvironmentRef, Byte*, JObjectLocalRef, Byte*, Int32, JClassLocalRef>
+		DefineClass;
 	/// <summary>
 	/// Pointer to <c>FindClass</c> function.
 	/// Loads a locally-defined class with the specified name.
@@ -57,12 +57,4 @@ internal readonly unsafe struct ClassFunctionSet
 	/// Converts a field ID derived from a class to a <c>java.lang.reflect.Field</c> object.
 	/// </summary>
 	public readonly ToReflectedFunction<JFieldId> ToReflectedField;
-
-	/// <summary>
-	/// <c>DefineClass</c>.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JClassLocalRef DefineClass(JEnvironmentRef envRef, Byte* classNamePtr, JObjectLocalRef localRef,
-		Byte* buffPtr, Int32 buffSize)
-		=> new(this._defineClass(envRef.Pointer, classNamePtr, localRef.Pointer, buffPtr, buffSize));
 }
