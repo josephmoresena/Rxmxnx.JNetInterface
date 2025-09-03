@@ -70,9 +70,13 @@ public static class Program
 			initArgs = new(initArgs.Version)
 			{
 				Options = new("-DjniLib.load.disable=true", "-Xcheck:jni", "-Xrs",
+				              initArgs.Version > 0x00010008 ?
+					              "-XX:+ErrorFileToStdout" :
+					              $"-XX:ErrorFile={(OperatingSystem.IsWindows() ? "CON" : "/dev/stderr")}",
 				              JVirtualMachine.TraceEnabled ? "-verbose:jni" : default,
 				              JVirtualMachine.TraceEnabled ? "-verbose:class" : default,
-				              JVirtualMachine.TraceEnabled ? "-verbose:gc" : default),
+				              JVirtualMachine.TraceEnabled ? "-verbose:gc" : default,
+				              JVirtualMachine.TraceEnabled ? "-XX:+UnlockDiagnosticVMOptions" : default),
 			};
 			using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out IEnvironment env);
 			try

@@ -67,7 +67,7 @@ public partial class Launcher
 	{
 		if (!Utilities.IsNativeAotSupported(jdk.JavaArchitecture, netVersion)) return;
 
-		JarArgs jarArgs = new() { Version = netVersion, JarName = jarFile.Name, };
+		JarArgs jarArgs = new() { Version = netVersion, JarName = jarFile.Name, JdkVersion = jdk.JavaVersion, };
 		String prefix = $"HelloJni.jar ({jdk.JavaVersion}, {jdk.JavaArchitecture}, {netVersion}";
 
 		String name = $"{prefix})";

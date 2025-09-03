@@ -17,7 +17,6 @@ public abstract partial class Launcher
 	public async Task Execute()
 	{
 		Dictionary<String, Int32> results = new();
-
 		try
 		{
 			Dictionary<Architecture, FileInfo[]> archFiles = this.Architectures.ToDictionary(
