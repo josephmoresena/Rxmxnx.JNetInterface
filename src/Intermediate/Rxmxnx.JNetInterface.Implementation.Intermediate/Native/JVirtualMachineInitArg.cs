@@ -96,8 +96,9 @@ public sealed class JVirtualMachineInitArg
 		Int32 index = 0;
 		foreach (VirtualMachineInitOptionValue option in optionsValue)
 		{
-			if (option.OptionString.IsZero || option.OptionString.Reference == (Byte)'\0') continue;
-			options[index] = option.OptionString;
+			ReadOnlyValPtr<Byte> optionString = option.OptionString;
+			if (optionString.IsZero || optionString.Reference == (Byte)'\0') continue;
+			options[index] = optionString;
 			index++;
 		}
 		return CStringSequence.GetUnsafe(options[..index]);
