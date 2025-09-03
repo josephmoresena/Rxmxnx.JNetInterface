@@ -47,7 +47,7 @@ Partial Module Program
         IManagedCallback.PrintSwitches()
     End Function
 
-    Private ReadOnly VmOptions As String() = {"-DjniLib.load.disable=true", "-Xrs" }
+    Private ReadOnly VmOptions As String() = {"-DjniLib.load.disable=true", "-Xcheck:jni", "-Xrs"}
 
     Private Sub Execute(jvmLib As JVirtualMachineLibrary, classByteCode As Byte(), ByVal ParamArray args As String())
 

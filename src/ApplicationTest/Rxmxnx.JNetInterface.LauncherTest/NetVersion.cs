@@ -4,6 +4,7 @@ public enum NetVersion : Byte
 {
 	Net80 = 8,
 	Net90 = 9,
+	Net10 = 10,
 }
 
 public static class NetVersionExtensions
@@ -12,6 +13,7 @@ public static class NetVersionExtensions
 		=> version switch
 		{
 			NetVersion.Net80 => "net8.0",
-			_ => "net9.0",
+			NetVersion.Net90 => "net9.0",
+			_ => "net10.0",
 		};
 }

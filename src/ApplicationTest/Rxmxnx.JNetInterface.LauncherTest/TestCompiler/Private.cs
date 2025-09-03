@@ -77,7 +77,7 @@ public partial class TestCompiler
 		await TestCompiler.RestoreNet(restoreArgs);
 
 		await TestCompiler.CompileNet(compileArgs);
-		if (restoreArgs.Version > NetVersion.Net80) return;
+		if (!Utilities.IsReflectionFreeModeSupported(restoreArgs.Version)) return;
 		compileArgs.BuildDependencies = false;
 
 		compileArgs.Publish |= Publish.NoReflection;
@@ -120,7 +120,8 @@ public partial class TestCompiler
 		compileArgs.Publish = Publish.NativeAot;
 		await TestCompiler.CompileNet(compileArgs);
 
-		if (!restoreArgs.ProjectFile.EndsWith(".csproj") || restoreArgs.Version > NetVersion.Net80) return;
+		if (!restoreArgs.ProjectFile.EndsWith(".csproj") ||
+		    !Utilities.IsReflectionFreeModeSupported(restoreArgs.Version)) return;
 
 		compileArgs.BuildDependencies = false;
 		compileArgs.Publish |= Publish.NoReflection;

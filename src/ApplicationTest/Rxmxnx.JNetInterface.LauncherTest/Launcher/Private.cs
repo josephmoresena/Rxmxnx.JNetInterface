@@ -76,7 +76,7 @@ public partial class Launcher
 		ConsoleNotifier.Notifier.Result(result, name);
 		results.Add(name, result);
 
-		if (netVersion > NetVersion.Net80) return;
+		if (!Utilities.IsReflectionFreeModeSupported(netVersion)) return;
 
 		jarArgs.NoReflection = true;
 		result = await this.RunJarFile(jarArgs, jdk, ConsoleNotifier.CancellationToken);

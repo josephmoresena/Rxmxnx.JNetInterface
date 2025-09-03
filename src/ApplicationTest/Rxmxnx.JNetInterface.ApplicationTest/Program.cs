@@ -1,5 +1,4 @@
-﻿using System.Buffers;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 using Rxmxnx.JNetInterface.Lang;
@@ -21,8 +20,12 @@ public static class Program
 			throw new ArgumentException("Please set JVM library path.");
 
 		Byte[] helloJniByteCode = await File.ReadAllBytesAsync("HelloDotnet.class");
+		Console.WriteLine($"HelloDotnet.class: {helloJniByteCode.Length} bytes");
+
 		JVirtualMachineLibrary jvmLib = JVirtualMachineLibrary.LoadLibrary(args[0]) ??
 			throw new ArgumentException("Invalid JVM library.");
+
+		Console.WriteLine($"JVM Library handle: {jvmLib.Handle}");
 
 		String[] jMainArgs = AotInfo.IsReflectionDisabled ?
 			[$"System Path: {Environment.SystemDirectory}",] :
@@ -59,16 +62,17 @@ public static class Program
 		try
 		{
 			JVirtualMachineInitArg initArgs = jvmLib.GetDefaultArgument();
-#if NET8_0
-			if (IVirtualMachine.TypeMetadataToStringEnabled) Console.WriteLine(initArgs);
-#endif
+			if (IVirtualMachine.TypeMetadataToStringEnabled)
+				Console.WriteLine(initArgs);
+			else
+				Console.WriteLine($"JDK Version: {initArgs.Version}");
+
 			initArgs = new(initArgs.Version)
 			{
-				Options = new("-DjniLib.load.disable=true", "-Xrs",
+				Options = new("-DjniLib.load.disable=true", "-Xcheck:jni", "-Xrs",
 				              JVirtualMachine.TraceEnabled ? "-verbose:jni" : default,
 				              JVirtualMachine.TraceEnabled ? "-verbose:class" : default,
-				              JVirtualMachine.TraceEnabled ? "-verbose:gc" : default,
-				              JVirtualMachine.TraceEnabled ? "-Xcheck:jni" : default),
+				              JVirtualMachine.TraceEnabled ? "-verbose:gc" : default),
 			};
 			using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out IEnvironment env);
 			try

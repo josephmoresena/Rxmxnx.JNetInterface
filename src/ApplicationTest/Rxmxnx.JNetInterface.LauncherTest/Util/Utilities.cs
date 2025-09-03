@@ -4,6 +4,7 @@ public static class Utilities
 {
 	public static Boolean IsNativeAotSupported(Architecture arch, NetVersion netVersion)
 		=> !(netVersion < NetVersion.Net90 && arch is Architecture.X86 or Architecture.Arm or Architecture.Armv6);
+	public static Boolean IsReflectionFreeModeSupported(NetVersion netVersion) => netVersion <= NetVersion.Net90;
 	public static async Task DownloadFileAsync(DownloadGetState state, CancellationToken cancellationToken = default)
 	{
 		using HttpClient httpClient = new();
