@@ -14,16 +14,47 @@ internal readonly unsafe struct InvocationFunctionSet
 	/// Pointer to <c>JNI_GetDefaultJavaVMInitArgs</c> exported function.
 	/// Returns a default configuration for the Java VM.
 	/// </summary>
-	public readonly delegate* unmanaged<ref VirtualMachineInitArgumentValue, JResult> GetDefaultVirtualMachineInitArgs;
+	private readonly delegate* unmanaged<VirtualMachineInitArgumentValue*, JResult> _getDefaultVirtualMachineInitArgs;
 	/// <summary>
 	/// Pointer to <c>JNI_CreateJavaVM</c> exported function.
 	/// Loads and initializes a Java VM. The current thread becomes the main thread.
 	/// </summary>
-	public readonly delegate* unmanaged<out JVirtualMachineRef, out JEnvironmentRef, in VirtualMachineInitArgumentValue,
-		JResult> CreateVirtualMachine;
+	private readonly delegate* unmanaged<JVirtualMachineRef*, JEnvironmentRef*, VirtualMachineInitArgumentValue*,
+		JResult> _createVirtualMachine;
 	/// <summary>
 	/// Pointer to <c>JNI_GetCreatedJavaVMs</c> exported function.
 	/// Returns all Java VMs that have been created.
 	/// </summary>
-	public readonly delegate* unmanaged<JVirtualMachineRef*, Int32, out Int32, JResult> GetCreatedVirtualMachines;
+	public readonly delegate* unmanaged<JVirtualMachineRef*, Int32, Int32*, JResult> _getCreatedVirtualMachines;
+
+	/// <summary>
+	/// <c>JNI_GetDefaultJavaVMInitArgs</c>.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JResult GetDefaultVirtualMachineInitArgs(ref VirtualMachineInitArgumentValue initArg)
+	{
+		fixed (VirtualMachineInitArgumentValue* initArgPtr = &initArg)
+			return this._getDefaultVirtualMachineInitArgs(initArgPtr);
+	}
+	/// <summary>
+	/// <c>JNI_CreateJavaVM</c>.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JResult CreateVirtualMachine(out JVirtualMachineRef vmRef, out JEnvironmentRef envRef,
+		in VirtualMachineInitArgumentValue initArg)
+	{
+		fixed (JVirtualMachineRef* vmRefPtr = &vmRef)
+		fixed (JEnvironmentRef* envRefPtr = &envRef)
+		fixed (VirtualMachineInitArgumentValue* initArgPtr = &initArg)
+			return this._createVirtualMachine(vmRefPtr, envRefPtr, initArgPtr);
+	}
+	/// <summary>
+	/// <c>JNI_GetCreatedJavaVMs</c>.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JResult GetCreatedVirtualMachines(JVirtualMachineRef* arr, Int32 arrSize, out Int32 count)
+	{
+		fixed (Int32* countPtr = &count)
+			return this._getCreatedVirtualMachines(arr, arrSize, countPtr);
+	}
 }
