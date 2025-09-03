@@ -25,7 +25,7 @@ public static class Program
 		JVirtualMachineLibrary jvmLib = JVirtualMachineLibrary.LoadLibrary(args[0]) ??
 			throw new ArgumentException("Invalid JVM library.");
 
-		Console.WriteLine($"JVM Library handle: {jvmLib.Handle}");
+		Console.WriteLine($"JVM Library handle: 0x{jvmLib.Handle:x8}");
 
 		String[] jMainArgs = AotInfo.IsReflectionDisabled ?
 			[$"System Path: {Environment.SystemDirectory}",] :
@@ -65,7 +65,7 @@ public static class Program
 			if (IVirtualMachine.TypeMetadataToStringEnabled)
 				Console.WriteLine(initArgs);
 			else
-				Console.WriteLine($"JDK Version: {initArgs.Version}");
+				Console.WriteLine($"JDK Version: 0x{initArgs.Version:x8}");
 
 			initArgs = new(initArgs.Version)
 			{
