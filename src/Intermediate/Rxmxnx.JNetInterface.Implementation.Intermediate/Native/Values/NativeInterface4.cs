@@ -8,10 +8,8 @@ namespace Rxmxnx.JNetInterface.Native.Values;
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
                  Justification = CommonConstants.BinaryStructJustification)]
-[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
-                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly unsafe struct NativeInterface4 : INativeInterface<NativeInterface4>
+internal readonly struct NativeInterface4 : INativeInterface<NativeInterface4>
 {
 	/// <inheritdoc/>
 	public static Int32 RequiredVersion => 0x00010004;
@@ -24,41 +22,30 @@ internal readonly unsafe struct NativeInterface4 : INativeInterface<NativeInterf
 #pragma warning restore CS0169
 
 	/// <summary>
-	/// Pointer to <c>NewDirectByteBuffer</c> function.
-	/// Allocates and returns a direct <c>java.nio.ByteBuffer</c> referring to the given block of memory.
+	/// Pointers to <c>GetObjectRefType</c>, <c>GetDirectBufferAddress</c> and <c>GetDirectBufferCapacity</c>
+	/// functions.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, IntPtr, Int64, JObjectLocalRef> NewDirectByteBuffer;
-	/// <summary>
-	/// Pointer to <c>GetDirectBufferAddress</c> function.
-	/// Fetches and returns the starting address of the memory region referenced by the given direct <c>java.nio.Buffer</c>.
-	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, IntPtr> GetDirectBufferAddress;
-	/// <summary>
-	/// Pointer to <c>GetDirectBufferCapacity</c> function.
-	/// Fetches and returns the capacity of the memory region referenced by the given direct <c>java.nio.Buffer</c>.
-	/// </summary>
-	/// <remarks>The capacity is the number of elements that the memory region contains.</remarks>
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, Int64> GetDirectBufferCapacity;
+	public readonly NioFunctionSet NioFunctions;
 
 	/// <summary>
-	/// Information of <see cref="NativeInterface4.NewDirectByteBuffer"/>
+	/// Information of <see cref="NioFunctionSet.NewDirectByteBuffer"/>
 	/// </summary>
 	public static readonly JniMethodInfo NewDirectByteBufferInfo = new()
 	{
-		Name = nameof(NativeInterface4.NewDirectByteBuffer), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(NioFunctionSet.NewDirectByteBuffer), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="NativeInterface4.GetDirectBufferAddress"/>
+	/// Information of <see cref="NioFunctionSet.GetDirectBufferAddress"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetDirectBufferAddressInfo = new()
 	{
-		Name = nameof(NativeInterface4.GetDirectBufferAddress), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(NioFunctionSet.GetDirectBufferAddress), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="NativeInterface4.GetDirectBufferCapacity"/>
+	/// Information of <see cref="NioFunctionSet.GetDirectBufferCapacity"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetDirectBufferCapacityInfo = new()
 	{
-		Name = nameof(NativeInterface4.GetDirectBufferCapacity), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(NioFunctionSet.GetDirectBufferCapacity), Level = JniSafetyLevels.CriticalSafe,
 	};
 }

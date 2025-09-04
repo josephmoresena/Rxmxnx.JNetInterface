@@ -44,7 +44,7 @@ partial class JEnvironment
 			if (result <= 0) this.CheckJniError();
 			return result;
 		}
-		public unsafe Int64? GetUtf8LongLength(JReferenceObject jObject)
+		public Int64? GetUtf8LongLength(JReferenceObject jObject)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);
 			ImplementationValidationUtilities.ThrowIfDefault(jObject);

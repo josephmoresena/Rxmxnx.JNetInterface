@@ -128,7 +128,7 @@ partial class JEnvironment
 		/// Checks if there is a pending JNI exception.
 		/// </summary>
 		/// <returns><see langword="true"/> if there is pending JNI exception; otherwise, <see langword="false"/>.</returns>
-		public unsafe Boolean HasPendingException()
+		public Boolean HasPendingException()
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionCheckInfo);

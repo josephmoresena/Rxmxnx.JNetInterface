@@ -21,7 +21,7 @@ internal readonly unsafe partial struct NativeInterface : INativeInterface<Nativ
 #pragma warning restore CS0169
 
 	/// <inheritdoc cref="JNativeInterface.GetVersionPointer"/>
-	public readonly delegate* unmanaged<JEnvironmentRef, Int32> GetVersion;
+	private readonly GetVersionPtr _getVersion;
 	/// <summary>
 	/// Pointers to <c>DefineClass</c>, <c>FindClass</c>, <c>FromReflectedMethod</c>,
 	/// <c>FromReflectedField</c>, <c>ToReflectedMethod</c>, <c>GetSuperclass</c>,
@@ -80,7 +80,7 @@ internal readonly unsafe partial struct NativeInterface : INativeInterface<Nativ
 	/// Pointer to <c>GetJavaVM</c> function.
 	/// Returns the Java VM interface (used in the Invocation API) associated with the current thread.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, out JVirtualMachineRef, JResult> GetVirtualMachine;
+	private readonly GetVirtualMachinePtr _getVirtualMachine;
 	/// <summary>
 	/// Pointers to <c>GetStringRegion</c> and <c>GetStringUTFRegion</c> functions.
 	/// </summary>
@@ -101,5 +101,31 @@ internal readonly unsafe partial struct NativeInterface : INativeInterface<Nativ
 	/// Pointer to <c>ExceptionCheck</c> function.
 	/// Checks for pending exceptions without creating a local reference to the exception object.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JBoolean> ExceptionCheck;
+	private readonly ExceptionCheckPtr _exceptionCheck;
+
+	/// <summary>
+	/// <c>GetVersion</c>.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public Int32 GetVersion(JEnvironmentRef envRef)
+		=> OperatingSystem.IsWindows() ? this._getVersion.Windows(envRef) : this._getVersion.Unix(envRef);
+	/// <summary>
+	/// <c>ExceptionCheck</c>.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JBoolean ExceptionCheck(JEnvironmentRef envRef)
+		=> OperatingSystem.IsWindows() ? this._exceptionCheck.Windows(envRef) : this._exceptionCheck.Unix(envRef);
+	/// <summary>
+	/// <c>GetVirtualMachine</c>.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JResult GetVirtualMachine(JEnvironmentRef envRef, out JVirtualMachineRef vmRef)
+	{
+		fixed (JVirtualMachineRef* vmRefPtr = &vmRef)
+		{
+			return OperatingSystem.IsWindows() ?
+				this._getVirtualMachine.Windows(envRef, vmRefPtr) :
+				this._getVirtualMachine.Unix(envRef, vmRefPtr);
+		}
+	}
 }

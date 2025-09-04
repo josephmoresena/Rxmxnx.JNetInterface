@@ -56,7 +56,7 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 		this._cache.CheckJniError();
 		action(state);
 	}
-	unsafe Boolean? IEnvironment.IsVirtual(JThreadObject jThread)
+	Boolean? IEnvironment.IsVirtual(JThreadObject jThread)
 	{
 		ImplementationValidationUtilities.ThrowIfProxy(jThread);
 		ImplementationValidationUtilities.ThrowIfDefault(jThread);

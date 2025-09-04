@@ -414,7 +414,7 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 		/// <returns>A <see cref="JModuleObject"/> instance.</returns>
-		private unsafe JModuleObject GetModule(JClassLocalRef classRef)
+		private JModuleObject GetModule(JClassLocalRef classRef)
 		{
 			ref readonly NativeInterface9 nativeInterface =
 				ref this.GetNativeInterface<NativeInterface9>(NativeInterface9.GetModuleInfo);
