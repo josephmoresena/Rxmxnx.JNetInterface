@@ -24,12 +24,18 @@ internal readonly unsafe struct InvokeInterface
 	private readonly Unix _unix;
 
 	/// <inheritdoc cref="JInvokeInterface.DestroyJavaVmPointer"/>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult DestroyVirtualMachine(JVirtualMachineRef vmRef)
 		=> OperatingSystem.IsWindows() ?
 			this._windows.DestroyVirtualMachine(vmRef) :
 			this._unix.DestroyVirtualMachine(vmRef);
 	/// <inheritdoc cref="JInvokeInterface.AttachCurrentThreadPointer"/>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult AttachCurrentThread(JVirtualMachineRef vmRef, out JEnvironmentRef envRef,
 		in VirtualMachineArgumentValue vmArg)
@@ -43,12 +49,18 @@ internal readonly unsafe struct InvokeInterface
 		}
 	}
 	/// <inheritdoc cref="JInvokeInterface.DetachCurrentThreadPointer"/>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult DetachCurrentThread(JVirtualMachineRef vmRef)
 		=> OperatingSystem.IsWindows() ?
 			this._windows.DetachCurrentThread(vmRef) :
 			this._unix.DetachCurrentThread(vmRef);
 	/// <inheritdoc cref="JInvokeInterface.GetEnvPointer"/>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult GetEnv(JVirtualMachineRef vmRef, out JEnvironmentRef envRef, Int32 jniVersion)
 	{
@@ -60,6 +72,9 @@ internal readonly unsafe struct InvokeInterface
 		}
 	}
 	/// <inheritdoc cref="JInvokeInterface.AttachCurrentThreadAsDaemonPointer"/>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult AttachCurrentThreadAsDaemon(JVirtualMachineRef vmRef, out JEnvironmentRef envRef,
 		in VirtualMachineArgumentValue vmArg)

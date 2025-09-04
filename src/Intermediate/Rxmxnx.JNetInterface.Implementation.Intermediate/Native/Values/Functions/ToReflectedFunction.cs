@@ -9,14 +9,14 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly unsafe struct ToReflectedFunction<TAccessible>
+internal readonly unsafe struct ToReflectedFunction<TAccessible> : IToReflectedFunction
 	where TAccessible : unmanaged, IAccessibleIdentifierType
 {
 	/// <summary>
 	/// Pointer to <c>ToReflected<typeparamref name="TAccessible"/></c> function.
 	/// Converts a <typeparamref name="TAccessible"/> to <c>java.lang.reflect</c> object.
 	/// </summary>
-	private readonly delegate* unmanaged<JEnvironmentRef, JClassLocalRef, IntPtr, JBoolean, JObjectLocalRef> _ptr;
+	private readonly IToReflectedFunction.ToReflectedFunction _toReflected;
 
 	/// <summary>
 	/// Pointer to <c>ToReflected<typeparamref name="TAccessible"/></c> function.
@@ -28,5 +28,7 @@ internal readonly unsafe struct ToReflectedFunction<TAccessible>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JObjectLocalRef ToReflected(JEnvironmentRef envRef, JClassLocalRef classRef, TAccessible accessibleId,
 		JBoolean isStatic)
-		=> this._ptr(envRef, classRef, accessibleId.Pointer, isStatic);
+		=> OperatingSystem.IsWindows() ?
+			this._toReflected.Windows(envRef, classRef, accessibleId.Pointer, isStatic) :
+			this._toReflected.Unix(envRef, classRef, accessibleId.Pointer, isStatic);
 }

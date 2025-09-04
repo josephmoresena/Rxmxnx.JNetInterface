@@ -106,18 +106,27 @@ internal readonly unsafe partial struct NativeInterface : INativeInterface<Nativ
 	/// <summary>
 	/// <c>GetVersion</c>.
 	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Int32 GetVersion(JEnvironmentRef envRef)
 		=> OperatingSystem.IsWindows() ? this._getVersion.Windows(envRef) : this._getVersion.Unix(envRef);
 	/// <summary>
 	/// <c>ExceptionCheck</c>.
 	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JBoolean ExceptionCheck(JEnvironmentRef envRef)
 		=> OperatingSystem.IsWindows() ? this._exceptionCheck.Windows(envRef) : this._exceptionCheck.Unix(envRef);
 	/// <summary>
 	/// <c>GetVirtualMachine</c>.
 	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult GetVirtualMachine(JEnvironmentRef envRef, out JVirtualMachineRef vmRef)
 	{

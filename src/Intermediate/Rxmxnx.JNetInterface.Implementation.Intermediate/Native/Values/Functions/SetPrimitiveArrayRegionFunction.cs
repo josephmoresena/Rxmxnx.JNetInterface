@@ -10,7 +10,8 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly unsafe struct SetPrimitiveArrayRegionFunction<TPrimitiveType, TArrayRef>
+internal readonly unsafe struct
+	SetPrimitiveArrayRegionFunction<TPrimitiveType, TArrayRef> : ISetPrimitiveArrayRegionFunction
 	where TPrimitiveType : unmanaged, INativeType, IPrimitiveType<TPrimitiveType>
 	where TArrayRef : unmanaged, IArrayReferenceType, IObjectReferenceType
 {
@@ -18,11 +19,10 @@ internal readonly unsafe struct SetPrimitiveArrayRegionFunction<TPrimitiveType, 
 	/// Pointer to <c>Set&lt;PrimitiveType&gt;ArrayRegion</c> function.
 	/// Copies back a region of a primitive array from a buffer.
 	/// </summary>
-	private readonly delegate* unmanaged<JEnvironmentRef, JArrayLocalRef, Int32, Int32, void*, void> _ptr;
+	private readonly ISetPrimitiveArrayRegionFunction.SetPrimitiveArrayRegionFunction _function;
 
 	/// <summary>
-	/// Pointer to <c>Set&lt;PrimitiveType&gt;ArrayRegion</c> function.
-	/// Copies back a region of a primitive array from a buffer.
+	/// <c>Set&lt;PrimitiveType&gt;ArrayRegion</c>.
 	/// </summary>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -30,5 +30,10 @@ internal readonly unsafe struct SetPrimitiveArrayRegionFunction<TPrimitiveType, 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void Set(JEnvironmentRef envRef, TArrayRef arrayRef, Int32 start, Int32 length,
 		ReadOnlyValPtr<TPrimitiveType> buffer)
-		=> this._ptr(envRef, arrayRef.ArrayValue, start, length, buffer);
+	{
+		if (OperatingSystem.IsWindows())
+			this._function.Windows(envRef, arrayRef.ArrayValue, start, length, buffer);
+		else
+			this._function.Unix(envRef, arrayRef.ArrayValue, start, length, buffer);
+	}
 }

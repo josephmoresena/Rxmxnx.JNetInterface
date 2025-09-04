@@ -10,7 +10,8 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly unsafe struct ReleasePrimitiveArrayElementsFunction<TPrimitiveType, TArrayRef>
+internal readonly unsafe struct
+	ReleasePrimitiveArrayElementsFunction<TPrimitiveType, TArrayRef> : IReleaseArrayElementsFunction
 	where TPrimitiveType : unmanaged, INativeType, IPrimitiveType<TPrimitiveType>
 	where TArrayRef : unmanaged, IArrayReferenceType, IObjectReferenceType
 {
@@ -18,11 +19,10 @@ internal readonly unsafe struct ReleasePrimitiveArrayElementsFunction<TPrimitive
 	/// Pointer to <c>Release&lt;PrimitiveType&gt;Elements</c> function.
 	/// Informs the <c>VM</c> that the native code no longer needs access to array elements.
 	/// </summary>
-	private readonly delegate* unmanaged<JEnvironmentRef, JArrayLocalRef, void*, JReleaseMode, void> _ptr;
+	private readonly IReleaseArrayElementsFunction.ReleaseArrayElementsFunction _function;
 
 	/// <summary>
-	/// Pointer to <c>Release&lt;PrimitiveType&gt;Elements</c> function.
-	/// Informs the <c>VM</c> that the native code no longer needs access to array elements.
+	/// <c>Release&lt;PrimitiveType&gt;Elements</c>.
 	/// </summary>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -30,5 +30,10 @@ internal readonly unsafe struct ReleasePrimitiveArrayElementsFunction<TPrimitive
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void Release(JEnvironmentRef envRef, TArrayRef arrayRef, ReadOnlyValPtr<TPrimitiveType> elements,
 		JReleaseMode mode)
-		=> this._ptr(envRef, arrayRef.ArrayValue, elements, mode);
+	{
+		if (OperatingSystem.IsWindows())
+			this._function.Windows(envRef, arrayRef.ArrayValue, elements, mode);
+		else
+			this._function.Unix(envRef, arrayRef.ArrayValue, elements, mode);
+	}
 }

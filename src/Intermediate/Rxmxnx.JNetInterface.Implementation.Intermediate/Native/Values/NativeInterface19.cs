@@ -30,6 +30,9 @@ internal readonly unsafe struct NativeInterface19 : INativeInterface<NativeInter
 	/// <summary>
 	/// <c>IsVirtualThread</c>.
 	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JBoolean IsVirtualThread(JEnvironmentRef envRef, JObjectLocalRef localRef)
 		=> OperatingSystem.IsWindows() ?

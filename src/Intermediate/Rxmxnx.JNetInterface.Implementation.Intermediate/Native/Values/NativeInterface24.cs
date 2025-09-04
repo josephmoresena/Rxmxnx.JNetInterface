@@ -30,6 +30,9 @@ internal readonly unsafe struct NativeInterface24 : INativeInterface<NativeInter
 	/// <summary>
 	/// <c>GetStringUTFLengthAsLong</c>.
 	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Int64 GetStringUtfLongLength(JEnvironmentRef envRef, JStringLocalRef stringRef)
 		=> OperatingSystem.IsWindows() ?

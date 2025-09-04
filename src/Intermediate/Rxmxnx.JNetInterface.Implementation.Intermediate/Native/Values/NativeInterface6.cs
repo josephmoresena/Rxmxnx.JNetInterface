@@ -30,6 +30,9 @@ internal readonly unsafe struct NativeInterface6 : INativeInterface<NativeInterf
 	/// <summary>
 	/// <c>GetObjectRefType</c>.
 	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JReferenceType GetObjectRefType(JEnvironmentRef envRef, JObjectLocalRef localRef)
 		=> OperatingSystem.IsWindows() ?
