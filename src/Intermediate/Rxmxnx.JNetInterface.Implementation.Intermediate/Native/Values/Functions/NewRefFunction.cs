@@ -4,24 +4,18 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// Function pointer to create new object reference through JNI.
 /// </summary>
 /// <typeparam name="TReference">Type of object reference.</typeparam>
-[StructLayout(LayoutKind.Explicit)]
+[StructLayout(LayoutKind.Sequential)]
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly unsafe struct NewRefFunction<TReference>
+internal readonly unsafe struct NewRefFunction<TReference> : INewRefFunction
 	where TReference : unmanaged, INativeType, IWrapper<JObjectLocalRef>
 {
 	/// <summary>
 	/// Pointer to <c>New<typeparamref name="TReference"/>Ref</c> function.
 	/// </summary>
-	[FieldOffset(0)]
-	private readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JObjectLocalRef, IntPtr> _windows;
-	/// <summary>
-	/// Pointer to <c>New<typeparamref name="TReference"/>Ref</c> function.
-	/// </summary>
-	[FieldOffset(0)]
-	private readonly delegate* unmanaged[Cdecl]<JEnvironmentRef, JObjectLocalRef, IntPtr> _unix;
+	private readonly INewRefFunction.NewRefFunction _function;
 
 	/// <summary>
 	/// Creates a new <typeparamref name="TReference"/> reference to the object referred.
@@ -38,8 +32,8 @@ internal readonly unsafe struct NewRefFunction<TReference>
 	{
 		TReference result = default;
 		Unsafe.As<TReference, IntPtr>(ref result) = OperatingSystem.IsWindows() ?
-			this._windows(envRef, localRef) :
-			this._unix(envRef, localRef);
+			this._function.Windows(envRef, localRef) :
+			this._function.Unix(envRef, localRef);
 		return result;
 	}
 }
