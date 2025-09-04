@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Interfaces;
 /// <summary>
 /// Function pointer to delete object reference through JNI.
 /// </summary>
-public interface IDeleteRefFunction
+internal interface IDeleteRefFunction
 {
 	/// <summary>
 	/// Function pointer to delete object local references through JNI.
