@@ -471,7 +471,7 @@ partial class JEnvironment
 		/// <see langword="true"/> if <paramref name="classRef"/> is assignable to <paramref name="otherClassRef"/>;
 		/// otherwise, <see langword="false"/>.
 		/// </returns>
-		private unsafe Boolean IsAssignableFrom(JClassLocalRef classRef, JClassLocalRef otherClassRef)
+		private Boolean IsAssignableFrom(JClassLocalRef classRef, JClassLocalRef otherClassRef)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.IsAssignableFromInfo);

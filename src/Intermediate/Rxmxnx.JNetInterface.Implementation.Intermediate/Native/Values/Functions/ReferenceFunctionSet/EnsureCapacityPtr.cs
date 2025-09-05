@@ -4,7 +4,6 @@ internal readonly partial struct ReferenceFunctionSet
 {
 	/// <summary>
 	/// Pointer to <c>EnsureLocalCapacity</c> function.
-	/// Ensures that at least a given number of local references can be created in the current thread.
 	/// </summary>
 	[StructLayout(LayoutKind.Explicit)]
 #if !PACKAGE

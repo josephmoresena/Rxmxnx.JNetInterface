@@ -16,7 +16,7 @@ internal readonly unsafe struct ToReflectedFunction<TAccessible> : IToReflectedF
 	/// Pointer to <c>ToReflected<typeparamref name="TAccessible"/></c> function.
 	/// Converts a <typeparamref name="TAccessible"/> to <c>java.lang.reflect</c> object.
 	/// </summary>
-	private readonly IToReflectedFunction.ToReflectedFunction _toReflected;
+	private readonly IToReflectedFunction.ToReflectedFunction _function;
 
 	/// <summary>
 	/// Pointer to <c>ToReflected<typeparamref name="TAccessible"/></c> function.
@@ -29,6 +29,6 @@ internal readonly unsafe struct ToReflectedFunction<TAccessible> : IToReflectedF
 	public JObjectLocalRef ToReflected(JEnvironmentRef envRef, JClassLocalRef classRef, TAccessible accessibleId,
 		JBoolean isStatic)
 		=> OperatingSystem.IsWindows() ?
-			this._toReflected.Windows(envRef, classRef, accessibleId.Pointer, isStatic) :
-			this._toReflected.Unix(envRef, classRef, accessibleId.Pointer, isStatic);
+			this._function.Windows(envRef, classRef, accessibleId.Pointer, isStatic) :
+			this._function.Unix(envRef, classRef, accessibleId.Pointer, isStatic);
 }

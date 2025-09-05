@@ -10,7 +10,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly unsafe struct CallNonVirtualMethodFunction
+internal readonly unsafe struct CallNonVirtualMethodFunction : ICallNonvirtualMethodFunction
 {
 	/// <summary>
 	/// Internal reserved entries.
@@ -21,6 +21,21 @@ internal readonly unsafe struct CallNonVirtualMethodFunction
 	/// <summary>
 	/// Caller <c>A</c> function.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, JValue*, void>
-		Call;
+	private readonly ICallNonvirtualMethodFunction.CallMethodFunction _function;
+
+	/// <summary>
+	/// <c>CallNonvirtualVoidMethodA</c>.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public void Call(JEnvironmentRef envRef, JObjectLocalRef localRef, JClassLocalRef classRef, JMethodId methodId,
+		JValue* args)
+	{
+		if (OperatingSystem.IsWindows())
+			this._function.Windows.Void(envRef, localRef, classRef, methodId, args);
+		else
+			this._function.Unix.Void(envRef, localRef, classRef, methodId, args);
+	}
 }

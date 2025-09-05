@@ -4,7 +4,6 @@ internal readonly partial struct ObjectFunctionSet
 {
 	/// <summary>
 	/// Pointer to <c>AllocObject</c> function.
-	/// Allocates a new Java object without invoking any of the constructors for the object.
 	/// </summary>
 	[StructLayout(LayoutKind.Explicit)]
 #if !PACKAGE

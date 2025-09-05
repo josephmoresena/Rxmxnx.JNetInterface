@@ -9,27 +9,27 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly unsafe struct GetAccessibleIdFunction<TAccessible>
+internal readonly unsafe struct GetAccessibleIdFunction<TAccessible> : IGetAccessibleIdFunction
 	where TAccessible : unmanaged, IAccessibleIdentifierType
 {
 	/// <summary>
 	/// Pointer to <c>Get&lt;type&gt;ID</c> function.
 	/// </summary>
 	/// <remarks>The accessible object is determined by its name and signature.</remarks>
-	private readonly delegate* unmanaged<JEnvironmentRef, JClassLocalRef, Byte*, Byte*, IntPtr> _ptr;
+	private readonly IGetAccessibleIdFunction.GetAccessibleIdFunction _function;
 
 	/// <summary>
-	/// Pointer to <c>Get&lt;type&gt;ID</c> function.
+	/// <c>Get&lt;type&gt;ID</c>.
 	/// </summary>
-	/// <remarks>The accessible object is determined by its name and signature.</remarks>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TAccessible GetId(JEnvironmentRef envRef, JClassLocalRef localRef, Byte* name, Byte* descriptor)
 	{
-		TAccessible result = default;
-		Unsafe.As<TAccessible, IntPtr>(ref result) = this._ptr(envRef, localRef, name, descriptor);
-		return result;
+		IntPtr result = OperatingSystem.IsWindows() ?
+			this._function.Windows(envRef, localRef, name, descriptor) :
+			this._function.Unix(envRef, localRef, name, descriptor);
+		return Unsafe.As<IntPtr, TAccessible>(ref result);
 	}
 }

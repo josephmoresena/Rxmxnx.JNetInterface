@@ -1,19 +1,19 @@
 namespace Rxmxnx.JNetInterface.Native.Values.Interfaces;
 
 /// <summary>
-/// Function pointer to copy values to a Java primitive array through JNI.
+/// Function pointer to copy values from a Java primitive array through JNI.
 /// </summary>
-internal interface ISetPrimitiveArrayRegionFunction
+internal interface IGetPrimitiveArrayRegionFunction
 {
 	/// <summary>
-	/// Pointer to <c>Set&lt;PrimitiveType&gt;ArrayRegion</c> function.
+	/// Pointer to <c>Get&lt;PrimitiveType&gt;ArrayRegion</c> function.
 	/// </summary>
 	[StructLayout(LayoutKind.Explicit)]
 #if !PACKAGE
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-	protected readonly unsafe struct SetPrimitiveArrayRegionFunction
+	protected readonly unsafe struct GetPrimitiveArrayRegionFunction
 	{
 		/// <summary>
 		/// Function pointer for Windows Operating System.

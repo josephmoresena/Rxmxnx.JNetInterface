@@ -11,7 +11,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly unsafe struct CallMethodFunction<TReceiver>
+internal readonly unsafe struct CallMethodFunction<TReceiver> : ICallMethodFunction
 	where TReceiver : unmanaged, INativeType, IWrapper<JObjectLocalRef>
 {
 	/// <summary>
@@ -23,5 +23,20 @@ internal readonly unsafe struct CallMethodFunction<TReceiver>
 	/// <summary>
 	/// Caller <c>A</c> function.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, TReceiver, JMethodId, JValue*, void> Call;
+	private readonly ICallMethodFunction.CallMethodFunction _function;
+
+	/// <summary>
+	/// <c>CallVoidMethodA</c>.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public void Call(JEnvironmentRef envRef, TReceiver receiver, JMethodId methodId, JValue* args)
+	{
+		if (OperatingSystem.IsWindows())
+			this._function.Windows.Void(envRef, receiver.Value.Pointer, methodId, args);
+		else
+			this._function.Unix.Void(envRef, receiver.Value.Pointer, methodId, args);
+	}
 }

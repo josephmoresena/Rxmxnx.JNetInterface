@@ -203,14 +203,14 @@ partial class JEnvironment
 			return true;
 		}
 		public Boolean IsParameter(JLocalObject jLocal) => this._objects.IsParameter(jLocal.LocalReference);
-		public unsafe void MonitorEnter(JObjectLocalRef localRef)
+		public void MonitorEnter(JObjectLocalRef localRef)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.MonitorEnterInfo);
 			JResult result = nativeInterface.MonitorFunctions.MonitorEnter(this.Reference, localRef);
 			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 		}
-		public unsafe void MonitorExit(JObjectLocalRef localRef)
+		public void MonitorExit(JObjectLocalRef localRef)
 		{
 			JResult result = JResult.Ok;
 			if (this._env.IsAttached && this.VirtualMachine.IsAlive)

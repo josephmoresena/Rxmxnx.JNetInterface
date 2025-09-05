@@ -10,7 +10,8 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly unsafe struct GetPrimitiveArrayElementsFunction<TPrimitiveType, TArrayRef>
+internal readonly unsafe struct
+	GetPrimitiveArrayElementsFunction<TPrimitiveType, TArrayRef> : IGetPrimitiveArrayElementsFunction
 	where TPrimitiveType : unmanaged, INativeType, IPrimitiveType<TPrimitiveType>
 	where TArrayRef : unmanaged, IArrayReferenceType, IObjectReferenceType
 {
@@ -18,16 +19,22 @@ internal readonly unsafe struct GetPrimitiveArrayElementsFunction<TPrimitiveType
 	/// Pointer to <c>Get&lt;PrimitiveType&gt;Elements</c> function.
 	/// Returns the body of the primitive array.
 	/// </summary>
-	private readonly delegate* unmanaged<JEnvironmentRef, JArrayLocalRef, out JBoolean, void*> _ptr;
+	private readonly IGetPrimitiveArrayElementsFunction.GetPrimitiveArrayElementsFunction _function;
 
 	/// <summary>
-	/// Pointer to <c>Get&lt;PrimitiveType&gt;Elements</c> function.
-	/// Returns the body of the primitive array.
+	/// <c>Get&lt;PrimitiveType&gt;Elements</c>.
 	/// </summary>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public ValPtr<TPrimitiveType> Get(JEnvironmentRef envRef, TArrayRef arrayRef, out JBoolean isCopy)
-		=> (TPrimitiveType*)this._ptr(envRef, arrayRef.ArrayValue, out isCopy);
+	{
+		fixed (JBoolean* isCopyPtr = &isCopy)
+		{
+			return (ValPtr<TPrimitiveType>)(OperatingSystem.IsWindows() ?
+				this._function.Windows(envRef, arrayRef.ArrayValue, isCopyPtr) :
+				this._function.Unix(envRef, arrayRef.ArrayValue, isCopyPtr));
+		}
+	}
 }

@@ -16,11 +16,10 @@ internal readonly unsafe struct GetStringRegionFunction<TChar> : IGetStringRegio
 	/// Pointer to <c>GetStringRegion</c> function.
 	/// Copies a number of characters from the string object to the given buffer.
 	/// </summary>
-	private readonly IGetStringRegionFunction.GetStringRegionFunction _getStringRegion;
+	private readonly IGetStringRegionFunction.GetStringRegionFunction _function;
 
 	/// <summary>
-	/// Pointer to <c>GetStringRegion</c> function.
-	/// Copies a number of characters from the string object to the given buffer.
+	/// <c>GetStringRegion</c>.
 	/// </summary>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -30,8 +29,8 @@ internal readonly unsafe struct GetStringRegionFunction<TChar> : IGetStringRegio
 		ValPtr<TChar> buffer)
 	{
 		if (OperatingSystem.IsWindows())
-			this._getStringRegion.Windows(envRef, stringRef, start, length, buffer);
+			this._function.Windows(envRef, stringRef, start, length, buffer);
 		else
-			this._getStringRegion.Unix(envRef, stringRef, start, length, buffer);
+			this._function.Unix(envRef, stringRef, start, length, buffer);
 	}
 }

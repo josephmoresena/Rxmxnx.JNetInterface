@@ -7,7 +7,6 @@ internal interface IReleaseArrayElementsFunction
 {
 	/// <summary>
 	/// Pointer to <c>Release&lt;PrimitiveType&gt;Elements</c> function.
-	/// Informs the <c>VM</c> that the native code no longer needs access to array elements.
 	/// </summary>
 	[StructLayout(LayoutKind.Explicit)]
 #if !PACKAGE

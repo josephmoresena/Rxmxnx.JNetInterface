@@ -4,7 +4,6 @@ internal readonly partial struct ObjectFunctionSet
 {
 	/// <summary>
 	/// Pointer to <c>GetObjectClass</c> function.
-	/// Returns the class of an object.
 	/// </summary>
 	[StructLayout(LayoutKind.Explicit)]
 #if !PACKAGE

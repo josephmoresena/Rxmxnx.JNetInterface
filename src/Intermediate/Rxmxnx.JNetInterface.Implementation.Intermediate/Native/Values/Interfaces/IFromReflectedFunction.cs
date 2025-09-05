@@ -1,30 +1,29 @@
 namespace Rxmxnx.JNetInterface.Native.Values.Interfaces;
 
 /// <summary>
-/// Function pointer to copy values to a Java primitive array through JNI.
+/// Function pointer to convert Java accessible object to accessible identifier through JNI.
 /// </summary>
-internal interface ISetPrimitiveArrayRegionFunction
+internal interface IFromReflectedFunction
 {
 	/// <summary>
-	/// Pointer to <c>Set&lt;PrimitiveType&gt;ArrayRegion</c> function.
+	/// Pointer to <c>FromReflected&lt;type&gt;</c> function.
 	/// </summary>
 	[StructLayout(LayoutKind.Explicit)]
 #if !PACKAGE
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-	protected readonly unsafe struct SetPrimitiveArrayRegionFunction
+	protected readonly unsafe struct FromReflectedFunction
 	{
 		/// <summary>
 		/// Function pointer for Windows Operating System.
 		/// </summary>
 		[FieldOffset(0)]
-		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JArrayLocalRef, Int32, Int32, void*, void>
-			Windows;
+		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JObjectLocalRef, IntPtr> Windows;
 		/// <summary>
 		/// Function pointer for Unix-like Operating System.
 		/// </summary>
 		[FieldOffset(0)]
-		public readonly delegate* unmanaged[Cdecl]<JEnvironmentRef, JArrayLocalRef, Int32, Int32, void*, void> Unix;
+		public readonly delegate* unmanaged[Cdecl]<JEnvironmentRef, JObjectLocalRef, IntPtr> Unix;
 	}
 }

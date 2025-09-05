@@ -4,7 +4,6 @@ internal readonly partial struct ObjectFunctionSet
 {
 	/// <summary>
 	/// Pointer to <c>IsInstanceOf</c> function.
-	/// Tests whether an object is an instance of a class.
 	/// </summary>
 	[StructLayout(LayoutKind.Explicit)]
 #if !PACKAGE

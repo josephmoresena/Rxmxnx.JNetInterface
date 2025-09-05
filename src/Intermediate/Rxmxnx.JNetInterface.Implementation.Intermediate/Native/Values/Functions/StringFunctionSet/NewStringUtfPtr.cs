@@ -4,7 +4,6 @@ internal readonly partial struct StringFunctionSet
 {
 	/// <summary>
 	/// Pointer to <c>NewStringUTF</c> function.
-	/// Constructs a new <c>java.lang.String</c> object from an array of characters.
 	/// </summary>
 	[StructLayout(LayoutKind.Explicit)]
 #if !PACKAGE
