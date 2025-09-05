@@ -195,6 +195,8 @@
                     body="stub"/>
             <method signature="System.Void DefiningClass(Rxmxnx.JNetInterface.Native.References.JEnvironmentRef,Rxmxnx.PInvoke.CString,Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.String)"
                     body="stub"/>
+            <method signature="System.Void VirtualMachineLoad(Rxmxnx.JNetInterface.Native.References.JVirtualMachineRef,System.Boolean,System.String)"
+                    body="stub"/>
             <method signature="System.String GetSha256Hex(System.ReadOnlySpan`1&lt;System.Byte&gt;)"
                     body="remove"/>
             <!-- Library -->

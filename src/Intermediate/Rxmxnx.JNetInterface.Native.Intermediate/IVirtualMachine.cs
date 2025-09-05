@@ -11,6 +11,10 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	public const Int32 MinimalVersion = 0x00010006;
 
 	/// <summary>
+	/// Capacity for thread initialization.
+	/// </summary>
+	internal const Int32 MinimalCapacity = 16;
+	/// <summary>
 	/// Capacity for Throwable.getStackTrace()
 	/// </summary>
 	internal const Int32 GetStackTraceCapacity = 5;

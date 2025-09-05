@@ -40,6 +40,7 @@ public partial class JVirtualMachine
 				this.Remove(reference); // Remove at initialization error.
 				throw;
 			}
+			JTrace.VirtualMachineLoad(reference, isNew);
 			return result;
 		}
 	}

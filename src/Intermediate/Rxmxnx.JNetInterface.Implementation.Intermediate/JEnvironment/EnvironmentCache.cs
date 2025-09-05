@@ -36,6 +36,8 @@ partial class JEnvironment
 		/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 		public EnvironmentCache(JVirtualMachine vm, JEnvironment env, JEnvironmentRef envRef) : base(vm, envRef, env)
 		{
+			this.TryEnsureLocalCapacity(IVirtualMachine.MinimalCapacity); // Ensure minimal capacity. 
+
 			this._env = env;
 			this._objects = new(this._classes);
 			if (this.Version < NativeInterface.RequiredVersion) return; // Avoid class loading if unsupported version.

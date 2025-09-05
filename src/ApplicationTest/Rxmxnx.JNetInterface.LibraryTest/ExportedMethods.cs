@@ -31,7 +31,8 @@ internal static class ExportedMethods
 		{
 			IVirtualMachine vm = JVirtualMachine.GetVirtualMachine(vmRef);
 			using IThread thread = vm.InitializeThread(new(() => "Unload Thread"u8));
-			JClassObject.GetClass<JHelloDotnetObject>(thread).UnregisterNativeCalls();
+			using JClassObject jClass = JClassObject.GetClass<JHelloDotnetObject>(thread);
+			jClass.UnregisterNativeCalls();
 		}
 		finally
 		{

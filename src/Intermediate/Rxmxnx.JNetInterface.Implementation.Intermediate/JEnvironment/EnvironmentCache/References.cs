@@ -19,10 +19,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfDifferentThread(this.Reference, this.Thread);
 			if (this._objects is not LocalFrame)
 			{
-				ref readonly NativeInterface nativeInterface =
-					ref this.GetNativeInterface<NativeInterface>(NativeInterface.EnsureLocalCapacityInfo);
-				JniException? jniException =
-					nativeInterface.ReferenceFunctions.EnsureLocalCapacity(this.Reference, capacity);
+				JniException? jniException = this.TryEnsureLocalCapacity(capacity);
 				this.CheckJniError();
 				if (jniException is not null) throw jniException;
 			}
