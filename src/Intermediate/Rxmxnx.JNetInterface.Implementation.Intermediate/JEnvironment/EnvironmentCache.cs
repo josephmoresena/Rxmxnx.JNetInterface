@@ -175,7 +175,7 @@ partial class JEnvironment
 		/// Deletes the current local reference frame.
 		/// </summary>
 		/// <param name="result">Current result.</param>
-		public unsafe void DeleteLocalFrame(JLocalObject? result)
+		public void DeleteLocalFrame(JLocalObject? result)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.PopLocalFrameInfo);

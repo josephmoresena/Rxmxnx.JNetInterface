@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// <summary>
 /// Set of function pointers to manipulate Java object array through JNI.
 /// </summary>
-[StructLayout(LayoutKind.Sequential)]
+[StructLayout(LayoutKind.Explicit)]
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
@@ -11,21 +11,104 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 internal readonly unsafe struct ObjectArrayFunctionSet
 {
 	/// <summary>
-	/// Pointer to <c>NewObjectArray</c> function.
-	/// Constructs a new array holding objects in given class.
+	/// Function set for Windows Operating System.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, Int32, JClassLocalRef, JObjectLocalRef, JObjectArrayLocalRef>
-		NewObjectArray;
+	[FieldOffset(0)]
+	private readonly Windows _windows;
 	/// <summary>
-	/// Pointer to <c>GetObjectArrayElement</c> function.
-	/// Returns an element of an <c>Object</c> array.
+	/// Function set for Unix-like Operating System.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectArrayLocalRef, Int32, JObjectLocalRef>
-		GetObjectArrayElement;
+	[FieldOffset(0)]
+	private readonly Unix _unix;
+
 	/// <summary>
-	/// Pointer to <c>SetObjectArrayElement</c> function.
-	/// Sets an element of an <c>Object</c> array.
+	/// <c>NewObjectArray</c>.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectArrayLocalRef, Int32, JObjectLocalRef, void>
-		SetObjectArrayElement;
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JObjectArrayLocalRef NewObjectArray(JEnvironmentRef envRef, Int32 length, JClassLocalRef classRef,
+		JObjectLocalRef localRef)
+		=> OperatingSystem.IsWindows() ?
+			this._windows.NewObjectArray(envRef, length, classRef, localRef) :
+			this._unix.NewObjectArray(envRef, length, classRef, localRef);
+	/// <summary>
+	/// <c>GetObjectArrayElement</c>.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JObjectLocalRef GetObjectArrayElement(JEnvironmentRef envRef, JObjectArrayLocalRef arrayRef, Int32 index)
+		=> OperatingSystem.IsWindows() ?
+			this._windows.GetObjectArrayElement(envRef, arrayRef, index) :
+			this._unix.GetObjectArrayElement(envRef, arrayRef, index);
+	/// <summary>
+	/// <c>SetObjectArrayElement</c>.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public void SetObjectArrayElement(JEnvironmentRef envRef, JObjectArrayLocalRef arrayRef, Int32 index,
+		JObjectLocalRef localRef)
+	{
+		if (OperatingSystem.IsWindows())
+			this._windows.SetObjectArrayElement(envRef, arrayRef, index, localRef);
+		else
+			this._unix.SetObjectArrayElement(envRef, arrayRef, index, localRef);
+	}
+
+	/// <summary>
+	/// Windows function set.
+	/// </summary>
+	[StructLayout(LayoutKind.Sequential)]
+	private readonly struct Windows
+	{
+		/// <summary>
+		/// Pointer to <c>NewObjectArray</c> function.
+		/// Constructs a new array holding objects in given class.
+		/// </summary>
+		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, Int32, JClassLocalRef, JObjectLocalRef,
+			JObjectArrayLocalRef> NewObjectArray;
+		/// <summary>
+		/// Pointer to <c>GetObjectArrayElement</c> function.
+		/// Returns an element of an <c>Object</c> array.
+		/// </summary>
+		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JObjectArrayLocalRef, Int32, JObjectLocalRef>
+			GetObjectArrayElement;
+		/// <summary>
+		/// Pointer to <c>SetObjectArrayElement</c> function.
+		/// Sets an element of an <c>Object</c> array.
+		/// </summary>
+		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JObjectArrayLocalRef, Int32, JObjectLocalRef, void
+			> SetObjectArrayElement;
+	}
+
+	/// <summary>
+	/// Unix function set.
+	/// </summary>
+	[StructLayout(LayoutKind.Sequential)]
+	private readonly struct Unix
+	{
+		/// <summary>
+		/// Pointer to <c>NewObjectArray</c> function.
+		/// Constructs a new array holding objects in given class.
+		/// </summary>
+		public readonly delegate* unmanaged[Cdecl]<JEnvironmentRef, Int32, JClassLocalRef, JObjectLocalRef,
+			JObjectArrayLocalRef> NewObjectArray;
+		/// <summary>
+		/// Pointer to <c>GetObjectArrayElement</c> function.
+		/// Returns an element of an <c>Object</c> array.
+		/// </summary>
+		public readonly delegate* unmanaged[Cdecl]<JEnvironmentRef, JObjectArrayLocalRef, Int32, JObjectLocalRef>
+			GetObjectArrayElement;
+		/// <summary>
+		/// Pointer to <c>SetObjectArrayElement</c> function.
+		/// Sets an element of an <c>Object</c> array.
+		/// </summary>
+		public readonly delegate* unmanaged[Cdecl]<JEnvironmentRef, JObjectArrayLocalRef, Int32, JObjectLocalRef, void>
+			SetObjectArrayElement;
+	}
 }

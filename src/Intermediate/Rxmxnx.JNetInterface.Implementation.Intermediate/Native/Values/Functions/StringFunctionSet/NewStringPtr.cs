@@ -1,8 +1,5 @@
 namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 
-/// <summary>
-/// Set of function pointers to manipulate Java string through JNI.
-/// </summary>
 internal readonly partial struct StringFunctionSet
 {
 	/// <summary>

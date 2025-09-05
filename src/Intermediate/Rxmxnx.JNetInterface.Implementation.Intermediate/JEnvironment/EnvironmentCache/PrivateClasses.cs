@@ -261,7 +261,7 @@ partial class JEnvironment
 		/// <see langword="true"/> if the object referenced by <paramref name="localRef"/> is an instance
 		/// of the class referenced by <paramref name="classRef"/>; otherwise, <see langword="false"/>.
 		/// </returns>
-		private unsafe Boolean IsInstanceOf(JObjectLocalRef localRef, JClassLocalRef classRef)
+		private Boolean IsInstanceOf(JObjectLocalRef localRef, JClassLocalRef classRef)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.IsInstanceOfInfo);

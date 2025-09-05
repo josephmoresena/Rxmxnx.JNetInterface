@@ -1,27 +1,28 @@
 namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 
-internal readonly partial struct StringFunctionSet
+internal readonly partial struct ReferenceFunctionSet
 {
 	/// <summary>
-	/// Pointer to <c>NewStringUTF</c> function.
-	/// Constructs a new <c>java.lang.String</c> object from an array of characters.
+	/// Pointer to <c>IsSameObject</c> function.
+	/// Tests whether two references to refer to the same Java object.
 	/// </summary>
 	[StructLayout(LayoutKind.Explicit)]
 #if !PACKAGE
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-	private readonly unsafe struct NewStringUtfPtr
+	private readonly unsafe struct IsSameObjectPtr
 	{
 		/// <summary>
 		/// Function pointer for Windows Operating System.
 		/// </summary>
 		[FieldOffset(0)]
-		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, Byte*, JStringLocalRef> Windows;
+		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JObjectLocalRef, JObjectLocalRef, JBoolean>
+			Windows;
 		/// <summary>
 		/// Function pointer for Unix-like Operating System.
 		/// </summary>
 		[FieldOffset(0)]
-		public readonly delegate* unmanaged[Cdecl]<JEnvironmentRef, Byte*, JStringLocalRef> Unix;
+		public readonly delegate* unmanaged[Cdecl]<JEnvironmentRef, JObjectLocalRef, JObjectLocalRef, JBoolean> Unix;
 	}
 }
