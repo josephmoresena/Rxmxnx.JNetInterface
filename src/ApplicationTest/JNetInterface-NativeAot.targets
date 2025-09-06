@@ -10,6 +10,8 @@
     <PropertyGroup Condition="'$(JNI_APP)' == 'true' And '$(IlcDisableReflection)' != 'true'">
         <!-- Assembly name must specify that it was compiled with Native-AOT -->
         <AssemblyName>$(AssemblyName).NAOT</AssemblyName>
+        <IsWindowsHost>$([MSBuild]::IsOSPlatform('Windows'))</IsWindowsHost>
+        <ControlFlowGuard Condition="'$(IsWindowsHost)' == 'true'">true</ControlFlowGuard>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm' And '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64'">
