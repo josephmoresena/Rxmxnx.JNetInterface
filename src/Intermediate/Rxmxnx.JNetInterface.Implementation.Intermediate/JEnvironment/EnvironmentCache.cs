@@ -67,7 +67,7 @@ partial class JEnvironment
 		{
 			if (this._criticalCount > 0 || this._buildingException)
 				this.ExceptionCheck();
-			else if (this.HasPendingException()) // Calls always to ExceptionCheck.
+			else if (this.HasPendingException()) // Calls to ExceptionCheck.
 				this.ExceptionOccurred();
 			this.Thrown = default; // Clears current exception.
 		}
