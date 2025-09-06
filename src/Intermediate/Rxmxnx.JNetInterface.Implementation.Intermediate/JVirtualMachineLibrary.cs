@@ -176,7 +176,7 @@ public sealed unsafe class JVirtualMachineLibrary
 	/// </returns>
 	public static JVirtualMachineLibrary? Create(IntPtr handle)
 	{
-		Span<IntPtr> functions = stackalloc IntPtr[3];
+		Span<IntPtr> functions = stackalloc IntPtr[4];
 		if (JVirtualMachineLibrary.TryGetJniExport(handle, JVirtualMachineLibrary.GetDefaultVirtualMachineInitArgsName,
 		                                           out functions[0]) &&
 		    JVirtualMachineLibrary.TryGetJniExport(handle, JVirtualMachineLibrary.CreateVirtualMachineName,

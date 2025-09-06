@@ -105,7 +105,7 @@ jobs:
       matrix:
         os: [ windows-latest, ubuntu-latest, macos-latest ]
     env:
-      JNETINTERFACE_ONLY_NATIVE_TEST: true
+      JNETINTERFACE_ONLY_NATIVE_TEST: false
     steps:
       - uses: actions/checkout@v4
       - name: APT deb822 sources
@@ -291,15 +291,18 @@ jobs:
           dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
             -p:TargetFramework=net9.0 \
             -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0/x86_64
-      - name: Build bionic-libs (.NET 8.0 - RFM)
+      - name: Build bionic-libs (.NET 9.0 - RFM)
         working-directory: ./NativeAOT-AndroidHelloJniLib
         run: |
           dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net8.0 -p:IlcDisableReflection=true \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0-RFM/arm64-v8a
+            -p:TargetFramework=net9.0 -p:IlcDisableReflection=true \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0-RFM/arm64-v8a
+          dotnet publish -r linux-bionic-arm -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:TargetFramework=net9.0 -p:IlcDisableReflection=true \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0-RFM/armeabi-v7a
           dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
             -p:TargetFramework=net8.0 -p:IlcDisableReflection=true \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0-RFM/x86_64
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0-RFM/x86_64
       - name: Build bionic-libs (.NET 8.0)
         working-directory: ./NativeAOT-AndroidHelloJniLib
         run: |
@@ -309,6 +312,15 @@ jobs:
           dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
             -p:TargetFramework=net8.0 \
             -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0/x86_64
+      - name: Build bionic-libs (.NET 8.0 - RFM)
+        working-directory: ./NativeAOT-AndroidHelloJniLib
+        run: |
+          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:TargetFramework=net8.0 -p:IlcDisableReflection=true \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0-RFM/arm64-v8a
+          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:TargetFramework=net8.0 -p:IlcDisableReflection=true \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0-RFM/x86_64
 
       - name: Create Android project structure
         env:
@@ -428,7 +440,7 @@ jobs:
             --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
             --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
             --out ./../jnetinterface-apptest-net9.0.apk jnetinterface-apptest-net9.0.apk 
-      - name: Build Android Apk (.NET 8.0 - RFM)
+      - name: Build Android Apk (.NET 9.0 - RFM)
         env:
           APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
           APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
@@ -437,16 +449,16 @@ jobs:
         run: |
           $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
           -I $ANDROID_HOME/platforms/android-35/android.jar \
-          -F jnetinterface-apptest-net8.0-RFM.apk ./dex 
+          -F jnetinterface-apptest-net9.0-RFM.apk ./dex 
           
-          mv ../lib-net8.0-RFM/* lib/
-          zip -ur jnetinterface-apptest-net8.0-RFM.apk lib/ 
+          mv ../lib-net9.0-RFM/* lib/
+          zip -ur jnetinterface-apptest-net9.0-RFM.apk lib/ 
           rm -rf lib/*
           
           $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
           --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
           --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
-          --out ./../jnetinterface-apptest-net8.0-RFM.apk jnetinterface-apptest-net8.0-RFM.apk 
+          --out ./../jnetinterface-apptest-net9.0-RFM.apk jnetinterface-apptest-net9.0-RFM.apk 
       - name: Build Android Apk (.NET 8.0)
         env:
           APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
@@ -466,6 +478,25 @@ jobs:
             --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
             --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
             --out ./../jnetinterface-apptest-net8.0.apk jnetinterface-apptest-net8.0.apk 
+      - name: Build Android Apk (.NET 8.0 - RFM)
+        env:
+          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
+          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
+        working-directory: ./hello-jni_apk
+        shell: bash
+        run: |
+          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
+          -I $ANDROID_HOME/platforms/android-35/android.jar \
+          -F jnetinterface-apptest-net8.0-RFM.apk ./dex 
+          
+          mv ../lib-net8.0-RFM/* lib/
+          zip -ur jnetinterface-apptest-net8.0-RFM.apk lib/ 
+          rm -rf lib/*
+          
+          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
+          --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
+          --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
+          --out ./../jnetinterface-apptest-net8.0-RFM.apk jnetinterface-apptest-net8.0-RFM.apk 
 
       - name: Create Android Artifact
         uses: actions/upload-artifact@v4
