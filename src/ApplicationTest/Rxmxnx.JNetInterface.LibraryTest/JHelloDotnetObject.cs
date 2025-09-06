@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
@@ -26,9 +28,17 @@ public sealed partial class JHelloDotnetObject : JLocalObject, IClassType<JHello
 	{
 		JVirtualMachine.SetMainClass<JHelloDotnetObject>(); // When native app, use defined class as main.
 		managed.Writer.WriteLine($"Loading bytecode... {classByteCode.LongLength / 1024.0:0.00} KiB");
-		JClassObject result = JClassObject.LoadClass<JHelloDotnetObject>(env, classByteCode);
-		JniCallback.RegisterNativeMethods(result, managed);
-		return result;
+		GCHandle gcHandle = GCHandle.Alloc(classByteCode, GCHandleType.Pinned);
+		try
+		{
+			JClassObject result = JClassObject.LoadClass<JHelloDotnetObject>(env, classByteCode);
+			JniCallback.RegisterNativeMethods(result, managed);
+			return result;
+		}
+		finally
+		{
+			gcHandle.Free();
+		}
 	}
 	public static void SetCallback<TManaged>(IEnvironment env, TManaged managed) where TManaged : IManagedCallback
 	{
