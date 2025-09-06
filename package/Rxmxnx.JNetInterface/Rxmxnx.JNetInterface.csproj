@@ -7,6 +7,13 @@
   
   <Import Project="..\JNetInterface.Package.targets" />
 
+  <!-- Validations -->
+  <PropertyGroup>
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <ApiCompatPreserveUnnecessarySuppressions>true</ApiCompatPreserveUnnecessarySuppressions>
+    <ApiCompatRespectInternals>true</ApiCompatRespectInternals>
+  </PropertyGroup>
+
   <!-- Include intermediate assemblies -->
   <ItemGroup>
     <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Implementation.Intermediate"/>

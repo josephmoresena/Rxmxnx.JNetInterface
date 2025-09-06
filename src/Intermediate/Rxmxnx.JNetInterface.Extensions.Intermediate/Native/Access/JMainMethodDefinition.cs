@@ -50,7 +50,7 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 	public void Invoke(JClassObject mainClass, params ReadOnlySpan<String?> args)
 	{
 		IEnvironment env = mainClass.Environment;
-		using JArrayObject<JStringObject>? jArgs = JMainMethodDefinition.CreateArgsArray(env, args);
+		using JArrayObject<JStringObject> jArgs = JMainMethodDefinition.CreateArgsArray(env, args);
 		this.InvokeMain(mainClass, jArgs);
 	}
 #endif
@@ -85,7 +85,7 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 	/// </returns>
 	[return: NotNullIfNotNull(nameof(args))]
 	private static JArrayObject<JStringObject>? CreateArgsArray(IEnvironment env, String?[]? args = default)
-		=> args is not null ? JMainMethodDefinition.CreateArgsArray(env, args.AsSpan()) : default;
+		=> args is not null ? JMainMethodDefinition.CreateArgsArray(env, args.AsReadOnlySpan()) : default;
 	/// <summary>
 	/// Creates a <see cref="JArrayObject{JStringObject}"/> in order to invoke PSVM method.
 	/// </summary>
@@ -98,7 +98,7 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 #if NET9_0_OR_GREATER
 		params
 #endif
-		ReadOnlySpan<String?> args)
+			ReadOnlySpan<String?> args)
 	{
 		JArrayObject<JStringObject> jArgs = JArrayObject<JStringObject>.Create(env, args.Length);
 		for (Int32 i = 0; i < args.Length; i++)

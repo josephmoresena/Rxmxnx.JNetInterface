@@ -17,7 +17,6 @@ internal static class MetadataTextUtilities
 	}
 #endif
 
-#if NET9_0_OR_GREATER
 	/// <summary>
 	/// Retrieves a detailed report with <paramref name="typeMetadata"/> information.
 	/// </summary>
@@ -28,22 +27,27 @@ internal static class MetadataTextUtilities
 	[ExcludeFromCodeCoverage]
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static String GetString(JDataTypeMetadata typeMetadata, IAppendableProperty?[] properties)
-		=> MetadataTextUtilities.GetString(typeMetadata, properties.AsSpan());
+	public static String GetString(JDataTypeMetadata typeMetadata,
+#if !NET9_0_OR_GREATER
+		params IAppendableProperty?[] properties
+#else
+		IAppendableProperty?[] properties
 #endif
+	)
+		=> MetadataTextUtilities.GetString(typeMetadata, properties.AsReadOnlySpan());
 	/// <summary>
 	/// Retrieves a detailed report with <paramref name="typeMetadata"/> information.
 	/// </summary>
 	/// <param name="typeMetadata">A <see cref="JDataTypeMetadata"/> instance.</param>
 	/// <param name="properties">Additional properties to report.</param>
 	/// <returns>A detailed string representation of <paramref name="typeMetadata"/>.</returns>
-	public static String GetString(JDataTypeMetadata typeMetadata, params
-#if !NET9_0_OR_GREATER
-		IAppendableProperty?[]
+	public static String GetString(JDataTypeMetadata typeMetadata,
+#if NET9_0_OR_GREATER
+		params ReadOnlySpan<IAppendableProperty?>
 #else
 		ReadOnlySpan<IAppendableProperty?>
 #endif
-		properties)
+			properties)
 	{
 		StringBuilder strBuild = new();
 		Boolean isVoid = typeMetadata.ClassName.AsSpan().SequenceEqual(JPrimitiveTypeMetadata.VoidMetadata.ClassName);
@@ -70,11 +74,7 @@ internal static class MetadataTextUtilities
 				if (typeMetadata.Kind is JTypeKind.Class)
 					MetadataTextUtilities.AppendProperty(strBuild, nameof(JDataTypeMetadata.Modifier),
 					                                     $"{typeMetadata.Modifier}");
-				foreach (IAppendableProperty? t in properties
-#if !NET9_0_OR_GREATER
-					         .AsSpan()
-#endif
-				        )
+				foreach (IAppendableProperty? t in properties)
 					MetadataTextUtilities.AppendProperty(strBuild, t);
 				break;
 		}
