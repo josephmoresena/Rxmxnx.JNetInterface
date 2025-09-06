@@ -39,7 +39,6 @@ partial class JEnvironment
 			this._env = env;
 			this._objects = new(this._classes);
 			if (this.Version < NativeInterface.RequiredVersion) return; // Avoid class loading if unsupported version.
-			this.TryEnsureLocalCapacity(IVirtualMachine.MinimalCapacity); // Ensure minimal capacity. 
 			this.LoadMainClasses();
 		}
 

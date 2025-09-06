@@ -456,16 +456,5 @@ partial class JEnvironment
 				CriticalException.UnknownInstance;
 			this.SetPendingException(criticalException, true);
 		}
-		/// <summary>
-		/// Tries to ensure local capacity is at least <paramref name="capacity"/>.
-		/// </summary>
-		/// <param name="capacity">The required local capacity.</param>
-		/// <returns>The result of the attempt.</returns>
-		private JResult TryEnsureLocalCapacity(Int32 capacity)
-		{
-			ref readonly NativeInterface nativeInterface =
-				ref this.GetNativeInterface<NativeInterface>(NativeInterface.EnsureLocalCapacityInfo);
-			return nativeInterface.ReferenceFunctions.EnsureLocalCapacity(this.Reference, capacity);
-		}
 	}
 }
