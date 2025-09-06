@@ -57,7 +57,7 @@ public partial class JConstructorDefinition
 	[ExcludeFromCodeCoverage]
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	protected JLocalObject NewReflected<TObject>(JConstructorObject jConstructor,
+	protected TObject NewReflected<TObject>(JConstructorObject jConstructor,
 #if !NET9_0_OR_GREATER
 		params IObject?[] args
 #else

@@ -420,9 +420,9 @@ jobs:
             -I $ANDROID_HOME/platforms/android-35/android.jar \
             -F jnetinterface-apptest-net9.0.apk ./dex 
           
-          mv ../lib-net9.0/*.so lib/.
+          mv ../lib-net9.0/* lib/
           zip -ur jnetinterface-apptest-net9.0.apk lib/
-          rm lib/*.so
+          rm -rf lib/*
           
           $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
             --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
@@ -439,9 +439,9 @@ jobs:
           -I $ANDROID_HOME/platforms/android-35/android.jar \
           -F jnetinterface-apptest-net8.0-RFM.apk ./dex 
           
-          mv ../lib-net8.0-RFM/*.so lib/.
+          mv ../lib-net8.0-RFM/* lib/
           zip -ur jnetinterface-apptest-net8.0-RFM.apk lib/ 
-          rm lib/*.so
+          rm -rf lib/*
           
           $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
           --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
@@ -458,9 +458,9 @@ jobs:
             -I $ANDROID_HOME/platforms/android-35/android.jar \
             -F jnetinterface-apptest-net8.0.apk ./dex 
           
-          mv ../lib-net8.0/*.so lib/.
+          mv ../lib-net8.0/* lib/
           zip -ur jnetinterface-apptest-net8.0.apk lib/ 
-          rm lib/*.so
+          rm -rf lib/*
           
           $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
             --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \

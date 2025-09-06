@@ -11,7 +11,8 @@
         <!-- Assembly name must specify that it was compiled with Native-AOT -->
         <AssemblyName>$(AssemblyName).NAOT</AssemblyName>
         <IsWindowsHost>$([MSBuild]::IsOSPlatform('Windows'))</IsWindowsHost>
-        <IlcDefaultStackSize Condition="'$(IsWindowsHost)' == 'true'">2097152</IlcDefaultStackSize>
+        <IsX64>$(RuntimeIdentifier.ToLower().EndsWith('-x64'))</IsX64>
+        <IlcDefaultStackSize Condition="'$(IsWindowsHost)' == 'true' And '$(IsX64)' == 'true'">4194304</IlcDefaultStackSize>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm' And '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64'">
