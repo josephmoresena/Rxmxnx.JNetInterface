@@ -20,9 +20,22 @@ internal static class ExportedMethods
 		}
 
 		IVirtualMachine vm = JVirtualMachine.GetVirtualMachine(vmRef);
-		using IThread thread = vm.InitializeThread(new(() => "Load Thread"u8));
-		JHelloDotnetObject.SetCallback(thread, new IManagedCallback.Default(vm, Console.Out));
+		if (vm.GetEnvironment() is { } env)
+		{
+			Trace.WriteLine($"Initialized JEnv: {env.Reference}");
+			SetCallback(env);
+		}
+		else
+		{
+			using IThread thread = vm.InitializeThread(new(() => "Load Thread"u8));
+			Trace.WriteLine($"Initialized JThread: {thread.Reference}");
+			thread.WithFrame(10, thread, SetCallback);
+		}
 		return IVirtualMachine.MinimalVersion;
+		static void SetCallback(IEnvironment env)
+		{
+			JHelloDotnetObject.SetCallback(env, new IManagedCallback.Default(env.VirtualMachine, Console.Out));
+		}
 	}
 	[UnmanagedCallersOnly(EntryPoint = "JNI_OnUnload")]
 	private static void UnloadLibrary(JVirtualMachineRef vmRef, IntPtr _)
