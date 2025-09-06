@@ -66,7 +66,7 @@ jobs:
         run: |
           ./.sonar/scanner/dotnet-sonarscanner begin /k:"josephmoresena_Rxmxnx.JNetInterface" /o:"josephmoresena" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.scanAll=false /d:sonar.coverage.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs" /d:sonar.cpd.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs" /d:sonar.cs.vstest.reportsPaths=TestResults/*.trx /d:sonar.cs.opencover.reportsPaths=TestResults/*/coverage.opencover.xml 
           dotnet build-server shutdown
-          dotnet restore src
+          dotnet restore src --ignore-failed-sources
           dotnet restore src/Test/Proxies/Native/JvmProxy.NativeProxy.slnx
           dotnet build src /p:MultipleFrameworkTest=true --no-restore --configuration Release --disable-build-servers /nr:false /maxcpucount:1
           dotnet test src /p:MultipleFrameworkTest=true --no-build --no-restore --configuration release --verbosity normal --collect:"XPlat Code Coverage" --results-directory TestResults/ --logger "trx;verbosity=detailed" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
@@ -189,7 +189,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          
+
       - name: Create core assembly
         working-directory: ./package/Rxmxnx.JNetInterface.Core
         run: |
@@ -198,12 +198,6 @@ jobs:
         working-directory: ./package/Rxmxnx.JNetInterface
         run: |
           dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp
-
-      - name: Create nuget.config for tests
-        working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LibraryTest
-        run: |
-          dotnet new nugetconfig
-          dotnet nuget add source "../../../package/Nuget/" -n TmpSource 
 
       - name: Publish launcher
         working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest
@@ -278,15 +272,43 @@ jobs:
           dotnet nuget add source "../package/Nuget/" -n TmpSource
           dotnet add package Rxmxnx.JNetInterface --version 9999.99.99.99-tmp
 
-      - name: Build bionic-libs
+      - name: Build bionic-libs (.NET 9.0)
         working-directory: ./NativeAOT-AndroidHelloJniLib
         run: |
           dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib/arm64-v8a
+            -p:TargetFramework=net9.0 \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0/arm64-v8a
           dotnet publish -r linux-bionic-arm -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib/armeabi-v7a
+            -p:TargetFramework=net9.0 \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0/armeabi-v7a
           dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib/x86_64
+            -p:TargetFramework=net9.0 \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0/x86_64
+      - name: Build bionic-libs (.NET 8.0 - RFM)
+        working-directory: ./NativeAOT-AndroidHelloJniLib
+        run: |
+          rm ../lib/x86_64/*
+          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+          -p:TargetFramework=net8.0 -p:IlcDisableReflection=true \
+          -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0-RFM/arm64-v8a
+          dotnet publish -r linux-bionic-arm -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+          -p:TargetFramework=net8.0 -p:IlcDisableReflection=true \
+          -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0-RFM/armeabi-v7a
+          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+          -p:TargetFramework=net8.0 -p:IlcDisableReflection=true \
+          -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0-RFM/x86_64
+      - name: Build bionic-libs (.NET 8.0)
+        working-directory: ./NativeAOT-AndroidHelloJniLib
+        run: |
+          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:TargetFramework=net8.0 \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0/arm64-v8a
+          dotnet publish -r linux-bionic-arm -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:TargetFramework=net8.0 \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0/armeabi-v7a
+          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:TargetFramework=net8.0 \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0/x86_64
 
       - name: Create Android project structure
         env:
@@ -300,9 +322,9 @@ jobs:
           mkdir ./hello-jni_apk/main/java/com/example/hellojni
           mkdir ./hello-jni_apk/class
           mkdir ./hello-jni_apk/dex
+          mkdir ./hello-jni_apk/lib
           
           echo "${APK_KEYSTORE_BASE64}" | base64 -d > ./hello-jni_apk/jnetinterface-apk.keystore
-          mv lib hello-jni_apk
       - name: Create Android java file
         working-directory: ./hello-jni_apk/main/java/com/example/hellojni
         run: |
@@ -375,10 +397,7 @@ jobs:
             </application>
           </manifest>' > AndroidManifest.xml
 
-      - name: Build Android Apk
-        env:
-          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
+      - name: Compile Android App
         working-directory: ./hello-jni_apk
         shell: bash
         run: |
@@ -390,20 +409,66 @@ jobs:
           $ANDROID_HOME/build-tools/35.0.0/d8 --lib $ANDROID_HOME/platforms/android-35/android.jar \
             --output ./dex \
             class/**/*.class 
-          
+      - name: Build Android Apk (.NET 9.0)
+        env:
+          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
+          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
+        working-directory: ./hello-jni_apk
+        shell: bash
+        run: |
           $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
             -I $ANDROID_HOME/platforms/android-35/android.jar \
-            -F jnetinterface-apptest.apk ./dex 
+            -F jnetinterface-apptest-net9.0.apk ./dex 
           
-          zip -ur jnetinterface-apptest.apk lib/ 
+          mv ../lib-net9.0/*.so lib/.
+          zip -ur jnetinterface-apptest-net9.0.apk lib/
+          rm lib/*.so
           
           $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
             --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
             --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
-            --out ./../jnetinterface-apptest.apk jnetinterface-apptest.apk 
+            --out ./../jnetinterface-apptest-net9.0.apk jnetinterface-apptest-net9.0.apk 
+      - name: Build Android Apk (.NET 8.0 - RFM)
+        env:
+          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
+          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
+        working-directory: ./hello-jni_apk
+        shell: bash
+        run: |
+          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
+          -I $ANDROID_HOME/platforms/android-35/android.jar \
+          -F jnetinterface-apptest-net8.0-RFM.apk ./dex 
+          
+          mv ../lib-net8.0-RFM/*.so lib/.
+          zip -ur jnetinterface-apptest-net8.0-RFM.apk lib/ 
+          rm lib/*.so
+          
+          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
+          --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
+          --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
+          --out ./../jnetinterface-apptest-net8.0-RFM.apk jnetinterface-apptest-net8.0-RFM.apk 
+      - name: Build Android Apk (.NET 8.0)
+        env:
+          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
+          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
+        working-directory: ./hello-jni_apk
+        shell: bash
+        run: |
+          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
+            -I $ANDROID_HOME/platforms/android-35/android.jar \
+            -F jnetinterface-apptest-net8.0.apk ./dex 
+          
+          mv ../lib-net8.0/*.so lib/.
+          zip -ur jnetinterface-apptest-net8.0.apk lib/ 
+          rm lib/*.so
+          
+          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
+            --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
+            --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
+            --out ./../jnetinterface-apptest-net8.0.apk jnetinterface-apptest-net8.0.apk 
 
       - name: Create Android Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Android-Artifact
-          path: jnetinterface-apptest.apk
+          path: jnetinterface-apptest-*.apk

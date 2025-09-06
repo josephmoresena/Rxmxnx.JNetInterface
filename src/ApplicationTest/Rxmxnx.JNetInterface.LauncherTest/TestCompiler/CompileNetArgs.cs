@@ -24,6 +24,7 @@ public partial class TestCompiler
 			}
 			args.Add($"/p:RequiredFramework={compileArgs._args.Version.GetTargetFramework()}");
 			args.Add("/p:RestorePackages=false");
+			args.Add("/p:UsePackage=true");
 			args.Add($"/p:BuildProjectReferences={compileArgs.BuildDependencies}");
 			args.Add($"/p:TargetFramework={compileArgs._args.Version.GetTargetFramework()}");
 			args.Add($"/p:JNI_LIBRARY={compileArgs.Publish.HasFlag(Publish.JniLibrary)}");

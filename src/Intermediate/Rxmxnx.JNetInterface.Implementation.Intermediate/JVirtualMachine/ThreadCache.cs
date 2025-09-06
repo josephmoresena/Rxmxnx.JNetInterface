@@ -19,6 +19,15 @@ public partial class JVirtualMachine
 		public ThreadCache(JVirtualMachine vm) => this._vm = vm;
 
 		/// <inheritdoc/>
+		public override JEnvironment Get(JEnvironmentRef reference, out Boolean isNew,
+			ThreadCreationArgs? arg = default)
+		{
+			JEnvironment result = base.Get(reference, out isNew, arg);
+			JTrace.EnvironmentLoad(reference, isNew);
+			return result;
+		}
+
+		/// <inheritdoc/>
 		protected override JEnvironment Create(JEnvironmentRef reference, ThreadCreationArgs? args)
 			=> !args.HasValue ?
 				new JEnvironment(this._vm, reference) :
