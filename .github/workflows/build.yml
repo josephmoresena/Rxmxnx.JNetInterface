@@ -287,7 +287,6 @@ jobs:
       - name: Build bionic-libs (.NET 8.0 - RFM)
         working-directory: ./NativeAOT-AndroidHelloJniLib
         run: |
-          rm ../lib/x86_64/*
           dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
           -p:TargetFramework=net8.0 -p:IlcDisableReflection=true \
           -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0-RFM/arm64-v8a
