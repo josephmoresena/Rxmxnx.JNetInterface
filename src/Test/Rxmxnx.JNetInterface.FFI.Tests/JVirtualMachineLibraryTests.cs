@@ -366,7 +366,7 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		}
 	}
 
-	[Theory]
+	[SkippableTheory]
 	[InlineData(JResult.Ok)]
 	[InlineData(JResult.Error)]
 	[InlineData(JResult.Ok, 1)]
