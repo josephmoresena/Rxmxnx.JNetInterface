@@ -106,6 +106,7 @@ jobs:
         os: [ windows-2025, ubuntu-latest, macos-latest ]
     env:
       JNETINTERFACE_ONLY_NATIVE_TEST: false
+      DOTNET_CLI_USE_MSBUILD_SERVER: false
     steps:
       - uses: actions/checkout@v4
       - name: APT deb822 sources
@@ -205,7 +206,7 @@ jobs:
       - name: Build tests
         run: |
           dotnet restore src --ignore-failed-sources
-          dotnet build src /p:MultipleFrameworkTest=true --configuration Release 
+          dotnet build src /p:MultipleFrameworkTest=true --no-restore --configuration Release --disable-build-servers /nr:false /maxcpucount:1
 
       - name: Windows x86 tests
         if: runner.os == 'Windows'
