@@ -92,6 +92,7 @@
                  Type="Classic C#"/>
         <File Path="Test\Tests.targets"/>
         <File Path="Test\CommonTests.targets"/>
+        <File Path="Test\x86.runsettings"/>
     </Folder>
     <Folder Name="/Test/Proxies/">
         <Project
