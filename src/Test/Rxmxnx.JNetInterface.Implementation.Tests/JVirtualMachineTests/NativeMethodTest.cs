@@ -7,7 +7,6 @@ public partial class JVirtualMachineTests
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		JClassTypeMetadata classTypeMetadata = IClassType.GetMetadata<JTestObject>();
-		List<ObjectTracker> trackers = [];
 		using IFixedPointer.IDisposable ctx = classTypeMetadata.Information.GetFixedPointer();
 		try
 		{
@@ -23,10 +22,11 @@ public partial class JVirtualMachineTests
 			proxyEnv.CallBooleanMethod(classRef.Value, proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
 			                           ReadOnlyValPtr<JValueWrapper>.Zero).Returns(false);
 
+			List<ObjectTracker> trackers = [];
 			using (JClassObject jClass = JClassObject.GetClass<JTestObject>(env))
 			{
 				jClass.Register([
-					TestUtilities.GetInstanceEntry(method1, out ObjectTracker tracker1),
+					TestUtilities.GetInstanceEntry(method1, out ObjectTracker? tracker1),
 					TestUtilities.GetStaticEntry(method2, out ObjectTracker tracker2),
 				]);
 				GC.Collect(2, GCCollectionMode.Aggressive);
@@ -60,7 +60,7 @@ public partial class JVirtualMachineTests
 				using (JClassObject jClass = JClassObject.GetClass<JTestObject>(env))
 				{
 					jClass.Register([
-						TestUtilities.GetInstanceEntry(method1, out ObjectTracker tracker1),
+						TestUtilities.GetInstanceEntry(method1, out ObjectTracker? tracker1),
 					]);
 					trackers.Add(tracker1);
 				}
@@ -70,6 +70,9 @@ public partial class JVirtualMachineTests
 
 				GC.Collect();
 				GC.WaitForPendingFinalizers();
+
+				Assert.True(trackers.All(d => d.WeakReference.IsAlive ==
+					                         !(d.FinalizerFlag?.Value).GetValueOrDefault()));
 
 				GC.Collect();
 				GC.WaitForPendingFinalizers();
@@ -90,6 +93,8 @@ public partial class JVirtualMachineTests
 
 			GC.Collect(2, GCCollectionMode.Aggressive);
 			GC.WaitForPendingFinalizers();
+
+			Assert.True(trackers.All(d => d.WeakReference.IsAlive == !(d.FinalizerFlag?.Value).GetValueOrDefault()));
 		}
 		finally
 		{
@@ -98,8 +103,6 @@ public partial class JVirtualMachineTests
 			GC.WaitForPendingFinalizers();
 			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
 			proxyEnv.FinalizeProxy(true);
-
-			Assert.True(trackers.All(d => d.WeakReference.IsAlive == !(d.FinalizerFlag?.Value).GetValueOrDefault()));
 		}
 	}
 }

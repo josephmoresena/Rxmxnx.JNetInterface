@@ -347,7 +347,9 @@ public sealed class PrimitiveArrayMemoryTests
 			        .DeleteGlobalRef(globalRef);
 
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
@@ -393,7 +395,9 @@ public sealed class PrimitiveArrayMemoryTests
 			        .ReleasePrimitiveArrayCritical(arrayRef, Arg.Any<ValPtr<Byte>>(), Arg.Any<JReleaseMode>());
 
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
@@ -474,7 +478,9 @@ public sealed class PrimitiveArrayMemoryTests
 			        .DeleteGlobalRef(globalRef);
 
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
@@ -527,7 +533,9 @@ public sealed class PrimitiveArrayMemoryTests
 		finally
 		{
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}

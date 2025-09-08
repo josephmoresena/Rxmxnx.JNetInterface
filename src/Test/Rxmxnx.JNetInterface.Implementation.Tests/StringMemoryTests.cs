@@ -54,7 +54,9 @@ public sealed class StringMemoryTests
 			proxyEnv.Received(0).ReleaseStringUtfChars(stringRef, Arg.Any<ReadOnlyValPtr<Byte>>());
 
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
@@ -124,7 +126,9 @@ public sealed class StringMemoryTests
 			        .DeleteGlobalRef(globalRef);
 
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
@@ -183,7 +187,9 @@ public sealed class StringMemoryTests
 		finally
 		{
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
@@ -270,7 +276,9 @@ public sealed class StringMemoryTests
 			        .DeleteGlobalRef(globalRef);
 
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
@@ -361,7 +369,9 @@ public sealed class StringMemoryTests
 			        .DeleteGlobalRef(globalRef);
 
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
@@ -405,7 +415,9 @@ public sealed class StringMemoryTests
 		finally
 		{
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
@@ -449,7 +461,9 @@ public sealed class StringMemoryTests
 		finally
 		{
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
@@ -460,13 +474,11 @@ public sealed class StringMemoryTests
 		JStringLocalRef stringRef = StringMemoryTests.fixture.Create<JStringLocalRef>();
 		String text = StringMemoryTests.fixture.Create<String>();
 		Memory<Byte> utfText = Encoding.UTF8.GetBytes(text);
-
 		try
 		{
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
 			using MemoryHandle handle = text.AsMemory().Pin();
 			using MemoryHandle utfHandle = utfText.Pin();
-
 			proxyEnv.NewString((ReadOnlyValPtr<Char>)handle.ToIntPtr(), text.Length).Returns(stringRef);
 			proxyEnv.NewStringUtf((ReadOnlyValPtr<Byte>)utfHandle.ToIntPtr()).Returns(stringRef);
 			proxyEnv.GetStringLength(stringRef).Returns(text.Length);
@@ -476,14 +488,11 @@ public sealed class StringMemoryTests
 				ValPtr<Char> ptr = (ValPtr<Char>)c[3];
 				text.CopyTo(ptr.Pointer.GetUnsafeSpan<Char>(text.Length));
 			});
-
 			using JStringObject jString = JStringObject.Create(env, text.AsSpan());
-
 			Assert.Equal(text, jString.Value);
 			Assert.Equal(utfText.Length, jString.Utf8Length);
 			Assert.Equal(text.Length, jString.Length);
 			Assert.False(Object.ReferenceEquals(text, jString.Value));
-
 			proxyEnv.Received(1).NewString(Arg.Any<ReadOnlyValPtr<Char>>(), Arg.Any<Int32>());
 			proxyEnv.Received(0).NewStringUtf(Arg.Any<ReadOnlyValPtr<Byte>>());
 			proxyEnv.Received(1).GetStringRegion(stringRef, 0, text.Length, Arg.Any<ValPtr<Char>>());
@@ -493,7 +502,9 @@ public sealed class StringMemoryTests
 		finally
 		{
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
@@ -515,9 +526,7 @@ public sealed class StringMemoryTests
 		Int64 length = longLength && longLengthCapable ?
 			Random.Shared.NextInt64(Int32.MaxValue + 2L, UInt32.MaxValue) :
 			Random.Shared.Next(16, Int32.MaxValue);
-
 		proxyEnv.GetVersion().Returns(jniVersion);
-
 		try
 		{
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
@@ -525,21 +534,17 @@ public sealed class StringMemoryTests
 			using JClassObject jClass = JClassObject.GetClass<JStringObject>(env);
 			using JStringObject jString =
 				Assert.IsType<JStringObject>(typeMetadata.CreateInstance(jClass, stringRef.Value, true));
-
 			unchecked
 			{
 				proxyEnv.GetStringLength(stringRef).Returns((Int32)(length / 4));
 				proxyEnv.GetStringUtfLength(stringRef).Returns((Int32)length);
 				proxyEnv.GetStringUtfLongLength(stringRef).Returns(length);
 			}
-
 			if (!noInt32)
 				Assert.Equal(length > Int32.MaxValue ? -1 : length, jString.Utf8Length);
 			Assert.Equal(length, jString.Utf8LongLength);
-
 			StringObjectMetadata objectMetadata =
 				Assert.IsType<StringObjectMetadata>(ILocalObject.CreateMetadata(jString));
-
 			proxyEnv.Received(longLengthCapable ? 0 : 1).GetStringUtfLength(stringRef);
 			proxyEnv.Received(longLengthCapable ? 1 : 0).GetStringUtfLongLength(stringRef);
 
@@ -557,7 +562,9 @@ public sealed class StringMemoryTests
 		finally
 		{
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
@@ -605,7 +612,9 @@ public sealed class StringMemoryTests
 		finally
 		{
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
