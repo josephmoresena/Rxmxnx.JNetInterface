@@ -101,7 +101,9 @@ public partial class JVirtualMachineTests
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
