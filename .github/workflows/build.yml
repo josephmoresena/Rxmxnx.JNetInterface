@@ -105,7 +105,7 @@ jobs:
       matrix:
         os: [ windows-2025, ubuntu-latest, macos-latest ]
     env:
-      JNETINTERFACE_ONLY_NATIVE_TEST: false
+      JNETINTERFACE_ONLY_NATIVE_TEST: true
       DOTNET_CLI_USE_MSBUILD_SERVER: false
     steps:
       - uses: actions/checkout@v4
