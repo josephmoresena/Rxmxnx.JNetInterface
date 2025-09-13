@@ -84,6 +84,8 @@ public static class Program
 #if NET8_0
 				if (IVirtualMachine.TypeMetadataToStringEnabled) JRuntimeInfo.PrintVirtualMachineInfo(env, vm, jvmLib);
 #endif
+				Console.WriteLine($"==== JNI 0x{env.Version:x8} ====");
+				
 				IManagedCallback.Default managedInstance = new(vm, Console.Out);
 				using JClassObject helloJniClass = JHelloDotnetObject.LoadClass(env, classByteCode, managedInstance);
 				Console.WriteLine("==== Begin psvm ===");

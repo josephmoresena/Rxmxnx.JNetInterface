@@ -60,6 +60,7 @@ Partial Module Program
             Dim env as IEnvironment = Nothing
             Using vm As IInvokedVirtualMachine = jvmLib.CreateVirtualMachine(initArgs, env)
                 Try
+                    Console.WriteLine($"==== JNI 0x{env.Version:x8} ====")
                     Dim managedInstance As New IManagedCallback.Default(vm, Console.Out)
                     Using _
                         helloJniClass As JClassObject =

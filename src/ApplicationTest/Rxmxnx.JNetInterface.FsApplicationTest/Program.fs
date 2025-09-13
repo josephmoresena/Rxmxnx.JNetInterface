@@ -30,6 +30,8 @@ let Execute (jvmLib: JVirtualMachineLibrary, classByteCode: byte[], args: string
         use v = vm
 
         try
+            Console.WriteLine($"==== JNI 0x{env.Version:x8} ====");
+            
             let managedInstance = IManagedCallback.Default(vm, Console.Out)
 
             use helloJniClass =
