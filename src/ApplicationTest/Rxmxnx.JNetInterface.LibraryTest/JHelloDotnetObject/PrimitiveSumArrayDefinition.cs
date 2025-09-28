@@ -10,6 +10,9 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public partial class JHelloDotnetObject
 {
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	[SuppressMessage("csharpsquid", "S2094:Classes should not be empty.",
 	                 Justification = "Type needs class inheritance.")]
 	private sealed class PrimitiveSumArrayDefinition<TNumber, TPrimitive>(ReadOnlySpan<Byte> functionName)
