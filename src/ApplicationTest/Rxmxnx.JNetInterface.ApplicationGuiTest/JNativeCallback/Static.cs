@@ -60,7 +60,7 @@ public partial class JNativeCallback
 		Boolean createState = true;
 		try
 		{
-			return JNativeCallback.constructorDef.NewCall<TObject>(env, [longKey[0], longKey[1],]).CastTo<TInterface>();
+			return JNativeCallback.constructorDef.NewCall<TObject>(env, longKey[0], longKey[1]).CastTo<TInterface>();
 		}
 		catch (Exception)
 		{

@@ -352,7 +352,7 @@ jobs:
           dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
             -p:TargetFramework=net8.0 -p:IlcDisableReflection=true \
             -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0-RFM/x86_64
-          
+
       - name: Create Android project structure
         env:
           APK_KEYSTORE_BASE64: ${{ secrets.APK_KEYSTORE }}
