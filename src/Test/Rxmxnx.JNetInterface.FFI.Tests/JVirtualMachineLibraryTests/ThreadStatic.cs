@@ -37,7 +37,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 #if NET8_0_OR_GREATER
 			Assert.True(Unsafe.IsNullRef(in options));
 #else
-			Assert.True(ref options);
+			Assert.True(Unsafe.IsNullRef(ref options));
 #endif
 			Assert.Equal(default, initValue.OptionsLength);
 			Assert.Equal(default, initValue.IgnoreUnrecognized);
@@ -81,7 +81,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 #if NET8_0_OR_GREATER
 				!Unsafe.IsNullRef(in options);
 #else
-                !Unsafe.IsNullRef(ref options);
+				!Unsafe.IsNullRef(ref options);
 #endif
 
 			Assert.Equal(0x00010006, value.Version);
@@ -92,7 +92,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 #if NET8_0_OR_GREATER
 				ref readonly Byte optionsBuffer =
 #else
-                ref Byte optionsBuffer =
+				ref Byte optionsBuffer =
 #endif
 					ref Unsafe.AsRef(in JVirtualMachineLibraryTests.args.Options.GetPinnableReference());
 #if NET8_0_OR_GREATER
@@ -131,16 +131,22 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 		if (JVirtualMachineLibraryTests.args is null) return JResult.DetachedThreadError;
 		try
 		{
+#if NET8_0_OR_GREATER
 			ref readonly VirtualMachineInitOptionValue options =
+#else
+			ref VirtualMachineInitOptionValue options =
+#endif
 				ref Unsafe.AsRef<VirtualMachineInitOptionValue>(initValue.Options);
+			Boolean nullOptions =
+#if NET8_0_OR_GREATER
+				!Unsafe.IsNullRef(in options);
+#else
+				!Unsafe.IsNullRef(ref options);
+#endif
 
 			Assert.InRange(initValue.Version, 0x00010006,
 			               Math.Max(JVirtualMachineLibraryTests.args.Version, 0x00010006));
-#if NET8_0_OR_GREATER
-			Assert.True(Unsafe.IsNullRef(in options));
-#else
-			Assert.True(Unsafe.IsNullRef(ref Unsafe.AsRef(in options)));
-#endif
+			Assert.True(nullOptions);
 			Assert.Equal(default, initValue.OptionsLength);
 			Assert.Equal(default, initValue.IgnoreUnrecognized);
 
