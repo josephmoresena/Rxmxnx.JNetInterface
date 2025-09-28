@@ -88,6 +88,9 @@ public readonly ref partial struct JNativeCallAdapter
 	/// <typeparam name="TElement">Type of <see cref="IReferenceType{TReference}"/> array element.</typeparam>
 	/// <param name="result">A <see cref="JArrayObject{TElement}"/> result.</param>
 	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	public JObjectArrayLocalRef FinalizeCall<TElement>(JArrayObject<TElement>? result)
 		where TElement : JReferenceObject, IReferenceType<TElement>
 		=> this.FinalizeCall<JObjectArrayLocalRef>(result?.Object);
@@ -303,6 +306,9 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="arrayRef">A parameter <see cref="JObjectArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{JLocalObject}"/> instance from <paramref name="arrayRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
+#if !NET8_0_OR_GREATER
+		[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 		public Builder WithParameter<TElement>(JObjectArrayLocalRef arrayRef, out JArrayObject<TElement>? jArray)
 			where TElement : JReferenceObject, IReferenceType<TElement>
 		{
@@ -316,6 +322,9 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="localRef">A parameter <see cref="JObjectLocalRef"/> reference.</param>
 		/// <param name="jLocal">A <typeparamref name="TObject"/> instance from <paramref name="localRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
+#if !NET8_0_OR_GREATER
+		[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 		public Builder WithParameter<TObject>(JObjectLocalRef localRef, out TObject? jLocal)
 			where TObject : JReferenceObject, IReferenceType<TObject>
 		{
@@ -339,6 +348,9 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="throwableRef">A parameter <see cref="JThrowableLocalRef"/> reference.</param>
 		/// <param name="jThrowable">A <see cref="JThrowableObject"/> instance from <paramref name="throwableRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
+#if !NET8_0_OR_GREATER
+		[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 		public Builder WithParameter<TThrowable>(JThrowableLocalRef throwableRef, out TThrowable? jThrowable)
 			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{

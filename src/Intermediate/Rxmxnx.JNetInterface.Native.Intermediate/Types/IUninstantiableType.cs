@@ -10,6 +10,9 @@ public interface IUninstantiableType : IClassType
 	/// <typeparamref name="TUninstantiable"/>.
 	/// </summary>
 	/// <typeparam name="TUninstantiable">Type of java reference type.</typeparam>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	protected static TUninstantiable ThrowInstantiation<TUninstantiable>()
 		where TUninstantiable : JLocalObject, IUninstantiableType, IUninstantiableType<TUninstantiable>
 		=> CommonValidationUtilities.ThrowInvalidInstantiation<TUninstantiable>();

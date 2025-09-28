@@ -38,6 +38,7 @@ internal static class CommonConstants
 	public const String CheckIdS6640 = "S6640:Using unsafe code blocks is security-sensitive";
 	public const String CheckIdS2376 = "S2376:Write-only properties should not be used";
 	public const String CheckIdS2326 = "S2326:Unused type parameters should be removed";
+	public const String CheckIdS4487 = "S4487:Unread \"private\" fields should be removed";
 	public const String BinaryStructJustification = "This struct is created only by binary operations.";
 	public const String AbstractProxyJustification = "This object is an abstract proxy.";
 	public const String JniThreadRequiredJustification = "Global object disposing requires a JNI thread.";
@@ -66,5 +67,6 @@ internal static class CommonConstants
 	public const String OnlyInternalInstantiationJustification =
 		"Only internal code is allowed to build an instance of current type.";
 	public const String NonGenericInGenericTypeJustification = "Non-generic type is declared inside a generic type.";
+	public const String RefLikeFieldJustification = "Unused member is a ref-like field.";
 #endif
 }

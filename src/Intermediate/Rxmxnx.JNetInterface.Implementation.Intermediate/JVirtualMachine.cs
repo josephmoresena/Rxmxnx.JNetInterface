@@ -118,6 +118,9 @@ public partial class JVirtualMachine : IVirtualMachine
 	/// <returns>
 	/// <see langword="true"/> if current datatype was registered; otherwise, <see langword="false"/>.
 	/// </returns>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	public static Boolean Register<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
 		=> MetadataHelper.Register<TReference>();
 	/// <summary>
@@ -146,6 +149,9 @@ public partial class JVirtualMachine : IVirtualMachine
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 #endif
 	public static void SetMainClass<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
 	{

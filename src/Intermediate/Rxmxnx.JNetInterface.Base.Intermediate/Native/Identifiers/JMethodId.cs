@@ -34,5 +34,5 @@ public readonly partial struct JMethodId : IAccessibleIdentifierType, INativePoi
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)
 		=> obj is JMethodId methodId && this.Pointer.Equals(methodId.Pointer);
 
-	static JMethodId INativePointerType<JMethodId>.New(IntPtr ptr) => new(ptr);
+	static JMethodId INativePointerType<JMethodId>.New(IntPtr value) => new(value);
 }

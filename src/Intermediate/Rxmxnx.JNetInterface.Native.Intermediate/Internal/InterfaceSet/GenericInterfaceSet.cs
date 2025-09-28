@@ -6,6 +6,9 @@ internal partial class InterfaceSet
 	/// Generic interface set.
 	/// </summary>
 	/// <typeparam name="TInterface"><see cref="IInterfaceType{TInterface}"/> type.</typeparam>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	private sealed class GenericInterfaceSet<TInterface> : IAppendableInterfaceSet, IRecursiveInterfaceSet
 		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 	{
@@ -42,6 +45,9 @@ internal partial class InterfaceSet
 	/// </summary>
 	/// <typeparam name="TInterface0"><see cref="IInterfaceType{TInterface0}"/> type.</typeparam>
 	/// <typeparam name="TInterface1"><see cref="IInterfaceType{TInterface1}"/> type.</typeparam>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	private sealed class GenericInterfaceSet<TInterface0, TInterface1> : IAppendableInterfaceSet, IRecursiveInterfaceSet
 		where TInterface0 : JInterfaceObject<TInterface0>, IInterfaceType<TInterface0>
 		where TInterface1 : JInterfaceObject<TInterface1>, IInterfaceType<TInterface1>

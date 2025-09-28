@@ -56,6 +56,9 @@ public partial class JEnumObject : JLocalObject, IClassType<JEnumObject>, IInter
 /// This class represents a local <c>java.lang.Enum</c> instance.
 /// </summary>
 /// <typeparam name="TEnum">Type of java enum type.</typeparam>
+#if !NET8_0_OR_GREATER
+[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 public abstract class JEnumObject<TEnum> : JEnumObject, IDataType where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>
 {
 	static JTypeKind IDataType.Kind => JTypeKind.Enum;

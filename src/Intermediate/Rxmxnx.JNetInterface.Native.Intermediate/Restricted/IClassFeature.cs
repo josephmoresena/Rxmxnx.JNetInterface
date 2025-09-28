@@ -120,6 +120,9 @@ internal partial interface IClassFeature
 	/// <param name="throwException">
 	/// Indicates whether exception should be thrown in managed code.
 	/// </param>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	void ThrowNew<TThrowable>(CString? message, Boolean throwException)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>;
 	/// <summary>
@@ -132,6 +135,9 @@ internal partial interface IClassFeature
 	/// <param name="throwException">
 	/// Indicates whether exception should be thrown in managed code.
 	/// </param>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	void ThrowNew<TThrowable>(String? message, Boolean throwException)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>;
 }

@@ -17,6 +17,9 @@ public partial interface IReferenceType : IDataType, ILocalObject, IDisposable
 	/// </summary>
 	/// <typeparam name="TReference">Type of the current java reference datatype.</typeparam>
 	/// <returns>The <see cref="JReferenceTypeMetadata"/> instance for given type.</returns>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public new static JReferenceTypeMetadata
 		GetMetadata<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TReference>()

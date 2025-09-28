@@ -35,6 +35,9 @@ public sealed class JAnnotationObject : JInterfaceObject<JAnnotationObject>, IIn
 /// This class represents an annotation instance.
 /// </summary>
 /// <typeparam name="TAnnotation">Type of <see cref="IInterfaceType"/>.</typeparam>
+#if !NET8_0_OR_GREATER
+[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]

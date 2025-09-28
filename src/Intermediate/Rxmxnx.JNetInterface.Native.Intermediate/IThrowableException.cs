@@ -4,6 +4,9 @@ namespace Rxmxnx.JNetInterface;
 /// Represents error that occur during JNI calls.
 /// </summary>
 /// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
+#if !NET8_0_OR_GREATER
+[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 public interface IThrowableException<out TThrowable> where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 {
 	/// <summary>

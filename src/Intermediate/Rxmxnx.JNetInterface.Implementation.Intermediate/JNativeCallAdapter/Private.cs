@@ -93,6 +93,9 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <typeparam name="TObject">A <see cref="IReferenceType"/> type.</typeparam>
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 		/// <returns>Initial <typaramref name="TObject"/> instance for <paramref name="localRef"/>.</returns>
+#if !NET8_0_OR_GREATER
+		[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 		private TObject CreateFinalObject<TObject>(JObjectLocalRef localRef)
 			where TObject : JReferenceObject, IReferenceType<TObject>
 		{

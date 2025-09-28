@@ -77,12 +77,18 @@ partial class JEnvironment
 			ReadOnlySpan<Byte> utf8Message = JEnvironment.GetSafeSpan(message);
 			this.ThrowNew(jClass, throwableMetadata, utf8Message, throwException, message?.ToString());
 		}
+#if !NET8_0_OR_GREATER
+		[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 		public void ThrowNew<TThrowable>(CString? message, Boolean throwException)
 			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
 			ReadOnlySpan<Byte> utf8Message = JEnvironment.GetSafeSpan(message);
 			this.ThrowNew<TThrowable>(utf8Message, throwException, message?.ToString());
 		}
+#if !NET8_0_OR_GREATER
+		[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 		public void ThrowNew<TThrowable>(String? message, Boolean throwException)
 			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{

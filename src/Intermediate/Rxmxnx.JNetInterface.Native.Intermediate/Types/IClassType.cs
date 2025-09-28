@@ -14,6 +14,9 @@ public interface IClassType : IReferenceType
 	/// </summary>
 	/// <typeparam name="TClass">Type of the current java class datatype.</typeparam>
 	/// <returns>The <see cref="JClassTypeMetadata"/> instance for given type.</returns>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public new static JClassTypeMetadata GetMetadata<TClass>() where TClass : JLocalObject, IClassType<TClass>
 		=> (JClassTypeMetadata)IDataType.GetMetadata<TClass>();

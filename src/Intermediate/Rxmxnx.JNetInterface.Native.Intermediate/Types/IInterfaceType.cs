@@ -15,6 +15,9 @@ public interface IInterfaceType : IReferenceType
 	/// </summary>
 	/// <typeparam name="TInterface">Type of the current java interface datatype.</typeparam>
 	/// <returns>The <see cref="JInterfaceTypeMetadata"/> instance for given type.</returns>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public new static JInterfaceTypeMetadata GetMetadata<TInterface>()
 		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>

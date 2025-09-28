@@ -8,6 +8,9 @@ internal abstract partial class MainClasses
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
 	/// <param name="isMainClass">Indicates whether <typeparamref name="TReference"/> is main class.</param>
 	/// <param name="mainClasses">Main classes dictionary.</param>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 #pragma warning disable CA1859
 	private static void AppendInitialClass<TReference>(Boolean isMainClass,
 		IDictionary<String, JDataTypeMetadata> mainClasses)

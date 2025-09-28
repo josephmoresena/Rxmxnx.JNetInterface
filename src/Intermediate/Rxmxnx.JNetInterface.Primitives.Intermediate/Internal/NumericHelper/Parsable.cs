@@ -21,7 +21,11 @@ internal static partial class NumericHelper
 		where T : unmanaged, ISpanParsable<T>
 		=> T.TryParse(s, provider, out result);
 #if NET8_0_OR_GREATER
-	/// <inheritdoc cref="ISpanParsable{TSelf}.TryParse(ReadOnlySpan{Char}, IFormatProvider?, out TSelf)"/>
+	/// <inheritdoc cref="IUtf8SpanParsable{TSelf}.Parse(ReadOnlySpan{Byte}, IFormatProvider?)"/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static T Parse<T>(ReadOnlySpan<Byte> s, IFormatProvider? provider) where T : unmanaged, IUtf8SpanParsable<T>
+		=> T.Parse(s, provider);
+	/// <inheritdoc cref="IUtf8SpanParsable{TSelf}.TryParse(ReadOnlySpan{Byte}, IFormatProvider?, out TSelf)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean TryParse<T>(ReadOnlySpan<Byte> utf8Text, IFormatProvider? provider, out T result)
 		where T : unmanaged, IUtf8SpanParsable<T>

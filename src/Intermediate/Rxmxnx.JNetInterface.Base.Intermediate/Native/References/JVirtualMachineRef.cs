@@ -6,6 +6,10 @@
 /// <remarks>
 /// This identifier will be valid until the library is unloaded or the JVM instance is destroyed.
 /// </remarks>
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 [StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JVirtualMachineRef : INativePointerType
 {

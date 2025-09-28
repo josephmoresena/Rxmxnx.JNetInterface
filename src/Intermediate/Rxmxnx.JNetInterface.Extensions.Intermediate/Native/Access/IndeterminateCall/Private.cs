@@ -257,6 +257,9 @@ public abstract partial class IndeterminateCall
 	/// <param name="definition">A <see cref="JConstructorDefinition"/> instance.</param>
 	/// <param name="jClass">Target class.</param>
 	/// <param name="args">Method arguments.</param>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	private static TObject NewCall<TObject>(JConstructorDefinition definition, JClassObject jClass,
 #if NET9_0_OR_GREATER
 		params
@@ -273,6 +276,9 @@ public abstract partial class IndeterminateCall
 	/// <param name="definition">A <see cref="JConstructorDefinition"/> instance.</param>
 	/// <param name="jConstructor">Reflected constructor instance.</param>
 	/// <param name="args">Method arguments.</param>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	private static TObject ReflectedNewCall<TObject>(JConstructorDefinition definition, JConstructorObject jConstructor,
 #if NET9_0_OR_GREATER
 		params

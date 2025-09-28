@@ -7,7 +7,9 @@ internal sealed class NativeVoidParameterless<TReceiver> where TReceiver : unman
 
 	public IWrapper<Boolean> IsDisposed => this._disposed;
 
+#pragma warning disable CA1822
 	public void VoidCall(JEnvironmentRef envRef, TReceiver classOrObjectRef) { }
+#pragma warning restore CA1822
 
 	~NativeVoidParameterless() => this._disposed.Value = true;
 }

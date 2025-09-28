@@ -21,6 +21,9 @@ public interface IEnumType : IClassType
 	/// </summary>
 	/// <typeparam name="TEnum">Type of the current java enum datatype.</typeparam>
 	/// <returns>The <see cref="JEnumTypeMetadata"/> instance for given type.</returns>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public new static JEnumTypeMetadata GetMetadata<TEnum>() where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>
 		=> (JEnumTypeMetadata)IDataType.GetMetadata<TEnum>();

@@ -236,6 +236,9 @@ partial class JEnvironment
 		/// <param name="message">
 		/// The message used to construct the <see cref="ThrowableException"/> instance.
 		/// </param>
+#if !NET8_0_OR_GREATER
+		[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 		private void ThrowNew<TThrowable>(ReadOnlySpan<Byte> utf8Message, Boolean throwException, String? message)
 			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{

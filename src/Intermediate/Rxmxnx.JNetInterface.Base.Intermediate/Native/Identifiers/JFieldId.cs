@@ -34,5 +34,5 @@ public readonly partial struct JFieldId : IAccessibleIdentifierType, INativePoin
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)
 		=> obj is JFieldId fieldId && this.Pointer.Equals(fieldId.Pointer);
 
-	static JFieldId INativePointerType<JFieldId>.New(IntPtr ptr) => new(ptr);
+	static JFieldId INativePointerType<JFieldId>.New(IntPtr value) => new(value);
 }
