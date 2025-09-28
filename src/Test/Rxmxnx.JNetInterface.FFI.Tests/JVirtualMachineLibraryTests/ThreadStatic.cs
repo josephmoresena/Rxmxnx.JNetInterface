@@ -79,9 +79,9 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 				ref Unsafe.AsRef<VirtualMachineInitOptionValue>(value.Options);
 			Boolean nullOptions =
 #if NET8_0_OR_GREATER
-				!Unsafe.IsNullRef(in options);
+				Unsafe.IsNullRef(in options);
 #else
-				!Unsafe.IsNullRef(ref options);
+				Unsafe.IsNullRef(ref options);
 #endif
 
 			Assert.Equal(0x00010006, value.Version);
@@ -139,9 +139,9 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 				ref Unsafe.AsRef<VirtualMachineInitOptionValue>(initValue.Options);
 			Boolean nullOptions =
 #if NET8_0_OR_GREATER
-				!Unsafe.IsNullRef(in options);
+				Unsafe.IsNullRef(in options);
 #else
-				!Unsafe.IsNullRef(ref options);
+				Unsafe.IsNullRef(ref options);
 #endif
 
 			Assert.InRange(initValue.Version, 0x00010006,

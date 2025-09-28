@@ -148,7 +148,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 				             Assert.Throws<JniException>(() => library.CreateVirtualMachine(args, out IEnvironment __))
 				                   .Result);
 				if (JVirtualMachineLibraryTests.nativeException is not null)
-					throw new AggregateException(nativeException);
+					throw new AggregateException(JVirtualMachineLibraryTests.nativeException);
 				return;
 			}
 
@@ -234,10 +234,11 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 			Options = useOptions ? JVirtualMachineLibraryTests.CreateOptionsSequence() : CStringSequence.Empty,
 			IgnoreUnrecognized = JVirtualMachineLibraryTests.fixture.Create<Boolean>(),
 		};
-		using MemoryHandle emptyHandle = CString.Empty.TryPin(out _);
-		using MemoryHandle seqHandle = args.Options.ToString().AsMemory().Pin();
-		Span<VirtualMachineInitOptionValue> optionSpan = stackalloc VirtualMachineInitOptionValue[args.Options.Count];
-		JVirtualMachineLibraryTests.optionsPtr = JVirtualMachineLibraryTests.GetOptionsPtr(optionSpan, args.Options);
+		using MemoryHandle seqHandle = JVirtualMachineLibraryTests.args.Options.ToString().AsMemory().Pin();
+		Span<VirtualMachineInitOptionValue> optionSpan =
+			stackalloc VirtualMachineInitOptionValue[JVirtualMachineLibraryTests.args.Options.Count];
+		JVirtualMachineLibraryTests.optionsPtr =
+			JVirtualMachineLibraryTests.GetOptionsPtr(optionSpan, JVirtualMachineLibraryTests.args.Options);
 
 		GetDefaultVirtualMachineInitArgsDelegate getDefaultVirtualMachineInitArgs =
 			JVirtualMachineLibraryTests.GetDefaultVirtualMachineInitArgsForGetDefaultArgumentTest;
@@ -248,7 +249,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 
 			if (JVirtualMachineLibraryTests.result != JResult.Ok)
 			{
-				Assert.Throws<JniException>(() => library.GetDefaultArgument(jniVersion));
+				Assert.Throws<JniException>(() => library.GetDefaultArgument(JVirtualMachineLibraryTests.jniVersion));
 				if (JVirtualMachineLibraryTests.nativeException is not null)
 					throw new AggregateException(JVirtualMachineLibraryTests.nativeException);
 				return;
@@ -259,8 +260,10 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 			if (JVirtualMachineLibraryTests.nativeException is not null)
 				throw new AggregateException(JVirtualMachineLibraryTests.nativeException);
 
-			Assert.Equal(JVirtualMachineLibraryTests.jniVersion < 0x00010006 ? 0x00010006 : jniVersion,
-			             defaultValue.Version);
+			Assert.Equal(
+				JVirtualMachineLibraryTests.jniVersion < 0x00010006 ?
+					0x00010006 :
+					JVirtualMachineLibraryTests.jniVersion, defaultValue.Version);
 			Assert.Equal(JVirtualMachineLibraryTests.args.Options.NonEmptyCount, defaultValue.Options.Count);
 			Assert.Equal(JVirtualMachineLibraryTests.args.Options.ToString(), defaultValue.Options.ToString());
 			Assert.Equal(!useOptions,
