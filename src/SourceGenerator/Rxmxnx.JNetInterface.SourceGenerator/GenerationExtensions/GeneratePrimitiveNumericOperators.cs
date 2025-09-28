@@ -341,7 +341,7 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>, IBinaryNumber<{1}>, IN
 	}}
 #if NET8_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	static JChar IUtf8SpanParsable<JChar>.Parse(ReadOnlySpan<Char> s, IFormatProvider? provider)
+	static JChar IUtf8SpanParsable<JChar>.Parse(ReadOnlySpan<Byte> s, IFormatProvider? provider)
 	    => NumericHelper.Parse<Char>(s, provider);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static Boolean IUtf8SpanParsable<JChar>.TryParse(ReadOnlySpan<Byte> s, IFormatProvider? provider, out JChar result)
