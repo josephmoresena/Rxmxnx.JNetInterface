@@ -142,8 +142,16 @@ internal readonly partial struct ClassNameHelper
 	private static Int32 GetPadding(CString classSignature, Boolean isObjectClass)
 		=> classSignature[^1] == CommonNames.ObjectSignatureSuffixChar && isObjectClass ? 1 : 0;
 
-#if !NET8_0_OR_GREATER
+	/// <summary>
+	/// Replaces all occurrences of <paramref name="oldValue"/> with <paramref name="newValue"/>.
+	/// </summary>
+	/// <param name="span">The span in which the chars should be replaced.</param>
+	/// <param name="oldValue">The char to be replaced with newValue.</param>
+	/// <param name="newValue">The char to replace all occurrences of oldValue.</param>
 	public static void Replace(Span<Char> span, Char oldValue, Char newValue)
+#if NET8_0_OR_GREATER
+		=> span.Replace(oldValue, newValue);
+#else
 	{
 		ref Char src = ref MemoryMarshal.GetReference(span);
 		for (Int32 idx = 0; idx < span.Length; ++idx)

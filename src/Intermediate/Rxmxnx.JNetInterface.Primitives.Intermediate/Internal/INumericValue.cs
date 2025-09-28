@@ -238,19 +238,19 @@ internal interface INumericValue<TPrimitive> : IBinaryNumber<TPrimitive>
 		return TPrimitive.Zero.GetTypeCode() switch
 		{
 			TypeCode.SByte => INumericValue<TPrimitive>.TryConvertFromChecked<SByte, TOther>(
-				value, new(ref result, static v => v)),
+				value, new(ref result, static v => (TPrimitive)v)),
 			TypeCode.Char => INumericValue<TPrimitive>.TryConvertFromChecked<Char, TOther>(
-				value, new(ref result, static v => v)),
+				value, new(ref result, static v => (TPrimitive)v)),
 			TypeCode.Double => INumericValue<TPrimitive>.TryConvertFromChecked<Double, TOther>(
-				value, new(ref result, static v => v)),
+				value, new(ref result, static v => (TPrimitive)v)),
 			TypeCode.Single => INumericValue<TPrimitive>.TryConvertFromChecked<Single, TOther>(
-				value, new(ref result, static v => v)),
+				value, new(ref result, static v => (TPrimitive)v)),
 			TypeCode.Int32 => INumericValue<TPrimitive>.TryConvertFromChecked<Int32, TOther>(
-				value, new(ref result, static v => v)),
+				value, new(ref result, static v => (TPrimitive)v)),
 			TypeCode.Int64 => INumericValue<TPrimitive>.TryConvertFromChecked<Int64, TOther>(
-				value, new(ref result, static v => v)),
+				value, new(ref result, static v => (TPrimitive)v)),
 			TypeCode.Int16 => INumericValue<TPrimitive>.TryConvertFromChecked<Int16, TOther>(
-				value, new(ref result, static v => v)),
+				value, new(ref result, static v => (TPrimitive)v)),
 			_ => false,
 		};
 	}
@@ -268,19 +268,19 @@ internal interface INumericValue<TPrimitive> : IBinaryNumber<TPrimitive>
 		return TPrimitive.Zero.GetTypeCode() switch
 		{
 			TypeCode.SByte => INumericValue<TPrimitive>.TryConvertFromSaturating<SByte, TOther>(
-				value, new(ref result, static v => v)),
+				value, new(ref result, static v => (TPrimitive)v)),
 			TypeCode.Char => INumericValue<TPrimitive>.TryConvertFromSaturating<Char, TOther>(
-				value, new(ref result, static v => v)),
+				value, new(ref result, static v => (TPrimitive)v)),
 			TypeCode.Double => INumericValue<TPrimitive>.TryConvertFromSaturating<Double, TOther>(
-				value, new(ref result, static v => v)),
+				value, new(ref result, static v => (TPrimitive)v)),
 			TypeCode.Single => INumericValue<TPrimitive>.TryConvertFromSaturating<Single, TOther>(
-				value, new(ref result, static v => v)),
+				value, new(ref result, static v => (TPrimitive)v)),
 			TypeCode.Int32 => INumericValue<TPrimitive>.TryConvertFromSaturating<Int32, TOther>(
-				value, new(ref result, static v => v)),
+				value, new(ref result, static v => (TPrimitive)v)),
 			TypeCode.Int64 => INumericValue<TPrimitive>.TryConvertFromSaturating<Int64, TOther>(
-				value, new(ref result, static v => v)),
+				value, new(ref result, static v => (TPrimitive)v)),
 			TypeCode.Int16 => INumericValue<TPrimitive>.TryConvertFromSaturating<Int16, TOther>(
-				value, new(ref result, static v => v)),
+				value, new(ref result, static v => (TPrimitive)v)),
 			_ => false,
 		};
 	}
@@ -298,19 +298,19 @@ internal interface INumericValue<TPrimitive> : IBinaryNumber<TPrimitive>
 		return TPrimitive.Zero.GetTypeCode() switch
 		{
 			TypeCode.SByte => INumericValue<TPrimitive>.TryConvertFromTruncating<SByte, TOther>(
-				value, new(ref result, static v => v)),
+				value, new(ref result, static v => (TPrimitive)v)),
 			TypeCode.Char => INumericValue<TPrimitive>.TryConvertFromTruncating<Char, TOther>(
-				value, new(ref result, static v => v)),
+				value, new(ref result, static v => (TPrimitive)v)),
 			TypeCode.Double => INumericValue<TPrimitive>.TryConvertFromTruncating<Double, TOther>(
-				value, new(ref result, static v => v)),
+				value, new(ref result, static v => (TPrimitive)v)),
 			TypeCode.Single => INumericValue<TPrimitive>.TryConvertFromTruncating<Single, TOther>(
-				value, new(ref result, static v => v)),
+				value, new(ref result, static v => (TPrimitive)v)),
 			TypeCode.Int32 => INumericValue<TPrimitive>.TryConvertFromTruncating<Int32, TOther>(
-				value, new(ref result, static v => v)),
+				value, new(ref result, static v => (TPrimitive)v)),
 			TypeCode.Int64 => INumericValue<TPrimitive>.TryConvertFromTruncating<Int64, TOther>(
-				value, new(ref result, static v => v)),
+				value, new(ref result, static v => (TPrimitive)v)),
 			TypeCode.Int16 => INumericValue<TPrimitive>.TryConvertFromTruncating<Int16, TOther>(
-				value, new(ref result, static v => v)),
+				value, new(ref result, static v => (TPrimitive)v)),
 			_ => false,
 		};
 	}

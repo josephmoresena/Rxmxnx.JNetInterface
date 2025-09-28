@@ -93,7 +93,7 @@ partial struct {1} : IBinaryInteger<{1}>, {4}<{1}>
 		String signedUnsafe = numericSymbol.Name is "JChar" ? "IUnsignedNumber" : "ISignedNumber";
 		String formattable = numericSymbol.Name is "JChar" ?
 			GenerationExtensions.BinaryCharFormattable :
-			String.Format(GenerationExtensions.BinaryIntegerFormattableFormat, numericSymbol.Name, underlineType);
+			String.Format(GenerationExtensions.BinaryIntegerFormattableFormat, numericSymbol.Name);
 		String source = String.Format(GenerationExtensions.NumericIntegerOperatorsFormat,
 		                              numericSymbol.ContainingNamespace, numericSymbol.Name, underlineType, formattable,
 		                              signedUnsafe);
