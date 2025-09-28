@@ -40,7 +40,7 @@ internal class ClassCache(JReferenceType type)
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	public void Load(JClassLocalRef classRef)
 	{
-		if (!classRef.IsDefault) this._access[classRef] = new(classRef);
+		if (classRef != default) this._access[classRef] = new(classRef);
 	}
 	/// <summary>
 	/// Unloads current class.
@@ -152,7 +152,7 @@ internal sealed class ClassCache<TClass>(JReferenceType type) : ClassCache(type)
 		foreach (TClass jClass in this._classes.Values)
 		{
 			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
-			if (classRef.IsDefault) continue;
+			if (classRef == default) continue;
 			this.Load(classRef);
 			JTrace.AccessLoaded(jClass);
 		}

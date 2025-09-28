@@ -428,7 +428,7 @@ internal unsafe partial class ReferenceHelper
 	{
 		NativeInterfaceProxy proxy = ReferenceHelper.GetProxy(envRef);
 		if (!proxy.UseDefaultClassRef) return proxy.NewGlobalRef(localRef);
-		return proxy.GetMainClassGlobalRef(JClassLocalRef.FromReference(in localRef)) ?? proxy.NewGlobalRef(localRef);
+		return proxy.GetMainClassGlobalRef(new(localRef)) ?? proxy.NewGlobalRef(localRef);
 	}
 	[UnmanagedCallersOnly]
 	private static void DeleteGlobalRef(JEnvironmentRef envRef, JGlobalRef globalRef)
@@ -690,8 +690,7 @@ internal unsafe partial class ReferenceHelper
 	private static void SetFloatField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId, Single value)
 		=> ReferenceHelper.GetProxy(envRef).SetFloatField(localRef, fieldId, value);
 	[UnmanagedCallersOnly]
-	private static void SetDoubleField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId,
-		Double value)
+	private static void SetDoubleField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId, Double value)
 		=> ReferenceHelper.GetProxy(envRef).SetDoubleField(localRef, fieldId, value);
 
 	[UnmanagedCallersOnly]

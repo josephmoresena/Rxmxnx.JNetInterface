@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Tests;
 
 [ExcludeFromCodeCoverage]
-public sealed class NativeVoidParameterless<TReceiver> where TReceiver : unmanaged, IWrapper<JObjectLocalRef>
+internal sealed class NativeVoidParameterless<TReceiver> where TReceiver : unmanaged, INativePointerType<TReceiver>
 {
 	private readonly IMutableWrapper<Boolean> _disposed = IMutableReference<Boolean>.Create();
 

@@ -140,7 +140,7 @@ partial class JEnvironment
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetSuperclassInfo);
 			JClassLocalRef superClassRef =
 				jniTransaction.Add(nativeInterface.ClassFunctions.GetSuperclass(this.Reference, classRef));
-			if (!superClassRef.IsDefault)
+			if (superClassRef != default)
 			{
 				JClassObject jSuperClass =
 					this.AsClassObject(superClassRef, new() { Kind = JTypeKind.Class, IsFinal = false, });
@@ -193,7 +193,7 @@ partial class JEnvironment
 			Boolean isLocalRef = this.IsLocalObject(jClass, out JReferenceType referenceType);
 			JTrace.GetClassInfo(classRef, referenceType);
 
-			if (classRef.IsDefault)
+			if (classRef == default)
 			{
 				IMessageResource resource = IMessageResource.GetInstance();
 				throw new ArgumentException(resource.UnloadedClass);

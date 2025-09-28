@@ -9,7 +9,7 @@ internal partial struct JniTransactionHandle
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		/// <inheritdoc cref="UnaryTransaction.LocalRef"/>
-		private new JArrayLocalRef LocalRef => JArrayLocalRef.FromReference(in base.LocalRef);
+		private new JArrayLocalRef LocalRef => new(base.LocalRef);
 
 		/// <summary>
 		/// Constructor.

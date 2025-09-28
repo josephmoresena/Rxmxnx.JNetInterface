@@ -431,7 +431,7 @@ partial class JEnvironment
 		private void ExceptionOccurred()
 		{
 			JThrowableLocalRef throwableRef = this.GetPendingException();
-			if (throwableRef.IsDefault) return;
+			if (throwableRef == default) return;
 			this._buildingException = true; // To avoid CheckJniError stack overflow.
 			ThrowableException jniException;
 			try

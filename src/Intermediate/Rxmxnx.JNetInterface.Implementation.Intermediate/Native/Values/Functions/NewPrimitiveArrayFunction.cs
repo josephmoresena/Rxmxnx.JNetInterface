@@ -10,7 +10,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
 internal readonly unsafe struct NewPrimitiveArrayFunction<TArrayRef> : INewPrimitiveArrayFunction
-	where TArrayRef : unmanaged, IArrayReferenceType, IObjectReferenceType
+	where TArrayRef : unmanaged, IArrayReferenceType, INativePointerType<TArrayRef>
 {
 	/// <summary>
 	/// Pointer to <c>New&lt;PrimitiveType&gt;Array</c> function.

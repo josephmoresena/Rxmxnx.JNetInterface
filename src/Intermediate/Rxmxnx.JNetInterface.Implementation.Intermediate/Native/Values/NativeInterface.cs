@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Native.Values;
 
 /// <summary>
-/// Function pointer based-struct replacement for <see cref="JNativeInterface"/> type.
+/// <c>JNINativeInterface_</c> struct. Contains all pointers to the functions of JNI.
 /// </summary>
 /// <remarks>JNI 1.2</remarks>
 [StructLayout(LayoutKind.Sequential)]
@@ -17,10 +17,12 @@ internal readonly unsafe partial struct NativeInterface : INativeInterface<Nativ
 	/// Internal reserved entries.
 	/// </summary>
 #pragma warning disable CS0169
-	private readonly JNativeInterface.ComReserved _reserved;
+	private readonly ComReserved _reserved;
 #pragma warning restore CS0169
 
-	/// <inheritdoc cref="JNativeInterface.GetVersionPointer"/>
+	/// <summary>
+	/// Pointer to <c>GetVersion</c> function. Retrieves the version of the <c>JNIEnv</c> interface.
+	/// </summary>
 	private readonly GetVersionPtr _getVersion;
 	/// <summary>
 	/// Pointers to <c>DefineClass</c>, <c>FindClass</c>, <c>FromReflectedMethod</c>,

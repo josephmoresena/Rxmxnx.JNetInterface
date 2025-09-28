@@ -18,7 +18,7 @@ partial class JEnvironment
 			this.Register(this.StackTraceElementObject);
 
 			// Register user main classes.
-			foreach (ITypeInformation? typeInformation in JVirtualMachine.MainClassesInformation)
+			foreach (ITypeInformation typeInformation in JVirtualMachine.MainClassesInformation)
 			{
 				if (!this._classes.TryGetValue(typeInformation.Hash, out JClassObject? mainClass))
 					// Only creates JClassObject instance if not found in class cache.
@@ -171,7 +171,7 @@ partial class JEnvironment
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.FindClassInfo);
 			JClassLocalRef result = nativeInterface.ClassFunctions.FindClass(this.Reference, namePtr);
-			if (result.IsDefault && !withNoCheckError) this.CheckJniError();
+			if (result == default && !withNoCheckError) this.CheckJniError();
 			return result;
 		}
 		/// <summary>
@@ -195,7 +195,7 @@ partial class JEnvironment
 			else
 			{
 				JClassLocalRef classRef = this._objects.FindClassParameter(typeInformation.Hash);
-				if (classRef.IsDefault && typeInformation is not ClassObjectMetadata)
+				if (classRef == default && typeInformation is not ClassObjectMetadata)
 					// Only find class by name if class was not in the runtime class cache.
 					fixed (Byte* ptr = &MemoryMarshal.GetReference(typeInformation.ClassName.AsSpan()))
 					{
@@ -316,7 +316,7 @@ partial class JEnvironment
 				classRef = nativeInterface.ClassFunctions.DefineClass(this.Reference, namePtr, localRef, bufferPtr,
 				                                                      buffer.Length);
 			}
-			if (classRef.IsDefault) this.CheckJniError();
+			if (classRef == default) this.CheckJniError();
 			JTrace.DefiningClass(this.Reference, className, classRef);
 			return classRef;
 		}
@@ -331,7 +331,7 @@ partial class JEnvironment
 			JClassLocalRef classRef)
 		{
 			JClassLocalRef classRefO = jniTransaction.Add(jClass);
-			if (classRefO.IsDefault || this._env.IsSame(classRef.Value, default))
+			if (classRefO == default || this._env.IsSame(classRef.Value, default))
 			{
 				if (JVirtualMachine.IsMainClass(jClass.Hash))
 					this.LoadMainClass(jClass, classRef);
@@ -394,7 +394,7 @@ partial class JEnvironment
 			JClassObject result = this.GetClass(classRef, isLocalRef, classObjectMetadata);
 			switch (jObject)
 			{
-				case ILocalObject local when classRef == result.LocalReference:
+				case ILocalObject local when classRef.Value == result.LocalReference:
 					result.Lifetime.Synchronize(local.Lifetime);
 					break;
 				case JGlobal jGlobal when !result.Lifetime.HasValidGlobal<JGlobal>():

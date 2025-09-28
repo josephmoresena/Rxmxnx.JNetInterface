@@ -90,11 +90,11 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// <summary>
 	/// Retrieves an object identifier using <paramref name="classSignature"/> and <paramref name="objRef"/>.
 	/// </summary>
-	/// <typeparam name="TObjectRef">Type of <see cref="IObjectReferenceType"/>.</typeparam>
+	/// <typeparam name="TObjectRef">Type of <see cref="INativePointerType{TObjectRef}"/>.</typeparam>
 	/// <param name="classSignature">Object class signature.</param>
 	/// <param name="objRef">Object reference.</param>
 	/// <returns>An object identifier using <paramref name="classSignature"/> and <paramref name="objRef"/>.</returns>
 	internal static String GetObjectIdentifier<TObjectRef>(CString classSignature, TObjectRef objRef)
-		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>
+		where TObjectRef : unmanaged, INativePointerType<TObjectRef>
 		=> $"{ClassNameHelper.GetClassName(classSignature)} {objRef}";
 }

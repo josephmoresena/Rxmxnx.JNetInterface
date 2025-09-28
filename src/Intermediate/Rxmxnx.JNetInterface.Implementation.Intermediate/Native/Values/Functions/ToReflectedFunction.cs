@@ -10,7 +10,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
 internal readonly unsafe struct ToReflectedFunction<TAccessible> : IToReflectedFunction
-	where TAccessible : unmanaged, IAccessibleIdentifierType
+	where TAccessible : unmanaged, IAccessibleIdentifierType, INativePointerType<TAccessible>
 {
 	/// <summary>
 	/// Pointer to <c>ToReflected<typeparamref name="TAccessible"/></c> function.

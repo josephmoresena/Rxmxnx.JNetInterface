@@ -24,11 +24,37 @@ public partial struct JBoolean : IPrimitiveEquatable, ISpanParsable<JBoolean>
 			_ => false,
 		};
 
-	static JBoolean IParsable<JBoolean>.Parse(String s, IFormatProvider? provider) => JBoolean.Parse(s);
+	static JBoolean IParsable<JBoolean>.Parse(String s, IFormatProvider? provider)
+#if !NET8_0_OR_GREATER
+		=> JBoolean.Parse(s);
+#else
+		=> NumericHelper.Parse<Boolean>(s, provider);
+#endif
 	static Boolean IParsable<JBoolean>.TryParse(String? s, IFormatProvider? provider, out JBoolean result)
+#if !NET8_0_OR_GREATER
 		=> JBoolean.TryParse(s, out result);
-	static JBoolean ISpanParsable<JBoolean>.Parse(ReadOnlySpan<Char> s, IFormatProvider? provider) => JBoolean.Parse(s);
+#else
+	{
+		Boolean tryParse = NumericHelper.TryParse(s, provider, out Boolean boolResult);
+		result = boolResult;
+		return tryParse;
+	}
+#endif
+	static JBoolean ISpanParsable<JBoolean>.Parse(ReadOnlySpan<Char> s, IFormatProvider? provider)
+#if !NET8_0_OR_GREATER
+		=> JBoolean.Parse(s);
+#else
+		=> NumericHelper.Parse<Boolean>(s, provider);
+#endif
 	static Boolean ISpanParsable<JBoolean>.TryParse(ReadOnlySpan<Char> s, IFormatProvider? provider,
 		out JBoolean result)
+#if !NET8_0_OR_GREATER
 		=> JBoolean.TryParse(s, out result);
+#else
+	{
+		Boolean tryParse = NumericHelper.TryParse(s, provider, out Boolean boolResult);
+		result = boolResult;
+		return tryParse;
+	}
+#endif
 }

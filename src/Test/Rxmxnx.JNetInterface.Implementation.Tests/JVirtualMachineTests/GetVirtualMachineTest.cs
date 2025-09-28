@@ -50,7 +50,7 @@ public partial class JVirtualMachineTests
 			proxyEnv.NewGlobalRef(Arg.Any<JObjectLocalRef>()).Returns(c =>
 			{
 				JObjectLocalRef localRef = (JObjectLocalRef)c[0];
-				JGlobalRef? globalRef = proxyEnv.GetMainClassGlobalRef(JClassLocalRef.FromReference(in localRef));
+				JGlobalRef? globalRef = proxyEnv.GetMainClassGlobalRef(new(localRef));
 				return globalRef!.Value;
 			});
 

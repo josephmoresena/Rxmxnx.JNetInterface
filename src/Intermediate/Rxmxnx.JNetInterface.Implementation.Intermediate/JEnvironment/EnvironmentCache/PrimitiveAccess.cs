@@ -68,7 +68,7 @@ partial class JEnvironment
 		/// <param name="setValue">Action to set value.</param>
 		private void SetPrimitiveStaticField<TPrimitive>(JClassLocalRef classRef, ReadOnlySpan<Byte> bytes,
 			Byte signature, JFieldId fieldId, ref readonly SetGenericFieldFunction<JClassLocalRef, TPrimitive> setValue)
-			where TPrimitive : unmanaged, INativeType, IPrimitiveType<TPrimitive>
+			where TPrimitive : unmanaged, INativeDataType<TPrimitive>, IPrimitiveType<TPrimitive>
 		{
 			TPrimitive value = MemoryMarshal.AsRef<TPrimitive>(bytes);
 			setValue.Set(this.Reference, classRef, fieldId, value);
@@ -130,7 +130,7 @@ partial class JEnvironment
 		/// <param name="setValue">Action to set value.</param>
 		private void SetPrimitiveField<TPrimitive>(JObjectLocalRef localRef, ReadOnlySpan<Byte> bytes, Byte signature,
 			JFieldId fieldId, ref readonly SetGenericFieldFunction<JObjectLocalRef, TPrimitive> setValue)
-			where TPrimitive : unmanaged, INativeType, IPrimitiveType<TPrimitive>
+			where TPrimitive : unmanaged, INativeDataType<TPrimitive>, IPrimitiveType<TPrimitive>
 		{
 			TPrimitive value = MemoryMarshal.AsRef<TPrimitive>(bytes);
 			setValue.Set(this.Reference, localRef, fieldId, value);
@@ -196,7 +196,7 @@ partial class JEnvironment
 		/// <param name="getValue">Function to get value.</param>
 		private void GetPrimitiveStaticField<TPrimitive>(Span<Byte> bytes, JClassLocalRef classRef, Byte signature,
 			JFieldId fieldId, ref readonly GetGenericFieldFunction<JClassLocalRef, TPrimitive> getValue)
-			where TPrimitive : unmanaged, INativeType, IPrimitiveType<TPrimitive>
+			where TPrimitive : unmanaged, INativeDataType<TPrimitive>, IPrimitiveType<TPrimitive>
 		{
 			TPrimitive result = getValue.Get(this.Reference, classRef, fieldId);
 			MemoryMarshal.AsRef<TPrimitive>(bytes) = result;
@@ -257,7 +257,7 @@ partial class JEnvironment
 		/// <param name="getValue">Function to get value.</param>
 		private void GetPrimitiveField<TPrimitive>(Span<Byte> bytes, JObjectLocalRef localRef, Byte signature,
 			JFieldId fieldId, ref readonly GetGenericFieldFunction<JObjectLocalRef, TPrimitive> getValue)
-			where TPrimitive : unmanaged, INativeType, IPrimitiveType<TPrimitive>
+			where TPrimitive : unmanaged, INativeDataType<TPrimitive>, IPrimitiveType<TPrimitive>
 		{
 			TPrimitive result = getValue.Get(this.Reference, localRef, fieldId);
 			MemoryMarshal.AsRef<TPrimitive>(bytes) = result;
@@ -343,7 +343,7 @@ partial class JEnvironment
 		private unsafe void CallStaticPrimitiveFunction<TPrimitive>(Span<Byte> bytes, JClassLocalRef classRef,
 			Byte signature, JMethodId methodId, JValue* ptr,
 			in CallGenericFunction<JClassLocalRef, TPrimitive> callFunction)
-			where TPrimitive : unmanaged, INativeType, IPrimitiveType<TPrimitive>
+			where TPrimitive : unmanaged, INativeDataType<TPrimitive>, IPrimitiveType<TPrimitive>
 		{
 			TPrimitive result = callFunction.Call(this.Reference, classRef, methodId, ptr);
 			MemoryMarshal.AsRef<TPrimitive>(bytes) = result;
@@ -426,7 +426,7 @@ partial class JEnvironment
 		private unsafe void CallPrimitiveNonVirtualFunction<TPrimitive>(Span<Byte> bytes, JObjectLocalRef localRef,
 			JClassLocalRef classRef, Byte signature, JMethodId methodId, JValue* ptr,
 			in CallNonVirtualGenericFunction<TPrimitive> callFunction)
-			where TPrimitive : unmanaged, INativeType, IPrimitiveType<TPrimitive>
+			where TPrimitive : unmanaged, INativeDataType<TPrimitive>, IPrimitiveType<TPrimitive>
 		{
 			TPrimitive result = callFunction.Call(this.Reference, localRef, classRef, methodId, ptr);
 			MemoryMarshal.AsRef<TPrimitive>(bytes) = result;
@@ -499,7 +499,7 @@ partial class JEnvironment
 		private unsafe void CallPrimitiveFunction<TPrimitive>(Span<Byte> bytes, JObjectLocalRef localRef,
 			Byte signature, JMethodId methodId, JValue* ptr,
 			in CallGenericFunction<JObjectLocalRef, TPrimitive> callFunction)
-			where TPrimitive : unmanaged, INativeType, IPrimitiveType<TPrimitive>
+			where TPrimitive : unmanaged, INativeDataType<TPrimitive>, IPrimitiveType<TPrimitive>
 		{
 			TPrimitive result = callFunction.Call(this.Reference, localRef, methodId, ptr);
 			MemoryMarshal.AsRef<TPrimitive>(bytes) = result;
@@ -527,7 +527,7 @@ partial class JEnvironment
 			for (Int32 i = 0; i < parameterTypes.Length; i++)
 			{
 				JObjectLocalRef localRef = this.GetObjectArrayElement(objectArrayRef, i);
-				JClassObject jClass = this.GetClass(JClassLocalRef.FromReference(in localRef), true);
+				JClassObject jClass = this.GetClass(new(localRef), true);
 				args[i] = MetadataHelper.GetArgumentMetadata(jClass);
 			}
 		}

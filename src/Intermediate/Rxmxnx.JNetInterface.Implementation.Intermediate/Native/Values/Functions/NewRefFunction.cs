@@ -10,7 +10,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
 internal readonly unsafe struct NewRefFunction<TReference> : INewRefFunction
-	where TReference : unmanaged, INativeType, IWrapper<JObjectLocalRef>
+	where TReference : unmanaged, INativeReferenceType, INativePointerType<TReference>
 {
 	/// <summary>
 	/// Pointer to <c>New<typeparamref name="TReference"/>Ref</c> function.
@@ -30,10 +30,9 @@ internal readonly unsafe struct NewRefFunction<TReference> : INewRefFunction
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TReference NewRef(JEnvironmentRef envRef, JObjectLocalRef localRef)
 	{
-		TReference result = default;
-		Unsafe.As<TReference, IntPtr>(ref result) = OperatingSystem.IsWindows() ?
+		IntPtr result = OperatingSystem.IsWindows() ?
 			this._function.Windows(envRef, localRef) :
 			this._function.Unix(envRef, localRef);
-		return result;
+		return TReference.New(result);
 	}
 }

@@ -22,6 +22,7 @@
         <IlcGenerateMstatFile>true</IlcGenerateMstatFile>
         <IlcGenerateDgmlFile>true</IlcGenerateDgmlFile>
         <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
+        <IsOSXHost>$([MSBuild]::IsOSPlatform('OSX'))</IsOSXHost>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -33,5 +34,24 @@
         <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
         <IlcGenerateCompleteTypeMetadata>false</IlcGenerateCompleteTypeMetadata>
     </PropertyGroup>
+
+    <ItemGroup Condition="'$(IsOSXHost)' == 'true' And '$(RuntimeIdentifier)' == 'osx-x64'">
+        <KnownILCompilerPack Condition="'$(TargetFramework)' == 'net7.0'" Remove="@(KnownILCompilerPack)"/>
+        <KnownILCompilerPack Include="Microsoft.DotNet.ILCompiler"
+                             TargetFramework="net7.0"
+                             ILCompilerRuntimeIdentifiers="linux-arm64;linux-musl-arm64;linux-musl-x64;linux-x64;win-arm64;win-x64;osx-x64"
+                             ILCompilerPackVersion="7.0.20"
+                             ILCompilerPackNamePattern="runtime.**RID**.Microsoft.DotNet.ILCompiler"
+                             Condition="'$(TargetFramework)' == 'net7.0'"/>
+    </ItemGroup>
+    <ItemGroup Condition="'$(IsOSXHost)' == 'true' And '$(RuntimeIdentifier)' == 'osx-arm64'">
+        <KnownILCompilerPack Condition="'$(TargetFramework)' == 'net7.0'" Remove="@(KnownILCompilerPack)"/>
+        <KnownILCompilerPack Include="Microsoft.DotNet.ILCompiler"
+                             TargetFramework="net7.0"
+                             ILCompilerRuntimeIdentifiers="linux-arm64;linux-musl-arm64;linux-musl-x64;linux-x64;win-arm64;win-x64;osx-x64"
+                             ILCompilerPackVersion="8.0.20"
+                             ILCompilerPackNamePattern="runtime.**RID**.Microsoft.DotNet.ILCompiler"
+                             Condition="'$(TargetFramework)' == 'net7.0'"/>
+    </ItemGroup>
 
 </Project>

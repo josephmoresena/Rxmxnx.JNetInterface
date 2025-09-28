@@ -32,12 +32,7 @@ public sealed class DataTypeTests
 		DataTypeTests.NativeTypeTest<JThrowableLocalRef>();
 		DataTypeTests.NativeTypeTest<JVirtualMachineRef>();
 		DataTypeTests.NativeTypeTest<JWeakRef>();
-
-		DataTypeTests.NativeTypeTest<JEnvironmentValue>();
-		DataTypeTests.NativeTypeTest<JInvokeInterface>();
-		DataTypeTests.NativeTypeTest<JNativeInterface>();
 		DataTypeTests.NativeTypeTest<JValue>();
-		DataTypeTests.NativeTypeTest<JVirtualMachineValue>();
 
 		NativeProxy.Type = (JNativeType)Enumerable.Range(Byte.MinValue, Byte.MaxValue)
 		                                          .First(x => !DataTypeTests.nativeTypes.Contains((JNativeType)x));
@@ -82,7 +77,7 @@ public sealed class DataTypeTests
 		String suffix = value switch
 		{
 			IFixedPointer ptr => $"0x{ptr.Pointer:x8}",
-			JValue or JNativeInterface or JInvokeInterface => Convert.ToHexString(NativeUtilities.AsBytes(value)),
+			JValue => Convert.ToHexString(NativeUtilities.AsBytes(value)),
 			_ => value.GetType().ToString(),
 		};
 		Assert.Equal(prefix + suffix, value.ToString());

@@ -11,8 +11,8 @@ public sealed class JIdentifierTests
 	internal void MethodTest() => JIdentifierTests.Test<JMethodId>();
 
 	private static void Test<TIdentifier>()
-		where TIdentifier : unmanaged, IAccessibleIdentifierType, IEquatable<TIdentifier>,
-		IEqualityOperators<TIdentifier, TIdentifier, Boolean>
+		where TIdentifier : unmanaged, IAccessibleIdentifierType, INativePointerType<TIdentifier>,
+		IEquatable<TIdentifier>, IEqualityOperators<TIdentifier, TIdentifier, Boolean>
 	{
 		IntPtr ptr1 = JIdentifierTests.fixture.CreateMany<Byte>(IntPtr.Size).ToArray().AsSpan().AsValue<IntPtr>();
 		IntPtr ptr2 = JIdentifierTests.fixture.CreateMany<Byte>(IntPtr.Size).ToArray().AsSpan().AsValue<IntPtr>();

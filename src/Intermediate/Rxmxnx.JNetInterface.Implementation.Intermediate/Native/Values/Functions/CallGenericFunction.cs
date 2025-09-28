@@ -13,7 +13,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
 internal readonly unsafe struct CallGenericFunction<TReceiver, TResult> : ICallMethodFunction
-	where TReceiver : unmanaged, IWrapper<JObjectLocalRef> where TResult : unmanaged, INativeType
+	where TReceiver : unmanaged, INativePointerType where TResult : unmanaged, INativeDataType<TResult>
 {
 	/// <summary>
 	/// Internal reserved entries.
@@ -32,80 +32,34 @@ internal readonly unsafe struct CallGenericFunction<TReceiver, TResult> : ICallM
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TResult Call(JEnvironmentRef envRef, TReceiver receiver, JMethodId methodId, JValue* args)
-	{
-		TResult result = default;
-		switch (TResult.Type)
+		=> TResult.Type switch
 		{
-			case JNativeType.JBoolean when OperatingSystem.IsWindows():
-				Unsafe.As<TResult, Byte>(ref result) =
-					this._function.Windows.Boolean(envRef, receiver.Value.Pointer, methodId, args);
-				break;
-			case JNativeType.JBoolean:
-				Unsafe.As<TResult, Byte>(ref result) =
-					this._function.Unix.Boolean(envRef, receiver.Value.Pointer, methodId, args);
-				break;
-			case JNativeType.JByte when OperatingSystem.IsWindows():
-				Unsafe.As<TResult, SByte>(ref result) =
-					this._function.Windows.Byte(envRef, receiver.Value.Pointer, methodId, args);
-				break;
-			case JNativeType.JByte:
-				Unsafe.As<TResult, SByte>(ref result) =
-					this._function.Unix.Byte(envRef, receiver.Value.Pointer, methodId, args);
-				break;
-			case JNativeType.JChar when OperatingSystem.IsWindows():
-				Unsafe.As<TResult, UInt16>(ref result) =
-					this._function.Windows.Char(envRef, receiver.Value.Pointer, methodId, args);
-				break;
-			case JNativeType.JChar:
-				Unsafe.As<TResult, UInt16>(ref result) =
-					this._function.Unix.Char(envRef, receiver.Value.Pointer, methodId, args);
-				break;
-			case JNativeType.JDouble when OperatingSystem.IsWindows():
-				Unsafe.As<TResult, Double>(ref result) =
-					this._function.Windows.Double(envRef, receiver.Value.Pointer, methodId, args);
-				break;
-			case JNativeType.JDouble:
-				Unsafe.As<TResult, Double>(ref result) =
-					this._function.Unix.Double(envRef, receiver.Value.Pointer, methodId, args);
-				break;
-			case JNativeType.JFloat when OperatingSystem.IsWindows():
-				Unsafe.As<TResult, Single>(ref result) =
-					this._function.Windows.Float(envRef, receiver.Value.Pointer, methodId, args);
-				break;
-			case JNativeType.JFloat:
-				Unsafe.As<TResult, Single>(ref result) =
-					this._function.Unix.Float(envRef, receiver.Value.Pointer, methodId, args);
-				break;
-			case JNativeType.JInt when OperatingSystem.IsWindows():
-				Unsafe.As<TResult, Int32>(ref result) =
-					this._function.Windows.Int(envRef, receiver.Value.Pointer, methodId, args);
-				break;
-			case JNativeType.JInt:
-				Unsafe.As<TResult, Int32>(ref result) =
-					this._function.Unix.Int(envRef, receiver.Value.Pointer, methodId, args);
-				break;
-			case JNativeType.JLong when OperatingSystem.IsWindows():
-				Unsafe.As<TResult, Int64>(ref result) =
-					this._function.Windows.Long(envRef, receiver.Value.Pointer, methodId, args);
-				break;
-			case JNativeType.JLong:
-				Unsafe.As<TResult, Int64>(ref result) =
-					this._function.Unix.Long(envRef, receiver.Value.Pointer, methodId, args);
-				break;
-			case JNativeType.JShort when OperatingSystem.IsWindows():
-				Unsafe.As<TResult, Int16>(ref result) =
-					this._function.Windows.Short(envRef, receiver.Value.Pointer, methodId, args);
-				break;
-			case JNativeType.JShort:
-				Unsafe.As<TResult, Int16>(ref result) =
-					this._function.Unix.Short(envRef, receiver.Value.Pointer, methodId, args);
-				break;
-			default:
-				Unsafe.As<TResult, JObjectLocalRef>(ref result) = OperatingSystem.IsWindows() ?
-					this._function.Windows.Object(envRef, receiver.Value.Pointer, methodId, args) :
-					this._function.Unix.Object(envRef, receiver.Value.Pointer, methodId, args);
-				break;
-		}
-		return result;
-	}
+			JNativeType.JBoolean when OperatingSystem.IsWindows() => this._function.Windows.Boolean(
+				envRef, receiver.Pointer, methodId, args),
+			JNativeType.JBoolean => this._function.Unix.Boolean(envRef, receiver.Pointer, methodId, args),
+			JNativeType.JByte when OperatingSystem.IsWindows() => this._function.Windows.Byte(
+				envRef, receiver.Pointer, methodId, args),
+			JNativeType.JByte => this._function.Unix.Byte(envRef, receiver.Pointer, methodId, args),
+			JNativeType.JChar when OperatingSystem.IsWindows() => this._function.Windows.Char(
+				envRef, receiver.Pointer, methodId, args),
+			JNativeType.JChar => this._function.Unix.Char(envRef, receiver.Pointer, methodId, args),
+			JNativeType.JDouble when OperatingSystem.IsWindows() => this._function.Windows.Double(
+				envRef, receiver.Pointer, methodId, args),
+			JNativeType.JDouble => this._function.Unix.Double(envRef, receiver.Pointer, methodId, args),
+			JNativeType.JFloat when OperatingSystem.IsWindows() => this._function.Windows.Float(
+				envRef, receiver.Pointer, methodId, args),
+			JNativeType.JFloat => this._function.Unix.Float(envRef, receiver.Pointer, methodId, args),
+			JNativeType.JInt when OperatingSystem.IsWindows() => this._function.Windows.Int(
+				envRef, receiver.Pointer, methodId, args),
+			JNativeType.JInt => this._function.Unix.Int(envRef, receiver.Pointer, methodId, args),
+			JNativeType.JLong when OperatingSystem.IsWindows() => this._function.Windows.Long(
+				envRef, receiver.Pointer, methodId, args),
+			JNativeType.JLong => this._function.Unix.Long(envRef, receiver.Pointer, methodId, args),
+			JNativeType.JShort when OperatingSystem.IsWindows() => this._function.Windows.Short(
+				envRef, receiver.Pointer, methodId, args),
+			JNativeType.JShort => this._function.Unix.Short(envRef, receiver.Pointer, methodId, args),
+			_ => OperatingSystem.IsWindows() ?
+				this._function.Windows.Object(envRef, receiver.Pointer, methodId, args) :
+				this._function.Unix.Object(envRef, receiver.Pointer, methodId, args),
+		};
 }

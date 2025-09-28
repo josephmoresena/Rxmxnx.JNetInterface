@@ -57,8 +57,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfUnsafe(info.Name, this.JniSecure(info.Level));
 			ImplementationValidationUtilities.ThrowIfInvalidVersion(info.Name, TNativeInterface.RequiredVersion,
 			                                                        this.Version);
-			ref readonly JEnvironmentValue refValue = ref this.Reference.Reference;
-			return ref Unsafe.AsRef<TNativeInterface>(refValue.Pointer.ToPointer());
+			return ref Unsafe.AsRef<TNativeInterface>(this.Reference.InterfacePointer);
 		}
 		/// <summary>
 		/// Checks JNI occurred error.

@@ -2,15 +2,13 @@ namespace Rxmxnx.JNetInterface.Primitives;
 
 using TypeMetadata = JPrimitiveTypeMetadata<JLong>;
 using IPrimitiveValueType = IPrimitiveType<JLong, Int64>;
-using IPrimitiveIntegerType = IPrimitiveIntegerType<JLong, Int64>;
-using IPrimitiveSignedType = IPrimitiveSignedType<JLong, Int64>;
+using IPrimitiveNumericType = IPrimitiveNumericType<JLong>;
 
 /// <summary>
 /// Primitive <c>long</c>. Represents a primitive 64-bit signed integer.
 /// </summary>
-[StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JLong : INativeType, IComparable<JLong>, IEquatable<JLong>, IPrimitiveIntegerType,
-	IPrimitiveSignedType
+[StructLayout(LayoutKind.Sequential, Pack = 1, Size = sizeof(Int64))]
+public readonly partial struct JLong : IPrimitiveIntegerType, IPrimitiveNumericType, IPrimitiveValueType
 {
 	/// <summary>
 	/// Primitive type info.
@@ -35,6 +33,8 @@ public readonly partial struct JLong : INativeType, IComparable<JLong>, IEquatab
 	/// <summary>
 	/// Internal 64-bit signed integer value.
 	/// </summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	private readonly Int64 _value;
 
 	/// <summary>
@@ -71,6 +71,6 @@ public readonly partial struct JLong : INativeType, IComparable<JLong>, IEquatab
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JLong(Int64 value) => new(value);
 
-	static JLong IPrimitiveNumericType<JLong>.FromDouble(Double value) => new(value);
-	static Double IPrimitiveNumericType<JLong>.ToDouble(JLong value) => value._value;
+	static JLong IPrimitiveNumericType.FromDouble(Double value) => new(value);
+	static Double IPrimitiveNumericType.ToDouble(JLong value) => value._value;
 }

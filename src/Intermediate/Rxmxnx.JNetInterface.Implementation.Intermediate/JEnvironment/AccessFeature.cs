@@ -412,7 +412,7 @@ partial class JEnvironment
 				handles.ForEach(h => h.Dispose());
 			}
 		}
-		public unsafe void ClearNatives(JClassObject jClass)
+		public void ClearNatives(JClassObject jClass)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
 			ref readonly NativeInterface nativeInterface =

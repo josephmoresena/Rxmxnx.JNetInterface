@@ -49,27 +49,27 @@ public readonly partial struct JFloat : IPrimitiveEquatable
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JFloat>.operator Int16(JFloat jPrimitive)
+	static explicit INativeDataType<JFloat>.operator Int16(JFloat jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Int16, Single>(jPrimitive._value);
-	static explicit IPrimitiveNumericType<JFloat>.operator Single(JFloat jPrimitive) => jPrimitive._value;
+	static explicit INativeDataType<JFloat>.operator Single(JFloat jPrimitive) => jPrimitive._value;
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JFloat>.operator Int32(JFloat jPrimitive)
+	static explicit INativeDataType<JFloat>.operator Int32(JFloat jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Int32, Single>(jPrimitive._value);
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JFloat>.operator Char(JFloat jPrimitive)
+	static explicit INativeDataType<JFloat>.operator Char(JFloat jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Char, Single>(jPrimitive._value);
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JFloat>.operator SByte(JFloat jPrimitive)
+	static explicit INativeDataType<JFloat>.operator SByte(JFloat jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<SByte, Single>(jPrimitive._value);
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JFloat>.operator Int64(JFloat jPrimitive)
+	static explicit INativeDataType<JFloat>.operator Int64(JFloat jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Int64, Single>(jPrimitive._value);
 }

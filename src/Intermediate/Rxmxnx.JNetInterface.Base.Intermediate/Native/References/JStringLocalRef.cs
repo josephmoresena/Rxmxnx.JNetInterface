@@ -6,7 +6,7 @@
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JStringLocalRef : IObjectReferenceType
+public readonly partial struct JStringLocalRef : IObjectReferenceType, INativePointerType<JStringLocalRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JString;
@@ -22,4 +22,17 @@ public readonly partial struct JStringLocalRef : IObjectReferenceType
 	public JObjectLocalRef Value => this._value;
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._value.Pointer;
+
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal JStringLocalRef(IntPtr value) : this(new JObjectLocalRef(value)) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	internal JStringLocalRef(JObjectLocalRef value) => this._value = value;
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static JStringLocalRef INativePointerType<JStringLocalRef>.New(IntPtr value) => new(value);
 }

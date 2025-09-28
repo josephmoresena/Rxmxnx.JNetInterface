@@ -30,8 +30,8 @@ let Execute (jvmLib: JVirtualMachineLibrary, classByteCode: byte[], args: string
         use v = vm
 
         try
-            Console.WriteLine($"==== JNI 0x{env.Version:x8} ====");
-            
+            Console.WriteLine($"==== JNI 0x{env.Version:x8} ====")
+
             let managedInstance = IManagedCallback.Default(vm, Console.Out)
 
             use helloJniClass =
@@ -54,7 +54,12 @@ let MainAsync () =
         if args.Length < 2 then
             raise (ArgumentException("Please set JVM library path."))
 
-        let! helloJniByteCode = File.ReadAllBytesAsync("HelloDotnet.class") |> Async.AwaitTask
+        let! helloJniByteCode =
+            if args.Length > 1 && not (String.IsNullOrWhiteSpace args.[1]) then
+                File.ReadAllBytesAsync(Path.Combine(args.[1], "HelloDotnet.class"))
+                |> Async.AwaitTask
+            else
+                File.ReadAllBytesAsync("HelloDotnet.class") |> Async.AwaitTask
 
         let jvmLib =
             match JVirtualMachineLibrary.LoadLibrary(Array.last args) with

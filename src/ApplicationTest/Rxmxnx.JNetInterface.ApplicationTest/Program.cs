@@ -19,7 +19,9 @@ public static class Program
 		if (args.Length < 1)
 			throw new ArgumentException("Please set JVM library path.");
 
-		Byte[] helloJniByteCode = await File.ReadAllBytesAsync("HelloDotnet.class");
+		Byte[] helloJniByteCode = await (args.Length > 1 && !String.IsNullOrWhiteSpace(args[1]) ?
+			File.ReadAllBytesAsync(Path.Combine(args[1], "HelloDotnet.class")) :
+			File.ReadAllBytesAsync("HelloDotnet.class"));
 		Console.WriteLine($"HelloDotnet.class: {helloJniByteCode.Length} bytes");
 
 		JVirtualMachineLibrary jvmLib = JVirtualMachineLibrary.LoadLibrary(args[0]) ??
@@ -85,7 +87,7 @@ public static class Program
 				if (IVirtualMachine.TypeMetadataToStringEnabled) JRuntimeInfo.PrintVirtualMachineInfo(env, vm, jvmLib);
 #endif
 				Console.WriteLine($"==== JNI 0x{env.Version:x8} ====");
-				
+
 				IManagedCallback.Default managedInstance = new(vm, Console.Out);
 				using JClassObject helloJniClass = JHelloDotnetObject.LoadClass(env, classByteCode, managedInstance);
 				Console.WriteLine("==== Begin psvm ===");

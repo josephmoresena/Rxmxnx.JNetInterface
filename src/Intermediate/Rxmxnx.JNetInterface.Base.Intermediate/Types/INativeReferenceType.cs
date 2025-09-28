@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Types;
 
 /// <summary>
-/// This interface exposes a native java reference.
+/// This interface exposes a JNI java reference.
 /// </summary>
-internal interface INativeReferenceType : IFixedPointer, INativeType;
+internal interface INativeReferenceType : INativePointerType;

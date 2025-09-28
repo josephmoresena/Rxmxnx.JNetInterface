@@ -9,10 +9,11 @@ internal partial class NativeFunctionSetImpl
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
 	                 Justification = CommonConstants.BinaryStructJustification)]
 #endif
-	[InlineArray(1)]
 	public struct SingleObjectBuffer
 	{
+#pragma warning disable CS0169
 		private IObject? _value;
+#pragma warning restore CS0169
 
 		public static Span<IObject?> GetSpan(ref SingleObjectBuffer buffer)
 			=> MemoryMarshal.CreateSpan(ref Unsafe.As<SingleObjectBuffer, IObject?>(ref buffer), 1);

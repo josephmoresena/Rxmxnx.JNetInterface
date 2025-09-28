@@ -132,7 +132,7 @@ partial class JEnvironment
 			where TResult : IDataType<TResult>
 		{
 			ref readonly InstanceMethodFunctionSet instanceMethodFunctions =
-				ref this.GetInstanceMethodFunctions(CommonNames.ObjectSignaturePrefixChar, !classRef.IsDefault);
+				ref this.GetInstanceMethodFunctions(CommonNames.ObjectSignaturePrefixChar, classRef != default);
 			using StackDisposable stackDisposable =
 				this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
 			Rented<Byte> rented = default;
@@ -143,7 +143,7 @@ partial class JEnvironment
 			JObjectLocalRef resultLocalRef;
 			fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
 			{
-				resultLocalRef = classRef.IsDefault ?
+				resultLocalRef = classRef == default ?
 					instanceMethodFunctions.MethodFunctions.CallObjectMethod.Call(
 						this.Reference, localRef, methodId, ptr) :
 					instanceMethodFunctions.NonVirtualFunctions.CallNonVirtualObjectMethod.Call(
@@ -177,7 +177,7 @@ partial class JEnvironment
 				                                        EnvironmentCache.HeapAlloc(requiredBytes, ref rented));
 			fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
 			{
-				if (classRef.IsDefault)
+				if (classRef == default)
 					this.CallPrimitiveFunction(bytes, localRef, definition.Descriptor[^1], methodId, ptr);
 				else
 					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, definition.Descriptor[^1], methodId,
@@ -233,7 +233,7 @@ partial class JEnvironment
 			ReadOnlySpan<IObject?> args, INativeTransaction jniTransaction, JMethodId methodId)
 		{
 			ref readonly InstanceMethodFunctionSet instanceMethodFunctions =
-				ref this.GetInstanceMethodFunctions(CommonNames.VoidSignatureChar, !classRef.IsDefault);
+				ref this.GetInstanceMethodFunctions(CommonNames.VoidSignatureChar, classRef != default);
 			using StackDisposable stackDisposable =
 				this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
 			Rented<Byte> rented = default;
@@ -243,7 +243,7 @@ partial class JEnvironment
 				                                        EnvironmentCache.HeapAlloc(requiredBytes, ref rented));
 			fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
 			{
-				if (classRef.IsDefault)
+				if (classRef == default)
 					instanceMethodFunctions.MethodFunctions.CallVoidMethod.Call(
 						this.Reference, localRef, methodId, ptr);
 				else

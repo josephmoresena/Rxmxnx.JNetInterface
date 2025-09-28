@@ -17,28 +17,28 @@ partial struct {1} : IFloatingPointIeee754<{1}>
 {{
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	Int32 IFloatingPoint<{1}>.GetExponentByteCount() 
-		=> IPrimitiveFloatingPointType<{1}, {2}>.GetExponentByteCount(this._value);
+		=> NumericHelper.GetExponentByteCount(this._value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	Int32 IFloatingPoint<{1}>.GetExponentShortestBitLength() 
-		=> IPrimitiveFloatingPointType<{1}, {2}>.GetExponentShortestBitLength(this._value);
+		=> NumericHelper.GetExponentShortestBitLength(this._value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	Int32 IFloatingPoint<{1}>.GetSignificandBitLength() 
-		=> IPrimitiveFloatingPointType<{1}, {2}>.GetSignificandBitLength(this._value);
+		=> NumericHelper.GetSignificandBitLength(this._value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	Int32 IFloatingPoint<{1}>.GetSignificandByteCount() 
-		=> IPrimitiveFloatingPointType<{1}, {2}>.GetSignificandByteCount(this._value);
+		=> NumericHelper.GetSignificandByteCount(this._value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	Boolean IFloatingPoint<{1}>.TryWriteExponentBigEndian(Span<Byte> destination, out Int32 bytesWritten)
-		=> IPrimitiveFloatingPointType<{1}, {2}>.TryWriteExponentBigEndian(this._value, destination, out bytesWritten);
+		=> NumericHelper.TryWriteExponentBigEndian(this._value, destination, out bytesWritten);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	Boolean IFloatingPoint<{1}>.TryWriteExponentLittleEndian(Span<Byte> destination, out Int32 bytesWritten)
-		=> IPrimitiveFloatingPointType<{1}, {2}>.TryWriteExponentLittleEndian(this._value, destination, out bytesWritten);
+		=> NumericHelper.TryWriteExponentLittleEndian(this._value, destination, out bytesWritten);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	Boolean IFloatingPoint<{1}>.TryWriteSignificandBigEndian(Span<Byte> destination, out Int32 bytesWritten)
-		=> IPrimitiveFloatingPointType<{1}, {2}>.TryWriteSignificandBigEndian(this._value, destination, out bytesWritten);
+		=> NumericHelper.TryWriteSignificandBigEndian(this._value, destination, out bytesWritten);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	Boolean IFloatingPoint<{1}>.TryWriteSignificandLittleEndian(Span<Byte> destination, out Int32 bytesWritten)
-		=> IPrimitiveFloatingPointType<{1}, {2}>.TryWriteSignificandLittleEndian(this._value, destination, out bytesWritten);
+		=> NumericHelper.TryWriteSignificandLittleEndian(this._value, destination, out bytesWritten);
 	
 	/// <inheritdoc cref=""IFloatingPointIeee754{{TSelf}}.Epsilon""/>
 	public static readonly {1} Epsilon = {2}.Epsilon;

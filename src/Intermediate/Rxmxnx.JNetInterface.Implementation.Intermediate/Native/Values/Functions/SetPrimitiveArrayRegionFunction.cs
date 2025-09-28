@@ -13,7 +13,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 internal readonly unsafe struct
 	SetPrimitiveArrayRegionFunction<TPrimitiveType, TArrayRef> : ISetPrimitiveArrayRegionFunction
 	where TPrimitiveType : unmanaged, INativeType, IPrimitiveType<TPrimitiveType>
-	where TArrayRef : unmanaged, IArrayReferenceType, IObjectReferenceType
+	where TArrayRef : unmanaged, IArrayReferenceType, INativePointerType<TArrayRef>
 {
 	/// <summary>
 	/// Pointer to <c>Set&lt;PrimitiveType&gt;ArrayRegion</c> function.

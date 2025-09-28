@@ -32,7 +32,7 @@ internal static class TestUtilities
 	{
 		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
 		JObjectLocalRef localRef = JClassObject.GetClass<JClassObject>(env).Global.Reference.Value;
-		JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
+		JClassLocalRef classRef = new(localRef);
 		JObjectArrayLocalRef arrayRef = TestUtilities.fixture.Create<JObjectArrayLocalRef>();
 		proxyEnv.NewObjectArray(length, classRef, Arg.Any<JObjectLocalRef>()).Returns(arrayRef);
 		Boolean withInitial = Random.Shared.Next(0, 2) < 1;

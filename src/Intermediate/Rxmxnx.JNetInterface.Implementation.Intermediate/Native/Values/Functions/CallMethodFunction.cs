@@ -12,7 +12,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
 internal readonly unsafe struct CallMethodFunction<TReceiver> : ICallMethodFunction
-	where TReceiver : unmanaged, INativeType, IWrapper<JObjectLocalRef>
+	where TReceiver : unmanaged, INativePointerType<TReceiver>
 {
 	/// <summary>
 	/// Internal reserved entries.
@@ -35,8 +35,8 @@ internal readonly unsafe struct CallMethodFunction<TReceiver> : ICallMethodFunct
 	public void Call(JEnvironmentRef envRef, TReceiver receiver, JMethodId methodId, JValue* args)
 	{
 		if (OperatingSystem.IsWindows())
-			this._function.Windows.Void(envRef, receiver.Value.Pointer, methodId, args);
+			this._function.Windows.Void(envRef, receiver.Pointer, methodId, args);
 		else
-			this._function.Unix.Void(envRef, receiver.Value.Pointer, methodId, args);
+			this._function.Unix.Void(envRef, receiver.Pointer, methodId, args);
 	}
 }

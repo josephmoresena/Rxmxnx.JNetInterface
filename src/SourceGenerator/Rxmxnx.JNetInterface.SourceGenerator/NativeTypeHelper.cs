@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
 
@@ -82,7 +80,7 @@ internal sealed record NativeTypeHelper
 			this._typeSymbol.GeneratePrimitiveToString(context, valueName);
 			this._typeSymbol.GeneratePrimitiveOperators(context, underlineType, valueName, this._isNumeric);
 			if (this._isNumeric)
-				this._typeSymbol.GeneratePrimitiveNumericOperators(context, underlineType);
+				this._typeSymbol.GeneratePrimitiveNumericOperators(context, underlineType, valueName);
 			if (this._isInteger)
 				this._typeSymbol.GenerateNumericPrimitiveIntegerOperators(context, underlineType);
 			if (this._isFloatingPoint)
@@ -127,6 +125,7 @@ internal sealed record NativeTypeHelper
 		=> this._typeSymbol.Name switch
 		{
 			"JBoolean" => "Value",
+			"JChar" => "Value",
 			"JEnvironmentValue" => "_functions",
 			"JVirtualMachineValue" => "_functions",
 			"JValue" => String.Empty,

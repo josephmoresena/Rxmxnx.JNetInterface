@@ -10,7 +10,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
 internal readonly unsafe struct GetAccessibleIdFunction<TAccessible> : IGetAccessibleIdFunction
-	where TAccessible : unmanaged, IAccessibleIdentifierType
+	where TAccessible : unmanaged, IAccessibleIdentifierType, INativePointerType<TAccessible>
 {
 	/// <summary>
 	/// Pointer to <c>Get&lt;type&gt;ID</c> function.
@@ -30,6 +30,6 @@ internal readonly unsafe struct GetAccessibleIdFunction<TAccessible> : IGetAcces
 		IntPtr result = OperatingSystem.IsWindows() ?
 			this._function.Windows(envRef, localRef, name, descriptor) :
 			this._function.Unix(envRef, localRef, name, descriptor);
-		return Unsafe.As<IntPtr, TAccessible>(ref result);
+		return TAccessible.New(result);
 	}
 }

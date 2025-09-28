@@ -43,26 +43,34 @@ public readonly partial struct JChar : IPrimitiveEquatable
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JChar>.operator SByte(JChar jPrimitive)
+	static explicit INativeDataType<JChar>.operator SByte(JChar jPrimitive)
 		=> NativeUtilities.AsBytes(jPrimitive).ToValue<SByte>();
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JChar>.operator Int64(JChar jPrimitive) => jPrimitive._value;
+	static explicit INativeDataType<JChar>.operator Int64(JChar jPrimitive) => jPrimitive._value;
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JChar>.operator Char(JChar jPrimitive) => jPrimitive._value;
+	static explicit INativeDataType<JChar>.operator Char(JChar jPrimitive) => jPrimitive.Value;
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JChar>.operator Int32(JChar jPrimitive) => jPrimitive._value;
+	static explicit INativeDataType<JChar>.operator UInt16(JChar jPrimitive) => jPrimitive._value;
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JChar>.operator Int16(JChar jPrimitive) => (Int16)jPrimitive._value;
+	static explicit INativeDataType<JChar>.operator Int32(JChar jPrimitive) => jPrimitive._value;
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JChar>.operator Single(JChar jPrimitive) => jPrimitive._value;
+	static explicit INativeDataType<JChar>.operator Int16(JChar jPrimitive) => (Int16)jPrimitive._value;
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static explicit INativeDataType<JChar>.operator Single(JChar jPrimitive) => jPrimitive._value;
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JChar>.operator JChar(UInt16 jPrimitive) => (Char)jPrimitive;
 }

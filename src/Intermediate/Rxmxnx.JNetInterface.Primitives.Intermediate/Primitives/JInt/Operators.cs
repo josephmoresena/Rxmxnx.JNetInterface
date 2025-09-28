@@ -36,14 +36,14 @@ public readonly partial struct JInt : IPrimitiveEquatable
 	/// <param name="value">A <see cref="JInt"/> to implicitly convert.</param>
 	public static implicit operator JDouble(JInt value) => value._value;
 
-	static explicit IPrimitiveNumericType<JInt>.operator Int32(JInt jPrimitive) => jPrimitive._value;
+	static explicit INativeDataType<JInt>.operator Int32(JInt jPrimitive) => jPrimitive._value;
 	static explicit IPrimitiveNumericType<JInt>.operator JLong(JInt jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JInt>.operator JDouble(JInt jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JInt>.operator JFloat(JInt jPrimitive) => jPrimitive;
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JInt>.operator Single(JInt jPrimitive) => jPrimitive._value;
+	static explicit INativeDataType<JInt>.operator Single(JInt jPrimitive) => jPrimitive._value;
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
@@ -51,20 +51,20 @@ public readonly partial struct JInt : IPrimitiveEquatable
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JInt>.operator SByte(JInt jPrimitive)
+	static explicit INativeDataType<JInt>.operator SByte(JInt jPrimitive)
 		=> NativeUtilities.AsBytes(jPrimitive).ToValue<SByte>();
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JInt>.operator Int64(JInt jPrimitive) => jPrimitive._value;
+	static explicit INativeDataType<JInt>.operator Int64(JInt jPrimitive) => jPrimitive._value;
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JInt>.operator Int16(JInt jPrimitive)
+	static explicit INativeDataType<JInt>.operator Int16(JInt jPrimitive)
 		=> NativeUtilities.AsBytes(jPrimitive).ToValue<Int16>();
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JInt>.operator Char(JInt jPrimitive)
+	static explicit INativeDataType<JInt>.operator Char(JInt jPrimitive)
 		=> NativeUtilities.AsBytes(jPrimitive).ToValue<Char>();
 }

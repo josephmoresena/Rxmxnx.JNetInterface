@@ -4,7 +4,7 @@ public partial class PrimitiveTestBase
 {
 	private static void DoubleNumericTypeTest<TPrimitive, TValue>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable,
 		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
 	{
@@ -15,7 +15,7 @@ public partial class PrimitiveTestBase
 	}
 	private static void NumericTypeTest<TPrimitive, TValue>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable,
 		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
 	{
@@ -73,7 +73,7 @@ public partial class PrimitiveTestBase
 	}
 	private static void IncrementTest<TPrimitive, TValue>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable,
 		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
 	{
@@ -91,7 +91,7 @@ public partial class PrimitiveTestBase
 	}
 	private static void DecrementTest<TPrimitive, TValue>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable,
 		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
 	{
@@ -109,7 +109,7 @@ public partial class PrimitiveTestBase
 	}
 	private static void ConversionNumericTypeTest<TPrimitive, TValue>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable
 		where TValue : unmanaged, IConvertible, IBinaryNumber<TValue>, IMinMaxValue<TValue>
 	{
 		SByte bValue = PrimitiveTestBase.Convert(primitive.Value, c => c.ToSByte(default));
@@ -146,7 +146,7 @@ public partial class PrimitiveTestBase
 	}
 	private static void CheckedOperationNumericTypeTest<TPrimitive, TValue>()
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable,
 		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
 	{
@@ -162,7 +162,7 @@ public partial class PrimitiveTestBase
 	}
 	private static void NumericOperationsTest<TPrimitive, TValue>(TPrimitive primitive0, TPrimitive primitive1)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable,
 		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
 	{
@@ -216,7 +216,7 @@ public partial class PrimitiveTestBase
 	}
 	private static void DivisionTest<TPrimitive, TValue>(TPrimitive num, TPrimitive div)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable,
 		IBinaryNumber<TPrimitive>, IMinMaxValue<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>
 	{
@@ -226,7 +226,7 @@ public partial class PrimitiveTestBase
 	}
 	private static void SignedCreateTest<TPrimitive, TValue>()
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable,
 		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
 	{
@@ -237,7 +237,7 @@ public partial class PrimitiveTestBase
 	}
 	private static void UnsignedCreateTest<TPrimitive, TValue>()
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable,
 		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
 	{
@@ -248,7 +248,7 @@ public partial class PrimitiveTestBase
 	}
 	private static void MinMaxCreateTest<TPrimitive, TValue, T>()
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable,
 		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
 		where T : unmanaged, IMinMaxValue<T>, INumberBase<T>
@@ -265,7 +265,7 @@ public partial class PrimitiveTestBase
 	}
 	private static void CreationTest<TPrimitive, TValue>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable,
 		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
 	{
@@ -295,7 +295,7 @@ public partial class PrimitiveTestBase
 	}
 	private static void CreationTest<TPrimitive, TValue, TNumber>(TPrimitive[] primitives)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable,
 		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
 		where TNumber : unmanaged, INumberBase<TNumber>, IMinMaxValue<TNumber>

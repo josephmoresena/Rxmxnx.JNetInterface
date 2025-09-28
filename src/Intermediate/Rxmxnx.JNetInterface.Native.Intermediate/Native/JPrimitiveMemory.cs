@@ -27,15 +27,15 @@ public sealed partial class JPrimitiveMemory<TPrimitive> : JPrimitiveMemory, IFi
 	/// Defines an implicit conversion of a given <see cref="JPrimitiveMemory{TPrimitive}"/> to
 	/// <see cref="JNativeMemory{TPrimitive}"/>.
 	/// </summary>
-	/// <param name="jPrimitiveMemory">A <see cref="JPrimitiveMemory{TPrimitive}"/> instance.</param>
+	/// <param name="jPrimitiveMemory">A <see cref="JPrimitiveMemory{TPrimitive}"/> to implicitly convert.</param>
 	/// <returns>A <see cref="JNativeMemory{TPrimitive}"/> instance.</returns>
 	public static implicit operator JNativeMemory<TPrimitive>(JPrimitiveMemory<TPrimitive> jPrimitiveMemory)
 		=> new(jPrimitiveMemory, jPrimitiveMemory._context);
 	/// <summary>
-	/// Defines an implicit conversion of a given <see cref="JNativeMemory{TPrimitive}"/> to
+	/// Defines an explicit conversion of a given <see cref="JNativeMemory{TPrimitive}"/> to
 	/// <see cref="JPrimitiveMemory{TPrimitive}"/>.
 	/// </summary>
-	/// <param name="jNativeMemory">A <see cref="JNativeMemory{TPrimitive}"/> instance.</param>
+	/// <param name="jNativeMemory">A <see cref="JNativeMemory{TPrimitive}"/> to explicitly convert.</param>
 	/// <returns>A <see cref="JPrimitiveMemory{TPrimitive}"/> instance.</returns>
 	public static explicit operator JPrimitiveMemory<TPrimitive>(JNativeMemory<TPrimitive> jNativeMemory)
 		=> new(jNativeMemory, (IFixedContext<TPrimitive>)jNativeMemory.GetContext());

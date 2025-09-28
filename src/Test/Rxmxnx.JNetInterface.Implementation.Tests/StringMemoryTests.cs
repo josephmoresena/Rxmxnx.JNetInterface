@@ -71,8 +71,8 @@ public sealed class StringMemoryTests
 		JGlobalRef globalRef = StringMemoryTests.fixture.Create<JGlobalRef>();
 		JStringLocalRef stringRef = StringMemoryTests.fixture.Create<JStringLocalRef>();
 
-		JStringLocalRef wStringRef = JStringLocalRef.FromReference(weakRef.Value);
-		JStringLocalRef gStringRef = JStringLocalRef.FromReference(globalRef.Value);
+		JStringLocalRef wStringRef = new(weakRef.Value);
+		JStringLocalRef gStringRef = new(globalRef.Value);
 		try
 		{
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
@@ -207,8 +207,8 @@ public sealed class StringMemoryTests
 		JGlobalRef globalRef = StringMemoryTests.fixture.Create<JGlobalRef>();
 		JStringLocalRef stringRef = StringMemoryTests.fixture.Create<JStringLocalRef>();
 
-		JStringLocalRef wStringRef = JStringLocalRef.FromReference(weakRef.Value);
-		JStringLocalRef gStringRef = JStringLocalRef.FromReference(globalRef.Value);
+		JStringLocalRef wStringRef = new(weakRef.Value);
+		JStringLocalRef gStringRef = new(globalRef.Value);
 		try
 		{
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
@@ -296,8 +296,8 @@ public sealed class StringMemoryTests
 		JGlobalRef globalRef = StringMemoryTests.fixture.Create<JGlobalRef>();
 		JStringLocalRef stringRef = StringMemoryTests.fixture.Create<JStringLocalRef>();
 
-		JStringLocalRef wStringRef = JStringLocalRef.FromReference(weakRef.Value);
-		JStringLocalRef gStringRef = JStringLocalRef.FromReference(globalRef.Value);
+		JStringLocalRef wStringRef = new(weakRef.Value);
+		JStringLocalRef gStringRef = new(globalRef.Value);
 		try
 		{
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);

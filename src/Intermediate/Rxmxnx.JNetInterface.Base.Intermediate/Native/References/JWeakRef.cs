@@ -7,7 +7,7 @@
 /// </summary>
 /// <remarks>This identifier may be valid until it is explicitly unloaded.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JWeakRef : IObjectGlobalReferenceType
+public readonly partial struct JWeakRef : IObjectGlobalReferenceType, INativePointerType<JWeakRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JWeak;
@@ -27,7 +27,17 @@ public readonly partial struct JWeakRef : IObjectGlobalReferenceType
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
-	public JWeakRef() => this._value = default;
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JWeakRef() : this(IntPtr.Zero) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal JWeakRef(IntPtr value) : this(new JObjectLocalRef(value)) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	internal JWeakRef(JObjectLocalRef value) => this._value = value;
 
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this._value.GetHashCode();
@@ -39,4 +49,7 @@ public readonly partial struct JWeakRef : IObjectGlobalReferenceType
 			IWrapper<JWeakRef> wrapper => this._value.Equals(wrapper.Value._value),
 			_ => false,
 		};
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static JWeakRef INativePointerType<JWeakRef>.New(IntPtr value) => new(value);
 }

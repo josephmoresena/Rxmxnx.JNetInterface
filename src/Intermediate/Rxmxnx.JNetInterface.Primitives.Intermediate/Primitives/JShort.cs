@@ -2,15 +2,13 @@ namespace Rxmxnx.JNetInterface.Primitives;
 
 using TypeMetadata = JPrimitiveTypeMetadata<JShort>;
 using IPrimitiveValueType = IPrimitiveType<JShort, Int16>;
-using IPrimitiveIntegerType = IPrimitiveIntegerType<JShort, Int16>;
-using IPrimitiveSignedType = IPrimitiveSignedType<JShort, Int16>;
+using IPrimitiveNumericType = IPrimitiveNumericType<JShort>;
 
 /// <summary>
 /// Primitive <c>short</c>. Represents a primitive 16-bit signed integer.
 /// </summary>
-[StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JShort : INativeType, IComparable<JShort>, IEquatable<JShort>, IPrimitiveIntegerType,
-	IPrimitiveSignedType
+[StructLayout(LayoutKind.Sequential, Pack = 1, Size = sizeof(Int16))]
+public readonly partial struct JShort : IPrimitiveIntegerType, IPrimitiveNumericType, IPrimitiveValueType
 {
 	/// <summary>
 	/// Primitive type info.
@@ -35,6 +33,8 @@ public readonly partial struct JShort : INativeType, IComparable<JShort>, IEquat
 	/// <summary>
 	/// Internal 16-bit signed integer value.
 	/// </summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	private readonly Int16 _value;
 
 	/// <summary>

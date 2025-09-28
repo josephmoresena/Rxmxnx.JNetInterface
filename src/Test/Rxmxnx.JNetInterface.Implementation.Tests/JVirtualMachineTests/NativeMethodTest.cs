@@ -29,7 +29,11 @@ public partial class JVirtualMachineTests
 					TestUtilities.GetInstanceEntry(method1, out ObjectTracker? tracker1),
 					TestUtilities.GetStaticEntry(method2, out ObjectTracker tracker2),
 				]);
-				GC.Collect(2, GCCollectionMode.Aggressive);
+#if NET8_0_OR_GREATER
+				GC.Collect(2, GCCollectionMode.Aggressive, true);
+#else
+				GC.Collect(2, GCCollectionMode.Forced, true);
+#endif
 				GC.WaitForPendingFinalizers();
 				trackers.Add(tracker1);
 				trackers.Add(tracker2);
@@ -37,7 +41,11 @@ public partial class JVirtualMachineTests
 			proxyEnv.Received(1).FindClass((ReadOnlyValPtr<Byte>)ctx.Pointer);
 			proxyEnv.Received(1).RegisterNatives(classRef, Arg.Any<ReadOnlyValPtr<NativeMethodValueWrapper>>(), 2);
 			proxyEnv.ClearReceivedCalls();
-			GC.Collect(2, GCCollectionMode.Aggressive);
+#if NET8_0_OR_GREATER
+			GC.Collect(2, GCCollectionMode.Aggressive, true);
+#else
+			GC.Collect(2, GCCollectionMode.Forced, true);
+#endif
 			GC.WaitForPendingFinalizers();
 			Assert.True(trackers.All(d => d.WeakReference.IsAlive));
 			Assert.True(trackers.All(d => !(d.FinalizerFlag?.Value).GetValueOrDefault()));
@@ -91,7 +99,11 @@ public partial class JVirtualMachineTests
 				proxyEnv.Received(count).UnregisterNatives(classRef);
 			}
 
-			GC.Collect(2, GCCollectionMode.Aggressive);
+#if NET8_0_OR_GREATER
+			GC.Collect(2, GCCollectionMode.Aggressive, true);
+#else
+			GC.Collect(2, GCCollectionMode.Forced, true);
+#endif
 			GC.WaitForPendingFinalizers();
 
 			Assert.True(trackers.All(d => d.WeakReference.IsAlive == !(d.FinalizerFlag?.Value).GetValueOrDefault()));

@@ -3,6 +3,10 @@
     <Import Project="JNetInterface-Frameworks.targets"/>
     
     <PropertyGroup>
+        <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    </PropertyGroup>
+    
+    <PropertyGroup>
         <JNI_APP Condition="'$(RuntimeIdentifier)' != ''">true</JNI_APP>
         <!-- Assembly name must specify which platform it was compiled for -->
         <AssemblyName Condition="'$(JNI_APP)' == 'true'">$(AssemblyName).$(RuntimeIdentifier)</AssemblyName>

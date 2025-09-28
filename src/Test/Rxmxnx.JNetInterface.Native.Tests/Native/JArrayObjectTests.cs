@@ -323,7 +323,7 @@ public sealed class JArrayObjectTests
 
 		Assert.Equal(jArray1.Object, jArray0.Object);
 		Assert.Equal(jArray1.Object, jArray6.Object);
-		Assert.Equal(JArrayLocalRef.FromReference(globalRef.Value), jArray2.Reference);
+		Assert.Equal(new(globalRef.Value), jArray2.Reference);
 		Assert.Equal(arrayRef, jArray5.Object.Reference);
 		Assert.Equal(arrayRef, jArray3.Object.Reference);
 		Assert.Equal(arrayRef, jArray4.Object.Reference);

@@ -8,8 +8,7 @@ namespace Rxmxnx.JNetInterface.Types;
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 internal partial interface IPrimitiveType<TPrimitive, TValue> : IPrimitiveType<TPrimitive>, IPrimitiveValue<TValue>
-	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>,
-	IPrimitiveEquatable
+	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

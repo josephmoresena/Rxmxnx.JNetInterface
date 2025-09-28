@@ -2,11 +2,11 @@
 
 /// <summary>
 /// JNI local handle for class objects (<c>jclass</c>). Represents a native-signed integer
-/// which serves as opaque identifier for an class object (<c>java.lang.Class&lt;?&gt;</c>).
+/// which serves as opaque identifier for a class object (<c>java.lang.Class&lt;?&gt;</c>).
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JClassLocalRef : IObjectReferenceType
+public readonly partial struct JClassLocalRef : IObjectReferenceType, INativePointerType<JClassLocalRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JClass;
@@ -20,21 +20,30 @@ public readonly partial struct JClassLocalRef : IObjectReferenceType
 	/// JNI local reference.
 	/// </summary>
 	public JObjectLocalRef Value => this._value;
+
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._value.Pointer;
 
 	/// <summary>
-	/// Converts a given <see cref="JGlobalRef"/> to <see cref="JClassLocalRef"/> instance.
+	/// Constructor.
 	/// </summary>
-	/// <param name="globalRef">A <see cref="JGlobalRef"/> to convert.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal static JClassLocalRef FromReference(in JGlobalRef globalRef)
-		=> NativeUtilities.Transform<JGlobalRef, JClassLocalRef>(in globalRef);
+	internal JClassLocalRef(IntPtr value) : this(new JObjectLocalRef(value)) { }
 	/// <summary>
-	/// Converts a given <see cref="JWeakRef"/> to <see cref="JClassLocalRef"/> instance.
+	/// Constructor.
 	/// </summary>
-	/// <param name="weakRef">A <see cref="JWeakRef"/> to convert.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal static JClassLocalRef FromReference(in JWeakRef weakRef)
-		=> NativeUtilities.Transform<JWeakRef, JClassLocalRef>(in weakRef);
+	internal JClassLocalRef(JWeakRef value) : this(value.Value) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal JClassLocalRef(JGlobalRef value) : this(value.Value) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	internal JClassLocalRef(JObjectLocalRef value) => this._value = value;
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static JClassLocalRef INativePointerType<JClassLocalRef>.New(IntPtr value) => new(value);
 }

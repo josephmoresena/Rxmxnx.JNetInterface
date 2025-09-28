@@ -7,7 +7,7 @@
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JArrayLocalRef : IObjectReferenceType
+public readonly partial struct JArrayLocalRef : IObjectReferenceType, INativePointerType<JArrayLocalRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JArray;
@@ -23,6 +23,16 @@ public readonly partial struct JArrayLocalRef : IObjectReferenceType
 	public JObjectLocalRef Value => this._value;
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._value.Pointer;
+
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal JArrayLocalRef(IntPtr value) : this(new JObjectLocalRef(value)) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	internal JArrayLocalRef(JObjectLocalRef value) => this._value = value;
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -71,4 +81,7 @@ public readonly partial struct JArrayLocalRef : IObjectReferenceType
 			IEquatable<JArrayLocalRef> other => other.Equals(arr),
 			_ => JObjectLocalRef.ObjectEquals(arr, obj),
 		};
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static JArrayLocalRef INativePointerType<JArrayLocalRef>.New(IntPtr value) => new(value);
 }

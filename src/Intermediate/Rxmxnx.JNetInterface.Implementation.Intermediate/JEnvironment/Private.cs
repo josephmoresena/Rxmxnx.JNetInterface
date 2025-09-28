@@ -194,7 +194,7 @@ partial class JEnvironment
 	/// <returns>A <see cref="ThrowableException"/> instance.</returns>
 	private ThrowableException? ParseException(JThrowableLocalRef throwableRef)
 	{
-		if (throwableRef.IsDefault) return default;
+		if (throwableRef == default) return default;
 		ThrowableException jniException = this._cache.CreateThrowableException(throwableRef);
 		this._cache.ThrowJniException(jniException, false);
 		return jniException;
@@ -247,7 +247,7 @@ partial class JEnvironment
 		ref readonly NativeInterface nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetObjectClassInfo);
 		JClassLocalRef classRef = nativeInterface.ObjectFunctions.GetObjectClass(this.Reference, localRef);
-		if (classRef.IsDefault) this._cache.CheckJniError();
+		if (classRef == default) this._cache.CheckJniError();
 		JTrace.GetObjectClass(localRef, classRef);
 		return classRef;
 	}

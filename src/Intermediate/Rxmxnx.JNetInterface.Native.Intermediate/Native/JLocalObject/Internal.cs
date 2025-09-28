@@ -39,7 +39,8 @@ public partial class JLocalObject
 	/// </summary>
 	/// <typeparam name="TValue">Type of <see langword="IObjectReference"/> instance.</typeparam>
 	/// <param name="localRef">A local object reference the value of the current instance.</param>
-	internal void SetValue<TValue>(TValue localRef) where TValue : unmanaged, IObjectReferenceType
+	internal void SetValue<TValue>(TValue localRef)
+		where TValue : unmanaged, IObjectReferenceType, INativePointerType<TValue>
 		=> this.Lifetime.SetValue(this, localRef);
 	/// <inheritdoc/>
 	internal override ref readonly TValue As<TValue>()

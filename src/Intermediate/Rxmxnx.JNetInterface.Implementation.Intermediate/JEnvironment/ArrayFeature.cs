@@ -36,7 +36,7 @@ partial class JEnvironment
 					                                                .NewArray(this.Reference, length).ArrayValue,
 					_ => arrayRef,
 				};
-				if (arrayRef.IsDefault) this.CheckJniError();
+				if (arrayRef == default) this.CheckJniError();
 			}
 			else
 			{
@@ -144,7 +144,7 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
 			ImplementationValidationUtilities.ThrowIfDefault(jArray);
-			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(array.Length);
+			ImplementationValidationUtilities.ThrowIfInvalidArrayLength(array.Length);
 
 			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TElement>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)

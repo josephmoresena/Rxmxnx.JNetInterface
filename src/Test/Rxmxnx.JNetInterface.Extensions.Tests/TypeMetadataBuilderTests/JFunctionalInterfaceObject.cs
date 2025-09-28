@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Tests;
 public sealed partial class TypeMetadataBuilderTests
 {
 	public sealed class JFunctionalInterfaceObject : JAnnotationObject<JFunctionalInterfaceObject>,
-		IInterfaceType<JFunctionalInterfaceObject>
+		IAnnotationType<JFunctionalInterfaceObject>
 	{
 		private static readonly JInterfaceTypeMetadata<JFunctionalInterfaceObject> typeMetadata =
 			TypeMetadataBuilder<JFunctionalInterfaceObject>

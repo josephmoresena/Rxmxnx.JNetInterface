@@ -56,8 +56,8 @@ public interface IPrimitiveType<TPrimitive> : IPrimitiveType, IDataType<TPrimiti
 	/// <param name="value">A <typeparamref name="TPrimitive"/> to implicitly convert.</param>
 	static abstract implicit operator JObject(TPrimitive value);
 	/// <summary>
-	/// Defines an implicit conversion of a given <see cref="JObject"/> to <typeparamref name="TPrimitive"/>.
+	/// Defines an explicit conversion of a given <see cref="JObject"/> to <typeparamref name="TPrimitive"/>.
 	/// </summary>
-	/// <param name="jObj">A <see cref="JObject"/> to implicitly convert.</param>
+	/// <param name="jObj">A <see cref="JObject"/> to explicitly convert.</param>
 	static abstract explicit operator TPrimitive(JObject jObj);
 }

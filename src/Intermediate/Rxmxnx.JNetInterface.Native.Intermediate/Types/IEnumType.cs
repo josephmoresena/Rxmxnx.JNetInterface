@@ -5,12 +5,16 @@ namespace Rxmxnx.JNetInterface.Types;
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface IEnumType : IReferenceType
+public interface IEnumType : IClassType
 {
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
 	static JTypeKind IDataType.Kind => JTypeKind.Enum;
+#if !NET8_0_OR_GREATER
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static Type IDataType.FamilyType => typeof(JEnumObject);
+#endif
 
 	/// <summary>
 	/// Retrieves the metadata for given enum type.

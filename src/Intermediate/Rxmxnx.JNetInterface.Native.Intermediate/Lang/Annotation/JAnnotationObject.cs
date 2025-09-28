@@ -41,7 +41,7 @@ public sealed class JAnnotationObject : JInterfaceObject<JAnnotationObject>, IIn
 #endif
 public abstract class JAnnotationObject<TAnnotation> : JInterfaceObject<TAnnotation>,
 	IInterfaceObject<JAnnotationObject>,
-	IDataType where TAnnotation : JAnnotationObject<TAnnotation>, IInterfaceType<TAnnotation>
+	IDataType where TAnnotation : JAnnotationObject<TAnnotation>, IAnnotationType<TAnnotation>
 {
 	static JTypeKind IDataType.Kind => JTypeKind.Annotation;
 	static Type IDataType.FamilyType => typeof(JAnnotationObject);

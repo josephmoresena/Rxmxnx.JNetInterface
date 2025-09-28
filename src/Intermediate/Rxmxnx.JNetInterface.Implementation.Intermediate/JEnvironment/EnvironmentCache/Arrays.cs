@@ -70,7 +70,7 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JArrayLocalRef arrayRef = jniTransaction.Add(jArray);
 			JObjectLocalRef localRef = jniTransaction.Add(item);
-			JObjectArrayLocalRef objectArrayRef = JObjectArrayLocalRef.FromReference(in arrayRef);
+			JObjectArrayLocalRef objectArrayRef = new(arrayRef);
 			using LocalFrame _ = new(this._env, IVirtualMachine.IndexOfObjectCapacity);
 			for (Int32 i = 0; i < jArray.Length; i++)
 			{
@@ -183,35 +183,35 @@ partial class JEnvironment
 			{
 				case CommonNames.BooleanSignatureChar:
 					result = arrayFunctions.GetElementsFunctions.GetBooleanArrayElements.Get(
-						this.Reference, JBooleanArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+						this.Reference, new(arrayRef), out isCopyJ);
 					break;
 				case CommonNames.ByteSignatureChar:
 					result = arrayFunctions.GetElementsFunctions.GetByteArrayElements.Get(
-						this.Reference, JByteArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+						this.Reference, new(arrayRef), out isCopyJ);
 					break;
 				case CommonNames.CharSignatureChar:
 					result = arrayFunctions.GetElementsFunctions.GetCharArrayElements.Get(
-						this.Reference, JCharArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+						this.Reference, new(arrayRef), out isCopyJ);
 					break;
 				case CommonNames.DoubleSignatureChar:
 					result = arrayFunctions.GetElementsFunctions.GetDoubleArrayElements.Get(
-						this.Reference, JDoubleArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+						this.Reference, new(arrayRef), out isCopyJ);
 					break;
 				case CommonNames.FloatSignatureChar:
 					result = arrayFunctions.GetElementsFunctions.GetFloatArrayElements.Get(
-						this.Reference, JFloatArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+						this.Reference, new(arrayRef), out isCopyJ);
 					break;
 				case CommonNames.IntSignatureChar:
 					result = arrayFunctions.GetElementsFunctions.GetIntArrayElements.Get(
-						this.Reference, JIntArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+						this.Reference, new(arrayRef), out isCopyJ);
 					break;
 				case CommonNames.LongSignatureChar:
 					result = arrayFunctions.GetElementsFunctions.GetLongArrayElements.Get(
-						this.Reference, JLongArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+						this.Reference, new(arrayRef), out isCopyJ);
 					break;
 				case CommonNames.ShortSignatureChar:
 					result = arrayFunctions.GetElementsFunctions.GetShortArrayElements.Get(
-						this.Reference, JShortArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+						this.Reference, new(arrayRef), out isCopyJ);
 					break;
 				default:
 					isCopyJ = false;
@@ -228,43 +228,35 @@ partial class JEnvironment
 			{
 				case CommonNames.BooleanSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseBooleanArrayElements.Release(
-						this.Reference, JBooleanArrayLocalRef.FromReference(in arrayRef),
-						(ReadOnlyValPtr<JBoolean>)pointer, mode);
+						this.Reference, new(arrayRef), (ReadOnlyValPtr<JBoolean>)pointer, mode);
 					break;
 				case CommonNames.ByteSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseByteArrayElements.Release(
-						this.Reference, JByteArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JByte>)pointer,
-						mode);
+						this.Reference, new(arrayRef), (ReadOnlyValPtr<JByte>)pointer, mode);
 					break;
 				case CommonNames.CharSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseCharArrayElements.Release(
-						this.Reference, JCharArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JChar>)pointer,
-						mode);
+						this.Reference, new(arrayRef), (ReadOnlyValPtr<JChar>)pointer, mode);
 					break;
 				case CommonNames.DoubleSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseDoubleArrayElements.Release(
-						this.Reference, JDoubleArrayLocalRef.FromReference(in arrayRef),
-						(ReadOnlyValPtr<JDouble>)pointer, mode);
+						this.Reference, new(arrayRef), (ReadOnlyValPtr<JDouble>)pointer, mode);
 					break;
 				case CommonNames.FloatSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseFloatArrayElements.Release(
-						this.Reference, JFloatArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JFloat>)pointer,
-						mode);
+						this.Reference, new(arrayRef), (ReadOnlyValPtr<JFloat>)pointer, mode);
 					break;
 				case CommonNames.IntSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseIntArrayElements.Release(
-						this.Reference, JIntArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JInt>)pointer,
-						mode);
+						this.Reference, new(arrayRef), (ReadOnlyValPtr<JInt>)pointer, mode);
 					break;
 				case CommonNames.LongSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseLongArrayElements.Release(
-						this.Reference, JLongArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JLong>)pointer,
-						mode);
+						this.Reference, new(arrayRef), (ReadOnlyValPtr<JLong>)pointer, mode);
 					break;
 				case CommonNames.ShortSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseShortArrayElements.Release(
-						this.Reference, JShortArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JShort>)pointer,
-						mode);
+						this.Reference, new(arrayRef), (ReadOnlyValPtr<JShort>)pointer, mode);
 					break;
 			}
 		}
@@ -403,7 +395,7 @@ partial class JEnvironment
 			JObjectArrayLocalRef arrayRef =
 				nativeInterface.ArrayFunctions.ObjectArrayFunctions.NewObjectArray(
 					this.Reference, length, classRef, initialRef);
-			if (arrayRef.IsDefault) this.CheckJniError();
+			if (arrayRef == default) this.CheckJniError();
 			return arrayRef.ArrayValue;
 		}
 		/// <summary>

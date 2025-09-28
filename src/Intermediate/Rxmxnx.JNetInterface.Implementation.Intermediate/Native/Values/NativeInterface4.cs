@@ -1,9 +1,9 @@
 namespace Rxmxnx.JNetInterface.Native.Values;
 
 /// <summary>
-/// Function pointer based-struct replacement for <see cref="JNativeInterface"/> type.
+/// <c>JNINativeInterface_</c> struct. Contains all pointers to the functions of JNI.
 /// </summary>
-/// <remarks>NIO Support</remarks>
+/// <remarks>JNI 1.4</remarks>
 [StructLayout(LayoutKind.Sequential)]
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,

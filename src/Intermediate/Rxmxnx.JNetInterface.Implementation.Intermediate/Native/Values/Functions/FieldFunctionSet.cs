@@ -9,7 +9,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly struct FieldFunctionSet<TReceiver> where TReceiver : unmanaged, IWrapper<JObjectLocalRef>
+internal readonly struct FieldFunctionSet<TReceiver> where TReceiver : unmanaged, INativePointerType<TReceiver>
 {
 	/// <summary>
 	/// Pointer to <c>GetFieldID</c> function.

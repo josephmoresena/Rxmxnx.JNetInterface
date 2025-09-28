@@ -6,12 +6,13 @@ using IPrimitiveValueType = IPrimitiveType<JBoolean, Boolean>;
 /// <summary>
 /// Primitive <c>boolean</c>. Represents a Boolean (<see langword="true"/> or <see langword="false"/>) value.
 /// </summary>
-[StructLayout(LayoutKind.Sequential)]
+[StructLayout(LayoutKind.Sequential, Pack = 1, Size = sizeof(Byte))]
+[DebuggerDisplay(nameof(JChar.Value))]
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1210,
                  Justification = CommonConstants.NoBooleanComparisonOperatorsJustification)]
 #endif
-public readonly partial struct JBoolean : INativeType, IComparable<JBoolean>, IEquatable<JBoolean>, IPrimitiveValueType
+public readonly partial struct JBoolean : IComparable<JBoolean>, IEquatable<JBoolean>, IPrimitiveValueType
 {
 	/// <summary>
 	/// Primitive type info.
@@ -36,6 +37,8 @@ public readonly partial struct JBoolean : INativeType, IComparable<JBoolean>, IE
 	/// <summary>
 	/// Internal 8-bit unsigned integer value.
 	/// </summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	private readonly Byte _value;
 
 	/// <summary>

@@ -201,7 +201,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 
 	/// <inheritdoc/>
 	public override String ToString()
-		=> !this.Reference.IsDefault ?
+		=> this.Reference != default ?
 			JObject.GetObjectIdentifier(this.ClassSignature, this.Reference) :
 			$"{this.Name}";
 	/// <inheritdoc/>

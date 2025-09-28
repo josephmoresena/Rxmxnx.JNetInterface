@@ -51,8 +51,7 @@ public sealed class ClassParseTests
 			Assert.Equal(classFeature.VoidObject, classFeature.AsClassObject(jGlobal));
 			if (useNew)
 				Assert.Equal(jGlobal, classFeature.VoidObject.Global);
-			proxyEnv.Received(0).IsInstanceOf(globalRef.Value,
-			                                  JClassLocalRef.FromReference(proxyEnv.VirtualMachine.ClassGlobalRef));
+			proxyEnv.Received(0).IsInstanceOf(globalRef.Value, new(proxyEnv.VirtualMachine.ClassGlobalRef));
 		}
 		finally
 		{
@@ -86,8 +85,7 @@ public sealed class ClassParseTests
 			Assert.Equal(classFeature.VoidObject, classFeature.AsClassObject(jWeak));
 			if (useNew)
 				Assert.Equal(jWeak, classFeature.VoidObject.Weak);
-			proxyEnv.Received(0).IsInstanceOf(weakRef.Value,
-			                                  JClassLocalRef.FromReference(proxyEnv.VirtualMachine.ClassGlobalRef));
+			proxyEnv.Received(0).IsInstanceOf(weakRef.Value, new(proxyEnv.VirtualMachine.ClassGlobalRef));
 		}
 		finally
 		{
@@ -156,8 +154,7 @@ public sealed class ClassParseTests
 				Assert.Equal(jGlobal, localObject.Global);
 			}
 
-			proxyEnv.Received(0).IsInstanceOf(globalRef.Value,
-			                                  JClassLocalRef.FromReference(proxyEnv.VirtualMachine.ClassGlobalRef));
+			proxyEnv.Received(0).IsInstanceOf(globalRef.Value, new(proxyEnv.VirtualMachine.ClassGlobalRef));
 		}
 		finally
 		{
@@ -181,12 +178,10 @@ public sealed class ClassParseTests
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
 			IClassFeature classFeature = env.ClassFeature;
 			using JLocalObject wrapperValue = TestUtilities.CreateWrapper(proxyEnv, value);
-			proxyEnv.IsInstanceOf(wrapperValue.Reference,
-			                      JClassLocalRef.FromReference(proxyEnv.VirtualMachine.ClassGlobalRef)).Returns(false);
+			proxyEnv.IsInstanceOf(wrapperValue.Reference, new(proxyEnv.VirtualMachine.ClassGlobalRef)).Returns(false);
 			Assert.Throws<ArgumentException>(() => classFeature.AsClassObject(wrapperValue));
 			proxyEnv.Received(1).IsInstanceOf(wrapperValue.Reference,
-			                                  JClassLocalRef.FromReference(
-				                                  proxyEnv.VirtualMachine.ClassGlobalRef.Value));
+			                                  new(proxyEnv.VirtualMachine.ClassGlobalRef.Value));
 		}
 		finally
 		{

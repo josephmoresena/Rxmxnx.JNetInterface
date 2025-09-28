@@ -7,7 +7,7 @@
 /// This identifier will be valid until the library is unloaded or the JVM instance is destroyed.
 /// </remarks>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JVirtualMachineRef : INativeReferenceType, IReadOnlyReferenceable<JVirtualMachineValue>
+public readonly partial struct JVirtualMachineRef : INativePointerType
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JVirtualMachineRef;
@@ -15,22 +15,20 @@ public readonly partial struct JVirtualMachineRef : INativeReferenceType, IReadO
 	/// <summary>
 	/// Internal pointer value.
 	/// </summary>
-	private readonly ReadOnlyValPtr<JVirtualMachineValue> _value;
+	private readonly ReadOnlyValPtr<IntPtr> _value;
 
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._value;
 
 	/// <summary>
-	/// <see langword="readonly ref"/> <see cref="JVirtualMachineValue"/> from this pointer.
+	/// Pointer to native interface.
 	/// </summary>
-	internal ref readonly JVirtualMachineValue Reference => ref this._value.Reference;
+	internal unsafe void* InterfacePointer => this._value.Reference.ToPointer();
 
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
-	public JVirtualMachineRef() => this._value = ReadOnlyValPtr<JVirtualMachineValue>.Zero;
-
-	ref readonly JVirtualMachineValue IReadOnlyReferenceable<JVirtualMachineValue>.Reference => ref this.Reference;
+	public JVirtualMachineRef() => this._value = ReadOnlyValPtr<IntPtr>.Zero;
 
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this._value.GetHashCode();

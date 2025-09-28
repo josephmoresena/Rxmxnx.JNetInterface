@@ -195,7 +195,7 @@ public sealed class PrimitiveTypeTests
 		wrapperByte.Value.Returns(value2.AsBytes()[0]);
 		Assert.Equal(equals, value.Equals(proxy));
 		Assert.Equal(equals, value.Equals(wrapperByte));
-		Assert.False(valObj.Equals((JObject)NativeUtilities.Transform<TPrimitive, JByte>(in value)));
+		Assert.True(valObj.Equals((JObject)NativeUtilities.Transform<TPrimitive, JByte>(in value)));
 		Assert.False(value.Equals(new PrimitiveTypeImpl()));
 	}
 	private static void NumericEqualityTest<TPrimitive, TValue>(TPrimitive value, TPrimitive value2)

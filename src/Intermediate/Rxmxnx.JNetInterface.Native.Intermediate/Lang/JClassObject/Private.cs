@@ -82,7 +82,7 @@ public partial class JClassObject
 	{
 		IEnvironment env = initializer.Class.Environment;
 		JObjectLocalRef localRef = initializer.LocalReference;
-		JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
+		JClassLocalRef classRef = new(localRef);
 		return env.ClassFeature.AsClassObject(classRef);
 	}
 	static JClassObject IClassType<JClassObject>.Create(IReferenceType.ObjectInitializer initializer)

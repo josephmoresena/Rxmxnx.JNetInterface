@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Native.Values;
 
 /// <summary>
-/// Function pointer based-struct replacement for <see cref="JInvokeInterface"/> type.
+/// <c>JNIInvokeInterface_</c> struct. Contains all pointers to the functions of the Invocation API.
 /// </summary>
 [StructLayout(LayoutKind.Explicit)]
 #if !PACKAGE
@@ -23,7 +23,9 @@ internal readonly unsafe struct InvokeInterface
 	[FieldOffset(0)]
 	private readonly Unix _unix;
 
-	/// <inheritdoc cref="JInvokeInterface.DestroyJavaVmPointer"/>
+	/// <summary>
+	/// Pointer to <c>DestroyJavaVM</c> function. Unloads a JVM and reclaims its resources.
+	/// </summary>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
@@ -32,7 +34,9 @@ internal readonly unsafe struct InvokeInterface
 		=> OperatingSystem.IsWindows() ?
 			this._windows.DestroyVirtualMachine(vmRef) :
 			this._unix.DestroyVirtualMachine(vmRef);
-	/// <inheritdoc cref="JInvokeInterface.AttachCurrentThreadPointer"/>
+	/// <summary>
+	/// Pointer to <c>AttachCurrentThread</c> function. Attaches the current thread to a JVM.
+	/// </summary>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
@@ -48,7 +52,9 @@ internal readonly unsafe struct InvokeInterface
 				this._unix.AttachCurrentThread(vmRef, envRefPtr, vmArgPtr);
 		}
 	}
-	/// <inheritdoc cref="JInvokeInterface.DetachCurrentThreadPointer"/>
+	/// <summary>
+	/// Pointer to <c>DetachCurrentThread</c> function. Detaches the current thread from a JVM.
+	/// </summary>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
@@ -57,7 +63,9 @@ internal readonly unsafe struct InvokeInterface
 		=> OperatingSystem.IsWindows() ?
 			this._windows.DetachCurrentThread(vmRef) :
 			this._unix.DetachCurrentThread(vmRef);
-	/// <inheritdoc cref="JInvokeInterface.GetEnvPointer"/>
+	/// <summary>
+	/// Pointer to <c>GetEnv</c> function. Retrieves the <c>JNIEnv</c> pointer for the current thread.
+	/// </summary>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
@@ -71,7 +79,10 @@ internal readonly unsafe struct InvokeInterface
 				this._unix.GetEnv(vmRef, envRefPtr, jniVersion);
 		}
 	}
-	/// <inheritdoc cref="JInvokeInterface.AttachCurrentThreadAsDaemonPointer"/>
+	/// <summary>
+	/// Pointer to <c>AttachCurrentThreadAsDaemon</c> function. Same as AttachCurrentThread, but the
+	/// newly-created <c>java.lang.Thread</c> instance is a daemon.
+	/// </summary>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
@@ -98,19 +109,19 @@ internal readonly unsafe struct InvokeInterface
 		/// Internal reserved entries.
 		/// </summary>
 #pragma warning disable CS0169
-		private readonly JInvokeInterface.ComReserved _reserved;
+		private readonly ComReserved _reserved;
 #pragma warning restore CS0169
 
-		/// <inheritdoc cref="JInvokeInterface.DestroyJavaVmPointer"/>
+		/// <inheritdoc cref="InvokeInterface.DestroyVirtualMachine"/>
 		public readonly delegate* unmanaged[Stdcall]<JVirtualMachineRef, JResult> DestroyVirtualMachine;
-		/// <inheritdoc cref="JInvokeInterface.AttachCurrentThreadPointer"/>
+		/// <inheritdoc cref="InvokeInterface.AttachCurrentThread"/>
 		public readonly delegate* unmanaged[Stdcall]<JVirtualMachineRef, JEnvironmentRef*, VirtualMachineArgumentValue*,
 			JResult > AttachCurrentThread;
-		/// <inheritdoc cref="JInvokeInterface.DetachCurrentThreadPointer"/>
+		/// <inheritdoc cref="InvokeInterface.DetachCurrentThread"/>
 		public readonly delegate* unmanaged[Stdcall]<JVirtualMachineRef, JResult> DetachCurrentThread;
-		/// <inheritdoc cref="JInvokeInterface.GetEnvPointer"/>
+		/// <inheritdoc cref="InvokeInterface.GetEnv"/>
 		public readonly delegate* unmanaged[Stdcall]<JVirtualMachineRef, JEnvironmentRef*, Int32, JResult> GetEnv;
-		/// <inheritdoc cref="JInvokeInterface.AttachCurrentThreadAsDaemonPointer"/>
+		/// <inheritdoc cref="InvokeInterface.AttachCurrentThreadAsDaemon"/>
 		public readonly delegate* unmanaged[Stdcall]<JVirtualMachineRef, JEnvironmentRef*, VirtualMachineArgumentValue*,
 			JResult > AttachCurrentThreadAsDaemon;
 	}
@@ -125,20 +136,33 @@ internal readonly unsafe struct InvokeInterface
 		/// Internal reserved entries.
 		/// </summary>
 #pragma warning disable CS0169
-		private readonly JInvokeInterface.ComReserved _reserved;
+		private readonly ComReserved _reserved;
 #pragma warning restore CS0169
 
-		/// <inheritdoc cref="JInvokeInterface.DestroyJavaVmPointer"/>
+		/// <inheritdoc cref="InvokeInterface.DestroyVirtualMachine"/>
 		public readonly delegate* unmanaged[Cdecl]<JVirtualMachineRef, JResult> DestroyVirtualMachine;
-		/// <inheritdoc cref="JInvokeInterface.AttachCurrentThreadPointer"/>
+		/// <inheritdoc cref="InvokeInterface.AttachCurrentThread"/>
 		public readonly delegate* unmanaged[Cdecl]<JVirtualMachineRef, JEnvironmentRef*, VirtualMachineArgumentValue*,
 			JResult > AttachCurrentThread;
-		/// <inheritdoc cref="JInvokeInterface.DetachCurrentThreadPointer"/>
+		/// <inheritdoc cref="InvokeInterface.DetachCurrentThread"/>
 		public readonly delegate* unmanaged[Cdecl]<JVirtualMachineRef, JResult> DetachCurrentThread;
-		/// <inheritdoc cref="JInvokeInterface.GetEnvPointer"/>
+		/// <inheritdoc cref="InvokeInterface.GetEnv"/>
 		public readonly delegate* unmanaged[Cdecl]<JVirtualMachineRef, JEnvironmentRef*, Int32, JResult> GetEnv;
-		/// <inheritdoc cref="JInvokeInterface.AttachCurrentThreadAsDaemonPointer"/>
+		/// <inheritdoc cref="InvokeInterface.AttachCurrentThreadAsDaemon"/>
 		public readonly delegate* unmanaged[Cdecl]<JVirtualMachineRef, JEnvironmentRef*, VirtualMachineArgumentValue*,
 			JResult > AttachCurrentThreadAsDaemon;
+	}
+
+	/// <summary>
+	/// This struct represent the reserved pointer for Microsoft COM compatibility.
+	/// </summary>
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct ComReserved
+	{
+#pragma warning disable CS0169
+		private IntPtr _reserved0;
+		private IntPtr _reserved1;
+		private IntPtr _reserved2;
+#pragma warning restore CS0169
 	}
 }

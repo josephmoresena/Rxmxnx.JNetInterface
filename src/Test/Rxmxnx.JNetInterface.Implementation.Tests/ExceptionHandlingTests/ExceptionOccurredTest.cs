@@ -195,7 +195,7 @@ public partial class ExceptionHandlingTests
 			proxyEnv.Received(getMessageRegionCount)
 			        .GetStringRegion(messageRef, 0, message.Length, Arg.Any<ValPtr<Char>>());
 			proxyEnv.Received(1).NewGlobalRef(throwableRef.Value);
-			proxyEnv.Received(throwGlobalCount).Throw(JThrowableLocalRef.FromReference(globalRef.Value));
+			proxyEnv.Received(throwGlobalCount).Throw(new(globalRef.Value));
 			proxyEnv.Received(throwLocalCount).Throw(throwableRef);
 
 			proxyEnv.Received().ExceptionClear();

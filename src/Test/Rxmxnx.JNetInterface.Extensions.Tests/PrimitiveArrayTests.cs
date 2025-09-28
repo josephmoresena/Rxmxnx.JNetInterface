@@ -41,15 +41,15 @@ public sealed class PrimitiveArrayTests
 			JClassLocalRef classRef = PrimitiveArrayTests.fixture.Create<JClassLocalRef>();
 			Object traceArrayRef = arrayTypeMetadata.Signature[1] switch
 			{
-				CommonNames.BooleanSignatureChar => JBooleanArrayLocalRef.FromReference(arrayRef),
-				CommonNames.ByteSignatureChar => JByteArrayLocalRef.FromReference(arrayRef),
-				CommonNames.CharSignatureChar => JCharArrayLocalRef.FromReference(arrayRef),
-				CommonNames.DoubleSignatureChar => JDoubleArrayLocalRef.FromReference(arrayRef),
-				CommonNames.FloatSignatureChar => JFloatArrayLocalRef.FromReference(arrayRef),
-				CommonNames.IntSignatureChar => JIntArrayLocalRef.FromReference(arrayRef),
-				CommonNames.LongSignatureChar => JLongArrayLocalRef.FromReference(arrayRef),
-				CommonNames.ShortSignatureChar => JShortArrayLocalRef.FromReference(arrayRef),
-				_ => JObjectArrayLocalRef.FromReference(arrayRef),
+				CommonNames.BooleanSignatureChar => new JBooleanArrayLocalRef(arrayRef),
+				CommonNames.ByteSignatureChar => new JByteArrayLocalRef(arrayRef),
+				CommonNames.CharSignatureChar => new JCharArrayLocalRef(arrayRef),
+				CommonNames.DoubleSignatureChar => new JDoubleArrayLocalRef(arrayRef),
+				CommonNames.FloatSignatureChar => new JFloatArrayLocalRef(arrayRef),
+				CommonNames.IntSignatureChar => new JIntArrayLocalRef(arrayRef),
+				CommonNames.LongSignatureChar => new JLongArrayLocalRef(arrayRef),
+				CommonNames.ShortSignatureChar => new JShortArrayLocalRef(arrayRef),
+				_ => new JObjectArrayLocalRef(arrayRef),
 			};
 
 			env.ArrayFeature.GetArrayLength(Arg.Any<JReferenceObject>()).Returns(arrayLength);

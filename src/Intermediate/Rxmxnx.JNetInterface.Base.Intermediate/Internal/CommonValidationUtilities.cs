@@ -83,6 +83,32 @@ internal static class CommonValidationUtilities
 		throw new InvalidOperationException(resource.VoidEquality);
 	}
 	/// <summary>
+	/// Throws an exception for an instance that cannot be cast to a <typeparamref name="T"/> value.
+	/// </summary>
+	/// <param name="nativeType">The invalid <see cref="JNativeType"/> value.</param>
+	/// <exception cref="InvalidCastException">Always throws an exception.</exception>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static T ThrowInvalidCastToNativeDataType<T>(JNativeType nativeType) where T : unmanaged
+	{
+		Byte signature = nativeType switch
+		{
+			JNativeType.JBoolean => CommonNames.BooleanSignatureChar,
+			JNativeType.JByte => CommonNames.ByteSignatureChar,
+			JNativeType.JChar => CommonNames.CharSignatureChar,
+			JNativeType.JDouble => CommonNames.DoubleSignatureChar,
+			JNativeType.JFloat => CommonNames.FloatSignatureChar,
+			JNativeType.JInt => CommonNames.IntSignatureChar,
+			JNativeType.JLong => CommonNames.DoubleSignatureChar,
+			JNativeType.JShort => CommonNames.ShortSignatureChar,
+			_ => CommonNames.ObjectSignaturePrefixChar,
+		};
+		CommonValidationUtilities.ThrowInvalidCastToPrimitive(signature);
+		return default;
+	}
+	/// <summary>
 	/// Throws an exception for an instance that cannot be cast to a <paramref name="primitiveSignature"/> value.
 	/// </summary>
 	/// <param name="primitiveSignature">A <see cref="JDataTypeMetadata"/> instance.</param>

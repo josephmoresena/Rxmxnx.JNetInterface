@@ -26,7 +26,7 @@ public sealed class ConstructorCallTests
 			using IFixedPointer.IDisposable ctxClass = metadata.Information.GetFixedPointer();
 			ReadOnlyValPtr<Byte> namePtr = (ReadOnlyValPtr<Byte>)infoDef.Pointer;
 			JThrowableLocalRef result = ConstructorCallTests.fixture.Create<JThrowableLocalRef>();
-			JClassLocalRef classRef = JClassLocalRef.FromReference(proxyEnv.VirtualMachine.ThrowableGlobalRef);
+			JClassLocalRef classRef = new(proxyEnv.VirtualMachine.ThrowableGlobalRef);
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
 
 			proxyEnv.ClearReceivedCalls();

@@ -103,7 +103,8 @@ internal sealed partial class ObjectLifetime(
 	/// <typeparam name="TValue">Type of <see langword="IObjectReference"/> instance.</typeparam>
 	/// <param name="jLocal">The java object to load.</param>
 	/// <param name="localRef">A local object reference the value of the current instance.</param>
-	public void SetValue<TValue>(JLocalObject jLocal, TValue localRef) where TValue : unmanaged, IObjectReferenceType
+	public void SetValue<TValue>(JLocalObject jLocal, TValue localRef)
+		where TValue : unmanaged, IObjectReferenceType, INativePointerType<TValue>
 	{
 		this.LoadNewValue(jLocal, localRef.Value);
 		this.Secondary?.LoadNewValue(jLocal, localRef.Value);

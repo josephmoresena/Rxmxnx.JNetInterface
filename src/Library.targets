@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+        <TargetFrameworks>net7.0;net8.0;net9.0</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -10,8 +10,12 @@
         <TrimmerSingleWarn>false</TrimmerSingleWarn>
     </PropertyGroup>
 
+    <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+        <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2"/>
+    </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="2.7.1"/>
     </ItemGroup>
+
 
 </Project>

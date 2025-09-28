@@ -72,6 +72,11 @@ public sealed partial class JArrayObject<TElement> : JLocalObject.ArrayView wher
 	/// </summary>
 	public static JArrayTypeMetadata Metadata => ArrayTypeMetadata.Instance;
 
+#if !NET8_0_OR_GREATER
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static Type IDataType.FamilyType => typeof(JArrayObject);
+#endif
+
 	/// <summary>
 	/// Gets or sets the element of <paramref name="index"/>.
 	/// </summary>

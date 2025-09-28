@@ -9,7 +9,7 @@ namespace Rxmxnx.JNetInterface.Tests.Internal;
 internal unsafe struct InternalNativeInterface
 {
 #pragma warning disable CS0169
-	private readonly JNativeInterface.ComReserved _reserved;
+	private readonly NativeInterface.ComReserved _reserved;
 #pragma warning restore CS0169
 
 	public delegate* unmanaged<JEnvironmentRef, Int32> GetVersion;

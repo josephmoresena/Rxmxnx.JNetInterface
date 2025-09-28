@@ -21,7 +21,14 @@ Partial Module Program
             Trace.Listeners.Add(listener)
         End If
 
-        Dim helloJniByteCode As Byte() = Await File.ReadAllBytesAsync("HelloDotnet.class")
+        Dim helloJniByteCode As Byte() = Await CType(
+            IIf(
+                args.Length > 1 AndAlso Not String.IsNullOrWhiteSpace(args(1)),
+                File.ReadAllBytesAsync(Path.Combine(args(1), "HelloDotnet.class")),
+                File.ReadAllBytesAsync("HelloDotnet.class")
+                ),
+            Task(Of Byte()))
+
         Dim jvmLib As JVirtualMachineLibrary = JVirtualMachineLibrary.LoadLibrary(args(0))
 
         If jvmLib is Nothing Then

@@ -10,7 +10,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
 internal readonly unsafe struct DeleteRefFunction<TReference> : IDeleteRefFunction
-	where TReference : unmanaged, INativeType, IWrapper<JObjectLocalRef>
+	where TReference : unmanaged, INativeReferenceType, INativePointerType<TReference>
 {
 	/// <summary>
 	/// Pointer to <c>Delete<typeparamref name="TReference"/>Ref</c> function.
@@ -28,8 +28,8 @@ internal readonly unsafe struct DeleteRefFunction<TReference> : IDeleteRefFuncti
 	public void DeleteRef(JEnvironmentRef envRef, TReference objRef)
 	{
 		if (OperatingSystem.IsWindows())
-			this._function.Windows(envRef, objRef.Value);
+			this._function.Windows(envRef, objRef.Pointer);
 		else
-			this._function.Unix(envRef, objRef.Value);
+			this._function.Unix(envRef, objRef.Pointer);
 	}
 }

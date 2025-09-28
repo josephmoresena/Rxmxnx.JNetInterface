@@ -44,10 +44,7 @@ public partial class JVirtualMachine
 		/// <returns>A managed <see cref="InvokeInterface"/> reference from current instance.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public unsafe ref readonly InvokeInterface GetInvokeInterface()
-		{
-			ref readonly JVirtualMachineValue refValue = ref this.Reference.Reference;
-			return ref Unsafe.AsRef<InvokeInterface>(refValue.Pointer.ToPointer());
-		}
+			=> ref Unsafe.AsRef<InvokeInterface>(this.Reference.InterfacePointer);
 		/// <summary>
 		/// Register a <see cref="JGlobal"/> instance.
 		/// </summary>
@@ -85,7 +82,7 @@ public partial class JVirtualMachine
 		{
 			if (globalRef == default) return;
 			this._globalObjects.Remove(globalRef, out _);
-			this.GlobalClassCache.Unload(JClassLocalRef.FromReference(in globalRef));
+			this.GlobalClassCache.Unload(new JClassLocalRef(globalRef));
 		}
 		/// <summary>
 		/// Removes <see cref="JWeakRef"/> from current cache.
@@ -95,7 +92,7 @@ public partial class JVirtualMachine
 		{
 			if (weakRef == default) return;
 			this._weakObjects.Remove(weakRef, out _);
-			this.WeakClassCache.Unload(JClassLocalRef.FromReference(in weakRef));
+			this.WeakClassCache.Unload(new JClassLocalRef(weakRef));
 		}
 		/// <summary>
 		/// Clears cache.

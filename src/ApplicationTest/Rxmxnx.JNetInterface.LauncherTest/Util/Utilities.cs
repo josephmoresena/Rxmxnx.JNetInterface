@@ -3,7 +3,14 @@ namespace Rxmxnx.JNetInterface.ApplicationTest.Util;
 public static class Utilities
 {
 	public static Boolean IsNativeAotSupported(Architecture arch, NetVersion netVersion)
-		=> !(netVersion < NetVersion.Net90 && arch is Architecture.X86 or Architecture.Arm or Architecture.Armv6);
+		=> netVersion >= NetVersion.Net70 && arch switch
+		{
+			Architecture.X64 => true,
+			Architecture.Arm64 => netVersion >= NetVersion.Net80 || OperatingSystem.IsWindows() ||
+				OperatingSystem.IsLinux(),
+			Architecture.X86 or Architecture.Arm or Architecture.Armv6 => netVersion >= NetVersion.Net90,
+			_ => false,
+		};
 	public static Boolean IsReflectionFreeModeSupported(NetVersion netVersion) => netVersion < NetVersion.Net90;
 	public static async Task DownloadFileAsync(DownloadGetState state, CancellationToken cancellationToken = default)
 	{

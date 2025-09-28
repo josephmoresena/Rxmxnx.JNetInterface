@@ -19,11 +19,11 @@ internal interface IDeleteRefFunction
 		/// Function pointer for Windows Operating System.
 		/// </summary>
 		[FieldOffset(0)]
-		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JObjectLocalRef, void> Windows;
+		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, IntPtr, void> Windows;
 		/// <summary>
 		/// Function pointer for Unix-like Operating System.
 		/// </summary>
 		[FieldOffset(0)]
-		public readonly delegate* unmanaged[Cdecl]<JEnvironmentRef, JObjectLocalRef, void> Unix;
+		public readonly delegate* unmanaged[Cdecl]<JEnvironmentRef, IntPtr, void> Unix;
 	}
 }

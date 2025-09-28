@@ -45,26 +45,26 @@ public readonly partial struct JLong : IPrimitiveEquatable
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JLong>.operator SByte(JLong jPrimitive)
+	static explicit INativeDataType<JLong>.operator SByte(JLong jPrimitive)
 		=> NativeUtilities.AsBytes(jPrimitive).ToValue<SByte>();
-	static explicit IPrimitiveNumericType<JLong>.operator Int64(JLong jPrimitive) => jPrimitive._value;
+	static explicit INativeDataType<JLong>.operator Int64(JLong jPrimitive) => jPrimitive._value;
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JLong>.operator Int16(JLong jPrimitive)
+	static explicit INativeDataType<JLong>.operator Int16(JLong jPrimitive)
 		=> NativeUtilities.AsBytes(jPrimitive).ToValue<Int16>();
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JLong>.operator Single(JLong jPrimitive) => jPrimitive._value;
+	static explicit INativeDataType<JLong>.operator Single(JLong jPrimitive) => jPrimitive._value;
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JLong>.operator Int32(JLong jPrimitive)
+	static explicit INativeDataType<JLong>.operator Int32(JLong jPrimitive)
 		=> NativeUtilities.AsBytes(jPrimitive).ToValue<Int32>();
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JLong>.operator Char(JLong jPrimitive)
+	static explicit INativeDataType<JLong>.operator Char(JLong jPrimitive)
 		=> NativeUtilities.AsBytes(jPrimitive).ToValue<Char>();
 }

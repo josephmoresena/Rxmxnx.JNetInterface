@@ -39,10 +39,10 @@ public sealed partial class JNativeCallAdapterTests
 
 		JNativeCallAdapter adapter =
 			JNativeCallAdapter.Create(proxyEnv.Reference, classRef, out JClassObject jClass2).Build();
-		Assert.Equal(!orClasRef.IsDefault && classRef != orClasRef, classRef != jClass.Reference);
+		Assert.Equal(orClasRef != default && classRef != orClasRef, classRef != jClass.Reference);
 		Assert.True(Object.ReferenceEquals(jClass, jClass2));
 		Assert.Equal(jClass.Reference, adapter.FinalizeCall(jClass2));
-		Assert.Equal(orClasRef.IsDefault, JObject.IsNullOrDefault(jClass));
+		Assert.Equal(orClasRef == default, JObject.IsNullOrDefault(jClass));
 		nameNameCtx.Dispose();
 	}
 	private static void FinalizeTest(NativeInterfaceProxy proxyEnv, CallResult result, JNativeCallAdapter adapter,
@@ -226,43 +226,25 @@ public sealed partial class JNativeCallAdapterTests
 		Span<JObjectLocalRef> refs = JNativeCallAdapterTests.fixture.CreateMany<JObjectLocalRef>(20).ToArray();
 
 		parameters.Add(JNativeCallAdapterTests.CreateModule(proxyEnv, builder, refs[0]));
-		parameters.Add(JNativeCallAdapterTests.CreateBooleanArray(proxyEnv, builder,
-		                                                          JBooleanArrayLocalRef.FromReference(in refs[1])));
-		parameters.Add(JNativeCallAdapterTests.CreateByteArray(proxyEnv, builder,
-		                                                       JByteArrayLocalRef.FromReference(in refs[2])));
-		parameters.Add(JNativeCallAdapterTests.CreateCharArray(proxyEnv, builder,
-		                                                       JCharArrayLocalRef.FromReference(in refs[3])));
-		parameters.Add(JNativeCallAdapterTests.CreateDoubleArray(proxyEnv, builder,
-		                                                         JDoubleArrayLocalRef.FromReference(in refs[4])));
-		parameters.Add(JNativeCallAdapterTests.CreateFloatArray(proxyEnv, builder,
-		                                                        JFloatArrayLocalRef.FromReference(in refs[5])));
-		parameters.Add(JNativeCallAdapterTests.CreateIntArray(
-			               proxyEnv, builder, JIntArrayLocalRef.FromReference(in refs[6])));
-		parameters.Add(JNativeCallAdapterTests.CreateLongArray(proxyEnv, builder,
-		                                                       JLongArrayLocalRef.FromReference(in refs[7])));
-		parameters.Add(JNativeCallAdapterTests.CreateShortArray(proxyEnv, builder,
-		                                                        JShortArrayLocalRef.FromReference(in refs[8])));
-		parameters.Add(JNativeCallAdapterTests.CreateClassArray(proxyEnv, builder,
-		                                                        JObjectArrayLocalRef.FromReference(in refs[9])));
-		parameters.Add(JNativeCallAdapterTests.CreateClassArray(proxyEnv, builder,
-		                                                        JObjectArrayLocalRef.FromReference(in refs[10])));
-		parameters.Add(JNativeCallAdapterTests.CreateArray(proxyEnv, builder,
-		                                                   JArrayLocalRef.FromReference(in refs[11]), false));
-		parameters.Add(JNativeCallAdapterTests.CreateArray(proxyEnv, builder,
-		                                                   JArrayLocalRef.FromReference(in refs[12]), true));
-		parameters.Add(JNativeCallAdapterTests.CreateTestArray<JStringObject>(
-			               proxyEnv, builder, JArrayLocalRef.FromReference(in refs[13])));
-		parameters.Add(JNativeCallAdapterTests.CreateTestArray<JThrowableObject>(
-			               proxyEnv, builder, JArrayLocalRef.FromReference(in refs[14])));
-		parameters.Add(JNativeCallAdapterTests.CreateTestArray<JLong>(
-			               proxyEnv, builder, JArrayLocalRef.FromReference(in refs[15])));
-		parameters.Add(JNativeCallAdapterTests.CreateString(
-			               proxyEnv, builder, JStringLocalRef.FromReference(in refs[16])));
+		parameters.Add(JNativeCallAdapterTests.CreateBooleanArray(proxyEnv, builder, new(refs[1].Pointer)));
+		parameters.Add(JNativeCallAdapterTests.CreateByteArray(proxyEnv, builder, new(refs[2].Pointer)));
+		parameters.Add(JNativeCallAdapterTests.CreateCharArray(proxyEnv, builder, new(refs[3].Pointer)));
+		parameters.Add(JNativeCallAdapterTests.CreateDoubleArray(proxyEnv, builder, new(refs[4].Pointer)));
+		parameters.Add(JNativeCallAdapterTests.CreateFloatArray(proxyEnv, builder, new(refs[5].Pointer)));
+		parameters.Add(JNativeCallAdapterTests.CreateIntArray(proxyEnv, builder, new(refs[6].Pointer)));
+		parameters.Add(JNativeCallAdapterTests.CreateLongArray(proxyEnv, builder, new(refs[7].Pointer)));
+		parameters.Add(JNativeCallAdapterTests.CreateShortArray(proxyEnv, builder, new(refs[8].Pointer)));
+		parameters.Add(JNativeCallAdapterTests.CreateClassArray(proxyEnv, builder, new(refs[9].Pointer)));
+		parameters.Add(JNativeCallAdapterTests.CreateClassArray(proxyEnv, builder, new(refs[10].Pointer)));
+		parameters.Add(JNativeCallAdapterTests.CreateArray(proxyEnv, builder, new(refs[11]), false));
+		parameters.Add(JNativeCallAdapterTests.CreateArray(proxyEnv, builder, new(refs[12]), true));
+		parameters.Add(JNativeCallAdapterTests.CreateTestArray<JStringObject>(proxyEnv, builder, new(refs[13])));
+		parameters.Add(JNativeCallAdapterTests.CreateTestArray<JThrowableObject>(proxyEnv, builder, new(refs[14])));
+		parameters.Add(JNativeCallAdapterTests.CreateTestArray<JLong>(proxyEnv, builder, new(refs[15])));
+		parameters.Add(JNativeCallAdapterTests.CreateString(proxyEnv, builder, new(refs[16])));
+		parameters.Add(JNativeCallAdapterTests.CreateThrowable(proxyEnv, builder, new(refs[17])));
 		parameters.Add(
-			JNativeCallAdapterTests.CreateThrowable(proxyEnv, builder, JThrowableLocalRef.FromReference(in refs[17])));
-		parameters.Add(
-			JNativeCallAdapterTests.CreateTypedThrowable<JRuntimeExceptionObject>(
-				proxyEnv, builder, JThrowableLocalRef.FromReference(in refs[18])));
+			JNativeCallAdapterTests.CreateTypedThrowable<JRuntimeExceptionObject>(proxyEnv, builder, new(refs[18])));
 
 		Int32 actualCount = parameters.Count;
 		for (Int32 i = 0; i < actualCount; i++)

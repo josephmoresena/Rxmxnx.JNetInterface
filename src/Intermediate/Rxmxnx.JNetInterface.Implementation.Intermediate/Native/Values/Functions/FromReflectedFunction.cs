@@ -10,7 +10,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
 internal readonly unsafe struct FromReflectedFunction<TAccessible> : IFromReflectedFunction
-	where TAccessible : unmanaged, IAccessibleIdentifierType
+	where TAccessible : unmanaged, IAccessibleIdentifierType, INativePointerType<TAccessible>
 {
 	/// <summary>
 	/// Pointer to <c>FromReflected<typeparamref name="TAccessible"/></c> function.
@@ -30,6 +30,6 @@ internal readonly unsafe struct FromReflectedFunction<TAccessible> : IFromReflec
 		IntPtr result = OperatingSystem.IsWindows() ?
 			this._function.Windows(envRef, localRef) :
 			this._function.Unix(envRef, localRef);
-		return Unsafe.As<IntPtr, TAccessible>(ref result);
+		return TAccessible.New(result);
 	}
 }

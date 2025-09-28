@@ -2,7 +2,9 @@ namespace Rxmxnx.JNetInterface.Native.Values;
 
 internal partial struct NativeInterface
 {
-	/// <inheritdoc cref="JNativeInterface.GetVersionPointer"/>
+	/// <summary>
+	/// Pointer to <c>GetVersion</c> function. Retrieves the version of the <c>JNIEnv</c> interface.
+	/// </summary>
 	[StructLayout(LayoutKind.Explicit)]
 #if !PACKAGE
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,

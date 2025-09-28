@@ -5,7 +5,7 @@
 /// </summary>
 /// <remarks>This references is valid only for the thread who owns the reference.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JEnvironmentRef : INativeReferenceType, IReadOnlyReferenceable<JEnvironmentValue>
+public readonly partial struct JEnvironmentRef : INativePointerType
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JEnvironmentRef;
@@ -13,23 +13,21 @@ public readonly partial struct JEnvironmentRef : INativeReferenceType, IReadOnly
 	/// <summary>
 	/// Internal pointer value.
 	/// </summary>
-	private readonly ReadOnlyValPtr<JEnvironmentValue> _value;
+	private readonly ReadOnlyValPtr<IntPtr> _value;
 
 	/// <inheritdoc/>
-	public IntPtr Pointer => this._value;
+	public IntPtr Pointer => this._value.Pointer;
 
 	/// <summary>
-	/// <see langword="readonly ref"/> <see cref="JEnvironmentValue"/> from this pointer.
+	/// Pointer to native interface.
 	/// </summary>
-	internal ref readonly JEnvironmentValue Reference => ref this._value.Reference;
+	internal unsafe void* InterfacePointer => this._value.Reference.ToPointer();
 
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JEnvironmentRef() => this._value = ReadOnlyValPtr<JEnvironmentValue>.Zero;
-
-	ref readonly JEnvironmentValue IReadOnlyReferenceable<JEnvironmentValue>.Reference => ref this.Reference;
+	public JEnvironmentRef() => this._value = ReadOnlyValPtr<IntPtr>.Zero;
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
