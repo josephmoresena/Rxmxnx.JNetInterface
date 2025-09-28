@@ -2,6 +2,28 @@
 
     <Import Project="JNetInterface-Config.targets"/>
 
+    <PropertyGroup>
+        <SelfContained Condition="'$(TargetFramework)' == 'net7.0'">true</SelfContained>
+        <IsOSXHost>$([MSBuild]::IsOSPlatform('OSX'))</IsOSXHost>
+        <HostArch>$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)</HostArch>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(IsOSXHost)' == 'true' And '$(TargetFramework)' == 'net7.0'">
+        <KnownILCompilerPack Remove="@(KnownILCompilerPack)"/>
+        <KnownILCompilerPack Include="Microsoft.DotNet.ILCompiler"
+                             TargetFramework="net7.0"
+                             ILCompilerRuntimeIdentifiers="linux-arm64;linux-musl-arm64;linux-musl-x64;linux-x64;win-arm64;win-x64;osx-x64"
+                             ILCompilerPackVersion="7.0.20"
+                             ILCompilerPackNamePattern="runtime.**RID**.Microsoft.DotNet.ILCompiler"
+                             Condition="'$(HostArch)' == 'X64'"/>
+        <KnownILCompilerPack Include="Microsoft.DotNet.ILCompiler"
+                             TargetFramework="net7.0"
+                             ILCompilerRuntimeIdentifiers="linux-arm64;linux-musl-arm64;linux-musl-x64;linux-x64;win-arm64;win-x64;osx-arm64;osx-x64"
+                             ILCompilerPackVersion="8.0.20"
+                             ILCompilerPackNamePattern="runtime.**RID**.Microsoft.DotNet.ILCompiler"
+                             Condition="'$(HostArch)' == 'Arm64'"/>
+    </ItemGroup>
+
     <PropertyGroup Condition="'$(IlcDisableReflection)' == 'true'">
         <!-- Assembly name must specify that it was compiled in reflection-free mode -->
         <AssemblyName>$(AssemblyName).RFM</AssemblyName>
@@ -18,13 +40,10 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <SelfContained Condition="'$(TargetFramework)' == 'net7.0'">true</SelfContained>
         <PublishAot>true</PublishAot>
         <IlcGenerateMstatFile>true</IlcGenerateMstatFile>
         <IlcGenerateDgmlFile>true</IlcGenerateDgmlFile>
         <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
-        <IsOSXHost>$([MSBuild]::IsOSPlatform('OSX'))</IsOSXHost>
-        <HostArch>$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)</HostArch>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -36,21 +55,5 @@
         <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
         <IlcGenerateCompleteTypeMetadata>false</IlcGenerateCompleteTypeMetadata>
     </PropertyGroup>
-
-    <ItemGroup Condition="'$(IsOSXHost)' == 'true'">
-        <KnownILCompilerPack Condition="'$(TargetFramework)' == 'net7.0'" Remove="@(KnownILCompilerPack)"/>
-        <KnownILCompilerPack Include="Microsoft.DotNet.ILCompiler"
-                             TargetFramework="net7.0"
-                             ILCompilerRuntimeIdentifiers="linux-arm64;linux-musl-arm64;linux-musl-x64;linux-x64;win-arm64;win-x64;osx-x64"
-                             ILCompilerPackVersion="7.0.20"
-                             ILCompilerPackNamePattern="runtime.**RID**.Microsoft.DotNet.ILCompiler"
-                             Condition="'$(TargetFramework)' == 'net7.0' And '$(HostArch)' == 'X64'"/>
-        <KnownILCompilerPack Include="Microsoft.DotNet.ILCompiler"
-                             TargetFramework="net7.0"
-                             ILCompilerRuntimeIdentifiers="linux-arm64;linux-musl-arm64;linux-musl-x64;linux-x64;win-arm64;win-x64;osx-x64"
-                             ILCompilerPackVersion="8.0.20"
-                             ILCompilerPackNamePattern="runtime.**RID**.Microsoft.DotNet.ILCompiler"
-                             Condition="'$(TargetFramework)' == 'net7.0' And '$(HostArch)' == 'Arm64'"/>
-    </ItemGroup>
 
 </Project>
