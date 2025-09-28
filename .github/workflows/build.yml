@@ -299,7 +299,7 @@ jobs:
           echo '<Project>' > Directory.Build.props
           echo '  <PropertyGroup>' >> Directory.Build.props
           echo '    <TargetFrameworks>net9.0;net8.0</TargetFrameworks>' >> Directory.Build.props
-          echo '    <TargetFrameworks Condition="''$(RuntimeIdentifier)'' != ''linux-bionic-arm''">$(TargetFrameworks);net7.0</TargetFrameworks>' >> Directory.Build.props
+          echo '    <TargetFrameworks Condition="'"'"'$(RuntimeIdentifier)'"'"' != '"'"'linux-bionic-arm'"'"'">$(TargetFrameworks);net7.0</TargetFrameworks>' >> Directory.Build.props
           echo '    <LangVersion>latest</LangVersion>' >> Directory.Build.props
           echo '  </PropertyGroup>' >> Directory.Build.props
           echo '</Project>' >> Directory.Build.props  
