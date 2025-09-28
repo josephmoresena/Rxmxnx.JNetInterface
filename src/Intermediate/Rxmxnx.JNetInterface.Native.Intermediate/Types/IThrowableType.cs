@@ -5,10 +5,8 @@ namespace Rxmxnx.JNetInterface.Types;
 /// </summary>
 public interface IThrowableType : IClassType
 {
-#if !NET8_0_OR_GREATER
 	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
 	static Type IDataType.FamilyType => typeof(JThrowableObject);
-#endif
 }
 
 /// <summary>

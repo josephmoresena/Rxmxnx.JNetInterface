@@ -1,3 +1,4 @@
+// ReSharper disable RedundantCast
 namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
@@ -235,6 +236,7 @@ internal interface INumericValue<TPrimitive> : IBinaryNumber<TPrimitive>
 			return true;
 		}
 		Unsafe.SkipInit(out result);
+		// For unknown reasons, an explicit operator is required at runtime.
 		return TPrimitive.Zero.GetTypeCode() switch
 		{
 			TypeCode.SByte => INumericValue<TPrimitive>.TryConvertFromChecked<SByte, TOther>(
@@ -265,6 +267,7 @@ internal interface INumericValue<TPrimitive> : IBinaryNumber<TPrimitive>
 			return true;
 		}
 		Unsafe.SkipInit(out result);
+		// For unknown reasons, an explicit operator is required at runtime.
 		return TPrimitive.Zero.GetTypeCode() switch
 		{
 			TypeCode.SByte => INumericValue<TPrimitive>.TryConvertFromSaturating<SByte, TOther>(
@@ -295,6 +298,7 @@ internal interface INumericValue<TPrimitive> : IBinaryNumber<TPrimitive>
 			return true;
 		}
 		Unsafe.SkipInit(out result);
+		// For unknown reasons, an explicit operator is required at runtime.
 		return TPrimitive.Zero.GetTypeCode() switch
 		{
 			TypeCode.SByte => INumericValue<TPrimitive>.TryConvertFromTruncating<SByte, TOther>(
@@ -325,6 +329,7 @@ internal interface INumericValue<TPrimitive> : IBinaryNumber<TPrimitive>
 			return true;
 		}
 		Unsafe.SkipInit(out result);
+		// For unknown reasons, an explicit operator is required at runtime.
 		return value switch
 		{
 			JByte jByte => INumericValue<TPrimitive>.TryConvertToChecked<SByte, TOther>(new(jByte.Value, ref result)),

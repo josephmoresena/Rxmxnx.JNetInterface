@@ -54,12 +54,7 @@ let MainAsync () =
         if args.Length < 2 then
             raise (ArgumentException("Please set JVM library path."))
 
-        let! helloJniByteCode =
-            if args.Length > 1 && not (String.IsNullOrWhiteSpace args.[1]) then
-                File.ReadAllBytesAsync(Path.Combine(args.[1], "HelloDotnet.class"))
-                |> Async.AwaitTask
-            else
-                File.ReadAllBytesAsync("HelloDotnet.class") |> Async.AwaitTask
+        let! helloJniByteCode = File.ReadAllBytesAsync("HelloDotnet.class") |> Async.AwaitTask                
 
         let jvmLib =
             match JVirtualMachineLibrary.LoadLibrary(Array.last args) with
