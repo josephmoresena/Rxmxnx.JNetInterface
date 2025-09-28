@@ -24,17 +24,25 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 	{
 		try
 		{
+#if NET8_0_OR_GREATER
 			ref readonly VirtualMachineInitOptionValue options =
+#else
+			ref VirtualMachineInitOptionValue options =
+#endif
 				ref Unsafe.AsRef<VirtualMachineInitOptionValue>(initValue.Options);
 
 			if (JVirtualMachineLibraryTests.count == 0)
 				Assert.Equal(0x00010006, initValue.Version);
 			JVirtualMachineLibraryTests.count++;
+#if NET8_0_OR_GREATER
 			Assert.True(Unsafe.IsNullRef(in options));
+#else
+			Assert.True(ref options);
+#endif
 			Assert.Equal(default, initValue.OptionsLength);
 			Assert.Equal(default, initValue.IgnoreUnrecognized);
 
-			if (initValue.Version > jniVersion)
+			if (initValue.Version > JVirtualMachineLibraryTests.jniVersion)
 				return JResult.VersionError;
 
 			initValue = new()
@@ -63,18 +71,40 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 		}
 		try
 		{
+#if NET8_0_OR_GREATER
 			ref readonly VirtualMachineInitOptionValue options =
+#else
+			ref VirtualMachineInitOptionValue options =
+#endif
 				ref Unsafe.AsRef<VirtualMachineInitOptionValue>(value.Options);
+			Boolean nullOptions =
+#if NET8_0_OR_GREATER
+				!Unsafe.IsNullRef(in options);
+#else
+                !Unsafe.IsNullRef(ref options);
+#endif
 
 			Assert.Equal(0x00010006, value.Version);
 			Assert.Equal(JVirtualMachineLibraryTests.args.Options.NonEmptyCount, value.OptionsLength);
 			Assert.Equal(JVirtualMachineLibraryTests.args.IgnoreUnrecognized, value.IgnoreUnrecognized);
-			if (!Unsafe.IsNullRef(in options) && (ReadOnlyValPtr<Byte>)options.OptionString is
-			    { IsZero: false, } optionString)
-				Assert.True(Unsafe.AreSame(in JVirtualMachineLibraryTests.args.Options.GetPinnableReference(),
-				                           in optionString.Reference));
+			if (!nullOptions && (ReadOnlyValPtr<Byte>)options.OptionString is { IsZero: false, } optionString)
+			{
+#if NET8_0_OR_GREATER
+				ref readonly Byte optionsBuffer =
+#else
+                ref Byte optionsBuffer =
+#endif
+					ref Unsafe.AsRef(in JVirtualMachineLibraryTests.args.Options.GetPinnableReference());
+#if NET8_0_OR_GREATER
+				Assert.True(Unsafe.AreSame(in optionsBuffer, in optionString.Reference));
+#else
+				Assert.True(Unsafe.AreSame(ref optionsBuffer, ref Unsafe.AsRef(in optionString.Reference)));
+#endif
+			}
 			else
+			{
 				Assert.Equal(0, value.OptionsLength);
+			}
 
 			if (JVirtualMachineLibraryTests.result != JResult.Ok)
 			{
@@ -106,7 +136,11 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 
 			Assert.InRange(initValue.Version, 0x00010006,
 			               Math.Max(JVirtualMachineLibraryTests.args.Version, 0x00010006));
+#if NET8_0_OR_GREATER
 			Assert.True(Unsafe.IsNullRef(in options));
+#else
+			Assert.True(Unsafe.IsNullRef(ref Unsafe.AsRef(in options)));
+#endif
 			Assert.Equal(default, initValue.OptionsLength);
 			Assert.Equal(default, initValue.IgnoreUnrecognized);
 
