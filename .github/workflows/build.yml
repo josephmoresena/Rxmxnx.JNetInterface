@@ -299,7 +299,6 @@ jobs:
           echo '<Project>' > Directory.Build.props
           echo '  <PropertyGroup>' >> Directory.Build.props
           echo '    <TargetFrameworks>net9.0;net8.0</TargetFrameworks>' >> Directory.Build.props
-          echo '    <TargetFrameworks Condition="'"'"'$(RuntimeIdentifier)'"'"' != '"'"'linux-bionic-arm'"'"'">$(TargetFrameworks);net7.0</TargetFrameworks>' >> Directory.Build.props
           echo '    <LangVersion>latest</LangVersion>' >> Directory.Build.props
           echo '  </PropertyGroup>' >> Directory.Build.props
           echo '</Project>' >> Directory.Build.props  
@@ -353,26 +352,7 @@ jobs:
           dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
             -p:TargetFramework=net8.0 -p:IlcDisableReflection=true \
             -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0-RFM/x86_64
-
-      - name: Build bionic-libs (.NET 7.0)
-        working-directory: ./NativeAOT-AndroidHelloJniLib
-        run: |
-          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net7.0 \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net7.0/arm64-v8a
-          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net7.0 \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net7.0/x86_64
-      - name: Build bionic-libs (.NET 7.0 - RFM)
-        working-directory: ./NativeAOT-AndroidHelloJniLib
-        run: |
-          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net7.0 -p:IlcDisableReflection=true \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net7.0-RFM/arm64-v8a
-          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net7.0 -p:IlcDisableReflection=true \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net7.0-RFM/x86_64
-
+          
       - name: Create Android project structure
         env:
           APK_KEYSTORE_BASE64: ${{ secrets.APK_KEYSTORE }}
@@ -548,45 +528,6 @@ jobs:
           --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
           --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
           --out ./../jnetinterface-apptest-net8.0-RFM.apk jnetinterface-apptest-net8.0-RFM.apk
-      - name: Build Android Apk (.NET 7.0)
-        env:
-          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
-        working-directory: ./hello-jni_apk
-        shell: bash
-        run: |
-          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
-            -I $ANDROID_HOME/platforms/android-35/android.jar \
-            -F jnetinterface-apptest-net7.0.apk ./dex 
-          
-          mv ../lib-net7.0/* lib/
-          zip -ur jnetinterface-apptest-net7.0.apk lib/ 
-          rm -rf lib/*
-          
-          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
-            --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
-            --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
-            --out ./../jnetinterface-apptest-net7.0.apk jnetinterface-apptest-net7.0.apk 
-      - name: Build Android Apk (.NET 7.0 - RFM)
-        env:
-          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
-        working-directory: ./hello-jni_apk
-        shell: bash
-        run: |
-          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
-          -I $ANDROID_HOME/platforms/android-35/android.jar \
-          -F jnetinterface-apptest-net7.0-RFM.apk ./dex 
-          
-          mv ../lib-net7.0-RFM/* lib/
-          zip -ur jnetinterface-apptest-net7.0-RFM.apk lib/ 
-          rm -rf lib/*
-          
-          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
-          --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
-          --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
-          --out ./../jnetinterface-apptest-net7.0-RFM.apk jnetinterface-apptest-net7.0-RFM.apk 
-
       - name: Create Android Artifact
         uses: actions/upload-artifact@v4
         with:

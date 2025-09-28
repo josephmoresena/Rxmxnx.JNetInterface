@@ -16,12 +16,19 @@ public class JCharBufferObject : JBufferObject<JChar>, IClassType<JCharBufferObj
 	/// Type interfaces.
 	/// </summary>
 	private static readonly ImmutableHashSet<JInterfaceTypeMetadata> typeInterfaces =
+#if NET8_0_OR_GREATER
 	[
 		IInterfaceType.GetMetadata<JComparableObject>(),
 		IInterfaceType.GetMetadata<JCharSequenceObject>(),
 		IInterfaceType.GetMetadata<JAppendableObject>(),
 		IInterfaceType.GetMetadata<JReadableObject>(),
 	];
+#else
+		ImmutableHashSet.Create(IInterfaceType.GetMetadata<JComparableObject>(),
+		                        IInterfaceType.GetMetadata<JCharSequenceObject>(),
+		                        IInterfaceType.GetMetadata<JAppendableObject>(),
+		                        IInterfaceType.GetMetadata<JReadableObject>());
+#endif
 	/// <summary>
 	/// Type metadata.
 	/// </summary>

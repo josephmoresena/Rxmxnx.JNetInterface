@@ -48,6 +48,9 @@ public partial class JNativeCallback
 #endif
 		JNativeCallback.RegisterNatives(env);
 	}
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	private static TInterface
 		Create<TObject, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>(
 			IEnvironment env, ReadOnlySpan<JLong> longKey, CallbackState state)

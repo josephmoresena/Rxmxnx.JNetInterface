@@ -12,11 +12,17 @@ public partial class JStringObject
 	/// Datatype interfaces.
 	/// </summary>
 	private static readonly ImmutableHashSet<JInterfaceTypeMetadata> typeInterfaces =
+#if NET8_0_OR_GREATER
 	[
 		IInterfaceType.GetMetadata<JSerializableObject>(),
 		IInterfaceType.GetMetadata<JComparableObject>(),
 		IInterfaceType.GetMetadata<JCharSequenceObject>(),
 	];
+#else
+		ImmutableHashSet.Create(IInterfaceType.GetMetadata<JSerializableObject>(),
+		                        IInterfaceType.GetMetadata<JComparableObject>(),
+		                        IInterfaceType.GetMetadata<JCharSequenceObject>());
+#endif
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>

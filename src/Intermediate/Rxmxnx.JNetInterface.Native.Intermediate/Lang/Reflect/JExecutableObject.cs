@@ -16,10 +16,15 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 	/// Type interfaces.
 	/// </summary>
 	private static readonly ImmutableHashSet<JInterfaceTypeMetadata> typeInterfaces =
+#if NET8_0_OR_GREATER
 	[
 		IInterfaceType.GetMetadata<JGenericDeclarationObject>(),
 		IInterfaceType.GetMetadata<JMemberObject>(),
 	];
+#else
+		ImmutableHashSet.Create(IInterfaceType.GetMetadata<JGenericDeclarationObject>(),
+		                        IInterfaceType.GetMetadata<JMemberObject>());
+#endif
 	/// <summary>
 	/// class metadata.
 	/// </summary>

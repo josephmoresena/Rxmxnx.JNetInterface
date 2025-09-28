@@ -22,9 +22,13 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 	/// Type interfaces.
 	/// </summary>
 	private static readonly ImmutableHashSet<JInterfaceTypeMetadata> typeInterfaces =
+#if NET8_0_OR_GREATER
 	[
 		IInterfaceType.GetMetadata<JDirectBufferObject>(),
 	];
+#else
+		ImmutableHashSet.Create(IInterfaceType.GetMetadata<JDirectBufferObject>());
+#endif
 	/// <summary>
 	/// Type metadata.
 	/// </summary>

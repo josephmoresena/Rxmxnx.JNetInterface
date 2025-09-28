@@ -12,12 +12,19 @@ public partial class JClassObject
 	/// Datatype interfaces.
 	/// </summary>
 	private static readonly ImmutableHashSet<JInterfaceTypeMetadata> typeInterfaces =
+#if NET8_0_OR_GREATER
 	[
 		IInterfaceType.GetMetadata<JSerializableObject>(),
 		IInterfaceType.GetMetadata<JAnnotatedElementObject>(),
 		IInterfaceType.GetMetadata<JGenericDeclarationObject>(),
 		IInterfaceType.GetMetadata<JTypeObject>(),
 	];
+#else
+		ImmutableHashSet.Create(IInterfaceType.GetMetadata<JSerializableObject>(),
+		                        IInterfaceType.GetMetadata<JAnnotatedElementObject>(),
+		                        IInterfaceType.GetMetadata<JGenericDeclarationObject>(),
+		                        IInterfaceType.GetMetadata<JTypeObject>());
+#endif
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
