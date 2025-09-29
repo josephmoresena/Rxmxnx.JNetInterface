@@ -11,6 +11,10 @@ internal partial class InterfaceSet : IAppendableInterfaceSet
 	private readonly ImmutableHashSet<JInterfaceTypeMetadata> _internalSet;
 
 	/// <summary>
+	/// Parameterless constructor.
+	/// </summary>
+	private InterfaceSet() : this(ImmutableHashSet<JInterfaceTypeMetadata>.Empty) { }
+	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="set">A <see cref="IReadOnlySet{T}"/> instance.</param>

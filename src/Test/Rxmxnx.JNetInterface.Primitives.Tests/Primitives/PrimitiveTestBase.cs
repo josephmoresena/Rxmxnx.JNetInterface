@@ -9,8 +9,8 @@ public abstract partial class PrimitiveTestBase
 
 	private protected static void FloatingTest<TPrimitive, TValue>()
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable,
-		IFloatingPoint<TPrimitive>, IBinaryNumber<TPrimitive>, IFloatingPointIeee754<TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IFloatingPoint<TPrimitive>,
+		IBinaryNumber<TPrimitive>, IFloatingPointIeee754<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IFloatingPoint<TValue>, IBinaryNumber<TValue>,
 		IFloatingPointIeee754<TValue>
 	{
@@ -27,8 +27,8 @@ public abstract partial class PrimitiveTestBase
 	}
 	private protected static void IntegerTest<TPrimitive, TValue>()
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable,
-		IBinaryInteger<TPrimitive>, IShiftOperators<TPrimitive, Int32, TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IBinaryInteger<TPrimitive>,
+		IShiftOperators<TPrimitive, Int32, TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryInteger<TValue>,
 		IShiftOperators<TValue, Int32, TValue>
 	{
@@ -49,8 +49,8 @@ public abstract partial class PrimitiveTestBase
 		=> Assert.Equal(TValue.NegativeOne, TPrimitive.NegativeOne.Value);
 	private protected static void NumericOperationsTest<TPrimitive, TValue>()
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable,
-		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IBinaryNumber<TPrimitive>,
+		INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
 	{
 		TPrimitive primitive = PrimitiveTestBase.Fixture.Create<TValue>();
@@ -60,8 +60,8 @@ public abstract partial class PrimitiveTestBase
 	}
 	private protected static void NumericTypeTest<TPrimitive, TValue>()
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable,
-		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IBinaryNumber<TPrimitive>,
+		INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
 	{
 		Assert.Equal(TValue.AllBitsSet, TPrimitive.AllBitsSet.Value);

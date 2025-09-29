@@ -121,9 +121,10 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// <param name="action">An action to invoke inside created new local reference.</param>
 	void WithFrame<TState>(Int32 capacity, TState state, Action<TState> action)
 #if NET9_0_OR_GREATER
-	where TState : allows ref struct
-#endif
+		where TState : allows ref struct;
+#else
 		;
+#endif
 	/// <summary>
 	/// Creates a new local reference frame and executes <paramref name="func"/> inside of it.
 	/// </summary>
@@ -138,9 +139,10 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// <param name="func">A function to execute inside created new local reference.</param>
 	TResult WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func)
 #if NET9_0_OR_GREATER
-	where TState : allows ref struct
-#endif
+		where TState : allows ref struct;
+#else
 		;
+#endif
 
 	/// <summary>
 	/// JNI pending exception describe.

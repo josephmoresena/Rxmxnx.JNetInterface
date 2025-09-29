@@ -96,7 +96,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfDefault(jString);
 			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, true);
 		}
-		public unsafe ReadOnlyValPtr<Char> GetCriticalSequence(JStringLocalRef stringRef)
+		public ReadOnlyValPtr<Char> GetCriticalSequence(JStringLocalRef stringRef)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetStringCriticalInfo);
@@ -148,7 +148,7 @@ partial class JEnvironment
 				throw;
 			}
 		}
-		public unsafe void ReleaseCriticalSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer)
+		public void ReleaseCriticalSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer)
 		{
 			try
 			{

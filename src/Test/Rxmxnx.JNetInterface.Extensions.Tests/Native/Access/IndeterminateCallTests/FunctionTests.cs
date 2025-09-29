@@ -16,6 +16,9 @@ public sealed class FunctionTests : IndeterminateAccessTestsBase
 		JArgumentMetadata.Create<JInt>(),
 	];
 
+	private static ReadOnlySpan<JArgumentMetadata> EmptyArgsMetadata => [];
+	private static ReadOnlySpan<IObject?> EmptyArgs => [];
+
 	[Fact]
 	internal void BooleanTest() => FunctionTests.ParameterlessTest<JBoolean>();
 	[Fact]
@@ -109,12 +112,11 @@ public sealed class FunctionTests : IndeterminateAccessTestsBase
 
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		using JClassObject jClass = new(env);
-		IndeterminateCall call =
-			IndeterminateCall.CreateFunctionDefinition(JArgumentMetadata.Create("Lpackage/FakeClass;"u8), "funcName"u8,
-			                                           []);
+		IndeterminateCall call = IndeterminateCall.CreateFunctionDefinition(
+			JArgumentMetadata.Create("Lpackage/FakeClass;"u8), "funcName"u8, FunctionTests.EmptyArgsMetadata);
 
-		Assert.Throws<InvalidOperationException>(() => call.NewCall(jClass, []));
-		Assert.Throws<InvalidOperationException>(() => call.NewCall<JLocalObject>(env, []));
+		Assert.Throws<InvalidOperationException>(() => call.NewCall(jClass, FunctionTests.EmptyArgs));
+		Assert.Throws<InvalidOperationException>(() => call.NewCall<JLocalObject>(env, FunctionTests.EmptyArgs));
 	}
 
 	private static void ParameterlessTest<TDataType>() where TDataType : IDataType<TDataType>
@@ -122,9 +124,11 @@ public sealed class FunctionTests : IndeterminateAccessTestsBase
 		JDataTypeMetadata typeMetadata = IDataType.GetMetadata<TDataType>();
 		ReadOnlySpan<Byte> functionName = (CString)FunctionTests.fixture.Create<String>();
 		JFunctionDefinition definition = new JFunctionDefinition<TDataType>.Parameterless(functionName);
-		IndeterminateCall call = IndeterminateCall.CreateFunctionDefinition<TDataType>(functionName, []);
+		IndeterminateCall call =
+			IndeterminateCall.CreateFunctionDefinition<TDataType>(functionName, FunctionTests.EmptyArgsMetadata);
 		IndeterminateCall callMetadata =
-			IndeterminateCall.CreateFunctionDefinition(typeMetadata.ArgumentMetadata, functionName, []);
+			IndeterminateCall.CreateFunctionDefinition(typeMetadata.ArgumentMetadata, functionName,
+			                                           FunctionTests.EmptyArgsMetadata);
 		IndeterminateCall operatorCall = definition;
 
 		Assert.Equal(call.Definition, operatorCall.Definition);
@@ -145,9 +149,9 @@ public sealed class FunctionTests : IndeterminateAccessTestsBase
 
 		IndeterminateResult result = new(new JValue.PrimitiveValue(), typeMetadata.Signature);
 
-		IndeterminateAccessTestsBase.Compare(result, call.FunctionCall(jClass, []));
-		IndeterminateAccessTestsBase.Compare(result, call.FunctionCall(jClass, jClass, true, []));
-		IndeterminateAccessTestsBase.Compare(result, call.StaticFunctionCall(jClass, []));
+		IndeterminateAccessTestsBase.Compare(result, call.FunctionCall(jClass, FunctionTests.EmptyArgs));
+		IndeterminateAccessTestsBase.Compare(result, call.FunctionCall(jClass, jClass, true, FunctionTests.EmptyArgs));
+		IndeterminateAccessTestsBase.Compare(result, call.StaticFunctionCall(jClass, FunctionTests.EmptyArgs));
 
 		Assert.Null((IndeterminateCall?)default(JFunctionDefinition<TDataType>));
 	}

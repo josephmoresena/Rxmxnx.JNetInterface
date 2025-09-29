@@ -24,7 +24,11 @@ public class JDialogObjectSwing : JDialogObject, IClassType<JDialogObjectSwing>
 		IEnvironment env = window.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JDialogObject>(env);
 		using JStringObject jString = JStringObject.Create(env, title);
+#if !NET9_0_OR_GREATER
 		return JDialogObjectSwing.constructorDef.NewCall<JDialogObjectSwing>(env, [window, jString,]);
+#else
+		return JDialogObjectSwing.constructorDef.NewCall<JDialogObjectSwing>(env, window, jString);
+#endif
 	}
 
 	static JDialogObjectSwing IClassType<JDialogObjectSwing>.Create(IReferenceType.ClassInitializer initializer)

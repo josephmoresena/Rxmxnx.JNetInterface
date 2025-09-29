@@ -61,7 +61,7 @@ public class JByteBufferObject : JBufferObject<JByte>, IClassType<JByteBufferObj
 	public static void WithDirectBuffer<TState>(IEnvironment env, Int32 capacity, TState state,
 		Action<JByteBufferObject, TState> action)
 #if NET9_0_OR_GREATER
-	where TState : allows ref struct
+		where TState : allows ref struct
 #endif
 		=> env.NioFeature.WithDirectByteBuffer(capacity, state, action);
 	/// <summary>
@@ -88,7 +88,7 @@ public class JByteBufferObject : JBufferObject<JByte>, IClassType<JByteBufferObj
 	public static TResult WithDirectBuffer<TState, TResult>(IEnvironment env, Int32 capacity, TState state,
 		Func<JByteBufferObject, TState, TResult> func)
 #if NET9_0_OR_GREATER
-	where TState : allows ref struct
+		where TState : allows ref struct
 #endif
 		=> env.NioFeature.WithDirectByteBuffer(capacity, state, func);
 

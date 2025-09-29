@@ -21,7 +21,11 @@ public class JButtonObject : JAbstractButtonObject, IClassType<JButtonObject>
 	{
 		using JClassObject jClass = JClassObject.GetClass<JButtonObject>(env);
 		using JStringObject jString = JStringObject.Create(env, text);
+#if !NET9_0_OR_GREATER
 		return JButtonObject.constructorDef.NewCall<JButtonObject>(env, [jString,]);
+#else
+		return JButtonObject.constructorDef.NewCall<JButtonObject>(env, jString);
+#endif
 	}
 
 	static JButtonObject IClassType<JButtonObject>.Create(IReferenceType.ClassInitializer initializer)

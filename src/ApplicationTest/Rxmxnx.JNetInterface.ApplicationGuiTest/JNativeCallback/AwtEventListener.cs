@@ -22,15 +22,15 @@ public partial class JNativeCallback
 		IInterfaceObject<JAwtEventListenerObject>, IInterfaceObject<JEventListenerObject>
 	{
 		private static readonly JMethodDefinition eventDispatchedDef = (JMethodDefinition)IndeterminateCall
-			.CreateMethodDefinition(
-				"awtEventListener_eventDispatched"u8,
+			.CreateMethodDefinition("awtEventListener_eventDispatched"u8,
 #if !NET9_0_OR_GREATER
-				[
-#endif
-					JArgumentMetadata.Get<JLong>(), JArgumentMetadata.Get<JLong>(),
-					JArgumentMetadata.Get<JAwtEventObject>()
-#if !NET9_0_OR_GREATER
-				]
+			                        [
+				                        JArgumentMetadata.Get<JLong>(), JArgumentMetadata.Get<JLong>(),
+				                        JArgumentMetadata.Get<JAwtEventObject>(),
+			                        ]
+#else
+			                        JArgumentMetadata.Get<JLong>(), JArgumentMetadata.Get<JLong>(),
+			                        JArgumentMetadata.Get<JAwtEventObject>()
 #endif
 			).Definition;
 		private static readonly JClassTypeMetadata<AwtEventListener> nestedTypeMetadata =

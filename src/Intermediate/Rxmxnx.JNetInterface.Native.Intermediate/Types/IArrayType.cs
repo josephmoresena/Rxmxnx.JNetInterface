@@ -7,15 +7,14 @@ namespace Rxmxnx.JNetInterface.Types;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public interface IArrayType : IReferenceType
 {
-	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
-	static JTypeKind IDataType.Kind => JTypeKind.Array;
-	static Type IDataType.FamilyType => typeof(JArrayObject);
-	
 	/// <summary>
 	/// Current type metadata.
 	/// </summary>
 	[ReadOnly(true)]
 	static abstract JArrayTypeMetadata Metadata { get; }
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static JTypeKind IDataType.Kind => JTypeKind.Array;
+	static Type IDataType.FamilyType => typeof(JArrayObject);
 
 	/// <summary>
 	/// Retrieves the metadata for given array type.

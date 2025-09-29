@@ -8,7 +8,7 @@
         <Using Include="System.Runtime.CompilerServices"/>
         <Using Include="System.Runtime.InteropServices"/>
         <Using Include="System.Text"/>
-        
+
         <Using Include="Xunit"/>
         <Using Include="AutoFixture"/>
         <Using Include="NSubstitute"/>

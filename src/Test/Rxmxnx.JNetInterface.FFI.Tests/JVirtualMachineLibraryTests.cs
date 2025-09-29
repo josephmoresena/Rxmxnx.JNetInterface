@@ -145,7 +145,8 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 			if (JVirtualMachineLibraryTests.result != JResult.Ok)
 			{
 				Assert.Equal(JVirtualMachineLibraryTests.result,
-				             Assert.Throws<JniException>(() => library.CreateVirtualMachine(args, out IEnvironment __))
+				             Assert.Throws<JniException>(() => library.CreateVirtualMachine(
+					                                         JVirtualMachineLibraryTests.args, out IEnvironment __))
 				                   .Result);
 				if (JVirtualMachineLibraryTests.nativeException is not null)
 					throw new AggregateException(JVirtualMachineLibraryTests.nativeException);
@@ -163,7 +164,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 		finally
 		{
 			reset();
-			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference,
+			JVirtualMachine.RemoveEnvironment(JVirtualMachineLibraryTests.proxyEnv.VirtualMachine.Reference,
 			                                  JVirtualMachineLibraryTests.proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();

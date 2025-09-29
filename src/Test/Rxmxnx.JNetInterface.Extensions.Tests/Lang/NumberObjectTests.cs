@@ -1,3 +1,5 @@
+// ReSharper disable RedundantCast
+
 namespace Rxmxnx.JNetInterface.Tests.Lang;
 
 [ExcludeFromCodeCoverage]
@@ -114,6 +116,7 @@ public sealed class NumberObjectTests
 	{
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JObjectLocalRef localRef = NumberObjectTests.fixture.Create<JObjectLocalRef>();
+		// For unknown reasons, an explicit operator is required at runtime.
 		TPrimitive value = (TPrimitive)NumberObjectTests.fixture.Create<Double>();
 		using JClassObject jClass = new(env);
 		using JClassObject jNumberClass = new(jClass, IClassType.GetMetadata<JNumberObject>());
@@ -234,6 +237,7 @@ public sealed class NumberObjectTests
 	{
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JObjectLocalRef localRef = NumberObjectTests.fixture.Create<JObjectLocalRef>();
+		// For unknown reasons, an explicit operator is required at runtime.
 		TPrimitive value = (TPrimitive)NumberObjectTests.fixture.Create<Double>();
 		using JClassObject jClass = new(env);
 		using JClassObject jNumberClass = new(jClass, IClassType.GetMetadata<JNumberObject>());
@@ -317,6 +321,7 @@ public sealed class NumberObjectTests
 	{
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JObjectLocalRef localRef = NumberObjectTests.fixture.Create<JObjectLocalRef>();
+		// For unknown reasons, an explicit operator is required at runtime.
 		TPrimitive value = (TPrimitive)NumberObjectTests.fixture.Create<Double>();
 		using JClassObject jClass = new(env);
 		using JClassObject jNumberClass = new(jClass, IClassType.GetMetadata<JNumberObject>());

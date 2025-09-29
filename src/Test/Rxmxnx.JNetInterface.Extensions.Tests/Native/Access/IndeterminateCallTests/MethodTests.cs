@@ -12,12 +12,15 @@ public sealed class MethodTests : IndeterminateAccessTestsBase
 		JArgumentMetadata.Create<JInt>(),
 	];
 
+	private static ReadOnlySpan<JArgumentMetadata> EmptyArgsMetadata => [];
+	private static ReadOnlySpan<IObject?> EmptyArgs => [];
+
 	[Fact]
 	internal void ParameterlessTest()
 	{
 		ReadOnlySpan<Byte> methodName = (CString)MethodTests.fixture.Create<String>();
 		JMethodDefinition definition = new JMethodDefinition.Parameterless(methodName);
-		IndeterminateCall call = IndeterminateCall.CreateMethodDefinition(methodName, []);
+		IndeterminateCall call = IndeterminateCall.CreateMethodDefinition(methodName, MethodTests.EmptyArgsMetadata);
 		IndeterminateCall operatorCall = definition;
 
 		Assert.Equal(call.Definition, operatorCall.Definition);
@@ -32,13 +35,13 @@ public sealed class MethodTests : IndeterminateAccessTestsBase
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		using JClassObject jClass = new(env);
 
-		IndeterminateAccessTestsBase.EmptyCompare(call.FunctionCall(jClass, []));
-		IndeterminateAccessTestsBase.EmptyCompare(call.FunctionCall(jClass, jClass, true, []));
-		IndeterminateAccessTestsBase.EmptyCompare(call.StaticFunctionCall(jClass, []));
+		IndeterminateAccessTestsBase.EmptyCompare(call.FunctionCall(jClass, MethodTests.EmptyArgs));
+		IndeterminateAccessTestsBase.EmptyCompare(call.FunctionCall(jClass, jClass, true, MethodTests.EmptyArgs));
+		IndeterminateAccessTestsBase.EmptyCompare(call.StaticFunctionCall(jClass, MethodTests.EmptyArgs));
 
 		Assert.Null((IndeterminateCall?)default(JMethodDefinition));
-		Assert.Throws<InvalidOperationException>(() => call.NewCall(jClass, []));
-		Assert.Throws<InvalidOperationException>(() => call.NewCall<JLocalObject>(env, []));
+		Assert.Throws<InvalidOperationException>(() => call.NewCall(jClass, MethodTests.EmptyArgs));
+		Assert.Throws<InvalidOperationException>(() => call.NewCall<JLocalObject>(env, MethodTests.EmptyArgs));
 	}
 
 	[Fact]

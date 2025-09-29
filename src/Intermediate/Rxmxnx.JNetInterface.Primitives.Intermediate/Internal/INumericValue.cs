@@ -1,4 +1,5 @@
 // ReSharper disable RedundantCast
+
 namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>

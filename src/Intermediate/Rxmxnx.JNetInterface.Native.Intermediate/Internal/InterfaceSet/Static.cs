@@ -5,7 +5,7 @@ internal partial class InterfaceSet
 	/// <summary>
 	/// Empty interface set.
 	/// </summary>
-	public static readonly InterfaceSet Empty = new([]);
+	public static readonly InterfaceSet Empty = new();
 	/// <summary>
 	/// Annotation interface set.
 	/// </summary>

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <Import Project="..\Tests.targets"/>
-    
+
     <ItemGroup>
         <Using Include="System.ComponentModel"/>
         <Using Include="System.Diagnostics.CodeAnalysis"/>

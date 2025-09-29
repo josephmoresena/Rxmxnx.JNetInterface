@@ -2,15 +2,6 @@ namespace Rxmxnx.JNetInterface.Tests;
 
 public sealed unsafe partial class JVirtualMachineLibraryTests
 {
-	[Flags]
-	internal enum JvmProxyType : Byte
-	{
-		Complete,
-		NoCreate = 0x1,
-		NoVMs = 0x2,
-		NoCreateAndNoVMs = JvmProxyType.NoCreate | JvmProxyType.NoVMs,
-	}
-	
 	private const String NativeLibraryName = "JvmProxy";
 
 	private static readonly String systemLibraryName = OperatingSystem.IsWindows() ? "user32" :
@@ -19,7 +10,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 	private static readonly String nativeExtension = OperatingSystem.IsWindows() ? ".dll" :
 		OperatingSystem.IsMacOS() ? ".dylib" : ".so";
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	
+
 	private static String GetProxyPath(JvmProxyType proxyType)
 	{
 		StringBuilder fileNameBuilder = new(50);

@@ -1,3 +1,5 @@
+// ReSharper disable RedundantCast
+
 namespace Rxmxnx.JNetInterface.Tests.Internal;
 
 [ExcludeFromCodeCoverage]
@@ -566,6 +568,7 @@ public sealed class NativeFunctionSetImplTests
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JNumberObject>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JObjectLocalRef localRef = NativeFunctionSetImplTests.fixture.Create<JObjectLocalRef>();
+		// For unknown reasons, an explicit operator is required at runtime.
 		TPrimitive value = (TPrimitive)NativeFunctionSetImplTests.fixture.Create<Double>();
 		JFunctionDefinition<TPrimitive>.Parameterless definition = new(functionName);
 		using JClassObject jClass = new(env);

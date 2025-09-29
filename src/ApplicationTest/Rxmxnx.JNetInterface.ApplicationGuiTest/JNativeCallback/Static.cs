@@ -60,7 +60,11 @@ public partial class JNativeCallback
 		Boolean createState = true;
 		try
 		{
+#if !NET9_0_OR_GREATER
+			return JNativeCallback.constructorDef.NewCall<TObject>(env, [longKey[0], longKey[1],]).CastTo<TInterface>();
+#else
 			return JNativeCallback.constructorDef.NewCall<TObject>(env, longKey[0], longKey[1]).CastTo<TInterface>();
+#endif
 		}
 		catch (Exception)
 		{

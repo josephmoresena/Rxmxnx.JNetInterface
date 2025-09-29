@@ -96,9 +96,11 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 	/// </returns>
 	private static JArrayObject<JStringObject> CreateArgsArray(IEnvironment env,
 #if NET9_0_OR_GREATER
-		params
+		params ReadOnlySpan<String?> args
+#else
+		ReadOnlySpan<String?> args
 #endif
-			ReadOnlySpan<String?> args)
+	)
 	{
 		JArrayObject<JStringObject> jArgs = JArrayObject<JStringObject>.Create(env, args.Length);
 		for (Int32 i = 0; i < args.Length; i++)
