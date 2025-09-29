@@ -41,8 +41,9 @@
 
     <PropertyGroup>
         <PublishAot>true</PublishAot>
-        <IlcGenerateMstatFile>true</IlcGenerateMstatFile>
-        <IlcGenerateDgmlFile>true</IlcGenerateDgmlFile>
+        <IsLinuxHost>$([MSBuild]::IsOSPlatform('OSX'))</IsLinuxHost>
+        <IlcGenerateMstatFile Condition="'$(IsLinuxHost)' != 'true' || '$(TargetFramework)' != 'net7.0' || '$(RuntimeIdentifier)' == 'linux-x64'">true</IlcGenerateMstatFile>
+        <IlcGenerateDgmlFile Condition="'$(IsLinuxHost)' != 'true' || '$(TargetFramework)' != 'net7.0' || '$(RuntimeIdentifier)' == 'linux-x64'">true</IlcGenerateDgmlFile>
         <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
     </PropertyGroup>
 
