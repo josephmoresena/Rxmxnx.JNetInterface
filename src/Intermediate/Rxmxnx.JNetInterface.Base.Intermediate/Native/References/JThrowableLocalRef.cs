@@ -5,7 +5,7 @@
 /// which serves as opaque identifier for an throwable object (<c>java.lang.Throwable</c>).
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
-[StructLayout(LayoutKind.Sequential)]
+[StructLayout(LayoutKind.Explicit)]
 public readonly partial struct JThrowableLocalRef : IObjectReferenceType, INativePointerType<JThrowableLocalRef>
 {
 	/// <inheritdoc/>
@@ -14,6 +14,7 @@ public readonly partial struct JThrowableLocalRef : IObjectReferenceType, INativ
 	/// <summary>
 	/// Internal <see cref="JObjectLocalRef"/> reference.
 	/// </summary>
+	[FieldOffset(0)]
 	private readonly JObjectLocalRef _value;
 
 	/// <summary>

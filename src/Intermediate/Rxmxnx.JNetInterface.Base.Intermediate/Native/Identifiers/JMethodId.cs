@@ -5,14 +5,20 @@
 /// as opaque identifier for a declared method in a <c>class</c>.
 /// </summary>
 /// <remarks>This handle will be valid until the associated <c>class</c> is unloaded.</remarks>
-[StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JMethodId : IAccessibleIdentifierType, INativePointerType<JMethodId>
+[StructLayout(LayoutKind.Explicit)]
+public readonly unsafe partial struct JMethodId : IAccessibleIdentifierType, INativePointerType<JMethodId>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JMethod;
 
+	/// <summary>
+	/// Internal value.
+	/// </summary>
+	[FieldOffset(0)]
+	private readonly void* _pointer;
+
 	/// <inheritdoc/>
-	public IntPtr Pointer { get; }
+	public IntPtr Pointer => (IntPtr)this._pointer;
 
 	/// <summary>
 	/// Parameterless constructor.
@@ -24,7 +30,7 @@ public readonly partial struct JMethodId : IAccessibleIdentifierType, INativePoi
 	/// Private constructor.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private JMethodId(IntPtr value) => this.Pointer = value;
+	private JMethodId(IntPtr value) => this._pointer = (void*)value;
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

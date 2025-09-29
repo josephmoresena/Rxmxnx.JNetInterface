@@ -134,6 +134,8 @@ internal sealed record NativeTypeHelper
 			"JObjectLocalRef" => "Pointer",
 			"JFieldId" => "Pointer",
 			"JMethodId" => "Pointer",
+			"JEnvironmentRef" => "Pointer",
+			"JVirtualMachineRef" => "Pointer",
 			_ => "_value",
 		};
 }

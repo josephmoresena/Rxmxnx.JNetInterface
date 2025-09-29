@@ -10,8 +10,8 @@
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-[StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JVirtualMachineRef : INativePointerType
+[StructLayout(LayoutKind.Explicit)]
+public readonly unsafe partial struct JVirtualMachineRef : INativePointerType
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JVirtualMachineRef;
@@ -19,24 +19,25 @@ public readonly partial struct JVirtualMachineRef : INativePointerType
 	/// <summary>
 	/// Internal pointer value.
 	/// </summary>
-	private readonly ReadOnlyValPtr<IntPtr> _value;
+	[FieldOffset(0)]
+	private readonly void** _value;
 
 	/// <inheritdoc/>
-	public IntPtr Pointer => this._value;
+	public IntPtr Pointer => (IntPtr)this._value;
 
 	/// <summary>
 	/// Pointer to native interface.
 	/// </summary>
-	internal unsafe void* InterfacePointer => this._value.Reference.ToPointer();
+	internal void* InterfacePointer => *this._value;
 
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
-	public JVirtualMachineRef() => this._value = ReadOnlyValPtr<IntPtr>.Zero;
+	public JVirtualMachineRef() => this._value = (void**)IntPtr.Zero;
 
 	/// <inheritdoc/>
-	public override Int32 GetHashCode() => this._value.GetHashCode();
+	public override Int32 GetHashCode() => this.Pointer.GetHashCode();
 	/// <inheritdoc/>
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)
-		=> obj is JVirtualMachineRef jVirtualMRef && this._value.Equals(jVirtualMRef._value);
+		=> obj is JVirtualMachineRef jVirtualMRef && this.Pointer.Equals(jVirtualMRef.Pointer);
 }

@@ -6,7 +6,7 @@
 /// This handle is valid only for the thread who owns the reference.
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
-[StructLayout(LayoutKind.Sequential)]
+[StructLayout(LayoutKind.Explicit)]
 public readonly partial struct JDoubleArrayLocalRef : IArrayReferenceType, INativePointerType<JDoubleArrayLocalRef>
 {
 	/// <inheritdoc/>
@@ -15,6 +15,7 @@ public readonly partial struct JDoubleArrayLocalRef : IArrayReferenceType, INati
 	/// <summary>
 	/// Internal <see cref="JArrayLocalRef"/> reference.
 	/// </summary>
+	[FieldOffset(0)]
 	private readonly JArrayLocalRef _value;
 
 	/// <summary>

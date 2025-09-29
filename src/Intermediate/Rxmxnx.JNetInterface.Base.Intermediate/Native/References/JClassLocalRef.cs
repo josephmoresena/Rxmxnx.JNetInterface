@@ -5,7 +5,7 @@
 /// which serves as opaque identifier for a class object (<c>java.lang.Class&lt;?&gt;</c>).
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
-[StructLayout(LayoutKind.Sequential)]
+[StructLayout(LayoutKind.Explicit)]
 public readonly partial struct JClassLocalRef : IObjectReferenceType, INativePointerType<JClassLocalRef>
 {
 	/// <inheritdoc/>
@@ -14,6 +14,7 @@ public readonly partial struct JClassLocalRef : IObjectReferenceType, INativePoi
 	/// <summary>
 	/// Internal <see cref="JObjectLocalRef"/> reference.
 	/// </summary>
+	[FieldOffset(0)]
 	private readonly JObjectLocalRef _value;
 
 	/// <summary>

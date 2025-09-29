@@ -6,15 +6,21 @@
 /// object.
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
-[StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JObjectLocalRef : INativeReferenceType, INativePointerType<JObjectLocalRef>,
+[StructLayout(LayoutKind.Explicit)]
+public readonly unsafe partial struct JObjectLocalRef : INativeReferenceType, INativePointerType<JObjectLocalRef>,
 	INativeDataType<JObjectLocalRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JObject;
 
+	/// <summary>
+	/// Internal value.
+	/// </summary>
+	[FieldOffset(0)]
+	private readonly void* _pointer;
+
 	/// <inheritdoc/>
-	public IntPtr Pointer { get; }
+	public IntPtr Pointer => (IntPtr)this._pointer;
 
 	/// <summary>
 	/// Parameterless constructor.
@@ -25,7 +31,7 @@ public readonly partial struct JObjectLocalRef : INativeReferenceType, INativePo
 	/// Constructor.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal JObjectLocalRef(IntPtr value) => this.Pointer = value;
+	internal JObjectLocalRef(IntPtr value) => this._pointer = (void*)value;
 
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this.Pointer.GetHashCode();

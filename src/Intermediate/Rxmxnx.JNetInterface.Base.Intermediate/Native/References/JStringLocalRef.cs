@@ -5,7 +5,7 @@
 /// which serves as opaque identifier for an string object (<c>java.lang.String</c>).
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
-[StructLayout(LayoutKind.Sequential)]
+[StructLayout(LayoutKind.Explicit)]
 public readonly partial struct JStringLocalRef : IObjectReferenceType, INativePointerType<JStringLocalRef>
 {
 	/// <inheritdoc/>
@@ -14,6 +14,7 @@ public readonly partial struct JStringLocalRef : IObjectReferenceType, INativePo
 	/// <summary>
 	/// Internal <see cref="JObjectLocalRef"/> reference.
 	/// </summary>
+	[FieldOffset(0)]
 	private readonly JObjectLocalRef _value;
 
 	/// <summary>

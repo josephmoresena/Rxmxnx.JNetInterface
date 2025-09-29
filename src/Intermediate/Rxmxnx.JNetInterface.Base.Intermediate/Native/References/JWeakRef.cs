@@ -6,7 +6,7 @@
 /// object.
 /// </summary>
 /// <remarks>This identifier may be valid until it is explicitly unloaded.</remarks>
-[StructLayout(LayoutKind.Sequential)]
+[StructLayout(LayoutKind.Explicit)]
 public readonly partial struct JWeakRef : IObjectGlobalReferenceType, INativePointerType<JWeakRef>
 {
 	/// <inheritdoc/>
@@ -15,6 +15,7 @@ public readonly partial struct JWeakRef : IObjectGlobalReferenceType, INativePoi
 	/// <summary>
 	/// Internal <see cref="JObjectLocalRef"/> reference.
 	/// </summary>
+	[FieldOffset(0)]
 	private readonly JObjectLocalRef _value;
 
 	/// <summary>
