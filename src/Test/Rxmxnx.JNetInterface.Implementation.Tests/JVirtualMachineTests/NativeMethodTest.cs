@@ -31,8 +31,10 @@ public partial class JVirtualMachineTests
 				]);
 #if NET8_0_OR_GREATER
 				GC.Collect(2, GCCollectionMode.Aggressive, true);
+				GC.Collect(2, GCCollectionMode.Aggressive, true);
 #else
-				GC.Collect(2, GCCollectionMode.Forced, true);
+			GC.Collect(2, GCCollectionMode.Forced, true);
+			GC.Collect(2, GCCollectionMode.Forced, true);
 #endif
 				GC.WaitForPendingFinalizers();
 				trackers.Add(tracker1);
@@ -43,7 +45,9 @@ public partial class JVirtualMachineTests
 			proxyEnv.ClearReceivedCalls();
 #if NET8_0_OR_GREATER
 			GC.Collect(2, GCCollectionMode.Aggressive, true);
+			GC.Collect(2, GCCollectionMode.Aggressive, true);
 #else
+			GC.Collect(2, GCCollectionMode.Forced, true);
 			GC.Collect(2, GCCollectionMode.Forced, true);
 #endif
 			GC.WaitForPendingFinalizers();
@@ -101,7 +105,9 @@ public partial class JVirtualMachineTests
 
 #if NET8_0_OR_GREATER
 			GC.Collect(2, GCCollectionMode.Aggressive, true);
+			GC.Collect(2, GCCollectionMode.Aggressive, true);
 #else
+			GC.Collect(2, GCCollectionMode.Forced, true);
 			GC.Collect(2, GCCollectionMode.Forced, true);
 #endif
 			GC.WaitForPendingFinalizers();
