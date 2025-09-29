@@ -7,7 +7,7 @@ using IPrimitiveNumericType = IPrimitiveNumericType<JByte>;
 /// <summary>
 /// Primitive <c>byte</c>. Represents an 8-bit signed integer.
 /// </summary>
-[StructLayout(LayoutKind.Sequential, Pack = 1, Size = sizeof(SByte))]
+[StructLayout(LayoutKind.Explicit, Size = sizeof(SByte), Pack = 0)]
 public readonly partial struct JByte : IPrimitiveIntegerType, IPrimitiveNumericType, IPrimitiveValueType
 {
 	/// <summary>
@@ -33,6 +33,7 @@ public readonly partial struct JByte : IPrimitiveIntegerType, IPrimitiveNumericT
 	/// <summary>
 	/// Internal 8-bit signed integer value.
 	/// </summary>
+	[FieldOffset(0)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	private readonly SByte _value;
@@ -67,7 +68,7 @@ public readonly partial struct JByte : IPrimitiveIntegerType, IPrimitiveNumericT
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JByte(JObject jObj)
 		=> CommonValidationUtilities.ThrowIfInvalidCast<SByte>(jObj as IConvertible);
-	/// <inheritdoc/>
+	/// <inheritdoc cref="INativeDataType{TNativeType}.op_Implicit(SByte)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JByte(SByte value) => new(value);
 

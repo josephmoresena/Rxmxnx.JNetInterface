@@ -7,7 +7,7 @@ using IPrimitiveNumericType = IPrimitiveNumericType<JInt>;
 /// <summary>
 /// Primitive <c>int</c>. Represents a primitive 32-bit signed integer.
 /// </summary>
-[StructLayout(LayoutKind.Sequential, Pack = 1, Size = sizeof(Int32))]
+[StructLayout(LayoutKind.Explicit, Size = sizeof(Int32), Pack = 0)]
 public readonly partial struct JInt : IPrimitiveIntegerType, IPrimitiveNumericType, IPrimitiveValueType
 {
 	/// <summary>
@@ -33,6 +33,7 @@ public readonly partial struct JInt : IPrimitiveIntegerType, IPrimitiveNumericTy
 	/// <summary>
 	/// Internal 32-bit signed integer value.
 	/// </summary>
+	[FieldOffset(0)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	private readonly Int32 _value;
@@ -67,7 +68,7 @@ public readonly partial struct JInt : IPrimitiveIntegerType, IPrimitiveNumericTy
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JInt(JObject jObj)
 		=> CommonValidationUtilities.ThrowIfInvalidCast<Int32>(jObj as IConvertible);
-	/// <inheritdoc/>
+	/// <inheritdoc cref="INativeDataType{TNativeType}.op_Implicit(SByte)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JInt(Int32 value) => new(value);
 

@@ -7,7 +7,7 @@ using IPrimitiveNumericType = IPrimitiveNumericType<JShort>;
 /// <summary>
 /// Primitive <c>short</c>. Represents a primitive 16-bit signed integer.
 /// </summary>
-[StructLayout(LayoutKind.Sequential, Pack = 1, Size = sizeof(Int16))]
+[StructLayout(LayoutKind.Explicit, Size = sizeof(Int16), Pack = 0)]
 public readonly partial struct JShort : IPrimitiveIntegerType, IPrimitiveNumericType, IPrimitiveValueType
 {
 	/// <summary>
@@ -33,6 +33,7 @@ public readonly partial struct JShort : IPrimitiveIntegerType, IPrimitiveNumeric
 	/// <summary>
 	/// Internal 16-bit signed integer value.
 	/// </summary>
+	[FieldOffset(0)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	private readonly Int16 _value;
@@ -67,7 +68,7 @@ public readonly partial struct JShort : IPrimitiveIntegerType, IPrimitiveNumeric
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JShort(JObject jObj)
 		=> CommonValidationUtilities.ThrowIfInvalidCast<Int16>(jObj as IConvertible);
-	/// <inheritdoc/>
+	/// <inheritdoc cref="INativeDataType{TNativeType}.op_Implicit(SByte)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JShort(Int16 value) => new(value);
 	/// <summary>

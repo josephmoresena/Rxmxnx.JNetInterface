@@ -11,7 +11,7 @@ using IPrimitiveNumericType = IPrimitiveNumericType<JFloat>;
 /// This struct is not ABI-compliant, so you should avoid using it as a return or parameter type in native or
 /// interop calls.
 /// </remarks>
-[StructLayout(LayoutKind.Sequential, Pack = 1, Size = sizeof(Single))]
+[StructLayout(LayoutKind.Explicit, Size = sizeof(Single), Pack = 0)]
 public readonly partial struct JFloat : IPrimitiveFloatingPointType, IPrimitiveNumericType, IPrimitiveValueType
 {
 	/// <summary>
@@ -37,6 +37,7 @@ public readonly partial struct JFloat : IPrimitiveFloatingPointType, IPrimitiveN
 	/// <summary>
 	/// Internal single-precision floating-point number value.
 	/// </summary>
+	[FieldOffset(0)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	private readonly Single _value;
@@ -71,7 +72,7 @@ public readonly partial struct JFloat : IPrimitiveFloatingPointType, IPrimitiveN
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JFloat(JObject jObj)
 		=> CommonValidationUtilities.ThrowIfInvalidCast<Single>(jObj as IConvertible);
-	/// <inheritdoc/>
+	/// <inheritdoc cref="INativeDataType{TNativeType}.op_Implicit(SByte)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JFloat(Single value) => new(value);
 

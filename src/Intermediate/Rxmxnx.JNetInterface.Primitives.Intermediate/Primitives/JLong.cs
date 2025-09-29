@@ -7,7 +7,7 @@ using IPrimitiveNumericType = IPrimitiveNumericType<JLong>;
 /// <summary>
 /// Primitive <c>long</c>. Represents a primitive 64-bit signed integer.
 /// </summary>
-[StructLayout(LayoutKind.Sequential, Pack = 1, Size = sizeof(Int64))]
+[StructLayout(LayoutKind.Explicit, Size = sizeof(Int64), Pack = 0)]
 public readonly partial struct JLong : IPrimitiveIntegerType, IPrimitiveNumericType, IPrimitiveValueType
 {
 	/// <summary>
@@ -33,6 +33,7 @@ public readonly partial struct JLong : IPrimitiveIntegerType, IPrimitiveNumericT
 	/// <summary>
 	/// Internal 64-bit signed integer value.
 	/// </summary>
+	[FieldOffset(0)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	private readonly Int64 _value;
@@ -67,7 +68,7 @@ public readonly partial struct JLong : IPrimitiveIntegerType, IPrimitiveNumericT
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JLong(JObject jObj)
 		=> CommonValidationUtilities.ThrowIfInvalidCast<Int64>(jObj as IConvertible);
-	/// <inheritdoc/>
+	/// <inheritdoc cref="INativeDataType{TNativeType}.op_Implicit(SByte)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JLong(Int64 value) => new(value);
 

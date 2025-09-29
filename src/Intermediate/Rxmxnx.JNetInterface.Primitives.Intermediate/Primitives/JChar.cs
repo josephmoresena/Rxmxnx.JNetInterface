@@ -7,7 +7,7 @@ using IPrimitiveNumericType = IPrimitiveNumericType<JChar>;
 /// <summary>
 /// Primitive <c>char</c>. Represents a character as a UTF-16 code unit.
 /// </summary>
-[StructLayout(LayoutKind.Sequential, Pack = 1, Size = sizeof(UInt16))]
+[StructLayout(LayoutKind.Explicit, Size = sizeof(UInt16), Pack = 0)]
 [DebuggerDisplay(nameof(JChar.Value))]
 public readonly partial struct JChar : IPrimitiveIntegerType, IPrimitiveNumericType, IPrimitiveValueType
 {
@@ -34,6 +34,7 @@ public readonly partial struct JChar : IPrimitiveIntegerType, IPrimitiveNumericT
 	/// <summary>
 	/// Internal UTF-16 code unit character.
 	/// </summary>
+	[FieldOffset(0)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	private readonly UInt16 _value;

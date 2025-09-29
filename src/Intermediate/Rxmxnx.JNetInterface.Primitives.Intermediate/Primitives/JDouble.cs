@@ -11,7 +11,7 @@ using IPrimitiveNumericType = IPrimitiveNumericType<JDouble>;
 /// This struct is not ABI-compliant, so you should avoid using it as a return or parameter type in native or
 /// interop calls.
 /// </remarks>
-[StructLayout(LayoutKind.Sequential, Pack = 1, Size = sizeof(Double))]
+[StructLayout(LayoutKind.Explicit, Size = sizeof(Double), Pack = 0)]
 public readonly partial struct JDouble : IPrimitiveFloatingPointType, IPrimitiveNumericType, IPrimitiveValueType
 {
 	/// <summary>
@@ -37,6 +37,7 @@ public readonly partial struct JDouble : IPrimitiveFloatingPointType, IPrimitive
 	/// <summary>
 	/// Internal double-precision floating-point number value.
 	/// </summary>
+	[FieldOffset(0)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	private readonly Double _value;
@@ -71,7 +72,7 @@ public readonly partial struct JDouble : IPrimitiveFloatingPointType, IPrimitive
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JDouble(JObject jObj)
 		=> CommonValidationUtilities.ThrowIfInvalidCast<Double>(jObj as IConvertible);
-	/// <inheritdoc/>
+	/// <inheritdoc cref="INativeDataType{TNativeType}.op_Implicit(SByte)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JDouble(Double value) => new(value);
 
