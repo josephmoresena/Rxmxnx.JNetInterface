@@ -42,9 +42,15 @@ internal partial class InterfaceSet
 	public static IInterfaceSet GetClassInterfaces(JClassTypeMetadata? baseMetadata,
 		IReadOnlySet<JInterfaceTypeMetadata> interfaces)
 	{
-		if (baseMetadata is null)
-			return interfaces.Count == 0 ? InterfaceSet.Empty : new([.. interfaces,]);
-		return interfaces.Count == 0 ? baseMetadata.Interfaces : new ClassInterfaceSet(baseMetadata, [.. interfaces,]);
+		if (interfaces.Count == 0)
+			return baseMetadata is null ? InterfaceSet.Empty : baseMetadata.Interfaces;
+		ImmutableHashSet<JInterfaceTypeMetadata> internalSet =
+#if NET8_0_OR_GREATER
+			[.. interfaces,];
+#else
+			ImmutableHashSet.CreateRange(interfaces);
+#endif
+		return baseMetadata is null ? new InterfaceSet(internalSet) : new ClassInterfaceSet(baseMetadata, internalSet);
 	}
 	/// <summary>
 	/// Retrieves a set with class interfaces.
@@ -61,7 +67,17 @@ internal partial class InterfaceSet
 	/// <param name="interfaces">A <see cref="IReadOnlySet{JInterfaceTypeMetadata}"/> instance.</param>
 	/// <returns>A <see cref="IInterfaceSet"/> instance.</returns>
 	public static IInterfaceSet GetInterfaceInterfaces(IReadOnlySet<JInterfaceTypeMetadata> interfaces)
-		=> interfaces.Count == 0 ? InterfaceSet.Empty : new InterfaceInterfaceSet([.. interfaces,]);
+	{
+		if (interfaces.Count == 0)
+			return InterfaceSet.Empty;
+		ImmutableHashSet<JInterfaceTypeMetadata> internalSet =
+#if NET8_0_OR_GREATER
+			[.. interfaces,];
+#else
+			ImmutableHashSet.CreateRange(interfaces);
+#endif
+		return new InterfaceInterfaceSet(internalSet);
+	}
 
 	/// <summary>
 	/// Indicates whether if <paramref name="item"/> and <paramref name="local"/> are same.

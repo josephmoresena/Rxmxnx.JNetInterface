@@ -127,7 +127,7 @@ internal partial class ObjectLifetime
 	/// </summary>
 	private void CleanObjects()
 	{
-		Int64[] keys = [.. this._objects.Keys,];
+		ReadOnlySpan<Int64> keys = [.. this._objects.Keys,];
 		foreach (Int64 objId in keys)
 		{
 			if (!this._objects[objId].TryGetTarget(out JLocalObject? jLocal) && jLocal is not JClassObject)
