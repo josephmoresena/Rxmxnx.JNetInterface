@@ -44,7 +44,7 @@ public partial class JVirtualMachine
 		/// <returns>A managed <see cref="InvokeInterface"/> reference from current instance.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public unsafe ref readonly InvokeInterface GetInvokeInterface()
-			=> ref Unsafe.AsRef<InvokeInterface>(this.Reference.InterfacePointer);
+			=> ref *(InvokeInterface*)this.Reference.InterfacePointer;
 		/// <summary>
 		/// Register a <see cref="JGlobal"/> instance.
 		/// </summary>
