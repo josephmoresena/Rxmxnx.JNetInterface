@@ -317,7 +317,7 @@ internal static class TestUtilities
 				(JBoolean)TestUtilities.fixture.Create<Boolean>(),
 			],
 			CallType.MultipleValues => Enumerable.Range(0, TestUtilities.multipleValueLength)
-			                                     .SelectMany(i => new IObject[]
+			                                     .SelectMany(_ => new IObject[]
 			                                     {
 				                                     (JInt)TestUtilities.fixture.Create<Int32>(),
 				                                     (JDouble)TestUtilities.fixture.Create<Double>(),
