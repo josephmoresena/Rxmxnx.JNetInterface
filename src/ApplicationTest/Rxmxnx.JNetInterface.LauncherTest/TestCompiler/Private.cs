@@ -94,7 +94,7 @@ public partial class TestCompiler
 		}
 		finally
 		{
-			TestCompiler.NetCleanUp(restoreArgs);
+			//TestCompiler.NetCleanUp(restoreArgs);
 		}
 	}
 	private static async Task CompileNetGuiApp(Boolean onlyNativeAot, RestoreNetArgs restoreArgs, Architecture arch,
@@ -114,7 +114,7 @@ public partial class TestCompiler
 		}
 		finally
 		{
-			TestCompiler.NetCleanUp(restoreArgs);
+			//TestCompiler.NetCleanUp(restoreArgs);
 		}
 	}
 	private static async Task CompileNetApp(Boolean onlyNativeAot, RestoreNetArgs restoreArgs, Architecture arch,
@@ -152,7 +152,7 @@ public partial class TestCompiler
 		}
 		finally
 		{
-			TestCompiler.NetCleanUp(restoreArgs);
+			//TestCompiler.NetCleanUp(restoreArgs);
 		}
 	}
 	private static async Task CompileNet(CompileNetArgs args)

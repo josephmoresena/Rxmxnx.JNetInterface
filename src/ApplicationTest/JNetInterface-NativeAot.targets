@@ -41,8 +41,8 @@
 
     <PropertyGroup>
         <PublishAot>true</PublishAot>
-        <IlcGenerateMstatFile Condition="'$(Language)' == 'C#'">true</IlcGenerateMstatFile>
-        <IlcGenerateDgmlFile Condition="'$(Language)' == 'C#'">true</IlcGenerateDgmlFile>
+        <IlcGenerateMstatFile Condition="'$(Language)' != 'F#' And '$(Language)' != 'VB'">true</IlcGenerateMstatFile>
+        <IlcGenerateDgmlFile Condition="'$(Language)' != 'F#' And '$(Language)' != 'VB'">true</IlcGenerateDgmlFile>
         <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
     </PropertyGroup>
 
