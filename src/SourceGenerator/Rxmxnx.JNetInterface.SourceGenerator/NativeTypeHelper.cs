@@ -13,6 +13,11 @@ namespace Rxmxnx.JNetInterface.SourceGenerator;
 internal sealed record NativeTypeHelper
 {
 	/// <summary>
+	/// FixedPointer.Pointer property name.
+	/// </summary>
+	private const String internalValueName = "Pointer";
+		
+	/// <summary>
 	/// Indicates whether the native type is an array reference.
 	/// </summary>
 	private readonly Boolean _isArrRef;
@@ -121,21 +126,20 @@ internal sealed record NativeTypeHelper
 	/// <returns>
 	/// The name of internal value for the current symbol.
 	/// </returns>
-	private String GetInternalValueName()
-		=> this._typeSymbol.Name switch
-		{
-			"JBoolean" => "Value",
-			"JChar" => "Value",
-			"JEnvironmentValue" => "_functions",
-			"JVirtualMachineValue" => "_functions",
-			"JValue" => String.Empty,
-			"JInvokeInterface" => String.Empty,
-			"JNativeInterface" => String.Empty,
-			"JObjectLocalRef" => "Pointer",
-			"JFieldId" => "Pointer",
-			"JMethodId" => "Pointer",
-			"JEnvironmentRef" => "Pointer",
-			"JVirtualMachineRef" => "Pointer",
-			_ => "_value",
-		};
+	private String GetInternalValueName() => this._typeSymbol.Name switch
+	{
+		"JBoolean" => "Value",
+		"JChar" => "Value",
+		"JEnvironmentValue" => "_functions",
+		"JVirtualMachineValue" => "_functions",
+		"JValue" => String.Empty,
+		"JInvokeInterface" => String.Empty,
+		"JNativeInterface" => String.Empty,
+		"JObjectLocalRef" => NativeTypeHelper.internalValueName,
+		"JFieldId" => NativeTypeHelper.internalValueName,
+		"JMethodId" => NativeTypeHelper.internalValueName,
+		"JEnvironmentRef" => NativeTypeHelper.internalValueName,
+		"JVirtualMachineRef" => NativeTypeHelper.internalValueName,
+		_ => "_value",
+	};
 }

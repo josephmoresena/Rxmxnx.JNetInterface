@@ -49,6 +49,6 @@ internal partial class DeadThread : IArrayFeature
 	}
 	void IArrayFeature.ReleasePrimitiveSequence<TPrimitive>(JArrayLocalRef arrayRef, IntPtr pointer, JReleaseMode mode)
 		=> this.ReleasePrimitiveSequenceTrace(arrayRef, pointer);
-	void IArrayFeature.ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, IntPtr criticalPtr, JReleaseMode _)
+	void IArrayFeature.ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, IntPtr criticalPtr, JReleaseMode mode)
 		=> this.ReleasePrimitiveCriticalSequenceTrace(arrayRef, criticalPtr);
 }
