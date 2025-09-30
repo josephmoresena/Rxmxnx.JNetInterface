@@ -176,12 +176,19 @@ jobs:
           
           sudo apt update 
           sudo apt upgrade --assume-yes
-          sudo apt-get install clang llvm zlib1g-dev libkrb5-dev libssl-dev \
+          sudo apt-get install coreutils clang llvm zlib1g-dev libkrb5-dev libssl-dev \
             qemu-user qemu-user-static binfmt-support libicu74:arm64 libicu74:armhf \
             libstdc++-14-dev:arm64 libstdc++-14-dev:arm64 \
             binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu zlib1g-dev:arm64 libssl-dev:arm64 \
             binutils-arm-linux-gnueabihf gcc-arm-linux-gnueabihf zlib1g-dev:armhf libssl-dev:armhf \
             --assume-yes
+          
+          sudo apt-get clean
+          sudo apt-get autoclean
+          sudo apt-get autoremove -y
+          sudo rm -rf /tmp/*
+          sudo rm -rf /var/tmp/*
+          df -h
 
       - name: Setup .NET
         if: runner.os != 'Windows'
@@ -234,6 +241,19 @@ jobs:
       - name: Publish launcher
         working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest
         run: dotnet publish
+        
+      - name: Clean up
+        shell: pwsh
+        run: |
+          Get-ChildItem -Recurse -Include *.csproj,*.fsproj,*.vbproj | ForEach-Object {
+              $projDir = Split-Path $_.FullName
+              "bin","obj" | ForEach-Object {
+              $path = Join-Path $projDir $_
+              if (Test-Path $path) {
+                Remove-Item -Recurse -Force $path
+              }
+            }
+          }
 
       - name: Run launcher (compile)
         shell: pwsh
@@ -243,6 +263,15 @@ jobs:
           } else {
             chmod +x Rxmxnx.JNetInterface.LauncherTest
             ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "compile"
+          }
+          Get-ChildItem -Recurse -Include *.csproj,*.fsproj,*.vbproj | ForEach-Object {
+              $projDir = Split-Path $_.FullName
+              "bin","obj" | ForEach-Object {
+              $path = Join-Path $projDir $_
+              if (Test-Path $path) {
+                Remove-Item -Recurse -Force $path
+              }
+            }
           }
 
       - name: Run launcher (run)
