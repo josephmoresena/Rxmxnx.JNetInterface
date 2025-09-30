@@ -5,6 +5,10 @@
 /// as opaque identifier for a declared field in a <c>class</c>.
 /// </summary>
 /// <remarks>This handle will be valid until the associated <c>class</c> is unloaded.</remarks>
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 [StructLayout(LayoutKind.Explicit)]
 public readonly unsafe partial struct JFieldId : IAccessibleIdentifierType, INativePointerType<JFieldId>
 {

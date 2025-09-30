@@ -87,15 +87,15 @@ partial class JEnvironment
 		/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
 		/// <param name="itemSpan">The binary information to locate in <paramref name="jArray"/>.</param>
 		/// <returns>The index of <paramref name="itemSpan"/> if found in <paramref name="jArray"/>; otherwise, -1.</returns>
-		private Int32 IndexOfPrimitive(JArrayObject jArray, ReadOnlySpan<Byte> itemSpan)
+		private unsafe Int32 IndexOfPrimitive(JArrayObject jArray, ReadOnlySpan<Byte> itemSpan)
 		{
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JArrayLocalRef arrayRef = jniTransaction.Add(jArray);
 			Int32 binaryLength = jArray.Length * itemSpan.Length;
-			ValPtr<Byte> criticalPtr = this.GetPrimitiveCriticalSequence(arrayRef);
+			IntPtr criticalPtr = this.GetPrimitiveCriticalSequence(arrayRef, out _);
 			try
 			{
-				Span<Byte> span = criticalPtr.Pointer.GetUnsafeSpan<Byte>(binaryLength);
+				ReadOnlySpan<Byte> span = MemoryMarshal.CreateReadOnlySpan(ref *(Byte*)criticalPtr, binaryLength);
 				for (Int32 offset = 0; offset < binaryLength; offset += itemSpan.Length)
 				{
 					if (itemSpan.SequenceEqual(span.Slice(offset, itemSpan.Length)))
@@ -104,7 +104,7 @@ partial class JEnvironment
 			}
 			finally
 			{
-				this.ReleasePrimitiveCriticalSequence(arrayRef, criticalPtr);
+				this.ReleasePrimitiveCriticalSequence(arrayRef, criticalPtr, JReleaseMode.Abort);
 			}
 			return -1;
 		}
@@ -120,22 +120,23 @@ partial class JEnvironment
 		/// <param name="arrayIndex">
 		/// The zero-based index in <paramref name="array"/> at which copying begins.
 		/// </param>
-		private void CopyToPrimitive(JArrayObject jArray, Int32 sizeOf, Array array, Int32 arrayIndex)
+		private unsafe void CopyToPrimitive(JArrayObject jArray, Int32 sizeOf, Array array, Int32 arrayIndex)
 		{
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			Span<Byte> bytes =
 				MemoryMarshal.CreateSpan(ref MemoryMarshal.GetArrayDataReference(array), sizeOf * array.Length);
 			JArrayLocalRef arrayRef = jniTransaction.Add(jArray);
 			Int32 offset = sizeOf * arrayIndex;
-			ValPtr<Byte> criticalPtr = this.GetPrimitiveCriticalSequence(arrayRef);
+			IntPtr criticalPtr = this.GetPrimitiveCriticalSequence(arrayRef, out _);
 			try
 			{
-				Span<Byte> span = criticalPtr.Pointer.GetUnsafeSpan<Byte>(sizeOf * jArray.Length);
+				ReadOnlySpan<Byte> span =
+					MemoryMarshal.CreateReadOnlySpan(ref *(Byte*)criticalPtr, sizeOf * jArray.Length);
 				span.CopyTo(bytes[offset..]); // Offset for destination array
 			}
 			finally
 			{
-				this.ReleasePrimitiveCriticalSequence(arrayRef, criticalPtr);
+				this.ReleasePrimitiveCriticalSequence(arrayRef, criticalPtr, JReleaseMode.Abort);
 			}
 		}
 		/// <summary>

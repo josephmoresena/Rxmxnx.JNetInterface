@@ -175,14 +175,15 @@ partial class JEnvironment
 			isCopy = isCopyJ.Value;
 			return result;
 		}
-		public ValPtr<Byte> GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef)
+		public IntPtr GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef, out Boolean isCopy)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetPrimitiveArrayCriticalInfo);
-			ValPtr<Byte> result =
+			IntPtr result =
 				nativeInterface.PrimitiveArrayCriticalFunctions.GetPrimitiveArrayCritical(
-					this.Reference, arrayRef, out _);
-			if (result == ValPtr<Byte>.Zero) this.CheckJniError();
+					this.Reference, arrayRef, out JBoolean isCopyJ);
+			if (result == IntPtr.Zero) this.CheckJniError();
+			isCopy = isCopyJ.Value;
 			this._criticalCount++;
 			return result;
 		}
@@ -206,7 +207,7 @@ partial class JEnvironment
 				throw;
 			}
 		}
-		public void ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, ValPtr<Byte> criticalPtr)
+		public void ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, IntPtr criticalPtr, JReleaseMode mode)
 		{
 			try
 			{
@@ -215,7 +216,7 @@ partial class JEnvironment
 					ref readonly NativeInterface nativeInterface =
 						ref this.GetNativeInterface<NativeInterface>(NativeInterface.ReleasePrimitiveArrayCriticalInfo);
 					nativeInterface.PrimitiveArrayCriticalFunctions.ReleasePrimitiveArrayCritical(
-						this.Reference, arrayRef, criticalPtr, JReleaseMode.Abort);
+						this.Reference, arrayRef, criticalPtr, mode);
 					this.CheckJniError();
 					this._criticalCount--;
 				}

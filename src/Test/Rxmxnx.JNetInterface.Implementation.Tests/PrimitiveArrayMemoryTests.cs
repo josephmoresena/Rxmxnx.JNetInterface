@@ -313,10 +313,22 @@ public sealed class PrimitiveArrayMemoryTests
 			using JPrimitiveMemory<TPrimitive> seq = jArray.GetCriticalElements(referenceKind);
 			Assert.Equal(value.Length, seq.Values.Length);
 			Assert.Equal(fMem.Pointer, seq.Pointer);
-			Assert.Null(seq.ReleaseMode);
-			Assert.False(seq.Copy);
-			seq.ReleaseMode = JReleaseMode.Abort;
-			Assert.Null(seq.ReleaseMode);
+
+			Assert.Equal(isCopy, seq.Copy);
+			if (!isCopy)
+			{
+				Assert.Null(seq.ReleaseMode);
+				seq.ReleaseMode = JReleaseMode.Abort;
+				Assert.Null(seq.ReleaseMode);
+				Assert.True(seq.Commit());
+			}
+			else
+			{
+				Assert.Equal(JReleaseMode.Free, seq.ReleaseMode);
+				seq.ReleaseMode = JReleaseMode.Abort;
+				Assert.Equal(JReleaseMode.Abort, seq.ReleaseMode);
+				Assert.False(seq.Commit());
+			}
 
 			Assert.Throws<UnsafeStateException>(() => JClassObject.GetClass(env, "package/critical/Test"u8));
 
@@ -434,10 +446,7 @@ public sealed class PrimitiveArrayMemoryTests
 			using JPrimitiveMemory<TPrimitive> seq = jArray.GetElements(referenceKind);
 			Assert.Equal(value.Length, seq.Values.Length);
 			Assert.Equal(fMem.Pointer, seq.Pointer);
-			Assert.Equal(JReleaseMode.Free, seq.ReleaseMode);
 			Assert.Equal(isCopy, seq.Copy);
-			seq.ReleaseMode = releaseMode;
-			Assert.Equal(releaseMode, seq.ReleaseMode);
 
 			proxyEnv.Received(1).GetArrayLength(arrayRef);
 			proxyEnv.Received(referenceKind is JMemoryReferenceKind.ThreadIndependent ? 1 : 0)
@@ -456,22 +465,53 @@ public sealed class PrimitiveArrayMemoryTests
 				                                                    .ThreadUnrestricted ?
 				                                                    1 :
 				                                                    0);
+			Int32 releaseCount;
+			if (!isCopy)
+			{
+				releaseCount = 0;
+				Assert.Null(seq.ReleaseMode);
+				seq.ReleaseMode = releaseMode;
+				Assert.Null(seq.ReleaseMode);
+			}
+			else
+			{
+				releaseCount = 1;
+				Assert.Equal(JReleaseMode.Free, seq.ReleaseMode);
+				seq.ReleaseMode = releaseMode;
+				Assert.Equal(releaseMode is not JReleaseMode.Commit ? releaseMode : JReleaseMode.Free, seq.ReleaseMode);
+			}
+			Assert.True(seq.Commit());
+
+			PrimitiveArrayMemoryTests.AssertReceivedReleaseElements(proxyEnv, ref arrayRef, signature,
+			                                                        referenceKind is JMemoryReferenceKind.Local ?
+				                                                        releaseCount :
+				                                                        0, JReleaseMode.Commit, null);
+			PrimitiveArrayMemoryTests.AssertReceivedReleaseElements(proxyEnv, ref wArrayRef, signature,
+			                                                        referenceKind is JMemoryReferenceKind
+				                                                        .ThreadIndependent ?
+				                                                        releaseCount :
+				                                                        0, JReleaseMode.Commit, null);
+			PrimitiveArrayMemoryTests.AssertReceivedReleaseElements(proxyEnv, ref gArrayRef, signature,
+			                                                        referenceKind is JMemoryReferenceKind
+				                                                        .ThreadUnrestricted ?
+				                                                        releaseCount :
+				                                                        0, JReleaseMode.Commit, null);
 		}
 		finally
 		{
 			PrimitiveArrayMemoryTests.AssertReceivedReleaseElements(proxyEnv, ref arrayRef, signature,
 			                                                        referenceKind is JMemoryReferenceKind.Local ? 1 : 0,
-			                                                        releaseMode);
+			                                                        releaseMode, isCopy);
 			PrimitiveArrayMemoryTests.AssertReceivedReleaseElements(proxyEnv, ref wArrayRef, signature,
 			                                                        referenceKind is JMemoryReferenceKind
 				                                                        .ThreadIndependent ?
 				                                                        1 :
-				                                                        0, releaseMode);
+				                                                        0, releaseMode, isCopy);
 			PrimitiveArrayMemoryTests.AssertReceivedReleaseElements(proxyEnv, ref gArrayRef, signature,
 			                                                        referenceKind is JMemoryReferenceKind
 				                                                        .ThreadUnrestricted ?
 				                                                        1 :
-				                                                        0, releaseMode);
+				                                                        0, releaseMode, isCopy);
 			proxyEnv.Received(referenceKind is JMemoryReferenceKind.ThreadIndependent ? 1 : 0)
 			        .DeleteWeakGlobalRef(weakRef);
 			proxyEnv.Received(referenceKind is JMemoryReferenceKind.ThreadUnrestricted ? 1 : 0)
@@ -792,8 +832,14 @@ public sealed class PrimitiveArrayMemoryTests
 		                               Arg.Any<ValPtr<JBoolean>>());
 	}
 	private static void AssertReceivedReleaseElements(NativeInterfaceProxy proxyEnv, ref JArrayLocalRef arrayRef,
-		Byte signature, Int32 count, JReleaseMode releaseMode)
+		Byte signature, Int32 count, JReleaseMode releaseMode, Boolean? isCopy)
 	{
+		releaseMode = releaseMode switch
+		{
+			JReleaseMode.Commit when isCopy is null => JReleaseMode.Commit,
+			JReleaseMode.Abort when isCopy.GetValueOrDefault() => JReleaseMode.Abort,
+			_ => JReleaseMode.Free,
+		};
 		proxyEnv.Received(signature == CommonNames.BooleanSignatureChar ? count : 0).ReleaseBooleanArrayElements(
 			arrayRef.Transform<JArrayLocalRef, JBooleanArrayLocalRef>(), Arg.Any<ReadOnlyValPtr<JBoolean>>(),
 			releaseMode);

@@ -6,6 +6,10 @@
 /// object.
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 [StructLayout(LayoutKind.Explicit)]
 public readonly unsafe partial struct JObjectLocalRef : INativeReferenceType, INativePointerType<JObjectLocalRef>,
 	INativeDataType<JObjectLocalRef>

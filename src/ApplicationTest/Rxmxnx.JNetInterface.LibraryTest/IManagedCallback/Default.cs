@@ -79,6 +79,7 @@ public partial interface IManagedCallback
 				using JPrimitiveMemory<JInt> intElements = jArray.GetElements();
 				foreach (JInt element in intElements.Values)
 					result += element;
+				intElements.ReleaseMode = JReleaseMode.Abort;
 				return JNumberObject<JInt, JIntegerObject>.Create(env, result);
 			}
 			catch (JniException)

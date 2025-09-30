@@ -42,10 +42,13 @@ internal partial class DeadThread : IArrayFeature
 		Unsafe.SkipInit(out isCopy);
 		return this.ThrowInvalidResult<IntPtr>();
 	}
-	ValPtr<Byte> IArrayFeature.GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef)
-		=> this.ThrowInvalidResult<ValPtr<Byte>>();
+	IntPtr IArrayFeature.GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef, out Boolean isCopy)
+	{
+		Unsafe.SkipInit(out isCopy);
+		return this.ThrowInvalidResult<IntPtr>();
+	}
 	void IArrayFeature.ReleasePrimitiveSequence<TPrimitive>(JArrayLocalRef arrayRef, IntPtr pointer, JReleaseMode mode)
 		=> this.ReleasePrimitiveSequenceTrace(arrayRef, pointer);
-	void IArrayFeature.ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, ValPtr<Byte> criticalPtr)
+	void IArrayFeature.ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, IntPtr criticalPtr, JReleaseMode _)
 		=> this.ReleasePrimitiveCriticalSequenceTrace(arrayRef, criticalPtr);
 }

@@ -12,16 +12,33 @@ public sealed partial class JPrimitiveMemory<TPrimitive> : JPrimitiveMemory, IFi
 	/// </summary>
 	public new JReleaseMode? ReleaseMode
 	{
-		get => !this.Critical ? base.ReleaseMode : default(JReleaseMode?);
+		get => this.Copy ? base.ReleaseMode : default(JReleaseMode?);
 		set
 		{
-			if (this.Critical || !value.HasValue)
-				return;
-			base.ReleaseMode = value.GetValueOrDefault();
+			base.ReleaseMode = value switch
+			{
+				JReleaseMode.Abort when this.Copy => JReleaseMode.Abort,
+				_ => JReleaseMode.Free,
+			};
 		}
 	}
 	/// <inheritdoc/>
 	public Span<TPrimitive> Values => this._context.Values;
+
+	/// <summary>
+	/// Copies the content from the current memory back into the array.
+	/// </summary>
+	/// <returns>
+	/// <see langword="true"/> if the current memory is not a copy or if the copy-back operation was performed;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	public new Boolean Commit()
+	{
+		if (!this.Copy) return true;
+		if (this.Critical) return false;
+		base.Commit();
+		return true;
+	}
 
 	/// <summary>
 	/// Defines an implicit conversion of a given <see cref="JPrimitiveMemory{TPrimitive}"/> to

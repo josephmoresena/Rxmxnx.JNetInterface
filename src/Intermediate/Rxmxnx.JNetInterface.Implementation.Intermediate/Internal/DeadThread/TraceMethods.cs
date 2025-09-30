@@ -68,7 +68,7 @@ internal partial class DeadThread
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	private void ReleasePrimitiveCriticalSequenceTrace(JArrayLocalRef arrayRef, ValPtr<Byte> criticalPtr)
+	private void ReleasePrimitiveCriticalSequenceTrace(JArrayLocalRef arrayRef, IntPtr criticalPtr)
 	{
 		if (JVirtualMachine.TraceEnabled)
 			Trace.WriteLine(

@@ -28,7 +28,7 @@ internal readonly unsafe struct PrimitiveArrayCriticalFunctionSet
 	[ExcludeFromCodeCoverage]
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public ValPtr<Byte> GetPrimitiveArrayCritical(JEnvironmentRef envRef, JArrayLocalRef arrayRef, out JBoolean isCopy)
+	public IntPtr GetPrimitiveArrayCritical(JEnvironmentRef envRef, JArrayLocalRef arrayRef, out JBoolean isCopy)
 	{
 		fixed (JBoolean* isCopyPtr = &isCopy)
 		{
@@ -44,7 +44,7 @@ internal readonly unsafe struct PrimitiveArrayCriticalFunctionSet
 	[ExcludeFromCodeCoverage]
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public void ReleasePrimitiveArrayCritical(JEnvironmentRef envRef, JArrayLocalRef arrayRef, ValPtr<Byte> dataPtr,
+	public void ReleasePrimitiveArrayCritical(JEnvironmentRef envRef, JArrayLocalRef arrayRef, IntPtr dataPtr,
 		JReleaseMode mode)
 	{
 		if (OperatingSystem.IsWindows())
@@ -63,13 +63,13 @@ internal readonly unsafe struct PrimitiveArrayCriticalFunctionSet
 		/// Pointer to <c>GetPrimitiveArrayCritical</c> function.
 		/// Returns the body of the primitive array.
 		/// </summary>
-		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JArrayLocalRef, JBoolean*, Byte*>
+		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JArrayLocalRef, JBoolean*, IntPtr>
 			GetPrimitiveArrayCritical;
 		/// <summary>
 		/// Pointer to <c>ReleasePrimitiveArrayCritical</c> function.
 		/// Informs the <c>VM</c> that the native code no longer needs access to array elements.
 		/// </summary>
-		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JArrayLocalRef, Byte*, JReleaseMode, void>
+		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JArrayLocalRef, IntPtr, JReleaseMode, void>
 			ReleasePrimitiveArrayCritical;
 	}
 
@@ -83,13 +83,13 @@ internal readonly unsafe struct PrimitiveArrayCriticalFunctionSet
 		/// Pointer to <c>GetPrimitiveArrayCritical</c> function.
 		/// Returns the body of the primitive array.
 		/// </summary>
-		public readonly delegate* unmanaged[Cdecl]<JEnvironmentRef, JArrayLocalRef, JBoolean*, Byte*>
+		public readonly delegate* unmanaged[Cdecl]<JEnvironmentRef, JArrayLocalRef, JBoolean*, IntPtr>
 			GetPrimitiveArrayCritical;
 		/// <summary>
 		/// Pointer to <c>ReleasePrimitiveArrayCritical</c> function.
 		/// Informs the <c>VM</c> that the native code no longer needs access to array elements.
 		/// </summary>
-		public readonly delegate* unmanaged[Cdecl]<JEnvironmentRef, JArrayLocalRef, Byte*, JReleaseMode, void>
+		public readonly delegate* unmanaged[Cdecl]<JEnvironmentRef, JArrayLocalRef, IntPtr, JReleaseMode, void>
 			ReleasePrimitiveArrayCritical;
 	}
 }

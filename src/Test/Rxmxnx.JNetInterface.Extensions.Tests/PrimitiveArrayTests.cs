@@ -139,6 +139,7 @@ public sealed class PrimitiveArrayTests
 		jArray.Environment.ArrayFeature.GetSequence(jArray, Arg.Any<JMemoryReferenceKind>()).Returns(sequenceMemory);
 
 		JPrimitiveMemory<TPrimitive> sequence = jArray.GetElements();
+		Boolean freeRelease = true;
 		try
 		{
 			IFixedContext<TPrimitive> elementsContext = sequence;
@@ -171,8 +172,19 @@ public sealed class PrimitiveArrayTests
 			Assert.Equal((sequence as IReadOnlyFixedContext<TPrimitive>).AsBinaryContext(), sequence);
 			Assert.Equal((sequence as IReadOnlyFixedContext<Byte>).AsBinaryContext(), sequence);
 
-			sequence.ReleaseMode = releaseMode;
-			Assert.Equal(releaseMode, sequence.ReleaseMode);
+			if (!sequence.Copy)
+			{
+				Assert.Null(sequence.ReleaseMode);
+				sequence.ReleaseMode = releaseMode;
+				Assert.Null(sequence.ReleaseMode);
+			}
+			else
+			{
+				Assert.NotNull(sequence.ReleaseMode);
+				sequence.ReleaseMode = releaseMode;
+				freeRelease = releaseMode is not JReleaseMode.Abort;
+				Assert.Equal(!freeRelease ? JReleaseMode.Abort : JReleaseMode.Free, sequence.ReleaseMode);
+			}
 
 			Assert.True((sequence as IReadOnlyFixedContext<TPrimitive>).Values.SequenceEqual(value0));
 			Assert.True((sequence as IReadOnlyFixedContext<Byte>).Values.SequenceEqual(value0.AsSpan().AsBytes()));
@@ -195,7 +207,7 @@ public sealed class PrimitiveArrayTests
 		}
 		sequence.Dispose();
 		sequenceMemory.Received(1).GetContext(sequence);
-		sequenceMemory.Received(1).Release(releaseMode);
+		sequenceMemory.Received(1).Release(!freeRelease ? JReleaseMode.Abort : JReleaseMode.Free);
 
 		Assert.Equal(value0, value1);
 	}
@@ -213,6 +225,7 @@ public sealed class PrimitiveArrayTests
 		      .Returns(sequenceMemory);
 
 		JPrimitiveMemory<TPrimitive> sequence = jArray.GetCriticalElements();
+		Boolean freeRelease = true;
 		try
 		{
 			IFixedContext<TPrimitive> elementsContext = sequence;
@@ -245,8 +258,19 @@ public sealed class PrimitiveArrayTests
 			Assert.Equal((sequence as IReadOnlyFixedContext<TPrimitive>).AsBinaryContext(), sequence);
 			Assert.Equal((sequence as IReadOnlyFixedContext<Byte>).AsBinaryContext(), sequence);
 
-			sequence.ReleaseMode = releaseMode;
-			Assert.Null(sequence.ReleaseMode);
+			if (!sequence.Copy)
+			{
+				Assert.Null(sequence.ReleaseMode);
+				sequence.ReleaseMode = releaseMode;
+				Assert.Null(sequence.ReleaseMode);
+			}
+			else
+			{
+				Assert.NotNull(sequence.ReleaseMode);
+				sequence.ReleaseMode = releaseMode;
+				freeRelease = releaseMode is not JReleaseMode.Abort;
+				Assert.Equal(!freeRelease ? JReleaseMode.Abort : JReleaseMode.Free, sequence.ReleaseMode);
+			}
 
 			Assert.True((sequence as IReadOnlyFixedContext<TPrimitive>).Values.SequenceEqual(value0));
 			Assert.True((sequence as IReadOnlyFixedContext<Byte>).Values.SequenceEqual(value0.AsSpan().AsBytes()));
@@ -270,7 +294,7 @@ public sealed class PrimitiveArrayTests
 		}
 		sequence.Dispose();
 		sequenceMemory.Received(1).GetContext(sequence);
-		sequenceMemory.Received(1).Release();
+		sequenceMemory.Received(1).Release(!freeRelease ? JReleaseMode.Abort : JReleaseMode.Free);
 
 		Assert.Equal(value0, value1);
 	}

@@ -13,10 +13,15 @@ public abstract partial class EnvironmentProxy
 		isCopy = false;
 		return IntPtr.Zero;
 	}
-	ValPtr<Byte> IArrayFeature.GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef) => ValPtr<Byte>.Zero;
+	IntPtr IArrayFeature.GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef, out Boolean isCopy)
+	{
+		isCopy = false;
+		return IntPtr.Zero;
+	}
 	void IArrayFeature.
 		ReleasePrimitiveSequence<TPrimitive>(JArrayLocalRef arrayRef, IntPtr pointer, JReleaseMode mode) { }
-	void IArrayFeature.ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, ValPtr<Byte> criticalPtr) { }
+	void IArrayFeature.
+		ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, IntPtr criticalPtr, JReleaseMode mode) { }
 	#endregion
 
 	#region IStringFeature

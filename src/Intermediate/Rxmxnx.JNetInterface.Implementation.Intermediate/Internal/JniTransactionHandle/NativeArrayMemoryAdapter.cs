@@ -26,7 +26,7 @@ internal partial struct JniTransactionHandle
 		{
 			this.Pointer = !this.Critical ?
 				env.ArrayFeature.GetPrimitiveSequence<TPrimitive>(this.LocalRef, out this.IsCopy) :
-				env.ArrayFeature.GetPrimitiveCriticalSequence(this.LocalRef);
+				env.ArrayFeature.GetPrimitiveCriticalSequence(this.LocalRef, out this.IsCopy);
 		}
 		/// <inheritdoc/>
 		public override void Release(JReleaseMode mode = JReleaseMode.Free)
@@ -36,8 +36,11 @@ internal partial struct JniTransactionHandle
 			if (!this.Critical)
 				thread.ArrayFeature.ReleasePrimitiveSequence<TPrimitive>(this.LocalRef, this.Pointer, mode);
 			else
-				thread.ArrayFeature.ReleasePrimitiveCriticalSequence(this.LocalRef, (ValPtr<Byte>)this.Pointer);
-			base.Release(mode);
+				thread.ArrayFeature.ReleasePrimitiveCriticalSequence(this.LocalRef, this.Pointer, mode);
+
+			if (this.Critical || mode is not JReleaseMode.Commit)
+				// Release if the memory is critical or the mode is not Commit.
+				base.Release(mode);
 		}
 	}
 }
