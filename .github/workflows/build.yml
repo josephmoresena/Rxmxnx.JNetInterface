@@ -109,50 +109,6 @@ jobs:
       JNETINTERFACE_ONLY_NATIVE_TEST: false
       DOTNET_CLI_USE_MSBUILD_SERVER: false
     steps:
-      - uses: actions/checkout@v4
-      - name: APT deb822 sources
-        if: runner.os == 'Linux'
-        run: |
-          if [[ $ImageOS == "ubuntu24" ]]; then
-           sudo bash -c 'cat > /etc/apt/sources.list.d/ubuntu.sources <<EOF
-          Types: deb
-          URIs: https://archive.ubuntu.com/ubuntu/
-          Suites: noble
-          Components: main restricted universe
-          Architectures: amd64
-          
-          Types: deb
-          URIs: https://security.ubuntu.com/ubuntu/
-          Suites: noble-security
-          Components: main restricted universe
-          Architectures: amd64
-          
-          Types: deb
-          URIs: https://archive.ubuntu.com/ubuntu/
-          Suites: noble-updates
-          Components: main restricted universe
-          Architectures: amd64
-          
-          Types: deb
-          URIs: https://azure.ports.ubuntu.com/ubuntu-ports/
-          Suites: noble
-          Components: main restricted multiverse universe
-          Architectures: arm64
-          
-          Types: deb
-          URIs: https://azure.ports.ubuntu.com/ubuntu-ports/
-          Suites: noble-updates
-          Components: main restricted multiverse universe
-          Architectures: arm64
-          
-          Types: deb
-          URIs: https://azure.ports.ubuntu.com/ubuntu-ports/
-          Suites: noble-updates
-          Components: main restricted multiverse universe
-          Architectures: armhf
-          EOF'
-          fi
-
       - name: Setup NativeAOT pre-requisites
         if: runner.os == 'Linux'
         run: |
@@ -241,7 +197,7 @@ jobs:
       - name: Publish launcher
         working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest
         run: dotnet publish
-        
+
       - name: Clean up
         shell: pwsh
         run: |
@@ -274,15 +230,6 @@ jobs:
             }
           }
 
-      - name: Run launcher (run)
-        shell: pwsh
-        run: |
-          if ($IsWindows) {
-            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "run"
-          } else {
-            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "run"
-          }
-
       - name: Create Native Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -300,6 +247,22 @@ jobs:
           name: ${{ runner.os }}-Artifact-Logs
           path: |
             ./artifacts/native/*
+
+      - name: Remove Native Logs
+        shell: pwsh
+        run: |
+          if (Test-Path ./artifacts/native) {
+              Remove-Item -Recurse -Force ./artifacts/native/*
+          }
+
+      - name: Run launcher (run)
+        shell: pwsh
+        run: |
+          if ($IsWindows) {
+            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "run"
+          } else {
+            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "run"
+          }
   
   android-test:
     needs: [ build ]
