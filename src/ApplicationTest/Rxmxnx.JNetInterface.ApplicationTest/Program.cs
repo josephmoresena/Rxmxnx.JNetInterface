@@ -64,15 +64,18 @@ public static class Program
 		try
 		{
 			JVirtualMachineInitArg initArgs = jvmLib.GetDefaultArgument();
-			if (IVirtualMachine.TypeMetadataToStringEnabled)
-				Console.WriteLine(initArgs);
-			else
-				Console.WriteLine($"JDK Version: 0x{initArgs.Version:x8}");
+			Int32 jdkVersion = jvmLib.GetLatestSupportedVersion();
+			if (jdkVersion != initArgs.Version || initArgs.Options.Count == 0)
+				if (IVirtualMachine.TypeMetadataToStringEnabled)
+					Console.WriteLine(initArgs);
+				else
+					Console.WriteLine($"Min JDK Version: 0x{initArgs.Version:x8}");
+			Console.WriteLine($"Supported JNI Version: 0x{jdkVersion:x8}");
 
-			initArgs = new(initArgs.Version)
+			initArgs = new(jdkVersion)
 			{
 				Options = new("-DjniLib.load.disable=true", "-Xcheck:jni", "-Xrs",
-				              initArgs.Version > 0x00010008 ?
+				              jdkVersion > 0x00010008 ?
 					              "-XX:+ErrorFileToStdout" :
 					              $"-XX:ErrorFile={(OperatingSystem.IsWindows() ? "CON" : "/dev/stderr")}",
 				              JVirtualMachine.TraceEnabled ? "-verbose:jni" : default,
