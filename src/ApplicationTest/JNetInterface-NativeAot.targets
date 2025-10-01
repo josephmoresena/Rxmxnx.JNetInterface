@@ -41,8 +41,8 @@
 
     <PropertyGroup>
         <PublishAot>true</PublishAot>
-        <IlcGenerateMstatFile Condition="'$(TargetFramework)' != 'net7.0' Or '$(JNI_LIBRARY)' == 'true' Or '$(IsCSharpApp)' == 'true'">true</IlcGenerateMstatFile>
-        <IlcGenerateDgmlFile Condition="'$(TargetFramework)' != 'net7.0' Or '$(JNI_LIBRARY)' == 'true' Or '$(IsCSharpApp)' == 'true'">true</IlcGenerateDgmlFile>
+        <IlcGenerateMstatFile Condition="'$(TargetFramework)' != 'net7.0' Or '$(IsCSharpApp)' == 'true'">true</IlcGenerateMstatFile>
+        <IlcGenerateDgmlFile Condition="'$(TargetFramework)' != 'net7.0' Or '$(IsCSharpApp)' == 'true'">true</IlcGenerateDgmlFile>
         <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
     </PropertyGroup>
 
