@@ -104,7 +104,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ windows-2025, ubuntu-latest, macos-latest ]
+        os: [ windows-latest, ubuntu-latest, macos-latest ]
     env:
       JNETINTERFACE_ONLY_NATIVE_TEST: false
       DOTNET_CLI_USE_MSBUILD_SERVER: false

@@ -3,7 +3,6 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <AssemblyName>ApplicationTest.CSharp</AssemblyName>
-        <IsCSharpApp>true</IsCSharpApp>
     </PropertyGroup>
 
     <Import Project="..\JNetInterface-App.targets"/>

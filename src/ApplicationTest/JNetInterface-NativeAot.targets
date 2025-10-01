@@ -4,6 +4,7 @@
 
     <PropertyGroup>
         <SelfContained Condition="'$(TargetFramework)' == 'net7.0'">true</SelfContained>
+        <IsWindowsHost>$([MSBuild]::IsOSPlatform('Windows'))</IsWindowsHost>
         <IsOSXHost>$([MSBuild]::IsOSPlatform('OSX'))</IsOSXHost>
         <HostArch>$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)</HostArch>
     </PropertyGroup>
@@ -41,8 +42,8 @@
 
     <PropertyGroup>
         <PublishAot>true</PublishAot>
-        <IlcGenerateMstatFile Condition="'$(TargetFramework)' != 'net7.0' Or '$(IsCSharpApp)' == 'true'">true</IlcGenerateMstatFile>
-        <IlcGenerateDgmlFile Condition="'$(TargetFramework)' != 'net7.0' Or '$(IsCSharpApp)' == 'true'">true</IlcGenerateDgmlFile>
+        <IlcGenerateMstatFile Condition="'$(TargetFramework)' != 'net7.0' Or '$(IsWindowsHost)' == 'true'">true</IlcGenerateMstatFile>
+        <IlcGenerateDgmlFile Condition="'$(TargetFramework)' != 'net7.0' Or '$(IsWindowsHost)' == 'true'">true</IlcGenerateDgmlFile>
         <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
     </PropertyGroup>
 
