@@ -19,14 +19,23 @@ internal static class ExportedMethods
 			Trace.Listeners.Add(ExportedMethods.traceListener);
 		}
 
-		IVirtualMachine vm = JVirtualMachine.GetVirtualMachine(vmRef);
-		using IThread thread = vm.InitializeThread(new(() => "Load Thread"u8));
-		JHelloDotnetObject.SetCallback(thread, new IManagedCallback.Default(vm, Console.Out));
-		return IVirtualMachine.MinimalVersion;
+		Console.WriteLine("JNI_OnLoad BEGIN");
+		try
+		{
+			IVirtualMachine vm = JVirtualMachine.GetVirtualMachine(vmRef);
+			using IThread thread = vm.InitializeThread(new(() => "Load Thread"u8));
+			JHelloDotnetObject.SetCallback(thread, new IManagedCallback.Default(vm, Console.Out));
+			return IVirtualMachine.MinimalVersion;
+		}
+		finally
+		{
+			Console.WriteLine("JNI_OnLoad END");
+		}
 	}
 	[UnmanagedCallersOnly(EntryPoint = "JNI_OnUnload")]
 	private static void UnloadLibrary(JVirtualMachineRef vmRef, IntPtr _)
 	{
+		Console.WriteLine("JNI_OnUnload BEGIN");
 		try
 		{
 			IVirtualMachine vm = JVirtualMachine.GetVirtualMachine(vmRef);
@@ -44,6 +53,7 @@ internal static class ExportedMethods
 				ExportedMethods.traceListener.Dispose();
 				ExportedMethods.traceListener = null;
 			}
+			Console.WriteLine("JNI_OnUnload END");
 		}
 	}
 }
