@@ -151,7 +151,7 @@ jobs:
           Architectures: armhf
           EOF'
           fi
-          
+
       - name: Setup NativeAOT pre-requisites
         if: runner.os == 'Linux'
         run: |

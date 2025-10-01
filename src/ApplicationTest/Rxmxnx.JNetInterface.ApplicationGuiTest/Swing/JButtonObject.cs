@@ -7,8 +7,13 @@ namespace Rxmxnx.JNetInterface.Swing;
 
 public class JButtonObject : JAbstractButtonObject, IClassType<JButtonObject>
 {
-	private static readonly IndeterminateCall constructorDef =
-		IndeterminateCall.CreateConstructorDefinition([JArgumentMetadata.Get<JStringObject>(),]);
+	private static readonly IndeterminateCall constructorDef = IndeterminateCall.CreateConstructorDefinition(
+#if !NET9_0_OR_GREATER
+		[JArgumentMetadata.Get<JStringObject>(),]
+#else
+		JArgumentMetadata.Get<JStringObject>()
+#endif
+	);
 	private static readonly JClassTypeMetadata<JButtonObject> typeMetadata = TypeMetadataBuilder<JAbstractButtonObject>
 	                                                                         .Create<JButtonObject>(
 		                                                                         "javax/swing/JButton"u8).Build();

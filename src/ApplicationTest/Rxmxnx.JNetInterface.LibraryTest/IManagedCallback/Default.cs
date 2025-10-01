@@ -17,7 +17,7 @@ public partial interface IManagedCallback
 		JStringObject IManagedCallback.GetHelloString(JLocalObject jLocal)
 		{
 			IEnvironment env = jLocal.Environment;
-			return JStringObject.Create(env, $"Hello from .NET, {Environment.MachineName}");
+			return JStringObject.Create(env, $"Hello from {JObject.CompilationFramework}, {Environment.MachineName}");
 		}
 		JInt IManagedCallback.GetThreadId(JLocalObject jLocal)
 		{

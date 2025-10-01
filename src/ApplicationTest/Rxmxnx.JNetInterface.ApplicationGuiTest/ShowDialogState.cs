@@ -62,5 +62,6 @@ internal sealed class ShowDialogState(JWindowObject owner) : ActionListenerState
 			$"Runtime Path: {HttpUtility.HtmlEncode(RuntimeEnvironment.GetRuntimeDirectory())}" +
 			ShowDialogState.breakLineHtml +
 			$"Runtime Version: {HttpUtility.HtmlEncode(RuntimeEnvironment.GetSystemVersion())}" +
+			ShowDialogState.breakLineHtml + $"Package: {HttpUtility.HtmlEncode(JObject.CompilationFramework)}" +
 			ShowDialogState.CloseHtml;
 }

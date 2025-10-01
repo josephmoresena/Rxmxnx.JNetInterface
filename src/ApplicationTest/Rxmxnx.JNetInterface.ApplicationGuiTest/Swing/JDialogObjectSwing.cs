@@ -8,9 +8,13 @@ namespace Rxmxnx.JNetInterface.Swing;
 
 public class JDialogObjectSwing : JDialogObject, IClassType<JDialogObjectSwing>
 {
-	private static readonly IndeterminateCall constructorDef = IndeterminateCall.CreateConstructorDefinition([
-		JArgumentMetadata.Get<JWindowObject>(), JArgumentMetadata.Get<JStringObject>(),
-	]);
+	private static readonly IndeterminateCall constructorDef = IndeterminateCall.CreateConstructorDefinition(
+#if !NET9_0_OR_GREATER
+		[JArgumentMetadata.Get<JWindowObject>(), JArgumentMetadata.Get<JStringObject>(),]
+#else
+		JArgumentMetadata.Get<JWindowObject>(), JArgumentMetadata.Get<JStringObject>()
+#endif
+	);
 	private static readonly JClassTypeMetadata<JDialogObjectSwing> typeMetadata =
 		TypeMetadataBuilder<JDialogObject>.Create<JDialogObjectSwing>("javax/swing/JDialog"u8).Build();
 	static JClassTypeMetadata<JDialogObjectSwing> IClassType<JDialogObjectSwing>.Metadata

@@ -5,6 +5,20 @@
 /// </summary>
 public abstract class JObject : IObject, IEquatable<JObject>
 {
+#if !PACKAGE || TEMP_PACKAGE
+	/// <summary>
+	/// Target framework for the current build.
+	/// </summary>
+	public const String CompilationFramework =
+#if NET9_0_OR_GREATER
+			".NET 9.0"
+#elif NET8_0_OR_GREATER
+			".NET 8.0"
+#else
+			".NET 7.0"
+#endif
+		;
+#endif
 	/// <summary>
 	/// Object type information.
 	/// </summary>

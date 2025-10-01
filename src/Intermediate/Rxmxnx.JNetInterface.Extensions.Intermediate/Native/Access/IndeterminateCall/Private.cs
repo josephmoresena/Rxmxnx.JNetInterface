@@ -25,9 +25,11 @@ public abstract partial class IndeterminateCall
 	private IndeterminateResult FunctionCall(JFunctionDefinition definition, JLocalObject jLocal, JClassObject jClass,
 		Boolean nonVirtual,
 #if NET9_0_OR_GREATER
-		params
+		params ReadOnlySpan<IObject?> args
+#else
+		ReadOnlySpan<IObject?> args
 #endif
-		ReadOnlySpan<IObject?> args)
+	)
 	{
 		IEnvironment env = jLocal.Environment;
 		ReadOnlySpan<Byte> signature = this.ReturnType;
@@ -52,10 +54,11 @@ public abstract partial class IndeterminateCall
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
 	private IndeterminateResult StaticFunctionCall(JFunctionDefinition definition, JClassObject jClass,
 #if NET9_0_OR_GREATER
-		params
+		params ReadOnlySpan<IObject?> args
+#else
+		ReadOnlySpan<IObject?> args
 #endif
-
-		ReadOnlySpan<IObject?> args)
+	)
 	{
 		IEnvironment env = jClass.Environment;
 		ReadOnlySpan<Byte> signature = this.ReturnType;
@@ -83,9 +86,11 @@ public abstract partial class IndeterminateCall
 	private static IndeterminateResult ReflectedFunctionCall(JFunctionDefinition definition, JMethodObject jFunction,
 		JLocalObject jLocal, Boolean nonVirtual,
 #if NET9_0_OR_GREATER
-		params
+		params ReadOnlySpan<IObject?> args
+#else
+		ReadOnlySpan<IObject?> args
 #endif
-		ReadOnlySpan<IObject?> args)
+	)
 	{
 		ReadOnlySpan<Byte> returnType = IndeterminateCall.GetReturnType(definition);
 		if (returnType.Length != 1)
@@ -145,9 +150,11 @@ public abstract partial class IndeterminateCall
 	private static IndeterminateResult ReflectedStaticFunctionCall(JFunctionDefinition definition,
 		JMethodObject jFunction,
 #if NET9_0_OR_GREATER
-		params
+		params ReadOnlySpan<IObject?> args
+#else
+		ReadOnlySpan<IObject?> args
 #endif
-		ReadOnlySpan<IObject?> args)
+	)
 	{
 		ReadOnlySpan<Byte> returnType = IndeterminateCall.GetReturnType(definition);
 		if (returnType.Length != 1)
@@ -196,11 +203,7 @@ public abstract partial class IndeterminateCall
 	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
 	/// <param name="args">Method arguments.</param>
 	private static void MethodCall(JMethodDefinition definition, JLocalObject jLocal, JClassObject jClass,
-		Boolean nonVirtual,
-#if NET9_0_OR_GREATER
-		params
-#endif
-		ReadOnlySpan<IObject?> args)
+		Boolean nonVirtual, ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jLocal.Environment;
 		env.AccessFeature.CallMethod(jLocal, jClass, definition, nonVirtual, args);
@@ -225,11 +228,7 @@ public abstract partial class IndeterminateCall
 	/// <param name="definition">A <see cref="JMethodDefinition"/> instance.</param>
 	/// <param name="jClass">Target class.</param>
 	/// <param name="args">Method arguments.</param>
-	private static void StaticMethodCall(JMethodDefinition definition, JClassObject jClass,
-#if NET9_0_OR_GREATER
-		params
-#endif
-		ReadOnlySpan<IObject?> args)
+	private static void StaticMethodCall(JMethodDefinition definition, JClassObject jClass, ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jClass.Environment;
 		env.AccessFeature.CallStaticMethod(jClass, definition, args);
@@ -241,10 +240,6 @@ public abstract partial class IndeterminateCall
 	/// <param name="jMethod">Reflected method instance.</param>
 	/// <param name="args">Method arguments.</param>
 	private static void ReflectedStaticMethodCall(JMethodDefinition definition, JMethodObject jMethod,
-#if NET9_0_OR_GREATER
-		params
-#endif
-
 		ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jMethod.Environment;
@@ -261,9 +256,6 @@ public abstract partial class IndeterminateCall
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 #endif
 	private static TObject NewCall<TObject>(JConstructorDefinition definition, JClassObject jClass,
-#if NET9_0_OR_GREATER
-		params
-#endif
 		ReadOnlySpan<IObject?> args) where TObject : JLocalObject, IClassType<TObject>
 	{
 		IEnvironment env = jClass.Environment;
@@ -280,9 +272,6 @@ public abstract partial class IndeterminateCall
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 #endif
 	private static TObject ReflectedNewCall<TObject>(JConstructorDefinition definition, JConstructorObject jConstructor,
-#if NET9_0_OR_GREATER
-		params
-#endif
 		ReadOnlySpan<IObject?> args) where TObject : JLocalObject, IClassType<TObject>
 	{
 		IEnvironment env = jConstructor.Environment;
@@ -319,11 +308,8 @@ public abstract partial class IndeterminateCall
 	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
 	/// <param name="args">Function arguments.</param>
 	private static void ReflectedPrimitiveFunctionCall<TPrimitive>(Span<Byte> bytes, JFunctionDefinition definition,
-		JMethodObject jMethod, JLocalObject jLocal, Boolean nonVirtual,
-#if NET9_0_OR_GREATER
-		params
-#endif
-		ReadOnlySpan<IObject?> args) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+		JMethodObject jMethod, JLocalObject jLocal, Boolean nonVirtual, ReadOnlySpan<IObject?> args)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		IEnvironment env = jMethod.Environment;
 		TPrimitive result = env.AccessFeature.CallFunction<TPrimitive>(jMethod, jLocal, definition, nonVirtual, args);
@@ -339,11 +325,8 @@ public abstract partial class IndeterminateCall
 	/// <param name="args">Function arguments.</param>
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
 	private static void ReflectedStaticPrimitiveFunctionCall<TPrimitive>(Span<Byte> bytes,
-		JFunctionDefinition definition, JMethodObject jMethod,
-#if NET9_0_OR_GREATER
-		params
-#endif
-		ReadOnlySpan<IObject?> args) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+		JFunctionDefinition definition, JMethodObject jMethod, ReadOnlySpan<IObject?> args)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		IEnvironment env = jMethod.Environment;
 		TPrimitive result = env.AccessFeature.CallStaticFunction<TPrimitive>(jMethod, definition, args);

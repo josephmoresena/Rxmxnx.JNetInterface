@@ -8,14 +8,31 @@ namespace Rxmxnx.JNetInterface.Awt;
 
 public class JWindowObject : JContainerObject, IClassType<JWindowObject>
 {
-	private static readonly IndeterminateCall setLocationRelativeToDef =
-		IndeterminateCall.CreateMethodDefinition("setLocationRelativeTo"u8,
-		                                         [JArgumentMetadata.Get<JComponentObject>(),]);
+	private static readonly IndeterminateCall setLocationRelativeToDef = IndeterminateCall.CreateMethodDefinition(
+		"setLocationRelativeTo"u8,
+#if !NET9_0_OR_GREATER
+		[JArgumentMetadata.Get<JComponentObject>(),]
+#else
+		JArgumentMetadata.Get<JComponentObject>()
+#endif
+	);
 	private static readonly JMethodDefinition.Parameterless packDef = new("pack"u8);
-	private static readonly IndeterminateCall setIconImageDef =
-		IndeterminateCall.CreateMethodDefinition("setIconImage"u8, [JArgumentMetadata.Get<JImageObject>(),]);
-	private static readonly IndeterminateCall setDockIconImageDef =
-		IndeterminateCall.CreateMethodDefinition("setDockIconImage"u8, [JArgumentMetadata.Get<JImageObject>(),]);
+	private static readonly IndeterminateCall setIconImageDef = IndeterminateCall.CreateMethodDefinition(
+		"setIconImage"u8,
+#if !NET9_0_OR_GREATER
+		[JArgumentMetadata.Get<JImageObject>(),]
+#else
+		JArgumentMetadata.Get<JImageObject>()
+#endif
+	);
+	private static readonly IndeterminateCall setDockIconImageDef = IndeterminateCall.CreateMethodDefinition(
+		"setDockIconImage"u8,
+#if !NET9_0_OR_GREATER
+		[JArgumentMetadata.Get<JImageObject>(),]
+#else
+		JArgumentMetadata.Get<JImageObject>()
+#endif
+	);
 
 	private static readonly JClassTypeMetadata<JWindowObject> typeMetadata =
 		TypeMetadataBuilder<JContainerObject>.Create<JWindowObject>("java/awt/Window"u8).Build();
@@ -30,13 +47,25 @@ public class JWindowObject : JContainerObject, IClassType<JWindowObject>
 	{
 		IEnvironment env = this.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JWindowObject>(env);
-		JWindowObject.setLocationRelativeToDef.MethodCall(this, jClass, false, [comp,]);
+		JWindowObject.setLocationRelativeToDef.MethodCall(this, jClass, false,
+#if !NET9_0_OR_GREATER
+		                                                  [comp,]
+#else
+		                                         comp
+#endif
+		);
 	}
 	public void SetIcon(JImageObject image)
 	{
 		IEnvironment env = this.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JWindowObject>(env);
-		JWindowObject.setIconImageDef.MethodCall(this, jClass, false, [image,]);
+		JWindowObject.setIconImageDef.MethodCall(this, jClass, false,
+#if !NET9_0_OR_GREATER
+		                                         [image,]
+#else
+		                                         image
+#endif
+		);
 	}
 	public void Pack()
 	{
@@ -72,7 +101,13 @@ public class JWindowObject : JContainerObject, IClassType<JWindowObject>
 			using JClassObject jClass = JClassObject.GetClass(env, className);
 			using JLocalObject jLocal =
 				new JNonTypedFunctionDefinition(getInstanceFunctionName, jClass.ClassSignature).StaticInvoke(jClass)!;
-			setIconDef.MethodCall(jLocal, [image,]);
+			setIconDef.MethodCall(jLocal,
+#if !NET9_0_OR_GREATER
+			                      [image,]
+#else
+			                      image
+#endif
+			);
 		}
 		catch (ThrowableException)
 		{

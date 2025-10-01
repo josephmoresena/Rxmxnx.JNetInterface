@@ -56,9 +56,11 @@ public abstract partial class IndeterminateCall : IWrapper<JCallDefinition>
 	/// <returns>A new <see cref="IndeterminateCall"/> instance.</returns>
 	public static IndeterminateCall CreateConstructorDefinition(
 #if NET9_0_OR_GREATER
-		params
+		params ReadOnlySpan<JArgumentMetadata> args
+#else
+		ReadOnlySpan<JArgumentMetadata> args = default
 #endif
-		ReadOnlySpan<JArgumentMetadata> args)
+	)
 	{
 		JConstructorDefinition definition = JConstructorDefinition.Create(args);
 		return new Constructor(definition);
@@ -71,9 +73,11 @@ public abstract partial class IndeterminateCall : IWrapper<JCallDefinition>
 	/// <returns>A new <see cref="IndeterminateCall"/> instance.</returns>
 	public static IndeterminateCall CreateMethodDefinition(ReadOnlySpan<Byte> methodName,
 #if NET9_0_OR_GREATER
-		params
+		params ReadOnlySpan<JArgumentMetadata> args
+#else
+		ReadOnlySpan<JArgumentMetadata> args = default
 #endif
-		ReadOnlySpan<JArgumentMetadata> args)
+	)
 	{
 		if (CommonNames.Constructor.SequenceEqual(methodName))
 			return IndeterminateCall.CreateConstructorDefinition(args);
@@ -91,9 +95,11 @@ public abstract partial class IndeterminateCall : IWrapper<JCallDefinition>
 	public static IndeterminateCall CreateFunctionDefinition(JArgumentMetadata returnType,
 		ReadOnlySpan<Byte> functionName,
 #if NET9_0_OR_GREATER
-		params
+		params ReadOnlySpan<JArgumentMetadata> args
+#else
+		ReadOnlySpan<JArgumentMetadata> args = default
 #endif
-		ReadOnlySpan<JArgumentMetadata> args)
+	)
 	{
 		if (CommonNames.Constructor.SequenceEqual(functionName))
 			return IndeterminateCall.CreateConstructorDefinition(args);
@@ -112,9 +118,11 @@ public abstract partial class IndeterminateCall : IWrapper<JCallDefinition>
 	/// <returns>A new <see cref="IndeterminateCall"/> instance.</returns>
 	public static IndeterminateCall CreateFunctionDefinition<TResult>(ReadOnlySpan<Byte> functionName,
 #if NET9_0_OR_GREATER
-		params
+		params ReadOnlySpan<JArgumentMetadata> args
+#else
+		ReadOnlySpan<JArgumentMetadata> args = default
 #endif
-		ReadOnlySpan<JArgumentMetadata> args) where TResult : IDataType<TResult>
+	) where TResult : IDataType<TResult>
 	{
 		if (CommonNames.Constructor.SequenceEqual(functionName))
 			return IndeterminateCall.CreateConstructorDefinition(args);

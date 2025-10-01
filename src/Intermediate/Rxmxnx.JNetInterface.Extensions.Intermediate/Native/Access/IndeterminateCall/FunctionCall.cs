@@ -10,9 +10,11 @@ public abstract partial class IndeterminateCall
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
 	public IndeterminateResult FunctionCall(JLocalObject jLocal,
 #if NET9_0_OR_GREATER
-		params
+		params ReadOnlySpan<IObject?> args
+#else
+		ReadOnlySpan<IObject?> args = default
 #endif
-		ReadOnlySpan<IObject?> args)
+	)
 		=> this.FunctionCall(jLocal, jLocal.Class, false, args);
 	/// <summary>
 	/// Invokes a function on given <see cref="JLocalObject"/> instance and returns its result.
@@ -24,9 +26,11 @@ public abstract partial class IndeterminateCall
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
 	public IndeterminateResult FunctionCall(JLocalObject jLocal, JClassObject jClass, Boolean nonVirtual,
 #if NET9_0_OR_GREATER
-		params
+		params ReadOnlySpan<IObject?> args
+#else
+		ReadOnlySpan<IObject?> args = default
 #endif
-		ReadOnlySpan<IObject?> args)
+	)
 	{
 		IndeterminateResult result = IndeterminateResult.Empty;
 		switch (this.Definition)
@@ -48,9 +52,11 @@ public abstract partial class IndeterminateCall
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
 	public IndeterminateResult StaticFunctionCall(JClassObject jClass,
 #if NET9_0_OR_GREATER
-		params
+		params ReadOnlySpan<IObject?> args
+#else
+		ReadOnlySpan<IObject?> args = default
 #endif
-		ReadOnlySpan<IObject?> args)
+	)
 	{
 		IndeterminateResult result = IndeterminateResult.Empty;
 		switch (this.Definition)
@@ -78,9 +84,11 @@ public abstract partial class IndeterminateCall
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
 	public static IndeterminateResult ReflectedFunctionCall(JMethodObject jMethod, JLocalObject jLocal,
 #if NET9_0_OR_GREATER
-		params
+		params ReadOnlySpan<IObject?> args
+#else
+		ReadOnlySpan<IObject?> args = default
 #endif
-		ReadOnlySpan<IObject?> args)
+	)
 		=> IndeterminateCall.ReflectedFunctionCall(jMethod, jLocal, false, args);
 	/// <summary>
 	/// Invokes a function on given <see cref="JLocalObject"/> instance and returns its result.
@@ -93,9 +101,11 @@ public abstract partial class IndeterminateCall
 	public static IndeterminateResult ReflectedFunctionCall(JMethodObject jMethod, JLocalObject jLocal,
 		Boolean nonVirtual,
 #if NET9_0_OR_GREATER
-		params
+		params ReadOnlySpan<IObject?> args
+#else
+		ReadOnlySpan<IObject?> args = default
 #endif
-		ReadOnlySpan<IObject?> args)
+	)
 	{
 		IndeterminateResult result = IndeterminateResult.Empty;
 		switch (jMethod.Definition)
@@ -118,9 +128,11 @@ public abstract partial class IndeterminateCall
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
 	public static IndeterminateResult ReflectedStaticFunctionCall(JExecutableObject jExecutable,
 #if NET9_0_OR_GREATER
-		params
+		params ReadOnlySpan<IObject?> args
+#else
+		ReadOnlySpan<IObject?> args = default
 #endif
-		ReadOnlySpan<IObject?> args)
+	)
 	{
 		IndeterminateResult result = IndeterminateResult.Empty;
 		switch (jExecutable.Definition)

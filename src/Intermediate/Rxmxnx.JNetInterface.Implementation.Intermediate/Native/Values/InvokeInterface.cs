@@ -116,14 +116,14 @@ internal readonly unsafe struct InvokeInterface
 		public readonly delegate* unmanaged[Stdcall]<JVirtualMachineRef, JResult> DestroyVirtualMachine;
 		/// <inheritdoc cref="InvokeInterface.AttachCurrentThread"/>
 		public readonly delegate* unmanaged[Stdcall]<JVirtualMachineRef, JEnvironmentRef*, VirtualMachineArgumentValue*,
-			JResult > AttachCurrentThread;
+			JResult> AttachCurrentThread;
 		/// <inheritdoc cref="InvokeInterface.DetachCurrentThread"/>
 		public readonly delegate* unmanaged[Stdcall]<JVirtualMachineRef, JResult> DetachCurrentThread;
 		/// <inheritdoc cref="InvokeInterface.GetEnv"/>
 		public readonly delegate* unmanaged[Stdcall]<JVirtualMachineRef, JEnvironmentRef*, Int32, JResult> GetEnv;
 		/// <inheritdoc cref="InvokeInterface.AttachCurrentThreadAsDaemon"/>
 		public readonly delegate* unmanaged[Stdcall]<JVirtualMachineRef, JEnvironmentRef*, VirtualMachineArgumentValue*,
-			JResult > AttachCurrentThreadAsDaemon;
+			JResult> AttachCurrentThreadAsDaemon;
 	}
 
 	/// <summary>
@@ -143,14 +143,14 @@ internal readonly unsafe struct InvokeInterface
 		public readonly delegate* unmanaged[Cdecl]<JVirtualMachineRef, JResult> DestroyVirtualMachine;
 		/// <inheritdoc cref="InvokeInterface.AttachCurrentThread"/>
 		public readonly delegate* unmanaged[Cdecl]<JVirtualMachineRef, JEnvironmentRef*, VirtualMachineArgumentValue*,
-			JResult > AttachCurrentThread;
+			JResult> AttachCurrentThread;
 		/// <inheritdoc cref="InvokeInterface.DetachCurrentThread"/>
 		public readonly delegate* unmanaged[Cdecl]<JVirtualMachineRef, JResult> DetachCurrentThread;
 		/// <inheritdoc cref="InvokeInterface.GetEnv"/>
 		public readonly delegate* unmanaged[Cdecl]<JVirtualMachineRef, JEnvironmentRef*, Int32, JResult> GetEnv;
 		/// <inheritdoc cref="InvokeInterface.AttachCurrentThreadAsDaemon"/>
 		public readonly delegate* unmanaged[Cdecl]<JVirtualMachineRef, JEnvironmentRef*, VirtualMachineArgumentValue*,
-			JResult > AttachCurrentThreadAsDaemon;
+			JResult> AttachCurrentThreadAsDaemon;
 	}
 
 	/// <summary>

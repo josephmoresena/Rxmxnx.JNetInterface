@@ -51,7 +51,7 @@ public partial class JVirtualMachineTests
 				proxyEnv.Received(1).FindClass((ReadOnlyValPtr<Byte>)ctx.Pointer);
 				proxyEnv.Received(1).RegisterNatives(classRef, Arg.Any<ReadOnlyValPtr<NativeMethodValueWrapper>>(), 1);
 				proxyEnv.ClearReceivedCalls();
-				
+
 				try
 				{
 					Assert.True(trackers.All(d => d.WeakReference.IsAlive ==
@@ -59,8 +59,8 @@ public partial class JVirtualMachineTests
 				}
 				catch (Exception)
 				{
-					Assert.Contains(trackers, d => d.WeakReference.IsAlive ==
-						                         !(d.FinalizerFlag?.Value).GetValueOrDefault());
+					Assert.Contains(
+						trackers, d => d.WeakReference.IsAlive == !(d.FinalizerFlag?.Value).GetValueOrDefault());
 				}
 
 				using (JClassObject jClass = JClassObject.GetClass<JTestObject>(env))
