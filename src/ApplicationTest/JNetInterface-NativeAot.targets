@@ -41,8 +41,8 @@
 
     <PropertyGroup>
         <PublishAot>true</PublishAot>
-        <IlcGenerateMstatFile>$(Language.ToLower().StartsWith('c'))</IlcGenerateMstatFile>
-        <IlcGenerateDgmlFile>$(Language.ToLower().StartsWith('c'))</IlcGenerateDgmlFile>
+        <IlcGenerateMstatFile Condition="'$(TargetFramework)' != 'net7.0'">true</IlcGenerateMstatFile>
+        <IlcGenerateDgmlFile Condition="'$(TargetFramework)' != 'net7.0'">true</IlcGenerateDgmlFile>
         <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
     </PropertyGroup>
 
