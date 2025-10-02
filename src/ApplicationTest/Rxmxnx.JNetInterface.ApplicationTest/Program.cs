@@ -65,7 +65,7 @@ public static class Program
 		{
 			JVirtualMachineInitArg initArgs = jvmLib.GetDefaultArgument();
 			Int32 jdkVersion = jvmLib.GetLatestSupportedVersion();
-			if (jdkVersion != initArgs.Version || initArgs.Options.Count == 0)
+			if (IVirtualMachine.MinimalVersion != initArgs.Version || initArgs.Options.Count != 0)
 				if (IVirtualMachine.TypeMetadataToStringEnabled)
 					Console.WriteLine(initArgs);
 				else
