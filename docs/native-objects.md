@@ -89,8 +89,6 @@ Native memory in `Rxmxnx.JNetInterface` is represented using a **memory adapter*
 
 ### Properties
 
-- **`ReleaseMode`**: Defines how memory is released. If the memory is critical (directly mapped to JVM memory), this is
-  `null`.
 - **`Values`**: Provides access via a read-only span.
 - **`Copy`**: Indicates whether the memory is a copy of the string data.
 - **`Critical`**: Indicates if the memory is directly pinned by the JVM.
@@ -172,8 +170,8 @@ element access operations.
 
 ## Primitive Arrays
 
-Unlike non-primitive arrays, **primitive arrays are not polymorphic**. JNI allows direct access to **primitive array
-memory segments**.
+Unlike non-primitive arrays, **primitive arrays are not polymorphic**. JNI allows direct access to the **primitive array
+memory**.
 
 ### Special Methods for Primitive Arrays
 
@@ -200,11 +198,15 @@ Primitive array memory is **mutable** and is managed using `JPrimitiveMemory<T>`
 
 #### Properties
 
-- **`ReleaseMode`**: Defines how memory is released. If critical, this is `null`.
+- **`ReleaseMode`**: Defines how memory is released. If not copy, is set to `null`.
 - **`Values`**: Provides access via a span.
 - **`Copy`**: Indicates if the memory is a copy.
 - **`Critical`**: Indicates if the memory is pinned by the JVM.
 - **`Pointer`**: Pointer to the memory.
+
+#### Methods
+
+- **`Commit()`**: Attempt to commit the native memory to the primitive java array if it is a copy and not critical.
 
 #### Note
 

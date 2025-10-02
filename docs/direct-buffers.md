@@ -54,4 +54,4 @@ class:
 
 - The `WithDirectBuffer` methods may allocate memory on the stack if the configured usable stack byte limit is not
   exceeded.
-- In .NET 9.0+, the generic state type parameter allows `ref struct`.  
+- Starting with .NET 9.0, the generic state type parameter allows `ref struct`.  

@@ -4,12 +4,12 @@
 instances of `JDataTypeMetadata` used for identification.  
 The following table illustrates how data type mapping works.
 
-| Java Declaration                | Base Type                                   | Interface                               | Metadata                                                                                    | Inheritance                                             |
-|---------------------------------|---------------------------------------------|-----------------------------------------|---------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `class JavaClassName`           | `JLocalObject`<sup>1</sup>                  | `IClassType<NetClassName>`              | `JClassTypeMetadata<NetClassName> { ClassName = package/JavaClassName }`                    | `: NetClassName`<sup>2</sup>                            |
-| `interface JavaInterfaceName`   | `JInterfaceObject<NetInterfaceClassName>`   | `IInterfaceType<NetInterfaceClassName>` | `JInterfaceTypeMetadata<NetInterfaceClassName> { ClassName = package/JavaInterfaceName }`   | `: IInterfaceObject<NetInterfaceClassName>`<sup>3</sup> |
-| `enum JavaEnumName`             | `JEnumObject<NetEnumClassName>`             | `IEnumType<NetEnumClassName>`           | `JEnumTypeMetadata<NetEnumClassName> { ClassName = package/JavaEnumName }`                  | N/A                                                     |
-| `@interface JavaAnnotationName` | `JAnnotationObject<NetAnnotationClassName>` | `IAnnotationType<NetInterfaceClassName>` | `JInterfaceTypeMetadata<NetAnnotationClassName> { ClassName = package/JavaAnnotationName }` | N/A<sup>4</sup>                                         |
+| Java Declaration                | Base Type                                   | Interface                                 | Metadata                                                                                    | Inheritance                                             |
+|---------------------------------|---------------------------------------------|-------------------------------------------|---------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `class JavaClassName`           | `JLocalObject`<sup>1</sup>                  | `IClassType<NetClassName>`                | `JClassTypeMetadata<NetClassName> { ClassName = package/JavaClassName }`                    | `: NetClassName`<sup>2</sup>                            |
+| `interface JavaInterfaceName`   | `JInterfaceObject<NetInterfaceClassName>`   | `IInterfaceType<NetInterfaceClassName>`   | `JInterfaceTypeMetadata<NetInterfaceClassName> { ClassName = package/JavaInterfaceName }`   | `: IInterfaceObject<NetInterfaceClassName>`<sup>3</sup> |
+| `enum JavaEnumName`             | `JEnumObject<NetEnumClassName>`             | `IEnumType<NetEnumClassName>`             | `JEnumTypeMetadata<NetEnumClassName> { ClassName = package/JavaEnumName }`                  | N/A                                                     |
+| `@interface JavaAnnotationName` | `JAnnotationObject<NetAnnotationClassName>` | `IAnnotationType<NetAnnotationClassName>` | `JInterfaceTypeMetadata<NetAnnotationClassName> { ClassName = package/JavaAnnotationName }` | N/A<sup>4</sup>                                         |
 
 1. The base type depends on the hierarchy of the mapped class.
 2. To extend a class, the superclass must be defined when constructing the `TypeMetadataBuilder` instance.
@@ -27,7 +27,8 @@ The following table illustrates how data type mapping works.
 | **Array**      | N/A                                                     | N/A                | `IArrayType<JArrayObject<..>>`                      | `JArrayTypeMetadata`                                   | N/A<sup>2</sup>                       |
 
 1. Primitive types cannot be inherited, just like in Java. In CLR, they are value-type structures, and additional
-   primitive types cannot be created.
+   primitive types cannot be
+   created. [They are blittable but may not be usable for function marshalling.](https://github.com/dotnet/runtime/issues/117778#issuecomment-3085491218).
 2. Arrays, like in Java, are views. While inheritance is not allowed, the `IArrayObject<..>` interface enables
    covariance for class-type arrays. For example, a `JArrayObject<JStringObject>` instance can be assigned to a variable
    of type `IArrayObject<JLocalObject>` or `IArrayObject<IInterfaceObject<JSerializableObject>>`.
