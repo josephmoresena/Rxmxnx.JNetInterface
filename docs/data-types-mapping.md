@@ -9,7 +9,7 @@ The following table illustrates how data type mapping works.
 | `class JavaClassName`           | `JLocalObject`<sup>1</sup>                  | `IClassType<NetClassName>`              | `JClassTypeMetadata<NetClassName> { ClassName = package/JavaClassName }`                    | `: NetClassName`<sup>2</sup>                            |
 | `interface JavaInterfaceName`   | `JInterfaceObject<NetInterfaceClassName>`   | `IInterfaceType<NetInterfaceClassName>` | `JInterfaceTypeMetadata<NetInterfaceClassName> { ClassName = package/JavaInterfaceName }`   | `: IInterfaceObject<NetInterfaceClassName>`<sup>3</sup> |
 | `enum JavaEnumName`             | `JEnumObject<NetEnumClassName>`             | `IEnumType<NetEnumClassName>`           | `JEnumTypeMetadata<NetEnumClassName> { ClassName = package/JavaEnumName }`                  | N/A                                                     |
-| `@interface JavaAnnotationName` | `JAnnotationObject<NetAnnotationClassName>` | `IInterfaceType<NetInterfaceClassName>` | `JInterfaceTypeMetadata<NetAnnotationClassName> { ClassName = package/JavaAnnotationName }` | N/A<sup>4</sup>                                         |
+| `@interface JavaAnnotationName` | `JAnnotationObject<NetAnnotationClassName>` | `IAnnotationType<NetInterfaceClassName>` | `JInterfaceTypeMetadata<NetAnnotationClassName> { ClassName = package/JavaAnnotationName }` | N/A<sup>4</sup>                                         |
 
 1. The base type depends on the hierarchy of the mapped class.
 2. To extend a class, the superclass must be defined when constructing the `TypeMetadataBuilder` instance.
@@ -36,7 +36,7 @@ The following table illustrates how data type mapping works.
 
 All JNI-interoperable types implement the `IObject` interface and extend or can be converted to `JObject`.
 
-![InterfaceHierarchy](https://github.com/user-attachments/assets/b7bc1605-ad6b-48fb-abf2-8e937a433809)
+![InterfaceHierarchy2](https://github.com/user-attachments/assets/8b704ba6-7c56-4053-a65a-82483e019770)
 
 All JNI-interoperable objects are instances of `JObject`. Primitives undergo boxing when converted to `JObject`.
 
