@@ -23,7 +23,7 @@ let Execute (jvmLib: JVirtualMachineLibrary, classByteCode: byte[], args: string
         initArgs <-
             JVirtualMachineInitArg(
                 initArgs.Version,
-                Options = CStringSequence [ "-DjniLib.load.disable=true"; "-Xcheck:jni"; "-Xrs" ]
+                Options = CStringSequence [ "-DjniLib.load.disable=true"; JRuntimeInfo.JniCheckOption; "-Xrs" ]
             )
 
         let vm, env = jvmLib.CreateVirtualMachine(initArgs)

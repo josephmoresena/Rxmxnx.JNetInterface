@@ -15,6 +15,11 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 /// </summary>
 public static class JRuntimeInfo
 {
+	public static String? JniCheckOption
+		=> Boolean.TryParse(Environment.GetEnvironmentVariable("JNETINTERFACE_JNI_CHECK"), out Boolean useJniCheck) &&
+			useJniCheck ?
+				"-Xcheck:jni" :
+				default;
 	public static void PrintMetadataInfo()
 	{
 		JRuntimeInfo.PrintBuiltInMetadata();

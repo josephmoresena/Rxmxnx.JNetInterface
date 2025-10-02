@@ -45,13 +45,9 @@ internal readonly unsafe struct InvocationFunctionSet
 		fixed (JEnvironmentRef* envRefPtr = &envRef)
 		fixed (VirtualMachineInitArgumentValue* initArgPtr = &initArg)
 		{
-			//TODO: Remove this.
-			Console.WriteLine("Calling CreateVirtualMachine");
-			JResult result = OperatingSystem.IsWindows() ?
+			return OperatingSystem.IsWindows() ?
 				this._windows.CreateVirtualMachine(vmRefPtr, envRefPtr, initArgPtr) :
 				this._unix.CreateVirtualMachine(vmRefPtr, envRefPtr, initArgPtr);
-			Console.WriteLine($"Result CreateVirtualMachine: {result}, {vmRef}, {envRef}");
-			return result;
 		}
 	}
 	/// <summary>

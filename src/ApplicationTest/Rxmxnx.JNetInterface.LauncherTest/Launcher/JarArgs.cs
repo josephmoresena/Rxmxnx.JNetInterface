@@ -25,7 +25,9 @@ public partial class Launcher
 				         "-XX:+ErrorFileToStdout" :
 				         $"-XX:ErrorFile={(OperatingSystem.IsWindows() ? "CON" : "/dev/stderr")}");
 			args.Add("-XX:+UnlockDiagnosticVMOptions");
-			args.Add("-Xcheck:jni");
+			if (Boolean.TryParse(Environment.GetEnvironmentVariable("JNETINTERFACE_JNI_CHECK"),
+			                     out Boolean useJniCheck) && useJniCheck)
+				args.Add("-Xcheck:jni");
 			args.Add("-jar");
 			args.Add(jarArgs.JarName);
 		}

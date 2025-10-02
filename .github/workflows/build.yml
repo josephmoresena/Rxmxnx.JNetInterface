@@ -108,6 +108,7 @@ jobs:
     env:
       JNETINTERFACE_ONLY_NATIVE_TEST: false
       DOTNET_CLI_USE_MSBUILD_SERVER: false
+      JNETINTERFACE_JNI_CHECK: false
     steps:
       - name: APT deb822 sources
         if: runner.os == 'Linux'

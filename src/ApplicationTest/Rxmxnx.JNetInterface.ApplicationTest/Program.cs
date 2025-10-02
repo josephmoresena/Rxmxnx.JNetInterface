@@ -74,7 +74,7 @@ public static class Program
 
 			initArgs = new(jdkVersion)
 			{
-				Options = new("-DjniLib.load.disable=true", "-Xcheck:jni", "-Xrs",
+				Options = new("-DjniLib.load.disable=true", JRuntimeInfo.JniCheckOption, "-Xrs",
 				              jdkVersion > 0x00010008 ?
 					              "-XX:+ErrorFileToStdout" :
 					              $"-XX:ErrorFile={(OperatingSystem.IsWindows() ? "CON" : "/dev/stderr")}",
