@@ -1,3 +1,5 @@
+// ReSharper disable RedundantCast
+
 namespace Rxmxnx.JNetInterface.Types;
 
 /// <summary>
@@ -151,20 +153,71 @@ internal interface IPrimitiveNumericType<TPrimitive> : IPrimitiveNumericType, IC
 	static abstract explicit operator JShort(TPrimitive jPrimitive);
 
 	/// <summary>
+	/// Defines an explicit conversion of a given <see cref="JByte"/> to <typeparamref name="TPrimitive"/>.
+	/// </summary>
+	/// <param name="jPrimitive">A <see cref="JByte"/> to explicitly convert.</param>
+	static virtual explicit operator TPrimitive(JByte jPrimitive) => (TPrimitive)jPrimitive.Value;
+	/// <summary>
+	/// Defines an explicit conversion of a given <see cref="JChar"/> to <typeparamref name="TPrimitive"/>.
+	/// </summary>
+	/// <param name="jPrimitive">A <see cref="JChar"/> to explicitly convert.</param>
+	static virtual explicit operator TPrimitive(JChar jPrimitive) => (TPrimitive)jPrimitive.Value;
+	/// <summary>
+	/// Defines an explicit conversion of a given <see cref="JDouble"/> to <typeparamref name="TPrimitive"/>.
+	/// </summary>
+	/// <param name="jPrimitive">A <see cref="JDouble"/> to explicitly convert.</param>
+	static virtual explicit operator TPrimitive(JDouble jPrimitive) => (TPrimitive)jPrimitive.Value;
+	/// <summary>
+	/// Defines an explicit conversion of a given <see cref="JFloat"/> to <typeparamref name="TPrimitive"/>.
+	/// </summary>
+	/// <param name="jPrimitive">A <see cref="JFloat"/> to explicitly convert.</param>
+	static virtual explicit operator TPrimitive(JFloat jPrimitive) => (TPrimitive)jPrimitive.Value;
+	/// <summary>
+	/// Defines an explicit conversion of a given <see cref="JInt"/> to <typeparamref name="TPrimitive"/>.
+	/// </summary>
+	/// <param name="jPrimitive">A <see cref="JInt"/> to explicitly convert.</param>
+	static virtual explicit operator TPrimitive(JInt jPrimitive) => (TPrimitive)jPrimitive.Value;
+	/// <summary>
+	/// Defines an explicit conversion of a given <see cref="JLong"/> to <typeparamref name="TPrimitive"/>.
+	/// </summary>
+	/// <param name="jPrimitive">A <see cref="JLong"/> to explicitly convert.</param>
+	static virtual explicit operator TPrimitive(JLong jPrimitive) => (TPrimitive)jPrimitive.Value;
+	/// <summary>
+	/// Defines an explicit conversion of a given <see cref="JShort"/> to <typeparamref name="TPrimitive"/>.
+	/// </summary>
+	/// <param name="jPrimitive">A <see cref="JShort"/> to explicitly convert.</param>
+	static virtual explicit operator TPrimitive(JShort jPrimitive) => (TPrimitive)jPrimitive.Value;
+
+	/// <summary>
 	/// Creates a <typeparamref name="TPrimitive"/> value from <see cref="Double"/>.
 	/// </summary>
 	/// <param name="value">A <see cref="Double"/> value.</param>
 	/// <returns>A <typeparamref name="TPrimitive"/> value.</returns>
-	public static abstract TPrimitive FromDouble(Double value);
+	protected static abstract TPrimitive FromDouble(Double value);
 	/// <summary>
 	/// Creates a <see cref="Double"/> value from <typeparamref name="TPrimitive"/>.
 	/// </summary>
 	/// <param name="value">A <typeparamref name="TPrimitive"/> value.</param>
 	/// <returns>A <see cref="Double"/> value.</returns>
-	public static abstract Double ToDouble(TPrimitive value);
+	protected static abstract Double ToDouble(TPrimitive value);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	static explicit INativeDataType<TPrimitive>.operator Double(TPrimitive value) => TPrimitive.ToDouble(value);
+	static explicit INativeDataType<TPrimitive>.operator SByte(TPrimitive value) => ((JByte)value).Value;
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static explicit INativeDataType<TPrimitive>.operator Char(TPrimitive value) => ((JChar)value).Value;
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static explicit INativeDataType<TPrimitive>.operator UInt16(TPrimitive value) => ((JChar)value).Value;
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static explicit INativeDataType<TPrimitive>.operator Double(TPrimitive value) => ((JDouble)value).Value;
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static explicit INativeDataType<TPrimitive>.operator Single(TPrimitive value) => ((JFloat)value).Value;
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static explicit INativeDataType<TPrimitive>.operator Int32(TPrimitive value) => ((JInt)value).Value;
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static explicit INativeDataType<TPrimitive>.operator Int64(TPrimitive value) => ((JLong)value).Value;
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static explicit INativeDataType<TPrimitive>.operator Int16(TPrimitive value) => ((JShort)value).Value;
+
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static implicit INativeDataType<TPrimitive>.operator TPrimitive(Double value) => TPrimitive.FromDouble(value);
 }

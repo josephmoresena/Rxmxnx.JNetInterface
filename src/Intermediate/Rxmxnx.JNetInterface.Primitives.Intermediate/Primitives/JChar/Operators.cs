@@ -36,6 +36,33 @@ public readonly partial struct JChar : IPrimitiveEquatable
 	/// <param name="value">A <see cref="JChar"/> to explicitly convert.</param>
 	public static explicit operator JDouble(JChar value) => value._value;
 
+#pragma warning disable CS0473
+#pragma warning disable CS0473
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JChar>.operator JChar(SByte value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JChar>.operator JChar(UInt16 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JChar>.operator JChar(Single value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JChar>.operator JChar(Int32 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JChar>.operator JChar(Int64 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JChar>.operator JChar(Int16 value) => new(value);
+
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
@@ -69,8 +96,5 @@ public readonly partial struct JChar : IPrimitiveEquatable
 	[ExcludeFromCodeCoverage]
 #endif
 	static explicit INativeDataType<JChar>.operator Single(JChar jPrimitive) => jPrimitive._value;
-#if !PACKAGE
-	[ExcludeFromCodeCoverage]
-#endif
-	static implicit INativeDataType<JChar>.operator JChar(UInt16 jPrimitive) => (Char)jPrimitive;
+#pragma warning restore CS0473
 }

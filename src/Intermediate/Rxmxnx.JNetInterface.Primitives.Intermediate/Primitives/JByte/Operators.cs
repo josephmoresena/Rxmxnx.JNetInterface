@@ -36,6 +36,28 @@ public readonly partial struct JByte : IPrimitiveEquatable
 	/// <param name="value">A <see cref="JByte"/> to implicitly convert.</param>
 	public static implicit operator JDouble(JByte value) => value._value;
 
+#pragma warning disable CS0473
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JByte>.operator JByte(UInt16 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JByte>.operator JByte(Single value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JByte>.operator JByte(Int32 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JByte>.operator JByte(Int64 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JByte>.operator JByte(Int16 value) => new(value);
+
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
@@ -66,4 +88,5 @@ public readonly partial struct JByte : IPrimitiveEquatable
 	[ExcludeFromCodeCoverage]
 #endif
 	static explicit INativeDataType<JByte>.operator Char(JByte jPrimitive) => (Char)jPrimitive._value;
+#pragma warning restore CS0473
 }

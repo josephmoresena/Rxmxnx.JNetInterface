@@ -41,6 +41,32 @@ public readonly partial struct JDouble : IPrimitiveEquatable
 	/// <param name="value">A <see cref="JDouble"/> to implicitly convert.</param>
 	public static implicit operator JFloat(JDouble value) => IPrimitiveNumericType.GetSingleValue(value.Value);
 
+#pragma warning disable CS0473
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JDouble>.operator JDouble(SByte value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JDouble>.operator JDouble(UInt16 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JDouble>.operator JDouble(Single value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JDouble>.operator JDouble(Int32 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JDouble>.operator JDouble(Int64 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JDouble>.operator JDouble(Int16 value) => new(value);
+
 	static explicit IPrimitiveNumericType<JDouble>.operator JFloat(JDouble jPrimitive) => jPrimitive;
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -76,4 +102,5 @@ public readonly partial struct JDouble : IPrimitiveEquatable
 #endif
 	static explicit INativeDataType<JDouble>.operator Char(JDouble jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Char, Double>(jPrimitive._value);
+#pragma warning restore CS0473
 }

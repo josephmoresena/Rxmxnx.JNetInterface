@@ -41,6 +41,28 @@ public readonly partial struct JFloat : IPrimitiveEquatable
 	/// <param name="value">A <see cref="JFloat"/> to implicitly convert.</param>
 	public static implicit operator JDouble(JFloat value) => value.Value;
 
+#pragma warning disable CS0473
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JFloat>.operator JFloat(SByte value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JFloat>.operator JFloat(UInt16 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JFloat>.operator JFloat(Int32 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JFloat>.operator JFloat(Int64 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JFloat>.operator JFloat(Int16 value) => new(value);
+
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
@@ -72,4 +94,5 @@ public readonly partial struct JFloat : IPrimitiveEquatable
 #endif
 	static explicit INativeDataType<JFloat>.operator Int64(JFloat jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Int64, Single>(jPrimitive._value);
+#pragma warning restore CS0473
 }

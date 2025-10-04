@@ -1,6 +1,6 @@
-namespace Rxmxnx.JNetInterface.Native.Access;
+namespace Rxmxnx.JNetInterface.Internal;
 
-public partial class IndeterminateField
+internal static partial class IndeterminateHelper
 {
 	/// <summary>
 	/// Retrieves the value of a field on given <see cref="JLocalObject"/> instance.
@@ -8,10 +8,9 @@ public partial class IndeterminateField
 	/// <param name="jField">Reflected field instance.</param>
 	/// <param name="jLocal">Target object.</param>
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static IndeterminateResult ReflectedGet(JFieldObject jField, JLocalObject jLocal)
+	public static unsafe IndeterminateResult ReflectedGet(JFieldObject jField, JLocalObject jLocal)
 	{
-		ReadOnlySpan<Byte> returnType = IndeterminateField.GetFieldType(jField.Definition);
+		ReadOnlySpan<Byte> returnType = IndeterminateHelper.GetFieldType(jField.Definition);
 
 		if (returnType.Length != 1)
 		{
@@ -20,32 +19,32 @@ public partial class IndeterminateField
 			return new(jObject, returnType);
 		}
 
-		Span<Byte> bytes = stackalloc Byte[sizeof(Int64)];
+		Span<Byte> bytes = stackalloc Byte[sizeof(JValue.PrimitiveValue)];
 		switch (returnType[0])
 		{
 			case CommonNames.BooleanSignatureChar:
-				IndeterminateField.CopyReflectedPrimitiveFieldValue<JBoolean>(bytes, jField, jLocal);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JBoolean>(bytes, jField, jLocal);
 				break;
 			case CommonNames.ByteSignatureChar:
-				IndeterminateField.CopyReflectedPrimitiveFieldValue<JByte>(bytes, jField, jLocal);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JByte>(bytes, jField, jLocal);
 				break;
 			case CommonNames.CharSignatureChar:
-				IndeterminateField.CopyReflectedPrimitiveFieldValue<JChar>(bytes, jField, jLocal);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JChar>(bytes, jField, jLocal);
 				break;
 			case CommonNames.DoubleSignatureChar:
-				IndeterminateField.CopyReflectedPrimitiveFieldValue<JDouble>(bytes, jField, jLocal);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JDouble>(bytes, jField, jLocal);
 				break;
 			case CommonNames.FloatSignatureChar:
-				IndeterminateField.CopyReflectedPrimitiveFieldValue<JFloat>(bytes, jField, jLocal);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JFloat>(bytes, jField, jLocal);
 				break;
 			case CommonNames.IntSignatureChar:
-				IndeterminateField.CopyReflectedPrimitiveFieldValue<JInt>(bytes, jField, jLocal);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JInt>(bytes, jField, jLocal);
 				break;
 			case CommonNames.LongSignatureChar:
-				IndeterminateField.CopyReflectedPrimitiveFieldValue<JLong>(bytes, jField, jLocal);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JLong>(bytes, jField, jLocal);
 				break;
 			case CommonNames.ShortSignatureChar:
-				IndeterminateField.CopyReflectedPrimitiveFieldValue<JShort>(bytes, jField, jLocal);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JShort>(bytes, jField, jLocal);
 				break;
 		}
 		return new(MemoryMarshal.Cast<Byte, JValue.PrimitiveValue>(bytes)[0], returnType);
@@ -55,10 +54,9 @@ public partial class IndeterminateField
 	/// </summary>
 	/// <param name="jField">Reflected field instance.</param>
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static IndeterminateResult ReflectedStaticGet(JFieldObject jField)
+	public static unsafe IndeterminateResult ReflectedStaticGet(JFieldObject jField)
 	{
-		ReadOnlySpan<Byte> returnType = IndeterminateField.GetFieldType(jField.Definition);
+		ReadOnlySpan<Byte> returnType = IndeterminateHelper.GetFieldType(jField.Definition);
 
 		if (returnType.Length != 1)
 		{
@@ -67,37 +65,36 @@ public partial class IndeterminateField
 			return new(jObject, returnType);
 		}
 
-		Span<Byte> bytes = stackalloc Byte[sizeof(Int64)];
+		Span<Byte> bytes = stackalloc Byte[sizeof(JValue.PrimitiveValue)];
 		switch (returnType[0])
 		{
 			case CommonNames.BooleanSignatureChar:
-				IndeterminateField.CopyReflectedPrimitiveFieldValue<JBoolean>(bytes, jField);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JBoolean>(bytes, jField);
 				break;
 			case CommonNames.ByteSignatureChar:
-				IndeterminateField.CopyReflectedPrimitiveFieldValue<JByte>(bytes, jField);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JByte>(bytes, jField);
 				break;
 			case CommonNames.CharSignatureChar:
-				IndeterminateField.CopyReflectedPrimitiveFieldValue<JChar>(bytes, jField);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JChar>(bytes, jField);
 				break;
 			case CommonNames.DoubleSignatureChar:
-				IndeterminateField.CopyReflectedPrimitiveFieldValue<JDouble>(bytes, jField);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JDouble>(bytes, jField);
 				break;
 			case CommonNames.FloatSignatureChar:
-				IndeterminateField.CopyReflectedPrimitiveFieldValue<JFloat>(bytes, jField);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JFloat>(bytes, jField);
 				break;
 			case CommonNames.IntSignatureChar:
-				IndeterminateField.CopyReflectedPrimitiveFieldValue<JInt>(bytes, jField);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JInt>(bytes, jField);
 				break;
 			case CommonNames.LongSignatureChar:
-				IndeterminateField.CopyReflectedPrimitiveFieldValue<JLong>(bytes, jField);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JLong>(bytes, jField);
 				break;
 			case CommonNames.ShortSignatureChar:
-				IndeterminateField.CopyReflectedPrimitiveFieldValue<JShort>(bytes, jField);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JShort>(bytes, jField);
 				break;
 		}
 		return new(MemoryMarshal.Cast<Byte, JValue.PrimitiveValue>(bytes)[0], returnType);
 	}
-
 	/// <summary>
 	/// Sets <paramref name="value"/> as the value of a field on given <see cref="JLocalObject"/> instance.
 	/// </summary>
@@ -106,12 +103,11 @@ public partial class IndeterminateField
 	/// <param name="jLocal">Target object.</param>
 	/// <param name="value">New field value.</param>
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void ReflectedSet<TValue>(JFieldObject jField, JLocalObject jLocal, TValue? value)
 		where TValue : IObject
 	{
 		IEnvironment env = jField.Environment;
-		ReadOnlySpan<Byte> signature = IndeterminateField.GetFieldType(jField.Definition);
+		ReadOnlySpan<Byte> signature = IndeterminateHelper.GetFieldType(jField.Definition);
 		IndeterminateResult fieldValue = IndeterminateField.GetFieldValue(env, value, signature);
 
 		switch (signature[0])
@@ -141,7 +137,7 @@ public partial class IndeterminateField
 				env.AccessFeature.SetField(jField, jLocal, jField.Definition, fieldValue.ShortValue);
 				break;
 			default:
-				IndeterminateField.SetReflectedFieldObject(jField, fieldValue, jLocal);
+				IndeterminateHelper.SetReflectedFieldObject(jField, fieldValue, jLocal);
 				break;
 		}
 	}
@@ -153,11 +149,10 @@ public partial class IndeterminateField
 	/// <param name="jField">Reflected field instance.</param>
 	/// <param name="value">New field value.</param>
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void ReflectedStaticSet<TValue>(JFieldObject jField, TValue? value) where TValue : IObject
 	{
 		IEnvironment env = jField.Environment;
-		ReadOnlySpan<Byte> signature = IndeterminateField.GetFieldType(jField.Definition);
+		ReadOnlySpan<Byte> signature = IndeterminateHelper.GetFieldType(jField.Definition);
 		IndeterminateResult fieldValue = IndeterminateField.GetFieldValue(env, value, signature);
 
 		switch (signature[0])
@@ -187,7 +182,7 @@ public partial class IndeterminateField
 				env.AccessFeature.SetStaticField(jField, jField.Definition, fieldValue.ShortValue);
 				break;
 			default:
-				IndeterminateField.SetReflectedFieldObject(jField, fieldValue);
+				IndeterminateHelper.SetReflectedFieldObject(jField, fieldValue);
 				break;
 		}
 	}

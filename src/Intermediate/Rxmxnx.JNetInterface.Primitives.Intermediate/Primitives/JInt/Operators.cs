@@ -36,6 +36,28 @@ public readonly partial struct JInt : IPrimitiveEquatable
 	/// <param name="value">A <see cref="JInt"/> to implicitly convert.</param>
 	public static implicit operator JDouble(JInt value) => value._value;
 
+#pragma warning disable CS0473
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JInt>.operator JInt(SByte value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JInt>.operator JInt(UInt16 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JInt>.operator JInt(Single value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JInt>.operator JInt(Int64 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JInt>.operator JInt(Int16 value) => new(value);
+
 	static explicit INativeDataType<JInt>.operator Int32(JInt jPrimitive) => jPrimitive._value;
 	static explicit IPrimitiveNumericType<JInt>.operator JLong(JInt jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JInt>.operator JDouble(JInt jPrimitive) => jPrimitive;
@@ -67,4 +89,5 @@ public readonly partial struct JInt : IPrimitiveEquatable
 #endif
 	static explicit INativeDataType<JInt>.operator Char(JInt jPrimitive)
 		=> NativeUtilities.AsBytes(jPrimitive).ToValue<Char>();
+#pragma warning restore CS0473
 }

@@ -36,6 +36,28 @@ public readonly partial struct JLong : IPrimitiveEquatable
 	/// <param name="value">A <see cref="JLong"/> to implicitly convert.</param>
 	public static implicit operator JDouble(JLong value) => value._value;
 
+#pragma warning disable CS0473
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JLong>.operator JLong(SByte value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JLong>.operator JLong(UInt16 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JLong>.operator JLong(Single value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JLong>.operator JLong(Int32 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JLong>.operator JLong(Int16 value) => new(value);
+
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
@@ -67,4 +89,5 @@ public readonly partial struct JLong : IPrimitiveEquatable
 #endif
 	static explicit INativeDataType<JLong>.operator Char(JLong jPrimitive)
 		=> NativeUtilities.AsBytes(jPrimitive).ToValue<Char>();
+#pragma warning restore CS0473
 }

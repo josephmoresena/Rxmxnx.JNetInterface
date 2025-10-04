@@ -36,6 +36,28 @@ public readonly partial struct JShort : IPrimitiveEquatable
 	/// <param name="value">A <see cref="JShort"/> to implicitly convert.</param>
 	public static implicit operator JDouble(JShort value) => value._value;
 
+#pragma warning disable CS0473
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JShort>.operator JShort(SByte value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JShort>.operator JShort(UInt16 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JShort>.operator JShort(Single value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JShort>.operator JShort(Int32 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JShort>.operator JShort(Int64 value) => new(value);
+
 	static explicit IPrimitiveNumericType<JShort>.operator JDouble(JShort jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JShort>.operator JFloat(JShort jPrimitive) => jPrimitive;
 #if !PACKAGE
@@ -66,4 +88,5 @@ public readonly partial struct JShort : IPrimitiveEquatable
 	[ExcludeFromCodeCoverage]
 #endif
 	static explicit INativeDataType<JShort>.operator Char(JShort jPrimitive) => (Char)jPrimitive._value;
+#pragma warning restore CS0473
 }

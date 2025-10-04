@@ -16,7 +16,13 @@ public readonly partial struct JChar
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public JChar(SByte value) => this._value = (Char)value;
+	public JChar(SByte value)
+	{
+		unchecked
+		{
+			this._value = (Char)value;
+		}
+	}
 	/// <summary>
 	/// Constructor.
 	/// </summary>

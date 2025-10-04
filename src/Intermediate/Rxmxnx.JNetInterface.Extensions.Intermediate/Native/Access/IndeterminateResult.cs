@@ -24,95 +24,66 @@ public readonly ref struct IndeterminateResult
 	/// </summary>
 	public JBoolean BooleanValue
 	{
-		get
-		{
-			if (!this._primitive.IsDefault)
-				return true;
-			return this.Object switch
-			{
-				JBooleanObject jBoolean => jBoolean.Value,
-				JCharacterObject jChar => jChar.Value != default,
-				_ => this.Object is not null,
-			};
-		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get => !this._primitive.IsDefault ? true : IndeterminateHelper.GetBooleanValue(this.Object);
 	}
 	/// <summary>
 	/// Resulting byte value.
 	/// </summary>
 	public JByte ByteValue
-		=> this.Object switch
-		{
-			JBooleanObject jBoolean => jBoolean.Value.Value ? JByte.One : JByte.Zero,
-			JCharacterObject jChar => (JByte)jChar.Value,
-			JNumberObject jNumber => jNumber.GetValue<JByte>(),
-			_ => this.GetNumericPrimitive<JByte>(),
-		};
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get => this.GetNumberValue<JByte>();
+	}
 	/// <summary>
 	/// Resulting char value.
 	/// </summary>
 	public JChar CharValue
-		=> this.Object switch
-		{
-			JBooleanObject jBoolean => jBoolean.Value.Value ? JChar.One : JChar.Zero,
-			JCharacterObject jChar => jChar.Value,
-			JNumberObject jNumber => (JChar)jNumber.GetValue<JShort>(),
-			_ => (JChar)this.GetNumericPrimitive<JShort>(),
-		};
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get => IndeterminateHelper.GetCharValue(this.Object) ?? this.GetNumericPrimitive<JChar>();
+	}
 	/// <summary>
 	/// Resulting double value.
 	/// </summary>
 	public JDouble DoubleValue
-		=> this.Object switch
-		{
-			JBooleanObject jBoolean => jBoolean.Value.Value ? JDouble.One : JDouble.Zero,
-			JCharacterObject jChar => (JDouble)jChar.Value,
-			JNumberObject jNumber => jNumber.GetValue<JDouble>(),
-			_ => this.GetNumericPrimitive<JDouble>(),
-		};
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get => this.GetNumberValue<JDouble>();
+	}
+
 	/// <summary>
 	/// Resulting float value.
 	/// </summary>
 	public JFloat FloatValue
-		=> this.Object switch
-		{
-			JBooleanObject jBoolean => jBoolean.Value.Value ? JFloat.One : JFloat.Zero,
-			JCharacterObject jChar => (JFloat)jChar.Value,
-			JNumberObject jNumber => jNumber.GetValue<JFloat>(),
-			_ => this.GetNumericPrimitive<JFloat>(),
-		};
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get => this.GetNumberValue<JFloat>();
+	}
 	/// <summary>
 	/// Resulting int value.
 	/// </summary>
 	public JInt IntValue
-		=> this.Object switch
-		{
-			JBooleanObject jBoolean => jBoolean.Value.Value ? JInt.One : JInt.Zero,
-			JCharacterObject jChar => (JInt)jChar.Value,
-			JNumberObject jNumber => jNumber.GetValue<JInt>(),
-			_ => this.GetNumericPrimitive<JInt>(),
-		};
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get => this.GetNumberValue<JInt>();
+	}
 	/// <summary>
 	/// Resulting long value.
 	/// </summary>
 	public JLong LongValue
-		=> this.Object switch
-		{
-			JBooleanObject jBoolean => jBoolean.Value.Value ? JLong.One : JLong.Zero,
-			JCharacterObject jChar => (JLong)jChar.Value,
-			JNumberObject jNumber => jNumber.GetValue<JLong>(),
-			_ => this.GetNumericPrimitive<JLong>(),
-		};
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get => this.GetNumberValue<JLong>();
+	}
 	/// <summary>
 	/// Resulting short value.
 	/// </summary>
 	public JShort ShortValue
-		=> this.Object switch
-		{
-			JBooleanObject jBoolean => jBoolean.Value.Value ? JShort.One : JShort.Zero,
-			JCharacterObject jChar => (JShort)jChar.Value,
-			JNumberObject jNumber => jNumber.GetValue<JShort>(),
-			_ => this.GetNumericPrimitive<JShort>(),
-		};
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get => this.GetNumberValue<JShort>();
+	}
 	/// <summary>
 	/// Resulting reference object.
 	/// </summary>
@@ -142,8 +113,8 @@ public readonly ref struct IndeterminateResult
 	}
 
 	/// <summary>
-	/// Copies the sequence of bytes of <paramref name="primitiveSignature"/> from current instance to <paramref name="bytes"/>
-	/// .
+	/// Copies the sequence of bytes of <paramref name="primitiveSignature"/> from current instance to
+	/// <paramref name="bytes"/>.
 	/// </summary>
 	/// <param name="primitiveSignature">Required primitive type JNI signature.</param>
 	/// <param name="bytes">Destination buffer.</param>
@@ -179,37 +150,46 @@ public readonly ref struct IndeterminateResult
 	}
 
 	/// <summary>
+	/// Retrieves numeric value.
+	/// </summary>
+	/// <typeparam name="TNumber">Destination number type.</typeparam>
+	/// <returns>A <typeparamref name="TNumber"/></returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private TNumber GetNumberValue<TNumber>()
+		where TNumber : unmanaged, IPrimitiveType<TNumber>, ISignedNumber<TNumber>, IPrimitiveNumericType<TNumber>,
+		IBinaryNumber<TNumber>
+		=> IndeterminateHelper.GetNumericValue<TNumber>(this.Object) ?? this.GetNumericPrimitive<TNumber>();
+	/// <summary>
 	/// Retrieves numeric primitive value.
 	/// </summary>
-	/// <typeparam name="TPrimitive">Destination primitive type.</typeparam>
-	/// <returns>A <typeparamref name="TPrimitive"/></returns>
-	private TPrimitive GetNumericPrimitive<TPrimitive>()
-		where TPrimitive : unmanaged, IPrimitiveNumericType<TPrimitive>, IPrimitiveType<TPrimitive>,
-		IBinaryNumber<TPrimitive>, ISignedNumber<TPrimitive>
+	/// <typeparam name="TNumber">Destination number type.</typeparam>
+	/// <returns>A <typeparamref name="TNumber"/></returns>
+	private TNumber GetNumericPrimitive<TNumber>()
+		where TNumber : unmanaged, IPrimitiveNumericType<TNumber>, IPrimitiveType<TNumber>, IBinaryNumber<TNumber>
 	{
 		if (this.Signature.Length == 0) return default;
 
-		Byte signature = IPrimitiveType.GetMetadata<TPrimitive>().Signature[0];
+		Byte signature = IPrimitiveType.GetMetadata<TNumber>().Signature[0];
 		switch (this.Signature[0])
 		{
 			case CommonNames.BooleanSignatureChar when signature != CommonNames.ByteSignatureChar:
 			case CommonNames.ByteSignatureChar when signature != CommonNames.ByteSignatureChar:
-				return this.GetNumericPrimitive<JByte, TPrimitive>();
-			case CommonNames.CharSignatureChar when signature != CommonNames.ShortSignatureChar:
-				return this.GetNumericPrimitive<JShort, TPrimitive>();
+				return this.GetNumericPrimitive<JByte, TNumber>();
+			case CommonNames.CharSignatureChar when signature != CommonNames.CharSignatureChar:
+				return this.GetNumericPrimitive<JChar, TNumber>();
 			case CommonNames.DoubleSignatureChar when signature != CommonNames.DoubleSignatureChar:
-				return this.GetNumericPrimitive<JDouble, TPrimitive>();
+				return this.GetNumericPrimitive<JDouble, TNumber>();
 			case CommonNames.FloatSignatureChar when signature != CommonNames.FloatSignatureChar:
-				return this.GetNumericPrimitive<JFloat, TPrimitive>();
+				return this.GetNumericPrimitive<JFloat, TNumber>();
 			case CommonNames.IntSignatureChar when signature != CommonNames.IntSignatureChar:
-				return this.GetNumericPrimitive<JInt, TPrimitive>();
+				return this.GetNumericPrimitive<JInt, TNumber>();
 			case CommonNames.LongSignatureChar when signature != CommonNames.LongSignatureChar:
-				return this.GetNumericPrimitive<JLong, TPrimitive>();
+				return this.GetNumericPrimitive<JLong, TNumber>();
 			case CommonNames.ShortSignatureChar when signature != CommonNames.ShortSignatureChar:
-				return this.GetNumericPrimitive<JShort, TPrimitive>();
+				return this.GetNumericPrimitive<JShort, TNumber>();
 			default:
 				ref JValue.PrimitiveValue valueRef = ref Unsafe.AsRef(in this._primitive);
-				return Unsafe.As<JValue.PrimitiveValue, TPrimitive>(ref valueRef);
+				return Unsafe.As<JValue.PrimitiveValue, TNumber>(ref valueRef);
 		}
 	}
 	/// <summary>
@@ -219,15 +199,14 @@ public readonly ref struct IndeterminateResult
 	/// <typeparam name="TPrimitive">Destination primitive type.</typeparam>
 	/// <returns>A <typeparamref name="TPrimitive"/></returns>
 	private TPrimitive GetNumericPrimitive<TSource, TPrimitive>()
-		where TSource : unmanaged, IPrimitiveNumericType<TSource>, IPrimitiveType<TSource>, IBinaryNumber<TSource>,
-		ISignedNumber<TSource>
+		where TSource : unmanaged, IPrimitiveNumericType<TSource>, IPrimitiveType<TSource>, IBinaryNumber<TSource>
 		where TPrimitive : unmanaged, IPrimitiveNumericType<TPrimitive>, IPrimitiveType<TPrimitive>,
-		IBinaryNumber<TPrimitive>, ISignedNumber<TPrimitive>
+		IBinaryNumber<TPrimitive>
 	{
 		ref JValue.PrimitiveValue valueRef = ref Unsafe.AsRef(in this._primitive);
 		ref TSource result = ref Unsafe.As<JValue.PrimitiveValue, TSource>(ref valueRef);
-		Double doubleValue = TSource.ToDouble(result);
-		return TPrimitive.FromDouble(doubleValue);
+		// ReSharper disable once RedundantCast
+		return (TPrimitive)(Double)result;
 	}
 	/// <summary>
 	/// Copies the sequence of bytes of <paramref name="value"/> to <paramref name="bytes"/>.
