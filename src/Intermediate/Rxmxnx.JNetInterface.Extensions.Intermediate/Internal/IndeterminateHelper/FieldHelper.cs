@@ -1,6 +1,10 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal static partial class IndeterminateHelper
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
+internal static unsafe partial class IndeterminateHelper
 {
 	/// <summary>
 	/// Retrieves the value of a field on given <see cref="JLocalObject"/> instance.
@@ -8,7 +12,7 @@ internal static partial class IndeterminateHelper
 	/// <param name="jField">Reflected field instance.</param>
 	/// <param name="jLocal">Target object.</param>
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
-	public static unsafe IndeterminateResult ReflectedGet(JFieldObject jField, JLocalObject jLocal)
+	public static IndeterminateResult ReflectedGet(JFieldObject jField, JLocalObject jLocal)
 	{
 		ReadOnlySpan<Byte> returnType = IndeterminateHelper.GetFieldType(jField.Definition);
 
@@ -54,7 +58,7 @@ internal static partial class IndeterminateHelper
 	/// </summary>
 	/// <param name="jField">Reflected field instance.</param>
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
-	public static unsafe IndeterminateResult ReflectedStaticGet(JFieldObject jField)
+	public static IndeterminateResult ReflectedStaticGet(JFieldObject jField)
 	{
 		ReadOnlySpan<Byte> returnType = IndeterminateHelper.GetFieldType(jField.Definition);
 
