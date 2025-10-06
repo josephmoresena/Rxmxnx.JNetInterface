@@ -1,7 +1,27 @@
+// ReSharper disable RedundantCast
+
 namespace Rxmxnx.JNetInterface.Internal;
 
 internal static partial class IndeterminateHelper
 {
+	/// <summary>
+	/// Retrieves a <typeparamref name="TNumber"/> value from <paramref name="jLocal"/>.
+	/// </summary>
+	/// <typeparam name="TNumber">Destination number type.</typeparam>
+	/// <param name="jLocal">A <c>java.lang.Number</c> instance.</param>
+	/// <param name="jClass">The <c>java.lang.Number</c> <see cref="JClassObject"/> instance.</param>
+	/// <returns>A <typeparamref name="TNumber"/> value.</returns>
+	private static TNumber GetNumericValue<TNumber>(JLocalObject jLocal, JClassObject jClass)
+		where TNumber : unmanaged, INativeDataType<TNumber>
+		=> TNumber.JniType switch
+		{
+			JNativeType.JByte => (TNumber)NativeFunctionSetImpl.ByteValueDefinition.Invoke(jLocal, jClass).Value,
+			JNativeType.JFloat => (TNumber)NativeFunctionSetImpl.FloatValueDefinition.Invoke(jLocal, jClass).Value,
+			JNativeType.JInt => (TNumber)NativeFunctionSetImpl.IntValueDefinition.Invoke(jLocal, jClass).Value,
+			JNativeType.JLong => (TNumber)NativeFunctionSetImpl.LongValueDefinition.Invoke(jLocal, jClass).Value,
+			JNativeType.JShort => (TNumber)NativeFunctionSetImpl.IntValueDefinition.Invoke(jLocal, jClass).Value,
+			_ => (TNumber)NativeFunctionSetImpl.DoubleValueDefinition.Invoke(jLocal, jClass).Value,
+		};
 	/// <summary>
 	/// Copies the primitive value of a reflected field instance to <paramref name="bytes"/>.
 	/// </summary>

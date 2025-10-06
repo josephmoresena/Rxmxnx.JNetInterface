@@ -68,10 +68,8 @@ internal static partial class IndeterminateHelper
 				if (classFeature.IsInstanceOf(jLocal, classFeature.NumberObject))
 					return (JChar)NativeFunctionSetImpl.ShortValueDefinition.Invoke(jLocal, classFeature.NumberObject);
 				if (classFeature.IsInstanceOf(jLocal, classFeature.BooleanObject))
-					return NativeFunctionSetImpl.BooleanValueDefinition.Invoke(jLocal, classFeature.BooleanObject)
-					                            .Value ?
-						JChar.One :
-						JChar.Zero;
+					return (Char)NativeFunctionSetImpl.BooleanValueDefinition.Invoke(jLocal, classFeature.BooleanObject)
+					                            .ByteValue;
 				return default;
 		}
 	}
@@ -102,21 +100,7 @@ internal static partial class IndeterminateHelper
 			case JNumberObject n: return n.GetValue<TNumber>();
 			default:
 				if (classFeature.IsInstanceOf(jLocal, classFeature.NumberObject))
-					return TNumber.JniType switch
-					{
-						JNativeType.JByte => NativeFunctionSetImpl.ByteValueDefinition
-						                                          .Invoke(jLocal, classFeature.NumberObject).Value,
-						JNativeType.JFloat => NativeFunctionSetImpl.FloatValueDefinition
-						                                           .Invoke(jLocal, classFeature.NumberObject).Value,
-						JNativeType.JInt => NativeFunctionSetImpl.IntValueDefinition
-						                                         .Invoke(jLocal, classFeature.NumberObject).Value,
-						JNativeType.JLong => NativeFunctionSetImpl.LongValueDefinition
-						                                          .Invoke(jLocal, classFeature.LongObject).Value,
-						JNativeType.JShort => NativeFunctionSetImpl.IntValueDefinition
-						                                           .Invoke(jLocal, classFeature.NumberObject).Value,
-						_ => (TNumber)NativeFunctionSetImpl.DoubleValueDefinition
-						                                   .Invoke(jLocal, classFeature.NumberObject).Value,
-					};
+					return IndeterminateHelper.GetNumericValue<TNumber>(jLocal, classFeature.NumberObject);
 				if (classFeature.IsInstanceOf(jLocal, classFeature.BooleanObject))
 					return NativeFunctionSetImpl.BooleanValueDefinition.Invoke(jLocal, classFeature.BooleanObject)
 					                            .Value ?
