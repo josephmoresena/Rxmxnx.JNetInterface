@@ -5,6 +5,7 @@
         <AssemblyName>ApplicationGuiTest</AssemblyName>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <ApplicationIcon>icon.ico</ApplicationIcon>
+        <GenerateAotLog>true</GenerateAotLog>
     </PropertyGroup>
 
     <Import Project="..\JNetInterface-App.targets"/>

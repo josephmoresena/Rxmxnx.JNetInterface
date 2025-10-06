@@ -3,6 +3,7 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <AssemblyName>ApplicationTest.CSharp</AssemblyName>
+        <GenerateAotLog>true</GenerateAotLog>
     </PropertyGroup>
 
     <Import Project="..\JNetInterface-App.targets"/>
