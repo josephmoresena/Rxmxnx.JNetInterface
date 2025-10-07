@@ -87,14 +87,14 @@ public static partial class TestCompiler
 			}
 		}
 	}
-	public static async Task RunManagedTest(DirectoryInfo projectDirectory)
+	public static async Task RunManagedTest(DirectoryInfo projectDirectory, NetVersion[] netVersions)
 	{
 		String? managedTestProjectFile = projectDirectory.GetDirectories("*.ManagedTest", SearchOption.AllDirectories)
 		                                                 .SelectMany(d => d.GetFiles("*.ManagedTest.csproj"))
 		                                                 .Select(f => f.FullName).FirstOrDefault();
 
 		if (String.IsNullOrEmpty(managedTestProjectFile)) return;
-		foreach (NetVersion netVersion in Enum.GetValues<NetVersion>())
+		foreach (NetVersion netVersion in netVersions)
 			await TestCompiler.RunNetTest(new() { ProjectFile = managedTestProjectFile, Version = netVersion, });
 	}
 }

@@ -10,10 +10,10 @@ DirectoryInfo outputDirectory = args.Length >= 2 ?
 Boolean compile = args.Length < 3 || "compile".AsSpan().SequenceEqual(args[2].ToLowerInvariant());
 Boolean run = args.Length < 3 || "run".AsSpan().SequenceEqual(args[2].ToLowerInvariant());
 
-if (compile)
-	await TestCompiler.RunManagedTest(projectDirectory);
-
 Launcher launcher = await Launcher.Create(outputDirectory);
+
+if (compile)
+	await TestCompiler.RunManagedTest(projectDirectory, launcher.NetVersions);
 
 Jdk minJdk = launcher.GetMinJdk();
 _ = Boolean.TryParse(Environment.GetEnvironmentVariable("JNETINTERFACE_ONLY_NATIVE_TEST"), out Boolean onlyNativeAot);
