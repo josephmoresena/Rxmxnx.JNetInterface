@@ -13,7 +13,7 @@ internal static partial class IndeterminateHelper
 	/// <returns>A <typeparamref name="TNumber"/> value.</returns>
 	private static TNumber GetNumericValue<TNumber>(JLocalObject jLocal, JClassObject jClass)
 		where TNumber : unmanaged, INativeDataType<TNumber>
-		=> TNumber.JniType switch
+		=> TNumber.Type switch
 		{
 			JNativeType.JByte => (TNumber)NativeFunctionSetImpl.ByteValueDefinition.Invoke(jLocal, jClass).Value,
 			JNativeType.JFloat => (TNumber)NativeFunctionSetImpl.FloatValueDefinition.Invoke(jLocal, jClass).Value,

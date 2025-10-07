@@ -6,11 +6,11 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal static partial class IndeterminateHelper
 {
 	/// <summary>
-	/// Retrieves a <see cref="JBoolean"/> value from <paramref name="jLocal"/>.
+	/// Retrieves a <see cref="Boolean"/> value from <paramref name="jLocal"/>.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <returns>A <see cref="JBoolean"/> value.</returns>
-	public static JBoolean GetBooleanValue(JLocalObject? jLocal)
+	/// <returns>A <see cref="Boolean"/> value.</returns>
+	public static Boolean GetBooleanValue(JLocalObject? jLocal)
 	{
 		if (jLocal is null) return false;
 
@@ -18,7 +18,7 @@ internal static partial class IndeterminateHelper
 		IClassFeature classFeature = env.ClassFeature;
 		switch (jLocal)
 		{
-			case IWrapper.IBase<JBoolean> z: return z.Value;
+			case IWrapper.IBase<JBoolean> z: return z.Value.Value;
 			case IWrapper.IBase<JByte> b: return b.Value != default;
 			case IWrapper.IBase<JChar> c: return c.Value != default;
 			case IWrapper.IBase<JDouble> d: return d.Value != default;
@@ -29,7 +29,7 @@ internal static partial class IndeterminateHelper
 			case JNumberObject n: return n.GetValue<JDouble>() != default;
 			default:
 				if (classFeature.IsInstanceOf(jLocal, classFeature.BooleanObject))
-					return NativeFunctionSetImpl.BooleanValueDefinition.Invoke(jLocal, classFeature.BooleanObject);
+					return NativeFunctionSetImpl.BooleanValueDefinition.Invoke(jLocal, classFeature.BooleanObject).Value;
 				if (classFeature.IsInstanceOf(jLocal, classFeature.CharacterObject))
 					return NativeFunctionSetImpl.CharValueDefinition.Invoke(jLocal, classFeature.CharacterObject) !=
 						default;
@@ -102,10 +102,8 @@ internal static partial class IndeterminateHelper
 				if (classFeature.IsInstanceOf(jLocal, classFeature.NumberObject))
 					return IndeterminateHelper.GetNumericValue<TNumber>(jLocal, classFeature.NumberObject);
 				if (classFeature.IsInstanceOf(jLocal, classFeature.BooleanObject))
-					return NativeFunctionSetImpl.BooleanValueDefinition.Invoke(jLocal, classFeature.BooleanObject)
-					                            .Value ?
-						TNumber.One :
-						TNumber.Zero;
+					return (TNumber)(SByte)NativeFunctionSetImpl.BooleanValueDefinition
+					                                     .Invoke(jLocal, classFeature.BooleanObject).ByteValue;
 				if (classFeature.IsInstanceOf(jLocal, classFeature.CharacterObject))
 					return (TNumber)NativeFunctionSetImpl.CharValueDefinition
 					                                     .Invoke(jLocal, classFeature.CharacterObject).Value;

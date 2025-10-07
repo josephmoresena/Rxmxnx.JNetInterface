@@ -25,7 +25,7 @@ public readonly ref struct IndeterminateResult
 	public JBoolean BooleanValue
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get => !this._primitive.IsDefault || IndeterminateHelper.GetBooleanValue(this.Object);
+		get => !this._primitive.IsDefault || IndeterminateHelper.GetBooleanValue(this.Object).Value;
 	}
 	/// <summary>
 	/// Resulting byte value.
