@@ -5,6 +5,7 @@ public abstract partial class Launcher
 	public DirectoryInfo OutputDirectory { get; }
 	public Architecture CurrentArch { get; }
 
+	public virtual NetVersion[] NetVersions => Enum.GetValues<NetVersion>();
 	public virtual IEnumerable<Jdk> this[Architecture arch] => [];
 	public abstract String RuntimeIdentifierPrefix { get; }
 
@@ -14,7 +15,7 @@ public abstract partial class Launcher
 	protected abstract String JavaExecutableName { get; }
 	protected abstract String JavaCompilerName { get; }
 
-	public async Task Execute()
+	public async Task Execute(NetVersion[] netVersions)
 	{
 		Dictionary<String, Int32> results = new();
 		try
@@ -28,7 +29,7 @@ public abstract partial class Launcher
 			foreach (Jdk jdk in this.Architectures.SelectMany(a => this[a]).ToHashSet())
 			{
 				if (jarFile is not null)
-					foreach (NetVersion netVersion in Enum.GetValues<NetVersion>())
+					foreach (NetVersion netVersion in netVersions)
 						await this.RunJarFile(jdk, jarFile, netVersion, results);
 
 				foreach (FileInfo appFile in archFiles[jdk.JavaArchitecture])

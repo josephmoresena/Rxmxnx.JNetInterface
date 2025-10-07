@@ -22,8 +22,8 @@ if (compile)
 {
 	await TestCompiler.CompileClass(minJdk, launcher.OutputDirectory);
 	await TestCompiler.CompileNet(projectDirectory, launcher.RuntimeIdentifierPrefix, outputDirectory.FullName,
-	                              onlyNativeAot);
+	                              launcher.NetVersions, onlyNativeAot || OperatingSystem.IsFreeBSD());
 }
 
 if (run)
-	await launcher.Execute();
+	await launcher.Execute(launcher.NetVersions);

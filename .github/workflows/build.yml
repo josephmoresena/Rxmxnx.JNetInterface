@@ -54,7 +54,7 @@ jobs:
         shell: bash
         run: |
           find src/ApplicationTest -name "*.*proj" -exec dotnet sln src remove {} \;
-          rm -rf src/ApplicationTest
+          mv src/ApplicationTest ./ApplicationTest
 
       - name: Clean test results
         run: rm -rf TestResults/
@@ -98,6 +98,15 @@ jobs:
             rm -rf "$TEMP_DIR"
           done
           echo "-----------------------------------"
+          mv bin/Release/*.*nupkg ../Nuget
+      
+      - name: Prepare workspace for FreeBSD
+        id: clean-workspace
+        run: |
+          rm -rf .git
+          rm -rf .sonarqube
+          rm -rf TestResults
+          mv ./ApplicationTest src/ApplicationTest
   
   app-test:
     needs: [ build ]

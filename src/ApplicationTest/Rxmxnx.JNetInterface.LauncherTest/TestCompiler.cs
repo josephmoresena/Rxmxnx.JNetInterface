@@ -33,7 +33,7 @@ public static partial class TestCompiler
 		}
 	}
 	public static async Task CompileNet(DirectoryInfo projectDirectory, String os, String outputPath,
-		Boolean onlyNativeAot = false)
+		NetVersion[] netVersions, Boolean onlyNativeAot)
 	{
 		Architecture[] architectures = OperatingSystem.IsWindows() ?
 			[Architecture.X86, Architecture.X64, Architecture.Arm64,] :
@@ -55,7 +55,7 @@ public static partial class TestCompiler
 			if (!TestCompiler.ArchSupported(arch)) continue;
 
 			String rid = $"{os}-{Enum.GetName(arch)!.ToLower()}";
-			foreach (NetVersion netVersion in Enum.GetValues<NetVersion>())
+			foreach (NetVersion netVersion in netVersions)
 			{
 				if (!String.IsNullOrEmpty(libProjectFile))
 					await TestCompiler.CompileNetLibrary(onlyNativeAot,
