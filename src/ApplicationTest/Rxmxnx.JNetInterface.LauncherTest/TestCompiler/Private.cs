@@ -192,8 +192,7 @@ public partial class TestCompiler
 		return arch == currentArch || currentArch switch
 		{
 			Architecture.X86 => OperatingSystem.IsWindows(),
-			Architecture.Arm => false,
-			Architecture.Armv6 => false,
+			Architecture.Arm or Architecture.Armv6 => OperatingSystem.IsLinux(),
 			_ => !OperatingSystem.IsFreeBSD(),
 		};
 	}

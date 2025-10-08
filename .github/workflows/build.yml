@@ -105,9 +105,49 @@ jobs:
         run: |
           rm -rf .git
           rm -rf .sonarqube
-          rm -rf TestResults
           mv ./ApplicationTest src/ApplicationTest
-  
+          
+      - name: Init FreeBSD 13.5 VM
+        id: vm
+        uses: vmactions/freebsd-vm@v1.2.3
+        with:
+          release: "13.5"
+          usesh: true
+          copyback: false
+          prepare: |
+            pkg install -y python311 py311-pillow sqlite3 unixODBC libgdiplus zip ca_root_nss dotnet openjdk8 openjdk11 openjdk17 openjdk21
+          run: |
+            dotnet dev-certs https --trust
+            
+      - name: Run Tests (FreeBSD 13.5)
+        shell: freebsd {0}
+        run: |
+          cd $GITHUB_WORKSPACE;
+          dotnet test ./src/Test/Rxmxnx.JNetInterface.Base.Tests/bin/Release/net9.0/Rxmxnx.JNetInterface.Base.Tests.dll --logger 'console;verbosity=detailed';
+          dotnet test ./src/Test/Rxmxnx.JNetInterface.Primitives.Tests/bin/Release/net9.0/Rxmxnx.JNetInterface.Primitives.Tests.dll --logger 'console;verbosity=detailed';
+          dotnet test ./src/Test/Rxmxnx.JNetInterface.Native.Tests/bin/Release/net9.0/Rxmxnx.JNetInterface.Native.Tests.dll --logger 'console;verbosity=detailed';
+          dotnet test ./src/Test/Rxmxnx.JNetInterface.Extensions.Tests/bin/Release/net9.0/Rxmxnx.JNetInterface.Extensions.Tests.dll --logger 'console;verbosity=detailed';
+          dotnet test ./src/Test/Rxmxnx.JNetInterface.Implementation.Tests/bin/Release/net9.0/Rxmxnx.JNetInterface.Implementation.Tests.dll --logger 'console;verbosity=detailed';
+      
+      - name: Publish Launcher (FreeBSD)
+        shell: freebsd {0}
+        run: |
+          cd $GITHUB_WORKSPACE;
+          cd ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest;
+          dotnet publish -r freebsd.13-x64;  
+          
+      - name: Run launcher (compile) (FreeBSD)
+        shell: freebsd {0}
+        run: |
+          cd $GITHUB_WORKSPACE;
+          ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "compile";
+
+      - name: Run launcher (run) (FreeBSD)
+        shell: freebsd {0}
+        run: |
+          cd $GITHUB_WORKSPACE;
+          ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "run";
+          
   app-test:
     needs: [ build ]
     runs-on: ${{ matrix.os }}
@@ -219,7 +259,9 @@ jobs:
           winget install Microsoft.DotNet.SDK.7 --architecture x64 --silent --force --disable-interactivity --accept-source-agreements
           winget install Microsoft.DotNet.SDK.8 --architecture x64 --silent --force --disable-interactivity --accept-source-agreements
           winget install Microsoft.DotNet.SDK.9 --architecture x64 --silent --force --disable-interactivity --accept-source-agreements
-
+          
+          dotnet workload update
+          
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
