@@ -134,8 +134,11 @@ public partial class TestCompiler
 				await TestCompiler.CompileNet(compileArgs);
 				compileArgs.BuildDependencies = false;
 
-				compileArgs.Publish = Publish.ReadyToRun;
-				await TestCompiler.CompileNet(compileArgs);
+				if (!OperatingSystem.IsFreeBSD()) 
+				{
+					compileArgs.Publish = Publish.ReadyToRun;
+					await TestCompiler.CompileNet(compileArgs);
+				}
 			}
 
 			if (!Utilities.IsNativeAotSupported(arch, restoreArgs.Version)) return;
