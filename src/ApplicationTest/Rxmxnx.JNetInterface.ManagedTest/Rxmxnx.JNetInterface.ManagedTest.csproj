@@ -1,6 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <Import Project="..\..\Test\Tests.targets"/>
+    
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('FREEBSD'))">
+        <TargetFrameworks>$(Null)</TargetFrameworks>
+    </PropertyGroup>
 
     <ItemGroup>
         <Using Include="Xunit"/>
