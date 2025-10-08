@@ -21,9 +21,9 @@ public partial class IndeterminateField
 
 		if (signature.Length == 1)
 		{
-			Span<Byte> bytes = stackalloc Byte[sizeof(Int64)];
-			env.AccessFeature.GetPrimitiveField(bytes, jLocal, jClass, this.Definition);
-			return new(MemoryMarshal.Cast<Byte, JValue.PrimitiveValue>(bytes)[0], signature);
+			Span<JValue.PrimitiveValue> pValue = stackalloc JValue.PrimitiveValue[1];
+			env.AccessFeature.GetPrimitiveField(pValue.AsBytes(), jLocal, jClass, this.Definition);
+			return new(pValue[0], signature);
 		}
 
 		JLocalObject? jObject = env.AccessFeature.GetField<JLocalObject>(jLocal, jClass, this.Definition);
@@ -41,9 +41,9 @@ public partial class IndeterminateField
 
 		if (signature.Length == 1)
 		{
-			Span<Byte> bytes = stackalloc Byte[sizeof(Int64)];
-			env.AccessFeature.GetPrimitiveStaticField(bytes, jClass, this.Definition);
-			return new(MemoryMarshal.Cast<Byte, JValue.PrimitiveValue>(bytes)[0], signature);
+			Span<JValue.PrimitiveValue> pValue = stackalloc JValue.PrimitiveValue[1];
+			env.AccessFeature.GetPrimitiveStaticField(pValue.AsBytes(), jClass, this.Definition);
+			return new(pValue[0], signature);
 		}
 
 		JLocalObject? jObject = env.AccessFeature.GetStaticField<JLocalObject>(jClass, this.Definition);

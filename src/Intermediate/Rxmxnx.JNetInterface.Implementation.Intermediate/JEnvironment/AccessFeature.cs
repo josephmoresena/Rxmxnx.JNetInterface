@@ -74,12 +74,11 @@ partial class JEnvironment
 		public TField? GetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition)
 			where TField : IDataType<TField>
 		{
-			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TField>();
-			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
+			if (!RuntimeHelpers.IsReferenceOrContainsReferences<TField>())
 			{
-				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
+				Span<Byte> bytes = stackalloc Byte[IDataType.GetMetadata<TField>().SizeOf];
 				this.GetPrimitiveField(bytes, jLocal, jClass, definition);
-				return (TField)primitiveMetadata.CreateInstance(bytes);
+				return Unsafe.As<Byte, TField>(ref MemoryMarshal.GetReference(bytes));
 			}
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
@@ -96,27 +95,25 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfProxy(jField);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jField.Definition);
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
-			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TField>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			_ = jniTransaction.Add(jField);
 			JFieldId fieldId = jField.FieldId;
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
-			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
+			if (RuntimeHelpers.IsReferenceOrContainsReferences<TField>())
 			{
 				JTrace.GetField(jLocal, jField.DeclaringClass, definition);
 				return this.GetObjectField<TField>(localRef, fieldId);
 			}
-			Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
+			Span<Byte> bytes = stackalloc Byte[IDataType.GetMetadata<TField>().SizeOf];
 			this.GetPrimitiveField(bytes, localRef, definition.Descriptor[^1], fieldId);
-			return (TField)primitiveMetadata.CreateInstance(bytes);
+			return Unsafe.As<Byte, TField>(ref MemoryMarshal.GetReference(bytes));
 		}
 		public void SetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition,
 			TField? value) where TField : IDataType<TField>
 		{
-			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TField>();
-			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
+			if (!RuntimeHelpers.IsReferenceOrContainsReferences<TField>())
 			{
-				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
+				Span<Byte> bytes = stackalloc Byte[IDataType.GetMetadata<TField>().SizeOf];
 				value!.CopyTo(bytes);
 				this.SetPrimitiveField(jLocal, jClass, definition, bytes);
 				return;
@@ -136,14 +133,13 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfProxy(jField);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jField.Definition);
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
-			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TField>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(3);
 			_ = jniTransaction.Add(jField);
 			JFieldId fieldId = jField.FieldId;
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
-			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
+			if (!RuntimeHelpers.IsReferenceOrContainsReferences<TField>())
 			{
-				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
+				Span<Byte> bytes = stackalloc Byte[IDataType.GetMetadata<TField>().SizeOf];
 				value!.CopyTo(bytes);
 				this.SetPrimitiveField(localRef, bytes, definition.Descriptor[^1], fieldId);
 				return;
@@ -154,12 +150,11 @@ partial class JEnvironment
 		public TField? GetStaticField<TField>(JClassObject jClass, JFieldDefinition definition)
 			where TField : IDataType<TField>
 		{
-			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TField>();
-			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
+			if (!RuntimeHelpers.IsReferenceOrContainsReferences<TField>())
 			{
-				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
+				Span<Byte> bytes = stackalloc Byte[IDataType.GetMetadata<TField>().SizeOf];
 				this.GetPrimitiveStaticField(bytes, jClass, definition);
-				return (TField)primitiveMetadata.CreateInstance(bytes);
+				return Unsafe.As<Byte, TField>(ref MemoryMarshal.GetReference(bytes));
 			}
 			JTrace.GetField(default, jClass, definition);
 			JObjectLocalRef localRef = this.GetStaticObjectField(jClass, definition);
@@ -170,28 +165,26 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jField);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jField.Definition);
-			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TField>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			_ = jniTransaction.Add(jField);
 			JFieldId fieldId = jField.FieldId;
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jField.DeclaringClass));
-			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
+			if (RuntimeHelpers.IsReferenceOrContainsReferences<TField>())
 			{
 				JTrace.GetField(default, jField.DeclaringClass, definition);
 				JObjectLocalRef localRef = this.GetStaticObjectField(classRef, fieldId);
 				return this.CreateObject<TField>(localRef, true, MetadataHelper.IsFinalType<TField>());
 			}
-			Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
+			Span<Byte> bytes = stackalloc Byte[IDataType.GetMetadata<TField>().SizeOf];
 			this.GetPrimitiveStaticField(bytes, classRef, definition.Descriptor[^1], fieldId);
-			return (TField)primitiveMetadata.CreateInstance(bytes);
+			return Unsafe.As<Byte, TField>(ref MemoryMarshal.GetReference(bytes));
 		}
 		public void SetStaticField<TField>(JClassObject jClass, JFieldDefinition definition, TField? value)
 			where TField : IDataType<TField>
 		{
-			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TField>();
-			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
+			if (!RuntimeHelpers.IsReferenceOrContainsReferences<TField>())
 			{
-				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
+				Span<Byte> bytes = stackalloc Byte[IDataType.GetMetadata<TField>().SizeOf];
 				value!.CopyTo(bytes);
 				this.SetPrimitiveStaticField(jClass, definition, bytes);
 				return;
@@ -208,19 +201,18 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jField);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jField.Definition);
-			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TField>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(3);
 			_ = jniTransaction.Add(jField);
 			JFieldId fieldId = jField.FieldId;
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jField.DeclaringClass));
-			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
+			if (RuntimeHelpers.IsReferenceOrContainsReferences<TField>())
 			{
 				JTrace.SetField(default, jField.DeclaringClass, definition, value);
 				this.SetStaticObjectField(classRef, value, jniTransaction, fieldId);
 			}
 			else
 			{
-				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
+				Span<Byte> bytes = stackalloc Byte[IDataType.GetMetadata<TField>().SizeOf];
 				value!.CopyTo(bytes);
 				this.SetPrimitiveStaticField(classRef, bytes, definition.Descriptor[^1], fieldId);
 			}
@@ -258,12 +250,11 @@ partial class JEnvironment
 		public TResult? CallStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition,
 			ReadOnlySpan<IObject?> args) where TResult : IDataType<TResult>
 		{
-			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TResult>();
-			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
+			if (!RuntimeHelpers.IsReferenceOrContainsReferences<TResult>())
 			{
-				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
+				Span<Byte> bytes = stackalloc Byte[IDataType.GetMetadata<TResult>().SizeOf];
 				this.CallStaticPrimitiveFunction(bytes, jClass, definition, args);
-				return (TResult)primitiveMetadata.CreateInstance(bytes);
+				return Unsafe.As<Byte, TResult>(ref MemoryMarshal.GetReference(bytes));
 			}
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction =
@@ -276,18 +267,17 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jMethod);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jMethod.Definition);
-			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TResult>();
 			using INativeTransaction jniTransaction =
 				this.VirtualMachine.CreateTransaction(2 + definition.ReferenceCount);
 			_ = jniTransaction.Add(jMethod);
 			JMethodId methodId = jMethod.MethodId;
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jMethod.DeclaringClass));
-			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
+			if (RuntimeHelpers.IsReferenceOrContainsReferences<TResult>())
 				return this.CallObjectStaticFunction<TResult>(definition, classRef, args, jniTransaction, methodId);
-			Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
+			Span<Byte> bytes = stackalloc Byte[IDataType.GetMetadata<TResult>().SizeOf];
 			JTrace.CallMethod(default, jMethod.DeclaringClass, definition, false, args);
 			this.CallStaticPrimitiveFunction(bytes, definition, classRef, args, jniTransaction, methodId);
-			return (TResult)primitiveMetadata.CreateInstance(bytes);
+			return Unsafe.As<Byte, TResult>(ref MemoryMarshal.GetReference(bytes));
 		}
 		public void CallStaticMethod(JClassObject jClass, JMethodDefinition definition, ReadOnlySpan<IObject?> args)
 		{
@@ -312,12 +302,11 @@ partial class JEnvironment
 		public TResult? CallFunction<TResult>(JLocalObject jLocal, JClassObject jClass, JFunctionDefinition definition,
 			Boolean nonVirtual, ReadOnlySpan<IObject?> args) where TResult : IDataType<TResult>
 		{
-			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TResult>();
-			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
+			if (!RuntimeHelpers.IsReferenceOrContainsReferences<TResult>())
 			{
-				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
+				Span<Byte> bytes = stackalloc Byte[IDataType.GetMetadata<TResult>().SizeOf];
 				this.CallPrimitiveFunction(bytes, jLocal, jClass, definition, nonVirtual, args);
-				return (TResult)primitiveMetadata.CreateInstance(bytes);
+				return Unsafe.As<Byte, TResult>(ref MemoryMarshal.GetReference(bytes));
 			}
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
@@ -335,7 +324,6 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfProxy(jMethod);
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jMethod.Definition);
-			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TResult>();
 			Int32 initialCapacity = nonVirtual ? 3 : 2;
 			using INativeTransaction jniTransaction =
 				this.VirtualMachine.CreateTransaction(initialCapacity + definition.ReferenceCount);
@@ -343,12 +331,12 @@ partial class JEnvironment
 			JMethodId methodId = jMethod.MethodId;
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
 			JClassLocalRef? classRef = nonVirtual ? jniTransaction.Add(this.ReloadClass(jMethod.DeclaringClass)) : null;
-			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
+			if (RuntimeHelpers.IsReferenceOrContainsReferences<TResult>())
 				return this.CallObjectFunction<TResult>(definition, localRef, classRef, args, jniTransaction, methodId);
-			Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
+			Span<Byte> bytes = stackalloc Byte[IDataType.GetMetadata<TResult>().SizeOf];
 			JTrace.CallMethod(jLocal, jMethod.DeclaringClass, definition, nonVirtual, args);
 			this.CallPrimitiveFunction(bytes, definition, localRef, classRef, args, jniTransaction, methodId);
-			return (TResult)primitiveMetadata.CreateInstance(bytes);
+			return Unsafe.As<Byte, TResult>(ref MemoryMarshal.GetReference(bytes));
 		}
 		public void CallMethod(JLocalObject jLocal, JClassObject jClass, JMethodDefinition definition,
 			Boolean nonVirtual, ReadOnlySpan<IObject?> args)

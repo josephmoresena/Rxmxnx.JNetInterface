@@ -31,10 +31,10 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	{
 		IEnvironment env = jEnum.Environment;
 		JClassObject enumClass = env.ClassFeature.EnumObject;
-		Span<Byte> bytes = stackalloc Byte[sizeof(Int32)];
-		env.AccessFeature.CallPrimitiveFunction(bytes, jEnum, enumClass, NativeFunctionSetImpl.OrdinalDefinition,
-		                                        false);
-		return bytes.AsValue<Int32>();
+		Span<Int32> result = stackalloc Int32[1];
+		env.AccessFeature.CallPrimitiveFunction(result.AsBytes(), jEnum, enumClass,
+		                                        NativeFunctionSetImpl.OrdinalDefinition, false);
+		return result[0];
 	}
 
 	/// <inheritdoc/>
@@ -57,11 +57,11 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	public override Int32 GetLineNumber(JStackTraceElementObject jStackTraceElement)
 	{
 		IEnvironment env = jStackTraceElement.Environment;
-		Span<Byte> bytes = stackalloc Byte[sizeof(Int32)];
+		Span<Int32> result = stackalloc Int32[1];
 		JClassObject stackTraceElementClass = env.ClassFeature.StackTraceElementObject;
-		env.AccessFeature.CallPrimitiveFunction(bytes, jStackTraceElement, stackTraceElementClass,
+		env.AccessFeature.CallPrimitiveFunction(result.AsBytes(), jStackTraceElement, stackTraceElementClass,
 		                                        NativeFunctionSetImpl.GetLineNumberDefinition, false);
-		return bytes.AsValue<Int32>();
+		return result[0];
 	}
 	/// <inheritdoc/>
 	public override JStringObject? GetFileName(JStackTraceElementObject jStackTraceElement)
@@ -164,10 +164,10 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	public override Int64 BufferCapacity(JBufferObject jBuffer)
 	{
 		IEnvironment env = jBuffer.Environment;
-		Span<Byte> bytes = stackalloc Byte[sizeof(Int64)];
-		env.AccessFeature.CallPrimitiveFunction(bytes, jBuffer, env.ClassFeature.BufferObject,
+		Span<Int64> result = stackalloc Int64[1];
+		env.AccessFeature.CallPrimitiveFunction(result.AsBytes(), jBuffer, env.ClassFeature.BufferObject,
 		                                        NativeFunctionSetImpl.BufferCapacityDefinition, false);
-		return bytes.AsValue<Int64>();
+		return result[0];
 	}
 	/// <inheritdoc/>
 	public override JClassObject GetDeclaringClass<TMember>(TMember jMember)

@@ -55,8 +55,8 @@ internal static partial class JTrace
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		if (!JVirtualMachine.TraceEnabled) return;
-		JPrimitiveTypeMetadata typeMetadata = IPrimitiveType.GetMetadata<TPrimitive>();
-		JTrace.SetField(jLocal, jClass, definition, typeMetadata.CreateInstance(bytes), callerMethod);
+		JTrace.SetField(jLocal, jClass, definition, Unsafe.As<Byte, TPrimitive>(ref MemoryMarshal.GetReference(bytes)),
+		                callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the call of a method to the trace listeners.

@@ -23,35 +23,35 @@ internal static unsafe partial class IndeterminateHelper
 			return new(jObject, returnType);
 		}
 
-		Span<Byte> bytes = stackalloc Byte[sizeof(JValue.PrimitiveValue)];
+		Span<JValue.PrimitiveValue> pValue = stackalloc JValue.PrimitiveValue[1];
 		switch (returnType[0])
 		{
 			case CommonNames.BooleanSignatureChar:
-				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JBoolean>(bytes, jField, jLocal);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JBoolean>(pValue.AsBytes(), jField, jLocal);
 				break;
 			case CommonNames.ByteSignatureChar:
-				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JByte>(bytes, jField, jLocal);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JByte>(pValue.AsBytes(), jField, jLocal);
 				break;
 			case CommonNames.CharSignatureChar:
-				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JChar>(bytes, jField, jLocal);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JChar>(pValue.AsBytes(), jField, jLocal);
 				break;
 			case CommonNames.DoubleSignatureChar:
-				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JDouble>(bytes, jField, jLocal);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JDouble>(pValue.AsBytes(), jField, jLocal);
 				break;
 			case CommonNames.FloatSignatureChar:
-				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JFloat>(bytes, jField, jLocal);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JFloat>(pValue.AsBytes(), jField, jLocal);
 				break;
 			case CommonNames.IntSignatureChar:
-				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JInt>(bytes, jField, jLocal);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JInt>(pValue.AsBytes(), jField, jLocal);
 				break;
 			case CommonNames.LongSignatureChar:
-				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JLong>(bytes, jField, jLocal);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JLong>(pValue.AsBytes(), jField, jLocal);
 				break;
 			case CommonNames.ShortSignatureChar:
-				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JShort>(bytes, jField, jLocal);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JShort>(pValue.AsBytes(), jField, jLocal);
 				break;
 		}
-		return new(MemoryMarshal.Cast<Byte, JValue.PrimitiveValue>(bytes)[0], returnType);
+		return new(pValue[0], returnType);
 	}
 	/// <summary>
 	/// Retrieves the value of a static field on the declaring class of given <see cref="JMethodObject"/> instance.
@@ -69,35 +69,35 @@ internal static unsafe partial class IndeterminateHelper
 			return new(jObject, returnType);
 		}
 
-		Span<Byte> bytes = stackalloc Byte[sizeof(JValue.PrimitiveValue)];
+		Span<JValue.PrimitiveValue> pValue = stackalloc JValue.PrimitiveValue[1];
 		switch (returnType[0])
 		{
 			case CommonNames.BooleanSignatureChar:
-				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JBoolean>(bytes, jField);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JBoolean>(pValue.AsBytes(), jField);
 				break;
 			case CommonNames.ByteSignatureChar:
-				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JByte>(bytes, jField);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JByte>(pValue.AsBytes(), jField);
 				break;
 			case CommonNames.CharSignatureChar:
-				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JChar>(bytes, jField);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JChar>(pValue.AsBytes(), jField);
 				break;
 			case CommonNames.DoubleSignatureChar:
-				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JDouble>(bytes, jField);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JDouble>(pValue.AsBytes(), jField);
 				break;
 			case CommonNames.FloatSignatureChar:
-				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JFloat>(bytes, jField);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JFloat>(pValue.AsBytes(), jField);
 				break;
 			case CommonNames.IntSignatureChar:
-				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JInt>(bytes, jField);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JInt>(pValue.AsBytes(), jField);
 				break;
 			case CommonNames.LongSignatureChar:
-				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JLong>(bytes, jField);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JLong>(pValue.AsBytes(), jField);
 				break;
 			case CommonNames.ShortSignatureChar:
-				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JShort>(bytes, jField);
+				IndeterminateHelper.CopyReflectedPrimitiveFieldValue<JShort>(pValue.AsBytes(), jField);
 				break;
 		}
-		return new(MemoryMarshal.Cast<Byte, JValue.PrimitiveValue>(bytes)[0], returnType);
+		return new(pValue[0], returnType);
 	}
 	/// <summary>
 	/// Sets <paramref name="value"/> as the value of a field on given <see cref="JLocalObject"/> instance.

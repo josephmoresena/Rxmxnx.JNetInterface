@@ -36,9 +36,9 @@ public abstract partial class IndeterminateCall
 
 		if (signature.Length == 1)
 		{
-			Span<Byte> bytes = stackalloc Byte[JValue.PrimitiveSize];
-			env.AccessFeature.CallPrimitiveFunction(bytes, jLocal, jClass, definition, nonVirtual, args);
-			return new(MemoryMarshal.Cast<Byte, JValue.PrimitiveValue>(bytes)[0], signature);
+			Span<JValue.PrimitiveValue> pValue = stackalloc JValue.PrimitiveValue[1];
+			env.AccessFeature.CallPrimitiveFunction(pValue.AsBytes(), jLocal, jClass, definition, nonVirtual, args);
+			return new(pValue[0], signature);
 		}
 
 		JLocalObject? jObject =
@@ -65,9 +65,9 @@ public abstract partial class IndeterminateCall
 
 		if (signature.Length == 1)
 		{
-			Span<Byte> bytes = stackalloc Byte[JValue.PrimitiveSize];
-			env.AccessFeature.CallStaticPrimitiveFunction(bytes, jClass, definition, args);
-			return new(MemoryMarshal.Cast<Byte, JValue.PrimitiveValue>(bytes)[0], signature);
+			Span<JValue.PrimitiveValue> pValue = stackalloc JValue.PrimitiveValue[1];
+			env.AccessFeature.CallStaticPrimitiveFunction(pValue.AsBytes(), jClass, definition, args);
+			return new(pValue[0], signature);
 		}
 
 		JLocalObject? jObject = env.AccessFeature.CallStaticFunction<JLocalObject>(jClass, definition, args);

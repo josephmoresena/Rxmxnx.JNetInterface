@@ -32,7 +32,7 @@ partial class JEnvironment
 		public JLocalObject CreateWrapper<TPrimitive>(TPrimitive primitive)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, INativeDataType<TPrimitive>
 		{
-			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
+			JDataTypeMetadata metadata = IDataType.GetMetadata<TPrimitive>();
 			JClassObject jClass;
 			JObjectLocalRef localRef;
 			JLocalObject result;

@@ -112,43 +112,43 @@ internal static partial class IndeterminateHelper
 			return new(jObject, returnType);
 		}
 
-		Span<Byte> bytes = stackalloc Byte[JValue.PrimitiveSize];
+		Span<JValue.PrimitiveValue> pValue = stackalloc JValue.PrimitiveValue[1];
 		switch (returnType[0])
 		{
 			case CommonNames.BooleanSignatureChar:
 				IndeterminateHelper.ReflectedPrimitiveFunctionCall<JBoolean>(
-					bytes, definition, jFunction, jLocal, nonVirtual, args);
+					pValue.AsBytes(), definition, jFunction, jLocal, nonVirtual, args);
 				break;
 			case CommonNames.ByteSignatureChar:
-				IndeterminateHelper.ReflectedPrimitiveFunctionCall<JByte>(bytes, definition, jFunction, jLocal,
-				                                                          nonVirtual, args);
+				IndeterminateHelper.ReflectedPrimitiveFunctionCall<JByte>(
+					pValue.AsBytes(), definition, jFunction, jLocal, nonVirtual, args);
 				break;
 			case CommonNames.CharSignatureChar:
-				IndeterminateHelper.ReflectedPrimitiveFunctionCall<JChar>(bytes, definition, jFunction, jLocal,
-				                                                          nonVirtual, args);
+				IndeterminateHelper.ReflectedPrimitiveFunctionCall<JChar>(
+					pValue.AsBytes(), definition, jFunction, jLocal, nonVirtual, args);
 				break;
 			case CommonNames.DoubleSignatureChar:
 				IndeterminateHelper.ReflectedPrimitiveFunctionCall<JDouble>(
-					bytes, definition, jFunction, jLocal, nonVirtual, args);
+					pValue.AsBytes(), definition, jFunction, jLocal, nonVirtual, args);
 				break;
 			case CommonNames.FloatSignatureChar:
 				IndeterminateHelper.ReflectedPrimitiveFunctionCall<JFloat>(
-					bytes, definition, jFunction, jLocal, nonVirtual, args);
+					pValue.AsBytes(), definition, jFunction, jLocal, nonVirtual, args);
 				break;
 			case CommonNames.IntSignatureChar:
 				IndeterminateHelper.ReflectedPrimitiveFunctionCall<JInt>(
-					bytes, definition, jFunction, jLocal, nonVirtual, args);
+					pValue.AsBytes(), definition, jFunction, jLocal, nonVirtual, args);
 				break;
 			case CommonNames.LongSignatureChar:
-				IndeterminateHelper.ReflectedPrimitiveFunctionCall<JLong>(bytes, definition, jFunction, jLocal,
-				                                                          nonVirtual, args);
+				IndeterminateHelper.ReflectedPrimitiveFunctionCall<JLong>(
+					pValue.AsBytes(), definition, jFunction, jLocal, nonVirtual, args);
 				break;
 			case CommonNames.ShortSignatureChar:
 				IndeterminateHelper.ReflectedPrimitiveFunctionCall<JShort>(
-					bytes, definition, jFunction, jLocal, nonVirtual, args);
+					pValue.AsBytes(), definition, jFunction, jLocal, nonVirtual, args);
 				break;
 		}
-		return new(MemoryMarshal.Cast<Byte, JValue.PrimitiveValue>(bytes)[0], returnType);
+		return new(pValue[0], returnType);
 	}
 	/// <summary>
 	/// Invokes a static function on the declaring class of given <see cref="JMethodObject"/> instance and
@@ -175,35 +175,43 @@ internal static partial class IndeterminateHelper
 			return new(jObject, returnType);
 		}
 
-		Span<Byte> bytes = stackalloc Byte[JValue.PrimitiveSize];
+		Span<JValue.PrimitiveValue> pValue = stackalloc JValue.PrimitiveValue[1];
 		switch (returnType[0])
 		{
 			case CommonNames.BooleanSignatureChar:
-				IndeterminateHelper.ReflectedStaticPrimitiveFunctionCall<JBoolean>(bytes, definition, jFunction, args);
+				IndeterminateHelper.ReflectedStaticPrimitiveFunctionCall<JBoolean>(
+					pValue.AsBytes(), definition, jFunction, args);
 				break;
 			case CommonNames.ByteSignatureChar:
-				IndeterminateHelper.ReflectedStaticPrimitiveFunctionCall<JByte>(bytes, definition, jFunction, args);
+				IndeterminateHelper.ReflectedStaticPrimitiveFunctionCall<JByte>(
+					pValue.AsBytes(), definition, jFunction, args);
 				break;
 			case CommonNames.CharSignatureChar:
-				IndeterminateHelper.ReflectedStaticPrimitiveFunctionCall<JChar>(bytes, definition, jFunction, args);
+				IndeterminateHelper.ReflectedStaticPrimitiveFunctionCall<JChar>(
+					pValue.AsBytes(), definition, jFunction, args);
 				break;
 			case CommonNames.DoubleSignatureChar:
-				IndeterminateHelper.ReflectedStaticPrimitiveFunctionCall<JDouble>(bytes, definition, jFunction, args);
+				IndeterminateHelper.ReflectedStaticPrimitiveFunctionCall<JDouble>(
+					pValue.AsBytes(), definition, jFunction, args);
 				break;
 			case CommonNames.FloatSignatureChar:
-				IndeterminateHelper.ReflectedStaticPrimitiveFunctionCall<JFloat>(bytes, definition, jFunction, args);
+				IndeterminateHelper.ReflectedStaticPrimitiveFunctionCall<JFloat>(
+					pValue.AsBytes(), definition, jFunction, args);
 				break;
 			case CommonNames.IntSignatureChar:
-				IndeterminateHelper.ReflectedStaticPrimitiveFunctionCall<JInt>(bytes, definition, jFunction, args);
+				IndeterminateHelper.ReflectedStaticPrimitiveFunctionCall<JInt>(
+					pValue.AsBytes(), definition, jFunction, args);
 				break;
 			case CommonNames.LongSignatureChar:
-				IndeterminateHelper.ReflectedStaticPrimitiveFunctionCall<JLong>(bytes, definition, jFunction, args);
+				IndeterminateHelper.ReflectedStaticPrimitiveFunctionCall<JLong>(
+					pValue.AsBytes(), definition, jFunction, args);
 				break;
 			case CommonNames.ShortSignatureChar:
-				IndeterminateHelper.ReflectedStaticPrimitiveFunctionCall<JShort>(bytes, definition, jFunction, args);
+				IndeterminateHelper.ReflectedStaticPrimitiveFunctionCall<JShort>(
+					pValue.AsBytes(), definition, jFunction, args);
 				break;
 		}
-		return new(MemoryMarshal.Cast<Byte, JValue.PrimitiveValue>(bytes)[0], returnType);
+		return new(pValue[0], returnType);
 	}
 	/// <summary>
 	/// Invokes a method on given <see cref="JLocalObject"/> instance.

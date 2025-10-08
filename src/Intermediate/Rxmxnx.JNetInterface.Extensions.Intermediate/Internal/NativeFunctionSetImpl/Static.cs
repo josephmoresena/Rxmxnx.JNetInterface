@@ -223,9 +223,9 @@ internal partial class NativeFunctionSetImpl
 		if (jClass.ArrayDimension + 1 == jClass.ClassSignature.Length) return JModifierObject.PrimitiveModifiers;
 		IEnvironment env = jClass.Environment;
 		JClassObject classClass = env.ClassFeature.ClassObject;
-		JModifierObject.Modifiers result = default;
+		Span<JModifierObject.Modifiers> result = stackalloc JModifierObject.Modifiers[1];
 		env.AccessFeature.CallPrimitiveFunction(result.AsBytes(), jClass, classClass,
 		                                        NativeFunctionSetImpl.GetModifiersDefinition, false, []);
-		return result;
+		return result[0];
 	}
 }

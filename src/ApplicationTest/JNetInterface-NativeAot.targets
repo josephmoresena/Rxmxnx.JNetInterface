@@ -7,7 +7,7 @@
         <HostArch>$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)</HostArch>
     </PropertyGroup>
 
-    <ItemGroup Condition=">$([MSBuild]::IsOSPlatform('OSX')) And '$(TargetFramework)' == 'net7.0'">
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(TargetFramework)' == 'net7.0'">
         <KnownILCompilerPack Remove="@(KnownILCompilerPack)"/>
         <KnownILCompilerPack Include="Microsoft.DotNet.ILCompiler"
                              TargetFramework="net7.0"
