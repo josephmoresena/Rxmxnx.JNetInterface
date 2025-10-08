@@ -4,7 +4,19 @@ public partial class Launcher
 {
 	private sealed partial class FreeBsd
 	{
+		private static readonly SemaphoreSlim pkgSemaphore = new(1, 1);
 		private static readonly Architecture[] currentArch = [RuntimeInformation.OSArchitecture,];
+		private static readonly NetVersion[] netVersions =
+		[
+#if NET10_0_OR_GREATER
+#elif NET9_0_OR_GREATER
+			NetVersion.Net90,
+#elif NET8_0_OR_GREATER
+			NetVersion.Net80,
+#elif NET7_0_OR_GREATER
+			NetVersion.Net70,
+#endif
+		];
 
 		private readonly ConcurrentDictionary<JdkVersion, Jdk> _jdks = new();
 		private String _runtimeIdentifier = "freebsd";

@@ -7,6 +7,7 @@ public partial class Launcher
 		static OSPlatform ILauncher<FreeBsd>.Platform => OSPlatform.FreeBSD;
 		public override String RuntimeIdentifierPrefix => this._runtimeIdentifier;
 		public override Architecture[] Architectures => FreeBsd.currentArch;
+		public override NetVersion[] NetVersions => FreeBsd.netVersions;
 		public override IEnumerable<Jdk> this[Architecture arch]
 			=> arch == this.CurrentArch ? this._jdks.Values : base[arch];
 
@@ -28,18 +29,26 @@ public partial class Launcher
 				JdkVersion.Jdk21 => "openjdk21",
 				_ => default,
 			};
-			if (String.IsNullOrWhiteSpace(pkgName) || await Utilities.Execute<String>(new()
-			    {
-				    ExecutablePath = "pkg",
-				    ArgState = pkgName,
-				    AppendArgs = (s, a) =>
+			await FreeBsd.pkgSemaphore.WaitAsync();
+			try
+			{
+				if (String.IsNullOrWhiteSpace(pkgName) || await Utilities.Execute<String>(new()
 				    {
-					    a.Add("install");
-					    a.Add(s);
-				    },
-				    Notifier = ConsoleNotifier.Notifier,
-			    }) != 0)
-				return default;
+					    ExecutablePath = "pkg",
+					    ArgState = pkgName,
+					    AppendArgs = (s, a) =>
+					    {
+						    a.Add("install");
+						    a.Add(s);
+					    },
+					    Notifier = ConsoleNotifier.Notifier,
+				    }) != 0)
+					return default;
+			}
+			finally
+			{
+				FreeBsd.pkgSemaphore.Release();
+			}
 			return this.GetJdk(version, arch, $"/usr/local/{pkgName}");
 		}
 

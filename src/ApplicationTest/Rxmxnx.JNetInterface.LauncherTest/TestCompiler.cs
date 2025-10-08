@@ -37,8 +37,9 @@ public static partial class TestCompiler
 	{
 		Architecture[] architectures = OperatingSystem.IsWindows() ?
 			[Architecture.X86, Architecture.X64, Architecture.Arm64,] :
-			!OperatingSystem.IsLinux() ? [Architecture.X64, Architecture.Arm64,] :
-				[Architecture.X64, Architecture.Arm, Architecture.Arm64,];
+			OperatingSystem.IsMacOS() ? [Architecture.X64, Architecture.Arm64,] :
+				OperatingSystem.IsLinux() ? [Architecture.X64, Architecture.Arm, Architecture.Arm64,] :
+					[RuntimeInformation.OSArchitecture,];
 
 		String? libProjectFile = projectDirectory.GetDirectories("*.LibraryTest", SearchOption.AllDirectories)
 		                                         .SelectMany(d => d.GetFiles("*.LibraryTest.csproj"))

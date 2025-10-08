@@ -191,10 +191,10 @@ public partial class TestCompiler
 		Architecture currentArch = RuntimeInformation.OSArchitecture;
 		return arch == currentArch || currentArch switch
 		{
-			Architecture.X86 => false,
+			Architecture.X86 => OperatingSystem.IsWindows(),
 			Architecture.Arm => false,
 			Architecture.Armv6 => false,
-			_ => true,
+			_ => !OperatingSystem.IsFreeBSD(),
 		};
 	}
 	private static void NetCleanUp(RestoreNetArgs restoreArgs)
