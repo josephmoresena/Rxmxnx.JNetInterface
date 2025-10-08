@@ -1,10 +1,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-    <PropertyGroup>
-        <IsFreeBSD>$([MSBuild]::IsOSPlatform('FREEBSD'))</IsFreeBSD>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(IsFreeBSD)' != 'true'">
+    <PropertyGroup Condition="!$([MSBuild]::IsOSPlatform('FREEBSD'))">
         <TargetFrameworks Condition="'$(RuntimeIdentifier)' != 'linux-arm' And '$(RuntimeIdentifier)' != 'win-x86'">net9.0;net8.0;net7.0</TargetFrameworks>
     </PropertyGroup>
 

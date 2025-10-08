@@ -68,7 +68,7 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction =
 				this.GetInstanceTransaction(jClass, jLocal, definition, out JObjectLocalRef localRef,
 				                            out JMethodId methodId);
-			JClassLocalRef classRef = nonVirtual ? jClass.Reference : default;
+			JClassLocalRef? classRef = nonVirtual ? jClass.Reference : null;
 			this.CallPrimitiveFunction(bytes, definition, localRef, classRef, args, jniTransaction, methodId);
 		}
 		public TField? GetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition)
@@ -324,7 +324,7 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction =
 				this.GetInstanceTransaction(jClass, jLocal, definition, out JObjectLocalRef localRef,
 				                            out JMethodId methodId);
-			JClassLocalRef classRef = nonVirtual ? jClass.Reference : default;
+			JClassLocalRef? classRef = nonVirtual ? jClass.Reference : null;
 			JTrace.CallMethod(jLocal, jClass, definition, nonVirtual, args);
 			return this.CallObjectFunction<TResult>(definition, localRef, classRef, args, jniTransaction, methodId);
 		}
@@ -342,8 +342,7 @@ partial class JEnvironment
 			_ = jniTransaction.Add(jMethod);
 			JMethodId methodId = jMethod.MethodId;
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
-			JClassLocalRef classRef =
-				nonVirtual ? jniTransaction.Add(this.ReloadClass(jMethod.DeclaringClass)) : default;
+			JClassLocalRef? classRef = nonVirtual ? jniTransaction.Add(this.ReloadClass(jMethod.DeclaringClass)) : null;
 			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
 				return this.CallObjectFunction<TResult>(definition, localRef, classRef, args, jniTransaction, methodId);
 			Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
@@ -359,7 +358,7 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction =
 				this.GetInstanceTransaction(jClass, jLocal, definition, out JObjectLocalRef localRef,
 				                            out JMethodId methodId);
-			JClassLocalRef classRef = nonVirtual ? jClass.Reference : default;
+			JClassLocalRef? classRef = nonVirtual ? jClass.Reference : null;
 			JTrace.CallMethod(jLocal, jClass, definition, nonVirtual, args);
 			this.CallMethod(definition, localRef, classRef, args, jniTransaction, methodId);
 		}
@@ -375,8 +374,7 @@ partial class JEnvironment
 			_ = jniTransaction.Add(jMethod);
 			JMethodId methodId = jMethod.MethodId;
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
-			JClassLocalRef classRef =
-				nonVirtual ? jniTransaction.Add(this.ReloadClass(jMethod.DeclaringClass)) : default;
+			JClassLocalRef? classRef = nonVirtual ? jniTransaction.Add(this.ReloadClass(jMethod.DeclaringClass)) : null;
 			JTrace.CallMethod(jLocal, jMethod.DeclaringClass, definition, nonVirtual, args);
 			this.CallMethod(definition, localRef, classRef, args, jniTransaction, methodId);
 		}

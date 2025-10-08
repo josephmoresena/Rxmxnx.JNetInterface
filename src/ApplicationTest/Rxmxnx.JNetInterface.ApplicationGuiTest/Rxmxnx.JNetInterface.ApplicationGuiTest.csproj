@@ -17,4 +17,11 @@
         <EmbeddedResource Include="Images\*"/>
     </ItemGroup>
 
+    <ItemGroup Condition="'$(PublishAot)' == 'true'">
+        <EmbeddedResource Condition="!$([MSBuild]::IsOSPlatform('FREEBSD'))" Remove="Images\freebsd.png"/>
+        <EmbeddedResource Condition="!$([MSBuild]::IsOSPlatform('LINUX'))" Remove="Images\linux.png"/>
+        <EmbeddedResource Condition="!$([MSBuild]::IsOSPlatform('OSX'))" Remove="Images\macosx.png"/>
+        <EmbeddedResource Condition="!$([MSBuild]::IsOSPlatform('WINDOWS'))" Remove="Images\windows.png"/>
+    </ItemGroup>
+
 </Project>
