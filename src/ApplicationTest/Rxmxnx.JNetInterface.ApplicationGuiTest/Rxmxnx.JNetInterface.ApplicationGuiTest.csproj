@@ -17,7 +17,7 @@
         <EmbeddedResource Include="Images\*"/>
     </ItemGroup>
 
-    <ItemGroup Condition="'$(PublishAot)' == 'true'">
+    <ItemGroup Condition="'$(RuntimeIdentifier)' != ''">
         <EmbeddedResource Condition="!$([MSBuild]::IsOSPlatform('FREEBSD'))" Remove="Images\freebsd.png"/>
         <EmbeddedResource Condition="!$([MSBuild]::IsOSPlatform('LINUX'))" Remove="Images\linux.png"/>
         <EmbeddedResource Condition="!$([MSBuild]::IsOSPlatform('OSX'))" Remove="Images\macosx.png"/>
