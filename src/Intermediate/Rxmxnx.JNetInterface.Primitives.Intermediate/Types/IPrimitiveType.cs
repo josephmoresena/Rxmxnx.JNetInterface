@@ -9,12 +9,17 @@ namespace Rxmxnx.JNetInterface.Types;
 /// <typeparam name="TValue">Type of the .NET equivalent structure.</typeparam>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-internal partial interface IPrimitiveType<TPrimitive, TValue> : IPrimitiveType<TPrimitive>, IPrimitiveValue<TValue>
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
+internal unsafe partial interface
+	IPrimitiveType<TPrimitive, TValue> : IPrimitiveType<TPrimitive>, IPrimitiveValue<TValue>
 	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, INativeDataType<TPrimitive>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	unsafe void IObject.CopyTo(Span<Byte> span, ref Int32 offset)
+	void IObject.CopyTo(Span<Byte> span, ref Int32 offset)
 	{
 		Unsafe.As<Byte, TValue>(ref span[offset]) = this.Value;
 		offset += sizeof(TPrimitive);

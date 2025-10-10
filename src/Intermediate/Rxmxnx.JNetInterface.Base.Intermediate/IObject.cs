@@ -47,6 +47,6 @@ public interface IObject
 	{
 		Span<JValue> value = stackalloc JValue[1];
 		this.CopyTo(value, 0);
-		return value == default;
+		return value[0].IsDefault;
 	}
 }

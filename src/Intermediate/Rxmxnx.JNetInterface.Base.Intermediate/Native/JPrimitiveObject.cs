@@ -48,12 +48,17 @@ internal abstract partial class JPrimitiveObject : JObject
 /// Java object representing a java primitive value.
 /// </summary>
 /// <typeparam name="TPrimitive">Type of java primitive value.</typeparam>
-internal sealed partial class JPrimitiveObject<TPrimitive> : JPrimitiveObject.Generic<TPrimitive>, IPrimitiveType,
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
+internal sealed unsafe partial class JPrimitiveObject<TPrimitive> : JPrimitiveObject.Generic<TPrimitive>,
+	IPrimitiveType,
 	IEquatable<JPrimitiveObject<TPrimitive>>
 	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IEquatable<TPrimitive>, IComparable<TPrimitive>
 {
 	/// <inheritdoc/>
-	public override unsafe Int32 SizeOf => sizeof(TPrimitive);
+	public override Int32 SizeOf => sizeof(TPrimitive);
 	/// <summary>
 	/// Constructor.
 	/// </summary>

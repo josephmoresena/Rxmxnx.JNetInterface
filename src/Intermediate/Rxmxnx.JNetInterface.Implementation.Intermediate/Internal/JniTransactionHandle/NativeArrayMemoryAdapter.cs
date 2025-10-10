@@ -1,6 +1,10 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal partial struct JniTransactionHandle
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
+internal unsafe partial struct JniTransactionHandle
 {
 	/// <summary>
 	/// Represents a JNI native array memory adapter.
@@ -17,7 +21,7 @@ internal partial struct JniTransactionHandle
 		/// <param name="jArray">A <see cref="JArrayObject{Primitive}"/> instance.</param>
 		/// <param name="referenceKind">Reference memory kind.</param>
 		/// <param name="critical">Indicates this adapter is for a critical sequence.</param>
-		public unsafe NativeArrayMemoryAdapter(JArrayObject<TPrimitive> jArray, JMemoryReferenceKind referenceKind,
+		public NativeArrayMemoryAdapter(JArrayObject<TPrimitive> jArray, JMemoryReferenceKind referenceKind,
 			Boolean critical) : base(jArray, referenceKind, critical)
 			=> this.BinarySize = jArray.Length * sizeof(TPrimitive);
 
