@@ -234,7 +234,7 @@ public abstract partial class EnvironmentProxy
 #endif
 	public static void SetValue<TWrapper, TPrimitive>(TWrapper jWrapper, TPrimitive value)
 		where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper, TPrimitive>
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>
 	{
 		EnvironmentProxy.ThrowIfNotProxy(jWrapper);
 		PrimitiveWrapperObjectMetadata<TPrimitive> objectMetadata = new(new(jWrapper.Class)) { Value = value, };

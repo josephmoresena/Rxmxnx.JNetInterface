@@ -60,4 +60,12 @@ public interface IPrimitiveType<TPrimitive> : IPrimitiveType, IDataType<TPrimiti
 	/// </summary>
 	/// <param name="jObj">A <see cref="JObject"/> to explicitly convert.</param>
 	static abstract explicit operator TPrimitive(JObject jObj);
+	/// <summary>
+	/// Create a <typeparamref name="TPrimitive"/> value from a <typeparamref name="TSource"/> instance.
+	/// </summary>
+	/// <typeparam name="TSource">The <see cref="IPrimitiveType{TSource}"/> type of the source value.</typeparam>
+	/// <param name="value">Source value.</param>
+	/// <returns>The <typeparamref name="TPrimitive"/> representation of <paramref name="value"/>.</returns>
+	static abstract TPrimitive CreateFrom<TSource>(TSource value)
+		where TSource : unmanaged, IPrimitiveType<TSource>, IEqualityOperators<TSource, TSource, Boolean>;
 }

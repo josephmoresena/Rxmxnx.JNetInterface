@@ -9,106 +9,77 @@ internal static partial class IndeterminateHelper
 	/// Retrieves a <see cref="Boolean"/> value from <paramref name="jLocal"/>.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="objectMetadata">Reference. A <see cref="objectMetadata"/> instance.</param>
 	/// <returns>A <see cref="Boolean"/> value.</returns>
-	public static Boolean GetBooleanValue(JLocalObject? jLocal)
+	public static Boolean GetBooleanValue(JLocalObject? jLocal, ref PrimitiveWrapperObjectMetadata? objectMetadata)
 	{
 		if (jLocal is null) return false;
-
-		IEnvironment env = jLocal.Environment;
-		IClassFeature classFeature = env.ClassFeature;
-		switch (jLocal)
+		if (objectMetadata is not null) return objectMetadata.GetValue<JBoolean>().GetValueOrDefault().Value;
+		return jLocal switch
 		{
-			case IWrapper.IBase<JBoolean> z: return z.Value.Value;
-			case IWrapper.IBase<JByte> b: return b.Value != default;
-			case IWrapper.IBase<JChar> c: return c.Value != default;
-			case IWrapper.IBase<JDouble> d: return d.Value != default;
-			case IWrapper.IBase<JFloat> f: return f.Value != default;
-			case IWrapper.IBase<JInt> i: return i.Value != default;
-			case IWrapper.IBase<JLong> j: return j.Value != default;
-			case IWrapper.IBase<JShort> s: return s.Value != default;
-			case JNumberObject n: return n.GetValue<JDouble>() != default;
-			default:
-				if (classFeature.IsInstanceOf(jLocal, classFeature.BooleanObject))
-					return NativeFunctionSetImpl.BooleanValueDefinition.Invoke(jLocal, classFeature.BooleanObject).Value;
-				if (classFeature.IsInstanceOf(jLocal, classFeature.CharacterObject))
-					return NativeFunctionSetImpl.CharValueDefinition.Invoke(jLocal, classFeature.CharacterObject) !=
-						default;
-				if (classFeature.IsInstanceOf(jLocal, classFeature.NumberObject))
-					return NativeFunctionSetImpl.DoubleValueDefinition.Invoke(jLocal, classFeature.NumberObject) !=
-						default;
-				return true;
-		}
+			IWrapper.IBase<JBoolean> z => z.Value.Value,
+			IWrapper.IBase<JByte> b => b.Value != default,
+			IWrapper.IBase<JChar> c => c.Value != default,
+			IWrapper.IBase<JDouble> d => d.Value != default,
+			IWrapper.IBase<JFloat> f => f.Value != default,
+			IWrapper.IBase<JInt> i => i.Value != default,
+			IWrapper.IBase<JLong> j => j.Value != default,
+			IWrapper.IBase<JShort> s => s.Value != default,
+			JNumberObject n => n.GetValue<JDouble>() != default,
+			_ => IndeterminateHelper.GetPrimitiveValue<JBoolean>(jLocal, out objectMetadata)?.Value ?? true,
+		};
 	}
 	/// <summary>
 	/// Retrieves a <see cref="JChar"/> value from <paramref name="jLocal"/>.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="objectMetadata">Reference. A <see cref="objectMetadata"/> instance.</param>
 	/// <returns>A <see cref="JChar"/> value.</returns>
-	public static JChar? GetCharValue(JLocalObject? jLocal)
+	public static JChar? GetCharValue(JLocalObject? jLocal, ref PrimitiveWrapperObjectMetadata? objectMetadata)
 	{
 		if (jLocal is null) return default;
-
-		IEnvironment env = jLocal.Environment;
-		IClassFeature classFeature = env.ClassFeature;
-		switch (jLocal)
+		if (objectMetadata is not null) return objectMetadata.GetValue<JChar>().GetValueOrDefault();
+		return jLocal switch
 		{
-			case IWrapper.IBase<JBoolean> z: return z.Value.Value ? JChar.One : JChar.Zero;
-			case IWrapper.IBase<JByte> b: return (JChar)b.Value;
-			case IWrapper.IBase<JChar> c: return c.Value;
-			case IWrapper.IBase<JDouble> d: return (JChar)d.Value;
-			case IWrapper.IBase<JFloat> f: return (JChar)f.Value;
-			case IWrapper.IBase<JInt> i: return (JChar)i.Value;
-			case IWrapper.IBase<JLong> j: return (JChar)j.Value;
-			case IWrapper.IBase<JShort> s: return (JChar)s.Value;
-			case JNumberObject n: return (JChar)n.GetValue<JShort>();
-
-			default:
-				if (classFeature.IsInstanceOf(jLocal, classFeature.CharacterObject))
-					return NativeFunctionSetImpl.CharValueDefinition.Invoke(jLocal, classFeature.CharacterObject);
-				if (classFeature.IsInstanceOf(jLocal, classFeature.NumberObject))
-					return (JChar)NativeFunctionSetImpl.ShortValueDefinition.Invoke(jLocal, classFeature.NumberObject);
-				if (classFeature.IsInstanceOf(jLocal, classFeature.BooleanObject))
-					return (Char)NativeFunctionSetImpl.BooleanValueDefinition.Invoke(jLocal, classFeature.BooleanObject)
-					                            .ByteValue;
-				return default;
-		}
+			IWrapper.IBase<JBoolean> z => z.Value.Value ? JChar.One : JChar.Zero,
+			IWrapper.IBase<JByte> b => (JChar)b.Value,
+			IWrapper.IBase<JChar> c => c.Value,
+			IWrapper.IBase<JDouble> d => (JChar)d.Value,
+			IWrapper.IBase<JFloat> f => (JChar)f.Value,
+			IWrapper.IBase<JInt> i => (JChar)i.Value,
+			IWrapper.IBase<JLong> j => (JChar)j.Value,
+			IWrapper.IBase<JShort> s => (JChar)s.Value,
+			JNumberObject n => (JChar)n.GetValue<JShort>(),
+			_ => IndeterminateHelper.GetPrimitiveValue<JChar>(jLocal, out objectMetadata).GetValueOrDefault(),
+		};
 	}
 	/// <summary>
 	/// Retrieves a <typeparamref name="TNumber"/> value from <paramref name="jLocal"/>.
 	/// </summary>
 	/// <typeparam name="TNumber">Destination number type.</typeparam>
+	/// <param name="objectMetadata">Reference. A <see cref="objectMetadata"/> instance.</param>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <returns>A <typeparamref name="TNumber"/> value.</returns>
-	public static TNumber? GetNumericValue<TNumber>(JLocalObject? jLocal)
+	public static TNumber?
+		GetNumericValue<TNumber>(JLocalObject? jLocal, ref PrimitiveWrapperObjectMetadata? objectMetadata)
 		where TNumber : unmanaged, IPrimitiveType<TNumber>, INativeDataType<TNumber>, ISignedNumber<TNumber>,
 		IBinaryNumber<TNumber>
 	{
 		if (jLocal is null) return default;
-
-		IEnvironment env = jLocal.Environment;
-		IClassFeature classFeature = env.ClassFeature;
-		switch (jLocal)
+		if (objectMetadata is not null) return objectMetadata.GetValue<TNumber>().GetValueOrDefault();
+		return jLocal switch
 		{
-			case IWrapper.IBase<JBoolean> z: return z.Value.Value ? TNumber.One : TNumber.Zero;
-			case IWrapper.IBase<JByte> b: return (TNumber)b.Value.Value;
-			case IWrapper.IBase<JChar> c: return (TNumber)c.Value.Value;
-			case IWrapper.IBase<JDouble> d: return (TNumber)d.Value.Value;
-			case IWrapper.IBase<JFloat> f: return (TNumber)f.Value.Value;
-			case IWrapper.IBase<JInt> i: return (TNumber)i.Value.Value;
-			case IWrapper.IBase<JLong> j: return (TNumber)j.Value.Value;
-			case IWrapper.IBase<JShort> s: return (TNumber)s.Value.Value;
-			case JNumberObject n: return n.GetValue<TNumber>();
-			default:
-				if (classFeature.IsInstanceOf(jLocal, classFeature.NumberObject))
-					return IndeterminateHelper.GetNumericValue<TNumber>(jLocal, classFeature.NumberObject);
-				if (classFeature.IsInstanceOf(jLocal, classFeature.BooleanObject))
-					return (TNumber)(SByte)NativeFunctionSetImpl.BooleanValueDefinition
-					                                     .Invoke(jLocal, classFeature.BooleanObject).ByteValue;
-				if (classFeature.IsInstanceOf(jLocal, classFeature.CharacterObject))
-					return (TNumber)NativeFunctionSetImpl.CharValueDefinition
-					                                     .Invoke(jLocal, classFeature.CharacterObject).Value;
-				return default;
-		}
+			IWrapper.IBase<JBoolean> z => z.Value.Value ? TNumber.One : TNumber.Zero,
+			IWrapper.IBase<JByte> b => b.Value.Value,
+			IWrapper.IBase<JChar> c => c.Value.Value,
+			IWrapper.IBase<JDouble> d => d.Value.Value,
+			IWrapper.IBase<JFloat> f => f.Value.Value,
+			IWrapper.IBase<JInt> i => i.Value.Value,
+			IWrapper.IBase<JLong> j => j.Value.Value,
+			IWrapper.IBase<JShort> s => s.Value.Value,
+			JNumberObject n => n.GetValue<TNumber>(),
+			_ => IndeterminateHelper.GetPrimitiveValue<TNumber>(jLocal, out objectMetadata).GetValueOrDefault(),
+		};
 	}
 	/// <summary>
 	/// Retrieves a <see cref="JLocalObject"/> from <paramref name="value"/>.

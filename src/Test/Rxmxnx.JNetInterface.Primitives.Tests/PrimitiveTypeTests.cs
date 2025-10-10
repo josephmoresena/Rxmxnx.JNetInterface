@@ -24,7 +24,8 @@ public sealed class PrimitiveTypeTests
 
 	private static void Test<TPrimitive, TValue>()
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable
+		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable,
+		INativeDataType<TPrimitive>
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 	{
 		TPrimitive value = PrimitiveTypeTests.fixture.Create<TValue>();
@@ -42,7 +43,8 @@ public sealed class PrimitiveTypeTests
 	}
 	private static void CopyToTest<TPrimitive, TValue>(TPrimitive value)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable
+		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable,
+		INativeDataType<TPrimitive>
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 	{
 		Span<TPrimitive> values = stackalloc TPrimitive[10];
@@ -60,7 +62,8 @@ public sealed class PrimitiveTypeTests
 	}
 	private static void MetadataTest<TPrimitive, TValue>(TPrimitive value)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable
+		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable,
+		INativeDataType<TPrimitive>
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 	{
 		JPrimitiveTypeMetadata typeMetadata = IPrimitiveType.GetMetadata<TPrimitive>();
@@ -90,7 +93,8 @@ public sealed class PrimitiveTypeTests
 	}
 	private static void EqualityTest<TPrimitive, TValue>(TPrimitive value, TPrimitive value2)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable
+		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable,
+		INativeDataType<TPrimitive>
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 	{
 		Object valObj = value;
@@ -133,7 +137,8 @@ public sealed class PrimitiveTypeTests
 	}
 	private static void EqualityEquatable<TPrimitive, TValue>(TPrimitive value)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable
+		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable,
+		INativeDataType<TPrimitive>
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 	{
 		IEquatable<TPrimitive> pEquatable = Substitute.For<IEquatable<TPrimitive>>();
@@ -153,7 +158,8 @@ public sealed class PrimitiveTypeTests
 	}
 	private static void ComparableTest<TPrimitive, TValue>(TPrimitive value, TPrimitive value2)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable
+		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable,
+		INativeDataType<TPrimitive>
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 	{
 		Int32 result = value.Value.CompareTo(value2.Value);
@@ -184,7 +190,8 @@ public sealed class PrimitiveTypeTests
 	}
 	private static void BooleanEqualityTest<TPrimitive, TValue>(TPrimitive value, TPrimitive value2)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable
+		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable,
+		INativeDataType<TPrimitive>
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 	{
 		Object valObj = value;
@@ -200,7 +207,8 @@ public sealed class PrimitiveTypeTests
 	}
 	private static void NumericEqualityTest<TPrimitive, TValue>(TPrimitive value, TPrimitive value2)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable
+		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable,
+		INativeDataType<TPrimitive>
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 	{
 		JObject bObject = (JBoolean)PrimitiveTypeTests.fixture.Create<Boolean>();
@@ -210,7 +218,8 @@ public sealed class PrimitiveTypeTests
 	}
 	private static void ObjectTest<TPrimitive, TValue>(TPrimitive value)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable
+		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable,
+		INativeDataType<TPrimitive>
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 	{
 		JPrimitiveObject<TPrimitive> pObj = (JPrimitiveObject<TPrimitive>)(JObject)value;
@@ -239,7 +248,8 @@ public sealed class PrimitiveTypeTests
 	private static void
 		ObjectEquality<TPrimitive, TValue>(JPrimitiveObject<TPrimitive> pObj, JPrimitiveObject<TPrimitive> pObj2)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable
+		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable,
+		INativeDataType<TPrimitive>
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 	{
 		Boolean equals = pObj.Value == pObj2.Value;

@@ -1,3 +1,5 @@
+// ReSharper disable RedundantCast
+
 namespace Rxmxnx.JNetInterface.Types;
 
 /// <summary>
@@ -8,7 +10,7 @@ namespace Rxmxnx.JNetInterface.Types;
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 internal partial interface IPrimitiveType<TPrimitive, TValue> : IPrimitiveType<TPrimitive>, IPrimitiveValue<TValue>
-	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>
+	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, INativeDataType<TPrimitive>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -26,4 +28,19 @@ internal partial interface IPrimitiveType<TPrimitive, TValue> : IPrimitiveType<T
 	/// </summary>
 	/// <param name="value">A <typeparamref name="TValue"/> to implicitly convert.</param>
 	static abstract implicit operator TPrimitive(TValue value);
+
+	static TPrimitive IPrimitiveType<TPrimitive>.CreateFrom<TSource>(TSource value)
+		=> value switch
+		{
+			JBoolean jBoolean => (TPrimitive)(SByte)jBoolean.ByteValue,
+			JByte jByte => (TPrimitive)jByte.Value,
+			JChar jChar => (TPrimitive)jChar.Value,
+			JDouble jDouble => (TPrimitive)jDouble.Value,
+			JFloat jFloat => (TPrimitive)jFloat.Value,
+			JInt jInt => (TPrimitive)jInt.Value,
+			JLong jLong => (TPrimitive)jLong.Value,
+			JShort jShort => (TPrimitive)jShort.Value,
+			TPrimitive primitive => primitive,
+			_ => CommonValidationUtilities.ThrowInvalidCastToNativeDataType<TPrimitive>(TSource.JniType),
+		};
 }

@@ -44,7 +44,7 @@ public abstract partial class PrimitiveTestBase
 	private protected static void SignedNumberTypeTest<TPrimitive, TValue>()
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
 		IEquatable<TPrimitive>, IPrimitiveEquatable, IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>,
-		ISignedNumber<TPrimitive>
+		ISignedNumber<TPrimitive>, INativeDataType<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, ISignedNumber<TValue>
 		=> Assert.Equal(TValue.NegativeOne, TPrimitive.NegativeOne.Value);
 	private protected static void NumericOperationsTest<TPrimitive, TValue>()
@@ -88,7 +88,7 @@ public abstract partial class PrimitiveTestBase
 	}
 	private protected static void SpanParseableTest<TPrimitive, TValue>()
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveEquatable, ISpanParsable<TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveEquatable, ISpanParsable<TPrimitive>, INativeDataType<TPrimitive>
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>,
 		ISpanParsable<TValue>
 	{
@@ -101,7 +101,7 @@ public abstract partial class PrimitiveTestBase
 	}
 	private protected static void SpanFormattableTest<TPrimitive, TValue>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveEquatable, ISpanFormattable
+		IEquatable<TPrimitive>, IPrimitiveEquatable, ISpanFormattable, INativeDataType<TPrimitive>
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>, ISpanFormattable
 	{
 		foreach (CultureInfo culture in PrimitiveTestBase.GetCultures(10))

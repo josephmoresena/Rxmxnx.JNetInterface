@@ -5,23 +5,80 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal static partial class IndeterminateHelper
 {
 	/// <summary>
-	/// Retrieves a <typeparamref name="TNumber"/> value from <paramref name="jLocal"/>.
+	/// Retrieves the primitive value from <paramref name="jLocal"/>.
 	/// </summary>
-	/// <typeparam name="TNumber">Destination number type.</typeparam>
-	/// <param name="jLocal">A <c>java.lang.Number</c> instance.</param>
-	/// <param name="jClass">The <c>java.lang.Number</c> <see cref="JClassObject"/> instance.</param>
-	/// <returns>A <typeparamref name="TNumber"/> value.</returns>
-	private static TNumber GetNumericValue<TNumber>(JLocalObject jLocal, JClassObject jClass)
-		where TNumber : unmanaged, INativeDataType<TNumber>
-		=> TNumber.Type switch
-		{
-			JNativeType.JByte => (TNumber)NativeFunctionSetImpl.ByteValueDefinition.Invoke(jLocal, jClass).Value,
-			JNativeType.JFloat => (TNumber)NativeFunctionSetImpl.FloatValueDefinition.Invoke(jLocal, jClass).Value,
-			JNativeType.JInt => (TNumber)NativeFunctionSetImpl.IntValueDefinition.Invoke(jLocal, jClass).Value,
-			JNativeType.JLong => (TNumber)NativeFunctionSetImpl.LongValueDefinition.Invoke(jLocal, jClass).Value,
-			JNativeType.JShort => (TNumber)NativeFunctionSetImpl.IntValueDefinition.Invoke(jLocal, jClass).Value,
-			_ => (TNumber)NativeFunctionSetImpl.DoubleValueDefinition.Invoke(jLocal, jClass).Value,
-		};
+	/// <typeparam name="TPrimitive">A <see cref="IPrimitiveType{TPrimitive}"/> destination type.</typeparam>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="objectMetadata">Output. A <see cref="PrimitiveWrapperObjectMetadata"/> instance.</param>
+	/// <returns>The <typeparamref name="TPrimitive"/> value from <paramref name="jLocal"/>.</returns>
+	[ExcludeFromCodeCoverage]
+	private static TPrimitive? GetPrimitiveValue<TPrimitive>(JLocalObject jLocal,
+		out PrimitiveWrapperObjectMetadata? objectMetadata)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>
+	{
+		IEnvironment env = jLocal.Environment;
+		IClassFeature classFeature = env.ClassFeature;
+		objectMetadata = default;
+		if (classFeature.IsInstanceOf(jLocal, classFeature.BooleanObject))
+			objectMetadata = new PrimitiveWrapperObjectMetadata<JBoolean>(new(classFeature.BooleanObject))
+			{
+				Value = NativeFunctionSetImpl.BooleanValueDefinition.Invoke(jLocal, classFeature.BooleanObject),
+			};
+		else if (classFeature.IsInstanceOf(jLocal, classFeature.CharacterObject))
+			objectMetadata = new PrimitiveWrapperObjectMetadata<JChar>(new(classFeature.CharacterObject))
+			{
+				Value = NativeFunctionSetImpl.CharValueDefinition.Invoke(jLocal, classFeature.CharacterObject),
+			};
+		else if (classFeature.IsInstanceOf(jLocal, classFeature.NumberObject))
+			switch (jLocal.Class.Hash)
+			{
+				case ClassNameHelper.ByteObjectHash:
+					objectMetadata = new PrimitiveWrapperObjectMetadata<JByte>(new(classFeature.NumberObject))
+					{
+						Value = NativeFunctionSetImpl.ByteValueDefinition.Invoke(jLocal, classFeature.NumberObject),
+					};
+					break;
+				case ClassNameHelper.DoubleObjectHash:
+					objectMetadata = new PrimitiveWrapperObjectMetadata<JDouble>(new(classFeature.NumberObject))
+					{
+						Value = NativeFunctionSetImpl.DoubleValueDefinition.Invoke(
+							jLocal, classFeature.NumberObject),
+					};
+					break;
+				case ClassNameHelper.FloatObjectHash:
+					objectMetadata = new PrimitiveWrapperObjectMetadata<JFloat>(new(classFeature.NumberObject))
+					{
+						Value =
+							NativeFunctionSetImpl.FloatValueDefinition.Invoke(jLocal, classFeature.NumberObject),
+					};
+					break;
+				case ClassNameHelper.IntegerObjectHash:
+					objectMetadata = new PrimitiveWrapperObjectMetadata<JInt>(new(classFeature.NumberObject))
+					{
+						Value = NativeFunctionSetImpl.IntValueDefinition.Invoke(jLocal, classFeature.NumberObject),
+					};
+					break;
+				case ClassNameHelper.LongObjectHash:
+					objectMetadata = new PrimitiveWrapperObjectMetadata<JLong>(new(classFeature.NumberObject))
+					{
+						Value = NativeFunctionSetImpl.LongValueDefinition.Invoke(jLocal, classFeature.NumberObject),
+					};
+					break;
+				case ClassNameHelper.ShortObjectHash:
+					objectMetadata = new PrimitiveWrapperObjectMetadata<JShort>(new(classFeature.NumberObject))
+					{
+						Value =
+							NativeFunctionSetImpl.ShortValueDefinition.Invoke(jLocal, classFeature.NumberObject),
+					};
+					break;
+				default:
+					return TPrimitive.CreateFrom(
+						NativeFunctionSetImpl.DoubleValueDefinition.Invoke(jLocal, classFeature.NumberObject));
+			}
+		else
+			return default;
+		return objectMetadata.GetValue<TPrimitive>();
+	}
 	/// <summary>
 	/// Copies the primitive value of a reflected field instance to <paramref name="bytes"/>.
 	/// </summary>

@@ -153,42 +153,6 @@ internal interface IPrimitiveNumericType<TPrimitive> : IPrimitiveNumericType, IC
 	static abstract explicit operator JShort(TPrimitive jPrimitive);
 
 	/// <summary>
-	/// Defines an explicit conversion of a given <see cref="JByte"/> to <typeparamref name="TPrimitive"/>.
-	/// </summary>
-	/// <param name="jPrimitive">A <see cref="JByte"/> to explicitly convert.</param>
-	static virtual explicit operator TPrimitive(JByte jPrimitive) => (TPrimitive)jPrimitive.Value;
-	/// <summary>
-	/// Defines an explicit conversion of a given <see cref="JChar"/> to <typeparamref name="TPrimitive"/>.
-	/// </summary>
-	/// <param name="jPrimitive">A <see cref="JChar"/> to explicitly convert.</param>
-	static virtual explicit operator TPrimitive(JChar jPrimitive) => (TPrimitive)jPrimitive.Value;
-	/// <summary>
-	/// Defines an explicit conversion of a given <see cref="JDouble"/> to <typeparamref name="TPrimitive"/>.
-	/// </summary>
-	/// <param name="jPrimitive">A <see cref="JDouble"/> to explicitly convert.</param>
-	static virtual explicit operator TPrimitive(JDouble jPrimitive) => (TPrimitive)jPrimitive.Value;
-	/// <summary>
-	/// Defines an explicit conversion of a given <see cref="JFloat"/> to <typeparamref name="TPrimitive"/>.
-	/// </summary>
-	/// <param name="jPrimitive">A <see cref="JFloat"/> to explicitly convert.</param>
-	static virtual explicit operator TPrimitive(JFloat jPrimitive) => (TPrimitive)jPrimitive.Value;
-	/// <summary>
-	/// Defines an explicit conversion of a given <see cref="JInt"/> to <typeparamref name="TPrimitive"/>.
-	/// </summary>
-	/// <param name="jPrimitive">A <see cref="JInt"/> to explicitly convert.</param>
-	static virtual explicit operator TPrimitive(JInt jPrimitive) => (TPrimitive)jPrimitive.Value;
-	/// <summary>
-	/// Defines an explicit conversion of a given <see cref="JLong"/> to <typeparamref name="TPrimitive"/>.
-	/// </summary>
-	/// <param name="jPrimitive">A <see cref="JLong"/> to explicitly convert.</param>
-	static virtual explicit operator TPrimitive(JLong jPrimitive) => (TPrimitive)jPrimitive.Value;
-	/// <summary>
-	/// Defines an explicit conversion of a given <see cref="JShort"/> to <typeparamref name="TPrimitive"/>.
-	/// </summary>
-	/// <param name="jPrimitive">A <see cref="JShort"/> to explicitly convert.</param>
-	static virtual explicit operator TPrimitive(JShort jPrimitive) => (TPrimitive)jPrimitive.Value;
-
-	/// <summary>
 	/// Creates a <typeparamref name="TPrimitive"/> value from <see cref="Double"/>.
 	/// </summary>
 	/// <param name="value">A <see cref="Double"/> value.</param>
