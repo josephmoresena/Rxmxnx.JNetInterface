@@ -9,7 +9,7 @@ internal static partial class IndeterminateHelper
 	/// </summary>
 	/// <typeparam name="TPrimitive">A <see cref="IPrimitiveType{TPrimitive}"/> destination type.</typeparam>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <param name="objectMetadata">Output. A <see cref="PrimitiveWrapperObjectMetadata"/> instance.</param>
+	/// <param name="objectMetadata">Output. A <see cref="ObjectMetadata"/> instance.</param>
 	/// <returns>The <typeparamref name="TPrimitive"/> value from <paramref name="jLocal"/>.</returns>
 	[ExcludeFromCodeCoverage]
 	private static TPrimitive? GetPrimitiveValue<TPrimitive>(JLocalObject jLocal,

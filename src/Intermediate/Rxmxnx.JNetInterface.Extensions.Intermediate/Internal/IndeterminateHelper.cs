@@ -9,7 +9,7 @@ internal static partial class IndeterminateHelper
 	/// Retrieves a <see cref="Boolean"/> value from <paramref name="jLocal"/>.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <param name="objectMetadata">Reference. A <see cref="objectMetadata"/> instance.</param>
+	/// <param name="objectMetadata">Reference. A <see cref="ObjectMetadata"/> instance.</param>
 	/// <returns>A <see cref="Boolean"/> value.</returns>
 	public static Boolean GetBooleanValue(JLocalObject? jLocal, ref PrimitiveWrapperObjectMetadata? objectMetadata)
 	{
@@ -33,7 +33,7 @@ internal static partial class IndeterminateHelper
 	/// Retrieves a <see cref="JChar"/> value from <paramref name="jLocal"/>.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <param name="objectMetadata">Reference. A <see cref="objectMetadata"/> instance.</param>
+	/// <param name="objectMetadata">Reference. A <see cref="ObjectMetadata"/> instance.</param>
 	/// <returns>A <see cref="JChar"/> value.</returns>
 	public static JChar? GetCharValue(JLocalObject? jLocal, ref PrimitiveWrapperObjectMetadata? objectMetadata)
 	{
@@ -57,7 +57,7 @@ internal static partial class IndeterminateHelper
 	/// Retrieves a <typeparamref name="TNumber"/> value from <paramref name="jLocal"/>.
 	/// </summary>
 	/// <typeparam name="TNumber">Destination number type.</typeparam>
-	/// <param name="objectMetadata">Reference. A <see cref="objectMetadata"/> instance.</param>
+	/// <param name="objectMetadata">Reference. A <see cref="ObjectMetadata"/> instance.</param>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <returns>A <typeparamref name="TNumber"/> value.</returns>
 	public static TNumber?
