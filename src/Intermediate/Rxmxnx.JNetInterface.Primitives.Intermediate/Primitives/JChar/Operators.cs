@@ -70,8 +70,7 @@ public readonly partial struct JChar : IPrimitiveEquatable
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit INativeDataType<JChar>.operator SByte(JChar jPrimitive)
-		=> NativeUtilities.AsBytes(jPrimitive).ToValue<SByte>();
+	static explicit INativeDataType<JChar>.operator SByte(JChar jPrimitive) => Unsafe.As<JChar, SByte>(ref jPrimitive);
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif

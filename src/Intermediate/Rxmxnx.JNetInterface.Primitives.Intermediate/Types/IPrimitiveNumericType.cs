@@ -103,7 +103,7 @@ internal unsafe interface IPrimitiveNumericType : INativeType, IPrimitiveType
 		where TFloatingPoint : unmanaged, IFloatingPoint<TFloatingPoint>
 	{
 		TInteger result = TInteger.CreateTruncating(value);
-		return NativeUtilities.AsBytes(result).ToValue<TResult>();
+		return Unsafe.As<TInteger, TResult>(ref result);
 	}
 }
 

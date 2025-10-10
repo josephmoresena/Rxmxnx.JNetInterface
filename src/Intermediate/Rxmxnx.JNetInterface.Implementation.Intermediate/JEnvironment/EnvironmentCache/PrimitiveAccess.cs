@@ -333,7 +333,7 @@ partial class JEnvironment
 		/// <param name="bytes">Destination span.</param>
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 		/// <param name="signature">Primitive signature.</param>
-		/// <param name="ptr">Pointer to call argments array.</param>
+		/// <param name="ptr">Pointer to call arguments array.</param>
 		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
 		/// <param name="callFunction">Function to invoke function.</param>
 #if !PACKAGE
@@ -357,7 +357,7 @@ partial class JEnvironment
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 		/// <param name="signature">Primitive signature.</param>
 		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
-		/// <param name="ptr">Pointer to call argments array.</param>
+		/// <param name="ptr">Pointer to call arguments array.</param>
 		/// <exception cref="ArgumentException">If signature is not for a primitive type.</exception>
 		private unsafe void CallPrimitiveNonVirtualFunction(Span<Byte> bytes, JObjectLocalRef localRef,
 			JClassLocalRef classRef, Byte signature, JMethodId methodId, JValue* ptr)
@@ -416,7 +416,7 @@ partial class JEnvironment
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 		/// <param name="signature">Primitive signature.</param>
-		/// <param name="ptr">Pointer to call argments array.</param>
+		/// <param name="ptr">Pointer to call arguments array.</param>
 		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
 		/// <param name="callFunction">Function to invoke function.</param>
 #if !PACKAGE
@@ -429,7 +429,7 @@ partial class JEnvironment
 			where TPrimitive : unmanaged, INativeDataType<TPrimitive>, IPrimitiveType<TPrimitive>
 		{
 			TPrimitive result = callFunction.Call(this.Reference, localRef, classRef, methodId, ptr);
-			MemoryMarshal.AsRef<TPrimitive>(bytes) = result;
+			result.CopyTo(bytes);
 			JTrace.CallPrimitiveFunction(localRef, classRef, signature, methodId, result);
 		}
 		/// <summary>
@@ -439,7 +439,7 @@ partial class JEnvironment
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 		/// <param name="signature">Primitive signature.</param>
 		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
-		/// <param name="ptr">Pointer to call argments array.</param>
+		/// <param name="ptr">Pointer to call arguments array.</param>
 		/// <exception cref="ArgumentException">If signature is not for a primitive type.</exception>
 		private unsafe void CallPrimitiveFunction(Span<Byte> bytes, JObjectLocalRef localRef, Byte signature,
 			JMethodId methodId, JValue* ptr)
@@ -489,7 +489,7 @@ partial class JEnvironment
 		/// <param name="bytes">Destination span.</param>
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 		/// <param name="signature">Primitive signature.</param>
-		/// <param name="ptr">Pointer to call argments array.</param>
+		/// <param name="ptr">Pointer to call arguments array.</param>
 		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
 		/// <param name="callFunction">Function to invoke function.</param>
 #if !PACKAGE
@@ -502,7 +502,7 @@ partial class JEnvironment
 			where TPrimitive : unmanaged, INativeDataType<TPrimitive>, IPrimitiveType<TPrimitive>
 		{
 			TPrimitive result = callFunction.Call(this.Reference, localRef, methodId, ptr);
-			MemoryMarshal.AsRef<TPrimitive>(bytes) = result;
+			result.CopyTo(bytes);
 			JTrace.CallPrimitiveFunction(localRef, default, signature, methodId, result);
 		}
 		/// <summary>

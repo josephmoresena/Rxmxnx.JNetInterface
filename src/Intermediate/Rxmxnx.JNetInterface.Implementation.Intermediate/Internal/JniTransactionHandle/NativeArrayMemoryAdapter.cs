@@ -17,9 +17,9 @@ internal partial struct JniTransactionHandle
 		/// <param name="jArray">A <see cref="JArrayObject{Primitive}"/> instance.</param>
 		/// <param name="referenceKind">Reference memory kind.</param>
 		/// <param name="critical">Indicates this adapter is for a critical sequence.</param>
-		public NativeArrayMemoryAdapter(JArrayObject<TPrimitive> jArray, JMemoryReferenceKind referenceKind,
+		public unsafe NativeArrayMemoryAdapter(JArrayObject<TPrimitive> jArray, JMemoryReferenceKind referenceKind,
 			Boolean critical) : base(jArray, referenceKind, critical)
-			=> this.BinarySize = jArray.Length * IPrimitiveType.GetMetadata<TPrimitive>().SizeOf;
+			=> this.BinarySize = jArray.Length * sizeof(TPrimitive);
 
 		/// <inheritdoc/>
 		public override void Activate(IEnvironment env)

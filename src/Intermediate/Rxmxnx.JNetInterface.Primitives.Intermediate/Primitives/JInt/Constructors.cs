@@ -77,7 +77,7 @@ public readonly partial struct JInt
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public JInt(Int64 value) => this._value = NativeUtilities.AsBytes(value).ToValue<Int32>();
+	public JInt(Int64 value) => this._value = Unsafe.As<Int64, Int32>(ref value);
 	/// <summary>
 	/// Constructor.
 	/// </summary>

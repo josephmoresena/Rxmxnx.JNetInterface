@@ -13,7 +13,7 @@ internal sealed class PrimitiveProxy(JPrimitiveObject primitive, CString? signat
 		=> (primitive as IObject).CopyTo(span, index);
 	public override String ToTraceText() => this.ToString()!;
 	private protected override ReadOnlySpan<Byte> AsSpan() => JPrimitiveObject.GetSpan(primitive);
-	public override Byte ToByte() => this.AsSpan()[0];
+	public override Byte ToByte() => this.AsSpan().SequenceEqual(stackalloc Byte[this.AsSpan().Length]) ? (Byte)0 : (Byte)1;
 }
 
 [ExcludeFromCodeCoverage]

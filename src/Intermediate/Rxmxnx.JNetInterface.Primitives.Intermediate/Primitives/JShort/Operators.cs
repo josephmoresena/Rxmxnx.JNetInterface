@@ -9,7 +9,7 @@ public readonly partial struct JShort : IPrimitiveEquatable
 	/// Defines an explicit conversion of a given <see cref="JShort"/> to <see cref="JByte"/>.
 	/// </summary>
 	/// <param name="value">A <see cref="JShort"/> to explicitly convert.</param>
-	public static explicit operator JByte(JShort value) => NativeUtilities.AsBytes(value).ToValue<JByte>();
+	public static explicit operator JByte(JShort value) => Unsafe.As<JShort, JByte>(ref value);
 	/// <summary>
 	/// Defines an explicit conversion of a given <see cref="JShort"/> to <see cref="JInt"/>.
 	/// </summary>
@@ -83,7 +83,7 @@ public readonly partial struct JShort : IPrimitiveEquatable
 	[ExcludeFromCodeCoverage]
 #endif
 	static explicit INativeDataType<JShort>.operator SByte(JShort jPrimitive)
-		=> NativeUtilities.AsBytes(jPrimitive).ToValue<SByte>();
+		=> Unsafe.As<JShort, SByte>(ref jPrimitive);
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif

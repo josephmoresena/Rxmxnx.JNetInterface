@@ -105,9 +105,9 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 			JNativeType.JFloat => NativeFunctionSetImpl.FloatValueDefinition,
 			_ => NativeFunctionSetImpl.DoubleValueDefinition,
 		};
-		Span<Byte> bytes = stackalloc Byte[metadata.SizeOf];
-		env.AccessFeature.CallPrimitiveFunction(bytes, jNumber, numberClass, functionDefinition, false);
-		return bytes.AsValue<TPrimitive>();
+		Span<TPrimitive> result = stackalloc TPrimitive[1];
+		env.AccessFeature.CallPrimitiveFunction(result.AsBytes(), jNumber, numberClass, functionDefinition, false);
+		return result[0];
 	}
 
 	/// <inheritdoc/>

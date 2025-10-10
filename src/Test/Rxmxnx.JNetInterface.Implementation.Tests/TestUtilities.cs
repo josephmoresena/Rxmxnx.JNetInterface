@@ -345,10 +345,9 @@ internal static class TestUtilities
 		{
 			using IReadOnlyFixedContext<JValueWrapper>.IDisposable ctx = ptr.GetUnsafeFixedContext(args.Length);
 			Span<Byte> byteSpan = stackalloc Byte[JValue.Size];
-			ReadOnlySpan<Byte> blank = stackalloc Byte[JValue.Size];
 			for (Int32 i = 0; i < args.Length; i++)
 			{
-				blank.CopyTo(byteSpan);
+				byteSpan.Clear();
 				args[i].CopyTo(byteSpan);
 				if (!NativeUtilities.AsBytes(in ctx.Values[i]).SequenceEqual(byteSpan))
 					return false;

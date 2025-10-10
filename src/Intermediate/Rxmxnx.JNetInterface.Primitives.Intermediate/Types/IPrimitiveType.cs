@@ -14,14 +14,17 @@ internal partial interface IPrimitiveType<TPrimitive, TValue> : IPrimitiveType<T
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	void IObject.CopyTo(Span<Byte> span, ref Int32 offset)
+	unsafe void IObject.CopyTo(Span<Byte> span, ref Int32 offset)
 	{
-		TValue value = this.Value;
-		NativeUtilities.AsBytes(in value).CopyTo(span[offset..]);
-		offset += IDataType.GetMetadata<TPrimitive>().SizeOf;
+		Unsafe.As<Byte, TValue>(ref span[offset]) = this.Value;
+		offset += sizeof(TPrimitive);
 	}
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	void IObject.CopyTo(Span<JValue> span, Int32 index) => span[index] = JValue.Create(this.Value);
+	void IObject.CopyTo(Span<JValue> span, Int32 index)
+	{
+		span[index] = default; // Clears the current value
+		Unsafe.As<JValue, TValue>(ref span[index]) = this.Value;
+	}
 
 	/// <summary>
 	/// Defines an implicit conversion of a given <typeparamref name="TValue"/> to <typeparamref name="TPrimitive"/>.

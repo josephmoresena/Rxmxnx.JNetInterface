@@ -66,7 +66,7 @@ public readonly partial struct JShort
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public JShort(Int32 value) => this._value = NativeUtilities.AsBytes(value).ToValue<Int16>();
+	public JShort(Int32 value) => this._value = Unsafe.As<Int32, Int16>(ref value);
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -77,7 +77,7 @@ public readonly partial struct JShort
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public JShort(Int64 value) => this._value = NativeUtilities.AsBytes(value).ToValue<Int16>();
+	public JShort(Int64 value) => this._value = Unsafe.As<Int64, Int16>(ref value);
 	/// <summary>
 	/// Constructor.
 	/// </summary>

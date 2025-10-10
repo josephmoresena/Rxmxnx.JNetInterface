@@ -53,7 +53,7 @@ internal sealed partial class JPrimitiveObject<TPrimitive> : JPrimitiveObject.Ge
 	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IEquatable<TPrimitive>, IComparable<TPrimitive>
 {
 	/// <inheritdoc/>
-	public override Int32 SizeOf => IPrimitiveType.GetMetadata<TPrimitive>().SizeOf;
+	public override unsafe Int32 SizeOf => sizeof(TPrimitive);
 	/// <summary>
 	/// Constructor.
 	/// </summary>

@@ -9,22 +9,22 @@ public readonly partial struct JLong : IPrimitiveEquatable
 	/// Defines an explicit conversion of a given <see cref="JLong"/> to <see cref="JByte"/>.
 	/// </summary>
 	/// <param name="value">A <see cref="JLong"/> to explicitly convert.</param>
-	public static explicit operator JByte(JLong value) => NativeUtilities.AsBytes(value).ToValue<JByte>();
+	public static explicit operator JByte(JLong value) => Unsafe.As<JLong, JByte>(ref value);
 	/// <summary>
 	/// Defines an explicit conversion of a given <see cref="JLong"/> to <see cref="JShort"/>.
 	/// </summary>
 	/// <param name="value">A <see cref="JLong"/> to explicitly convert.</param>
-	public static explicit operator JShort(JLong value) => NativeUtilities.AsBytes(value).ToValue<JShort>();
+	public static explicit operator JShort(JLong value) => Unsafe.As<JLong, JShort>(ref value);
 	/// <summary>
 	/// Defines an explicit conversion of a given <see cref="JLong"/> to <see cref="JInt"/>.
 	/// </summary>
 	/// <param name="value">A <see cref="JLong"/> to explicitly convert.</param>
-	public static explicit operator JInt(JLong value) => NativeUtilities.AsBytes(value).ToValue<JInt>();
+	public static explicit operator JInt(JLong value) => Unsafe.As<JLong, JInt>(ref value);
 	/// <summary>
 	/// Defines an explicit conversion of a given <see cref="JLong"/> to <see cref="JLong"/>.
 	/// </summary>
 	/// <param name="value">A <see cref="JLong"/> to explicitly convert.</param>
-	public static explicit operator JChar(JLong value) => NativeUtilities.AsBytes(value).ToValue<JChar>();
+	public static explicit operator JChar(JLong value) => Unsafe.As<JLong, JChar>(ref value);
 	/// <summary>
 	/// Defines an implicit conversion of a given <see cref="JLong"/> to <see cref="JFloat"/>.
 	/// </summary>
@@ -67,14 +67,12 @@ public readonly partial struct JLong : IPrimitiveEquatable
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit INativeDataType<JLong>.operator SByte(JLong jPrimitive)
-		=> NativeUtilities.AsBytes(jPrimitive).ToValue<SByte>();
+	static explicit INativeDataType<JLong>.operator SByte(JLong jPrimitive) => Unsafe.As<JLong, SByte>(ref jPrimitive);
 	static explicit INativeDataType<JLong>.operator Int64(JLong jPrimitive) => jPrimitive._value;
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit INativeDataType<JLong>.operator Int16(JLong jPrimitive)
-		=> NativeUtilities.AsBytes(jPrimitive).ToValue<Int16>();
+	static explicit INativeDataType<JLong>.operator Int16(JLong jPrimitive) => Unsafe.As<JLong, Int16>(ref jPrimitive);
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
@@ -82,12 +80,10 @@ public readonly partial struct JLong : IPrimitiveEquatable
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit INativeDataType<JLong>.operator Int32(JLong jPrimitive)
-		=> NativeUtilities.AsBytes(jPrimitive).ToValue<Int32>();
+	static explicit INativeDataType<JLong>.operator Int32(JLong jPrimitive) => Unsafe.As<JLong, Int32>(ref jPrimitive);
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit INativeDataType<JLong>.operator Char(JLong jPrimitive)
-		=> NativeUtilities.AsBytes(jPrimitive).ToValue<Char>();
+	static explicit INativeDataType<JLong>.operator Char(JLong jPrimitive) => Unsafe.As<JLong, Char>(ref jPrimitive);
 #pragma warning restore CS0473
 }

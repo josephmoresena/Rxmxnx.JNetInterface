@@ -49,16 +49,19 @@ internal partial class JPrimitiveObject
 		/// <inheritdoc/>
 		public override String? ToString() => this._value.ToString();
 		/// <inheritdoc/>
-		public override Byte ToByte() => NativeUtilities.AsBytes(in this._value)[0];
+		public override Byte ToByte() => (Byte)(!this._value.Equals(default) ? 0x1 : 0x0);
 
 		/// <inheritdoc cref="IObject.CopyTo(Span{JValue}, Int32)"/>
 		private protected override void CopyTo(Span<JValue> span, Int32 index)
-			=> this.AsSpan().CopyTo(span[index].AsBytes());
+		{
+			span[index] = default; // Clears the current value
+			Unsafe.As<JValue, TValue>(ref span[index]) = this.Value;
+		}
 		/// <inheritdoc/>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private protected override void CopyTo(Span<Byte> span, ref Int32 offset)
 		{
-			this.AsSpan().CopyTo(span[offset..]);
+			Unsafe.As<Byte, TValue>(ref span[offset]) = this.Value;
 			offset += this.SizeOf;
 		}
 	}
