@@ -7,7 +7,7 @@
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-[StructLayout(LayoutKind.Explicit, Size = sizeof(Int64), Pack = 0)]
+[StructLayout(LayoutKind.Explicit)]
 internal readonly unsafe partial struct JValue : INativeType
 {
 	/// <inheritdoc/>

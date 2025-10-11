@@ -55,6 +55,7 @@ public interface IDataType<out TDataType> : IDataType where TDataType : IDataTyp
 	/// </remarks>
 	[ReadOnly(true)]
 	[Browsable(false)]
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	protected static abstract JDataTypeMetadata Metadata { get; }
 

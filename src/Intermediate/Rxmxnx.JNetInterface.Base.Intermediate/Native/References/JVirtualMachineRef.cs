@@ -28,6 +28,9 @@ public readonly unsafe partial struct JVirtualMachineRef : INativePointerType
 	/// <summary>
 	/// Pointer to native interface.
 	/// </summary>
+	[Browsable(false)]
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	[EditorBrowsable(EditorBrowsableState.Never)]
 	internal void* InterfacePointer => *this._value;
 
 	/// <summary>
