@@ -35,6 +35,10 @@ public abstract partial class JDataTypeMetadata : ITypeInformation
 	/// Kind of the current type.
 	/// </summary>
 	public abstract JTypeKind Kind { get; }
+	/// <summary>
+	/// Specifies the minimun Java runtime version required for the current type.
+	/// </summary>
+	public abstract JRuntimeVersion Since { get; }
 
 	/// <inheritdoc/>
 	public CString ClassName => this._info.Name;

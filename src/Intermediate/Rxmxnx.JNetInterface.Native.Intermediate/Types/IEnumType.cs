@@ -13,6 +13,7 @@ public interface IEnumType : IClassType
 	static JTypeKind IDataType.Kind => JTypeKind.Enum;
 	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
 	static Type IDataType.FamilyType => typeof(JEnumObject);
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.J5;
 
 	/// <summary>
 	/// Retrieves the metadata for given enum type.

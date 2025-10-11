@@ -18,6 +18,7 @@ public class JProxyObject : JLocalObject, IClassType<JProxyObject>
 		JLocalObject.CreateBuiltInMetadata<JProxyObject>(JProxyObject.typeInfo, JTypeModifier.Extensible);
 
 	static TypeMetadata IClassType<JProxyObject>.Metadata => JProxyObject.ProxyTypeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd3;
 
 	/// <inheritdoc/>
 	protected JProxyObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

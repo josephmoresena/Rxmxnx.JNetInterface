@@ -23,6 +23,7 @@ public sealed class JComparableObject : JInterfaceObject<JComparableObject>, IIn
 			JComparableObject.typeInfo, InterfaceSet.Empty);
 
 	static TypeMetadata IInterfaceType<JComparableObject>.Metadata => JComparableObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd2;
 
 	/// <inheritdoc/>
 	private JComparableObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

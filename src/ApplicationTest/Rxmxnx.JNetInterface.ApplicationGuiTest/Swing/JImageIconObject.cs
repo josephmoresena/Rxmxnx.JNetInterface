@@ -23,6 +23,7 @@ public class JImageIconObject : JLocalObject, IClassType<JImageIconObject>, IInt
 	private static readonly JFunctionDefinition<JImageObject>.Parameterless getImageDef = new("getImage"u8);
 
 	static JClassTypeMetadata<JImageIconObject> IClassType<JImageIconObject>.Metadata => JImageIconObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd2;
 
 	protected JImageIconObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JImageIconObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

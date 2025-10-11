@@ -12,6 +12,7 @@ public class JEventObject : JLocalObject, IClassType<JEventObject>, IInterfaceOb
 	                                                                        .Implements<JSerializableObject>().Build();
 
 	static JClassTypeMetadata<JEventObject> IClassType<JEventObject>.Metadata => JEventObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd1;
 
 	protected JEventObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JEventObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

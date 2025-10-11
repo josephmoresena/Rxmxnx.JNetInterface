@@ -18,6 +18,7 @@ public sealed class JModuleObject : JLocalObject, IClassType<JModuleObject>, IIn
 		JModuleObject.typeInfo, JTypeModifier.Final, InterfaceSet.AnnotatedElementSet);
 
 	static TypeMetadata IClassType<JModuleObject>.Metadata => JModuleObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.J9;
 
 	/// <inheritdoc/>
 	private JModuleObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

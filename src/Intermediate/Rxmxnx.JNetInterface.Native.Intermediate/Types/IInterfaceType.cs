@@ -9,6 +9,7 @@ public interface IInterfaceType : IReferenceType
 {
 	static JTypeKind IDataType.Kind => JTypeKind.Interface;
 	static Type IDataType.FamilyType => typeof(JLocalObject.InterfaceView);
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd0;
 
 	/// <summary>
 	/// Retrieves the metadata for given interface type.

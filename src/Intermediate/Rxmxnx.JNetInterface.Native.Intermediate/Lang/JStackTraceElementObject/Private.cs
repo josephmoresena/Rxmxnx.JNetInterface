@@ -15,6 +15,7 @@ public partial class JStackTraceElementObject
 		JStackTraceElementObject.typeInfo, JTypeModifier.Final, InterfaceSet.SerializableSet);
 
 	static TypeMetadata IClassType<JStackTraceElementObject>.Metadata => JStackTraceElementObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd4;
 
 	/// <inheritdoc cref="JStackTraceElementObject.ClassName"/>
 	private String? _className;

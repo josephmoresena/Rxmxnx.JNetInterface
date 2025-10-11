@@ -44,6 +44,7 @@ public class JFrameObjectSwing : JFrameObjectAwt, IClassType<JFrameObjectSwing>
 		TypeMetadataBuilder<JFrameObjectAwt>.Create<JFrameObjectSwing>("javax/swing/JFrame"u8).Build();
 	static JClassTypeMetadata<JFrameObjectSwing> IClassType<JFrameObjectSwing>.Metadata
 		=> JFrameObjectSwing.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd2;
 
 	protected JFrameObjectSwing(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JFrameObjectSwing(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

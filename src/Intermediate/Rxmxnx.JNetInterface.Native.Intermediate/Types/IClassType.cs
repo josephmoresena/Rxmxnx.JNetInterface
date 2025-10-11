@@ -8,6 +8,7 @@ namespace Rxmxnx.JNetInterface.Types;
 public interface IClassType : IReferenceType
 {
 	static JTypeKind IDataType.Kind => JTypeKind.Class;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd0;
 
 	/// <summary>
 	/// Retrieves the metadata for given class type.

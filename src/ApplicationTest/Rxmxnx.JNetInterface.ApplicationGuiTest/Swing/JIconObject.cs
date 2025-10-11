@@ -10,6 +10,7 @@ public sealed class JIconObject : JInterfaceObject<JIconObject>, IInterfaceType<
 		TypeMetadataBuilder<JIconObject>.Create("javax/swing/Icon"u8).Build();
 
 	static JInterfaceTypeMetadata<JIconObject> IInterfaceType<JIconObject>.Metadata => JIconObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd2;
 
 	private JIconObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 	static JIconObject IInterfaceType<JIconObject>.Create(IReferenceType.ObjectInitializer initializer)

@@ -25,6 +25,11 @@ public class JLabelObject : JComponentObjectSwing, IClassType<JLabelObject>
 		TypeMetadataBuilder<JComponentObjectSwing>.Create<JLabelObject>("javax/swing/JLabel"u8).Build();
 
 	static JClassTypeMetadata<JLabelObject> IClassType<JLabelObject>.Metadata => JLabelObject.typeMetadata;
+#if !NET8_0_OR_GREATER
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd1;
+#endif
+
 	protected JLabelObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JLabelObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	protected JLabelObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

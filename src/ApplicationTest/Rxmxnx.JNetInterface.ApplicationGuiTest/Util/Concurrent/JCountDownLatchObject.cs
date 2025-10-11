@@ -22,6 +22,7 @@ public class JCountDownLatchObject : JLocalObject, IClassType<JCountDownLatchObj
 		TypeMetadataBuilder<JCountDownLatchObject>.Create("java/util/concurrent/CountDownLatch"u8).Build();
 	static JClassTypeMetadata<JCountDownLatchObject> IClassType<JCountDownLatchObject>.Metadata
 		=> JCountDownLatchObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.J5;
 
 	protected JCountDownLatchObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JCountDownLatchObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

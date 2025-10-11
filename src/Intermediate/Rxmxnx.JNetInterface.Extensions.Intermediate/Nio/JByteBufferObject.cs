@@ -19,6 +19,8 @@ public class JByteBufferObject : JBufferObject<JByte>, IClassType<JByteBufferObj
 		InterfaceSet.ComparableSet);
 
 	static TypeMetadata IClassType<JByteBufferObject>.Metadata => JByteBufferObject.typeMetadata;
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd4;
 
 	/// <inheritdoc/>
 	private protected JByteBufferObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }

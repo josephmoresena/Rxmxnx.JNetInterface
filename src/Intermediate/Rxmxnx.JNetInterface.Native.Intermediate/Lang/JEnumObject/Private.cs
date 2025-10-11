@@ -15,6 +15,7 @@ public partial class JEnumObject
 		JEnumObject.typeInfo, JTypeModifier.Abstract, InterfaceSet.SerializableComparableSet);
 
 	static TypeMetadata IClassType<JEnumObject>.Metadata => JEnumObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.J5;
 
 	/// <summary>
 	/// String of enum value.

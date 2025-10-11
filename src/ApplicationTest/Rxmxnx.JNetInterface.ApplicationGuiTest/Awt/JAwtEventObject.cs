@@ -31,6 +31,7 @@ public class JAwtEventObject : JEventObject, IClassType<JAwtEventObject>
 		                                                                           "java/awt/AWTEvent"u8,
 		                                                                           JTypeModifier.Abstract).Build();
 	static JClassTypeMetadata<JAwtEventObject> IClassType<JAwtEventObject>.Metadata => JAwtEventObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd1;
 
 	protected JAwtEventObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JAwtEventObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

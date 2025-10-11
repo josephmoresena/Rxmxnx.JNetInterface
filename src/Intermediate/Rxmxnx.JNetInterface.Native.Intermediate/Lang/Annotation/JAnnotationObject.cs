@@ -23,6 +23,7 @@ public sealed class JAnnotationObject : JInterfaceObject<JAnnotationObject>, IIn
 			JAnnotationObject.typeInfo, InterfaceSet.Empty);
 
 	static TypeMetadata IInterfaceType<JAnnotationObject>.Metadata => JAnnotationObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.J5;
 
 	/// <inheritdoc/>
 	private JAnnotationObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
@@ -48,6 +49,7 @@ public abstract class JAnnotationObject<TAnnotation> : JInterfaceObject<TAnnotat
 {
 	static JTypeKind IDataType.Kind => JTypeKind.Annotation;
 	static Type IDataType.FamilyType => typeof(JAnnotationObject);
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.J5;
 
 	/// <inheritdoc/>
 	protected JAnnotationObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

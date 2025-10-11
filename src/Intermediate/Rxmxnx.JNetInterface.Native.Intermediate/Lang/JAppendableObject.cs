@@ -23,6 +23,7 @@ public sealed class JAppendableObject : JInterfaceObject<JAppendableObject>, IIn
 			JAppendableObject.typeInfo, InterfaceSet.Empty);
 
 	static TypeMetadata IInterfaceType<JAppendableObject>.Metadata => JAppendableObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.J5;
 
 	/// <inheritdoc/>
 	private JAppendableObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

@@ -24,6 +24,8 @@ public partial class JArrayObject<TElement>
 		public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<JArrayObject<TElement>>();
 		/// <inheritdoc/>
 		public override JClassTypeMetadata BaseMetadata => JLocalObject.ObjectClassMetadata;
+		/// <inheritdoc/>
+		public override JRuntimeVersion Since => TElement.Since;
 
 		/// <summary>
 		/// Constructor.

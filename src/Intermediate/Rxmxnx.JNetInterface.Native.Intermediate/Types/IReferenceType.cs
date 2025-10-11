@@ -11,6 +11,10 @@ public partial interface IReferenceType : IDataType, ILocalObject, IDisposable
 	[ExcludeFromCodeCoverage]
 #endif
 	static Type IDataType.FamilyType => typeof(JLocalObject);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd0;
 
 	/// <summary>
 	/// Retrieves the metadata for given reference type.

@@ -15,6 +15,7 @@ public partial class JBufferObject
 		JLocalObject.CreateBuiltInMetadata<JBufferObject>(JBufferObject.typeInfo, JTypeModifier.Abstract);
 
 	static TypeMetadata IClassType<JBufferObject>.Metadata => JBufferObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd4;
 
 	/// <inheritdoc cref="JBufferObject.Address"/>
 	private IntPtr? _address;

@@ -14,6 +14,8 @@ public interface IPrimitiveType : IDataType, IComparable, IConvertible
 
 	static JTypeKind IDataType.Kind => JTypeKind.Primitive;
 	static Type? IDataType.FamilyType => default;
+	// Primitives as classes are available only from JDK 1.1
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd1;
 
 #if PACKAGE
 	/// <summary>

@@ -10,6 +10,7 @@ public interface IAnnotationType : IInterfaceType
 	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
 	static JTypeKind IDataType.Kind => JTypeKind.Annotation;
 	static Type IDataType.FamilyType => typeof(JAnnotationObject);
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.J5;
 }
 
 /// <summary>

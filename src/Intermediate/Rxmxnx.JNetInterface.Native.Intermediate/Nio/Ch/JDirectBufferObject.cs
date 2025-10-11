@@ -25,6 +25,7 @@ public sealed class JDirectBufferObject : JInterfaceObject<JDirectBufferObject>,
 			JDirectBufferObject.typeInfo, InterfaceSet.Empty);
 
 	static TypeMetadata IInterfaceType<JDirectBufferObject>.Metadata => JDirectBufferObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd4;
 
 	/// <inheritdoc/>
 	private JDirectBufferObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

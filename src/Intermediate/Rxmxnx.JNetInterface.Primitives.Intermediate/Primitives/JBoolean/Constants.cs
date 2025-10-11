@@ -18,6 +18,7 @@ public partial struct JBoolean : INativeDataType<JBoolean>
 	static JDataTypeMetadata IDataType<JBoolean>.Metadata => JBoolean.typeMetadata;
 	static JTypeKind IDataType.Kind => JTypeKind.Primitive;
 	static Type? IDataType.FamilyType => default;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd1;
 #endif
 
 	static JBoolean IPrimitiveType<JBoolean>.CreateFrom<TSource>(TSource value) => value != default;

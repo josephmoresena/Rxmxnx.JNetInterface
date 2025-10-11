@@ -19,6 +19,8 @@ public class JDialogObjectSwing : JDialogObject, IClassType<JDialogObjectSwing>
 		TypeMetadataBuilder<JDialogObject>.Create<JDialogObjectSwing>("javax/swing/JDialog"u8).Build();
 	static JClassTypeMetadata<JDialogObjectSwing> IClassType<JDialogObjectSwing>.Metadata
 		=> JDialogObjectSwing.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd2;
+
 	protected JDialogObjectSwing(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JDialogObjectSwing(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	protected JDialogObjectSwing(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

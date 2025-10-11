@@ -22,6 +22,8 @@ public class JMappedByteBufferObject : JByteBufferObject, IClassType<JMappedByte
 		JMappedByteBufferObject.typeInfo, IClassType.GetMetadata<JByteBufferObject>(), JTypeModifier.Abstract);
 
 	static TypeMetadata IClassType<JMappedByteBufferObject>.Metadata => JMappedByteBufferObject.typeMetadata;
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd4;
 
 	/// <inheritdoc/>
 	private protected JMappedByteBufferObject(JClassObject jClass, JObjectLocalRef localRef) :

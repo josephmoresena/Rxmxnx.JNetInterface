@@ -22,6 +22,7 @@ public sealed class JReadableObject : JInterfaceObject<JReadableObject>, IInterf
 		JLocalObject.InterfaceView.CreateBuiltInMetadata<JReadableObject>(JReadableObject.typeInfo, InterfaceSet.Empty);
 
 	static TypeMetadata IInterfaceType<JReadableObject>.Metadata => JReadableObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.J5;
 
 	/// <inheritdoc/>
 	private JReadableObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

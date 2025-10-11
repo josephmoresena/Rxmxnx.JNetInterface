@@ -35,6 +35,8 @@ public abstract partial class JPrimitiveTypeMetadata : JDataTypeMetadata
 	public sealed override JTypeKind Kind => JTypeKind.Primitive;
 	/// <inheritdoc/>
 	public sealed override JTypeModifier Modifier => JTypeModifier.Final;
+	/// <inheritdoc/>
+	public override JRuntimeVersion Since => JRuntimeVersion.SEd1;
 
 	/// <summary>
 	/// Information of wrapper class.

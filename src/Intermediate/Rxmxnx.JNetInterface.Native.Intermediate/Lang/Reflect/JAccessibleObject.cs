@@ -18,6 +18,7 @@ public class JAccessibleObject : JLocalObject, IClassType<JAccessibleObject>, II
 		JAccessibleObject.typeInfo, JTypeModifier.Extensible, InterfaceSet.AnnotatedElementSet);
 
 	static TypeMetadata IClassType<JAccessibleObject>.Metadata => JAccessibleObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd2;
 
 	/// <inheritdoc/>
 	private protected JAccessibleObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }

@@ -15,6 +15,7 @@ public interface IArrayType : IReferenceType
 	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
 	static JTypeKind IDataType.Kind => JTypeKind.Array;
 	static Type IDataType.FamilyType => typeof(JArrayObject);
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd0;
 
 	/// <summary>
 	/// Retrieves the metadata for given array type.

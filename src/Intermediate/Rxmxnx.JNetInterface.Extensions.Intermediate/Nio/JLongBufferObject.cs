@@ -19,6 +19,8 @@ public class JLongBufferObject : JBufferObject<JLong>, IClassType<JLongBufferObj
 		InterfaceSet.ComparableSet);
 
 	static TypeMetadata IClassType<JLongBufferObject>.Metadata => JLongBufferObject.typeMetadata;
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd4;
 
 	/// <inheritdoc/>
 	protected JLongBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

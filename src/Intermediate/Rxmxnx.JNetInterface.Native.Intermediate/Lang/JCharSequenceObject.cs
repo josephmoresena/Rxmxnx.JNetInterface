@@ -23,6 +23,7 @@ public sealed class JCharSequenceObject : JInterfaceObject<JCharSequenceObject>,
 			JCharSequenceObject.typeInfo, InterfaceSet.Empty);
 
 	static TypeMetadata IInterfaceType<JCharSequenceObject>.Metadata => JCharSequenceObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd4;
 
 	/// <inheritdoc/>
 	private JCharSequenceObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

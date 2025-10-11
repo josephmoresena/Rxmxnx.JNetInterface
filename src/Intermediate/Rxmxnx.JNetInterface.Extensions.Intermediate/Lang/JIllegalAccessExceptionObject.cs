@@ -26,6 +26,7 @@ public class JIllegalAccessExceptionObject : JReflectiveOperationExceptionObject
 
 	static TypeMetadata IThrowableType<JIllegalAccessExceptionObject>.Metadata
 		=> JIllegalAccessExceptionObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd0;
 
 	/// <inheritdoc/>
 	protected JIllegalAccessExceptionObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
