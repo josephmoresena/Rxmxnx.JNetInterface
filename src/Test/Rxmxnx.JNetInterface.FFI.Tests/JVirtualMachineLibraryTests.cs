@@ -33,9 +33,24 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 	{
 		String proxyPath = JVirtualMachineLibraryTests.GetProxyPath(proxyType);
 		JVirtualMachineLibrary? library = JVirtualMachineLibrary.LoadLibrary(proxyPath);
-		Assert.Null(library);
-		if (!NativeLibrary.TryLoad(proxyPath, out IntPtr handle)) return;
-		Assert.Null(JVirtualMachineLibrary.Create(handle));
+		if (proxyType.HasFlag(JvmProxyType.NoCreate))
+		{
+			Assert.Null(library);
+			if (!NativeLibrary.TryLoad(proxyPath, out IntPtr handle)) return;
+			Assert.Null(JVirtualMachineLibrary.Create(handle));
+		}
+		else if (proxyType.HasFlag(JvmProxyType.NoVMs))
+		{
+			if (!NativeLibrary.TryLoad(proxyPath, out IntPtr _))
+			{
+				Skip.If((library?.Handle).GetValueOrDefault() != IntPtr.Zero, "Invalid native library loading.");
+				Assert.Null(library);
+				return;
+			}
+
+			Assert.NotNull(library);
+			Assert.Throws<JniException>(() => library.GetCreatedVirtualMachines());
+		}
 	}
 
 	[Fact]

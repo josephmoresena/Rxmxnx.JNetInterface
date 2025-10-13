@@ -139,6 +139,8 @@ public sealed unsafe class JVirtualMachineLibrary
 	/// <exception cref="JniException">If JNI call ends with an error.</exception>
 	public IVirtualMachine[] GetCreatedVirtualMachines()
 	{
+		if (!this._hasCreatedVm)
+			ImplementationValidationUtilities.ThrowIfInvalidResult(JResult.VersionError);
 		_ = this._functions.GetCreatedVirtualMachines(default, 0, out Int32 vmCount);
 		if (vmCount <= 0) return [];
 		JVirtualMachineRef[] arr = this.GetCreatedVirtualMachines(vmCount, out JResult result);
@@ -154,11 +156,6 @@ public sealed unsafe class JVirtualMachineLibrary
 	/// <returns>An array of <see cref="JVirtualMachineRef"/> references.</returns>
 	private JVirtualMachineRef[] GetCreatedVirtualMachines(Int32 vmCount, out JResult result)
 	{
-		if (!this._hasCreatedVm)
-		{
-			result = JResult.Error;
-			return [];
-		}
 		JVirtualMachineRef[] arr = new JVirtualMachineRef[vmCount];
 		fixed (JVirtualMachineRef* ptr = arr)
 			result = this._functions.GetCreatedVirtualMachines(ptr, arr.Length, out vmCount);
