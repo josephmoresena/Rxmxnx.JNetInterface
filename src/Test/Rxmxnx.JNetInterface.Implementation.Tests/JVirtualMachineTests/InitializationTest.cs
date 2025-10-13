@@ -15,10 +15,10 @@ public partial class JVirtualMachineTests
 	[InlineData(MainClass.Throwable, ClassLoadingError.FindClass)]
 	[InlineData(MainClass.Throwable, ClassLoadingError.TypeIdError)]
 	[InlineData(MainClass.Throwable, ClassLoadingError.CreateGlobal)]
-	[InlineData(MainClass.StackTraceElement, ClassLoadingError.None)]
-	[InlineData(MainClass.StackTraceElement, ClassLoadingError.FindClass)]
-	[InlineData(MainClass.StackTraceElement, ClassLoadingError.TypeIdError)]
-	[InlineData(MainClass.StackTraceElement, ClassLoadingError.CreateGlobal)]
+	[InlineData(MainClass.System, ClassLoadingError.None)]
+	[InlineData(MainClass.System, ClassLoadingError.FindClass)]
+	[InlineData(MainClass.System, ClassLoadingError.TypeIdError)]
+	[InlineData(MainClass.System, ClassLoadingError.CreateGlobal)]
 	[InlineData(MainClass.VoidObject, ClassLoadingError.None)]
 	[InlineData(MainClass.VoidObject, ClassLoadingError.FindClass)]
 	[InlineData(MainClass.VoidObject, ClassLoadingError.TypeIdError)]
@@ -171,6 +171,7 @@ public partial class JVirtualMachineTests
 			// Fundamental classes
 			Assert.Equal(mainGlobalRef[MainClass.Class].Value, env.ClassFeature.ClassObject.Reference.Value);
 			Assert.Equal(mainGlobalRef[MainClass.Throwable].Value, env.ClassFeature.ThrowableObject.Reference.Value);
+			Assert.Equal(mainGlobalRef[MainClass.System].Value, env.ClassFeature.SystemObject.Reference.Value);
 			Assert.Equal(mainGlobalRef[MainClass.StackTraceElement].Value,
 			             env.ClassFeature.StackTraceElementObject.Reference.Value);
 

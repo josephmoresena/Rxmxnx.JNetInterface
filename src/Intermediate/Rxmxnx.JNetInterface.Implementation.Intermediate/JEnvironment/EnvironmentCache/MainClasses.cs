@@ -7,6 +7,7 @@ partial class JEnvironment
 		JClassObject IClassFeature.ClassObject => this.GetLoadedClass(this.ClassObject);
 		JClassObject IClassFeature.ThrowableObject => this.GetLoadedClass(this.ThrowableObject);
 		JClassObject IClassFeature.StackTraceElementObject => this.GetLoadedClass(this.StackTraceElementObject);
+		JClassObject IClassFeature.SystemObject => this.GetLoadedClass(this.SystemObject);
 
 		JClassObject IClassFeature.VoidPrimitive => this.GetLoadedClass(this.VoidPrimitive);
 		JClassObject IClassFeature.BooleanPrimitive => this.GetLoadedClass(this.BooleanPrimitive);

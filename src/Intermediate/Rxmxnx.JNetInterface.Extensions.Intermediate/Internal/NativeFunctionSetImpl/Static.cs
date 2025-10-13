@@ -147,6 +147,17 @@ internal partial class NativeFunctionSetImpl
 		new(NativeFunctionSet.CharValueFunctionInfo);
 
 	/// <summary>
+	/// <c>System.getProperty(java.lang.String)</c> definition.
+	/// </summary>
+	public static readonly JFunctionDefinition<JStringObject> GetPropertyDefinition =
+		new(NativeFunctionSet.GetPropertyFunctionInfo, IntPtr.Size, [IntPtr.Size,], 1);
+	/// <summary>
+	/// <c>System.setProperty(java.lang.String, java.lang.String)</c> definition.
+	/// </summary>
+	public static readonly JMethodDefinition SetPropertyDefinition =
+		new(NativeFunctionSet.GetPropertyFunctionInfo, 2 * IntPtr.Size, [IntPtr.Size, IntPtr.Size,], 2);
+
+	/// <summary>
 	/// Constructor <c>java.lang.Boolean(boolean)</c>
 	/// </summary>
 	public static readonly PrimitiveWrapperConstructor<JBoolean> BooleanConstructor =

@@ -17,6 +17,8 @@ public partial class JVirtualMachine
 		public override JGlobal ThrowableObject => this.GlobalClassCache[ClassNameHelper.ThrowableHash];
 		/// <inheritdoc/>
 		public override JGlobal StackTraceElementObject => this.GlobalClassCache[ClassNameHelper.StackTraceElementHash];
+		/// <inheritdoc/>
+		public override JGlobal SystemObject => this.GlobalClassCache[ClassNameHelper.SystemHash];
 
 		/// <summary>
 		/// Constructor.
@@ -27,6 +29,7 @@ public partial class JVirtualMachine
 			this._classMetadata = ClassObjectMetadata.Create<JClassObject>();
 			this._throwableMetadata = ClassObjectMetadata.Create<JThrowableObject>();
 			this._stackTraceElementMetadata = ClassObjectMetadata.Create<JStackTraceElementObject>();
+			this._systemMetadata = ClassObjectMetadata.Create<JSystemObject>();
 			this._booleanMetadata = ClassObjectMetadata.Create<JBoolean>();
 			this._byteMetadata = ClassObjectMetadata.Create<JByte>();
 			this._charMetadata = ClassObjectMetadata.Create<JChar>();
@@ -39,6 +42,7 @@ public partial class JVirtualMachine
 			this.AppendGlobal(vm, this._classMetadata);
 			this.AppendGlobal(vm, this._throwableMetadata);
 			this.AppendGlobal(vm, this._stackTraceElementMetadata);
+			this.AppendGlobal(vm, this._systemMetadata);
 
 			this.AppendGlobal(vm, ClassObjectMetadata.VoidMetadata);
 			this.AppendGlobal(vm, this._booleanMetadata);
@@ -67,6 +71,7 @@ public partial class JVirtualMachine
 				ClassNameHelper.ClassHash => true,
 				ClassNameHelper.ThrowableHash => true,
 				ClassNameHelper.StackTraceElementHash => true,
+				ClassNameHelper.SystemHash => true,
 				// Primitive classes
 				ClassNameHelper.VoidPrimitiveHash => MainClasses.PrimitiveMainClassesEnabled,
 				ClassNameHelper.BooleanPrimitiveHash => MainClasses.PrimitiveMainClassesEnabled,
@@ -89,8 +94,10 @@ public partial class JVirtualMachine
 			JTrace.MainClassesLoading(env.VirtualMachine.Reference, env.Reference);
 			GlobalMainClasses.LoadMainClass(env, this.ClassObject, this._classMetadata);
 			GlobalMainClasses.LoadMainClass(env, this.ThrowableObject, this._throwableMetadata);
-			GlobalMainClasses.LoadMainClass(env, this.StackTraceElementObject, this._stackTraceElementMetadata);
-			this.LoadUserMainClasses(env);
+			GlobalMainClasses.LoadMainClass(env, this.SystemObject, this._systemMetadata);
+			if (env.Version >= (Int32)JRuntimeVersion.SEd4)
+				GlobalMainClasses.LoadMainClass(env, this.StackTraceElementObject, this._stackTraceElementMetadata);
+			this.LoadUserMainClasses(env); // TODO: Check Runtime Version
 			if (MainClasses.PrimitiveMainClassesEnabled)
 				this.LoadPrimitiveMainClasses(env);
 			JTrace.MainClassesLoaded(env.VirtualMachine.Reference, env.Reference);

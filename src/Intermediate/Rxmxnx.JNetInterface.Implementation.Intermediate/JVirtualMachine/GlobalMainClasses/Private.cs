@@ -46,6 +46,10 @@ public partial class JVirtualMachine
 		/// </summary>
 		private readonly ClassObjectMetadata _stackTraceElementMetadata;
 		/// <summary>
+		/// Metadata for <see cref="JSystemObject"/>.
+		/// </summary>
+		private readonly ClassObjectMetadata _systemMetadata;
+		/// <summary>
 		/// Metadata for <see cref="JThrowableObject"/>.
 		/// </summary>
 		private readonly ClassObjectMetadata _throwableMetadata;

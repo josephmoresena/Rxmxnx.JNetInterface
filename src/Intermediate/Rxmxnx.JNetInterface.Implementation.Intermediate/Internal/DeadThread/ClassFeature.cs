@@ -14,6 +14,7 @@ internal partial class DeadThread : IClassFeature
 	JClassObject IClassFeature.ClassObject => this.ThrowInvalidResult<JClassObject>();
 	JClassObject IClassFeature.ThrowableObject => this.ThrowInvalidResult<JClassObject>();
 	JClassObject IClassFeature.StackTraceElementObject => this.ThrowInvalidResult<JClassObject>();
+	JClassObject IClassFeature.SystemObject => this.ThrowInvalidResult<JClassObject>();
 	JClassObject IClassFeature.VoidObject => this.ThrowInvalidResult<JClassObject>();
 	JClassObject IClassFeature.BooleanObject => this.ThrowInvalidResult<JClassObject>();
 	JClassObject IClassFeature.ByteObject => this.ThrowInvalidResult<JClassObject>();

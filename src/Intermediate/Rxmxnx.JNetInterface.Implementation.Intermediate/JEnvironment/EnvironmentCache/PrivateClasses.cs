@@ -15,6 +15,7 @@ partial class JEnvironment
 		{
 			this.Register(this.ClassObject);
 			this.Register(this.ThrowableObject);
+			this.Register(this.SystemObject);
 			this.Register(this.StackTraceElementObject);
 
 			// Register user main classes.

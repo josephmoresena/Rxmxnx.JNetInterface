@@ -54,6 +54,9 @@ public partial class JFunctionDefinition<TResult> : JFunctionDefinition where TR
 	/// </summary>
 	/// <param name="definition">Function definition name.</param>
 	internal JFunctionDefinition(JFunctionDefinition definition) : base(definition) { }
+	/// <inheritdoc/>
+	internal JFunctionDefinition(AccessibleInfoSequence info, Int32 callSize, Int32[] sizes, Int32 referenceCount) :
+		base(info, callSize, sizes, referenceCount) { }
 	/// <summary>
 	/// Internal Constructor.
 	/// </summary>
@@ -69,7 +72,4 @@ public partial class JFunctionDefinition<TResult> : JFunctionDefinition where TR
 	/// <remarks>This constructor should be never inherited.</remarks>
 	private JFunctionDefinition(ReadOnlySpan<Byte> functionName) : base(functionName,
 	                                                                    IDataType.GetMetadata<TResult>().Signature) { }
-	/// <inheritdoc/>
-	private JFunctionDefinition(AccessibleInfoSequence info, Int32 callSize, Int32[] sizes, Int32 referenceCount) :
-		base(info, callSize, sizes, referenceCount) { }
 }

@@ -39,6 +39,10 @@ internal partial struct ClassNameHelper
 	/// Hash for <c>java.lang.Thread</c> type.
 	/// </summary>
 	public const String ThreadHash = "慪慶氯湡⽧桔敲摡䰀慪慶氯湡⽧桔敲摡;䱛慪慶氯湡⽧桔敲摡;";
+	/// <summary>
+	/// Hash for <c>java.lang.System</c> type.
+	/// </summary>
+	public const String SystemHash = "慪慶氯湡\u2f67祓瑳浥䰀慪慶氯湡\u2f67祓瑳浥\u003b䱛慪慶氯湡\u2f67祓瑳浥\u003b";
 	#endregion
 
 	#region java.lang.reflect

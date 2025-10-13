@@ -23,6 +23,7 @@ public partial class JThrowableObject
 	private StackTraceInfo[] GetStackTrace()
 	{
 		IEnvironment env = this.Environment;
+		if (env.Version < (Int32)JRuntimeVersion.SEd4) return [];
 		using JArrayObject<JStackTraceElementObject> stackTrace = env.FunctionSet.GetStackTrace(this);
 		return this.Environment.WithFrame(IVirtualMachine.GetStackTraceCapacity, stackTrace,
 		                                  JThrowableObject.GetStackTraceInfo!);

@@ -121,6 +121,11 @@ internal static partial class ReferenceHelper
 		fixed (Byte* isNativeMethodName = NativeFunctionSetImpl.IsNativeMethodDefinition.Name)
 			return methodName == isNativeMethodName;
 	}
+	public static unsafe Boolean IsGetPropertyMethod(Byte* methodName)
+	{
+		fixed (Byte* isPropertyMethodName = NativeFunctionSetImpl.GetPropertyDefinition.Name)
+			return methodName == isPropertyMethodName;
+	}
 
 	private static unsafe InvokeInterfaceProxy GetProxy(JVirtualMachineRef vmRef)
 	{

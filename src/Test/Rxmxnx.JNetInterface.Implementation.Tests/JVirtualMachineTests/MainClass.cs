@@ -28,5 +28,6 @@ public partial class JVirtualMachineTests
 		ShortObject = 0x80000,
 		ShortPrimitive = 0x100000,
 		NumberObject = 0x200000,
+		System = 0x400000,
 	}
 }
