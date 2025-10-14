@@ -25,7 +25,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 		Assert.Equal(library.Handle, JVirtualMachineLibrary.Create(handle)?.Handle);
 	}
 
-	[Theory]
+	[SkippableTheory]
 	[InlineData(JvmProxyType.NoCreate)]
 	[InlineData(JvmProxyType.NoVMs)]
 	[InlineData(JvmProxyType.NoCreateAndNoVMs)]
