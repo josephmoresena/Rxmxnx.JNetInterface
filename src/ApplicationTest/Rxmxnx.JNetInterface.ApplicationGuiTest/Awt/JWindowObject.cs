@@ -51,7 +51,7 @@ public class JWindowObject : JContainerObject, IClassType<JWindowObject>
 #if !NET9_0_OR_GREATER
 		                                                  [comp,]
 #else
-		                                         comp
+		                                                  comp
 #endif
 		);
 	}

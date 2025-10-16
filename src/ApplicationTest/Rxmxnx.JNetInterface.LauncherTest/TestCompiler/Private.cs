@@ -134,7 +134,7 @@ public partial class TestCompiler
 				await TestCompiler.CompileNet(compileArgs);
 				compileArgs.BuildDependencies = false;
 
-				if (!OperatingSystem.IsFreeBSD()) 
+				if (!OperatingSystem.IsFreeBSD())
 				{
 					compileArgs.Publish = Publish.ReadyToRun;
 					await TestCompiler.CompileNet(compileArgs);
