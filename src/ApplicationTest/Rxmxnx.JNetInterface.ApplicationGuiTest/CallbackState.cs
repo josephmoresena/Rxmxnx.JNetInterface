@@ -22,7 +22,7 @@ public abstract class CallbackState
 		CallbackState.counter[nintRef]++;
 		return jGlobal;
 	}
-	protected static Boolean FreeGlobal(JGlobalBase? jGlobal)
+	protected static Boolean FreeGlobal([NotNullWhen(true)] JGlobalBase? jGlobal)
 	{
 		IntPtr nintRef = JGlobalBase.GetReference(jGlobal);
 		if (nintRef == default) return false;
