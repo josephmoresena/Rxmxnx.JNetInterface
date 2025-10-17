@@ -1,6 +1,7 @@
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
+using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
 
@@ -17,6 +18,7 @@ public class JWindowObject : JContainerObject, IClassType<JWindowObject>
 #endif
 	);
 	private static readonly JMethodDefinition.Parameterless packDef = new("pack"u8);
+	private static readonly JFunctionDefinition<JBoolean>.Parameterless isVisibleDef = new("isVisible"u8);
 	private static readonly IndeterminateCall setIconImageDef = IndeterminateCall.CreateMethodDefinition(
 		"setIconImage"u8,
 #if !NET9_0_OR_GREATER
@@ -58,7 +60,9 @@ public class JWindowObject : JContainerObject, IClassType<JWindowObject>
 	public void SetIcon(JImageObject image)
 	{
 		IEnvironment env = this.Environment;
-		using JClassObject jClass = JClassObject.GetClass<JWindowObject>(env);
+		using JClassObject jClass = this.Environment.Version >= (Int32)JRuntimeVersion.J6 ?
+			JClassObject.GetClass<JWindowObject>(env) :
+			this.Class;
 		JWindowObject.setIconImageDef.MethodCall(this, jClass, false,
 #if !NET9_0_OR_GREATER
 		                                         [image,]
@@ -73,6 +77,12 @@ public class JWindowObject : JContainerObject, IClassType<JWindowObject>
 		using JClassObject jClass = JClassObject.GetClass<JWindowObject>(env);
 		JWindowObject.packDef.Invoke(this, jClass);
 	}
+	public Boolean IsVisible()
+	{
+		IEnvironment env = this.Environment;
+		using JClassObject jClass = JClassObject.GetClass<JWindowObject>(env);
+		return JWindowObject.isVisibleDef.Invoke(this, jClass).Value;
+	}
 
 	public static void SetApplicationIcon(JImageObject image)
 	{
@@ -81,7 +91,7 @@ public class JWindowObject : JContainerObject, IClassType<JWindowObject>
 		ReadOnlySpan<Byte> getInstanceFunctionName;
 		IndeterminateCall setIconDef;
 
-		if (env.Version < 0x00090000)
+		if (env.Version < (Int32)JRuntimeVersion.J9)
 		{
 			if (!OperatingSystem.IsMacOS() && !OperatingSystem.IsIOS() && !OperatingSystem.IsTvOS())
 				return;

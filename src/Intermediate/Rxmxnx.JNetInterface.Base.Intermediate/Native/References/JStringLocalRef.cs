@@ -28,7 +28,7 @@ public readonly partial struct JStringLocalRef : IObjectReferenceType, INativePo
 	/// Constructor.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal JStringLocalRef(IntPtr value) : this(new JObjectLocalRef(value)) { }
+	private JStringLocalRef(IntPtr value) : this(new JObjectLocalRef(value)) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>

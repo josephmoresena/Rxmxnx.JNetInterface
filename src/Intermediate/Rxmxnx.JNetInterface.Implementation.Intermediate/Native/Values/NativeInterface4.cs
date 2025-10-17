@@ -12,7 +12,7 @@ namespace Rxmxnx.JNetInterface.Native.Values;
 internal readonly struct NativeInterface4 : INativeInterface<NativeInterface4>
 {
 	/// <inheritdoc/>
-	public static Int32 RequiredVersion => 0x00010004;
+	public static Int32 RequiredVersion => (Int32)JRuntimeVersion.SEd4;
 
 	/// <summary>
 	/// Native interface for <c>JNI_VERSION_1_2</c>

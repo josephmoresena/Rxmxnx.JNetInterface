@@ -39,7 +39,7 @@ public partial class JVirtualMachine
 	private JEnvironment? GetEnvironment()
 	{
 		JResult result = this._cache.GetInvokeInterface()
-		                     .GetEnv(this.Reference, out JEnvironmentRef envRef, 0x00010006);
+		                     .GetEnv(this.Reference, out JEnvironmentRef envRef, (Int32)JRuntimeVersion.SEd2);
 		return result is JResult.Ok ? this._cache.ThreadCache.Get(envRef, out _) : default;
 	}
 	/// <summary>

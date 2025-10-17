@@ -4,16 +4,16 @@ namespace Rxmxnx.JNetInterface.Tests.Native.Values;
 public sealed class JEnvironmentTests
 {
 	[Theory]
-	[InlineData(0x00010001)]
-	[InlineData(0x00010002)]
-	[InlineData(0x00010004)]
-	[InlineData(0x00010006)]
-	[InlineData(0x00010008)]
-	[InlineData(0x00090000)]
-	[InlineData(0x000a0000)]
-	[InlineData(0x00130000)]
-	[InlineData(0x00140000)]
-	[InlineData(0x00150000)]
+	[InlineData((Int32)JRuntimeVersion.SEd1)]
+	[InlineData((Int32)JRuntimeVersion.SEd2)]
+	[InlineData((Int32)JRuntimeVersion.SEd4)]
+	[InlineData((Int32)JRuntimeVersion.J6)]
+	[InlineData((Int32)JRuntimeVersion.J8)]
+	[InlineData((Int32)JRuntimeVersion.J9)]
+	[InlineData((Int32)JRuntimeVersion.J10)]
+	[InlineData((Int32)JRuntimeVersion.J19)]
+	[InlineData((Int32)JRuntimeVersion.J21)]
+	[InlineData((Int32)JRuntimeVersion.J24)]
 	internal unsafe void Test(Int32 jniVersion)
 	{
 		Span<IntPtr> interface1 = stackalloc IntPtr[5];

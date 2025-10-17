@@ -95,7 +95,7 @@ public sealed class JLocalObjectTests
 		JWeakRef weakRef = nCase > 1 ? JLocalObjectTests.fixture.Create<JWeakRef>() : default;
 		JGlobalRef globalRef = nCase > 2 ? JLocalObjectTests.fixture.Create<JGlobalRef>() : default;
 
-		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
+		vm.InitializeThread(Arg.Any<CString?>(), version: Arg.Any<Int32>()).Returns(thread);
 		env.ReferenceFeature.Unload(Arg.Any<JGlobal>()).Returns(true);
 		env.IsValidationAvoidable(Arg.Any<JGlobalBase>()).Returns(true);
 		env.Version.Returns(IVirtualMachine.MinimalVersion - (minVersion ? 0 : 1));
@@ -209,7 +209,7 @@ public sealed class JLocalObjectTests
 		JGlobalRef globalRef = JLocalObjectTests.fixture.Create<JGlobalRef>();
 		JWeakRef weakRef = JLocalObjectTests.fixture.Create<JWeakRef>();
 
-		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
+		vm.InitializeThread(Arg.Any<CString?>(), version: Arg.Any<Int32>()).Returns(thread);
 		env.ReferenceFeature.Unload(Arg.Any<JGlobal>()).Returns(true);
 		env.IsValidationAvoidable(Arg.Any<JGlobalBase>()).Returns(true);
 
@@ -254,7 +254,7 @@ public sealed class JLocalObjectTests
 		JGlobalRef globalRef = nCase > 2 ? JLocalObjectTests.fixture.Create<JGlobalRef>() : default;
 		Boolean result = JLocalObjectTests.fixture.Create<Boolean>();
 
-		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
+		vm.InitializeThread(Arg.Any<CString?>(), version: Arg.Any<Int32>()).Returns(thread);
 		env.ReferenceFeature.Unload(Arg.Any<JGlobal>()).Returns(true);
 		env.IsValidationAvoidable(Arg.Any<JGlobalBase>()).Returns(true);
 

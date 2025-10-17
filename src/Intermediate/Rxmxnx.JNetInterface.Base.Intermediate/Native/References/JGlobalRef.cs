@@ -34,11 +34,11 @@ public readonly partial struct JGlobalRef : IObjectGlobalReferenceType, INativeP
 	/// Constructor.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal JGlobalRef(IntPtr value) : this(new JObjectLocalRef(value)) { }
+	private JGlobalRef(IntPtr value) : this(new JObjectLocalRef(value)) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	internal JGlobalRef(JObjectLocalRef value) => this._value = value;
+	private JGlobalRef(JObjectLocalRef value) => this._value = value;
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

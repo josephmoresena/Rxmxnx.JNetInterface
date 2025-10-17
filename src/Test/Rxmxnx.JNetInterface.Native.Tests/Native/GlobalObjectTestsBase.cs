@@ -10,7 +10,7 @@ public abstract class GlobalObjectTestsBase
 	{
 		ConcurrentBag<TGlobalRef> result = [];
 
-		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
+		vm.InitializeThread(Arg.Any<CString?>(), version: Arg.Any<Int32>()).Returns(thread);
 		thread.ReferenceFeature.Unload(Arg.Any<JGlobal>()).Returns(unload);
 		thread.ReferenceFeature.WhenForAnyArgs(r => r.Unload(Arg.Any<JGlobal>())).Do(c =>
 		{

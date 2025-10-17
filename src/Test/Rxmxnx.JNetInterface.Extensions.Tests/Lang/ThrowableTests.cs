@@ -313,6 +313,7 @@ public sealed class ThrowableTests
 			Assert.Equal(jGlobal, exception.GlobalThrowable);
 			Assert.Equal(mutableException.Value, exception);
 
+			// ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
 			exception.WithSafeInvoke(t =>
 			{
 				Assert.Equal(default, t.LocalReference);

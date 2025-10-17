@@ -53,7 +53,7 @@ static void InitGui(JVirtualMachineLibrary jvmLib)
 	try
 	{
 		using JFrameObjectSwing frame = CreateFrame(env, $"Hello .NET - JNI 0x{env.Version:x8}");
-		using JCountDownLatchObject countDownLatch = GetCountDownAwait(frame);
+		using JCountDownLatchObject? countDownLatch = GetCountDownAwait(frame);
 		using (JLabelObject frameContent = CreateFrameLabel(env))
 		{
 			using (JButtonObject jButton = JButtonObject.Create(env, "Click me!!!"u8))
@@ -73,7 +73,12 @@ static void InitGui(JVirtualMachineLibrary jvmLib)
 		frame.SetCloseOperation(JFrameObjectSwing.CloseOperation.Exit);
 
 		Show(frame);
-		countDownLatch.Await();
+		if (countDownLatch is not null)
+			countDownLatch.Await();
+		else
+			do
+				Task.Delay(200).Wait();
+			while (frame.IsVisible());
 	}
 	catch (Exception ex)
 	{
@@ -87,7 +92,8 @@ static void InitGui(JVirtualMachineLibrary jvmLib)
 
 static JVirtualMachineInitArg GetInitialArgs(JVirtualMachineLibrary virtualMachineLibrary)
 {
-	JVirtualMachineInitArg virtualMachineInitArg = virtualMachineLibrary.GetDefaultArgument();
+	JVirtualMachineInitArg virtualMachineInitArg =
+		virtualMachineLibrary.GetDefaultArgument((Int32)JRuntimeVersion.SEd2);
 	String jarPath = ExtractJar().Replace(" ", @"\ ");
 	return new(virtualMachineInitArg.Version)
 	{
@@ -154,15 +160,25 @@ static JFrameObjectSwing CreateFrame(IEnvironment env, String title)
 
 	return result;
 }
-static JCountDownLatchObject GetCountDownAwait(JWindowObject window)
+static JCountDownLatchObject? GetCountDownAwait(JWindowObject window)
 {
 	IEnvironment env = window.Environment;
-	JCountDownLatchObject result = JCountDownLatchObject.Create(window.Environment, 1);
-	using JToolkitObject toolkit = JToolkitObject.GetDefaultToolkit(env);
-	using JAwtEventListenerObject listener =
-		JNativeCallback.CreateAwtEventListener(env, new CloseCountDownState(window, result));
-	toolkit.AddEventListener(listener, EventMask.Window);
-	return result;
+	if (env.Version < (Int32)JRuntimeVersion.SEd4) return default;
+	// TODO: Avoid throw exception on JRE 1.5
+	try
+	{
+		JCountDownLatchObject result = JCountDownLatchObject.Create(window.Environment, 1);
+		using JToolkitObject toolkit = JToolkitObject.GetDefaultToolkit(env);
+		using JAwtEventListenerObject listener =
+			JNativeCallback.CreateAwtEventListener(env, new CloseCountDownState(window, result));
+		toolkit.AddEventListener(listener, EventMask.Window);
+		return result;
+	}
+	catch (ThrowableException)
+	{
+		env.PendingException = default;
+		return default;
+	}
 }
 static JLabelObject CreateFrameLabel(IEnvironment env)
 {

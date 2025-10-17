@@ -10,7 +10,7 @@ internal static partial class MetadataHelper
 		private readonly struct InterfaceAssignationState
 		{
 			public String FromHash { get; init; }
-			public ConcurrentDictionary<AssignationKey, Boolean> AssignationCache { get; init; }
+			public RuntimeMetadataStorage Storage { get; init; }
 		}
 	}
 }

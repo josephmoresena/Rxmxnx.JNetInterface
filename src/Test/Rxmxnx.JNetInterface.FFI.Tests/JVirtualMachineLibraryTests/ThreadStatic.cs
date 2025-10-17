@@ -32,7 +32,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 				ref Unsafe.AsRef<VirtualMachineInitOptionValue>(initValue.Options);
 
 			if (JVirtualMachineLibraryTests.count == 0)
-				Assert.Equal(0x00010006, initValue.Version);
+				Assert.Equal((Int32)JRuntimeVersion.SEd2, initValue.Version);
 			JVirtualMachineLibraryTests.count++;
 #if NET8_0_OR_GREATER
 			Assert.True(Unsafe.IsNullRef(in options));
@@ -84,7 +84,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 				Unsafe.IsNullRef(ref options);
 #endif
 
-			Assert.Equal(0x00010006, value.Version);
+			Assert.Equal((Int32)JRuntimeVersion.J6, value.Version);
 			Assert.Equal(JVirtualMachineLibraryTests.args.Options.NonEmptyCount, value.OptionsLength);
 			Assert.Equal(JVirtualMachineLibraryTests.args.IgnoreUnrecognized, value.IgnoreUnrecognized);
 			if (!nullOptions && (ReadOnlyValPtr<Byte>)options.OptionString is { IsZero: false, } optionString)
@@ -144,8 +144,8 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 				Unsafe.IsNullRef(ref options);
 #endif
 
-			Assert.InRange(initValue.Version, 0x00010006,
-			               Math.Max(JVirtualMachineLibraryTests.args.Version, 0x00010006));
+			Assert.InRange(initValue.Version, (Int32)JRuntimeVersion.SEd2,
+			               Math.Max(JVirtualMachineLibraryTests.args.Version, (Int32)JRuntimeVersion.SEd2));
 			Assert.True(nullOptions);
 			Assert.Equal(default, initValue.OptionsLength);
 			Assert.Equal(default, initValue.IgnoreUnrecognized);

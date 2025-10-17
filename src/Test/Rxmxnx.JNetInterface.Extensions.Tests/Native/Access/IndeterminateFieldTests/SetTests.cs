@@ -151,6 +151,7 @@ public sealed class SetTests : IndeterminateAccessTestsBase
 			test(env, fieldName, jInterfaceClass, jString, jFieldClass, instance);
 		}
 
+		// ReSharper disable once CollectionNeverUpdated.Local
 		using JArrayObject<TObject> jArray = new(jArrayClass, SetTests.fixture.Create<JArrayLocalRef>(), 0);
 		SetTests.ReferenceObjectTest<JArrayObject<TObject>>(env, fieldName, jArrayClass, jString, jFieldClass,
 		                                                    jArrayClass);
@@ -419,29 +420,29 @@ public sealed class SetTests : IndeterminateAccessTestsBase
 			   Assert.True(primitiveArray.AsSpan().AsBytes().SequenceEqual(mem.Bytes[..sizeof(TPrimitive)]));
 		   });
 		env.FunctionSet.GetPrimitiveValue<JByte>(Arg.Any<JNumberObject>())
-		   .Returns(c => (JByte)IPrimitiveType.GetMetadata<JByte>().CreateInstance(primitiveArray.AsSpan().AsBytes()));
+		   .Returns(_ => (JByte)IPrimitiveType.GetMetadata<JByte>().CreateInstance(primitiveArray.AsSpan().AsBytes()));
 		env.FunctionSet.GetPrimitiveValue<JDouble>(Arg.Any<JNumberObject>())
-		   .Returns(c => (JDouble)IPrimitiveType.GetMetadata<JDouble>()
+		   .Returns(_ => (JDouble)IPrimitiveType.GetMetadata<JDouble>()
 		                                        .CreateInstance(primitiveArray.AsSpan().AsBytes()));
 		env.FunctionSet.GetPrimitiveValue<JFloat>(Arg.Any<JNumberObject>())
-		   .Returns(c => (JFloat)IPrimitiveType.GetMetadata<JFloat>()
+		   .Returns(_ => (JFloat)IPrimitiveType.GetMetadata<JFloat>()
 		                                       .CreateInstance(primitiveArray.AsSpan().AsBytes()));
 		env.FunctionSet.GetPrimitiveValue<JInt>(Arg.Any<JNumberObject>())
-		   .Returns(c => (JInt)IPrimitiveType.GetMetadata<JInt>().CreateInstance(primitiveArray.AsSpan().AsBytes()));
+		   .Returns(_ => (JInt)IPrimitiveType.GetMetadata<JInt>().CreateInstance(primitiveArray.AsSpan().AsBytes()));
 		env.FunctionSet.GetPrimitiveValue<JLong>(Arg.Any<JNumberObject>())
-		   .Returns(c => (JLong)IPrimitiveType.GetMetadata<JLong>().CreateInstance(primitiveArray.AsSpan().AsBytes()));
+		   .Returns(_ => (JLong)IPrimitiveType.GetMetadata<JLong>().CreateInstance(primitiveArray.AsSpan().AsBytes()));
 		env.FunctionSet.GetPrimitiveValue<JShort>(Arg.Any<JNumberObject>())
-		   .Returns(c => (JShort)IPrimitiveType.GetMetadata<JShort>()
+		   .Returns(_ => (JShort)IPrimitiveType.GetMetadata<JShort>()
 		                                       .CreateInstance(primitiveArray.AsSpan().AsBytes()));
 		env.AccessFeature
 		   .CallFunction<JBoolean>(Arg.Any<JLocalObject>(), Arg.Any<JClassObject>(),
 		                           NativeFunctionSetImpl.BooleanValueDefinition, false, [])
-		   .Returns(c => (JBoolean)IPrimitiveType.GetMetadata<JBoolean>()
+		   .Returns(_ => (JBoolean)IPrimitiveType.GetMetadata<JBoolean>()
 		                                         .CreateInstance(primitiveArray.AsSpan().AsBytes()));
 		env.AccessFeature
 		   .CallFunction<JChar>(Arg.Any<JLocalObject>(), Arg.Any<JClassObject>(),
 		                        NativeFunctionSetImpl.CharValueDefinition, false, [])
-		   .Returns(c => (JChar)IPrimitiveType.GetMetadata<JChar>().CreateInstance(primitiveArray.AsSpan().AsBytes()));
+		   .Returns(_ => (JChar)IPrimitiveType.GetMetadata<JChar>().CreateInstance(primitiveArray.AsSpan().AsBytes()));
 
 		field.Set(jString, instance);
 		env.AccessFeature.Received(1).SetPrimitiveField(jString, jString.Class,
@@ -615,29 +616,29 @@ public sealed class SetTests : IndeterminateAccessTestsBase
 			wrapperTypeMetadata.ParseInstance(wrapperTypeMetadata.CreateInstance(jWrapperClass, localRef, true)));
 
 		env.FunctionSet.GetPrimitiveValue<JByte>(Arg.Any<JNumberObject>())
-		   .Returns(c => (JByte)IPrimitiveType.GetMetadata<JByte>().CreateInstance(primitiveArray.AsSpan().AsBytes()));
+		   .Returns(_ => (JByte)IPrimitiveType.GetMetadata<JByte>().CreateInstance(primitiveArray.AsSpan().AsBytes()));
 		env.FunctionSet.GetPrimitiveValue<JDouble>(Arg.Any<JNumberObject>())
-		   .Returns(c => (JDouble)IPrimitiveType.GetMetadata<JDouble>()
+		   .Returns(_ => (JDouble)IPrimitiveType.GetMetadata<JDouble>()
 		                                        .CreateInstance(primitiveArray.AsSpan().AsBytes()));
 		env.FunctionSet.GetPrimitiveValue<JFloat>(Arg.Any<JNumberObject>())
-		   .Returns(c => (JFloat)IPrimitiveType.GetMetadata<JFloat>()
+		   .Returns(_ => (JFloat)IPrimitiveType.GetMetadata<JFloat>()
 		                                       .CreateInstance(primitiveArray.AsSpan().AsBytes()));
 		env.FunctionSet.GetPrimitiveValue<JInt>(Arg.Any<JNumberObject>())
-		   .Returns(c => (JInt)IPrimitiveType.GetMetadata<JInt>().CreateInstance(primitiveArray.AsSpan().AsBytes()));
+		   .Returns(_ => (JInt)IPrimitiveType.GetMetadata<JInt>().CreateInstance(primitiveArray.AsSpan().AsBytes()));
 		env.FunctionSet.GetPrimitiveValue<JLong>(Arg.Any<JNumberObject>())
-		   .Returns(c => (JLong)IPrimitiveType.GetMetadata<JLong>().CreateInstance(primitiveArray.AsSpan().AsBytes()));
+		   .Returns(_ => (JLong)IPrimitiveType.GetMetadata<JLong>().CreateInstance(primitiveArray.AsSpan().AsBytes()));
 		env.FunctionSet.GetPrimitiveValue<JShort>(Arg.Any<JNumberObject>())
-		   .Returns(c => (JShort)IPrimitiveType.GetMetadata<JShort>()
+		   .Returns(_ => (JShort)IPrimitiveType.GetMetadata<JShort>()
 		                                       .CreateInstance(primitiveArray.AsSpan().AsBytes()));
 		env.AccessFeature
 		   .CallFunction<JBoolean>(Arg.Any<JLocalObject>(), Arg.Any<JClassObject>(),
 		                           NativeFunctionSetImpl.BooleanValueDefinition, false, [])
-		   .Returns(c => (JBoolean)IPrimitiveType.GetMetadata<JBoolean>()
+		   .Returns(_ => (JBoolean)IPrimitiveType.GetMetadata<JBoolean>()
 		                                         .CreateInstance(primitiveArray.AsSpan().AsBytes()));
 		env.AccessFeature
 		   .CallFunction<JChar>(Arg.Any<JLocalObject>(), Arg.Any<JClassObject>(),
 		                        NativeFunctionSetImpl.CharValueDefinition, false, [])
-		   .Returns(c => (JChar)IPrimitiveType.GetMetadata<JChar>().CreateInstance(primitiveArray.AsSpan().AsBytes()));
+		   .Returns(_ => (JChar)IPrimitiveType.GetMetadata<JChar>().CreateInstance(primitiveArray.AsSpan().AsBytes()));
 		env.ReferenceFeature.CreateWrapper(primitiveArray[0]).Returns(instance);
 
 		JFieldDefinition definition = new JFieldDefinition<TWrapper>(fieldName);

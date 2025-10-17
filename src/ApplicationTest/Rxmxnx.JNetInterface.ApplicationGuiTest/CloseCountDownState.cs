@@ -4,10 +4,10 @@ using Rxmxnx.JNetInterface.Util.Concurrent;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-internal sealed class CloseCountDownState(JWindowObject window, JCountDownLatchObject countDownLatch)
+internal sealed class CloseCountDownState(JWindowObject window, JCountDownLatchObject? countDownLatch)
 	: AwtEventListenerState
 {
-	private readonly JGlobalBase _countDownLatch = CallbackState.UseGlobal(countDownLatch.Global);
+	private readonly JGlobalBase? _countDownLatch = CallbackState.UseGlobal(countDownLatch?.Global);
 	private readonly Object _lock = new();
 	private readonly JGlobalBase _window = CallbackState.UseGlobal(window.Global);
 
@@ -20,8 +20,8 @@ internal sealed class CloseCountDownState(JWindowObject window, JCountDownLatchO
 			if (awtEvent.GetSource() is not { } localWindow) return;
 			if (!env.IsSameObject(localWindow, this._window)) return;
 
-			using JCountDownLatchObject countDown = this._countDownLatch.AsLocal<JCountDownLatchObject>(env);
-			countDown.CountDown();
+			using JCountDownLatchObject? countDown = this._countDownLatch?.AsLocal<JCountDownLatchObject>(env);
+			countDown?.CountDown();
 		}
 	}
 	public void Dispose()

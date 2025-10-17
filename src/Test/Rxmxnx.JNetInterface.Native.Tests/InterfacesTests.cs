@@ -31,7 +31,8 @@ public sealed class InterfacesTests
 		{
 			String threadName = $"{Enum.GetName(purpose)}-{Environment.CurrentManagedThreadId}";
 			using IThread thread = (env.VirtualMachine as IVirtualMachine).CreateThread(purpose);
-			env.VirtualMachine.Received(1).InitializeThread(Arg.Is<CString?>(c => c!.ToString() == threadName));
+			env.VirtualMachine.Received(1).InitializeThread(Arg.Is<CString?>(c => c!.ToString() == threadName),
+			                                                version: (Int32)JRuntimeVersion.SEd2);
 		}
 	}
 	[Fact]

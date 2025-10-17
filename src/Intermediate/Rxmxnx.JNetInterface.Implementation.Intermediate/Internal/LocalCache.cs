@@ -40,7 +40,7 @@ internal class LocalCache
 	/// <summary>
 	/// Current class cache.
 	/// </summary>
-	public ClassCache ClassCache { get; set; }
+	public ClassCache ClassCache { get; }
 
 	/// <summary>
 	/// Constructor.

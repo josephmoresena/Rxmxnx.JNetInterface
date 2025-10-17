@@ -509,20 +509,20 @@ public sealed class StringMemoryTests
 		}
 	}
 	[Theory]
-	[InlineData(0x00010008)]
-	[InlineData(0x00090000)]
-	[InlineData(0x00150000)]
-	[InlineData(0x00180000)]
-	[InlineData(0x00010008, true)]
-	[InlineData(0x00090000, true)]
-	[InlineData(0x00150000, true)]
-	[InlineData(0x00180000, true)]
-	[InlineData(0x00180000, true, true)]
+	[InlineData((Int32)JRuntimeVersion.J8)]
+	[InlineData((Int32)JRuntimeVersion.J9)]
+	[InlineData((Int32)JRuntimeVersion.J21)]
+	[InlineData((Int32)JRuntimeVersion.J24)]
+	[InlineData((Int32)JRuntimeVersion.J8, true)]
+	[InlineData((Int32)JRuntimeVersion.J9, true)]
+	[InlineData((Int32)JRuntimeVersion.J21, true)]
+	[InlineData((Int32)JRuntimeVersion.J24, true)]
+	[InlineData((Int32)JRuntimeVersion.J24, true, true)]
 	internal void UtfStringLongLengthTest(Int32 jniVersion, Boolean noInt32 = false, Boolean longLength = false)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		JStringLocalRef stringRef = StringMemoryTests.fixture.Create<JStringLocalRef>();
-		Boolean longLengthCapable = jniVersion >= 0x00180000;
+		Boolean longLengthCapable = jniVersion >= (Int32)JRuntimeVersion.J24;
 		Int64 length = longLength && longLengthCapable ?
 			Random.Shared.NextInt64(Int32.MaxValue + 2L, UInt32.MaxValue) :
 			Random.Shared.Next(16, Int32.MaxValue);

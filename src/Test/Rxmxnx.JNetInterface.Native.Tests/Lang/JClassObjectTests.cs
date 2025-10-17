@@ -491,7 +491,7 @@ public sealed class JClassObjectTests
 		JClassObject jClass = new(env);
 		JLocalObject jLocal = new(jClass, classRef.Value);
 
-		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
+		vm.InitializeThread(Arg.Any<CString?>(), version: Arg.Any<Int32>()).Returns(thread);
 		thread.ReferenceFeature.Unload(Arg.Any<JGlobal>()).Returns(true);
 
 		jClass.SetValue(classRef);

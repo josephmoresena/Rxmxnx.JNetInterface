@@ -28,7 +28,7 @@ public readonly partial struct JThrowableLocalRef : IObjectReferenceType, INativ
 	/// Constructor.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal JThrowableLocalRef(IntPtr value) : this(new JObjectLocalRef(value)) { }
+	private JThrowableLocalRef(IntPtr value) : this(new JObjectLocalRef(value)) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>

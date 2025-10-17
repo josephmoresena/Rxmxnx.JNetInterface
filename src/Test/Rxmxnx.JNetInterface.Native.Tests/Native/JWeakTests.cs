@@ -16,7 +16,7 @@ public sealed class JWeakTests : GlobalObjectTestsBase
 		JWeakRef weakRef0 = GlobalObjectTestsBase.Fixture.Create<JWeakRef>();
 		JWeakRef weakRef1 = GlobalObjectTestsBase.Fixture.Create<JWeakRef>();
 
-		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
+		vm.InitializeThread(Arg.Any<CString?>(), version: Arg.Any<Int32>()).Returns(thread);
 		env.ReferenceFeature.Unload(Arg.Any<JWeak>()).Returns(true);
 		env.IsValidationAvoidable(Arg.Any<JGlobalBase>()).Returns(true);
 
@@ -67,14 +67,14 @@ public sealed class JWeakTests : GlobalObjectTestsBase
 		env.ReferenceFeature.ClearReceivedCalls();
 		jWeak1.Dispose();
 
-		vm.Received(1).InitializeThread(Arg.Any<CString?>());
+		vm.Received(1).InitializeThread(Arg.Any<CString?>(), version: Arg.Any<Int32>());
 		env.ReferenceFeature.Received(1).Unload(jWeak1);
 		Assert.Equal(default, jWeak1.Reference);
 
 		vm.ClearReceivedCalls();
 		env.ReferenceFeature.ClearReceivedCalls();
 		jWeak1.Dispose();
-		vm.Received(1).InitializeThread(Arg.Any<CString?>());
+		vm.Received(1).InitializeThread(Arg.Any<CString?>(), version: Arg.Any<Int32>());
 		env.ReferenceFeature.Received(0).Unload(jWeak1);
 
 		env.ClearReceivedCalls();
@@ -104,7 +104,7 @@ public sealed class JWeakTests : GlobalObjectTestsBase
 		using JClassObject jClassClass = new(env);
 		using JWeak jWeak = new(jClassClass, weakRef);
 
-		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
+		vm.InitializeThread(Arg.Any<CString?>(), version: Arg.Any<Int32>()).Returns(thread);
 		jClassClass.SetAssignableTo<JClassObject>(true);
 		jClassClass.SetAssignableTo<JStringObject>(false);
 
@@ -125,7 +125,7 @@ public sealed class JWeakTests : GlobalObjectTestsBase
 
 		env.JniSecure().Returns(jniSecure.GetValueOrDefault());
 		vm.GetEnvironment().Returns(jniSecure.HasValue ? env : default);
-		vm.WhenForAnyArgs(v => v.InitializeThread(Arg.Any<CString?>())).Do(c =>
+		vm.WhenForAnyArgs(v => v.InitializeThread(Arg.Any<CString?>(), version: Arg.Any<Int32>())).Do(c =>
 		{
 			if (!c[0]!.ToString()!.StartsWith("CheckAssignability-")) return;
 			if (!jniSecure.GetValueOrDefault())
@@ -136,7 +136,7 @@ public sealed class JWeakTests : GlobalObjectTestsBase
 		Assert.False(jWeak.InstanceOf<JArrayObject<JLocalObject>>());
 		vm.Received(1).GetEnvironment();
 		env.Received(jniSecure.HasValue ? 1 : 0).JniSecure();
-		vm.Received(1).InitializeThread(Arg.Any<CString?>());
+		vm.Received(1).InitializeThread(Arg.Any<CString?>(), version: Arg.Any<Int32>());
 		env.ClassFeature.Received(1).IsInstanceOf<JArrayObject<JLocalObject>>(jWeak);
 	}
 
@@ -153,7 +153,7 @@ public sealed class JWeakTests : GlobalObjectTestsBase
 		using JClassObject jClassClass = new(env);
 		using JWeak jWeak = new(jClassClass, weakRef);
 
-		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
+		vm.InitializeThread(Arg.Any<CString?>(), version: Arg.Any<Int32>()).Returns(thread);
 		env.ReferenceFeature.GetSynchronizer(Arg.Any<JWeak>()).Returns(synchronizer);
 
 		if (isDefault)

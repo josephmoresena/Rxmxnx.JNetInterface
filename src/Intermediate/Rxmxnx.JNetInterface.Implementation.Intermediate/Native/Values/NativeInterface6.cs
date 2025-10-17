@@ -14,7 +14,7 @@ namespace Rxmxnx.JNetInterface.Native.Values;
 internal readonly unsafe struct NativeInterface6 : INativeInterface<NativeInterface6>
 {
 	/// <inheritdoc/>
-	public static Int32 RequiredVersion => 0x00010006;
+	public static Int32 RequiredVersion => (Int32)JRuntimeVersion.J6;
 
 	/// <summary>
 	/// Function set for Windows Operating System.

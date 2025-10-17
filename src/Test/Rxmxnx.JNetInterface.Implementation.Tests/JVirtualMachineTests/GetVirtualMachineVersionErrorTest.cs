@@ -3,14 +3,14 @@ namespace Rxmxnx.JNetInterface.Tests;
 public partial class JVirtualMachineTests
 {
 	[Theory]
-	[InlineData(0x00010001)]
-	[InlineData(0x00010002)]
-	[InlineData(0x00010003)]
-	[InlineData(0x00010004)]
-	[InlineData(0x00010005)]
+	[InlineData((Int32)JRuntimeVersion.SEd1)]
+	[InlineData((Int32)JRuntimeVersion.SEd2)]
+	[InlineData((Int32)JRuntimeVersion.SEd3)]
+	[InlineData((Int32)JRuntimeVersion.SEd4)]
+	[InlineData((Int32)JRuntimeVersion.J5)]
 	internal void GetVirtualMachineVersionErrorTest(Int32 jniVersion)
 	{
-		Boolean vmInitialized = jniVersion >= 0x00010002;
+		Boolean vmInitialized = jniVersion >= (Int32)JRuntimeVersion.SEd2;
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		try
 		{
@@ -26,8 +26,10 @@ public partial class JVirtualMachineTests
 				Exception ex =
 					Assert.Throws<JavaVersionException>(() => JVirtualMachine.GetVirtualMachine(
 						                                    proxyEnv.VirtualMachine.Reference));
-				Assert.Equal(IMessageResource.GetInstance().InvalidCallVersion(jniVersion, "FindClass", 0x00010002),
-				             ex.Message);
+				Assert.Equal(
+					IMessageResource.GetInstance()
+					                .InvalidCallVersion(jniVersion, "FindClass", (Int32)JRuntimeVersion.SEd2),
+					ex.Message);
 			}
 
 			proxyEnv.VirtualMachine.Received(1).GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>());

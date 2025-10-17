@@ -55,7 +55,7 @@ public abstract partial class JArrayTypeMetadata
 		=> JArrayTypeMetadata.metadataCache.TryGetValue(elementSignature.ToHexString(),
 		                                                out JArrayTypeMetadata? result) ?
 			result :
-			JArrayTypeMetadata.TryGetArrayArrayMetadataWithReflection(elementSignature, typeofElement);
+			JArrayTypeMetadata.TryGetArrayArrayMetadataWithReflection(typeofElement);
 	/// <summary>
 	/// Retrieves array deep.
 	/// </summary>
@@ -110,13 +110,11 @@ public abstract partial class JArrayTypeMetadata
 	/// Tries to retrieve metadata for the array of arrays of <paramref name="typeofElement"/>.
 	/// </summary>
 	/// <param name="typeofElement">Type of array element.</param>
-	/// <param name="elementSignature">Element signature.</param>
 	/// <returns>A <see cref="JArrayTypeMetadata"/> for the array of arrays of <paramref name="typeofElement"/>.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	private static JArrayTypeMetadata? TryGetArrayArrayMetadataWithReflection(CString elementSignature,
-		Type typeofElement)
+	private static JArrayTypeMetadata? TryGetArrayArrayMetadataWithReflection(Type typeofElement)
 	{
 		if (!IVirtualMachine.JaggedArrayAutoGenerationEnabled) return default;
 		try

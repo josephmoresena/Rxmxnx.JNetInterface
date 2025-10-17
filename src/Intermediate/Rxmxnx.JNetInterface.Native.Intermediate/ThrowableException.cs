@@ -16,7 +16,8 @@ public abstract partial class ThrowableException : JniException, IThrowableExcep
 	/// <summary>
 	/// Throwable reference.
 	/// </summary>
-	public JThrowableLocalRef ThrowableRef => this.GlobalThrowable?.To<JThrowableLocalRef>() ?? default;
+	public JThrowableLocalRef ThrowableRef
+		=> this.GlobalThrowable is JReferenceObject obj ? obj.To<JThrowableLocalRef>() : default;
 
 	/// <summary>
 	/// Global throwable instance.

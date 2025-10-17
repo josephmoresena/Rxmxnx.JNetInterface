@@ -10,7 +10,7 @@ public partial class JEnumObject
 		/// <summary>
 		/// Empty field list.
 		/// </summary>
-		public static readonly FieldList Empty = new();
+		private static readonly FieldList empty = new();
 
 		/// <inheritdoc/>
 		public String PropertyName => nameof(JEnumTypeMetadata.Fields);
@@ -69,7 +69,7 @@ public partial class JEnumObject
 		{
 			if (IVirtualMachine.MetadataValidationEnabled)
 				NativeValidationUtilities.ThrowIfInvalidList(enumTypeName, this);
-			return this.Count != 0 ? this : FieldList.Empty;
+			return this.Count != 0 ? this : FieldList.empty;
 		}
 
 		/// <summary>

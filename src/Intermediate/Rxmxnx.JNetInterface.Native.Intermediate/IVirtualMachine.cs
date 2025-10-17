@@ -8,7 +8,7 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	/// <summary>
 	/// Minimum virtual machine version required for any JNI thread.
 	/// </summary>
-	public const Int32 MinimalVersion = 0x00010006;
+	public const Int32 MinimalVersion = (Int32)JRuntimeVersion.J6;
 
 	/// <summary>
 	/// Capacity for thread initialization.
@@ -136,6 +136,6 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	internal IThread CreateThread(ThreadPurpose purpose)
 	{
 		ThreadCreationArgs args = ThreadCreationArgs.Create(purpose);
-		return this.InitializeThread(args.Name, args.ThreadGroup);
+		return this.InitializeThread(args.Name, args.ThreadGroup, (Int32)JRuntimeVersion.SEd2);
 	}
 }

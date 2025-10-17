@@ -62,19 +62,17 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 	}
 
 	[SkippableTheory]
-	[InlineData(0x00010001)]
-	[InlineData(0x00010002)]
-	[InlineData(0x00010003)]
-	[InlineData(0x00010004)]
-	[InlineData(0x00010005)]
-	[InlineData(0x00010006)]
-	[InlineData(0x00010008)]
-	[InlineData(0x00090000)]
-	[InlineData(0x000a0000)]
-	[InlineData(0x00130000)]
-	[InlineData(0x00140000)]
-	[InlineData(0x00150000)]
-	[InlineData(0x00180000)]
+	[InlineData((Int32)JRuntimeVersion.SEd1)]
+	[InlineData((Int32)JRuntimeVersion.SEd2)]
+	[InlineData((Int32)JRuntimeVersion.SEd4)]
+	[InlineData((Int32)JRuntimeVersion.J6)]
+	[InlineData((Int32)JRuntimeVersion.J8)]
+	[InlineData((Int32)JRuntimeVersion.J9)]
+	[InlineData((Int32)JRuntimeVersion.J10)]
+	[InlineData((Int32)JRuntimeVersion.J19)]
+	[InlineData((Int32)JRuntimeVersion.J20)]
+	[InlineData((Int32)JRuntimeVersion.J21)]
+	[InlineData((Int32)JRuntimeVersion.J24)]
 	internal void GetLatestSupportedVersionTest(Int32 jniVersionTest)
 	{
 		JVirtualMachineLibraryTests.nativeException = default;
@@ -97,7 +95,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 			reset();
 			arrangeInvocation(getDefaultVirtualMachineInitArgs.GetUnsafeFuncPtr(), default, default);
 
-			if (JVirtualMachineLibraryTests.jniVersion < 0x00010006)
+			if (JVirtualMachineLibraryTests.jniVersion < (Int32)JRuntimeVersion.SEd2)
 				Assert.Throws<JavaVersionException>(() => library.GetLatestSupportedVersion());
 			else
 				Assert.Equal(JVirtualMachineLibraryTests.jniVersion, library.GetLatestSupportedVersion());
@@ -106,14 +104,16 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 				throw new AggregateException(JVirtualMachineLibraryTests.nativeException);
 			Assert.Equal(JVirtualMachineLibraryTests.jniVersion switch
 			{
-				0x00010006 => 2,
-				0x00010008 => 3,
-				0x00090000 => 4,
-				0x000a0000 => 5,
-				0x00130000 => 6,
-				0x00140000 => 7,
-				0x00150000 => 8,
-				0x00180000 => 8,
+				(Int32)JRuntimeVersion.SEd2 => 2,
+				(Int32)JRuntimeVersion.SEd4 => 3,
+				(Int32)JRuntimeVersion.J6 => 4,
+				(Int32)JRuntimeVersion.J8 => 5,
+				(Int32)JRuntimeVersion.J9 => 6,
+				(Int32)JRuntimeVersion.J10 => 7,
+				(Int32)JRuntimeVersion.J19 => 8,
+				(Int32)JRuntimeVersion.J20 => 9,
+				(Int32)JRuntimeVersion.J21 => 10,
+				(Int32)JRuntimeVersion.J24 => 10,
 				_ => 1,
 			}, JVirtualMachineLibraryTests.count);
 		}
@@ -143,7 +143,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 		delegate* unmanaged<FuncPtr<GetDefaultVirtualMachineInitArgsDelegate>, FuncPtr<CreateVirtualMachineDelegate>,
 			FuncPtr<GetCreatedJavaVMsDelegate>, void> arrangeInvocation =
 				JVirtualMachineLibraryTests.GetProxyMethods(library, out delegate* unmanaged<void> reset);
-		JVirtualMachineLibraryTests.args = new(0x00010006)
+		JVirtualMachineLibraryTests.args = new((Int32)JRuntimeVersion.J6)
 		{
 			Options = JVirtualMachineLibraryTests.CreateOptionsSequence(),
 			IgnoreUnrecognized = JVirtualMachineLibraryTests.fixture.Create<Boolean>(),
@@ -191,45 +191,45 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 	}
 
 	[SkippableTheory]
-	[InlineData(0x00010001)]
-	[InlineData(0x00010002)]
-	[InlineData(0x00010003)]
-	[InlineData(0x00010004)]
-	[InlineData(0x00010005)]
-	[InlineData(0x00010006)]
-	[InlineData(0x00010008)]
-	[InlineData(0x00090000)]
-	[InlineData(0x000a0000)]
-	[InlineData(0x00130000)]
-	[InlineData(0x00140000)]
-	[InlineData(0x00150000)]
-	[InlineData(0x00180000)]
-	[InlineData(0x00010001, JResult.Error)]
-	[InlineData(0x00010002, JResult.Error)]
-	[InlineData(0x00010003, JResult.Error)]
-	[InlineData(0x00010004, JResult.Error)]
-	[InlineData(0x00010005, JResult.Error)]
-	[InlineData(0x00010006, JResult.Error)]
-	[InlineData(0x00010008, JResult.Error)]
-	[InlineData(0x00090000, JResult.Error)]
-	[InlineData(0x000a0000, JResult.Error)]
-	[InlineData(0x00130000, JResult.Error)]
-	[InlineData(0x00140000, JResult.Error)]
-	[InlineData(0x00150000, JResult.Error)]
-	[InlineData(0x00180000, JResult.Error)]
-	[InlineData(0x00010001, JResult.Ok, true)]
-	[InlineData(0x00010002, JResult.Ok, true)]
-	[InlineData(0x00010003, JResult.Ok, true)]
-	[InlineData(0x00010004, JResult.Ok, true)]
-	[InlineData(0x00010005, JResult.Ok, true)]
-	[InlineData(0x00010006, JResult.Ok, true)]
-	[InlineData(0x00010008, JResult.Ok, true)]
-	[InlineData(0x00090000, JResult.Ok, true)]
-	[InlineData(0x000a0000, JResult.Ok, true)]
-	[InlineData(0x00130000, JResult.Ok, true)]
-	[InlineData(0x00140000, JResult.Ok, true)]
-	[InlineData(0x00150000, JResult.Ok, true)]
-	[InlineData(0x00180000, JResult.Ok, true)]
+	[InlineData((Int32)JRuntimeVersion.SEd1)]
+	[InlineData((Int32)JRuntimeVersion.SEd2)]
+	[InlineData((Int32)JRuntimeVersion.SEd3)]
+	[InlineData((Int32)JRuntimeVersion.SEd4)]
+	[InlineData((Int32)JRuntimeVersion.J5)]
+	[InlineData((Int32)JRuntimeVersion.J6)]
+	[InlineData((Int32)JRuntimeVersion.J8)]
+	[InlineData((Int32)JRuntimeVersion.J9)]
+	[InlineData((Int32)JRuntimeVersion.J10)]
+	[InlineData((Int32)JRuntimeVersion.J19)]
+	[InlineData((Int32)JRuntimeVersion.J20)]
+	[InlineData((Int32)JRuntimeVersion.J21)]
+	[InlineData((Int32)JRuntimeVersion.J24)]
+	[InlineData((Int32)JRuntimeVersion.SEd1, JResult.Error)]
+	[InlineData((Int32)JRuntimeVersion.SEd2, JResult.Error)]
+	[InlineData((Int32)JRuntimeVersion.SEd3, JResult.Error)]
+	[InlineData((Int32)JRuntimeVersion.SEd4, JResult.Error)]
+	[InlineData((Int32)JRuntimeVersion.J5, JResult.Error)]
+	[InlineData((Int32)JRuntimeVersion.J6, JResult.Error)]
+	[InlineData((Int32)JRuntimeVersion.J8, JResult.Error)]
+	[InlineData((Int32)JRuntimeVersion.J9, JResult.Error)]
+	[InlineData((Int32)JRuntimeVersion.J10, JResult.Error)]
+	[InlineData((Int32)JRuntimeVersion.J19, JResult.Error)]
+	[InlineData((Int32)JRuntimeVersion.J20, JResult.Error)]
+	[InlineData((Int32)JRuntimeVersion.J21, JResult.Error)]
+	[InlineData((Int32)JRuntimeVersion.J24, JResult.Error)]
+	[InlineData((Int32)JRuntimeVersion.SEd1, JResult.Ok, true)]
+	[InlineData((Int32)JRuntimeVersion.SEd2, JResult.Ok, true)]
+	[InlineData((Int32)JRuntimeVersion.SEd3, JResult.Ok, true)]
+	[InlineData((Int32)JRuntimeVersion.SEd4, JResult.Ok, true)]
+	[InlineData((Int32)JRuntimeVersion.J5, JResult.Ok, true)]
+	[InlineData((Int32)JRuntimeVersion.J6, JResult.Ok, true)]
+	[InlineData((Int32)JRuntimeVersion.J8, JResult.Ok, true)]
+	[InlineData((Int32)JRuntimeVersion.J9, JResult.Ok, true)]
+	[InlineData((Int32)JRuntimeVersion.J10, JResult.Ok, true)]
+	[InlineData((Int32)JRuntimeVersion.J19, JResult.Ok, true)]
+	[InlineData((Int32)JRuntimeVersion.J20, JResult.Ok, true)]
+	[InlineData((Int32)JRuntimeVersion.J21, JResult.Ok, true)]
+	[InlineData((Int32)JRuntimeVersion.J24, JResult.Ok, true)]
 	internal void GetDefaultArgumentTest(Int32 jniVersionTest, JResult resultTest = JResult.Ok,
 		Boolean useOptions = false)
 	{
@@ -277,8 +277,8 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 				throw new AggregateException(JVirtualMachineLibraryTests.nativeException);
 
 			Assert.Equal(
-				JVirtualMachineLibraryTests.jniVersion < 0x00010006 ?
-					0x00010006 :
+				JVirtualMachineLibraryTests.jniVersion < (Int32)JRuntimeVersion.SEd2 ?
+					(Int32)JRuntimeVersion.SEd2 :
 					JVirtualMachineLibraryTests.jniVersion, defaultValue.Version);
 			Assert.Equal(JVirtualMachineLibraryTests.args.Options.NonEmptyCount, defaultValue.Options.Count);
 			Assert.Equal(JVirtualMachineLibraryTests.args.Options.ToString(), defaultValue.Options.ToString());

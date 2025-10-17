@@ -34,11 +34,11 @@ public readonly partial struct JWeakRef : IObjectGlobalReferenceType, INativePoi
 	/// Constructor.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal JWeakRef(IntPtr value) : this(new JObjectLocalRef(value)) { }
+	private JWeakRef(IntPtr value) : this(new JObjectLocalRef(value)) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	internal JWeakRef(JObjectLocalRef value) => this._value = value;
+	private JWeakRef(JObjectLocalRef value) => this._value = value;
 
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this._value.GetHashCode();
