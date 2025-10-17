@@ -143,11 +143,14 @@ static void Show(JComponentObject component)
 }
 static JFrameObjectSwing CreateFrame(IEnvironment env, String title)
 {
-	using JClassObject graphicsEnv = JClassObject.GetClass(env, "java/awt/GraphicsEnvironment"u8);
-	JFunctionDefinition<JBoolean>.Parameterless isHeadlessDef = new("isHeadless"u8);
+	if (env.Version >= (Int32)JRuntimeVersion.SEd4)
+	{
+		using JClassObject graphicsEnv = JClassObject.GetClass(env, "java/awt/GraphicsEnvironment"u8);
+		JFunctionDefinition<JBoolean>.Parameterless isHeadlessDef = new("isHeadless"u8);
 
-	if (isHeadlessDef.StaticInvoke(graphicsEnv).Value)
-		throw new InvalidOperationException("Java is running in Headless mode.");
+		if (isHeadlessDef.StaticInvoke(graphicsEnv).Value)
+			throw new InvalidOperationException("Java is running in Headless mode.");
+	}
 
 	JFrameObjectSwing result = JFrameObjectSwing.Create(env, title);
 
