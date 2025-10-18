@@ -10,6 +10,7 @@ using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
 using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Swing;
+using Rxmxnx.JNetInterface.Util;
 using Rxmxnx.JNetInterface.Util.Concurrent;
 using Rxmxnx.PInvoke;
 
@@ -20,6 +21,7 @@ JVirtualMachine.SetMainClass<JContainerObject>();
 JVirtualMachine.SetMainClass<JAbstractButtonObject>();
 JVirtualMachine.SetMainClass<JCountDownLatchObject>();
 JVirtualMachine.SetMainClass<JToolkitObject>();
+JVirtualMachine.SetMainClass<JEventObject>();
 JVirtualMachine.SetMainClass<JAwtEventObject>();
 
 JVirtualMachineLibrary? jvmLib = default;

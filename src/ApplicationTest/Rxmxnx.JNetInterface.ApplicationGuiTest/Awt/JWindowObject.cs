@@ -1,7 +1,6 @@
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
-using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
 
@@ -18,7 +17,6 @@ public class JWindowObject : JContainerObject, IClassType<JWindowObject>
 #endif
 	);
 	private static readonly JMethodDefinition.Parameterless packDef = new("pack"u8);
-	private static readonly JFunctionDefinition<JBoolean>.Parameterless isVisibleDef = new("isVisible"u8);
 	private static readonly IndeterminateCall setIconImageDef = IndeterminateCall.CreateMethodDefinition(
 		"setIconImage"u8,
 #if !NET9_0_OR_GREATER
@@ -48,6 +46,7 @@ public class JWindowObject : JContainerObject, IClassType<JWindowObject>
 	public void SetRelativeTo(JComponentObject? comp = default)
 	{
 		IEnvironment env = this.Environment;
+		if (env.Version < (Int32)JRuntimeVersion.SEd4) return;
 		using JClassObject jClass = JClassObject.GetClass<JWindowObject>(env);
 		JWindowObject.setLocationRelativeToDef.MethodCall(this, jClass, false,
 #if !NET9_0_OR_GREATER
@@ -76,12 +75,6 @@ public class JWindowObject : JContainerObject, IClassType<JWindowObject>
 		IEnvironment env = this.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JWindowObject>(env);
 		JWindowObject.packDef.Invoke(this, jClass);
-	}
-	public Boolean IsVisible()
-	{
-		IEnvironment env = this.Environment;
-		using JClassObject jClass = JClassObject.GetClass<JWindowObject>(env);
-		return JWindowObject.isVisibleDef.Invoke(this, jClass).Value;
 	}
 
 	public static void SetApplicationIcon(JImageObject image)

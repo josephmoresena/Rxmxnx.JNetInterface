@@ -1,5 +1,4 @@
 using Rxmxnx.JNetInterface.Lang;
-using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
 using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
@@ -25,7 +24,6 @@ public class JAwtEventObject : JEventObject, IClassType<JAwtEventObject>
 	}
 
 	private static readonly JFunctionDefinition<JInt>.Parameterless getIdDef = new("getID"u8);
-	private static readonly JFunctionDefinition<JLocalObject>.Parameterless getSourceDef = new("getSource"u8);
 	private static readonly JClassTypeMetadata<JAwtEventObject> typeMetadata = TypeMetadataBuilder<JEventObject>
 	                                                                           .Create<JAwtEventObject>(
 		                                                                           "java/awt/AWTEvent"u8,
@@ -41,11 +39,6 @@ public class JAwtEventObject : JEventObject, IClassType<JAwtEventObject>
 	{
 		using JClassObject jClass = JClassObject.GetClass<JAwtEventObject>(this.Environment);
 		return (EventId)JAwtEventObject.getIdDef.Invoke(this, jClass).Value;
-	}
-	public JLocalObject? GetSource()
-	{
-		using JClassObject jClass = JClassObject.GetClass<JAwtEventObject>(this.Environment);
-		return JAwtEventObject.getSourceDef.Invoke(this, jClass);
 	}
 
 	static JAwtEventObject IClassType<JAwtEventObject>.Create(IReferenceType.ClassInitializer initializer)
