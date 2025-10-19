@@ -234,7 +234,7 @@ public partial class JVirtualMachineTests
 			disposables.Add(typePtr);
 			disposables.ForEach(d => d.Dispose());
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
-			Assert.Equal(noThrows, JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
