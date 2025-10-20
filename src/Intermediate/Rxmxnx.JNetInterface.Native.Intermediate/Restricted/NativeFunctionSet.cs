@@ -193,4 +193,16 @@ public abstract partial class NativeFunctionSet
 	/// <returns>A <see cref="JChar"/> value.</returns>
 	public abstract JChar GetValue(JCharacterObject jCharacterObject);
 #endif
+	/// <summary>
+	/// Retrieves the system property indicated by <paramref name="jString"/>.
+	/// </summary>
+	/// <param name="jString">A <see cref="JStringObject"/> instance.</param>
+	/// <returns>A <see cref="JStringObject"/> value.</returns>
+	public abstract JStringObject? GetProperty(JStringObject jString);
+	/// <summary>
+	/// Sets the system property indicated by the specified key.
+	/// </summary>
+	/// <param name="jStringKey">A <see cref="JStringObject"/> instance.</param>
+	/// <param name="jStringValue">A <see cref="JStringObject"/> instance.</param>
+	public abstract void SetProperty(JStringObject jStringKey, JStringObject? jStringValue);
 }

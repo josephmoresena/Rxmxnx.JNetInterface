@@ -168,22 +168,14 @@ static JFrameObjectSwing CreateFrame(IEnvironment env, String title)
 static JCountDownLatchObject? GetCountDownAwait(JWindowObject window)
 {
 	IEnvironment env = window.Environment;
-	if (env.Version < (Int32)JRuntimeVersion.SEd4) return default;
-	// TODO: Avoid throw exception on JRE 1.5
-	try
-	{
-		JCountDownLatchObject result = JCountDownLatchObject.Create(window.Environment, 1);
-		using JToolkitObject toolkit = JToolkitObject.GetDefaultToolkit(env);
-		using JAwtEventListenerObject listener =
-			JNativeCallback.CreateAwtEventListener(env, new CloseCountDownState(window, result));
-		toolkit.AddEventListener(listener, EventMask.Window);
-		return result;
-	}
-	catch (ThrowableException)
-	{
-		env.PendingException = default;
-		return default;
-	}
+	if (env.VirtualMachine.Version < JRuntimeVersion.J5) return default;
+
+	JCountDownLatchObject result = JCountDownLatchObject.Create(window.Environment, 1);
+	using JToolkitObject toolkit = JToolkitObject.GetDefaultToolkit(env);
+	using JAwtEventListenerObject listener =
+		JNativeCallback.CreateAwtEventListener(env, new CloseCountDownState(window, result));
+	toolkit.AddEventListener(listener, EventMask.Window);
+	return result;
 }
 static JLabelObject CreateFrameLabel(IEnvironment env)
 {

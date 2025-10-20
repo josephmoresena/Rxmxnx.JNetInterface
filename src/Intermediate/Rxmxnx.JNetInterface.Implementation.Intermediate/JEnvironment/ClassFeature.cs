@@ -137,7 +137,8 @@ partial class JEnvironment
 				return default; // Primitive classes, Interfaces classes or Object class has no super-class.
 			if (jClass.ClassSignature[0] == CommonNames.ArraySignaturePrefixChar)
 				return this.GetClass<JLocalObject>(); // Super-class of Array classes is Object class.
-			if (MetadataHelper.GetExactMetadata(jClass.Hash)?.BaseMetadata is { } metadata)
+			if (MetadataHelper.GetExactMetadata(jClass.Hash)?.BaseMetadata is { } metadata &&
+			    metadata.Since <= this.VirtualMachine.Version) // Only if super class is compatible with current JRE.
 				return this.GetOrFindClass(metadata); // Well-known class.
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));

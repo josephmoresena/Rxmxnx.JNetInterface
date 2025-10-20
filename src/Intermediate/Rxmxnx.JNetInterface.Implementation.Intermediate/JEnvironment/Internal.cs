@@ -44,6 +44,31 @@ partial class JEnvironment
 		return this.GetMainClassGlobalRef(typeInformation, classRef);
 	}
 	/// <summary>
+	/// Retrieves the current JRE version.
+	/// </summary>
+	/// <param name="systemClassRef"><c>java.lang.System</c> class reference.</param>
+	/// <returns>Current JRE version.</returns>
+	internal JRuntimeVersion GetVersion(JClassLocalRef systemClassRef)
+	{
+		JMethodId getPropertyId = this.GetStaticMethodId(NativeFunctionSetImpl.GetPropertyDefinition, systemClassRef);
+		if (getPropertyId != default)
+		{
+			Decimal jreVersion = this._cache.GetRuntimeVersion(systemClassRef, getPropertyId);
+			switch (jreVersion)
+			{
+				case < 1:
+					break;
+				case < 2:
+					return JRuntimeVersion.SEd0 + (Int32)(10 * (jreVersion - 1.0m));
+				default:
+					return (JRuntimeVersion)((Int32)JRuntimeVersion.SEd0 * jreVersion);
+			}
+		}
+		this._cache.ClearException();
+		// If it was not possible to determine the JRE version, the JNI version is assumed.
+		return (JRuntimeVersion)this.Version;
+	}
+	/// <summary>
 	/// Retrieves a global reference for given class name.
 	/// </summary>
 	/// <param name="classMetadata">Class metadata.</param>

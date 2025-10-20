@@ -9,6 +9,8 @@ namespace Rxmxnx.JNetInterface.Proxies;
 public abstract class VirtualMachineProxy : IVirtualMachine
 {
 	/// <inheritdoc/>
+	public abstract JRuntimeVersion Version { get; }
+	/// <inheritdoc/>
 	public abstract JVirtualMachineRef Reference { get; }
 
 	Boolean IVirtualMachine.NoProxy => false;

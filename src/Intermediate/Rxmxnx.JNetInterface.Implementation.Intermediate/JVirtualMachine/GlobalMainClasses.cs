@@ -97,11 +97,26 @@ public partial class JVirtualMachine
 			GlobalMainClasses.LoadMainClass(env, this.SystemObject, this._systemMetadata);
 			if (env.Version >= (Int32)JRuntimeVersion.SEd4)
 				GlobalMainClasses.LoadMainClass(env, this.StackTraceElementObject, this._stackTraceElementMetadata);
-			this.LoadUserMainClasses(env); // TODO: Check Runtime Version
+			this.LoadUserMainClasses(env);
 			if (MainClasses.PrimitiveMainClassesEnabled)
 				this.LoadPrimitiveMainClasses(env);
 			JTrace.MainClassesLoaded(env.VirtualMachine.Reference, env.Reference);
 			this.GlobalClassCache.RefreshAccess();
+		}
+		/// <summary>
+		/// Retrieves the current JRE version.
+		/// </summary>
+		/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
+		/// <returns>A <see cref="JRuntimeVersion"/> value.</returns>
+		public JRuntimeVersion GetVersion(IVirtualMachine vm)
+		{
+			if (this._version.HasValue) return this._version.Value;
+
+			using IThread thread = vm.CreateThread(ThreadPurpose.GetRuntimeVersion);
+			this._version = thread is not JEnvironment env ?
+				JRuntimeVersion.Undefined :
+				env.GetVersion(this.SystemObject.As<JClassLocalRef>());
+			return this._version.Value;
 		}
 	}
 }

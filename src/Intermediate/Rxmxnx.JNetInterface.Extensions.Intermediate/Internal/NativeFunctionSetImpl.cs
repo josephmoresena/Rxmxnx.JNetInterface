@@ -201,19 +201,17 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		JClassObject fieldClass = env.ClassFeature.FieldObject;
 		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetTypeDefinition, jField, fieldClass)!;
 	}
-
 #if !PACKAGE
 	/// <summary>
 	/// Retrieves the <see cref="JBoolean"/> value of <paramref name="jBooleanObject"/>.
 	/// </summary>
 	/// <param name="jBooleanObject">A <see cref="JBooleanObject"/> instance.</param>
 	/// <returns>A <see cref="JBoolean"/> value.</returns>
-	public static
+	public static JBoolean GetValue(JBooleanObject jBooleanObject)
 #else
 	/// <inheritdoc/>
-	public override
+	public override JBoolean GetValue(JBooleanObject jBooleanObject)
 #endif
-		JBoolean GetValue(JBooleanObject jBooleanObject)
 	{
 		IEnvironment env = jBooleanObject.Environment;
 		JClassObject jClass = env.ClassFeature.BooleanObject;
@@ -225,15 +223,29 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	/// </summary>
 	/// <param name="jCharacterObject">A <see cref="JCharacterObject"/> instance.</param>
 	/// <returns>A <see cref="JChar"/> value.</returns>
-	public static
+	public static JChar GetValue(JCharacterObject jCharacterObject)
 #else
 	/// <inheritdoc/>
-	public override
+	public override JChar GetValue(JCharacterObject jCharacterObject)
 #endif
-		JChar GetValue(JCharacterObject jCharacterObject)
 	{
 		IEnvironment env = jCharacterObject.Environment;
 		JClassObject jClass = env.ClassFeature.CharacterObject;
 		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.CharValueDefinition, jCharacterObject, jClass);
+	}
+	/// <inheritdoc/>
+	public override JStringObject? GetProperty(JStringObject jString)
+	{
+		IEnvironment env = jString.Environment;
+		using JClassObject jClass = JClassObject.GetClass<JSystemObject>(env);
+		return JFunctionDefinition.StaticInvoke(NativeFunctionSetImpl.GetPropertyDefinition, jClass, [jString,]);
+	}
+	/// <inheritdoc/>
+	public override void SetProperty(JStringObject jStringKey, JStringObject? jStringValue)
+	{
+		IEnvironment env = jStringKey.Environment;
+		using JClassObject jClass = JClassObject.GetClass<JSystemObject>(env);
+		JMethodDefinition.StaticInvoke(NativeFunctionSetImpl.SetPropertyDefinition, jClass,
+		                               [jStringKey, jStringValue,]);
 	}
 }

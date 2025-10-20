@@ -13,6 +13,7 @@ The `IVirtualMachine` interface represents a `JavaVM` instance managed by `Rxmxn
 
 ## Instance Properties & Methods
 
+- **`Version`**: Java runtime version.
 - **`Reference`**: The `JVirtualMachineRef` reference managed by this instance.
 - **`GetEnvironment()`**: Retrieves the JNI environment (`JNIEnv`), equivalent to the JNI `GetEnv` call.
 - **`InitializeThread(CString?, JGlobalBase?, Int32)`**: Attaches the current thread to the JVM (`AttachCurrentThread`).
