@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Rxmxnx.JNetInterface;
 
 #if !PACKAGE
@@ -52,7 +54,7 @@ partial class JEnvironment
 						ReadOnlySpan<Char> chars = new(charsPtr, versionLength);
 						nativeInterface.StringRegionFunctions.Utf16.GetStringRegion(
 							this.Reference, propValueRef, 0, versionLength, charsPtr);
-						if (Decimal.TryParse(chars, default, out Decimal result)) return result;
+						if (Decimal.TryParse(chars, CultureInfo.InvariantCulture, out Decimal result)) return result;
 					}
 				}
 			}
