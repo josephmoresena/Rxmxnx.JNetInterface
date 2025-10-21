@@ -37,7 +37,7 @@ public partial class JVirtualMachineTests
 			{
 				JClassLocalRef classRef = (JClassLocalRef)c[0];
 				Byte* fieldName = (Byte*)((ReadOnlyValPtr<Byte>)c[1]).Pointer;
-				JFieldId? fieldId = proxyEnv.GetPrimitiveWrapperClassTypeField(classRef, fieldName);
+				JFieldId? fieldId = proxyEnv.GetMainStaticFieldId(classRef, fieldName);
 				return fieldId!.Value;
 			});
 			proxyEnv.GetStaticObjectField(Arg.Any<JClassLocalRef>(), Arg.Any<JFieldId>()).Returns(c =>

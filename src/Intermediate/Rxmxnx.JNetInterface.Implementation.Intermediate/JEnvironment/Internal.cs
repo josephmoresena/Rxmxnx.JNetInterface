@@ -47,10 +47,13 @@ partial class JEnvironment
 	/// Retrieves the current JRE version.
 	/// </summary>
 	/// <param name="systemClassRef"><c>java.lang.System</c> class reference.</param>
+	/// <param name="initializing">Indicates whether the current call occurs on VM initializing.</param>
 	/// <returns>Current JRE version.</returns>
-	internal JRuntimeVersion GetVersion(JClassLocalRef systemClassRef)
+	internal JRuntimeVersion GetVersion(JClassLocalRef systemClassRef, Boolean initializing)
 	{
+		if (!initializing) this.CheckJniError();
 		JMethodId getPropertyId = this.GetStaticMethodId(NativeFunctionSetImpl.GetPropertyDefinition, systemClassRef);
+		using LocalFrame? _ = !initializing ? new(this, IVirtualMachine.GetVersionCapacity) : default;
 		if (getPropertyId != default)
 		{
 			Decimal jreVersion = this._cache.GetRuntimeVersion(systemClassRef, getPropertyId);

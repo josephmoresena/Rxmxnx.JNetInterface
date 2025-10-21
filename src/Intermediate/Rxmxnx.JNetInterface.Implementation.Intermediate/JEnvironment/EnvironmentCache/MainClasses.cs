@@ -1,5 +1,3 @@
-using System.Globalization;
-
 namespace Rxmxnx.JNetInterface;
 
 #if !PACKAGE
@@ -47,13 +45,26 @@ partial class JEnvironment
 				if (propValueRef != default)
 				{
 					Int32 versionLength =
+#if !NET8_0_OR_GREATER
 						nativeInterface.StringFunctions.Utf16.GetStringLength(this.Reference, propValueRef);
+#else
+						nativeInterface.StringFunctions.Utf8.GetStringLength(this.Reference, propValueRef);
+#endif
 					if (versionLength > 0)
 					{
-						Char* charsPtr = stackalloc Char[versionLength];
-						ReadOnlySpan<Char> chars = new(charsPtr, versionLength);
-						nativeInterface.StringRegionFunctions.Utf16.GetStringRegion(
-							this.Reference, propValueRef, 0, versionLength, charsPtr);
+#if !NET8_0_OR_GREATER
+						ReadOnlySpan<Char> chars = stackalloc Char[versionLength];
+						fixed (Char* charsPtr = &MemoryMarshal.GetReference(chars))
+							nativeInterface.StringRegionFunctions.Utf16.GetStringRegion(
+								this.Reference, propValueRef, 0, versionLength, charsPtr);
+#else
+						ReadOnlySpan<Byte> chars = stackalloc Byte[versionLength];
+						fixed (Byte* charsPtr = &MemoryMarshal.GetReference(chars))
+						{
+							nativeInterface.StringRegionFunctions.Utf8.GetStringRegion(
+								this.Reference, propValueRef, 0, versionLength, charsPtr);
+						}
+#endif
 						if (Decimal.TryParse(chars, CultureInfo.InvariantCulture, out Decimal result)) return result;
 					}
 				}

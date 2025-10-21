@@ -34,6 +34,10 @@ public partial interface IVirtualMachine
 	/// Capacity GetObjectClass()
 	/// </summary>
 	internal const Int32 GetObjectClassCapacity = 5;
+	/// <summary>
+	/// Capacity System.getProperty("java.specification.version")
+	/// </summary>
+	internal const Int32 GetVersionCapacity = 3;
 
 	/// <summary>
 	/// Indicates whether the current instance is not a proxy.

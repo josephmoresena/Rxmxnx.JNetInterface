@@ -110,7 +110,7 @@ public partial class JVirtualMachine
 		{
 			// The JNI version is checked to avoid check the JRE version.
 			if ((Int32)sinceVersion < env.Version) return true;
-			this._version ??= env.GetVersion(this.SystemObject.As<JClassLocalRef>());
+			this._version ??= env.GetVersion(this.SystemObject.As<JClassLocalRef>(), true);
 			return sinceVersion < this._version;
 		}
 		/// <summary>

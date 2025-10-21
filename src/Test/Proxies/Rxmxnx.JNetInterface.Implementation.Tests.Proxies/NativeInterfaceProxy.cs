@@ -132,7 +132,7 @@ public abstract class NativeInterfaceProxy
 			return this.VirtualMachine.ShortPGlobalRef;
 		return null;
 	}
-	public unsafe JFieldId? GetPrimitiveWrapperClassTypeField(JClassLocalRef classRef, Byte* fieldName)
+	public unsafe JFieldId? GetMainStaticFieldId(JClassLocalRef classRef, Byte* fieldName)
 	{
 		if (!ReferenceHelper.IsTypeField(fieldName)) return default;
 		if (classRef == this.VoidObjectLocalRef || classRef.Value == this.VirtualMachine.VoidGlobalRef.Value)
@@ -189,11 +189,13 @@ public abstract class NativeInterfaceProxy
 			if (ReferenceHelper.IsIsNativeMethodMethod(methodName))
 				return this.VirtualMachine.StackTraceElementIsNativeMethodMethodId;
 		}
-		else if (classRef.Value == this.VirtualMachine.SystemGlobalRef.Value || classRef == this.SystemLocalRef)
-		{
+		return default;
+	}
+	public unsafe JMethodId? GetMainStaticMethodId(JClassLocalRef classRef, Byte* methodName)
+	{
+		if (classRef.Value == this.VirtualMachine.SystemGlobalRef.Value || classRef == this.SystemLocalRef)
 			if (ReferenceHelper.IsGetPropertyMethod(methodName))
 				return this.VirtualMachine.SystemGetPropertyMethodId;
-		}
 		return default;
 	}
 	public JClassLocalRef? GetPrimitiveClass(JClassLocalRef classRef, JFieldId fieldId)

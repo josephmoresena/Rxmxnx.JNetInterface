@@ -111,11 +111,10 @@ public partial class JVirtualMachine
 		public JRuntimeVersion GetVersion(IVirtualMachine vm)
 		{
 			if (this._version.HasValue) return this._version.Value;
-
 			using IThread thread = vm.CreateThread(ThreadPurpose.GetRuntimeVersion);
 			this._version = thread is not JEnvironment env ?
 				JRuntimeVersion.Undefined :
-				env.GetVersion(this.SystemObject.As<JClassLocalRef>());
+				env.GetVersion(this.SystemObject.As<JClassLocalRef>(), false);
 			return this._version.Value;
 		}
 	}
