@@ -54,7 +54,8 @@ static void InitGui(JVirtualMachineLibrary jvmLib)
 	using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out IEnvironment env);
 	try
 	{
-		using JFrameObjectSwing frame = CreateFrame(env, $"Hello .NET - JNI 0x{env.Version:x8}");
+		using JFrameObjectSwing frame =
+			CreateFrame(env, $"Hello .NET - JNI 0x{env.Version:x8} - JRE {env.VirtualMachine.Version}");
 		using JCountDownLatchObject? countDownLatch = GetCountDownAwait(frame);
 		using (JLabelObject frameContent = CreateFrameLabel(env))
 		{

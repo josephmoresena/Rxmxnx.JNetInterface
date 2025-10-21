@@ -88,7 +88,10 @@ public static class Program
 #if NET8_0
 				if (IVirtualMachine.TypeMetadataToStringEnabled) JRuntimeInfo.PrintVirtualMachineInfo(env, vm, jvmLib);
 #endif
-				Console.WriteLine($"==== JNI 0x{env.Version:x8} ====");
+				String jreVersion = !AotInfo.IsReflectionDisabled ?
+					$"{env.VirtualMachine.Version}" :
+					$"0x{env.VirtualMachine.Version:x8}";
+				Console.WriteLine($"==== JNI 0x{env.Version:x8} - JRE {jreVersion} ====");
 
 				IManagedCallback.Default managedInstance = new(vm, Console.Out);
 				using JClassObject helloJniClass = JHelloDotnetObject.LoadClass(env, classByteCode, managedInstance);
