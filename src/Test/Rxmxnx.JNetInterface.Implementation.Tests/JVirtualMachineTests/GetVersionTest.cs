@@ -95,7 +95,7 @@ public partial class JVirtualMachineTests
 		proxyEnv.NewStringUtf(Arg.Any<ReadOnlyValPtr<Byte>>()).Returns(stringRef);
 		try
 		{
-			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+			JEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
 			Int32 jVersion = (Int32)env.VirtualMachine.Version;
 			Assert.Equal(invalidResult ? env.Version : (Int32)version, jVersion);
 			Assert.Equal(invalidResult ? (JRuntimeVersion)env.Version : version, env.VirtualMachine.Version);
