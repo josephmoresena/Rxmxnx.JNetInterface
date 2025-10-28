@@ -42,7 +42,7 @@ internal unsafe struct ArrayFillState<TElement>
 	private Int32 _count;
 #endif
 	/// <summary>
-	/// Delegate for <see cref="JLocalObject"/> instantiation from <see cref="TElement"/> value.
+	/// Delegate for <see cref="JLocalObject"/> instantiation from <typeparamref name="TElement"/> value.
 	/// </summary>
 	public Func<IEnvironment, TElement, JLocalObject?>? CreateInstance { get; init; }
 

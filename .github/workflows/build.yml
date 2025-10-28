@@ -107,11 +107,11 @@ jobs:
           rm -rf .sonarqube
           mv ./ApplicationTest src/ApplicationTest
 
-      - name: Init FreeBSD 13.5 VM
+      - name: Init FreeBSD 14.3 VM
         id: vm
-        uses: vmactions/freebsd-vm@v1.2.3
+        uses: vmactions/freebsd-vm@v1.2.4
         with:
-          release: "13.5"
+          release: "14.3"
           usesh: true
           sync: nfs
           prepare: |
@@ -120,7 +120,7 @@ jobs:
           run: |
             dotnet dev-certs https --trust
 
-      - name: Run Tests (FreeBSD 13.5)
+      - name: Run Tests (FreeBSD 14.3)
         shell: freebsd {0}
         run: |
           cd $GITHUB_WORKSPACE;
@@ -135,7 +135,7 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE;
           cd ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest;
-          dotnet publish -r freebsd.13-x64;
+          dotnet publish -r freebsd.14-x64;
 
       - name: Run launcher (compile) (FreeBSD)
         shell: freebsd {0}
@@ -152,7 +152,7 @@ jobs:
       - name: Create Native Artifact (FreeBSD)
         uses: actions/upload-artifact@v4
         with:
-          name: FreeBSD.13-Artifact
+          name: FreeBSD.14-Artifact
           path: |
             ./artifacts/*.class
             ./artifacts/*.jar
