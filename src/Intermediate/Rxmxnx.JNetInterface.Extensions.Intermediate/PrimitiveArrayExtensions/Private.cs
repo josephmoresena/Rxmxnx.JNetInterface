@@ -64,7 +64,7 @@ public static partial class PrimitiveArrayExtensions
 			{
 				return env.WithFrame<JArrayObject, ArrayFillMap<TPrimitive>>(
 					frameSize,
-					new(new(dimensionPtr, memoryPtr, values.Length))
+					new(new(dimensionPtr, lengths.Length, memoryPtr, values.Length))
 					{
 						ArrayTypeMetadata = arrayTypeMetadata, Environment = env,
 					}, PrimitiveArrayExtensions.CreateInitialArray);

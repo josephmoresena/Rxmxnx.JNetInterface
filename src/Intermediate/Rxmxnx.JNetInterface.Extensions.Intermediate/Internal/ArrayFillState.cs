@@ -4,13 +4,13 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// State structure for multidimensional array fill.
 /// </summary>
 /// <typeparam name="TElement">The type of array element.</typeparam>
-#if NET9_0_OR_GREATER
-internal ref struct ArrayFillState<TElement>(ReadOnlySpan<Int32> dimensions, ReadOnlySpan<TElement> values)
-#else
-#if !NET9_0_OR_GREATER && !PACKAGE
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
+#if NET9_0_OR_GREATER
+internal unsafe ref struct ArrayFillState<TElement>(ReadOnlySpan<Int32> dimensions, ReadOnlySpan<TElement> values)
+#else
 internal unsafe struct ArrayFillState<TElement>
 #endif
 {
@@ -29,6 +29,10 @@ internal unsafe struct ArrayFillState<TElement>
 	/// </summary>
 	private readonly ReadOnlyValPtr<Int32> _dimensionPtr;
 	/// <summary>
+	/// Number of dimensions.
+	/// </summary>
+	private readonly Int32 _dimensionCount;
+	/// <summary>
 	/// Pointer to data memory.
 	/// </summary>
 	private ReadOnlyValPtr<TElement> _memoryPtr;
@@ -42,21 +46,28 @@ internal unsafe struct ArrayFillState<TElement>
 	/// </summary>
 	public Func<IEnvironment, TElement, JLocalObject?>? CreateInstance { get; init; }
 
-#if !NET9_0_OR_GREATER
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="dimensionPtr">Pointer to dimensions.</param>
+	/// <param name="dimensions">Number of dimensions.</param>
 	/// <param name="memoryPtr">Pointer to data memory.</param>
 	/// <param name="count">Number of elements in memory.</param>
+#if NET9_0_OR_GREATER && !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 #pragma warning disable CS8500
-	public ArrayFillState(Int32* dimensionPtr, TElement* memoryPtr, Int32 count)
+	public ArrayFillState(Int32* dimensionPtr, Int32 dimensions, TElement* memoryPtr, Int32 count)
 #pragma warning restore CS8500
+#if !NET9_0_OR_GREATER
 	{
 		this._dimensionPtr = dimensionPtr;
+		this._dimensionCount = dimensions;
 		this._count = count;
 		this._memoryPtr = memoryPtr;
 	}
+#else
+		: this(new(dimensionPtr, dimensions), new(memoryPtr, count)) { }
 #endif
 	/// <summary>
 	/// Retrieves the primitive span for the current iteration.
@@ -90,8 +101,8 @@ internal unsafe struct ArrayFillState<TElement>
 	/// <inheritdoc cref="Array.GetLength(Int32)"/>
 	public Int32 GetLength(Int32 dimension)
 #if NET9_0_OR_GREATER
-		=> this._dimensions[dimension];
+		=> this._dimensions.Length > dimension ? this._dimensions[dimension] : -1;
 #else
-		=> (this._dimensionPtr + dimension).Reference;
+		=> this._dimensionCount > dimension ? (this._dimensionPtr + dimension).Reference : -1;
 #endif
 }
