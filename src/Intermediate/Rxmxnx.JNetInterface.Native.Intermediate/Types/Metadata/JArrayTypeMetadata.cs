@@ -36,6 +36,14 @@ public abstract partial class JArrayTypeMetadata : JClassTypeMetadata
 	}
 
 	/// <summary>
+	/// Creates a <see cref="JArrayObject"/> instance for current type.
+	/// </summary>
+	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+	/// <param name="length">Array length.</param>
+	/// <returns>A <see cref="JArrayObject"/> instance.</returns>
+	public abstract JArrayObject CreateInstance(IEnvironment env, Int32 length);
+
+	/// <summary>
 	/// Indicates whether an instance of the current array type is instance of the current type of
 	/// <paramref name="otherMetadata"/>.
 	/// </summary>
@@ -51,6 +59,19 @@ public abstract partial class JArrayTypeMetadata : JClassTypeMetadata
 		    otherMetadata.ElementMetadata is JReferenceTypeMetadata otherElementMetadata)
 			return elementMetadata.TypeOf(otherElementMetadata);
 		return false;
+	}
+	/// <summary>
+	/// Retrieves the <see cref="JArrayTypeMetadata"/> instance for <paramref name="rank"/> dimension.
+	/// </summary>
+	/// <param name="rank">The number of dimensions of the array of the current element type.</param>
+	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
+	public JArrayTypeMetadata GetArrayTypeMetadata(Int32 rank)
+	{
+		NativeValidationUtilities.ThrowIfInvalidDimension(rank);
+		JArrayTypeMetadata result = this;
+		while (result.Dimension - this.Dimension < rank - 1)
+			result = NativeValidationUtilities.ThrowIfMissingArrayMetadata(result);
+		return result;
 	}
 
 	/// <inheritdoc/>

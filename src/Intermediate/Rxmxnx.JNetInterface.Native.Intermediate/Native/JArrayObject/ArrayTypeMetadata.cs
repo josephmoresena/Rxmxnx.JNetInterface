@@ -51,6 +51,11 @@ public partial class JArrayObject<TElement>
 
 		/// <inheritdoc/>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public override JArrayObject CreateInstance(IEnvironment env, Int32 length)
+			=> JArrayObject<TElement>.Create(env, length).Object;
+
+		/// <inheritdoc/>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		internal override JClassObject GetClass(IEnvironment env)
 			=> env.ClassFeature.GetClass<JArrayObject<TElement>>();
 		/// <inheritdoc/>
