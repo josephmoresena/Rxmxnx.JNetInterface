@@ -405,7 +405,7 @@ public sealed class NumberObjectTests
 		IndeterminateResult result = new(jNumberObject, IDataType.GetMetadata<TNumber>().Signature);
 		TPrimitive primitive = jNumberObject?.GetValue<TPrimitive>() ?? default;
 		Assert.Equal(jNumberObject, result.Object);
-		Assert.Equal(jNumberObject is not null, result.BooleanValue);
+		Assert.Equal(primitive != default, result.BooleanValue);
 		Assert.Equal((JByte)primitive, result.ByteValue);
 		Assert.Equal((JChar)primitive, result.CharValue);
 		Assert.Equal((JDouble)primitive, result.DoubleValue);
