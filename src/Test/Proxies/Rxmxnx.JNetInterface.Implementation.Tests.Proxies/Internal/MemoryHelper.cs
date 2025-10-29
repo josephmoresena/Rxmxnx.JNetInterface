@@ -4,6 +4,9 @@ namespace Rxmxnx.JNetInterface.Tests.Internal;
 internal sealed unsafe class MemoryHelper<TPointer> where TPointer : unmanaged, IFixedPointer
 {
 	private readonly HashSet<Int32> _busy;
+#if NET9_0_OR_GREATER
+	private readonly Lock _lock = new();
+#endif
 	private readonly IntPtr _noValue;
 	private readonly Queue<Int32> _toFree = new(Byte.MaxValue);
 	private readonly IntPtr _value;
@@ -24,7 +27,11 @@ internal sealed unsafe class MemoryHelper<TPointer> where TPointer : unmanaged, 
 
 	public TPointer Get()
 	{
+#if NET9_0_OR_GREATER
+		using (this._lock.EnterScope())
+#else
 		lock (this._values)
+#endif
 		{
 			while (this._busy.Count < this._values.Length)
 			{
@@ -42,7 +49,11 @@ internal sealed unsafe class MemoryHelper<TPointer> where TPointer : unmanaged, 
 	public void Free(TPointer value)
 	{
 		IntPtr ptr = (IntPtr)this._localHandle.Pointer;
+#if NET9_0_OR_GREATER
+		using (this._lock.EnterScope())
+#else
 		lock (this._values)
+#endif
 		{
 			Int32 index = MemoryHelper<TPointer>.GetIndex(value.Pointer, ptr, this._values.Length);
 			if (index < 0) return;

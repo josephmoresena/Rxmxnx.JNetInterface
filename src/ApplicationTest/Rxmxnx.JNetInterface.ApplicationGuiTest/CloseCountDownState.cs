@@ -8,12 +8,20 @@ internal sealed class CloseCountDownState(JWindowObject window, JCountDownLatchO
 	: AwtEventListenerState
 {
 	private readonly JGlobalBase? _countDownLatch = CallbackState.UseGlobal(countDownLatch?.Global);
+#if NET9_0_OR_GREATER
+	private readonly Lock _lock = new();
+#else
 	private readonly Object _lock = new();
+#endif
 	private readonly JGlobalBase _window = CallbackState.UseGlobal(window.Global);
 
 	public override void EventDispatched(JAwtEventObject awtEvent)
 	{
+#if NET9_0_OR_GREATER
+		using (this._lock.EnterScope())
+#else
 		lock (this._lock)
+#endif
 		{
 			IEnvironment env = awtEvent.Environment;
 			if (awtEvent.GetId() is not JAwtEventObject.EventId.Closed) return;
@@ -26,7 +34,11 @@ internal sealed class CloseCountDownState(JWindowObject window, JCountDownLatchO
 	}
 	public void Dispose()
 	{
+#if NET9_0_OR_GREATER
+		using (this._lock.EnterScope())
+#else
 		lock (this._lock)
+#endif
 		{
 			if (CallbackState.FreeGlobal(this._window))
 				this._window.Dispose();

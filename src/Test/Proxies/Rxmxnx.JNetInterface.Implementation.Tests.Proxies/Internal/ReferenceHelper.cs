@@ -2,8 +2,13 @@ namespace Rxmxnx.JNetInterface.Tests.Internal;
 
 internal static partial class ReferenceHelper
 {
+#if NET9_0_OR_GREATER
+	private static readonly Lock invokeLock = new();
+	private static readonly Lock nativeLock = new();
+#else
 	private static readonly Object invokeLock = new();
 	private static readonly Object nativeLock = new();
+#endif
 
 	public static readonly IFixture Fixture = new Fixture().RegisterReferences();
 
@@ -12,24 +17,40 @@ internal static partial class ReferenceHelper
 
 	public static Boolean Contains(NativeInterfaceProxy proxy)
 	{
+#if NET9_0_OR_GREATER
+		using (ReferenceHelper.nativeLock.EnterScope())
+#else
 		lock (ReferenceHelper.nativeLock)
+#endif
 			return Object.ReferenceEquals(proxy, ReferenceHelper.nativeProxies.GetValueOrDefault(proxy.Reference));
 	}
 	public static InvokeInterfaceProxy Initialize(InvokeInterfaceProxy proxy)
 	{
-		lock (ReferenceHelper.invokeLock)
+#if NET9_0_OR_GREATER
+		using (ReferenceHelper.nativeLock.EnterScope())
+#else
+		lock (ReferenceHelper.nativeLock)
+#endif
 			ReferenceHelper.invokeProxies[proxy.Reference] = proxy;
 		return proxy;
 	}
 	public static NativeInterfaceProxy Initialize(NativeInterfaceProxy proxy)
 	{
+#if NET9_0_OR_GREATER
+		using (ReferenceHelper.nativeLock.EnterScope())
+#else
 		lock (ReferenceHelper.nativeLock)
+#endif
 			ReferenceHelper.nativeProxies[proxy.Reference] = proxy;
 		return proxy;
 	}
 	public static void FinalizeProxy(InvokeInterfaceProxy proxy)
 	{
-		lock (ReferenceHelper.invokeLock)
+#if NET9_0_OR_GREATER
+		using (ReferenceHelper.nativeLock.EnterScope())
+#else
+		lock (ReferenceHelper.nativeLock)
+#endif
 		{
 			if (Object.ReferenceEquals(proxy, ReferenceHelper.invokeProxies.GetValueOrDefault(proxy.Reference)))
 				ReferenceHelper.invokeProxies.Remove(proxy.Reference, out _);
@@ -43,7 +64,11 @@ internal static partial class ReferenceHelper
 	}
 	public static void FinalizeProxy(NativeInterfaceProxy proxy, Boolean finalizeVm)
 	{
+#if NET9_0_OR_GREATER
+		using (ReferenceHelper.nativeLock.EnterScope())
+#else
 		lock (ReferenceHelper.nativeLock)
+#endif
 		{
 			Boolean remove =
 				Object.ReferenceEquals(proxy, ReferenceHelper.nativeProxies.GetValueOrDefault(proxy.Reference));
@@ -130,7 +155,11 @@ internal static partial class ReferenceHelper
 	private static unsafe InvokeInterfaceProxy GetProxy(JVirtualMachineRef vmRef)
 	{
 		IntPtr ptr = ReferenceHelper.InvokeInterface.AsSpan().GetUnsafeIntPtr();
-		lock (ReferenceHelper.invokeLock)
+#if NET9_0_OR_GREATER
+		using (ReferenceHelper.nativeLock.EnterScope())
+#else
+		lock (ReferenceHelper.nativeLock)
+#endif
 		{
 			InvokeInterfaceProxy? result = ReferenceHelper.invokeProxies.GetValueOrDefault(vmRef);
 			if (result is not null && (IntPtr)result.Reference.InterfacePointer != ptr) result = default;
@@ -142,7 +171,11 @@ internal static partial class ReferenceHelper
 	private static unsafe NativeInterfaceProxy GetProxy(JEnvironmentRef envRef)
 	{
 		IntPtr ptr = ReferenceHelper.NativeInterface.AsSpan().GetUnsafeIntPtr();
+#if NET9_0_OR_GREATER
+		using (ReferenceHelper.nativeLock.EnterScope())
+#else
 		lock (ReferenceHelper.nativeLock)
+#endif
 		{
 			NativeInterfaceProxy? result = ReferenceHelper.nativeProxies.GetValueOrDefault(envRef);
 			if (result is not null && (IntPtr)result.Reference.InterfacePointer != ptr) result = default;

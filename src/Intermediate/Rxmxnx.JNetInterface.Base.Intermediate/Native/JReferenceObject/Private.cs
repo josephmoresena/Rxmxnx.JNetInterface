@@ -5,7 +5,11 @@ public partial class JReferenceObject
 	/// <summary>
 	/// Sequence lock instance.
 	/// </summary>
+#if NET9_0_OR_GREATER
+	private static readonly Lock sequenceLock = new();
+#else
 	private static readonly Object sequenceLock = new();
+#endif
 
 	/// <summary>
 	/// Current sequence value.
@@ -43,7 +47,11 @@ public partial class JReferenceObject
 	private static Int64 GetInstanceId(JReferenceObject jObject, JReferenceObject? jOther = default)
 	{
 		if (jOther is not null && jObject is View) return jOther._id;
+#if NET9_0_OR_GREATER
+		using (JReferenceObject.sequenceLock.EnterScope())
+#else
 		lock (JReferenceObject.sequenceLock)
+#endif
 			return JReferenceObject.sequenceValue++;
 	}
 }

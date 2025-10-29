@@ -11,16 +11,24 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 internal sealed class ShowDialogState(JWindowObject owner) : ActionListenerState, IDisposable
 {
-	private const String OpenHtml = "<html>";
-	private const String CloseHtml = "</html>";
+	private const String openHtml = "<html>";
+	private const String closeHtml = "</html>";
 
-	private static readonly String breakLineHtml = "<br/>" + Environment.NewLine;
+	private static readonly String breakLineHtml = $"<br/>{Environment.NewLine}";
 
+#if NET9_0_OR_GREATER
+	private readonly Lock _lock = new();
+#else
 	private readonly Object _lock = new();
+#endif
 	private readonly JGlobalBase _owner = CallbackState.UseGlobal(owner.Global);
 	public void Dispose()
 	{
+#if NET9_0_OR_GREATER
+		using (this._lock.EnterScope())
+#else
 		lock (this._lock)
+#endif
 		{
 			if (CallbackState.FreeGlobal(this._owner))
 				this._owner.Dispose();
@@ -29,7 +37,11 @@ internal sealed class ShowDialogState(JWindowObject owner) : ActionListenerState
 
 	public override void ActionPerformed(JActionEventObject actionEvent)
 	{
+#if NET9_0_OR_GREATER
+		using (this._lock.EnterScope())
+#else
 		lock (this._lock)
+#endif
 		{
 			IEnvironment env = actionEvent.Environment;
 			using JWindowObject window = this._owner.AsLocal<JWindowObject>(env);
@@ -46,7 +58,7 @@ internal sealed class ShowDialogState(JWindowObject owner) : ActionListenerState
 	}
 
 	private static String GetRuntimeInformation()
-		=> ShowDialogState.OpenHtml + $"Number of Cores: {Environment.ProcessorCount}" + ShowDialogState.breakLineHtml +
+		=> ShowDialogState.openHtml + $"Number of Cores: {Environment.ProcessorCount}" + ShowDialogState.breakLineHtml +
 			$"Little-Endian: {BitConverter.IsLittleEndian}" + ShowDialogState.breakLineHtml +
 			$"OS: {RuntimeInformation.OSDescription}" + ShowDialogState.breakLineHtml +
 			$"OS Arch: {RuntimeInformation.OSArchitecture}" + ShowDialogState.breakLineHtml +
@@ -63,5 +75,5 @@ internal sealed class ShowDialogState(JWindowObject owner) : ActionListenerState
 			ShowDialogState.breakLineHtml +
 			$"Runtime Version: {HttpUtility.HtmlEncode(RuntimeEnvironment.GetSystemVersion())}" +
 			ShowDialogState.breakLineHtml + $"Package: {HttpUtility.HtmlEncode(JObject.CompilationFramework)}" +
-			ShowDialogState.CloseHtml;
+			ShowDialogState.closeHtml;
 }
