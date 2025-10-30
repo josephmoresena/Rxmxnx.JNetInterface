@@ -7,4 +7,5 @@ public enum JdkVersion : Byte
 	Jdk11 = 11,
 	Jdk17 = 17,
 	Jdk21 = 21,
+	Jdk25 = 25,
 }
