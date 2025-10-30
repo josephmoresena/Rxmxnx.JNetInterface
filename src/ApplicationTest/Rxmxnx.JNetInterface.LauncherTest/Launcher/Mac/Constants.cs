@@ -14,7 +14,7 @@ public partial class Launcher
 			{ JdkVersion.Jdk11, "https://aka.ms/download-jdk/microsoft-jdk-11.0.29-macos-x64.tar.gz" },
 			{ JdkVersion.Jdk17, "https://aka.ms/download-jdk/microsoft-jdk-17.0.17-macos-x64.tar.gz" },
 			{ JdkVersion.Jdk21, "https://download.oracle.com/java/21/latest/jdk-21_macos-x64_bin.tar.gz" },
-			{ JdkVersion.Jdk21, "https://download.oracle.com/java/25/latest/jdk-25_macos-x64_bin.tar.gz" },
+			{ JdkVersion.Jdk25, "https://download.oracle.com/java/25/latest/jdk-25_macos-x64_bin.tar.gz" },
 		};
 		private static readonly Dictionary<JdkVersion, String> arm64Url = new()
 		{
@@ -22,7 +22,7 @@ public partial class Launcher
 			{ JdkVersion.Jdk11, "https://aka.ms/download-jdk/microsoft-jdk-11.0.29-macos-aarch64.tar.gz" },
 			{ JdkVersion.Jdk17, "https://aka.ms/download-jdk/microsoft-jdk-17.0.17-macos-aarch64.tar.gz" },
 			{ JdkVersion.Jdk21, "https://download.oracle.com/java/21/latest/jdk-21_macos-aarch64_bin.tar.gz" },
-			{ JdkVersion.Jdk21, "https://download.oracle.com/java/25/latest/jdk-25_macos-aarch64_bin.tar.gz" },
+			{ JdkVersion.Jdk25, "https://download.oracle.com/java/25/latest/jdk-25_macos-aarch64_bin.tar.gz" },
 		};
 	}
 }

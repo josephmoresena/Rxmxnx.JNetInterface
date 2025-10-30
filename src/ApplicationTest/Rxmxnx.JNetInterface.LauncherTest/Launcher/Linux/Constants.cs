@@ -35,7 +35,7 @@ public partial class Launcher
 			{ JdkVersion.Jdk11, "https://aka.ms/download-jdk/microsoft-jdk-11.0.26-linux-x64.tar.gz" },
 			{ JdkVersion.Jdk17, "https://aka.ms/download-jdk/microsoft-jdk-17.0.17-linux-x64.tar.gz" },
 			{ JdkVersion.Jdk21, "https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.tar.gz" },
-			{ JdkVersion.Jdk21, "https://download.oracle.com/java/25/latest/jdk-25_linux-x64_bin.tar.gz" },
+			{ JdkVersion.Jdk25, "https://download.oracle.com/java/25/latest/jdk-25_linux-x64_bin.tar.gz" },
 		};
 		private static readonly Dictionary<JdkVersion, String> arm64Url = new()
 		{
@@ -43,7 +43,7 @@ public partial class Launcher
 			{ JdkVersion.Jdk11, "https://aka.ms/download-jdk/microsoft-jdk-11.0.26-linux-aarch64.tar.gz" },
 			{ JdkVersion.Jdk17, "https://aka.ms/download-jdk/microsoft-jdk-17.0.17-linux-aarch64.tar.gz" },
 			{ JdkVersion.Jdk21, "https://download.oracle.com/java/21/latest/jdk-21_linux-aarch64_bin.tar.gz" },
-			{ JdkVersion.Jdk21, "https://download.oracle.com/java/25/latest/jdk-25_linux-aarch64_bin.tar.gz" },
+			{ JdkVersion.Jdk25, "https://download.oracle.com/java/25/latest/jdk-25_linux-aarch64_bin.tar.gz" },
 		};
 	}
 }

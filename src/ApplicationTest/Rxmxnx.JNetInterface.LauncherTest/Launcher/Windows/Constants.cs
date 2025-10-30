@@ -24,14 +24,14 @@ public partial class Launcher
 			{ JdkVersion.Jdk11, "https://aka.ms/download-jdk/microsoft-jdk-11.0.26-windows-x64.zip" },
 			{ JdkVersion.Jdk17, "https://aka.ms/download-jdk/microsoft-jdk-17.0.17-windows-x64.zip" },
 			{ JdkVersion.Jdk21, "https://download.oracle.com/java/21/latest/jdk-21_windows-x64_bin.zip" },
-			{ JdkVersion.Jdk21, "https://download.oracle.com/java/25/latest/jdk-25_windows-x64_bin.zip" },
+			{ JdkVersion.Jdk25, "https://download.oracle.com/java/25/latest/jdk-25_windows-x64_bin.zip" },
 		};
 		private static readonly Dictionary<JdkVersion, String> arm64Url = new()
 		{
 			{ JdkVersion.Jdk11, "https://aka.ms/download-jdk/microsoft-jdk-11.0.26-windows-aarch64.zip" },
 			{ JdkVersion.Jdk17, "https://aka.ms/download-jdk/microsoft-jdk-17.0.17-windows-aarch64.zip" },
 			{ JdkVersion.Jdk21, "https://aka.ms/download-jdk/microsoft-jdk-21.0.9-windows-aarch64.zip" },
-			{ JdkVersion.Jdk21, "https://aka.ms/download-jdk/microsoft-jdk-25.0.6-windows-aarch64.zip" },
+			{ JdkVersion.Jdk25, "https://aka.ms/download-jdk/microsoft-jdk-25.0.6-windows-aarch64.zip" },
 		};
 		private static readonly EnumerationOptions searchOptions = new()
 		{
