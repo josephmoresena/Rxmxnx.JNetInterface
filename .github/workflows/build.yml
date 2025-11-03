@@ -13,18 +13,18 @@ jobs:
       DOTNET_CLI_USE_MSBUILD_SERVER: false
     steps:
       - name: Set up JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: 21
           distribution: 'zulu'
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: |
             7.0.x
             8.0.x
             9.0.x
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
@@ -109,7 +109,7 @@ jobs:
 
       - name: Init FreeBSD 14.3 VM
         id: vm
-        uses: vmactions/freebsd-vm@v1.2.4
+        uses: vmactions/freebsd-vm@v1.2.5
         with:
           release: "14.3"
           usesh: true
@@ -150,7 +150,7 @@ jobs:
           ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "run";
 
       - name: Create Native Artifact (FreeBSD)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: FreeBSD.14-Artifact
           path: |
@@ -161,7 +161,7 @@ jobs:
             ./artifacts/*HelloJni.* 
 
       - name: Create Native Artifact Logs (FreeBSD)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: FreeBSD.13-Artifact-Logs
           path: |
@@ -263,7 +263,7 @@ jobs:
 
       - name: Setup .NET
         if: runner.os != 'Windows'
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: |
             7.0.x
@@ -283,8 +283,8 @@ jobs:
           winget install Microsoft.DotNet.SDK.9 --architecture x64 --silent --force --disable-interactivity --accept-source-agreements
           
           dotnet workload update
-
-      - uses: actions/checkout@v4
+ 
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 1
 
@@ -348,7 +348,7 @@ jobs:
           }
 
       - name: Create Native Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ runner.os }}-Artifact
           path: |
@@ -359,7 +359,7 @@ jobs:
             ./artifacts/*HelloJni.* 
 
       - name: Create Native Artifact Logs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ runner.os }}-Artifact-Logs
           path: |
@@ -385,9 +385,9 @@ jobs:
     needs: [ build ]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 9.0.x
 
@@ -639,7 +639,7 @@ jobs:
           --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
           --out ./../jnetinterface-apptest-net8.0-RFM.apk jnetinterface-apptest-net8.0-RFM.apk
       - name: Create Android Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: Android-Artifact
           path: jnetinterface-apptest-*.apk
