@@ -14,6 +14,7 @@ using Rxmxnx.JNetInterface.Util;
 using Rxmxnx.JNetInterface.Util.Concurrent;
 using Rxmxnx.PInvoke;
 
+JVirtualMachine.SetMainClass<JRootPaneContainerObject>();
 JVirtualMachine.SetMainClass<JFrameObjectSwing>();
 JVirtualMachine.SetMainClass<JWindowObject>();
 JVirtualMachine.SetMainClass<JComponentObject>();

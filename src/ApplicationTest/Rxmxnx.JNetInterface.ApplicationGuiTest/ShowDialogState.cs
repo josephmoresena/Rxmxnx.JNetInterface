@@ -9,7 +9,7 @@ using Rxmxnx.JNetInterface.Swing;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-internal sealed class ShowDialogState(JWindowObject owner) : ActionListenerState, IDisposable
+internal sealed class ShowDialogState(JFrameObjectAwt owner) : ActionListenerState, IDisposable
 {
 	private const String openHtml = "<html>";
 	private const String closeHtml = "</html>";
@@ -44,15 +44,26 @@ internal sealed class ShowDialogState(JWindowObject owner) : ActionListenerState
 #endif
 		{
 			IEnvironment env = actionEvent.Environment;
-			using JWindowObject window = this._owner.AsLocal<JWindowObject>(env);
-			using JDialogObjectSwing dialog = JDialogObjectSwing.Create(window, "System Info");
-
+			using JFrameObjectAwt frame = this._owner.AsLocal<JFrameObjectAwt>(env);
+			using JDialogObjectSwing dialog = JDialogObjectSwing.Create(frame, "System Info", true);
 			using (JLabelObject jLabel = JLabelObject.Create(env, ShowDialogState.GetRuntimeInformation()))
 			using (JStringObject jString = JStringObject.Create(env, "Center"u8))
-				dialog.Add(jLabel, jString);
+			{
+				if (env.VirtualMachine.Version < JRuntimeVersion.J5)
+				{
+					// Cast the javax.swing.JDialog instance to javax.swing.RootPaneContainer
+					JRootPaneContainerObject rootPane = dialog.CastTo<JRootPaneContainerObject>();
+					using JContainerObject? contentContainer = rootPane.GetContentPane();
+					contentContainer?.Add(jLabel, jString);
+				}
+				else // For JDK 1.5 and later, use the add method directly.
+				{
+					dialog.Add(jLabel, jString);
+				}
+			}
 
 			dialog.Pack();
-			dialog.SetRelativeTo(window);
+			dialog.SetRelativeTo(frame);
 			dialog.SetVisible(true);
 		}
 	}

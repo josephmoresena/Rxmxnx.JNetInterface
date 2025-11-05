@@ -7,7 +7,8 @@ using Rxmxnx.JNetInterface.Types.Metadata;
 
 namespace Rxmxnx.JNetInterface.Swing;
 
-public class JFrameObjectSwing : JFrameObjectAwt, IClassType<JFrameObjectSwing>
+public class JFrameObjectSwing : JFrameObjectAwt, IClassType<JFrameObjectSwing>,
+	IInterfaceObject<JRootPaneContainerObject>
 {
 	public enum CloseOperation
 	{
@@ -40,8 +41,8 @@ public class JFrameObjectSwing : JFrameObjectAwt, IClassType<JFrameObjectSwing>
 		JArgumentMetadata.Get<JContainerObject>()
 #endif
 	);
-	private static readonly JClassTypeMetadata<JFrameObjectSwing> typeMetadata =
-		TypeMetadataBuilder<JFrameObjectAwt>.Create<JFrameObjectSwing>("javax/swing/JFrame"u8).Build();
+	private static readonly JClassTypeMetadata<JFrameObjectSwing> typeMetadata = TypeMetadataBuilder<JFrameObjectAwt>
+		.Create<JFrameObjectSwing>("javax/swing/JFrame"u8).Implements<JRootPaneContainerObject>().Build();
 	static JClassTypeMetadata<JFrameObjectSwing> IClassType<JFrameObjectSwing>.Metadata
 		=> JFrameObjectSwing.typeMetadata;
 	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd2;

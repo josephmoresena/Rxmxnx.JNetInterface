@@ -1,22 +1,25 @@
 using Rxmxnx.JNetInterface.Awt;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native.Access;
+using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
 
 namespace Rxmxnx.JNetInterface.Swing;
 
-public class JDialogObjectSwing : JDialogObject, IClassType<JDialogObjectSwing>
+public class JDialogObjectSwing : JDialogObject, IClassType<JDialogObjectSwing>,
+	IInterfaceObject<JRootPaneContainerObject>
 {
 	private static readonly IndeterminateCall constructorDef = IndeterminateCall.CreateConstructorDefinition(
 #if !NET9_0_OR_GREATER
-		[JArgumentMetadata.Get<JWindowObject>(), JArgumentMetadata.Get<JStringObject>(),]
+		[JArgumentMetadata.Get<JFrameObjectAwt>(), JArgumentMetadata.Get<JStringObject>(), JArgumentMetadata.Get<JBoolean>(),]
 #else
-		JArgumentMetadata.Get<JWindowObject>(), JArgumentMetadata.Get<JStringObject>()
+		JArgumentMetadata.Get<JFrameObjectAwt>(), JArgumentMetadata.Get<JStringObject>(),
+		JArgumentMetadata.Get<JBoolean>()
 #endif
 	);
-	private static readonly JClassTypeMetadata<JDialogObjectSwing> typeMetadata =
-		TypeMetadataBuilder<JDialogObject>.Create<JDialogObjectSwing>("javax/swing/JDialog"u8).Build();
+	private static readonly JClassTypeMetadata<JDialogObjectSwing> typeMetadata = TypeMetadataBuilder<JDialogObject>
+		.Create<JDialogObjectSwing>("javax/swing/JDialog"u8).Implements<JRootPaneContainerObject>().Build();
 	static JClassTypeMetadata<JDialogObjectSwing> IClassType<JDialogObjectSwing>.Metadata
 		=> JDialogObjectSwing.typeMetadata;
 	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd2;
@@ -25,15 +28,15 @@ public class JDialogObjectSwing : JDialogObject, IClassType<JDialogObjectSwing>
 	protected JDialogObjectSwing(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	protected JDialogObjectSwing(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	public static JDialogObjectSwing Create(JWindowObject window, String title)
+	public static JDialogObjectSwing Create(JFrameObjectAwt frame, String title, Boolean modal)
 	{
-		IEnvironment env = window.Environment;
-		using JClassObject jClass = JClassObject.GetClass<JDialogObject>(env);
+		IEnvironment env = frame.Environment;
+		using JClassObject jClass = JClassObject.GetClass<JDialogObjectSwing>(env);
 		using JStringObject jString = JStringObject.Create(env, title);
 #if !NET9_0_OR_GREATER
-		return JDialogObjectSwing.constructorDef.NewCall<JDialogObjectSwing>(env, [window, jString,]);
+		return JDialogObjectSwing.constructorDef.NewCall<JDialogObjectSwing>(env, [window, jString, (JBoolean)modal,]);
 #else
-		return JDialogObjectSwing.constructorDef.NewCall<JDialogObjectSwing>(env, window, jString);
+		return JDialogObjectSwing.constructorDef.NewCall<JDialogObjectSwing>(env, frame, jString, (JBoolean)modal);
 #endif
 	}
 
