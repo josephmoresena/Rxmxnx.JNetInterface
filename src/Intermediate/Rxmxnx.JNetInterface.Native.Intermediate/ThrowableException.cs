@@ -29,7 +29,7 @@ public abstract partial class ThrowableException : JniException, IThrowableExcep
 				(obj as JGlobalBase)?.ObjectMetadata :
 				default;
 			if (objectMetadata is ThrowableObjectMetadata throwableMetadata) return throwableMetadata;
-			else if (objectMetadata is not null) return new(objectMetadata) { Message = this.Message, };
+			if (objectMetadata is not null) return new(objectMetadata) { Message = this.Message, };
 			return default;
 		}
 	}
