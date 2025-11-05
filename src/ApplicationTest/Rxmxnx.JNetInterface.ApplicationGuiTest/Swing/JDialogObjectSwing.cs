@@ -34,7 +34,7 @@ public class JDialogObjectSwing : JDialogObject, IClassType<JDialogObjectSwing>,
 		using JClassObject jClass = JClassObject.GetClass<JDialogObjectSwing>(env);
 		using JStringObject jString = JStringObject.Create(env, title);
 #if !NET9_0_OR_GREATER
-		return JDialogObjectSwing.constructorDef.NewCall<JDialogObjectSwing>(env, [window, jString, (JBoolean)modal,]);
+		return JDialogObjectSwing.constructorDef.NewCall<JDialogObjectSwing>(env, [frame, jString, (JBoolean)modal,]);
 #else
 		return JDialogObjectSwing.constructorDef.NewCall<JDialogObjectSwing>(env, frame, jString, (JBoolean)modal);
 #endif
