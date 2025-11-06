@@ -37,8 +37,16 @@ internal sealed class ShowComponentState(JComponentObject component, IWrapper<Bo
 		{
 			UIAdapter.Instance.PrintThreadInfo(env.Reference);
 			if (!this._component.IsValid(env)) return;
-			using JComponentObject localComponent = this._component.AsLocal<JComponentObject>(env);
-			localComponent.SetVisible(setVisible.Value);
+			try
+			{
+				using JComponentObject localComponent = this._component.AsLocal<JComponentObject>(env);
+				localComponent.SetVisible(setVisible.Value);
+			}
+			catch (Exception ex)
+			{
+				UIAdapter.Instance.ShowError(ex);
+				if (ex is JniException) env.PendingException = default;
+			}
 		}
 	}
 }

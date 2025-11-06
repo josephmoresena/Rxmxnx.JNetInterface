@@ -37,34 +37,42 @@ internal sealed class ShowDialogState(JFrameObjectAwt owner) : ActionListenerSta
 
 	public override void ActionPerformed(JActionEventObject actionEvent)
 	{
+		IEnvironment env = actionEvent.Environment;
 #if NET9_0_OR_GREATER
 		using (this._lock.EnterScope())
 #else
 		lock (this._lock)
 #endif
 		{
-			IEnvironment env = actionEvent.Environment;
-			using JFrameObjectAwt frame = this._owner.AsLocal<JFrameObjectAwt>(env);
-			using JDialogObjectSwing dialog = JDialogObjectSwing.Create(frame, "System Info", true);
-			using (JLabelObject jLabel = JLabelObject.Create(env, ShowDialogState.GetRuntimeInformation()))
-			using (JStringObject jString = JStringObject.Create(env, "Center"u8))
+			try
 			{
-				if (env.VirtualMachine.Version < JRuntimeVersion.J5)
+				using JFrameObjectAwt frame = this._owner.AsLocal<JFrameObjectAwt>(env);
+				using JDialogObjectSwing dialog = JDialogObjectSwing.Create(frame, "System Info", true);
+				using (JLabelObject jLabel = JLabelObject.Create(env, ShowDialogState.GetRuntimeInformation()))
+				using (JStringObject jString = JStringObject.Create(env, "Center"u8))
 				{
-					// Cast the javax.swing.JDialog instance to javax.swing.RootPaneContainer
-					JRootPaneContainerObject rootPane = dialog.CastTo<JRootPaneContainerObject>();
-					using JContainerObject? contentContainer = rootPane.GetContentPane();
-					contentContainer?.Add(jLabel, jString);
+					if (env.VirtualMachine.Version < JRuntimeVersion.J5)
+					{
+						// Cast the javax.swing.JDialog instance to javax.swing.RootPaneContainer
+						JRootPaneContainerObject rootPane = dialog.CastTo<JRootPaneContainerObject>();
+						using JContainerObject? contentContainer = rootPane.GetContentPane();
+						contentContainer?.Add(jLabel, jString);
+					}
+					else // For JDK 1.5 and later, use the add method directly.
+					{
+						dialog.Add(jLabel, jString);
+					}
 				}
-				else // For JDK 1.5 and later, use the add method directly.
-				{
-					dialog.Add(jLabel, jString);
-				}
-			}
 
-			dialog.Pack();
-			dialog.SetRelativeTo(frame);
-			dialog.SetVisible(true);
+				dialog.Pack();
+				dialog.SetRelativeTo(frame);
+				dialog.SetVisible(true);
+			}
+			catch (Exception ex)
+			{
+				UIAdapter.Instance.ShowError(ex);
+				if (ex is JniException) env.PendingException = default;
+			}
 		}
 	}
 

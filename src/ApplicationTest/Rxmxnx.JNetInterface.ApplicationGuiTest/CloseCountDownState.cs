@@ -17,19 +17,27 @@ internal sealed class CloseCountDownState(JWindowObject window, JCountDownLatchO
 
 	public override void EventDispatched(JAwtEventObject awtEvent)
 	{
+		IEnvironment env = awtEvent.Environment;
 #if NET9_0_OR_GREATER
 		using (this._lock.EnterScope())
 #else
 		lock (this._lock)
 #endif
 		{
-			IEnvironment env = awtEvent.Environment;
-			if (awtEvent.GetId() is not JAwtEventObject.EventId.Closed) return;
-			if (awtEvent.GetSource() is not { } localWindow) return;
-			if (!env.IsSameObject(localWindow, this._window)) return;
+			try
+			{
+				if (awtEvent.GetId() is not JAwtEventObject.EventId.Closed) return;
+				if (awtEvent.GetSource() is not { } localWindow) return;
+				if (!env.IsSameObject(localWindow, this._window)) return;
 
-			using JCountDownLatchObject? countDown = this._countDownLatch?.AsLocal<JCountDownLatchObject>(env);
-			countDown?.CountDown();
+				using JCountDownLatchObject? countDown = this._countDownLatch?.AsLocal<JCountDownLatchObject>(env);
+				countDown?.CountDown();
+			}
+			catch (Exception ex)
+			{
+				UIAdapter.Instance.ShowError(ex);
+				if (ex is JniException) env.PendingException = default;
+			}
 		}
 	}
 	public void Dispose()
