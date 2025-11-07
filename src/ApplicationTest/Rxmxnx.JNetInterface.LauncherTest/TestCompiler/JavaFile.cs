@@ -140,6 +140,17 @@ public class HelloDotnet {
         }
     }
 
+    public static void printCharArray(char[][] array) {
+        if (array == null) return;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == null) continue;
+            for (int j = 0; j < array[i].length; j++) {
+                System.out.print(array[i][j]);
+            }
+            System.out.println();
+        }
+    }
+
     @SuppressWarnings(""deprecation"")
     private static String getThreadInfo() {
         Thread currentThread = Thread.currentThread();
@@ -430,6 +441,15 @@ public class HelloDotnet {
       {
         ""name"": ""getStackTrace"",
         ""parameterTypes"": []
+      }
+    ]
+  },
+  {
+    ""name"": ""java.lang.System"",
+    ""methods"": [
+      {
+        ""name"": ""getProperty"",
+        ""parameterTypes"": [ ""java.lang.String"" ]
       }
     ]
   },

@@ -44,6 +44,12 @@ public sealed partial class JHelloDotnetObject : JLocalObject, IClassType<JHello
 			using JLocalObject? jLocal = GetObjectDefinition.Instance.Invoke(helloJniClass, i);
 			Console.WriteLine($"getObject({i}) -> {jLocal}");
 		}
+
+		IEnvironment env = helloJniClass.Environment;
+		using JArrayObject<JArrayObject<JChar>> chars = JHelloDotnetObject.anyaChars.ToPrimitiveArray(env);
+		IndeterminateCall
+			.CreateMethodDefinition("printCharArray"u8, JArgumentMetadata.Get<JArrayObject<JArrayObject<JChar>>>())
+			.StaticMethodCall(helloJniClass, chars);
 	}
 
 	static JHelloDotnetObject IClassType<JHelloDotnetObject>.Create(IReferenceType.ClassInitializer initializer)
