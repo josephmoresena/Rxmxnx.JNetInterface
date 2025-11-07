@@ -15,7 +15,7 @@ public partial class JClassObject
 	/// Retrieves the runtime <see cref="JDataTypeMetadata"/> instance from current class.
 	/// </summary>
 	/// <returns>A <see cref="JDataTypeMetadata"/> instance.</returns>
-	public JDataTypeMetadata GetRuntimeClassMetadata() => JClassObject.GetRuntimeClassMetadata(jClass);
+	public JDataTypeMetadata GetRuntimeClassMetadata() => JClassObject.GetRuntimeClassMetadata(this);
 #endif
 
 	/// <summary>
