@@ -1,15 +1,16 @@
+#if !PACKAGE
 namespace Rxmxnx.JNetInterface;
 
-#if !PACKAGE
 /// <summary>
 /// Set of class extensions.
 /// </summary>
 public static class ClassExtensions
-#else
-public partial class JClassObject
-#endif
 {
-#if PACKAGE
+#else
+namespace Rxmxnx.JNetInterface.Lang;
+
+public partial class JClassObject
+{
 	/// <summary>
 	/// Retrieves the runtime <see cref="JDataTypeMetadata"/> instance from current class.
 	/// </summary>
