@@ -268,6 +268,8 @@ public sealed class JArrayObjectTests
 
 		Assert.Equal(jArray, JArrayObject<TElement>.Create(env, jArray.Length));
 		env.ArrayFeature.Received(1).CreateArray<TElement>(jArray.Length);
+		Assert.Equal(jArray.Object, arrayTypeMetadata.CreateInstance(env, jArray.Length));
+		env.ArrayFeature.Received(2).CreateArray<TElement>(jArray.Length);
 
 		Assert.Equal(jArray, JArrayObject<TElement>.Create(jArray.Object.Class, jArray.Length));
 		env.ArrayFeature.Received(1).CreateArray<TElement>(jArray.Object.Class, jArray.Length);

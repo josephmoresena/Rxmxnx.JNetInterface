@@ -1,5 +1,9 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+    <PropertyGroup>
+        <TargetFramework Condition="'$(RequiredFramework)' == '' And '$(OutputType)' != 'WinExe'">net9.0</TargetFramework>
+    </PropertyGroup>
+
     <Import Project="JNetInterface-Frameworks.targets"/>
 
     <PropertyGroup>
@@ -24,7 +28,7 @@
         <AssemblyName Condition="$(PublishReadyToRun) == 'true'">$(AssemblyName).R2R</AssemblyName>
     </PropertyGroup>
 
-    <ItemGroup>
+    <ItemGroup Condition="'$(OutputType)' != 'WinExe'">
         <ProjectReference Include="..\Rxmxnx.JNetInterface.ConsoleTest\Rxmxnx.JNetInterface.ConsoleTest.csproj"/>
     </ItemGroup>
 

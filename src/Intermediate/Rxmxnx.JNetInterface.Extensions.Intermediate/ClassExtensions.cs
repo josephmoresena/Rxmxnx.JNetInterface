@@ -15,7 +15,7 @@ public partial class JClassObject
 	/// Retrieves the runtime <see cref="JDataTypeMetadata"/> instance from current class.
 	/// </summary>
 	/// <returns>A <see cref="JDataTypeMetadata"/> instance.</returns>
-	public JDataTypeMetadata GetRuntimeClassMetadata() => JClassObject.GetRuntimeClassMetadata(this);
+	public JDataTypeMetadata GetRuntimeTypeMetadata() => JClassObject.GetRuntimeTypeMetadata(this);
 #endif
 
 	/// <summary>
@@ -24,7 +24,7 @@ public partial class JClassObject
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <returns>A <see cref="JDataTypeMetadata"/> instance.</returns>
 #if !PACKAGE
-	public static JDataTypeMetadata GetRuntimeClassMetadata(this JClassObject jClass)
+	public static JDataTypeMetadata GetRuntimeTypeMetadata(this JClassObject jClass)
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private static JDataTypeMetadata GetRuntimeClassMetadata(JClassObject jClass)

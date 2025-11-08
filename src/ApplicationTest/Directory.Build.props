@@ -1,6 +1,5 @@
 <Project>
     <PropertyGroup>
-        <TargetFramework Condition="'$(RequiredFramework)' == ''">net9.0</TargetFramework>
         <TargetFramework Condition="'$(RequiredFramework)' != ''">$(RequiredFramework)</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>

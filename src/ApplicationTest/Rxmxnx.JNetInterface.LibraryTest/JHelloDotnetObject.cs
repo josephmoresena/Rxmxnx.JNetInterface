@@ -48,8 +48,13 @@ public sealed partial class JHelloDotnetObject : JLocalObject, IClassType<JHello
 		IEnvironment env = helloJniClass.Environment;
 		using JArrayObject<JArrayObject<JChar>> chars = JHelloDotnetObject.anyaChars.ToPrimitiveArray(env);
 		IndeterminateCall
+#if NET9_0_OR_GREATER
 			.CreateMethodDefinition("printCharArray"u8, JArgumentMetadata.Get<JArrayObject<JArrayObject<JChar>>>())
 			.StaticMethodCall(helloJniClass, chars);
+#else
+			.CreateMethodDefinition("printCharArray"u8, [JArgumentMetadata.Get<JArrayObject<JArrayObject<JChar>>>(),])
+			.StaticMethodCall(helloJniClass, [chars,]);
+#endif
 	}
 
 	static JHelloDotnetObject IClassType<JHelloDotnetObject>.Create(IReferenceType.ClassInitializer initializer)
