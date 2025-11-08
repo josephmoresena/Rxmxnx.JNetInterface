@@ -85,13 +85,16 @@ internal unsafe struct ArrayFillState<TElement>
 #else
 		Int32 spanLength = Math.Min(count, this._count);
 		ReadOnlySpan<TElement> result = new(this._memoryPtr, spanLength);
-		if (result.Length > count)
+		if (this._count > count)
 		{
 			this._memoryPtr += spanLength;
 			this._count -= spanLength;
 		}
-		this._memoryPtr = default;
-		this._count = default;
+		else
+		{
+			this._memoryPtr = default;
+			this._count = default;
+		}
 		return result;
 #endif
 	}
