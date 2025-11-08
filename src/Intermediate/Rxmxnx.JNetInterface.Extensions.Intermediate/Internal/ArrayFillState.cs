@@ -74,10 +74,11 @@ internal unsafe struct ArrayFillState<TElement>
 	{
 #if NET9_0_OR_GREATER
 		ReadOnlySpan<TElement> result = this._memory;
+		Int32 spanLength = Math.Min(count, this._memory.Length);
 		if (this._memory.Length > count)
 		{
 			this._memory = result[count..];
-			return result[..this._memory.Length];
+			return result[..spanLength];
 		}
 		this._memory = [];
 		return result;
@@ -97,7 +98,7 @@ internal unsafe struct ArrayFillState<TElement>
 	/// <inheritdoc cref="Array.GetLength(Int32)"/>
 	public Int32 GetLength(Int32 dimension)
 #if NET9_0_OR_GREATER
-		=> this._dimensions.Length > dimension ? this._dimensions[dimension] : -1;
+		=> this._dimensions.Length >= dimension ? this._dimensions[dimension] : -1;
 #else
 		=> this._dimensionCount > dimension ? (this._dimensionPtr + dimension).Reference : -1;
 #endif

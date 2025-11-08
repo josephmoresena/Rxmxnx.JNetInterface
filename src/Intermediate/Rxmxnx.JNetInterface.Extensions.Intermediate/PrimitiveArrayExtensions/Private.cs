@@ -28,7 +28,7 @@ public static partial class PrimitiveArrayExtensions
 		for (Int32 i = 0; i < dimensions.Length; i++)
 			dimensions[i] = array.GetLength(i);
 		return PrimitiveArrayExtensions
-		       .CreateInitialArray(values, IArrayType.GetArrayMetadata<TArrayObject>(), env, dimensions)
+		       .CreateInitialArray(values, IArrayType.GetMetadata<TArrayObject>(), env, dimensions)
 		       .CastTo<TArrayObject>();
 	}
 	/// <summary>
@@ -82,7 +82,7 @@ public static partial class PrimitiveArrayExtensions
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		JArrayObject result = map.ArrayTypeMetadata.CreateInstance(map.Environment, map.State.GetLength(0));
-		PrimitiveArrayExtensions.FillArray(result, 1, ref map.State);
+		PrimitiveArrayExtensions.FillArray(result, 0, ref map.State);
 		return result;
 	}
 	/// <summary>
@@ -99,20 +99,21 @@ public static partial class PrimitiveArrayExtensions
 			PrimitiveArrayExtensions.FillArrayArray(arrayElementMetadata, jArray.CastTo<JArrayObject<JLocalObject>>(),
 			                                        dimension + 1, ref state);
 		else
-			PrimitiveArrayExtensions.FillPrimitive(jArray.CastTo<JArrayObject<TPrimitive>>(), state);
+			PrimitiveArrayExtensions.FillPrimitive(jArray.CastTo<JArrayObject<TPrimitive>>(), ref state);
 	}
 	/// <summary>
 	/// Fills <paramref name="jArray"/> with primitive data from <paramref name="state"/>.
 	/// </summary>
 	/// <typeparam name="TPrimitive">A <see cref="IPrimitiveType{TPrimitive}"/> type.</typeparam>
 	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive>"/> instance.</param>
-	/// <param name="state">A <see cref="ArrayFillState{TPrimitive}"/> instance.</param>
+	/// <param name="state">Reference. A <see cref="ArrayFillState{TPrimitive}"/> instance.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private static void FillPrimitive<TPrimitive>(JArrayObject<TPrimitive> jArray, ArrayFillState<TPrimitive> state)
+	private static void FillPrimitive<TPrimitive>(JArrayObject<TPrimitive> jArray, ref ArrayFillState<TPrimitive> state)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		using JPrimitiveMemory<TPrimitive> sequence = jArray.GetCriticalElements(JMemoryReferenceKind.Local);
-		state.Take(jArray.Length).CopyTo(sequence.Values);
+		ReadOnlySpan<TPrimitive> valuesToCopy = state.Take(jArray.Length);
+		valuesToCopy.CopyTo(sequence.Values);
 	}
 	/// <summary>
 	/// Fills <paramref name="jArray"/> with arrays according to <paramref name="state"/>.
@@ -121,7 +122,7 @@ public static partial class PrimitiveArrayExtensions
 	/// <param name="arrayElementMetadata">A <see cref="JArrayTypeMetadata"/> of the <paramref name="jArray"/> element type.</param>
 	/// <param name="jArray">A <see cref="JArrayObject{JLocalObject>"/> instance.</param>
 	/// <param name="dimension">Current dimension.</param>
-	/// <param name="state">A <see cref="ArrayFillState{TPrimitive}"/> instance.</param>
+	/// <param name="state">Reference. A <see cref="ArrayFillState{TPrimitive}"/> instance.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private static void FillArrayArray<TPrimitive>(JArrayTypeMetadata arrayElementMetadata,
 		JArrayObject<JLocalObject> jArray, Int32 dimension, ref ArrayFillState<TPrimitive> state)
@@ -132,7 +133,7 @@ public static partial class PrimitiveArrayExtensions
 		for (Int32 i = 0; i < jArray.Length; i++)
 		{
 			using JArrayObject jArrayElement = arrayElementMetadata.CreateInstance(env, state.GetLength(dimension));
-			PrimitiveArrayExtensions.FillArray(jArrayElement, dimension + 1, ref state);
+			PrimitiveArrayExtensions.FillArray(jArrayElement, dimension, ref state);
 			arrayFeature.SetElement(jArray, i, jArrayElement);
 		}
 	}
