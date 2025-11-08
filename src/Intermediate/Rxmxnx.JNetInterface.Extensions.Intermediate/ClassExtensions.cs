@@ -27,7 +27,7 @@ public partial class JClassObject
 	public static JDataTypeMetadata GetRuntimeTypeMetadata(this JClassObject jClass)
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private static JDataTypeMetadata GetRuntimeClassMetadata(JClassObject jClass)
+	private static JDataTypeMetadata GetRuntimeTypeMetadata(JClassObject jClass)
 #endif
 		=> jClass.GetInformation().Hash switch
 		{
