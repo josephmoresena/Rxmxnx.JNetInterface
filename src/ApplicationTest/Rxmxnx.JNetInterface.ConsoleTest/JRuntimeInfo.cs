@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 using Rxmxnx.JNetInterface.Io;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Lang.Annotation;
@@ -15,6 +17,7 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 /// </summary>
 public static class JRuntimeInfo
 {
+	public static Boolean MatchArch = RuntimeInformation.OSArchitecture == RuntimeInformation.ProcessArchitecture;
 	public static String JniCheckOption
 		=> Boolean.TryParse(Environment.GetEnvironmentVariable("JNETINTERFACE_JNI_CHECK"), out Boolean useJniCheck) &&
 			useJniCheck ?

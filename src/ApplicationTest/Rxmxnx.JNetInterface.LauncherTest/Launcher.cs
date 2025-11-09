@@ -17,6 +17,8 @@ public abstract partial class Launcher
 
 	public async Task Execute(NetVersion[] netVersions)
 	{
+		ConsoleNotifier.ShowDiskUsage();
+
 		Dictionary<String, Int32> results = new();
 		try
 		{
@@ -73,7 +75,8 @@ public abstract partial class Launcher
 		};
 		Int32 result = await Utilities.Execute(state, cancellationToken);
 		ConsoleNotifier.Notifier.Result(result, executionName);
-		ConsoleNotifier.ShowDiskUsage();
+		if (Utilities.ShowDiagnostics)
+			ConsoleNotifier.ShowDiskUsage();
 		return result;
 	}
 	protected virtual async Task<Int32> RunJarFile(JarArgs jarArgs, Jdk jdk, CancellationToken cancellationToken)
@@ -87,7 +90,8 @@ public abstract partial class Launcher
 			Notifier = ConsoleNotifier.Notifier,
 		};
 		Int32 result = await Utilities.Execute(state, cancellationToken);
-		ConsoleNotifier.ShowDiskUsage();
+		if (Utilities.ShowDiagnostics)
+			ConsoleNotifier.ShowDiskUsage();
 		return result;
 	}
 }

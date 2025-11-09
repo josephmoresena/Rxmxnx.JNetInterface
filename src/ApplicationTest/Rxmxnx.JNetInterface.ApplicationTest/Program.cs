@@ -13,7 +13,7 @@ public static class Program
 	public static async Task Main(String[] args)
 	{
 #if NET8_0
-		if (IVirtualMachine.TypeMetadataToStringEnabled) JRuntimeInfo.PrintMetadataInfo();
+		if (IVirtualMachine.TypeMetadataToStringEnabled && JRuntimeInfo.MatchArch) JRuntimeInfo.PrintMetadataInfo();
 #endif
 
 		if (args.Length < 1)
@@ -66,7 +66,7 @@ public static class Program
 			JVirtualMachineInitArg initArgs = jvmLib.GetDefaultArgument();
 			Int32 jdkVersion = jvmLib.GetLatestSupportedVersion();
 			if (IVirtualMachine.MinimalVersion != initArgs.Version || initArgs.Options.Count != 0)
-				if (IVirtualMachine.TypeMetadataToStringEnabled)
+				if (IVirtualMachine.TypeMetadataToStringEnabled && JRuntimeInfo.MatchArch)
 					Console.WriteLine(initArgs);
 				else
 					Console.WriteLine($"Min JDK Version: 0x{initArgs.Version:x8}");
@@ -86,7 +86,8 @@ public static class Program
 			try
 			{
 #if NET8_0
-				if (IVirtualMachine.TypeMetadataToStringEnabled) JRuntimeInfo.PrintVirtualMachineInfo(env, vm, jvmLib);
+				if (IVirtualMachine.TypeMetadataToStringEnabled && JRuntimeInfo.MatchArch) 
+					JRuntimeInfo.PrintVirtualMachineInfo(env, vm, jvmLib);
 #endif
 				String jreVersion = !AotInfo.IsReflectionDisabled ?
 					$"{env.VirtualMachine.Version}" :

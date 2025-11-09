@@ -97,5 +97,7 @@ public static partial class TestCompiler
 		if (String.IsNullOrEmpty(managedTestProjectFile)) return;
 		foreach (NetVersion netVersion in netVersions)
 			await TestCompiler.RunNetTest(new() { ProjectFile = managedTestProjectFile, Version = netVersion, });
+
+		ConsoleNotifier.ShowDiskUsage();
 	}
 }
