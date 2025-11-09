@@ -7,6 +7,7 @@ public partial class TestCompiler
 import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.Date;
 
 public class HelloDotnet {
