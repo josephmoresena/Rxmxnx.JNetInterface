@@ -15,9 +15,7 @@ public static class Program
 #if NET8_0
 		if (IVirtualMachine.TypeMetadataToStringEnabled && JRuntimeInfo.MatchArch) JRuntimeInfo.PrintMetadataInfo();
 #endif
-
-		if (args.Length < 1)
-			throw new ArgumentException("Please set JVM library path.");
+		if (args.Length < 1) throw new ArgumentException("Please set JVM library path.");
 
 		Byte[] helloJniByteCode = await (args.Length > 1 && !String.IsNullOrWhiteSpace(args[1]) ?
 			File.ReadAllBytesAsync(Path.Combine(args[1], "HelloDotnet.class")) :

@@ -42,7 +42,11 @@ public sealed partial class JHelloDotnetObject : JLocalObject, IClassType<JHello
 		for (JInt i = 0; i < count; i++)
 		{
 			using JLocalObject? jLocal = GetObjectDefinition.Instance.Invoke(helloJniClass, i);
-			Console.WriteLine($"getObject({i}) -> {jLocal}");
+			JDataTypeMetadata? runtimeTypeMetadata = jLocal?.Class.GetRuntimeTypeMetadata();
+			String typeDescription = runtimeTypeMetadata is null ? " (null)" :
+				runtimeTypeMetadata.Kind is not JTypeKind.Array && !runtimeTypeMetadata.Signature.AsSpan()
+					.SequenceEqual(jLocal?.Class.ClassSignature) ? $" {runtimeTypeMetadata.Signature}" : String.Empty;
+			Console.WriteLine($"getObject({i}) -> {jLocal}{typeDescription}");
 		}
 
 		IEnvironment env = helloJniClass.Environment;

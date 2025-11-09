@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class HelloDotnet {
-    public static final int COUNT = 20;
+    public static final int COUNT = 22;
 
     static {
         if (!Boolean.parseBoolean(System.getProperty(""jniLib.load.disable"")))
@@ -135,8 +135,12 @@ public class HelloDotnet {
                 return (byte)120; 
             case 19:
                 return true; 
+            case 20:
+                return new ParseException(""This is the exception message"", 0); 
+            case 21:
+                return new Date(); 
             default:
-                return null;
+                return null; 
         }
     }
 
