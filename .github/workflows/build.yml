@@ -283,7 +283,7 @@ jobs:
           winget install Microsoft.DotNet.SDK.9 --architecture x64 --silent --force --disable-interactivity --accept-source-agreements
           
           dotnet workload update
- 
+
       - uses: actions/checkout@v5
         with:
           fetch-depth: 1
@@ -371,6 +371,15 @@ jobs:
           if (Test-Path ./artifacts/native) {
               Remove-Item -Recurse -Force ./artifacts/native/*
           }
+
+      - name: Clean Up 2
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          sudo rm -rf /tmp/*
+          sudo rm -rf /var/tmp/*
+          
+          df -h
 
       - name: Run launcher (run)
         shell: pwsh

@@ -13,6 +13,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Using Include="System.Buffers"/>
         <Using Include="System.Collections.Concurrent"/>
         <Using Include="System.Collections.ObjectModel"/>
         <Using Include="System.Diagnostics"/>

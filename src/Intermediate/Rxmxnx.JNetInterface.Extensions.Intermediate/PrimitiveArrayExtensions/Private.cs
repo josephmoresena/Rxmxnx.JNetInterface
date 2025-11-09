@@ -15,8 +15,11 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
-	[return: NotNullIfNotNull(nameof(array))]
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveOptimization)]
+	[return: NotNullIfNotNull(nameof(array))]
 	private static TArrayObject?
 		CreateInitialArray<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TArrayObject,
 			TPrimitive>(Array? array, IEnvironment env, ReadOnlySpan<TPrimitive> values)
@@ -42,9 +45,12 @@ public static partial class PrimitiveArrayExtensions
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	/// <param name="lengths">A read-only span specifying the length of each dimension.</param>
 	/// <returns>A <see cref="JArrayObject"/> instance.</returns>
-#if !NET9_0_OR_GREATER && !PACKAGE
+#if !PACKAGE
+#if !NET9_0_OR_GREATER
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
+	[ExcludeFromCodeCoverage]
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private static JArrayObject CreateInitialArray<TPrimitive>(ReadOnlySpan<TPrimitive> values,
@@ -78,6 +84,9 @@ public static partial class PrimitiveArrayExtensions
 	/// <typeparam name="TPrimitive">A <see cref="IPrimitiveType{TPrimitive}"/> type.</typeparam>
 	/// <param name="map">A <see cref="ArrayFillMap{TPrimitive}"/> instance.</param>
 	/// <returns>A <see cref="JArrayObject"/> instance.</returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	private static JArrayObject CreateInitialArray<TPrimitive>(ArrayFillMap<TPrimitive> map)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
@@ -92,6 +101,9 @@ public static partial class PrimitiveArrayExtensions
 	/// <param name="jArray">A <see cref="JArrayObject"/> to fill.</param>
 	/// <param name="dimension">Current array dimension.</param>
 	/// <param name="state">A <see cref="ArrayFillState{TPrimitive}"/> instance.</param>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	private static void FillArray<TPrimitive>(JArrayObject jArray, Int32 dimension,
 		ref ArrayFillState<TPrimitive> state) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
@@ -107,6 +119,9 @@ public static partial class PrimitiveArrayExtensions
 	/// <typeparam name="TPrimitive">A <see cref="IPrimitiveType{TPrimitive}"/> type.</typeparam>
 	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive>"/> instance.</param>
 	/// <param name="state">Reference. A <see cref="ArrayFillState{TPrimitive}"/> instance.</param>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private static void FillPrimitive<TPrimitive>(JArrayObject<TPrimitive> jArray, ref ArrayFillState<TPrimitive> state)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
@@ -123,6 +138,9 @@ public static partial class PrimitiveArrayExtensions
 	/// <param name="jArray">A <see cref="JArrayObject{JLocalObject>"/> instance.</param>
 	/// <param name="dimension">Current dimension.</param>
 	/// <param name="state">Reference. A <see cref="ArrayFillState{TPrimitive}"/> instance.</param>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private static void FillArrayArray<TPrimitive>(JArrayTypeMetadata arrayElementMetadata,
 		JArrayObject<JLocalObject> jArray, Int32 dimension, ref ArrayFillState<TPrimitive> state)

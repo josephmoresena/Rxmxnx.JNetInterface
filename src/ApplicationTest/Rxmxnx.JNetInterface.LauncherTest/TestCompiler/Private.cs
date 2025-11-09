@@ -168,6 +168,7 @@ public partial class TestCompiler
 			Notifier = ConsoleNotifier.Notifier,
 		};
 		await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
+		ConsoleNotifier.ShowDiskUsage();
 	}
 	private static async Task RestoreNet(RestoreNetArgs args)
 	{

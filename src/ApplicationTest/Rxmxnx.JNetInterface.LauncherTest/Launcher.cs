@@ -73,6 +73,7 @@ public abstract partial class Launcher
 		};
 		Int32 result = await Utilities.Execute(state, cancellationToken);
 		ConsoleNotifier.Notifier.Result(result, executionName);
+		ConsoleNotifier.ShowDiskUsage();
 		return result;
 	}
 	protected virtual async Task<Int32> RunJarFile(JarArgs jarArgs, Jdk jdk, CancellationToken cancellationToken)
@@ -85,6 +86,8 @@ public abstract partial class Launcher
 			WorkingDirectory = this.OutputDirectory.FullName,
 			Notifier = ConsoleNotifier.Notifier,
 		};
-		return await Utilities.Execute(state, cancellationToken);
+		Int32 result = await Utilities.Execute(state, cancellationToken);
+		ConsoleNotifier.ShowDiskUsage();
+		return result;
 	}
 }

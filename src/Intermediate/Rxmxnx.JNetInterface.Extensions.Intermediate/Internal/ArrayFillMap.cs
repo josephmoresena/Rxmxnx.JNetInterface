@@ -4,6 +4,9 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// Map structure for multidimensional array creation.
 /// </summary>
 /// <typeparam name="TElement">The type of array element.</typeparam>
+#if !PACKAGE
+[ExcludeFromCodeCoverage]
+#endif
 #if NET9_0_OR_GREATER
 internal ref struct ArrayFillMap<TElement>(ArrayFillState<TElement> state)
 #else

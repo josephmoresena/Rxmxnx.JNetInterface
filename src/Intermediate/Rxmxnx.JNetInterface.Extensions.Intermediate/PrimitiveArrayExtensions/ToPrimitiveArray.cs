@@ -15,6 +15,9 @@ public static partial class PrimitiveArrayExtensions
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
 	/// <remarks>The resulting array is considered primitive only if it has a single dimension.</remarks>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 #if !NET9_0_OR_GREATER
 	public static JArrayObject ToPrimitiveArray<TPrimitive>(this ReadOnlySpan<TPrimitive> values, IEnvironment env,
 		params Int32[] lengths)
@@ -37,6 +40,9 @@ public static partial class PrimitiveArrayExtensions
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
 	/// <remarks>The resulting array is considered primitive only if it has a single dimension.</remarks>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 #if NET9_0_OR_GREATER
 	public static JArrayObject ToPrimitiveArray<TPrimitive>(this ReadOnlySpan<TPrimitive> values, IEnvironment env,
 		params ReadOnlySpan<Int32> lengths)

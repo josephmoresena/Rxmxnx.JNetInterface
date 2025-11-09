@@ -7,6 +7,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+[ExcludeFromCodeCoverage]
 #endif
 #if NET9_0_OR_GREATER
 internal unsafe ref struct ArrayFillState<TElement>(ReadOnlySpan<Int32> dimensions, ReadOnlySpan<TElement> values)

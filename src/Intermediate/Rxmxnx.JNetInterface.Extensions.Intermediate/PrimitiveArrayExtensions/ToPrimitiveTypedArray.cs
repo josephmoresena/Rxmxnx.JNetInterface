@@ -11,6 +11,9 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	[return: NotNullIfNotNull(nameof(array))]
 	public static JArrayObject<TPrimitive>? ToPrimitiveArray<TPrimitive>(this TPrimitive[]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
@@ -25,8 +28,12 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
-	public static JArrayObject<JArrayObject<TPrimitive>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,] array, IEnvironment env)
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
+	public static JArrayObject<JArrayObject<TPrimitive>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions.CreateInitialArray<JArrayObject<JArrayObject<TPrimitive>>, TPrimitive>(
 			array, env, array.AsSpan());
@@ -39,8 +46,12 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
-	public static JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,] array, IEnvironment env)
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
+	public static JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>, TPrimitive>(
@@ -54,8 +65,12 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
-	public static JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,] array, IEnvironment env)
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
+	public static JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>, TPrimitive>(
@@ -69,8 +84,12 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
-	public static JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,] array, IEnvironment env)
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
+	public static JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>,
@@ -84,8 +103,12 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
-	public static JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,] array, IEnvironment env)
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
+	public static JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<
@@ -100,9 +123,13 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
-		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,] array, IEnvironment env)
+		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<
@@ -118,10 +145,14 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<
-			JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,] array, IEnvironment env)
+			JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<
@@ -137,10 +168,14 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<
-			JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,] array, IEnvironment env)
+			JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<
@@ -156,10 +191,14 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<
-			JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,] array, IEnvironment env)
+			JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<
@@ -175,10 +214,14 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
-			JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,] array, IEnvironment env)
+			JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<
@@ -194,10 +237,14 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
-			JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,] array, IEnvironment env)
+			JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<
@@ -213,10 +260,14 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
-			JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,] array, IEnvironment env)
+			JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<
@@ -233,11 +284,15 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 			JArrayObject<
-				JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,] array, IEnvironment env)
+				JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
@@ -253,11 +308,15 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 			JArrayObject<JArrayObject<
-				JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,] array, IEnvironment env)
+				JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
@@ -273,11 +332,16 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 			JArrayObject<JArrayObject<JArrayObject<
 				JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,] array, IEnvironment env)
+		?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
@@ -293,12 +357,16 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 			JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 				JArrayObject<
-					JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,] array, IEnvironment env)
+					JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
@@ -316,12 +384,16 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 			JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 				JArrayObject<
-					JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,] array, IEnvironment env)
+					JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
@@ -339,12 +411,16 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 			JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 				JArrayObject<
-					JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,] array, IEnvironment env)
+					JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
@@ -362,12 +438,16 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 			JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 				JArrayObject<
 					JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,] array, IEnvironment env)
+		? ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
@@ -385,12 +465,16 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 			JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 				JArrayObject<JArrayObject<
-					JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,] array, IEnvironment env)
+					JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
@@ -408,12 +492,16 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 			JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 				JArrayObject<JArrayObject<JArrayObject<
-					JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,] array, IEnvironment env)
+					JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
@@ -431,12 +519,16 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 			JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 				JArrayObject<JArrayObject<JArrayObject<
-					JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,,] array, IEnvironment env)
+					JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
@@ -454,13 +546,17 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 			JArrayObject
 			<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 				JArrayObject<JArrayObject<JArrayObject<
-					JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,,,] array, IEnvironment env)
+					JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
@@ -480,13 +576,18 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 			JArrayObject
 			<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 				JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 					JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,,,,] array, IEnvironment env)
+		?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
@@ -506,14 +607,18 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 			JArrayObject
 			<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 				JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 					JArrayObject<
-						JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,,,,,] array, IEnvironment env)
+						JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
@@ -533,14 +638,18 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 			JArrayObject
 			<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 				JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 					JArrayObject<
-						JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,,,,,,] array, IEnvironment env)
+						JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
@@ -560,6 +669,10 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 			JArrayObject
@@ -567,8 +680,8 @@ public static partial class PrimitiveArrayExtensions
 				JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 					JArrayObject<
 						JArrayObject<
-							JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,,,,,,,] array, IEnvironment env)
+							JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
@@ -590,6 +703,10 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 			JArrayObject
@@ -597,8 +714,8 @@ public static partial class PrimitiveArrayExtensions
 				JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 					JArrayObject<JArrayObject<
 						JArrayObject<
-							JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,,,,,,,,] array, IEnvironment env)
+							JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>>>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
@@ -620,6 +737,10 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 			JArrayObject
@@ -628,7 +749,8 @@ public static partial class PrimitiveArrayExtensions
 					JArrayObject<JArrayObject<JArrayObject<
 						JArrayObject<
 							JArrayObject<JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,,,,,,,,,] array, IEnvironment env)
+		?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
@@ -650,6 +772,10 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 			JArrayObject
@@ -658,8 +784,8 @@ public static partial class PrimitiveArrayExtensions
 					JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 						JArrayObject<
 							JArrayObject<
-								JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,] array, IEnvironment env)
+								JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
@@ -681,6 +807,10 @@ public static partial class PrimitiveArrayExtensions
 	/// <returns>
 	/// A newly created <see cref="JArrayObject"/> instance representing the array.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[return: NotNullIfNotNull(nameof(array))]
 	public static
 		JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 			JArrayObject
@@ -689,8 +819,8 @@ public static partial class PrimitiveArrayExtensions
 					JArrayObject<JArrayObject<JArrayObject<JArrayObject<
 						JArrayObject<
 							JArrayObject<
-								JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,] array, IEnvironment env)
+								JArrayObject<JArrayObject<JArrayObject<TPrimitive>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>?
+		ToPrimitiveArray<TPrimitive>(this TPrimitive[,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,]? array, IEnvironment env)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> PrimitiveArrayExtensions
 			.CreateInitialArray<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<
