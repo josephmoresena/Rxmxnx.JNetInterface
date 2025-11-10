@@ -51,10 +51,10 @@ partial class JEnvironment
 			if (this.Version < NativeInterface24.RequiredVersion) return default;
 
 			ref readonly NativeInterface24 nativeInterface =
-				ref this.GetNativeInterface<NativeInterface24>(NativeInterface24.GetStringUtfLongLengthInfo);
+				ref this.GetNativeInterface<NativeInterface24>(NativeInterface24.GetStringUtfLengthAsLongInfo);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JStringLocalRef stringRef = jniTransaction.Add<JStringLocalRef>(jObject);
-			Int64 result = nativeInterface.GetStringUtfLongLength(this.Reference, stringRef);
+			Int64 result = nativeInterface.GetStringUtfLengthAsLong(this.Reference, stringRef);
 			if (result <= 0) this.CheckJniError();
 			return result;
 		}

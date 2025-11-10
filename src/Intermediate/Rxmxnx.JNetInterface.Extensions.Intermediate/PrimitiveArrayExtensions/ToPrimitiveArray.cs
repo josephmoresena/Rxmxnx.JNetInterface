@@ -52,6 +52,7 @@ public static partial class PrimitiveArrayExtensions
 #endif
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
+		if (lengths.IsEmpty) lengths = [1,];
 		JArrayTypeMetadata arrayTypeMetadata = JArrayObject<TPrimitive>.Metadata.GetArrayTypeMetadata(lengths.Length);
 		return PrimitiveArrayExtensions.CreateInitialArray(values, arrayTypeMetadata, env, lengths);
 	}

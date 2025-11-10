@@ -43,6 +43,7 @@ through the `JStringObject` class.
 
 - **`Length`**: UTF-16 character count. If not initialized, calls `GetStringLength`.
 - **`Utf8Length`**: UTF-8 byte count. If not initialized, calls `GetStringUTFLength`.
+- **`Utf8LongLength`**: Same as `Utf8Length` property but in Java 24 and later, calls `GetStringUTFLengthAsLong`.
 - **`Value`**: The string content. If not initialized, calls `GetStringRegion`.
 - **`Reference`**: JNI reference to the string instance.
 
@@ -125,10 +126,20 @@ The `JArrayObject<>` class exposes the following static methods:
 - **`Create(IEnvironment, Int32, JClassObject)`**: Creates an array with a specified element class.
 - **`Create(JClassObject, Int32, T)`**: Creates an array with a specified element class and initializes it.
 
+The `JArrayTypeMetadata` class exposes the method `CreateInstance(IEnvironment, Int32)` that allows to create an
+array of the class identified by the metadata with the specified length.
+
+### Primitive Array Creation
+
+Additionally to the previously mentioned methods, the `ToPrimitiveArray(IEnvironment)` extension methods allow to create
+primitives arrays from managed arrays of primitive types, including multidimensional ones.
+
 ##### Notes
 
 - Specifying an **element class** requires compatibility with the array type.
 - Initializing arrays with a default value is **only recommended** for **non-primitive** arrays.
+- There is also a `ToPrimitiveArray` extension method for read-only spans, where the dimensions of the array to be
+  created must be specified. If no dimensions are specified, a dimension of 1 is assumed.
 
 ---  
 

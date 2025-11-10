@@ -57,7 +57,10 @@ public abstract class JInterfaceTypeMetadata<TInterface> : JInterfaceTypeMetadat
 	where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 {
 	/// <inheritdoc/>
-	public sealed override JRuntimeVersion Since => TInterface.Since;
+	public sealed override JRuntimeVersion Since
+		=> this.Kind is JTypeKind.Interface || TInterface.Since >= JRuntimeVersion.J5 ?
+			TInterface.Since :
+			JRuntimeVersion.J5;
 
 	/// <inheritdoc/>
 	private protected JInterfaceTypeMetadata(ReadOnlySpan<Byte> interfaceName, Boolean isAnnotation) : base(

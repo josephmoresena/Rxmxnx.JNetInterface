@@ -41,7 +41,8 @@ public abstract class JEnumTypeMetadata : JClassTypeMetadata
 public abstract class JEnumTypeMetadata<TEnum> : JEnumTypeMetadata where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>
 {
 	/// <inheritdoc/>
-	public sealed override JRuntimeVersion Since => TEnum.Since;
+	public sealed override JRuntimeVersion Since
+		=> TEnum.Since >= JRuntimeVersion.J5 ? TEnum.Since : JRuntimeVersion.J5;
 
 	/// <inheritdoc/>
 	private protected JEnumTypeMetadata(ReadOnlySpan<Byte> className) : base(className) { }

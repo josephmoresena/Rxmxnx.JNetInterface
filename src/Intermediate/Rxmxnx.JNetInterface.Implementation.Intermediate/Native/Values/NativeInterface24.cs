@@ -34,17 +34,17 @@ internal readonly unsafe struct NativeInterface24 : INativeInterface<NativeInter
 	[ExcludeFromCodeCoverage]
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Int64 GetStringUtfLongLength(JEnvironmentRef envRef, JStringLocalRef stringRef)
+	public Int64 GetStringUtfLengthAsLong(JEnvironmentRef envRef, JStringLocalRef stringRef)
 		=> OperatingSystem.IsWindows() ?
 			this._windows.GetStringUtfLongLength(envRef, stringRef) :
 			this._unix.GetStringUtfLongLength(envRef, stringRef);
 
 	/// <summary>
-	/// Information of <see cref="GetStringUtfLongLength"/>
+	/// Information of <see cref="GetStringUtfLengthAsLong"/>
 	/// </summary>
-	public static readonly JniMethodInfo GetStringUtfLongLengthInfo = new()
+	public static readonly JniMethodInfo GetStringUtfLengthAsLongInfo = new()
 	{
-		Name = nameof(NativeInterface24.GetStringUtfLongLengthInfo), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(NativeInterface24.GetStringUtfLengthAsLong), Level = JniSafetyLevels.CriticalSafe,
 	};
 
 	/// <summary>

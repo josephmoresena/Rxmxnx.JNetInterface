@@ -36,6 +36,9 @@ Each metadata object exposes the following properties:
     - `java.lang.String` → Final
     - `java.lang.Object` → Extensible
     - `java.lang.Number` (`JNumberObject`) → Abstract
+- **`Since`**: Indicates the version of the Java language specification from which the current type exists.
+  This is especially useful to prevent errors when initializing main classes in environments with versions earlier than
+  their definition.
 
 ##### Notes
 
@@ -43,6 +46,8 @@ Each metadata object exposes the following properties:
   sequence containing the class name, JNI signature, and array signature.
 - Type metadata includes a `.ToString()` implementation, which may be unnecessary in release builds. To disable it, use
   the feature switch `JNetInterface.DisableTypeMetadataToString`.
+- The minimum recommended Java version to be used with `Rxmxnx.JNetInterface` is version **1.6**; however, limited
+  compatibility can be achieved with version **1.2**.
 
 ## Metadata Builders
 

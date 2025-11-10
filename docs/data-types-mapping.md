@@ -18,6 +18,15 @@ The following table illustrates how data type mapping works.
 4. While Java annotations (`@interface`) are not meant to be inherited, they are treated as interfaces in the mapping,
    allowing inheritance.
 
+##### Notes
+
+- By default, the static property `IDataType.Since` is initialized with the value `JRuntimeVersion.SEd0` (Java 1.0) but
+  can be overridden in any mapped type.
+- In .NET 8.0 and later, the value of the static property `IDataType.Since` is inherited from the base class but can be
+  overridden in any subclass.
+- The minimum allowed value for the static property `IDataType.Since`, both for annotations and enums, is
+  `JRuntimeVersion.J5` (Java 1.5).
+
 ## Specialized Types
 
 | Specialization | Java Declaration                                        | Base Type          | Interface                                           | Metadata                                               | Inheritance                           |
