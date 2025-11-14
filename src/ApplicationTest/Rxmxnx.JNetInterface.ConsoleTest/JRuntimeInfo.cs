@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using Rxmxnx.JNetInterface.Io;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Lang.Annotation;
+using Rxmxnx.JNetInterface.Lang.Reflect;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
@@ -37,6 +38,21 @@ public static class JRuntimeInfo
 		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JClassObject>.Metadata, 5);
 		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JThrowableObject>.Metadata, 5);
 		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JStringObject>.Metadata, 5);
+	}
+	public static void PrintPrimitiveArrayMetadataInfo()
+	{
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JBoolean>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JByte>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JChar>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JDouble>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JFloat>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JInt>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JLong>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JShort>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JLocalObject>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JClassObject>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JThrowableObject>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JStringObject>.Metadata);
 	}
 	public static void PrintVirtualMachineInfo(IEnvironment env, IInvokedVirtualMachine vm,
 		JVirtualMachineLibrary jvmLib)
@@ -87,34 +103,75 @@ public static class JRuntimeInfo
 			arrMetadata = arrMetadata.ElementMetadata as JArrayTypeMetadata;
 		}
 	}
+	private static void PrintArrayMetadata(JArrayTypeMetadata arrMetadata)
+	{
+		ReadOnlySpan<Byte> signature = arrMetadata.Signature;
+		Console.Write(arrMetadata.ElementMetadata.Signature);
+		Console.Write("->");
+		Console.Write(arrMetadata.Signature);
+		for (Int32 i = 0; i < 32; i++)
+		{
+			if (arrMetadata.GetArrayMetadata() is not { } arrMet2) break;
+			arrMetadata = arrMet2;
+		}
+		if (signature.SequenceEqual(arrMetadata.Signature)) return;
+		Console.Write("->");
+		Console.WriteLine(arrMetadata.Signature);
+	}
 	private static void PrintBuiltInMetadata()
 	{
 		Console.WriteLine("====== Primitive types ======");
 		Console.WriteLine(JPrimitiveTypeMetadata.VoidMetadata);
 		Console.WriteLine(IDataType.GetMetadata<JBoolean>());
+		Console.WriteLine(IDataType.GetMetadata<JByte>());
 		Console.WriteLine(IDataType.GetMetadata<JChar>());
+		Console.WriteLine(IDataType.GetMetadata<JShort>());
 		Console.WriteLine(IDataType.GetMetadata<JInt>());
+		Console.WriteLine(IDataType.GetMetadata<JLong>());
+		Console.WriteLine(IDataType.GetMetadata<JFloat>());
 		Console.WriteLine(IDataType.GetMetadata<JDouble>());
 
 		Console.WriteLine("====== Reference types ======");
 		Console.WriteLine(IDataType.GetMetadata<JLocalObject>());
 		Console.WriteLine(IDataType.GetMetadata<JClassObject>());
+		Console.WriteLine(IDataType.GetMetadata<JStringObject>());
+		Console.WriteLine(IDataType.GetMetadata<JEnumObject>());
+		Console.WriteLine(IDataType.GetMetadata<JNumberObject>());
+		Console.WriteLine(IDataType.GetMetadata<JThrowableObject>());
+		Console.WriteLine(IDataType.GetMetadata<JStackTraceElementObject>());
+		Console.WriteLine(IDataType.GetMetadata<JExceptionObject>());
 		Console.WriteLine(IDataType.GetMetadata<JRuntimeExceptionObject>());
+		Console.WriteLine(IDataType.GetMetadata<JErrorObject>());
 
 		Console.WriteLine("====== Wrapper types ======");
 		Console.WriteLine(IDataType.GetMetadata<JVoidObject>());
 		Console.WriteLine(IDataType.GetMetadata<JBooleanObject>());
-		Console.WriteLine(IDataType.GetMetadata<JCharacterObject>());
-		Console.WriteLine(IDataType.GetMetadata<JIntegerObject>());
+		Console.WriteLine(IDataType.GetMetadata<JByteObject>());
 		Console.WriteLine(IDataType.GetMetadata<JDoubleObject>());
+		Console.WriteLine(IDataType.GetMetadata<JFloatObject>());
+		Console.WriteLine(IDataType.GetMetadata<JIntegerObject>());
+		Console.WriteLine(IDataType.GetMetadata<JCharacterObject>());
+		Console.WriteLine(IDataType.GetMetadata<JLongObject>());
+		Console.WriteLine(IDataType.GetMetadata<JShortObject>());
 
 		Console.WriteLine("====== Array types ======");
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JBoolean>>());
 		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JByte>>());
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JChar>>());
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JShort>>());
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JInt>>());
 		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JLong>>());
 		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JFloat>>());
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JDouble>>());
 
 		Console.WriteLine("====== Interfaces types ======");
+		Console.WriteLine(IDataType.GetMetadata<JCharSequenceObject>());
+		Console.WriteLine(IDataType.GetMetadata<JCloneableObject>());
+		Console.WriteLine(IDataType.GetMetadata<JComparableObject>());
 		Console.WriteLine(IDataType.GetMetadata<JSerializableObject>());
+		Console.WriteLine(IDataType.GetMetadata<JAnnotatedElementObject>());
+		Console.WriteLine(IDataType.GetMetadata<JGenericDeclarationObject>());
+		Console.WriteLine(IDataType.GetMetadata<JTypeObject>());
 		Console.WriteLine(IDataType.GetMetadata<JAnnotationObject>());
 	}
 	private static void PrintAttachedThreadInfo(Object? obj)

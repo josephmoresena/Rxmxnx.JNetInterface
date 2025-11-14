@@ -12,10 +12,16 @@ public static class Program
 {
 	public static async Task Main(String[] args)
 	{
+		if (IVirtualMachine.TypeMetadataToStringEnabled && JRuntimeInfo.MatchArch && AotInfo.IsNativeAot)
 #if !NET9_0_OR_GREATER
-		if (IVirtualMachine.TypeMetadataToStringEnabled && JRuntimeInfo.MatchArch) JRuntimeInfo.PrintMetadataInfo();
+			JRuntimeInfo.PrintMetadataInfo();
+#else
+			if (IVirtualMachine.JaggedArrayAutoGenerationEnabled)
+				JRuntimeInfo.PrintPrimitiveArrayMetadataInfo();
 #endif
-		if (args.Length < 1) throw new ArgumentException("Please set JVM library path.");
+
+		if (args.Length < 1)
+			throw new ArgumentException("Please set JVM library path.");
 
 		Byte[] helloJniByteCode = await (args.Length > 1 && !String.IsNullOrWhiteSpace(args[1]) ?
 			File.ReadAllBytesAsync(Path.Combine(args[1], "HelloDotnet.class")) :
