@@ -415,24 +415,6 @@ jobs:
             ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "jar"
           }
 
-      - name: Run launcher (run - Full Framework)
-        shell: pwsh
-        run: |
-          if ($IsWindows) {
-            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "net"
-          } else {
-            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "net"
-          }
-
-      - name: Run launcher (run - Ready-To-Run)
-        shell: pwsh
-        run: |
-          if ($IsWindows) {
-            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "r2r"
-          } else {
-            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "r2r"
-          }
-
       - name: Run launcher (run - Native AOT)
         shell: pwsh
         run: |
@@ -449,6 +431,24 @@ jobs:
             ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "rfm"
           } else {
             ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "rfm"
+          }
+
+      - name: Run launcher (run - Ready-To-Run)
+        shell: pwsh
+        run: |
+          if ($IsWindows) {
+            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "r2r"
+          } else {
+            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "r2r"
+          }
+
+      - name: Run launcher (run - Full Framework)
+        shell: pwsh
+        run: |
+          if ($IsWindows) {
+            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "net"
+          } else {
+            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "net"
           }
   
   android-test:
