@@ -21,6 +21,7 @@
         <Using Include="System.IO.Compression"/>
         <Using Include="System.Runtime.InteropServices"/>
         <Using Include="System.Text"/>
+        <Using Include="System.Text.RegularExpressions"/>
 
         <Using Include="Rxmxnx.PInvoke"/>
         <Using Include="Rxmxnx.JNetInterface.ApplicationTest.Util"/>

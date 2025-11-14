@@ -32,11 +32,11 @@ if (compile)
 
 if (run || jar)
 	await launcher.ExecuteJar(launcher.NetVersions);
-if (run || net)
-	await launcher.Execute();
-if (run || r2R)
-	await launcher.Execute(".R2R");
 if (run || nAot)
 	await launcher.Execute(".NAOT");
 if (run || rfm)
 	await launcher.Execute(".RFM");
+if (run || r2R)
+	await launcher.Execute(".R2R");
+if (run || net)
+	await launcher.Execute();

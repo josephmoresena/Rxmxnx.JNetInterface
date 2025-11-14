@@ -22,11 +22,17 @@ public abstract partial class Launcher
 		Dictionary<String, Int32> results = new();
 		try
 		{
-			Dictionary<Architecture, FileInfo[]> archFiles = this.Architectures.ToDictionary(
+			String exeExtension = SystemInfo.IsWindows ? ".exe" : "";
+			Dictionary<Architecture, HashSet<FileInfo>> archFiles = this.Architectures.ToDictionary(
 				a => a,
-				a => this.OutputDirectory.GetFiles(
-					$"ApplicationTest.*.{this.RuntimeIdentifierPrefix}-{Enum.GetName(a)!.ToLower()}.net*.0{pattern}"));
-			foreach (Jdk jdk in this.Architectures.SelectMany(a => this[a]).ToHashSet())
+				a => this.OutputDirectory
+				         .GetFiles(
+					         $"ApplicationTest.*.{this.RuntimeIdentifierPrefix}-{Enum.GetName(a)!.ToLower()}.net*.0{pattern}{exeExtension}")
+				         .OrderBy(f => NetVersionParser.GetNetVersion(f.FullName)).ToHashSet());
+			HashSet<Jdk> jdks = this.Architectures.SelectMany(a => this[a])
+			                        .OrderBy(j => (j.JavaVersion, j.JavaArchitecture == this.CurrentArch,
+				                                 j.JavaArchitecture)).ToHashSet();
+			foreach (Jdk jdk in jdks)
 			{
 				foreach (FileInfo appFile in archFiles[jdk.JavaArchitecture])
 				{
@@ -52,7 +58,10 @@ public abstract partial class Launcher
 			FileInfo? jarFile = this.OutputDirectory.GetFiles("HelloJni.jar").FirstOrDefault();
 			if (jarFile is null) return;
 
-			foreach (Jdk jdk in this.Architectures.SelectMany(a => this[a]).ToHashSet())
+			HashSet<Jdk> jdks = this.Architectures.SelectMany(a => this[a])
+			                        .OrderBy(j => (j.JavaVersion, j.JavaArchitecture == this.CurrentArch,
+				                                 j.JavaArchitecture)).ToHashSet();
+			foreach (Jdk jdk in jdks)
 			{
 				foreach (NetVersion netVersion in netVersions)
 					await this.RunJarFile(jdk, jarFile, netVersion, results);
