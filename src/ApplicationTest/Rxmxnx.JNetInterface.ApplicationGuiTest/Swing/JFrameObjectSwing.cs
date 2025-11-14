@@ -69,7 +69,7 @@ public class JFrameObjectSwing : JFrameObjectAwt, IClassType<JFrameObjectSwing>,
 		using JClassObject jClass = JClassObject.GetClass<JFrameObjectSwing>(env);
 		JFrameObjectSwing.setContentPaneDef.MethodCall(this, jClass, false,
 #if !NET9_0_OR_GREATER
-		                                                         [contentPane,]
+		                                               [contentPane,]
 #else
 		                                               contentPane
 #endif
@@ -81,7 +81,7 @@ public class JFrameObjectSwing : JFrameObjectAwt, IClassType<JFrameObjectSwing>,
 		using JStringObject jString = JStringObject.Create(env, title);
 		return JFrameObjectSwing.titleConstructorDef.NewCall<JFrameObjectSwing>(env,
 #if !NET9_0_OR_GREATER
-		                                                         [jString,]
+				[jString,]
 #else
 				jString
 #endif

@@ -85,10 +85,11 @@ internal static class MetadataTextUtilities
 			MetadataTextUtilities.AppendProperty(strBuild, typeMetadata.ArgumentMetadata);
 		}
 		MetadataTextUtilities.AppendProperty(strBuild, nameof(JDataTypeMetadata.Type), $"{typeMetadata.Type}");
+		if (typeMetadata.Since > JRuntimeVersion.SEd2)
+			MetadataTextUtilities.AppendProperty(strBuild, nameof(JDataTypeMetadata.Since),
+			                                     typeMetadata.Since.GetRuntimeName());
 		MetadataTextUtilities.AppendHash(strBuild, typeMetadata.Hash);
 		MetadataTextUtilities.AppendObjectEnd(strBuild);
-		MetadataTextUtilities.AppendProperty(strBuild, nameof(JDataTypeMetadata.Since),
-		                                     typeMetadata.Since.GetRuntimeName());
 
 		return strBuild.ToString();
 	}

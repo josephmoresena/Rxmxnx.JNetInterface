@@ -36,7 +36,7 @@ public class JToolkitObject : JLocalObject, IClassType<JToolkitObject>
 		using JClassObject jClass = JClassObject.GetClass<JToolkitObject>(env);
 		JToolkitObject.addAwtEventListenerDef.MethodCall(this, jClass, false,
 #if !NET9_0_OR_GREATER
-		                                                         [eventListener, (JLong)(Int64)mask,]
+		                                                 [eventListener, (JLong)(Int64)mask,]
 #else
 		                                                 eventListener, (JLong)(Int64)mask
 #endif

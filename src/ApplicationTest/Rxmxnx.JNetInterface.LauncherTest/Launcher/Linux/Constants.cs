@@ -23,14 +23,13 @@ public partial class Launcher
 			},
 			{
 				JdkVersion.Jdk17,
-				"https://cdn.azul.com/zulu-embedded/bin/zulu17.60.17-ca-jdk17.0.16-c2-linux_aarch32hf.tar.gz"	// Update to 17.0.17
+				"https://cdn.azul.com/zulu-embedded/bin/zulu17.60.17-ca-jdk17.0.16-c2-linux_aarch32hf.tar.gz" // Update to 17.0.17
 			},
 		};
 		private static readonly Dictionary<JdkVersion, String> amd64Url = new()
 		{
 			{
-				JdkVersion.Jdk6,
-				"https://www.atteya.net/site/en/downloads/java-jdk?download=48:java-jdk-6u45-linux-x64"
+				JdkVersion.Jdk6, "https://www.atteya.net/site/en/downloads/java-jdk?download=48:java-jdk-6u45-linux-x64"
 			},
 			{ JdkVersion.Jdk8, "https://cdn.azul.com/zulu/bin/zulu8.90.0.19-ca-jdk8.0.472-linux_x64.tar.gz" },
 			{ JdkVersion.Jdk11, "https://aka.ms/download-jdk/microsoft-jdk-11.0.29-linux-x64.tar.gz" },

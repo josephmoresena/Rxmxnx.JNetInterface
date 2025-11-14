@@ -55,8 +55,10 @@ partial class JEnvironment
 #if !NET8_0_OR_GREATER
 						ReadOnlySpan<Char> chars = stackalloc Char[versionLength];
 						fixed (Char* charsPtr = &MemoryMarshal.GetReference(chars))
+						{
 							nativeInterface.StringRegionFunctions.Utf16.GetStringRegion(
 								this.Reference, propValueRef, 0, versionLength, charsPtr);
+						}
 #else
 						ReadOnlySpan<Byte> chars = stackalloc Byte[versionLength];
 						fixed (Byte* charsPtr = &MemoryMarshal.GetReference(chars))

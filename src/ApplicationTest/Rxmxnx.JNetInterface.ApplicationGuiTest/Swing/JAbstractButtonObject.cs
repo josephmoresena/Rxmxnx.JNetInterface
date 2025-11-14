@@ -37,7 +37,7 @@ public class JAbstractButtonObject : JComponentObjectSwing, IClassType<JAbstract
 		using JClassObject jClass = JClassObject.GetClass<JAbstractButtonObject>(env);
 		JAbstractButtonObject.addActionListenerDef.MethodCall(this, jClass, false,
 #if !NET9_0_OR_GREATER
-		                                                         [listener,]
+		                                                      [listener,]
 #else
 		                                                      listener
 #endif

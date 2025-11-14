@@ -30,8 +30,12 @@ public partial class Launcher
 		{
 			{ JdkVersion.Jdk11, "https://aka.ms/download-jdk/microsoft-jdk-11.0.29-windows-aarch64.zip" },
 			{ JdkVersion.Jdk17, "https://aka.ms/download-jdk/microsoft-jdk-17.0.16-windows-aarch64.zip" },
-			{ JdkVersion.Jdk21, "https://aka.ms/download-jdk/microsoft-jdk-21.0.8-windows-aarch64.zip" },		// Update to 21.0.9
-			{ JdkVersion.Jdk25, "https://cdn.azul.com/zulu/bin/zulu25.30.17-ca-jdk25.0.1-win_aarch64.zip" },	// Update to MS Version
+			{
+				JdkVersion.Jdk21, "https://aka.ms/download-jdk/microsoft-jdk-21.0.8-windows-aarch64.zip"
+			}, // Update to 21.0.9
+			{
+				JdkVersion.Jdk25, "https://cdn.azul.com/zulu/bin/zulu25.30.17-ca-jdk25.0.1-win_aarch64.zip"
+			}, // Update to MS Version
 		};
 		private static readonly EnumerationOptions searchOptions = new()
 		{

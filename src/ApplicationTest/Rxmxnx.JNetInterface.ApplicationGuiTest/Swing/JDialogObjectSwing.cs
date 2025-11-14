@@ -12,7 +12,10 @@ public class JDialogObjectSwing : JDialogObject, IClassType<JDialogObjectSwing>,
 {
 	private static readonly IndeterminateCall constructorDef = IndeterminateCall.CreateConstructorDefinition(
 #if !NET9_0_OR_GREATER
-		[JArgumentMetadata.Get<JFrameObjectAwt>(), JArgumentMetadata.Get<JStringObject>(), JArgumentMetadata.Get<JBoolean>(),]
+		[
+			JArgumentMetadata.Get<JFrameObjectAwt>(), JArgumentMetadata.Get<JStringObject>(),
+			JArgumentMetadata.Get<JBoolean>(),
+		]
 #else
 		JArgumentMetadata.Get<JFrameObjectAwt>(), JArgumentMetadata.Get<JStringObject>(),
 		JArgumentMetadata.Get<JBoolean>()
