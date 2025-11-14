@@ -31,7 +31,7 @@ internal readonly unsafe struct
 	public void Release(JEnvironmentRef envRef, TArrayRef arrayRef, ReadOnlyValPtr<TPrimitiveType> elements,
 		JReleaseMode mode)
 	{
-		if (OperatingSystem.IsWindows())
+		if (SystemInfo.IsWindows)
 			this._function.Windows(envRef, arrayRef.ArrayValue, elements, mode);
 		else
 			this._function.Unix(envRef, arrayRef.ArrayValue, elements, mode);

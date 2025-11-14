@@ -39,7 +39,7 @@ internal readonly unsafe partial struct StringFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JStringLocalRef NewString(JEnvironmentRef envRef, Char* textPtr, Int32 textLength)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._newString.Windows(envRef, textPtr, textLength) :
 			this._newString.Unix(envRef, textPtr, textLength);
 	/// <summary>
@@ -50,7 +50,7 @@ internal readonly unsafe partial struct StringFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JStringLocalRef NewStringUtf(JEnvironmentRef envRef, Byte* textPtr)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._newStringUtf.Windows(envRef, textPtr) :
 			this._newStringUtf.Unix(envRef, textPtr);
 }
@@ -80,7 +80,7 @@ internal readonly unsafe struct StringFunctionSet<TChar> : IStringFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Int32 GetStringLength(JEnvironmentRef envRef, JStringLocalRef stringRef)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._functions.Windows.GetLength(envRef, stringRef) :
 			this._functions.Unix.GetLength(envRef, stringRef);
 	/// <summary>
@@ -94,7 +94,7 @@ internal readonly unsafe struct StringFunctionSet<TChar> : IStringFunctionSet
 	{
 		fixed (JBoolean* isCopyPtr = &isCopy)
 		{
-			return (ReadOnlyValPtr<TChar>)(OperatingSystem.IsWindows() ?
+			return (ReadOnlyValPtr<TChar>)(SystemInfo.IsWindows ?
 				this._functions.Windows.GetChars(envRef, stringRef, isCopyPtr) :
 				this._functions.Unix.GetChars(envRef, stringRef, isCopyPtr));
 		}
@@ -108,7 +108,7 @@ internal readonly unsafe struct StringFunctionSet<TChar> : IStringFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void ReleaseStringChars(JEnvironmentRef envRef, JStringLocalRef stringRef, ReadOnlyValPtr<TChar> chars)
 	{
-		if (OperatingSystem.IsWindows())
+		if (SystemInfo.IsWindows)
 			this._functions.Windows.ReleaseChars(envRef, stringRef, chars);
 		else
 			this._functions.Unix.ReleaseChars(envRef, stringRef, chars);

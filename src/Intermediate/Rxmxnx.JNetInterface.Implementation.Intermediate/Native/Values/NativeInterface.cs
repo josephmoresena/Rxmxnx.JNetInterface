@@ -113,7 +113,7 @@ internal readonly unsafe partial struct NativeInterface : INativeInterface<Nativ
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Int32 GetVersion(JEnvironmentRef envRef)
-		=> OperatingSystem.IsWindows() ? this._getVersion.Windows(envRef) : this._getVersion.Unix(envRef);
+		=> SystemInfo.IsWindows ? this._getVersion.Windows(envRef) : this._getVersion.Unix(envRef);
 	/// <summary>
 	/// <c>ExceptionCheck</c>.
 	/// </summary>
@@ -122,7 +122,7 @@ internal readonly unsafe partial struct NativeInterface : INativeInterface<Nativ
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JBoolean ExceptionCheck(JEnvironmentRef envRef)
-		=> OperatingSystem.IsWindows() ? this._exceptionCheck.Windows(envRef) : this._exceptionCheck.Unix(envRef);
+		=> SystemInfo.IsWindows ? this._exceptionCheck.Windows(envRef) : this._exceptionCheck.Unix(envRef);
 	/// <summary>
 	/// <c>GetVirtualMachine</c>.
 	/// </summary>
@@ -134,7 +134,7 @@ internal readonly unsafe partial struct NativeInterface : INativeInterface<Nativ
 	{
 		fixed (JVirtualMachineRef* vmRefPtr = &vmRef)
 		{
-			return OperatingSystem.IsWindows() ?
+			return SystemInfo.IsWindows ?
 				this._getVirtualMachine.Windows(envRef, vmRefPtr) :
 				this._getVirtualMachine.Unix(envRef, vmRefPtr);
 		}

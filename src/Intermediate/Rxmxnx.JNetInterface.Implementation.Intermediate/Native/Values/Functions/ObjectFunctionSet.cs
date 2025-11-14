@@ -40,7 +40,7 @@ internal readonly unsafe partial struct ObjectFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JObjectLocalRef AllocObject(JEnvironmentRef envRef, JClassLocalRef classRef)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._allocObject.Windows(envRef, classRef) :
 			this._allocObject.Unix(envRef, classRef);
 	/// <summary>
@@ -51,7 +51,7 @@ internal readonly unsafe partial struct ObjectFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JClassLocalRef GetObjectClass(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._getObjectClass.Windows(envRef, localRef) :
 			this._getObjectClass.Unix(envRef, localRef);
 	/// <summary>
@@ -62,7 +62,7 @@ internal readonly unsafe partial struct ObjectFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JBoolean IsInstanceOf(JEnvironmentRef envRef, JObjectLocalRef localRef, JClassLocalRef classRef)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._instanceOf.Windows(envRef, localRef, classRef) :
 			this._instanceOf.Unix(envRef, localRef, classRef);
 }

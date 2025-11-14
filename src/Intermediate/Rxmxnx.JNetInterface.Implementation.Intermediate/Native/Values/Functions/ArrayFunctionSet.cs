@@ -67,7 +67,7 @@ internal readonly unsafe partial struct ArrayFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Int32 GetArrayLength(JEnvironmentRef envRef, JArrayLocalRef arrayRef)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._getArrayLength.Windows(envRef, arrayRef) :
 			this._getArrayLength.Unix(envRef, arrayRef);
 }

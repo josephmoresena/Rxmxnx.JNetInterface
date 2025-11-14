@@ -3,6 +3,7 @@ using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
+using Rxmxnx.PInvoke;
 
 namespace Rxmxnx.JNetInterface.Awt;
 
@@ -86,7 +87,7 @@ public class JWindowObject : JContainerObject, IClassType<JWindowObject>
 
 		if (env.Version < (Int32)JRuntimeVersion.J9)
 		{
-			if (!OperatingSystem.IsMacOS() && !OperatingSystem.IsIOS() && !OperatingSystem.IsTvOS())
+			if (!SystemInfo.IsMac)
 				return;
 			className = "com/apple/eawt/Application"u8;
 			getInstanceFunctionName = "getApplication"u8;

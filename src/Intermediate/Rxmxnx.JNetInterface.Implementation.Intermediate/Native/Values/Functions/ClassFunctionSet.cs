@@ -66,7 +66,7 @@ internal readonly unsafe partial struct ClassFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JClassLocalRef DefineClass(JEnvironmentRef envRef, Byte* className, JObjectLocalRef localRef, Byte* buffPtr,
 		Int32 buffSize)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._defineClass.Windows(envRef, className, localRef, buffPtr, buffSize) :
 			this._defineClass.Unix(envRef, className, localRef, buffPtr, buffSize);
 	/// <summary>
@@ -77,9 +77,7 @@ internal readonly unsafe partial struct ClassFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JClassLocalRef FindClass(JEnvironmentRef envRef, Byte* className)
-		=> OperatingSystem.IsWindows() ?
-			this._findClass.Windows(envRef, className) :
-			this._findClass.Unix(envRef, className);
+		=> SystemInfo.IsWindows ? this._findClass.Windows(envRef, className) : this._findClass.Unix(envRef, className);
 	/// <summary>
 	/// <c>GetSuperClass</c>.
 	/// </summary>
@@ -88,7 +86,7 @@ internal readonly unsafe partial struct ClassFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JClassLocalRef GetSuperclass(JEnvironmentRef envRef, JClassLocalRef classRef)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._getSuperclass.Windows(envRef, classRef) :
 			this._getSuperclass.Unix(envRef, classRef);
 	/// <summary>
@@ -99,7 +97,7 @@ internal readonly unsafe partial struct ClassFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JBoolean IsAssignableFrom(JEnvironmentRef envRef, JClassLocalRef classRef0, JClassLocalRef classRef1)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._isAssignableFrom.Windows(envRef, classRef0, classRef1) :
 			this._isAssignableFrom.Unix(envRef, classRef0, classRef1);
 }

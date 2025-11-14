@@ -4,11 +4,11 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 {
 	private const String NativeLibraryName = "JvmProxy";
 
-	private static readonly String systemLibraryName = OperatingSystem.IsWindows() ? "user32" :
-		OperatingSystem.IsMacOS() ? "/usr/lib/libSystem.B.dylib" : "libc";
-	private static readonly String libraryPrefix = OperatingSystem.IsWindows() ? String.Empty : "lib";
-	private static readonly String nativeExtension = OperatingSystem.IsWindows() ? ".dll" :
-		OperatingSystem.IsMacOS() ? ".dylib" : ".so";
+	private static readonly String systemLibraryName = SystemInfo.IsWindows ? "user32" :
+		SystemInfo.IsMac ? "/usr/lib/libSystem.B.dylib" : "libc";
+	private static readonly String libraryPrefix = SystemInfo.IsWindows ? String.Empty : "lib";
+	private static readonly String nativeExtension = SystemInfo.IsWindows ? ".dll" :
+		SystemInfo.IsMac ? ".dylib" : ".so";
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 
 	private static String GetProxyPath(JvmProxyType proxyType)

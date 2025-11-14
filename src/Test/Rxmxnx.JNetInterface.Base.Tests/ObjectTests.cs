@@ -43,8 +43,8 @@ public sealed class ObjectTests
 		ValueProxy[] array = MemoryMarshal.Cast<Byte, ValueProxy>(
 			ObjectTests.fixture.CreateMany<Byte>(length * JValue.Size).ToArray()).ToArray();
 		Int32 index = Random.Shared.Next(0, array.Length);
-		view.CopyTo(MemoryMarshal.Cast<ValueProxy, JValue>(array), index);
-		jObject.Received(1).CopyTo(Arg.Is<ValueProxy[]>(a => a.SequenceEqual(array)), index);
+		view.CopyTo(MemoryMarshal.Cast<ValueProxy, JValue>(array.AsSpan()), index);
+		jObject.Received(1).CopyTo(Arg.Is<ValueProxy[]>(a => ((IEnumerable<ValueProxy>)a).SequenceEqual(array)), index);
 	}
 	[Fact]
 	internal void ViewInformationTest()

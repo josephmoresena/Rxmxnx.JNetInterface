@@ -22,7 +22,7 @@ public partial class Launcher
 			if (jarArgs.NoReflection)
 				args.Add("-Ddotnet.reflection.disable=true");
 			args.Add(jarArgs.JdkVersion > JdkVersion.Jdk6 ? "-XX:+ErrorFileToStdout" :
-			         !OperatingSystem.IsWindows() ? "-XX:ErrorFile=/dev/stderr" : "");
+			         !SystemInfo.IsWindows ? "-XX:ErrorFile=/dev/stderr" : "");
 			args.Add("-XX:+UnlockDiagnosticVMOptions");
 			if (Boolean.TryParse(Environment.GetEnvironmentVariable("JNETINTERFACE_JNI_CHECK"),
 			                     out Boolean useJniCheck) && useJniCheck)

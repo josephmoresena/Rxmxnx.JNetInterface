@@ -31,7 +31,7 @@ internal readonly partial struct ReferenceFunctionSet
 #endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public JResult PushLocalFrame(JEnvironmentRef envRef, Int32 capacity)
-			=> OperatingSystem.IsWindows() ?
+			=> SystemInfo.IsWindows ?
 				this._windows.PushLocalFrame(envRef, capacity) :
 				this._unix.PushLocalFrame(envRef, capacity);
 		/// <summary>
@@ -42,7 +42,7 @@ internal readonly partial struct ReferenceFunctionSet
 #endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public JObjectLocalRef PopLocalFrame(JEnvironmentRef envRef, JObjectLocalRef localRef)
-			=> OperatingSystem.IsWindows() ?
+			=> SystemInfo.IsWindows ?
 				this._windows.PopLocalFrame(envRef, localRef) :
 				this._unix.PopLocalFrame(envRef, localRef);
 

@@ -116,15 +116,13 @@ static String ExtractJar()
 }
 static String GetImageName()
 {
-	if (OperatingSystem.IsWindows())
+	if (SystemInfo.IsWindows)
 		return "windows.png";
-	if (OperatingSystem.IsLinux())
+	if (SystemInfo.IsLinux)
 		return "linux.png";
-	if (OperatingSystem.IsFreeBSD())
+	if (SystemInfo.IsFreeBsd)
 		return "freebsd.png";
-	return !OperatingSystem.IsBrowser() ?
-		"macosx.png" :
-		throw new PlatformNotSupportedException("Unsupported platform.");
+	return !SystemInfo.IsWebRuntime ? "macosx.png" : throw new PlatformNotSupportedException("Unsupported platform.");
 }
 static Byte[] GetResourceBytes(String fileName)
 {
@@ -160,7 +158,7 @@ static JFrameObjectSwing CreateFrame(IEnvironment env, String title)
 
 	using JImageIconObject icon = JImageIconObject.Create(env, GetResourceBytes("icon.png"))!;
 	using JImageObject image = icon.GetImage();
-	if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux() || OperatingSystem.IsFreeBSD())
+	if (SystemInfo.IsWindows || SystemInfo.IsLinux || SystemInfo.IsFreeBsd)
 		result.SetIcon(image);
 	else
 		JWindowObject.SetApplicationIcon(image);

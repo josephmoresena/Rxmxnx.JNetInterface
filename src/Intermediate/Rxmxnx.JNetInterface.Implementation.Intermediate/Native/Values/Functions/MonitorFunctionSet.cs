@@ -29,7 +29,7 @@ internal readonly unsafe struct MonitorFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult MonitorEnter(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._windows.MonitorEnter(envRef, localRef) :
 			this._unix.MonitorEnter(envRef, localRef);
 	/// <summary>
@@ -40,7 +40,7 @@ internal readonly unsafe struct MonitorFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult MonitorExit(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._windows.MonitorExit(envRef, localRef) :
 			this._unix.MonitorExit(envRef, localRef);
 

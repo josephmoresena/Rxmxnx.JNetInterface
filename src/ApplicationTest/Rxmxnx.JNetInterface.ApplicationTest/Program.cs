@@ -74,7 +74,7 @@ public static class Program
 			{
 				Options = new("-DjniLib.load.disable=true", JRuntimeInfo.JniCheckOption, "-Xrs",
 				              jdkVersion > (Int32)JRuntimeVersion.J8 ? "-XX:+ErrorFileToStdout" :
-				              OperatingSystem.IsWindows() ? "-XX:ErrorFile=/dev/stderr" : default,
+				              SystemInfo.IsWindows ? "-XX:ErrorFile=/dev/stderr" : default,
 				              JVirtualMachine.TraceEnabled ? "-verbose:jni" : default,
 				              JVirtualMachine.TraceEnabled ? "-verbose:class" : default,
 				              JVirtualMachine.TraceEnabled ? "-verbose:gc" : default,

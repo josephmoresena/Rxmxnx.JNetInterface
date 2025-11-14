@@ -26,15 +26,13 @@ internal readonly unsafe struct ErrorFunctionSet
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult Throw(JEnvironmentRef envRef, JThrowableLocalRef throwableRef)
-		=> OperatingSystem.IsWindows() ?
-			this._windows.Throw(envRef, throwableRef) :
-			this._unix.Throw(envRef, throwableRef);
+		=> SystemInfo.IsWindows ? this._windows.Throw(envRef, throwableRef) : this._unix.Throw(envRef, throwableRef);
 	/// <summary>
 	/// <c>ThrowNew</c>.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult ThrowNew(JEnvironmentRef envRef, JClassLocalRef classRef, Byte* messagePtr)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._windows.ThrowNew(envRef, classRef, messagePtr) :
 			this._unix.ThrowNew(envRef, classRef, messagePtr);
 	/// <summary>
@@ -42,14 +40,14 @@ internal readonly unsafe struct ErrorFunctionSet
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JThrowableLocalRef ExceptionOccurred(JEnvironmentRef envRef)
-		=> OperatingSystem.IsWindows() ? this._windows.ExceptionOccurred(envRef) : this._unix.ExceptionOccurred(envRef);
+		=> SystemInfo.IsWindows ? this._windows.ExceptionOccurred(envRef) : this._unix.ExceptionOccurred(envRef);
 	/// <summary>
 	/// <c>ExceptionDescribe</c>.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void ExceptionDescribe(JEnvironmentRef envRef)
 	{
-		if (OperatingSystem.IsWindows())
+		if (SystemInfo.IsWindows)
 			this._windows.ExceptionDescribe(envRef);
 		else
 			this._unix.ExceptionDescribe(envRef);
@@ -60,7 +58,7 @@ internal readonly unsafe struct ErrorFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void ExceptionClear(JEnvironmentRef envRef)
 	{
-		if (OperatingSystem.IsWindows())
+		if (SystemInfo.IsWindows)
 			this._windows.ExceptionClear(envRef);
 		else
 			this._unix.ExceptionClear(envRef);
@@ -71,7 +69,7 @@ internal readonly unsafe struct ErrorFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void FatalError(JEnvironmentRef envRef, Byte* messagePtr)
 	{
-		if (OperatingSystem.IsWindows())
+		if (SystemInfo.IsWindows)
 			this._windows.FatalError(envRef, messagePtr);
 		else
 			this._unix.FatalError(envRef, messagePtr);

@@ -9,8 +9,7 @@ public static class Utilities
 		=> netVersion >= NetVersion.Net70 && arch switch
 		{
 			Architecture.X64 => true,
-			Architecture.Arm64 => netVersion >= NetVersion.Net80 || OperatingSystem.IsWindows() ||
-				OperatingSystem.IsLinux(),
+			Architecture.Arm64 => netVersion >= NetVersion.Net80 || SystemInfo.IsWindows || SystemInfo.IsLinux,
 			Architecture.X86 or Architecture.Arm or Architecture.Armv6 => netVersion >= NetVersion.Net90,
 			_ => false,
 		};

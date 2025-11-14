@@ -31,9 +31,7 @@ internal readonly unsafe struct InvokeInterface
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult DestroyVirtualMachine(JVirtualMachineRef vmRef)
-		=> OperatingSystem.IsWindows() ?
-			this._windows.DestroyVirtualMachine(vmRef) :
-			this._unix.DestroyVirtualMachine(vmRef);
+		=> SystemInfo.IsWindows ? this._windows.DestroyVirtualMachine(vmRef) : this._unix.DestroyVirtualMachine(vmRef);
 	/// <summary>
 	/// Pointer to <c>AttachCurrentThread</c> function. Attaches the current thread to a JVM.
 	/// </summary>
@@ -47,7 +45,7 @@ internal readonly unsafe struct InvokeInterface
 		fixed (JEnvironmentRef* envRefPtr = &envRef)
 		fixed (VirtualMachineArgumentValue* vmArgPtr = &vmArg)
 		{
-			return OperatingSystem.IsWindows() ?
+			return SystemInfo.IsWindows ?
 				this._windows.AttachCurrentThread(vmRef, envRefPtr, vmArgPtr) :
 				this._unix.AttachCurrentThread(vmRef, envRefPtr, vmArgPtr);
 		}
@@ -60,9 +58,7 @@ internal readonly unsafe struct InvokeInterface
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult DetachCurrentThread(JVirtualMachineRef vmRef)
-		=> OperatingSystem.IsWindows() ?
-			this._windows.DetachCurrentThread(vmRef) :
-			this._unix.DetachCurrentThread(vmRef);
+		=> SystemInfo.IsWindows ? this._windows.DetachCurrentThread(vmRef) : this._unix.DetachCurrentThread(vmRef);
 	/// <summary>
 	/// Pointer to <c>GetEnv</c> function. Retrieves the <c>JNIEnv</c> pointer for the current thread.
 	/// </summary>
@@ -74,7 +70,7 @@ internal readonly unsafe struct InvokeInterface
 	{
 		fixed (JEnvironmentRef* envRefPtr = &envRef)
 		{
-			return OperatingSystem.IsWindows() ?
+			return SystemInfo.IsWindows ?
 				this._windows.GetEnv(vmRef, envRefPtr, jniVersion) :
 				this._unix.GetEnv(vmRef, envRefPtr, jniVersion);
 		}
@@ -93,7 +89,7 @@ internal readonly unsafe struct InvokeInterface
 		fixed (JEnvironmentRef* envRefPtr = &envRef)
 		fixed (VirtualMachineArgumentValue* vmArgPtr = &vmArg)
 		{
-			return OperatingSystem.IsWindows() ?
+			return SystemInfo.IsWindows ?
 				this._windows.AttachCurrentThreadAsDaemon(vmRef, envRefPtr, vmArgPtr) :
 				this._unix.AttachCurrentThreadAsDaemon(vmRef, envRefPtr, vmArgPtr);
 		}

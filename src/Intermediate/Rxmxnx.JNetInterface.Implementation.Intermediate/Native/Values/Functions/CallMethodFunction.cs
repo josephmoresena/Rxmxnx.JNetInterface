@@ -34,7 +34,7 @@ internal readonly unsafe struct CallMethodFunction<TReceiver> : ICallMethodFunct
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void Call(JEnvironmentRef envRef, TReceiver receiver, JMethodId methodId, JValue* args)
 	{
-		if (OperatingSystem.IsWindows())
+		if (SystemInfo.IsWindows)
 			this._function.Windows.Void(envRef, receiver.Pointer, methodId, args);
 		else
 			this._function.Unix.Void(envRef, receiver.Pointer, methodId, args);

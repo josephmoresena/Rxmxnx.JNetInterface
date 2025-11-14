@@ -27,7 +27,7 @@ internal readonly unsafe struct GetAccessibleIdFunction<TAccessible> : IGetAcces
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TAccessible GetId(JEnvironmentRef envRef, JClassLocalRef localRef, Byte* name, Byte* descriptor)
 	{
-		IntPtr result = OperatingSystem.IsWindows() ?
+		IntPtr result = SystemInfo.IsWindows ?
 			this._function.Windows(envRef, localRef, name, descriptor) :
 			this._function.Unix(envRef, localRef, name, descriptor);
 		return TAccessible.New(result);

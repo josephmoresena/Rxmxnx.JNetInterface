@@ -6,10 +6,10 @@ public partial class Launcher
 	{
 		ConsoleNotifier.PlatformNotifier.BeginDetection();
 
-		OSPlatform platform = OperatingSystem.IsWindows() ? OSPlatform.Windows :
-			OperatingSystem.IsMacOS() ? OSPlatform.OSX :
-			OperatingSystem.IsLinux() ? OSPlatform.Linux :
-			OperatingSystem.IsFreeBSD() ? OSPlatform.FreeBSD : default;
+		OSPlatform platform = SystemInfo.IsWindows ? OSPlatform.Windows :
+			SystemInfo.IsMac ? OSPlatform.OSX :
+			SystemInfo.IsLinux ? OSPlatform.Linux :
+			SystemInfo.IsFreeBsd ? OSPlatform.FreeBSD : default;
 
 		if (platform == OSPlatform.OSX)
 			return await Launcher.Create<Mac>(outputDirectory);

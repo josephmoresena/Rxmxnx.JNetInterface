@@ -28,7 +28,7 @@ internal readonly unsafe struct ToReflectedFunction<TAccessible> : IToReflectedF
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JObjectLocalRef ToReflected(JEnvironmentRef envRef, JClassLocalRef classRef, TAccessible accessibleId,
 		JBoolean isStatic)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._function.Windows(envRef, classRef, accessibleId.Pointer, isStatic) :
 			this._function.Unix(envRef, classRef, accessibleId.Pointer, isStatic);
 }

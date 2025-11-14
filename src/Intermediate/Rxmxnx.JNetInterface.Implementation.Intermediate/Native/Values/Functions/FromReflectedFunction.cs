@@ -27,7 +27,7 @@ internal readonly unsafe struct FromReflectedFunction<TAccessible> : IFromReflec
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TAccessible FromReflected(JEnvironmentRef envRef, JObjectLocalRef localRef)
 	{
-		IntPtr result = OperatingSystem.IsWindows() ?
+		IntPtr result = SystemInfo.IsWindows ?
 			this._function.Windows(envRef, localRef) :
 			this._function.Unix(envRef, localRef);
 		return TAccessible.New(result);

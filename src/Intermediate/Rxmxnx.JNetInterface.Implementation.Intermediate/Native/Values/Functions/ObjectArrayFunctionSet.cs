@@ -30,7 +30,7 @@ internal readonly unsafe struct ObjectArrayFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JObjectArrayLocalRef NewObjectArray(JEnvironmentRef envRef, Int32 length, JClassLocalRef classRef,
 		JObjectLocalRef localRef)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._windows.NewObjectArray(envRef, length, classRef, localRef) :
 			this._unix.NewObjectArray(envRef, length, classRef, localRef);
 	/// <summary>
@@ -41,7 +41,7 @@ internal readonly unsafe struct ObjectArrayFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JObjectLocalRef GetObjectArrayElement(JEnvironmentRef envRef, JObjectArrayLocalRef arrayRef, Int32 index)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._windows.GetObjectArrayElement(envRef, arrayRef, index) :
 			this._unix.GetObjectArrayElement(envRef, arrayRef, index);
 	/// <summary>
@@ -54,7 +54,7 @@ internal readonly unsafe struct ObjectArrayFunctionSet
 	public void SetObjectArrayElement(JEnvironmentRef envRef, JObjectArrayLocalRef arrayRef, Int32 index,
 		JObjectLocalRef localRef)
 	{
-		if (OperatingSystem.IsWindows())
+		if (SystemInfo.IsWindows)
 			this._windows.SetObjectArrayElement(envRef, arrayRef, index, localRef);
 		else
 			this._unix.SetObjectArrayElement(envRef, arrayRef, index, localRef);

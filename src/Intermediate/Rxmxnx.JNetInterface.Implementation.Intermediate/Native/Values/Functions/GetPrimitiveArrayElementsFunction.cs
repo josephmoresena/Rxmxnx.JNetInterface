@@ -32,7 +32,7 @@ internal readonly unsafe struct
 	{
 		fixed (JBoolean* isCopyPtr = &isCopy)
 		{
-			return (ValPtr<TPrimitiveType>)(OperatingSystem.IsWindows() ?
+			return (ValPtr<TPrimitiveType>)(SystemInfo.IsWindows ?
 				this._function.Windows(envRef, arrayRef.ArrayValue, isCopyPtr) :
 				this._function.Unix(envRef, arrayRef.ArrayValue, isCopyPtr));
 		}

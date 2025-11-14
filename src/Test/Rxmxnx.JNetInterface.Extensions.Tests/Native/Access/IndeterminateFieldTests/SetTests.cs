@@ -104,7 +104,8 @@ public sealed class SetTests : IndeterminateAccessTestsBase
 			                                     i.GetGenericTypeDefinition() == typeof(IPrimitiveWrapperType<,>))
 		                     ?.GetGenericArguments() is { } wrapperTypes)
 		{
-			action += SetTests.primitiveFieldWrapperTestInfo.MakeGenericMethod([..wrapperTypes.Reverse(),])
+			action += SetTests.primitiveFieldWrapperTestInfo
+			                  .MakeGenericMethod([..((IEnumerable<Type>)wrapperTypes).Reverse(),])
 			                  .CreateDelegate<Action>();
 			action += SetTests.wrapperFieldPrimitiveTestInfo.MakeGenericMethod(wrapperTypes).CreateDelegate<Action>();
 		}

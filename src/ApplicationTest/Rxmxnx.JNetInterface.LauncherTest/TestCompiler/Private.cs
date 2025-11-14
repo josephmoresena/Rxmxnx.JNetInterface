@@ -134,7 +134,7 @@ public partial class TestCompiler
 				await TestCompiler.CompileNet(compileArgs);
 				compileArgs.BuildDependencies = false;
 
-				if (!OperatingSystem.IsFreeBSD())
+				if (!SystemInfo.IsFreeBsd)
 				{
 					compileArgs.Publish = Publish.ReadyToRun;
 					await TestCompiler.CompileNet(compileArgs);
@@ -196,9 +196,9 @@ public partial class TestCompiler
 		Architecture currentArch = RuntimeInformation.OSArchitecture;
 		return arch == currentArch || currentArch switch
 		{
-			Architecture.X86 => OperatingSystem.IsWindows(),
-			Architecture.Arm or Architecture.Armv6 => OperatingSystem.IsLinux(),
-			_ => !OperatingSystem.IsFreeBSD(),
+			Architecture.X86 => SystemInfo.IsWindows,
+			Architecture.Arm or Architecture.Armv6 => SystemInfo.IsLinux,
+			_ => !SystemInfo.IsFreeBsd,
 		};
 	}
 	private static void NetCleanUp(RestoreNetArgs restoreArgs)

@@ -35,31 +35,31 @@ internal readonly unsafe struct CallNonVirtualGenericFunction<TResult> : ICallNo
 		JValue* args)
 		=> TResult.Type switch
 		{
-			JNativeType.JBoolean when OperatingSystem.IsWindows() => this._function.Windows.Boolean(
+			JNativeType.JBoolean when SystemInfo.IsWindows => this._function.Windows.Boolean(
 				envRef, localRef, classRef, methodId, args),
 			JNativeType.JBoolean => this._function.Unix.Boolean(envRef, localRef, classRef, methodId, args),
-			JNativeType.JByte when OperatingSystem.IsWindows() => this._function.Windows.Byte(
+			JNativeType.JByte when SystemInfo.IsWindows => this._function.Windows.Byte(
 				envRef, localRef, classRef, methodId, args),
 			JNativeType.JByte => this._function.Unix.Byte(envRef, localRef, classRef, methodId, args),
-			JNativeType.JChar when OperatingSystem.IsWindows() => this._function.Windows.Char(
+			JNativeType.JChar when SystemInfo.IsWindows => this._function.Windows.Char(
 				envRef, localRef, classRef, methodId, args),
 			JNativeType.JChar => this._function.Unix.Char(envRef, localRef, classRef, methodId, args),
-			JNativeType.JDouble when OperatingSystem.IsWindows() => this._function.Windows.Double(
+			JNativeType.JDouble when SystemInfo.IsWindows => this._function.Windows.Double(
 				envRef, localRef, classRef, methodId, args),
 			JNativeType.JDouble => this._function.Unix.Double(envRef, localRef, classRef, methodId, args),
-			JNativeType.JFloat when OperatingSystem.IsWindows() => this._function.Windows.Float(
+			JNativeType.JFloat when SystemInfo.IsWindows => this._function.Windows.Float(
 				envRef, localRef, classRef, methodId, args),
 			JNativeType.JFloat => this._function.Unix.Float(envRef, localRef, classRef, methodId, args),
-			JNativeType.JInt when OperatingSystem.IsWindows() => this._function.Windows.Int(
+			JNativeType.JInt when SystemInfo.IsWindows => this._function.Windows.Int(
 				envRef, localRef, classRef, methodId, args),
 			JNativeType.JInt => this._function.Unix.Int(envRef, localRef, classRef, methodId, args),
-			JNativeType.JLong when OperatingSystem.IsWindows() => this._function.Windows.Long(
+			JNativeType.JLong when SystemInfo.IsWindows => this._function.Windows.Long(
 				envRef, localRef, classRef, methodId, args),
 			JNativeType.JLong => this._function.Unix.Long(envRef, localRef, classRef, methodId, args),
-			JNativeType.JShort when OperatingSystem.IsWindows() => this._function.Windows.Short(
+			JNativeType.JShort when SystemInfo.IsWindows => this._function.Windows.Short(
 				envRef, localRef, classRef, methodId, args),
 			JNativeType.JShort => this._function.Unix.Short(envRef, localRef, classRef, methodId, args),
-			_ => OperatingSystem.IsWindows() ?
+			_ => SystemInfo.IsWindows ?
 				this._function.Windows.Object(envRef, localRef, classRef, methodId, args) :
 				this._function.Unix.Object(envRef, localRef, classRef, methodId, args),
 		};

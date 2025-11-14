@@ -35,7 +35,7 @@ internal readonly unsafe struct NativeInterface6 : INativeInterface<NativeInterf
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JReferenceType GetObjectRefType(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._windows.GetObjectRefType(envRef, localRef) :
 			this._unix.GetObjectRefType(envRef, localRef);
 

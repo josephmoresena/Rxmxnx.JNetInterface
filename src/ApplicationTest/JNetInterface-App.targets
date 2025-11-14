@@ -1,7 +1,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
     <PropertyGroup>
-        <TargetFramework Condition="'$(RequiredFramework)' == '' And '$(OutputType)' != 'WinExe'">net9.0</TargetFramework>
+        <TargetFramework Condition="'$(RequiredFramework)' == '' And '$(OutputType)' != 'WinExe'">$(DefaultFramework)</TargetFramework>
     </PropertyGroup>
 
     <Import Project="JNetInterface-Frameworks.targets"/>

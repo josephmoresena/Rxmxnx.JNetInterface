@@ -72,7 +72,7 @@ internal readonly unsafe partial struct ReferenceFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JBoolean IsSameObject(JEnvironmentRef envRef, JObjectLocalRef localRef0, JObjectLocalRef localRef1)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._isSameObject.Windows(envRef, localRef0, localRef1) :
 			this._isSameObject.Unix(envRef, localRef0, localRef1);
 	/// <summary>
@@ -83,7 +83,7 @@ internal readonly unsafe partial struct ReferenceFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult EnsureLocalCapacity(JEnvironmentRef envRef, Int32 capacity)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._ensureLocalCapacity.Windows(envRef, capacity) :
 			this._ensureLocalCapacity.Unix(envRef, capacity);
 }

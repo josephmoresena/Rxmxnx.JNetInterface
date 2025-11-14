@@ -27,7 +27,7 @@ internal readonly unsafe struct NewPrimitiveArrayFunction<TArrayRef> : INewPrimi
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TArrayRef NewArray(JEnvironmentRef envRef, Int32 length)
 	{
-		JArrayLocalRef result = OperatingSystem.IsWindows() ?
+		JArrayLocalRef result = SystemInfo.IsWindows ?
 			this._function.Windows(envRef, length) :
 			this._function.Unix(envRef, length);
 		return Unsafe.As<JArrayLocalRef, TArrayRef>(ref result);

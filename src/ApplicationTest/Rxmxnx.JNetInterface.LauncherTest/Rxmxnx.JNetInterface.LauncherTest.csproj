@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>$(DefaultFramework)</TargetFramework>
         <TargetFrameworks>$(null)</TargetFrameworks>
         <OutputType>Exe</OutputType>
         <ImplicitUsings>enable</ImplicitUsings>

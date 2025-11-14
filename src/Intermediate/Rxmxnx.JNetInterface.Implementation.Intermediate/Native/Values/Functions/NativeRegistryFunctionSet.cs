@@ -30,7 +30,7 @@ internal readonly unsafe struct NativeRegistryFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult RegisterNatives(JEnvironmentRef envRef, JClassLocalRef classRef, NativeMethodValue* methodsPtr,
 		Int32 methodsCount)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._windows.RegisterNatives(envRef, classRef, methodsPtr, methodsCount) :
 			this._unix.RegisterNatives(envRef, classRef, methodsPtr, methodsCount);
 	/// <summary>
@@ -41,7 +41,7 @@ internal readonly unsafe struct NativeRegistryFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult UnregisterNatives(JEnvironmentRef envRef, JClassLocalRef classRef)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._windows.UnregisterNatives(envRef, classRef) :
 			this._unix.UnregisterNatives(envRef, classRef);
 

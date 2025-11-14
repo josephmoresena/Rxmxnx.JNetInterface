@@ -29,7 +29,7 @@ internal readonly unsafe struct NioFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JObjectLocalRef NewDirectByteBuffer(JEnvironmentRef envRef, IntPtr buffPtr, Int64 buffSize)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._windows.NewDirectByteBuffer(envRef, buffPtr, buffSize) :
 			this._unix.NewDirectByteBuffer(envRef, buffPtr, buffSize);
 	/// <summary>
@@ -40,7 +40,7 @@ internal readonly unsafe struct NioFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public IntPtr GetDirectBufferAddress(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._windows.GetDirectBufferAddress(envRef, localRef) :
 			this._unix.GetDirectBufferAddress(envRef, localRef);
 	/// <summary>
@@ -51,7 +51,7 @@ internal readonly unsafe struct NioFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Int64 GetDirectBufferCapacity(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> OperatingSystem.IsWindows() ?
+		=> SystemInfo.IsWindows ?
 			this._windows.GetDirectBufferCapacity(envRef, localRef) :
 			this._unix.GetDirectBufferCapacity(envRef, localRef);
 

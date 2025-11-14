@@ -32,7 +32,7 @@ internal readonly unsafe struct PrimitiveArrayCriticalFunctionSet
 	{
 		fixed (JBoolean* isCopyPtr = &isCopy)
 		{
-			return OperatingSystem.IsWindows() ?
+			return SystemInfo.IsWindows ?
 				this._windows.GetPrimitiveArrayCritical(envRef, arrayRef, isCopyPtr) :
 				this._unix.GetPrimitiveArrayCritical(envRef, arrayRef, isCopyPtr);
 		}
@@ -47,7 +47,7 @@ internal readonly unsafe struct PrimitiveArrayCriticalFunctionSet
 	public void ReleasePrimitiveArrayCritical(JEnvironmentRef envRef, JArrayLocalRef arrayRef, IntPtr dataPtr,
 		JReleaseMode mode)
 	{
-		if (OperatingSystem.IsWindows())
+		if (SystemInfo.IsWindows)
 			this._windows.ReleasePrimitiveArrayCritical(envRef, arrayRef, dataPtr, mode);
 		else
 			this._unix.ReleasePrimitiveArrayCritical(envRef, arrayRef, dataPtr, mode);

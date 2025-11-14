@@ -35,10 +35,10 @@ public static partial class TestCompiler
 	public static async Task CompileNet(DirectoryInfo projectDirectory, String os, String outputPath,
 		NetVersion[] netVersions, Boolean onlyNativeAot)
 	{
-		Architecture[] architectures = OperatingSystem.IsWindows() ?
+		Architecture[] architectures = SystemInfo.IsWindows ?
 			[Architecture.X86, Architecture.X64, Architecture.Arm64,] :
-			OperatingSystem.IsMacOS() ? [Architecture.X64, Architecture.Arm64,] :
-				OperatingSystem.IsLinux() ? [Architecture.X64, Architecture.Arm, Architecture.Arm64,] :
+			SystemInfo.IsMac ? [Architecture.X64, Architecture.Arm64,] :
+				SystemInfo.IsLinux ? [Architecture.X64, Architecture.Arm, Architecture.Arm64,] :
 					[RuntimeInformation.OSArchitecture,];
 
 		String? libProjectFile = projectDirectory.GetDirectories("*.LibraryTest", SearchOption.AllDirectories)

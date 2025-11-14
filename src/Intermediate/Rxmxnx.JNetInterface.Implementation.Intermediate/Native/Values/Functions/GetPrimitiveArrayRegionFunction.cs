@@ -31,7 +31,7 @@ internal readonly unsafe struct
 	public void Get(JEnvironmentRef envRef, TArrayRef arrayRef, Int32 start, Int32 length,
 		ValPtr<TPrimitiveType> buffer)
 	{
-		if (OperatingSystem.IsWindows())
+		if (SystemInfo.IsWindows)
 			this._function.Windows(envRef, arrayRef.ArrayValue, start, length, buffer);
 		else
 			this._function.Unix(envRef, arrayRef.ArrayValue, start, length, buffer);

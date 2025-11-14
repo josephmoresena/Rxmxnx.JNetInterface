@@ -29,7 +29,7 @@ internal readonly unsafe struct InvocationFunctionSet
 	{
 		fixed (VirtualMachineInitArgumentValue* initArgPtr = &initArg)
 		{
-			return OperatingSystem.IsWindows() ?
+			return SystemInfo.IsWindows ?
 				this._windows.GetDefaultVirtualMachineInitArgs(initArgPtr) :
 				this._unix.GetDefaultVirtualMachineInitArgs(initArgPtr);
 		}
@@ -45,7 +45,7 @@ internal readonly unsafe struct InvocationFunctionSet
 		fixed (JEnvironmentRef* envRefPtr = &envRef)
 		fixed (VirtualMachineInitArgumentValue* initArgPtr = &initArg)
 		{
-			return OperatingSystem.IsWindows() ?
+			return SystemInfo.IsWindows ?
 				this._windows.CreateVirtualMachine(vmRefPtr, envRefPtr, initArgPtr) :
 				this._unix.CreateVirtualMachine(vmRefPtr, envRefPtr, initArgPtr);
 		}
@@ -58,7 +58,7 @@ internal readonly unsafe struct InvocationFunctionSet
 	{
 		fixed (Int32* countPtr = &count)
 		{
-			return OperatingSystem.IsWindows() ?
+			return SystemInfo.IsWindows ?
 				this._windows.GetCreatedVirtualMachines(arr, arrSize, countPtr) :
 				this._unix.GetCreatedVirtualMachines(arr, arrSize, countPtr);
 		}

@@ -30,7 +30,7 @@ internal readonly unsafe struct NewRefFunction<TReference> : INewRefFunction
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TReference NewRef(JEnvironmentRef envRef, JObjectLocalRef localRef)
 	{
-		IntPtr result = OperatingSystem.IsWindows() ?
+		IntPtr result = SystemInfo.IsWindows ?
 			this._function.Windows(envRef, localRef) :
 			this._function.Unix(envRef, localRef);
 		return TReference.New(result);

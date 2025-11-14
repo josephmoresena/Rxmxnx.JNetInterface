@@ -33,7 +33,7 @@ internal readonly unsafe struct StringCriticalFunctionSet
 	{
 		fixed (JBoolean* isCopyPtr = &isCopy)
 		{
-			return OperatingSystem.IsWindows() ?
+			return SystemInfo.IsWindows ?
 				this._windows.GetStringCritical(envRef, stringRef, isCopyPtr) :
 				this._unix.GetStringCritical(envRef, stringRef, isCopyPtr);
 		}
@@ -47,7 +47,7 @@ internal readonly unsafe struct StringCriticalFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void ReleaseStringCritical(JEnvironmentRef envRef, JStringLocalRef stringRef, ReadOnlyValPtr<Char> chars)
 	{
-		if (OperatingSystem.IsWindows())
+		if (SystemInfo.IsWindows)
 			this._windows.ReleaseStringCritical(envRef, stringRef, chars);
 		else
 			this._unix.ReleaseStringCritical(envRef, stringRef, chars);
