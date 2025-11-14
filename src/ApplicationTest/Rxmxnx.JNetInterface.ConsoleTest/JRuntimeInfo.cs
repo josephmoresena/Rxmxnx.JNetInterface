@@ -114,9 +114,12 @@ public static class JRuntimeInfo
 			if (arrMetadata.GetArrayMetadata() is not { } arrMet2) break;
 			arrMetadata = arrMet2;
 		}
-		if (signature.SequenceEqual(arrMetadata.Signature)) return;
-		Console.Write("->");
-		Console.WriteLine(arrMetadata.Signature);
+		if (!signature.SequenceEqual(arrMetadata.Signature))
+		{
+			Console.Write("->");
+			Console.WriteLine(arrMetadata.Signature);
+		}
+		Console.WriteLine();
 	}
 	private static void PrintBuiltInMetadata()
 	{
