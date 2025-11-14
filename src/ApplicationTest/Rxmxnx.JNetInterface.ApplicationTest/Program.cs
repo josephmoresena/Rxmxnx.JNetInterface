@@ -17,7 +17,7 @@ public static class Program
 			JRuntimeInfo.PrintMetadataInfo();
 #else
 			if (IVirtualMachine.JaggedArrayAutoGenerationEnabled)
-				JRuntimeInfo.PrintPrimitiveArrayMetadataInfo();
+				JRuntimeInfo.PrintJaggedArrayMetadataInfo();
 #endif
 
 		if (args.Length < 1)

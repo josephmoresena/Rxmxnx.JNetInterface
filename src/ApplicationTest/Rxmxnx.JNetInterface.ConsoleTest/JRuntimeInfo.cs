@@ -39,7 +39,7 @@ public static class JRuntimeInfo
 		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JThrowableObject>.Metadata, 5);
 		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JStringObject>.Metadata, 5);
 	}
-	public static void PrintPrimitiveArrayMetadataInfo()
+	public static void PrintJaggedArrayMetadataInfo()
 	{
 		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JBoolean>.Metadata);
 		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JByte>.Metadata);

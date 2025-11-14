@@ -144,11 +144,17 @@ jobs:
           cd $GITHUB_WORKSPACE;
           ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "compile";
 
-      - name: Run launcher (run) (FreeBSD)
+      - name: Run launcher (run executables) (FreeBSD)
         shell: freebsd {0}
         run: |
           cd $GITHUB_WORKSPACE;
           ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "run";
+
+      - name: Run launcher (run jars) (FreeBSD)
+        shell: freebsd {0}
+        run: |
+          cd $GITHUB_WORKSPACE;
+          ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "jar";
 
       - name: Create Native Artifact (FreeBSD)
         uses: actions/upload-artifact@v5
@@ -334,6 +340,8 @@ jobs:
 
       - name: Run launcher (compile)
         shell: pwsh
+        env:
+          SHOW_DIAGNOSTICS: true
         run: |
           if ($IsWindows) {
             ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "compile"
@@ -404,13 +412,22 @@ jobs:
           Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Temp\*" -ErrorAction SilentlyContinue
           Remove-Item -Recurse -Force "$env:USERPROFILE\.nuget\packages" -ErrorAction SilentlyContinue
 
-      - name: Run launcher (run)
+      - name: Run launcher (run executables)
         shell: pwsh
         run: |
           if ($IsWindows) {
             ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "run"
           } else {
             ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "run"
+          }
+
+      - name: Run launcher (run jars)
+        shell: pwsh
+        run: |
+          if ($IsWindows) {
+            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "jar"
+          } else {
+            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "jar"
           }
   
   android-test:

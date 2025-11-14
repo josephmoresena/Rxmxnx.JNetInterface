@@ -26,20 +26,36 @@ public abstract partial class Launcher
 				a => a,
 				a => this.OutputDirectory.GetFiles(
 					$"ApplicationTest.*.{this.RuntimeIdentifierPrefix}-{Enum.GetName(a)!.ToLower()}.*"));
-			FileInfo? jarFile = this.OutputDirectory.GetFiles("HelloJni.jar").FirstOrDefault();
-
 			foreach (Jdk jdk in this.Architectures.SelectMany(a => this[a]).ToHashSet())
 			{
-				if (jarFile is not null)
-					foreach (NetVersion netVersion in netVersions)
-						await this.RunJarFile(jdk, jarFile, netVersion, results);
-
 				foreach (FileInfo appFile in archFiles[jdk.JavaArchitecture])
 				{
 					String executionName =
 						$"{Path.GetRelativePath(this.OutputDirectory.FullName, appFile.FullName)} ({jdk.JavaVersion})";
 					results.Add(executionName, await this.RunAppFile(appFile, jdk, executionName));
 				}
+			}
+		}
+		finally
+		{
+			if (results.Count > 0)
+				ConsoleNotifier.Results(results);
+		}
+	}
+	public async Task ExecuteJar(NetVersion[] netVersions)
+	{
+		ConsoleNotifier.ShowDiskUsage();
+
+		Dictionary<String, Int32> results = new();
+		try
+		{
+			FileInfo? jarFile = this.OutputDirectory.GetFiles("HelloJni.jar").FirstOrDefault();
+			if (jarFile is null) return;
+
+			foreach (Jdk jdk in this.Architectures.SelectMany(a => this[a]).ToHashSet())
+			{
+				foreach (NetVersion netVersion in netVersions)
+					await this.RunJarFile(jdk, jarFile, netVersion, results);
 			}
 		}
 		finally

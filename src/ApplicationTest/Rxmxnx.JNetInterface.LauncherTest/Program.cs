@@ -9,6 +9,7 @@ DirectoryInfo outputDirectory = args.Length >= 2 ?
 	new DirectoryInfo(Environment.CurrentDirectory).CreateSubdirectory("Output");
 Boolean compile = args.Length < 3 || "compile".AsSpan().SequenceEqual(args[2].ToLowerInvariant());
 Boolean run = args.Length < 3 || "run".AsSpan().SequenceEqual(args[2].ToLowerInvariant());
+Boolean jar = args.Length < 3 || "jar".AsSpan().SequenceEqual(args[2].ToLowerInvariant());
 
 Launcher launcher = await Launcher.Create(outputDirectory);
 
@@ -27,3 +28,5 @@ if (compile)
 
 if (run)
 	await launcher.Execute(launcher.NetVersions);
+if (jar)
+	await launcher.ExecuteJar(launcher.NetVersions);
