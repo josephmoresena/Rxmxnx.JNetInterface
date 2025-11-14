@@ -15,7 +15,7 @@ public abstract partial class Launcher
 	protected abstract String JavaExecutableName { get; }
 	protected abstract String JavaCompilerName { get; }
 
-	public async Task Execute()
+	public async Task Execute(String? pattern = default)
 	{
 		ConsoleNotifier.ShowDiskUsage();
 
@@ -25,7 +25,7 @@ public abstract partial class Launcher
 			Dictionary<Architecture, FileInfo[]> archFiles = this.Architectures.ToDictionary(
 				a => a,
 				a => this.OutputDirectory.GetFiles(
-					$"ApplicationTest.*.{this.RuntimeIdentifierPrefix}-{Enum.GetName(a)!.ToLower()}.*"));
+					$"ApplicationTest.*.{this.RuntimeIdentifierPrefix}-{Enum.GetName(a)!.ToLower()}.net*.0{pattern}"));
 			foreach (Jdk jdk in this.Architectures.SelectMany(a => this[a]).ToHashSet())
 			{
 				foreach (FileInfo appFile in archFiles[jdk.JavaArchitecture])

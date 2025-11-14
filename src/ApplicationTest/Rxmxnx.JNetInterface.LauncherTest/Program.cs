@@ -9,6 +9,10 @@ DirectoryInfo outputDirectory = args.Length >= 2 ?
 	new DirectoryInfo(Environment.CurrentDirectory).CreateSubdirectory("Output");
 Boolean compile = args.Length < 3 || "compile".AsSpan().SequenceEqual(args[2].ToLowerInvariant());
 Boolean run = args.Length < 3 || "run".AsSpan().SequenceEqual(args[2].ToLowerInvariant());
+Boolean net = args.Length < 3 || "net".AsSpan().SequenceEqual(args[2].ToLowerInvariant());
+Boolean r2R = args.Length < 3 || "r2r".AsSpan().SequenceEqual(args[2].ToLowerInvariant());
+Boolean nAot = args.Length < 3 || "naot".AsSpan().SequenceEqual(args[2].ToLowerInvariant());
+Boolean rfm = args.Length < 3 || "rfm".AsSpan().SequenceEqual(args[2].ToLowerInvariant());
 Boolean jar = args.Length < 3 || "jar".AsSpan().SequenceEqual(args[2].ToLowerInvariant());
 
 Launcher launcher = await Launcher.Create(outputDirectory);
@@ -26,7 +30,13 @@ if (compile)
 	                              launcher.NetVersions, onlyNativeAot);
 }
 
-if (run)
-	await launcher.Execute();
-if (jar)
+if (run || jar)
 	await launcher.ExecuteJar(launcher.NetVersions);
+if (run || net)
+	await launcher.Execute();
+if (run || r2R)
+	await launcher.Execute(".R2R");
+if (run || nAot)
+	await launcher.Execute(".NAOT");
+if (run || rfm)
+	await launcher.Execute(".RFM");
