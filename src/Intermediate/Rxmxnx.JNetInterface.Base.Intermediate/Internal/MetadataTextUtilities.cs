@@ -87,6 +87,8 @@ internal static class MetadataTextUtilities
 		MetadataTextUtilities.AppendProperty(strBuild, nameof(JDataTypeMetadata.Type), $"{typeMetadata.Type}");
 		MetadataTextUtilities.AppendHash(strBuild, typeMetadata.Hash);
 		MetadataTextUtilities.AppendObjectEnd(strBuild);
+		MetadataTextUtilities.AppendProperty(strBuild, nameof(JDataTypeMetadata.Since),
+		                                     typeMetadata.Since.GetRuntimeName());
 
 		return strBuild.ToString();
 	}

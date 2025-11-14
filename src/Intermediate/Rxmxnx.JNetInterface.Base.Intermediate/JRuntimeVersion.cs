@@ -114,3 +114,61 @@ public enum JRuntimeVersion
 	/// </summary>
 	J25 = JRuntimeVersion.SEd0 * 25,
 }
+
+/// <summary>
+/// Extensions for <see cref="JRuntimeVersion"/> enum.
+/// </summary>
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
+public static class JRuntimeVersionExtensions
+{
+	/// <summary>
+	/// Retrieves the Java runtime version name.
+	/// </summary>
+	/// <param name="jreVersion">A <see cref="JRuntimeVersion"/> value.</param>
+	/// <returns>The name of <paramref name="jreVersion"/> value.</returns>
+	public static String GetRuntimeName(this JRuntimeVersion jreVersion)
+		=> jreVersion switch
+		{
+			JRuntimeVersion.SEd0 => "JRE 1.0",
+			JRuntimeVersion.SEd1 => "JRE 1.1",
+			JRuntimeVersion.SEd2 => "JRE 1.2",
+			JRuntimeVersion.SEd3 => "JRE 1.3",
+			JRuntimeVersion.SEd4 => "JRE 1.4",
+			JRuntimeVersion.J5 => "JRE 1.5",
+			JRuntimeVersion.J6 => "JRE 1.6",
+			JRuntimeVersion.J7 => "JRE 1.7",
+			JRuntimeVersion.J8 => "JRE 1.8",
+			JRuntimeVersion.J9 => "JRE 9.0",
+			JRuntimeVersion.J10 => "JRE 10.0",
+			JRuntimeVersion.J11 => "JRE 11.0",
+			JRuntimeVersion.J12 => "JRE 12.0",
+			JRuntimeVersion.J13 => "JRE 13.0",
+			JRuntimeVersion.J14 => "JRE 14.0",
+			JRuntimeVersion.J15 => "JRE 15.0",
+			JRuntimeVersion.J16 => "JRE 16.0",
+			JRuntimeVersion.J17 => "JRE 17.0",
+			JRuntimeVersion.J18 => "JRE 18.0",
+			JRuntimeVersion.J19 => "JRE 19.0",
+			JRuntimeVersion.J20 => "JRE 20.0",
+			JRuntimeVersion.J21 => "JRE 21.0",
+			JRuntimeVersion.J22 => "JRE 22.0",
+			JRuntimeVersion.J23 => "JRE 23.0",
+			JRuntimeVersion.J24 => "JRE 24.0",
+			JRuntimeVersion.J25 => "JRE 25.0",
+			_ => JRuntimeVersionExtensions.GetRuntimeName((Int32)jreVersion),
+		};
+
+	/// <summary>
+	/// Retrieves the Java runtime version name.
+	/// </summary>
+	/// <param name="jreVersion">A <see cref="Int32"/> value.</param>
+	/// <returns>The name of <paramref name="jreVersion"/> value.</returns>
+	private static String GetRuntimeName(Int32 jreVersion)
+	{
+		const Int32 j0 = (Int32)JRuntimeVersion.SEd0;
+		return jreVersion > j0 && jreVersion % j0 == 0 ?
+			$"JRE {jreVersion / j0}.0" :
+			$"JRE 0x{jreVersion:x8}"; // Invalid Version
+	}
+}

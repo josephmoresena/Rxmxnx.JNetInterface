@@ -12,7 +12,7 @@ public static class Program
 {
 	public static async Task Main(String[] args)
 	{
-#if NET8_0
+#if !NET9_0_OR_GREATER
 		if (IVirtualMachine.TypeMetadataToStringEnabled && JRuntimeInfo.MatchArch) JRuntimeInfo.PrintMetadataInfo();
 #endif
 		if (args.Length < 1) throw new ArgumentException("Please set JVM library path.");
@@ -63,11 +63,8 @@ public static class Program
 		{
 			JVirtualMachineInitArg initArgs = jvmLib.GetDefaultArgument();
 			Int32 jdkVersion = jvmLib.GetLatestSupportedVersion();
-			if (IVirtualMachine.MinimalVersion != initArgs.Version || initArgs.Options.Count != 0)
-				if (IVirtualMachine.TypeMetadataToStringEnabled && JRuntimeInfo.MatchArch)
-					Console.WriteLine(initArgs);
-				else
-					Console.WriteLine($"Min JDK Version: 0x{initArgs.Version:x8}");
+			if (IVirtualMachine.TypeMetadataToStringEnabled && JRuntimeInfo.MatchArch && initArgs.Options.Count != 0)
+				Console.WriteLine(initArgs);
 			Console.WriteLine($"Supported JNI Version: 0x{jdkVersion:x8}");
 
 			initArgs = new(jdkVersion)
@@ -83,14 +80,11 @@ public static class Program
 			using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out IEnvironment env);
 			try
 			{
-#if NET8_0
+#if !NET9_0_OR_GREATER
 				if (IVirtualMachine.TypeMetadataToStringEnabled && JRuntimeInfo.MatchArch) 
 					JRuntimeInfo.PrintVirtualMachineInfo(env, vm, jvmLib);
 #endif
-				String jreVersion = !AotInfo.IsReflectionDisabled ?
-					$"{env.VirtualMachine.Version}" :
-					$"0x{env.VirtualMachine.Version:x8}";
-				Console.WriteLine($"==== JNI 0x{env.Version:x8} - JRE {jreVersion} ====");
+				Console.WriteLine($"==== JNI 0x{env.Version:x8} - {env.VirtualMachine.Version.GetRuntimeName()} ====");
 
 				IManagedCallback.Default managedInstance = new(vm, Console.Out);
 				using JClassObject helloJniClass = JHelloDotnetObject.LoadClass(env, classByteCode, managedInstance);

@@ -64,6 +64,26 @@ public sealed class DataTypeTests
 			$"{nameof(JDataTypeMetadata.Hash)} = {InfoSequenceBase.GetPrintableHash(voidMetadata.Hash, out String lastChar)}{lastChar} }}";
 		Assert.Equal(dataTypeString, voidMetadata.ToString());
 	}
+	[Fact]
+	internal void GetRuntimeNameTest()
+	{
+		JRuntimeVersion[] values = Enum.GetValues<JRuntimeVersion>();
+		Int32 maxValue = (Int32)values.Max() * 2;
+		foreach (JRuntimeVersion jreVersion in values.Concat(Enumerable.Repeat(0, values.Length * 2)
+		                                                               .Select(_ => (JRuntimeVersion)Random.Shared.Next(
+			                                                                       0, maxValue))))
+		{
+			String value = jreVersion switch
+			{
+				< JRuntimeVersion.SEd0 => $"JRE 0x{(Int32)jreVersion:x8}",
+				<= JRuntimeVersion.J8 => $"JRE 1.{(Int32)jreVersion - (Int32)JRuntimeVersion.SEd0}",
+				> JRuntimeVersion.SEd0 when (Int32)jreVersion % (Int32)JRuntimeVersion.SEd0 == 0 =>
+					$"JRE {(Int32)jreVersion / (Int32)JRuntimeVersion.SEd0}.0",
+				_ => $"JRE 0x{(Int32)jreVersion:x8}",
+			};
+			Assert.Equal(value, jreVersion.GetRuntimeName());
+		}
+	}
 
 	private static void PrimitiveTest<TPrimitive>() where TPrimitive : IPrimitiveType
 	{
