@@ -15,7 +15,7 @@ public abstract partial class Launcher
 	protected abstract String JavaExecutableName { get; }
 	protected abstract String JavaCompilerName { get; }
 
-	public async Task Execute(NetVersion[] netVersions)
+	public async Task Execute()
 	{
 		ConsoleNotifier.ShowDiskUsage();
 

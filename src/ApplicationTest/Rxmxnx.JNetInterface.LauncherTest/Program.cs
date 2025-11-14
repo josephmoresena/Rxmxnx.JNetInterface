@@ -27,6 +27,6 @@ if (compile)
 }
 
 if (run)
-	await launcher.Execute(launcher.NetVersions);
+	await launcher.Execute();
 if (jar)
 	await launcher.ExecuteJar(launcher.NetVersions);
