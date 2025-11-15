@@ -138,10 +138,6 @@ internal partial interface IMessageResource
 	/// Message for unmanaged memory context exception.
 	/// </summary>
 	String UnmanagedMemoryContext { get; }
-	/// <summary>
-	/// Message for invalid array dimension.
-	/// </summary>
-	String InvalidArrayDimension { get; }
 
 	/// <summary>
 	/// Message for instantiation exception.
@@ -285,4 +281,9 @@ internal partial interface IMessageResource
 	/// </summary>
 	/// <param name="typeMetadata">Source type metadata.</param>
 	String MissingArrayTypeMetadata(JDataTypeMetadata typeMetadata);
+	/// <summary>
+	/// Message for invalid array dimension.
+	/// </summary>
+	/// <param name="maxLevel">Maximum level.</param>
+	String InvalidArrayDimension(Int32 maxLevel);
 }

@@ -52,7 +52,6 @@ internal sealed class ArabicMessageResource : IMessageResource
 	String IMessageResource.NotAttachedThread => "لم يتم إرفاق الخيط الحالي بـ JVM.";
 	String IMessageResource.IncompatibleLibrary => "مكتبة JVM غير متوافقة.";
 	String IMessageResource.UnmanagedMemoryContext => "كتلة الذاكرة غير مدارة.";
-	String IMessageResource.InvalidArrayDimension => "يجب أن تكون أبعاد المصفوفة بين 1 و255.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} ليس نوعًا قابلاً للإنشاء.";
 	String IMessageResource.InvalidCastTo(Type type) => $"تحويل غير صالح إلى {type}.";
@@ -124,6 +123,10 @@ internal sealed class ArabicMessageResource : IMessageResource
 	String IMessageResource.InvalidArrayClass(String className) => $"{className} ليس فئة مصفوفة.";
 	String IMessageResource.MissingArrayTypeMetadata(JDataTypeMetadata typeMetadata)
 		=> $"تعذّر استرداد بيانات النوع {typeMetadata.ArraySignature} من بيانات النوع {typeMetadata.Signature}.";
+	String IMessageResource.InvalidArrayDimension(Int32 maxLevel)
+		=> maxLevel > 0 ?
+			$"يجب أن تكون أبعاد المصفوفة بين 1 و {maxLevel}." :
+			"نوع المصفوفة يحتوي على عدد كبير جدًا من الأبعاد.";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

@@ -52,7 +52,6 @@ internal sealed class RussianMessageResource : IMessageResource
 	String IMessageResource.NotAttachedThread => "Текущий поток не подключен к JVM.";
 	String IMessageResource.IncompatibleLibrary => "Несовместимая библиотека JVM.";
 	String IMessageResource.UnmanagedMemoryContext => "Блок памяти не управляем.";
-	String IMessageResource.InvalidArrayDimension => "Размерности массива должны быть в диапазоне от 1 до 255.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} не является создаваемым типом.";
 	String IMessageResource.InvalidCastTo(Type type) => $"Недопустимое приведение к {type}.";
@@ -122,6 +121,10 @@ internal sealed class RussianMessageResource : IMessageResource
 	String IMessageResource.InvalidArrayClass(String className) => $"{className} не является классом массива.";
 	String IMessageResource.MissingArrayTypeMetadata(JDataTypeMetadata typeMetadata)
 		=> $"Не удалось получить метаданные типа {typeMetadata.ArraySignature} из метаданных типа {typeMetadata.Signature}.";
+	String IMessageResource.InvalidArrayDimension(Int32 maxLevel)
+		=> maxLevel > 0 ?
+			$"Размерность массива должна быть от 1 до {maxLevel}." :
+			"Тип массива имеет слишком много измерений.";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

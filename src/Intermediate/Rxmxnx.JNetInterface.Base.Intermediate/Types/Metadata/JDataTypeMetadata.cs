@@ -58,11 +58,11 @@ public abstract partial class JDataTypeMetadata : ITypeInformation
 	public JArrayTypeMetadata GetArrayMetadata(Byte depth)
 	{
 		JArrayTypeMetadata? arrayTypeMetadata = this as JArrayTypeMetadata;
-		Int32 offset = arrayTypeMetadata is not null ? 0 : -1;
+		Int32 offset = arrayTypeMetadata is not null ? 0 : 1;
 
 		arrayTypeMetadata ??= this.GetArrayMetadata();
 		CommonValidationUtilities.ThrowIfInvalidDimension(this, arrayTypeMetadata?.Dimension - offset, depth);
-		return arrayTypeMetadata!.WithAdditionalNesting(depth - offset);
+		return arrayTypeMetadata!.WithAdditionalNesting((Int32)depth - offset);
 	}
 
 	/// <summary>

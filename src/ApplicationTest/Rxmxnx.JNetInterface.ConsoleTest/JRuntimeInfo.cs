@@ -117,7 +117,7 @@ public static class JRuntimeInfo
 		if (!signature.SequenceEqual(arrMetadata.Signature))
 		{
 			Console.Write("->");
-			Console.WriteLine(arrMetadata.Signature);
+			Console.Write(arrMetadata.Signature);
 		}
 		Console.WriteLine();
 	}

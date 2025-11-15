@@ -250,7 +250,8 @@ internal static class CommonValidationUtilities
 		if (currentDimension is null)
 			throw new InvalidOperationException(resource.MissingArrayTypeMetadata(currentTypeMetadata));
 		Int32 finalDimension = currentDimension.Value + level;
-		if (finalDimension is <= Byte.MinValue or >= Byte.MaxValue)
-			throw new ArgumentOutOfRangeException(nameof(level), resource.InvalidArrayDimension);
+		if (level > 0 && finalDimension <= Byte.MaxValue) return;
+		throw new ArgumentOutOfRangeException(nameof(level),
+		                                      resource.InvalidArrayDimension(255 - currentDimension.Value));
 	}
 }

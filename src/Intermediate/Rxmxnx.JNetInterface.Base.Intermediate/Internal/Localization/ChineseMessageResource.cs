@@ -50,7 +50,6 @@ internal sealed class ChineseMessageResource : IMessageResource
 	String IMessageResource.NotAttachedThread => "当前线程未附加到 JVM。";
 	String IMessageResource.IncompatibleLibrary => "不兼容的 JVM 库。";
 	String IMessageResource.UnmanagedMemoryContext => "内存块未受管理。";
-	String IMessageResource.InvalidArrayDimension => "数组维度必须在 1 到 255 之间。";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} 不是可实例化的类型。";
 	String IMessageResource.InvalidCastTo(Type type) => $"无法转换为 {type}。";
@@ -109,6 +108,8 @@ internal sealed class ChineseMessageResource : IMessageResource
 	String IMessageResource.InvalidArrayClass(String className) => $"{className} 不是数组类。";
 	String IMessageResource.MissingArrayTypeMetadata(JDataTypeMetadata typeMetadata)
 		=> $"无法从 {typeMetadata.Signature} 类型元数据中获取 {typeMetadata.ArraySignature} 类型元数据。";
+	String IMessageResource.InvalidArrayDimension(Int32 maxLevel)
+		=> maxLevel > 0 ? $"数组维度必须在 1 到 {maxLevel} 之间。" : "数组类型的维度过多。";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

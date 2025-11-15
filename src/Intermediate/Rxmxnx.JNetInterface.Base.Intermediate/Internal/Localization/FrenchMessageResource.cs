@@ -52,8 +52,6 @@ internal sealed class FrenchMessageResource : IMessageResource
 	String IMessageResource.NotAttachedThread => "Le thread actuel n'est pas attaché à la JVM.";
 	String IMessageResource.IncompatibleLibrary => "Bibliothèque JVM incompatible.";
 	String IMessageResource.UnmanagedMemoryContext => "Le bloc mémoire est non géré.";
-	String IMessageResource.InvalidArrayDimension
-		=> "Les dimensions d’un tableau doivent être comprises entre 1 et 255.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} n'est pas un type instantiable.";
 	String IMessageResource.InvalidCastTo(Type type) => $"Conversion invalide vers {type}.";
@@ -124,6 +122,10 @@ internal sealed class FrenchMessageResource : IMessageResource
 	String IMessageResource.InvalidArrayClass(String className) => $"{className} n'est pas une classe de tableau.";
 	String IMessageResource.MissingArrayTypeMetadata(JDataTypeMetadata typeMetadata)
 		=> $"Impossible de récupérer les métadonnées du type {typeMetadata.ArraySignature} à partir des métadonnées du type {typeMetadata.Signature}.";
+	String IMessageResource.InvalidArrayDimension(Int32 maxLevel)
+		=> maxLevel > 0 ?
+			$"Les dimensions du tableau doivent être comprises entre 1 et {maxLevel}." :
+			"Le type de tableau possède trop de dimensions.";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

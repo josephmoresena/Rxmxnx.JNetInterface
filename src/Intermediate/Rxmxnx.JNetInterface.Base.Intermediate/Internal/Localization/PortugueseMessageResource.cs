@@ -52,7 +52,6 @@ internal sealed class PortugueseMessageResource : IMessageResource
 	String IMessageResource.NotAttachedThread => "A thread atual não está anexada à JVM.";
 	String IMessageResource.IncompatibleLibrary => "Biblioteca JVM incompatível.";
 	String IMessageResource.UnmanagedMemoryContext => "O bloco de memória é não gerenciado.";
-	String IMessageResource.InvalidArrayDimension => "As dimensões do array devem estar entre 1 e 255.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} não é um tipo instanciável.";
 	String IMessageResource.InvalidCastTo(Type type) => $"Conversão inválida para {type}.";
@@ -122,6 +121,10 @@ internal sealed class PortugueseMessageResource : IMessageResource
 	String IMessageResource.InvalidArrayClass(String className) => $"{className} não é uma classe de array.";
 	String IMessageResource.MissingArrayTypeMetadata(JDataTypeMetadata typeMetadata)
 		=> $"Não foi possível obter os metadados do tipo {typeMetadata.ArraySignature} a partir dos metadados do tipo {typeMetadata.Signature}.";
+	String IMessageResource.InvalidArrayDimension(Int32 maxLevel)
+		=> maxLevel > 0 ?
+			$"As dimensões do array devem estar entre 1 e {maxLevel}." :
+			"O tipo de array possui dimensões demais.";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)
