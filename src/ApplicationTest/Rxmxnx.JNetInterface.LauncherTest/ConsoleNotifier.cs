@@ -203,7 +203,7 @@ public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPl
 		}
 	}
 
-	public static void Results(Dictionary<String, Int32> results)
+	public static void Results(IDictionary<String, Int32> results)
 	{
 		Int32 maxKeyLength = results.Keys.Max(k => k.Length);
 		using Lock.Scope scope = ConsoleNotifier.consoleLock.EnterScope();
@@ -309,6 +309,25 @@ public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPl
 			if (i >= fields.Length - 1) continue;
 			separator.CopyTo(buffer[pos..]);
 			pos += separator.Length;
+		}
+	}
+	public static void Aborted(String[] processNames)
+	{
+		Int32 maxKeyLength = processNames.Max(k => k.Length);
+		using Lock.Scope scope = ConsoleNotifier.consoleLock.EnterScope();
+		try
+		{
+			Console.ForegroundColor = ConsoleColor.White;
+			Console.WriteLine("Aborted Test");
+			Console.WriteLine(new String('-', maxKeyLength));
+
+			Console.ForegroundColor = ConsoleColor.Red;
+			foreach (String processName in processNames)
+				Console.Write(processName);
+		}
+		finally
+		{
+			Console.ResetColor();
 		}
 	}
 }

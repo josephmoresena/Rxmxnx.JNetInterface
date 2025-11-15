@@ -19,8 +19,8 @@ public abstract partial class Launcher
 	{
 		ConsoleNotifier.ShowDiskUsage();
 
-		Dictionary<String, Int32> results = new();
-		List<Task> executionTasks = [];
+		ConcurrentDictionary<String, Int32> results = new();
+		Dictionary<String, Task> executionTasks = [];
 		try
 		{
 			String exeExtension = SystemInfo.IsWindows ? ".exe" : "";
@@ -40,28 +40,33 @@ public abstract partial class Launcher
 					String executionName =
 						$"{Path.GetRelativePath(this.OutputDirectory.FullName, appFile.FullName)} ({jdk.JavaVersion})";
 					Task executionTask = AppendResult(executionName, this.RunAppFile(appFile, jdk, executionName));
-					await Task.WhenAny(Task.Delay(20000, ConsoleNotifier.CancellationToken), executionTask)
+					await Task.WhenAny(Task.Delay(40000, ConsoleNotifier.CancellationToken), executionTask)
 					          .ConfigureAwait(false);
 					if (!executionTask.IsCompleted)
-						executionTasks.Add(executionTask);
+						executionTasks.Add(executionName, executionTask);
 				}
 			}
 		}
 		finally
 		{
-			if (results.Count > 0)
+			if (!results.IsEmpty)
 				ConsoleNotifier.Results(results);
 		}
-		if (executionTasks.Any(t => !t.IsCompleted))
+		if (executionTasks.Values.Any(t => !t.IsCompleted))
 		{
 			Console.WriteLine($"Waiting for pending tasks ({executionTasks.Count})...");
-			await Task.WhenAny(Task.Delay(40000, ConsoleNotifier.CancellationToken), Task.WhenAll(executionTasks));
+			await Task.WhenAny(Task.Delay(120000, ConsoleNotifier.CancellationToken),
+			                   Task.WhenAll(executionTasks.Values));
 		}
-		if (executionTasks.Any(t => !t.IsCompleted))
-			Environment.Exit(0);
+		if (executionTasks.Values.All(t => t.IsCompleted)) return;
+		ConsoleNotifier.Aborted(executionTasks.Where(kpv => !kpv.Value.IsCompleted).Select(kpv => kpv.Key).ToArray());
+		Environment.Exit(0);
 		return;
 		async Task AppendResult(String executionName, Task<Int32> resultTask)
-			=> results.Add(executionName, await resultTask.ConfigureAwait(false));
+		{
+			Int32 result = await resultTask.ConfigureAwait(false);
+			results.AddOrUpdate(executionName, result, (_, _) => result);
+		}
 	}
 	public async Task ExecuteJar(NetVersion[] netVersions)
 	{
