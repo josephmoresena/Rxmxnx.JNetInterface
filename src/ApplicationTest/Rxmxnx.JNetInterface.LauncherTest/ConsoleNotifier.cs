@@ -227,6 +227,30 @@ public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPl
 			Console.ResetColor();
 		}
 	}
+	public static void Results(IDictionary<String, Task> results)
+	{
+		Int32 maxKeyLength = results.Keys.Max(k => k.Length);
+		using Lock.Scope scope = ConsoleNotifier.consoleLock.EnterScope();
+		try
+		{
+			Console.ForegroundColor = ConsoleColor.White;
+			Console.WriteLine($"{"Test".PadRight(maxKeyLength)} | Status Task ");
+			Console.WriteLine(new String('-', maxKeyLength + 20));
+
+			foreach (KeyValuePair<String, Task> kvp in results)
+			{
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.Write($"{kvp.Key.PadRight(maxKeyLength)} | ");
+
+				Console.ForegroundColor = !kvp.Value.IsCompleted ? ConsoleColor.Red : ConsoleColor.Green;
+				Console.WriteLine(kvp.Value.Status);
+			}
+		}
+		finally
+		{
+			Console.ResetColor();
+		}
+	}
 	public static CancellationTokenRegistration RegisterCancellation(CancellationTokenSource cts)
 		=> ConsoleNotifier.CancellationToken.Register(ConsoleNotifier.CancelSource, cts);
 
@@ -309,25 +333,6 @@ public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPl
 			if (i >= fields.Length - 1) continue;
 			separator.CopyTo(buffer[pos..]);
 			pos += separator.Length;
-		}
-	}
-	public static void Aborted(String[] processNames)
-	{
-		Int32 maxKeyLength = processNames.Max(k => k.Length);
-		using Lock.Scope scope = ConsoleNotifier.consoleLock.EnterScope();
-		try
-		{
-			Console.ForegroundColor = ConsoleColor.White;
-			Console.WriteLine("Aborted Test");
-			Console.WriteLine(new String('-', maxKeyLength));
-
-			Console.ForegroundColor = ConsoleColor.Red;
-			foreach (String processName in processNames)
-				Console.Write(processName);
-		}
-		finally
-		{
-			Console.ResetColor();
 		}
 	}
 }
