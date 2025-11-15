@@ -229,4 +229,28 @@ internal static class CommonValidationUtilities
 		String message = resource.InvalidMetadata(className, typeOfT);
 		throw new ArgumentException(message);
 	}
+	/// <summary>
+	/// Throws an exception if <paramref name="level"/> is an invalid dimension for an array of dimension
+	/// <paramref name="currentDimension"/>.
+	/// </summary>
+	/// <param name="currentTypeMetadata">Current <see cref="JDataTypeMetadata"/> instance.</param>
+	/// <param name="currentDimension">Number of current datatype dimensions.</param>
+	/// <param name="level">Level of nesting for current type.</param>
+	/// <exception cref="InvalidOperationException">
+	/// Throws and exception if <paramref name="currentDimension"/> value is <see langword="null"/>.
+	/// </exception>
+	/// <exception cref="ArgumentOutOfRangeException">
+	/// Throws an exception if <paramref name="level"/> is an invalid dimension for an array of dimension
+	/// <paramref name="currentDimension"/>.
+	/// </exception>
+	public static void ThrowIfInvalidDimension(JDataTypeMetadata currentTypeMetadata, Int32? currentDimension,
+		Int32 level)
+	{
+		IMessageResource resource = IMessageResource.GetInstance();
+		if (currentDimension is null)
+			throw new InvalidOperationException(resource.MissingArrayTypeMetadata(currentTypeMetadata));
+		Int32 finalDimension = currentDimension.Value + level;
+		if (finalDimension is <= Byte.MinValue or >= Byte.MaxValue)
+			throw new ArgumentOutOfRangeException(nameof(level), resource.InvalidArrayDimension);
+	}
 }

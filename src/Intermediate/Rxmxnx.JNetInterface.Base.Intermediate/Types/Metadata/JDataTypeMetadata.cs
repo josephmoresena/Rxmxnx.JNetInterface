@@ -53,6 +53,21 @@ public abstract partial class JDataTypeMetadata : ITypeInformation
 	/// <summary>
 	/// Creates a <see cref="JArrayTypeMetadata"/> from current instance.
 	/// </summary>
+	/// <param name="depth">Depth of the resulting metadata type.</param>
+	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
+	public JArrayTypeMetadata GetArrayMetadata(Byte depth)
+	{
+		JArrayTypeMetadata? arrayTypeMetadata = this as JArrayTypeMetadata;
+		Int32 offset = arrayTypeMetadata is not null ? 0 : -1;
+
+		arrayTypeMetadata ??= this.GetArrayMetadata();
+		CommonValidationUtilities.ThrowIfInvalidDimension(this, arrayTypeMetadata?.Dimension - offset, depth);
+		return arrayTypeMetadata!.WithAdditionalNesting(depth - offset);
+	}
+
+	/// <summary>
+	/// Creates a <see cref="JArrayTypeMetadata"/> from current instance.
+	/// </summary>
 	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
 	public abstract JArrayTypeMetadata? GetArrayMetadata();
 #endif

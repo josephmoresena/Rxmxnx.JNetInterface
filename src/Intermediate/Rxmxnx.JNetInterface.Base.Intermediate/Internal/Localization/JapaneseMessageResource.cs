@@ -50,6 +50,7 @@ internal sealed class JapaneseMessageResource : IMessageResource
 	String IMessageResource.NotAttachedThread => "現在のスレッドは JVM にアタッチされていません。";
 	String IMessageResource.IncompatibleLibrary => "互換性のない JVM ライブラリです。";
 	String IMessageResource.UnmanagedMemoryContext => "メモリブロックはアンマネージドです。";
+	String IMessageResource.InvalidArrayDimension => "配列の次元は 1 から 255 の範囲でなければなりません。";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} はインスタンス化できない型です。";
 	String IMessageResource.InvalidCastTo(Type type) => $"{type} へのキャストが無効です。";
@@ -111,6 +112,8 @@ internal sealed class JapaneseMessageResource : IMessageResource
 	String IMessageResource.InvalidCallVersion(Int32 currentVersion, String functionName, Int32 requiredVersion)
 		=> $"{functionName} はバージョン 0x{requiredVersion:x8} を必要としますが、現在のバージョンは 0x{currentVersion:x8} です。";
 	String IMessageResource.InvalidArrayClass(String className) => $"{className} は配列クラスではありません。";
+	String IMessageResource.MissingArrayTypeMetadata(JDataTypeMetadata typeMetadata)
+		=> $"{typeMetadata.Signature} の型メタデータから {typeMetadata.ArraySignature} の型メタデータを取得できませんでした。";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

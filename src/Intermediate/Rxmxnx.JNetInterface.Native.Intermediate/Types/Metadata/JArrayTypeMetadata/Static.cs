@@ -57,7 +57,7 @@ public abstract partial class JArrayTypeMetadata
 			result :
 			JArrayTypeMetadata.TryGetArrayArrayMetadataWithReflection(typeofElement);
 	/// <summary>
-	/// Retrieves array deep.
+	/// Retrieves array depth.
 	/// </summary>
 	/// <typeparam name="TElement">A <see cref="IArrayType"/> type.</typeparam>
 	/// <returns>Array type.</returns>

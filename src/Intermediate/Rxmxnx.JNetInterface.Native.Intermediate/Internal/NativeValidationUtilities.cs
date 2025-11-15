@@ -235,17 +235,6 @@ internal static class NativeValidationUtilities
 		throw new InvalidOperationException(resource.NotConstructorDefinition);
 	}
 	/// <summary>
-	/// Throws an exception if <paramref name="rank"/> is an invalid array dimension.
-	/// </summary>
-	/// <param name="rank">Number of dimensions</param>
-	/// <exception cref="RankException">
-	/// Throws an exception if <paramref name="rank"/> is an invalid array dimension.
-	/// </exception>
-	public static void ThrowIfInvalidDimension(Int32 rank)
-	{
-		if (rank <= 0) throw new RankException();
-	}
-	/// <summary>
 	/// Throws and exception if the metadata of the array of <paramref name="arrayTypeMetadata"/> type is missing.
 	/// </summary>
 	/// <param name="arrayTypeMetadata">A <see cref="JArrayTypeMetadata"/> instance.</param>
@@ -257,7 +246,9 @@ internal static class NativeValidationUtilities
 	{
 		if (arrayTypeMetadata.GetArrayMetadata() is { } result)
 			return result;
-		throw new InvalidOperationException();
+		IMessageResource resource = IMessageResource.GetInstance();
+		String message = resource.MissingArrayTypeMetadata(arrayTypeMetadata);
+		throw new InvalidOperationException(message);
 	}
 
 	/// <summary>

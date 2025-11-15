@@ -2,6 +2,8 @@ namespace Rxmxnx.JNetInterface.ApplicationTest.Util;
 
 public static class Utilities
 {
+	private static readonly ConcurrentDictionary<Guid, Process> _processes = [];
+
 	public static Boolean ShowDiagnostics
 		=> Boolean.TryParse(Environment.GetEnvironmentVariable("SHOW_DIAGNOSTICS"), out Boolean showDiagnostics) &&
 			showDiagnostics;
@@ -64,10 +66,19 @@ public static class Utilities
 		state.AppendArgs(info.ArgumentList);
 		if (!String.IsNullOrEmpty(state.WorkingDirectory)) info.WorkingDirectory = state.WorkingDirectory;
 		state.Notifier?.Begin(info);
+		Guid processId = Guid.CreateVersion7();
 		using Process prog = Process.Start(info)!;
-		await prog.WaitForExitAsync(cancellationToken);
-		state.Notifier?.End(info);
-		return prog.ExitCode;
+		Utilities._processes.TryAdd(processId, prog);
+		try
+		{
+			await prog.WaitForExitAsync(cancellationToken);
+			state.Notifier?.End(info);
+			return prog.ExitCode;
+		}
+		finally
+		{
+			Utilities._processes.TryRemove(processId, out _);
+		}
 	}
 	public static async Task<Int32> Execute<TState>(ExecuteState<TState> state,
 		CancellationToken cancellationToken = default)
@@ -79,10 +90,19 @@ public static class Utilities
 		state.AppendArgs(state.ArgState, info.ArgumentList);
 		if (!String.IsNullOrEmpty(state.WorkingDirectory)) info.WorkingDirectory = state.WorkingDirectory;
 		state.Notifier?.Begin(info);
+		Guid processId = Guid.CreateVersion7();
 		using Process prog = Process.Start(info)!;
-		await prog.WaitForExitAsync(cancellationToken);
-		state.Notifier?.End(info);
-		return prog.ExitCode;
+		Utilities._processes.TryAdd(processId, prog);
+		try
+		{
+			await prog.WaitForExitAsync(cancellationToken);
+			state.Notifier?.End(info);
+			return prog.ExitCode;
+		}
+		finally
+		{
+			Utilities._processes.TryRemove(processId, out _);
+		}
 	}
 	public static async Task<Int32> QemuExecute(QemuExecuteState state, CancellationToken cancellationToken = default)
 	{
@@ -96,10 +116,19 @@ public static class Utilities
 		state.AppendArgs(info.ArgumentList);
 		if (!String.IsNullOrEmpty(state.WorkingDirectory)) info.WorkingDirectory = state.WorkingDirectory;
 		state.Notifier?.Begin(info);
+		Guid processId = Guid.CreateVersion7();
 		using Process prog = Process.Start(info)!;
-		await prog.WaitForExitAsync(cancellationToken);
-		state.Notifier?.End(info);
-		return prog.ExitCode;
+		Utilities._processes.TryAdd(processId, prog);
+		try
+		{
+			await prog.WaitForExitAsync(cancellationToken);
+			state.Notifier?.End(info);
+			return prog.ExitCode;
+		}
+		finally
+		{
+			Utilities._processes.TryRemove(processId, out _);
+		}
 	}
 	public static async Task<Int32> QemuExecute<TState>(QemuExecuteState<TState> state,
 		CancellationToken cancellationToken = default)
@@ -114,10 +143,19 @@ public static class Utilities
 		state.AppendArgs(state.ArgState, info.ArgumentList);
 		if (!String.IsNullOrEmpty(state.WorkingDirectory)) info.WorkingDirectory = state.WorkingDirectory;
 		state.Notifier?.Begin(info);
+		Guid processId = Guid.CreateVersion7();
 		using Process prog = Process.Start(info)!;
-		await prog.WaitForExitAsync(cancellationToken);
-		state.Notifier?.End(info);
-		return prog.ExitCode;
+		Utilities._processes.TryAdd(processId, prog);
+		try
+		{
+			await prog.WaitForExitAsync(cancellationToken);
+			state.Notifier?.End(info);
+			return prog.ExitCode;
+		}
+		finally
+		{
+			Utilities._processes.TryRemove(processId, out _);
+		}
 	}
 	public static async Task<String> ExecuteWithOutput(ExecuteState state,
 		CancellationToken cancellationToken = default)
@@ -129,11 +167,28 @@ public static class Utilities
 		state.AppendArgs?.Invoke(info.ArgumentList);
 		if (!String.IsNullOrEmpty(state.WorkingDirectory)) info.WorkingDirectory = state.WorkingDirectory;
 		state.Notifier?.Begin(info);
+		Guid processId = Guid.CreateVersion7();
 		using Process prog = Process.Start(info)!;
-		String result = await Utilities.ReadOutput(prog, cancellationToken);
-		await prog.WaitForExitAsync(cancellationToken);
-		state.Notifier?.End(info);
-		return result;
+		Utilities._processes.TryAdd(processId, prog);
+		try
+		{
+			String result = await Utilities.ReadOutput(prog, cancellationToken);
+			await prog.WaitForExitAsync(cancellationToken);
+			state.Notifier?.End(info);
+			return result;
+		}
+		finally
+		{
+			Utilities._processes.TryRemove(processId, out _);
+		}
+	}
+	public static void KillRunningProcesses()
+	{
+		foreach (Guid processId in Utilities._processes.Keys.ToArray())
+		{
+			if (Utilities._processes.TryRemove(processId, out Process? process))
+				process.Kill(true);
+		}
 	}
 
 	private static async Task<String> ReadOutput(Process prog, CancellationToken cancellationToken)

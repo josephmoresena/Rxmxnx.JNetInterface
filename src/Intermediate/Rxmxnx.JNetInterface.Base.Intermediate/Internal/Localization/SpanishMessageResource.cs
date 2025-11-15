@@ -54,6 +54,7 @@ internal sealed class SpanishMessageResource : IMessageResource
 	String IMessageResource.NotAttachedThread => "El hilo actual no está adjunto a la JVM.";
 	String IMessageResource.IncompatibleLibrary => "Biblioteca JVM incompatible.";
 	String IMessageResource.UnmanagedMemoryContext => "El bloque de memoria es no administrado.";
+	String IMessageResource.InvalidArrayDimension => "Las dimensiones del arreglo deben estar entre 1 y 255.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} no es un tipo instanciable.";
 	String IMessageResource.InvalidCastTo(Type type) => $"Conversión no válida a {type}.";
@@ -122,6 +123,8 @@ internal sealed class SpanishMessageResource : IMessageResource
 	String IMessageResource.InvalidCallVersion(Int32 currentVersion, String functionName, Int32 requiredVersion)
 		=> $"{functionName} requiere la versión 0x{requiredVersion:x8}, pero la versión actual es 0x{currentVersion:x8}.";
 	String IMessageResource.InvalidArrayClass(String className) => $"{className} no es una clase de array.";
+	String IMessageResource.MissingArrayTypeMetadata(JDataTypeMetadata typeMetadata)
+		=> $"No se pudieron obtener los metadatos del tipo {typeMetadata.ArraySignature} desde los metadatos del tipo {typeMetadata.Signature}.";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

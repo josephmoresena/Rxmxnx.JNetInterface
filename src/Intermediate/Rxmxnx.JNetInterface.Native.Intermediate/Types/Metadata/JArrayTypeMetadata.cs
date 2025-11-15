@@ -66,15 +66,14 @@ public abstract partial class JArrayTypeMetadata : JClassTypeMetadata
 		=> otherMetadata is JArrayTypeMetadata arrayMetadata ? this.TypeOf(arrayMetadata) : base.TypeOf(otherMetadata);
 
 	/// <summary>
-	/// Retrieves the <see cref="JArrayTypeMetadata"/> instance for <paramref name="rank"/> dimension.
+	/// Retrieves the <see cref="JArrayTypeMetadata"/> instance for <paramref name="level"/> dimension.
 	/// </summary>
-	/// <param name="rank">The number of dimensions of the array of the current element type.</param>
+	/// <param name="level">The number of dimensions of the array of the current element type.</param>
 	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
-	internal JArrayTypeMetadata GetArrayTypeMetadata(Int32 rank)
+	internal JArrayTypeMetadata WithAdditionalNesting(Int32 level)
 	{
-		NativeValidationUtilities.ThrowIfInvalidDimension(rank);
 		JArrayTypeMetadata result = this;
-		while (result.Dimension - this.Dimension < rank - 1)
+		while (result.Dimension - this.Dimension < level)
 			result = NativeValidationUtilities.ThrowIfMissingArrayMetadata(result);
 		return result;
 	}

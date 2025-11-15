@@ -63,7 +63,7 @@ public abstract partial class Launcher
 		if (executionTasks.IsEmpty) return;
 
 		ConsoleNotifier.Results(executionTasks);
-		Environment.Exit(0);
+		Utilities.KillRunningProcesses();
 		return;
 		async Task AppendResult(String executionName, Task<Int32> resultTask)
 		{
