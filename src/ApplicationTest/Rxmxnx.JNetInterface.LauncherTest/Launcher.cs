@@ -20,25 +20,30 @@ public abstract partial class Launcher
 		ConsoleNotifier.ShowDiskUsage();
 
 		Dictionary<String, Int32> results = new();
+		List<Task> executionTasks = [];
 		try
 		{
 			String exeExtension = SystemInfo.IsWindows ? ".exe" : "";
-			Dictionary<Architecture, HashSet<FileInfo>> archFiles = this.Architectures.ToDictionary(
+			Dictionary<Architecture, FileInfo[]> archFiles = this.Architectures.ToDictionary(
 				a => a,
 				a => this.OutputDirectory
 				         .GetFiles(
 					         $"ApplicationTest.*.{this.RuntimeIdentifierPrefix}-{Enum.GetName(a)!.ToLower()}.net*.0{pattern}{exeExtension}")
-				         .OrderBy(f => NetVersionParser.GetNetVersion(f.FullName)).ToHashSet());
-			HashSet<Jdk> jdks = this.Architectures.SelectMany(a => this[a])
-			                        .OrderBy(j => (j.JavaVersion, j.JavaArchitecture == this.CurrentArch,
-				                                 j.JavaArchitecture)).ToHashSet();
+				         .OrderBy(f => NetVersionParser.GetNetVersion(f.FullName)).ToArray());
+			Jdk[] jdks = this.Architectures.SelectMany(a => this[a]).Distinct()
+			                 .OrderBy(j => (j.JavaVersion, j.JavaArchitecture == this.CurrentArch, j.JavaArchitecture))
+			                 .ToArray();
 			foreach (Jdk jdk in jdks)
 			{
 				foreach (FileInfo appFile in archFiles[jdk.JavaArchitecture])
 				{
 					String executionName =
 						$"{Path.GetRelativePath(this.OutputDirectory.FullName, appFile.FullName)} ({jdk.JavaVersion})";
-					results.Add(executionName, await this.RunAppFile(appFile, jdk, executionName));
+					Task executionTask = AppendResult(executionName, this.RunAppFile(appFile, jdk, executionName));
+					await Task.WhenAny(Task.Delay(20000, ConsoleNotifier.CancellationToken), executionTask)
+					          .ConfigureAwait(false);
+					if (!executionTask.IsCompleted)
+						executionTasks.Add(executionTask);
 				}
 			}
 		}
@@ -47,6 +52,16 @@ public abstract partial class Launcher
 			if (results.Count > 0)
 				ConsoleNotifier.Results(results);
 		}
+		if (executionTasks.Any(t => !t.IsCompleted))
+		{
+			Console.WriteLine($"Waiting for pending tasks ({executionTasks.Count})...");
+			await Task.WhenAny(Task.Delay(40000, ConsoleNotifier.CancellationToken), Task.WhenAll(executionTasks));
+		}
+		if (executionTasks.Any(t => !t.IsCompleted))
+			Environment.Exit(0);
+		return;
+		async Task AppendResult(String executionName, Task<Int32> resultTask)
+			=> results.Add(executionName, await resultTask.ConfigureAwait(false));
 	}
 	public async Task ExecuteJar(NetVersion[] netVersions)
 	{
@@ -58,9 +73,9 @@ public abstract partial class Launcher
 			FileInfo? jarFile = this.OutputDirectory.GetFiles("HelloJni.jar").FirstOrDefault();
 			if (jarFile is null) return;
 
-			HashSet<Jdk> jdks = this.Architectures.SelectMany(a => this[a])
-			                        .OrderBy(j => (j.JavaVersion, j.JavaArchitecture == this.CurrentArch,
-				                                 j.JavaArchitecture)).ToHashSet();
+			Jdk[] jdks = this.Architectures.SelectMany(a => this[a]).Distinct()
+			                 .OrderBy(j => (j.JavaVersion, j.JavaArchitecture == this.CurrentArch, j.JavaArchitecture))
+			                 .ToArray();
 			foreach (Jdk jdk in jdks)
 			{
 				foreach (NetVersion netVersion in netVersions)

@@ -102,13 +102,14 @@ public partial class Launcher
 			registry.Unregister();
 		}
 	}
-	private async Task<Int32> RunAppFile(FileInfo appFile, Jdk jdk, String executionName)
+	private async Task<Int32> RunAppFile(FileInfo appFile, Jdk jdk, String executionName,
+		CancellationToken? ct = default)
 	{
 		using CancellationTokenSource source = new(TimeSpan.FromMinutes(5));
 		CancellationTokenRegistration registry = ConsoleNotifier.RegisterCancellation(source);
 		try
 		{
-			return await this.RunAppFile(appFile, jdk, executionName, ConsoleNotifier.CancellationToken);
+			return await this.RunAppFile(appFile, jdk, executionName, ct ?? ConsoleNotifier.CancellationToken);
 		}
 		catch (OperationCanceledException)
 		{
