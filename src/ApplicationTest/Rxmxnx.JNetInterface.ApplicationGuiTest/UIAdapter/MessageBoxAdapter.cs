@@ -10,7 +10,6 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 internal partial class UIAdapter
 {
-	[SupportedOSPlatform("windows")]
 	private sealed class MessageBoxAdapter : UIAdapter
 	{
 		[DllImport("user32.dll", EntryPoint = "MessageBoxW")]
@@ -26,6 +25,7 @@ internal partial class UIAdapter
 		public override void PrintThreadInfo(JEnvironmentRef environmentRef)
 			=> Trace.WriteLine($"Thread: {Environment.CurrentManagedThreadId}, {environmentRef}.");
 		public override void PrintArgs(JVirtualMachineInitArg jvmLib) => Trace.WriteLine(jvmLib);
+		[SupportedOSPlatform("windows")]
 		public override void ExecuteGui<TState>(in TState state, in Action<TState> action)
 		{
 			Thread.CurrentThread.SetApartmentState(ApartmentState.Unknown);

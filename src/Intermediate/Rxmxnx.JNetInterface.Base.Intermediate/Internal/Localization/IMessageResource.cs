@@ -276,4 +276,14 @@ internal partial interface IMessageResource
 	/// Message for invalid array class exception.
 	/// </summary>
 	String InvalidArrayClass(String className);
+	/// <summary>
+	/// Message for missing array type metadata.
+	/// </summary>
+	/// <param name="typeMetadata">Source type metadata.</param>
+	String MissingArrayTypeMetadata(JDataTypeMetadata typeMetadata);
+	/// <summary>
+	/// Message for invalid array dimension.
+	/// </summary>
+	/// <param name="maxLevel">Maximum level.</param>
+	String InvalidArrayDimension(Int32 maxLevel);
 }

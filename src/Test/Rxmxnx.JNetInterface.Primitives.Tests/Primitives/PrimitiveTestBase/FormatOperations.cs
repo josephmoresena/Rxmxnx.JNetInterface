@@ -9,7 +9,7 @@ public partial class PrimitiveTestBase
 	}
 	private static void SpanParseableTest<TPrimitive, TValue>(TValue value, IFormatProvider? provider = default)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveEquatable, ISpanParsable<TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveEquatable, ISpanParsable<TPrimitive>, INativeDataType<TPrimitive>
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>,
 		ISpanParsable<TValue>
 	{
@@ -23,7 +23,7 @@ public partial class PrimitiveTestBase
 	}
 	private static void ParseableTest<TPrimitive, TValue>(String text, IFormatProvider? provider)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveEquatable, IParsable<TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveEquatable, IParsable<TPrimitive>, INativeDataType<TPrimitive>
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>, IParsable<TValue>
 	{
 		Assert.Equal(TValue.Parse(text, provider), TPrimitive.Parse(text, provider));
@@ -34,7 +34,7 @@ public partial class PrimitiveTestBase
 	}
 	private static void SpanFormattableTest<TPrimitive, TValue>(TPrimitive primitive0, IFormatProvider? provider)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveEquatable, ISpanFormattable
+		IEquatable<TPrimitive>, IPrimitiveEquatable, ISpanFormattable, INativeDataType<TPrimitive>
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>, ISpanFormattable
 	{
 		Span<Char> chars0 = stackalloc Char[primitive0.Value.ToString(provider).Length];

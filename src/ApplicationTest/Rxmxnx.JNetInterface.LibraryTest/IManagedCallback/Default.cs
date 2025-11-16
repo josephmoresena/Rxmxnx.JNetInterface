@@ -17,7 +17,7 @@ public partial interface IManagedCallback
 		JStringObject IManagedCallback.GetHelloString(JLocalObject jLocal)
 		{
 			IEnvironment env = jLocal.Environment;
-			return JStringObject.Create(env, $"Hello from .NET, {Environment.MachineName}");
+			return JStringObject.Create(env, $"Hello from {JObject.CompilationFramework}, {Environment.MachineName}");
 		}
 		JInt IManagedCallback.GetThreadId(JLocalObject jLocal)
 		{
@@ -53,15 +53,19 @@ public partial interface IManagedCallback
 				env.DescribeException();
 				if (e is ThrowableException te)
 				{
-					this.Writer.WriteLine($"=== {te.EnvironmentRef} thread: {te.ThreadId} === ");
+					this.Writer.WriteLine(
+						$"=== {te.EnvironmentRef} thread: {te.ThreadId} throwable: {te.ThrowableRef}=== ");
 					this.Writer.WriteLine(te.WithSafeInvoke(t => t.ToString()));
 				}
-				env.PendingException = default;
+				Console.WriteLine($"Thread throwable: {env.PendingException?.ThrowableRef}");
 			}
 			finally
 			{
-				CString message = new(() => "Thrown from C# code."u8);
+				env.PendingException = default;
+				Console.WriteLine("Throwing exception from .NET...");
+				CString message = new(() => "Thrown from .NET code."u8);
 				JThrowableObject.ThrowNew<JIllegalArgumentExceptionObject>(env, message);
+				Console.WriteLine("Exception thrown from .NET...");
 			}
 		}
 
@@ -75,6 +79,7 @@ public partial interface IManagedCallback
 				using JPrimitiveMemory<JInt> intElements = jArray.GetElements();
 				foreach (JInt element in intElements.Values)
 					result += element;
+				intElements.ReleaseMode = JReleaseMode.Abort;
 				return JNumberObject<JInt, JIntegerObject>.Create(env, result);
 			}
 			catch (JniException)

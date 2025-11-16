@@ -8,13 +8,13 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly unsafe struct StringFunctionSet
+internal readonly unsafe partial struct StringFunctionSet
 {
 	/// <summary>
 	/// Pointer to <c>NewString</c> function.
 	/// Constructs a new <c>java.lang.String</c> object from an array of characters.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, Char*, Int32, JStringLocalRef> NewString;
+	private readonly NewStringPtr _newString;
 	/// <summary>
 	/// Pointers to <c>GetStringLength</c>, <c>GetStringChars</c> and <c>ReleaseStringChars</c>
 	/// functions.
@@ -24,12 +24,35 @@ internal readonly unsafe struct StringFunctionSet
 	/// Pointer to <c>NewStringUTF</c> function.
 	/// Constructs a new <c>java.lang.String</c> object from an array of characters.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, Byte*, JStringLocalRef> NewStringUtf;
+	private readonly NewStringUtfPtr _newStringUtf;
 	/// <summary>
 	/// Pointers to <c>GetStringUTFLength</c>, <c>GetStringUTFChars</c> and <c>ReleaseStringUTFChars</c>
 	/// functions.
 	/// </summary>
 	public readonly StringFunctionSet<Byte> Utf8;
+
+	/// <summary>
+	/// <c>NewString</c>.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JStringLocalRef NewString(JEnvironmentRef envRef, Char* textPtr, Int32 textLength)
+		=> SystemInfo.IsWindows ?
+			this._newString.Windows(envRef, textPtr, textLength) :
+			this._newString.Unix(envRef, textPtr, textLength);
+	/// <summary>
+	/// <c>NewString</c>.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JStringLocalRef NewStringUtf(JEnvironmentRef envRef, Byte* textPtr)
+		=> SystemInfo.IsWindows ?
+			this._newStringUtf.Windows(envRef, textPtr) :
+			this._newStringUtf.Unix(envRef, textPtr);
 }
 
 /// <summary>
@@ -41,55 +64,53 @@ internal readonly unsafe struct StringFunctionSet
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly unsafe struct StringFunctionSet<TChar>
+internal readonly unsafe struct StringFunctionSet<TChar> : IStringFunctionSet
 	where TChar : unmanaged, IBinaryNumber<TChar>, IUnsignedNumber<TChar>
 {
 	/// <summary>
-	/// Pointer to <c>GetStringLength</c> function.
-	/// Returns the length (the count of characters) of a Java string.
+	/// Pointer to <c>GetStringLength</c>, <c>GetStringChars</c> and <c>ReleaseStringChars</c> functions.
 	/// </summary>
-	private readonly delegate* unmanaged<JEnvironmentRef, JStringLocalRef, Int32> _getLengthPtr;
-	/// <summary>
-	/// Pointer to <c>GetStringChars</c> function.
-	/// Returns a pointer to the array of characters of the string.
-	/// </summary>
-	/// <remarks>This pointer is valid until <c>ReleaseStringChars()</c> is called.</remarks>
-	private readonly delegate* unmanaged<JEnvironmentRef, JStringLocalRef, out JBoolean, void*> _getCharsPtr;
-	/// <summary>
-	/// Pointer to <c>ReleaseStringChars</c> function.
-	/// Informs the <c>VM</c> that the native code no longer needs access to chars.
-	/// </summary>
-	private readonly delegate* unmanaged<JEnvironmentRef, JStringLocalRef, void*, void> _releaseChars;
+	private readonly IStringFunctionSet.StringFunctionSet _functions;
 
 	/// <summary>
-	/// Pointer to <c>GetStringLength</c> function.
-	/// Returns the length (the count of characters) of a Java string.
+	/// <c>GetStringLength</c>.
 	/// </summary>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Int32 GetStringLength(JEnvironmentRef envRef, JStringLocalRef stringRef)
-		=> this._getLengthPtr(envRef, stringRef);
+		=> SystemInfo.IsWindows ?
+			this._functions.Windows.GetLength(envRef, stringRef) :
+			this._functions.Unix.GetLength(envRef, stringRef);
 	/// <summary>
-	/// Pointer to <c>GetStringChars</c> function.
-	/// Returns a pointer to the array of characters of the string.
+	/// <c>GetStringChars</c>.
 	/// </summary>
-	/// <remarks>This pointer is valid until <c>ReleaseStringChars()</c> is called.</remarks>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public ReadOnlyValPtr<TChar> GetStringChars(JEnvironmentRef envRef, JStringLocalRef stringRef, out JBoolean isCopy)
-		=> (ReadOnlyValPtr<TChar>)this._getCharsPtr(envRef, stringRef, out isCopy);
+	{
+		fixed (JBoolean* isCopyPtr = &isCopy)
+		{
+			return (ReadOnlyValPtr<TChar>)(SystemInfo.IsWindows ?
+				this._functions.Windows.GetChars(envRef, stringRef, isCopyPtr) :
+				this._functions.Unix.GetChars(envRef, stringRef, isCopyPtr));
+		}
+	}
 	/// <summary>
-	/// Pointer to <c>ReleaseStringChars</c> function.
-	/// Informs the <c>VM</c> that the native code no longer needs access to chars.
+	/// <c>ReleaseStringChars</c>.
 	/// </summary>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void ReleaseStringChars(JEnvironmentRef envRef, JStringLocalRef stringRef, ReadOnlyValPtr<TChar> chars)
-		=> this._releaseChars(envRef, stringRef, chars);
+	{
+		if (SystemInfo.IsWindows)
+			this._functions.Windows.ReleaseChars(envRef, stringRef, chars);
+		else
+			this._functions.Unix.ReleaseChars(envRef, stringRef, chars);
+	}
 }

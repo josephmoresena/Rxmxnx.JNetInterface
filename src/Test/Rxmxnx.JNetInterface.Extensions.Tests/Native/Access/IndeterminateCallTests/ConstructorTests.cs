@@ -10,17 +10,23 @@ public sealed class ConstructorTests : IndeterminateAccessTestsBase
 		JArgumentMetadata.Create<JInt>(),
 	];
 
+	private static ReadOnlySpan<JArgumentMetadata> EmptyArgsMetadata => [];
+	private static ReadOnlySpan<IObject?> EmptyArgs => [];
+
 	[Fact]
 	internal void ParameterlessTest()
 	{
 		JConstructorDefinition definition = new JConstructorDefinition.Parameterless();
-		IndeterminateCall call = IndeterminateCall.CreateConstructorDefinition([]);
+		IndeterminateCall call = IndeterminateCall.CreateConstructorDefinition(ConstructorTests.EmptyArgsMetadata);
 		IndeterminateCall operatorCall = definition;
-		IndeterminateCall methodCall = IndeterminateCall.CreateMethodDefinition(CommonNames.Constructor, []);
+		IndeterminateCall methodCall =
+			IndeterminateCall.CreateMethodDefinition(CommonNames.Constructor, ConstructorTests.EmptyArgsMetadata);
 		IndeterminateCall functionCall =
-			IndeterminateCall.CreateFunctionDefinition(default!, CommonNames.Constructor, []);
+			IndeterminateCall.CreateFunctionDefinition(default!, CommonNames.Constructor,
+			                                           ConstructorTests.EmptyArgsMetadata);
 		IndeterminateCall functionCallGeneric =
-			IndeterminateCall.CreateFunctionDefinition<JInt>(CommonNames.Constructor, []);
+			IndeterminateCall.CreateFunctionDefinition<JInt>(CommonNames.Constructor,
+			                                                 ConstructorTests.EmptyArgsMetadata);
 
 		Assert.Equal(call.Definition, operatorCall.Definition);
 		Assert.Equal(call.Definition, methodCall.Definition);
@@ -39,13 +45,13 @@ public sealed class ConstructorTests : IndeterminateAccessTestsBase
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		using JClassObject jClass = new(env);
 
-		IndeterminateAccessTestsBase.EmptyCompare(call.FunctionCall(jClass, []));
-		IndeterminateAccessTestsBase.EmptyCompare(call.FunctionCall(jClass, jClass, true, []));
-		IndeterminateAccessTestsBase.EmptyCompare(call.FunctionCall(jClass, jClass, false, []));
+		IndeterminateAccessTestsBase.EmptyCompare(call.FunctionCall(jClass, ConstructorTests.EmptyArgs));
+		IndeterminateAccessTestsBase.EmptyCompare(call.FunctionCall(jClass, jClass, true, ConstructorTests.EmptyArgs));
+		IndeterminateAccessTestsBase.EmptyCompare(call.FunctionCall(jClass, jClass, false, ConstructorTests.EmptyArgs));
 		IndeterminateAccessTestsBase.Compare(new(new JValue.PrimitiveValue(), jClass.ClassSignature),
-		                                     call.StaticFunctionCall(jClass, []));
+		                                     call.StaticFunctionCall(jClass, ConstructorTests.EmptyArgs));
 
-		call.StaticMethodCall(jClass, []);
+		call.StaticMethodCall(jClass, ConstructorTests.EmptyArgs);
 
 		Assert.Null((IndeterminateCall?)default(JConstructorDefinition));
 	}

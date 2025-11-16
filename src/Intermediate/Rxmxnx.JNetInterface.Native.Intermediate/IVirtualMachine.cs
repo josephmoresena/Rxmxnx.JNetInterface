@@ -3,88 +3,16 @@
 /// <summary>
 /// This interface exposes the invocation interface of a Java Virtual Machine.
 /// </summary>
-public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
+public partial interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 {
 	/// <summary>
-	/// Minimum virtual machine version required for any JNI thread.
+	/// Java runtime version.
 	/// </summary>
-	public const Int32 MinimalVersion = 0x00010006;
-
-	/// <summary>
-	/// Capacity for Throwable.getStackTrace()
-	/// </summary>
-	internal const Int32 GetStackTraceCapacity = 5;
-	/// <summary>
-	/// Capacity Class.getModifiers(), Class.getName() and FindClass()
-	/// </summary>
-	internal const Int32 IsFinalArrayCapacity = 5;
-	/// <summary>
-	/// Capacity Class.getModifiers(), Class.getName() and FindClass()
-	/// </summary>
-	internal const Int32 GetAccessibleDefinitionCapacity = 3;
-	/// <summary>
-	/// Capacity Class.getModifiers(), Class.getSuperclass() and Class.getName()
-	/// </summary>
-	internal const Int32 GetSuperTypeCapacity = 5;
-	/// <summary>
-	/// Capacity Throwable.message()
-	/// </summary>
-	internal const Int32 CreateThrowableExceptionCapacity = 5;
-	/// <summary>
-	/// Capacity GetObjectArrayElement()
-	/// </summary>
-	internal const Int32 IndexOfObjectCapacity = 5;
-	/// <summary>
-	/// Capacity GetObjectClass()
-	/// </summary>
-	internal const Int32 GetObjectClassCapacity = 5;
-
-	/// <summary>
-	/// Indicates whether metadata validation is enabled.
-	/// </summary>
-#if !PACKAGE
-	[ExcludeFromCodeCoverage]
-#endif
-	public static Boolean MetadataValidationEnabled
-	{
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get => !AppContext.TryGetSwitch("JNetInterface.DisableMetadataValidation", out Boolean disable) || !disable;
-	}
-	/// <summary>
-	/// Indicates whether metadata for jagged arrays is auto-generated.
-	/// </summary>
-	/// <remarks>In reflection-free mode this feature is unavailable.</remarks>
-#if !PACKAGE
-	[ExcludeFromCodeCoverage]
-#endif
-	public static Boolean JaggedArrayAutoGenerationEnabled
-	{
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get
-			=> !AotInfo.IsReflectionDisabled &&
-				(!AppContext.TryGetSwitch("JNetInterface.DisableJaggedArrayAutoGeneration", out Boolean disable) ||
-					!disable);
-	}
-	/// <summary>
-	/// Indicates whether detailed a ToString() is available for type metadata instances.
-	/// </summary>
-#if !PACKAGE
-	[ExcludeFromCodeCoverage]
-#endif
-	public static Boolean TypeMetadataToStringEnabled
-	{
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get => !AppContext.TryGetSwitch("JNetInterface.DisableTypeMetadataToString", out Boolean disable) || !disable;
-	}
-
+	JRuntimeVersion Version { get; }
 	/// <summary>
 	/// JNI reference to the interface.
 	/// </summary>
 	JVirtualMachineRef Reference { get; }
-	/// <summary>
-	/// Indicates whether the current instance is not a proxy.
-	/// </summary>
-	internal Boolean NoProxy { get; }
 
 	JVirtualMachineRef IWrapper<JVirtualMachineRef>.Value => this.Reference;
 
@@ -123,15 +51,4 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	/// </summary>
 	/// <param name="message">Error message.</param>
 	void FatalError(String? message);
-
-	/// <summary>
-	/// Attaches the current thread to the virtual machine for <paramref name="purpose"/>.
-	/// </summary>
-	/// <param name="purpose">The purpose of requested thread.</param>
-	/// <returns>A <see cref="IThread"/> instance for given purpose.</returns>
-	internal IThread CreateThread(ThreadPurpose purpose)
-	{
-		ThreadCreationArgs args = ThreadCreationArgs.Create(purpose);
-		return this.InitializeThread(args.Name, args.ThreadGroup);
-	}
 }

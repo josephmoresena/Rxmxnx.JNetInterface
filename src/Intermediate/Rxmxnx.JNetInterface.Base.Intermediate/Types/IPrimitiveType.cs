@@ -14,6 +14,8 @@ public interface IPrimitiveType : IDataType, IComparable, IConvertible
 
 	static JTypeKind IDataType.Kind => JTypeKind.Primitive;
 	static Type? IDataType.FamilyType => default;
+	// Primitives as classes are available only from JDK 1.1
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd1;
 
 #if PACKAGE
 	/// <summary>
@@ -56,8 +58,16 @@ public interface IPrimitiveType<TPrimitive> : IPrimitiveType, IDataType<TPrimiti
 	/// <param name="value">A <typeparamref name="TPrimitive"/> to implicitly convert.</param>
 	static abstract implicit operator JObject(TPrimitive value);
 	/// <summary>
-	/// Defines an implicit conversion of a given <see cref="JObject"/> to <typeparamref name="TPrimitive"/>.
+	/// Defines an explicit conversion of a given <see cref="JObject"/> to <typeparamref name="TPrimitive"/>.
 	/// </summary>
-	/// <param name="jObj">A <see cref="JObject"/> to implicitly convert.</param>
+	/// <param name="jObj">A <see cref="JObject"/> to explicitly convert.</param>
 	static abstract explicit operator TPrimitive(JObject jObj);
+	/// <summary>
+	/// Create a <typeparamref name="TPrimitive"/> value from a <typeparamref name="TSource"/> instance.
+	/// </summary>
+	/// <typeparam name="TSource">The <see cref="IPrimitiveType{TSource}"/> type of the source value.</typeparam>
+	/// <param name="value">Source value.</param>
+	/// <returns>The <typeparamref name="TPrimitive"/> representation of <paramref name="value"/>.</returns>
+	static abstract TPrimitive CreateFrom<TSource>(TSource value)
+		where TSource : unmanaged, IPrimitiveType<TSource>, IEqualityOperators<TSource, TSource, Boolean>;
 }

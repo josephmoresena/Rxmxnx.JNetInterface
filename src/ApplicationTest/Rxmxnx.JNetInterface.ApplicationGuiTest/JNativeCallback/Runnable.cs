@@ -18,10 +18,13 @@ public partial class JNativeCallback
 	private sealed unsafe class Runnable : JNativeCallback, IClassType<Runnable>, IInterfaceObject<JRunnableObject>
 	{
 		private static readonly JMethodDefinition runDef = (JMethodDefinition)IndeterminateCall.CreateMethodDefinition(
-			"runnable_run"u8, [
-				JArgumentMetadata.Get<JLong>(),
-				JArgumentMetadata.Get<JLong>(),
-			]).Definition;
+			"runnable_run"u8,
+#if !NET9_0_OR_GREATER
+			[JArgumentMetadata.Get<JLong>(), JArgumentMetadata.Get<JLong>(),]
+#else
+			JArgumentMetadata.Get<JLong>(), JArgumentMetadata.Get<JLong>()
+#endif
+		).Definition;
 		private static readonly JClassTypeMetadata<Runnable> nestedTypeMetadata = TypeMetadataBuilder<JNativeCallback>
 			.Create<Runnable>("com/rxmxnx/jnetinterface/NativeCallback$NativeRunnable"u8, JTypeModifier.Final)
 			.Implements<JRunnableObject>().Build();

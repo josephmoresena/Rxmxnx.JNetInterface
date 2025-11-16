@@ -1,7 +1,15 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+    <PropertyGroup>
+        <TargetFramework Condition="'$(RequiredFramework)' == '' And '$(OutputType)' != 'WinExe'">$(DefaultFramework)</TargetFramework>
+    </PropertyGroup>
+
     <Import Project="JNetInterface-Frameworks.targets"/>
-    
+
+    <PropertyGroup>
+        <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    </PropertyGroup>
+
     <PropertyGroup>
         <JNI_APP Condition="'$(RuntimeIdentifier)' != ''">true</JNI_APP>
         <!-- Assembly name must specify which platform it was compiled for -->
@@ -20,7 +28,7 @@
         <AssemblyName Condition="$(PublishReadyToRun) == 'true'">$(AssemblyName).R2R</AssemblyName>
     </PropertyGroup>
 
-    <ItemGroup>
+    <ItemGroup Condition="'$(OutputType)' != 'WinExe'">
         <ProjectReference Include="..\Rxmxnx.JNetInterface.ConsoleTest\Rxmxnx.JNetInterface.ConsoleTest.csproj"/>
     </ItemGroup>
 

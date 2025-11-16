@@ -1,12 +1,12 @@
-namespace Rxmxnx.JNetInterface.Restricted;
-
-using TDirectBuffer =
 #if !PACKAGE
-	JBufferObject
+using JByteBufferBuffer = Rxmxnx.JNetInterface.Nio.JBufferObject;
+
 #else
-	JByteBufferObject
+using JByteBufferBuffer = Rxmxnx.JNetInterface.Nio.JByteBufferObject;
+
 #endif
-	;
+
+namespace Rxmxnx.JNetInterface.Restricted;
 
 internal partial interface INioFeature
 {
@@ -15,14 +15,15 @@ internal partial interface INioFeature
 	/// </summary>
 	/// <param name="memory">A <see cref="IFixedMemory"/> instance.</param>
 	/// <returns>A direct <see cref="JBufferObject"/> instance.</returns>
-	internal TDirectBuffer NewDirectByteBuffer(IFixedMemory.IDisposable memory);
+	internal JByteBufferBuffer NewDirectByteBuffer(IFixedMemory.IDisposable memory);
 	/// <summary>
 	/// Creates an ephemeral <c>java.nio.DirectByteBuffer</c> instance and executes <paramref name="action"/>.
 	/// </summary>
 	/// <typeparam name="TBuffer">Type of created buffer.</typeparam>
 	/// <param name="capacity">Capacity of created buffer.</param>
 	/// <param name="action">Action to execute.</param>
-	internal void WithDirectByteBuffer<TBuffer>(Int32 capacity, Action<TBuffer> action) where TBuffer : TDirectBuffer;
+	internal void WithDirectByteBuffer<TBuffer>(Int32 capacity, Action<TBuffer> action)
+		where TBuffer : JByteBufferBuffer;
 	/// <summary>
 	/// Creates an ephemeral <c>java.nio.DirectByteBuffer</c> instance and executes <paramref name="action"/>.
 	/// </summary>
@@ -33,9 +34,9 @@ internal partial interface INioFeature
 	/// <param name="action">Action to execute.</param>
 	internal void WithDirectByteBuffer<TBuffer, TState>(Int32 capacity, TState state, Action<TBuffer, TState> action)
 #if NET9_0_OR_GREATER
-	where TState : allows ref struct
+		where TState : allows ref struct
 #endif
-		where TBuffer : TDirectBuffer;
+		where TBuffer : JByteBufferBuffer;
 	/// <summary>
 	/// Creates an ephemeral <c>java.nio.DirectByteBuffer</c> instance and executes <paramref name="func"/>.
 	/// </summary>
@@ -45,7 +46,7 @@ internal partial interface INioFeature
 	/// <param name="func">Function to execute.</param>
 	/// <returns>The result of <paramref name="func"/> execution.</returns>
 	internal TResult WithDirectByteBuffer<TBuffer, TResult>(Int32 capacity, Func<TBuffer, TResult> func)
-		where TBuffer : TDirectBuffer;
+		where TBuffer : JByteBufferBuffer;
 	/// <summary>
 	/// Creates an ephemeral <c>java.nio.DirectByteBuffer</c> instance and executes <paramref name="func"/>.
 	/// </summary>
@@ -59,7 +60,7 @@ internal partial interface INioFeature
 	internal TResult WithDirectByteBuffer<TBuffer, TState, TResult>(Int32 capacity, TState state,
 		Func<TBuffer, TState, TResult> func)
 #if NET9_0_OR_GREATER
-	where TState : allows ref struct
+		where TState : allows ref struct
 #endif
-		where TBuffer : TDirectBuffer;
+		where TBuffer : JByteBufferBuffer;
 }

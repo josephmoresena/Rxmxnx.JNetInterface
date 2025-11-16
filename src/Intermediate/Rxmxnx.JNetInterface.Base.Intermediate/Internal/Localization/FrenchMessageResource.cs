@@ -120,6 +120,12 @@ internal sealed class FrenchMessageResource : IMessageResource
 	String IMessageResource.InvalidCallVersion(Int32 currentVersion, String functionName, Int32 requiredVersion)
 		=> $"{functionName} nécessite la version 0x{requiredVersion:x8}, mais la version actuelle est 0x{currentVersion:x8}.";
 	String IMessageResource.InvalidArrayClass(String className) => $"{className} n'est pas une classe de tableau.";
+	String IMessageResource.MissingArrayTypeMetadata(JDataTypeMetadata typeMetadata)
+		=> $"Impossible de récupérer les métadonnées du type {typeMetadata.ArraySignature} à partir des métadonnées du type {typeMetadata.Signature}.";
+	String IMessageResource.InvalidArrayDimension(Int32 maxLevel)
+		=> maxLevel > 0 ?
+			$"Les dimensions du tableau doivent être comprises entre 1 et {maxLevel}." :
+			"Le type de tableau possède trop de dimensions.";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

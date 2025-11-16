@@ -9,18 +9,17 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly unsafe struct FromReflectedFunction<TAccessible>
-	where TAccessible : unmanaged, IAccessibleIdentifierType
+internal readonly unsafe struct FromReflectedFunction<TAccessible> : IFromReflectedFunction
+	where TAccessible : unmanaged, IAccessibleIdentifierType, INativePointerType<TAccessible>
 {
 	/// <summary>
 	/// Pointer to <c>FromReflected<typeparamref name="TAccessible"/></c> function.
 	/// Converts a <c>java.lang.reflect</c> object to a <typeparamref name="TAccessible"/>.
 	/// </summary>
-	private readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, IntPtr> _ptr;
+	private readonly IFromReflectedFunction.FromReflectedFunction _function;
 
 	/// <summary>
-	/// Pointer to <c>FromReflected<typeparamref name="TAccessible"/></c> function.
-	/// Converts a <c>java.lang.reflect</c> object to a <typeparamref name="TAccessible"/>.
+	/// <c>FromReflected<typeparamref name="TAccessible"/></c>.
 	/// </summary>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -28,8 +27,9 @@ internal readonly unsafe struct FromReflectedFunction<TAccessible>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TAccessible FromReflected(JEnvironmentRef envRef, JObjectLocalRef localRef)
 	{
-		TAccessible result = default;
-		Unsafe.As<TAccessible, IntPtr>(ref result) = this._ptr(envRef, localRef);
-		return result;
+		IntPtr result = SystemInfo.IsWindows ?
+			this._function.Windows(envRef, localRef) :
+			this._function.Unix(envRef, localRef);
+		return TAccessible.New(result);
 	}
 }

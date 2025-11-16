@@ -25,10 +25,11 @@ public abstract partial class ArrayFeatureProxy : IArrayFeature
 		JMemoryReferenceKind referenceKind) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 	public abstract IntPtr GetPrimitiveSequence<TPrimitive>(JArrayLocalRef arrayRef, out Boolean isCopy)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
-	public abstract ValPtr<Byte> GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef);
+	public abstract IntPtr GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef, out Boolean isCopy);
 	public abstract void ReleasePrimitiveSequence<TPrimitive>(JArrayLocalRef arrayRef, IntPtr pointer,
 		JReleaseMode mode) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
-	public abstract void ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, ValPtr<Byte> criticalPtr);
+	public abstract void ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, IntPtr criticalPtr,
+		JReleaseMode mode);
 	public abstract void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, IFixedMemory<TPrimitive> elements,
 		Int32 startIndex = 0) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 	public abstract void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, IReadOnlyFixedMemory<TPrimitive> elements,

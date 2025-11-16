@@ -19,6 +19,8 @@ public class JDoubleBufferObject : JBufferObject<JDouble>, IClassType<JDoubleBuf
 		InterfaceSet.ComparableSet);
 
 	static TypeMetadata IClassType<JDoubleBufferObject>.Metadata => JDoubleBufferObject.typeMetadata;
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd4;
 
 	/// <inheritdoc/>
 	protected JDoubleBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

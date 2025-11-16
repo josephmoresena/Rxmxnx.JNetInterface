@@ -60,7 +60,7 @@ public sealed class JClassObjectTests
 		Assert.Equal(jClass.IsArray, objectMetadata.ObjectSignature[0] == CommonNames.ArraySignaturePrefixChar);
 		Assert.Equal(jClass.ArrayDimension, objectMetadata.ArrayDimension);
 		Assert.Equal(jClass.Hash, objectMetadata.Hash);
-		Assert.Equal(!jClass.Reference.IsDefault ? $"{jClass.Name} {jClass.Reference}" : $"{jClass.Name}",
+		Assert.Equal(jClass.Reference != default ? $"{jClass.Name} {jClass.Reference}" : $"{jClass.Name}",
 		             jClass.ToString());
 
 		JSerializableObject jSerializable = jClass.CastTo<JSerializableObject>();
@@ -170,7 +170,7 @@ public sealed class JClassObjectTests
 		Assert.Equal(jClassObj.Hash, metadata.Hash);
 
 		Assert.Equal(
-			!jClassObj.Reference.IsDefault ?
+			jClassObj.Reference != default ?
 				$"{jClassObj.Name.ToString().Replace('/', '.')} {jClassObj.Reference}" :
 				$"{jClassObj.Name}", jClassObj.ToString());
 	}
@@ -491,7 +491,7 @@ public sealed class JClassObjectTests
 		JClassObject jClass = new(env);
 		JLocalObject jLocal = new(jClass, classRef.Value);
 
-		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
+		vm.InitializeThread(Arg.Any<CString?>(), version: Arg.Any<Int32>()).Returns(thread);
 		thread.ReferenceFeature.Unload(Arg.Any<JGlobal>()).Returns(true);
 
 		jClass.SetValue(classRef);

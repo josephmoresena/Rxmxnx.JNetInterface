@@ -90,6 +90,7 @@ internal readonly partial struct ClassNameHelper
 			CommonNames.IntSignatureChar => CommonNames.IntPrimitive,
 			CommonNames.LongSignatureChar => CommonNames.LongPrimitive,
 			CommonNames.ShortSignatureChar => CommonNames.ShortPrimitive,
+			CommonNames.ObjectSignaturePrefixChar => nameof(Object),
 			_ => String.Empty,
 		};
 	}
@@ -112,7 +113,11 @@ internal readonly partial struct ClassNameHelper
 	private static void WriteObjectElementName(Span<Char> buffer, ClassNameHelper helper)
 	{
 		Encoding.UTF8.GetChars(helper, buffer); // Decodes UTF-8 chars.
+#if !NET8_0_OR_GREATER
+		ClassNameHelper.Replace(buffer, '/', '.'); // Escapes chars.
+#else
 		buffer.Replace('/', '.'); // Escapes chars.
+#endif
 	}
 	/// <summary>
 	/// Retrieves offset for current class name.
@@ -136,4 +141,24 @@ internal readonly partial struct ClassNameHelper
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private static Int32 GetPadding(CString classSignature, Boolean isObjectClass)
 		=> classSignature[^1] == CommonNames.ObjectSignatureSuffixChar && isObjectClass ? 1 : 0;
+
+	/// <summary>
+	/// Replaces all occurrences of <paramref name="oldValue"/> with <paramref name="newValue"/>.
+	/// </summary>
+	/// <param name="span">The span in which the chars should be replaced.</param>
+	/// <param name="oldValue">The char to be replaced with newValue.</param>
+	/// <param name="newValue">The char to replace all occurrences of oldValue.</param>
+	public static void Replace(Span<Char> span, Char oldValue, Char newValue)
+#if NET8_0_OR_GREATER
+		=> span.Replace(oldValue, newValue);
+#else
+	{
+		ref Char src = ref MemoryMarshal.GetReference(span);
+		for (Int32 idx = 0; idx < span.Length; ++idx)
+		{
+			Char original = Unsafe.Add(ref src, idx);
+			Unsafe.Add(ref src, idx) = oldValue.Equals(original) ? newValue : original;
+		}
+	}
+#endif
 }

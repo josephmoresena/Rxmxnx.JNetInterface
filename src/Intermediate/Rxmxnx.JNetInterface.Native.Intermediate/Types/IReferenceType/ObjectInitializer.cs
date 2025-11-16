@@ -16,11 +16,11 @@ public partial interface IReferenceType
 		/// <summary>
 		/// Created object previous instance.
 		/// </summary>
-		public JLocalObject Instance { get; init; } = jLocal;
+		public JLocalObject Instance { get; private init; } = jLocal;
 		/// <summary>
 		/// Override class instance.
 		/// </summary>
-		public JClassObject? Class { get; init; }
+		public JClassObject? Class { get; private init; }
 
 		/// <summary>
 		/// Defines an explicit conversion of a given <see cref="JLocalObject"/> to

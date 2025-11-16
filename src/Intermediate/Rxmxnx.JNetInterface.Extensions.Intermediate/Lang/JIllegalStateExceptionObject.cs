@@ -25,6 +25,7 @@ public class JIllegalStateExceptionObject : JRuntimeExceptionObject, IThrowableT
 
 	static TypeMetadata IThrowableType<JIllegalStateExceptionObject>.Metadata
 		=> JIllegalStateExceptionObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd1;
 
 	/// <inheritdoc/>
 	protected JIllegalStateExceptionObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

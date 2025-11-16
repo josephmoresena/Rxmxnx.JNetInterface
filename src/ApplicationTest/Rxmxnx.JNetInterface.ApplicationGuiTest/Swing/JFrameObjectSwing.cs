@@ -7,7 +7,8 @@ using Rxmxnx.JNetInterface.Types.Metadata;
 
 namespace Rxmxnx.JNetInterface.Swing;
 
-public class JFrameObjectSwing : JFrameObjectAwt, IClassType<JFrameObjectSwing>
+public class JFrameObjectSwing : JFrameObjectAwt, IClassType<JFrameObjectSwing>,
+	IInterfaceObject<JRootPaneContainerObject>
 {
 	public enum CloseOperation
 	{
@@ -17,16 +18,34 @@ public class JFrameObjectSwing : JFrameObjectAwt, IClassType<JFrameObjectSwing>
 		Hide = 1,
 	}
 
-	private static readonly IndeterminateCall titleConstructorDef =
-		IndeterminateCall.CreateConstructorDefinition([JArgumentMetadata.Get<JStringObject>(),]);
-	private static readonly IndeterminateCall setDefaultCloseOperationDef =
-		IndeterminateCall.CreateMethodDefinition("setDefaultCloseOperation"u8, [JArgumentMetadata.Get<JInt>(),]);
-	private static readonly IndeterminateCall setContentPaneDef =
-		IndeterminateCall.CreateMethodDefinition("setContentPane"u8, [JArgumentMetadata.Get<JContainerObject>(),]);
-	private static readonly JClassTypeMetadata<JFrameObjectSwing> typeMetadata =
-		TypeMetadataBuilder<JFrameObjectAwt>.Create<JFrameObjectSwing>("javax/swing/JFrame"u8).Build();
+	private static readonly IndeterminateCall titleConstructorDef = IndeterminateCall.CreateConstructorDefinition(
+#if !NET9_0_OR_GREATER
+		[JArgumentMetadata.Get<JStringObject>(),]
+#else
+		JArgumentMetadata.Get<JStringObject>()
+#endif
+	);
+	private static readonly IndeterminateCall setDefaultCloseOperationDef = IndeterminateCall.CreateMethodDefinition(
+		"setDefaultCloseOperation"u8,
+#if !NET9_0_OR_GREATER
+		[JArgumentMetadata.Get<JInt>(),]
+#else
+		JArgumentMetadata.Get<JInt>()
+#endif
+	);
+	private static readonly IndeterminateCall setContentPaneDef = IndeterminateCall.CreateMethodDefinition(
+		"setContentPane"u8,
+#if !NET9_0_OR_GREATER
+		[JArgumentMetadata.Get<JContainerObject>(),]
+#else
+		JArgumentMetadata.Get<JContainerObject>()
+#endif
+	);
+	private static readonly JClassTypeMetadata<JFrameObjectSwing> typeMetadata = TypeMetadataBuilder<JFrameObjectAwt>
+		.Create<JFrameObjectSwing>("javax/swing/JFrame"u8).Implements<JRootPaneContainerObject>().Build();
 	static JClassTypeMetadata<JFrameObjectSwing> IClassType<JFrameObjectSwing>.Metadata
 		=> JFrameObjectSwing.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd2;
 
 	protected JFrameObjectSwing(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JFrameObjectSwing(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
@@ -36,19 +55,37 @@ public class JFrameObjectSwing : JFrameObjectAwt, IClassType<JFrameObjectSwing>
 	{
 		IEnvironment env = this.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JFrameObjectSwing>(env);
-		JFrameObjectSwing.setDefaultCloseOperationDef.MethodCall(this, jClass, false, [(JInt)(Int32)operation,]);
+		JFrameObjectSwing.setDefaultCloseOperationDef.MethodCall(this, jClass, false,
+#if !NET9_0_OR_GREATER
+		                                                         [(JInt)(Int32)operation,]
+#else
+		                                                         (JInt)(Int32)operation
+#endif
+		);
 	}
 	public void SetContentPane(JContainerObject contentPane)
 	{
 		IEnvironment env = this.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JFrameObjectSwing>(env);
-		JFrameObjectSwing.setContentPaneDef.MethodCall(this, jClass, false, [contentPane,]);
+		JFrameObjectSwing.setContentPaneDef.MethodCall(this, jClass, false,
+#if !NET9_0_OR_GREATER
+		                                               [contentPane,]
+#else
+		                                               contentPane
+#endif
+		);
 	}
 
 	public static JFrameObjectSwing Create(IEnvironment env, String title)
 	{
 		using JStringObject jString = JStringObject.Create(env, title);
-		return JFrameObjectSwing.titleConstructorDef.NewCall<JFrameObjectSwing>(env, [jString,]);
+		return JFrameObjectSwing.titleConstructorDef.NewCall<JFrameObjectSwing>(env,
+#if !NET9_0_OR_GREATER
+				[jString,]
+#else
+				jString
+#endif
+		);
 	}
 
 	static JFrameObjectSwing IClassType<JFrameObjectSwing>.Create(IReferenceType.ClassInitializer initializer)

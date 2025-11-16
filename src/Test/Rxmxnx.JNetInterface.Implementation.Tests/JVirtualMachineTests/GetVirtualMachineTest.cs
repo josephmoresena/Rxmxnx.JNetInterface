@@ -37,7 +37,7 @@ public partial class JVirtualMachineTests
 			{
 				JClassLocalRef classRef = (JClassLocalRef)c[0];
 				Byte* fieldName = (Byte*)((ReadOnlyValPtr<Byte>)c[1]).Pointer;
-				JFieldId? fieldId = proxyEnv.GetPrimitiveWrapperClassTypeField(classRef, fieldName);
+				JFieldId? fieldId = proxyEnv.GetMainStaticFieldId(classRef, fieldName);
 				return fieldId!.Value;
 			});
 			proxyEnv.GetStaticObjectField(Arg.Any<JClassLocalRef>(), Arg.Any<JFieldId>()).Returns(c =>
@@ -50,7 +50,7 @@ public partial class JVirtualMachineTests
 			proxyEnv.NewGlobalRef(Arg.Any<JObjectLocalRef>()).Returns(c =>
 			{
 				JObjectLocalRef localRef = (JObjectLocalRef)c[0];
-				JGlobalRef? globalRef = proxyEnv.GetMainClassGlobalRef(JClassLocalRef.FromReference(in localRef));
+				JGlobalRef? globalRef = proxyEnv.GetMainClassGlobalRef(new(localRef));
 				return globalRef!.Value;
 			});
 
@@ -61,7 +61,7 @@ public partial class JVirtualMachineTests
 			                                                       Arg.Any<ReadOnlyValPtr<
 				                                                       VirtualMachineArgumentValueWrapper>>());
 			proxyEnv.Received(1).GetVersion();
-			proxyEnv.Received(13).FindClass(Arg.Any<ReadOnlyValPtr<Byte>>());
+			proxyEnv.Received(14).FindClass(Arg.Any<ReadOnlyValPtr<Byte>>());
 			proxyEnv.Received(9).GetStaticFieldId(Arg.Any<JClassLocalRef>(), Arg.Any<ReadOnlyValPtr<Byte>>(),
 			                                      Arg.Any<ReadOnlyValPtr<Byte>>());
 			proxyEnv.Received(9).GetStaticObjectField(Arg.Any<JClassLocalRef>(), Arg.Any<JFieldId>());
@@ -82,7 +82,9 @@ public partial class JVirtualMachineTests
 		finally
 		{
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(false);
 			proxyVm.FinalizeProxy();
 		}

@@ -52,7 +52,7 @@ partial class JEnvironment
 			JStringLocalRef result;
 			fixed (Char* ptr = &MemoryMarshal.GetReference(chars))
 				result = nativeInterface.StringFunctions.NewString(this.Reference, ptr, chars.Length);
-			if (result.IsDefault) this.CheckJniError();
+			if (result == default) this.CheckJniError();
 			return result;
 		}
 		/// <summary>
@@ -67,7 +67,7 @@ partial class JEnvironment
 			JStringLocalRef result;
 			fixed (Byte* ptr = &MemoryMarshal.GetReference(units))
 				result = nativeInterface.StringFunctions.NewStringUtf(this.Reference, ptr);
-			if (result.IsDefault) this.CheckJniError();
+			if (result == default) this.CheckJniError();
 			return result;
 		}
 	}

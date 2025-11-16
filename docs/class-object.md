@@ -54,6 +54,8 @@ These operations require JNI calls:
 - **`GetInterfaces()`**: Obtains the list of implemented interfaces using the Java `getInterfaces()` function.
 - **`GetInformation()`**: Returns the registered type information in `Rxmxnx.JNetInterface`. If the class is a mapped
   type, the retrieved information should match the type metadata.
+- **`GetRuntimeTypeMetadata()`**: Returns the type metadata used by `Rxmxnx.JNetInterface` to map the type of the
+  current class.
 
 ## Additional JNI-Based Operations
 
@@ -65,7 +67,7 @@ These operations require JNI calls:
 - **`Register(..JNativeCallEntry..)`**: Registers Java native methods mapped to .NET local methods via JNI
   `RegisterNatives`.
 - **`UnregisterNativeCalls()`**: Removes registered Java native methods mapped to .NET using JNI `UnregisterNatives`.
-- **`GetModule()`**: Available only in JVM versions compatible with Java 9.0 or later.
+- **`GetModule()`**: Available only in JVM versions compatible with Java 9.0 and later.
 
 ##### Notes
 

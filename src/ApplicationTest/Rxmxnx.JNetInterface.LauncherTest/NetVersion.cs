@@ -2,8 +2,12 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public enum NetVersion : Byte
 {
+	Net70 = 7,
 	Net80 = 8,
 	Net90 = 9,
+#if NET10_0_OR_GREATER
+	Net100 = 10,
+#endif
 }
 
 public static class NetVersionExtensions
@@ -11,7 +15,9 @@ public static class NetVersionExtensions
 	public static String GetTargetFramework(this NetVersion version)
 		=> version switch
 		{
+			NetVersion.Net70 => "net7.0",
 			NetVersion.Net80 => "net8.0",
-			_ => "net9.0",
+			NetVersion.Net90 => "net9.0",
+			_ => "net10.0",
 		};
 }

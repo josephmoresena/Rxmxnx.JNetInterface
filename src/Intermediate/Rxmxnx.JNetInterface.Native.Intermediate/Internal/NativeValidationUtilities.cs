@@ -225,12 +225,30 @@ internal static class NativeValidationUtilities
 	/// </summary>
 	/// <param name="callDefinition">A <see cref="JCallDefinition"/> instance.</param>
 	/// <returns><paramref name="callDefinition"/> as <see cref="JConstructorDefinition"/> instance.</returns>
-	/// <exception cref="NotImplementedException"></exception>
+	/// <exception cref="NotImplementedException">
+	/// Throws an exception if <paramref name="callDefinition"/> is not a <see cref="JConstructorDefinition"/> instance.
+	/// </exception>
 	public static JConstructorDefinition ThrowIfNotConstructor(JCallDefinition callDefinition)
 	{
 		if (callDefinition is JConstructorDefinition definition) return definition;
 		IMessageResource resource = IMessageResource.GetInstance();
 		throw new InvalidOperationException(resource.NotConstructorDefinition);
+	}
+	/// <summary>
+	/// Throws and exception if the metadata of the array of <paramref name="arrayTypeMetadata"/> type is missing.
+	/// </summary>
+	/// <param name="arrayTypeMetadata">A <see cref="JArrayTypeMetadata"/> instance.</param>
+	/// <returns></returns>
+	/// <exception cref="InvalidOperationException">
+	/// Throws and exception if the metadata of the array of <paramref name="arrayTypeMetadata"/> type is missing.
+	/// </exception>
+	public static JArrayTypeMetadata ThrowIfMissingArrayMetadata(JArrayTypeMetadata arrayTypeMetadata)
+	{
+		if (arrayTypeMetadata.GetArrayMetadata() is { } result)
+			return result;
+		IMessageResource resource = IMessageResource.GetInstance();
+		String message = resource.MissingArrayTypeMetadata(arrayTypeMetadata);
+		throw new InvalidOperationException(message);
 	}
 
 	/// <summary>

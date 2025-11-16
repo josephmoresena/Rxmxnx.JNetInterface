@@ -5,6 +5,7 @@
         <AssemblyName>ApplicationGuiTest</AssemblyName>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <ApplicationIcon>icon.ico</ApplicationIcon>
+        <GenerateAotLog>true</GenerateAotLog>
     </PropertyGroup>
 
     <Import Project="..\JNetInterface-App.targets"/>
@@ -14,6 +15,25 @@
         <None Remove="icon.ico"/>
         <EmbeddedResource Include="NativeCallbacks.jar"/>
         <EmbeddedResource Include="Images\*"/>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(RuntimeIdentifier)' != ''">
+        <EmbeddedResource Condition="!$([MSBuild]::IsOSPlatform('FREEBSD'))" Remove="Images\freebsd.png"/>
+        <EmbeddedResource Condition="!$([MSBuild]::IsOSPlatform('LINUX'))" Remove="Images\linux.png"/>
+        <EmbeddedResource Condition="!$([MSBuild]::IsOSPlatform('OSX'))" Remove="Images\macosx.png"/>
+        <EmbeddedResource Condition="!$([MSBuild]::IsOSPlatform('WINDOWS'))" Remove="Images\windows.png"/>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(UsePackage)' != 'true'">
+        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj"/>
+        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
+        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
+        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj"/>
+        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(UsePackage)' == 'true'">
+        <PackageReference Include="Rxmxnx.JNetInterface" Version="9999.99.99.99-tmp"/>
     </ItemGroup>
 
 </Project>

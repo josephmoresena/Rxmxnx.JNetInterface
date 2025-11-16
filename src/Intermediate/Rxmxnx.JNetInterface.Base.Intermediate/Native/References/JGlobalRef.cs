@@ -6,8 +6,8 @@
 /// object.
 /// </summary>
 /// <remarks>This identifier will be valid until it is explicitly unloaded.</remarks>
-[StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JGlobalRef : IObjectGlobalReferenceType
+[StructLayout(LayoutKind.Explicit)]
+public readonly partial struct JGlobalRef : IObjectGlobalReferenceType, INativePointerType<JGlobalRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JGlobal;
@@ -15,6 +15,7 @@ public readonly partial struct JGlobalRef : IObjectGlobalReferenceType
 	/// <summary>
 	/// Internal <see cref="JObjectLocalRef"/> reference.
 	/// </summary>
+	[FieldOffset(0)]
 	private readonly JObjectLocalRef _value;
 
 	/// <summary>
@@ -28,7 +29,16 @@ public readonly partial struct JGlobalRef : IObjectGlobalReferenceType
 	/// Parameterless constructor.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JGlobalRef() => this._value = default;
+	public JGlobalRef() : this(IntPtr.Zero) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private JGlobalRef(IntPtr value) : this(new JObjectLocalRef(value)) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	private JGlobalRef(JObjectLocalRef value) => this._value = value;
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -42,4 +52,7 @@ public readonly partial struct JGlobalRef : IObjectGlobalReferenceType
 			IWrapper<JGlobalRef> wrapper => this._value.Equals(wrapper.Value._value),
 			_ => false,
 		};
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static JGlobalRef INativePointerType<JGlobalRef>.New(IntPtr value) => new(value);
 }

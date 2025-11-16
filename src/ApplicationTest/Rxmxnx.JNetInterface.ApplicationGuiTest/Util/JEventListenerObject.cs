@@ -11,6 +11,7 @@ public sealed class JEventListenerObject : JInterfaceObject<JEventListenerObject
 
 	static JInterfaceTypeMetadata<JEventListenerObject> IInterfaceType<JEventListenerObject>.Metadata
 		=> JEventListenerObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd1;
 
 	private JEventListenerObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 	static JEventListenerObject IInterfaceType<JEventListenerObject>.Create(

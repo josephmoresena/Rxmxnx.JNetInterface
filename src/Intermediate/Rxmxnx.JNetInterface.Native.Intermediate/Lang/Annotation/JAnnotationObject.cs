@@ -23,6 +23,7 @@ public sealed class JAnnotationObject : JInterfaceObject<JAnnotationObject>, IIn
 			JAnnotationObject.typeInfo, InterfaceSet.Empty);
 
 	static TypeMetadata IInterfaceType<JAnnotationObject>.Metadata => JAnnotationObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.J5;
 
 	/// <inheritdoc/>
 	private JAnnotationObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
@@ -35,16 +36,20 @@ public sealed class JAnnotationObject : JInterfaceObject<JAnnotationObject>, IIn
 /// This class represents an annotation instance.
 /// </summary>
 /// <typeparam name="TAnnotation">Type of <see cref="IInterfaceType"/>.</typeparam>
+#if !NET8_0_OR_GREATER
+[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
 #endif
 public abstract class JAnnotationObject<TAnnotation> : JInterfaceObject<TAnnotation>,
 	IInterfaceObject<JAnnotationObject>,
-	IDataType where TAnnotation : JAnnotationObject<TAnnotation>, IInterfaceType<TAnnotation>
+	IDataType where TAnnotation : JAnnotationObject<TAnnotation>, IAnnotationType<TAnnotation>
 {
 	static JTypeKind IDataType.Kind => JTypeKind.Annotation;
 	static Type IDataType.FamilyType => typeof(JAnnotationObject);
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.J5;
 
 	/// <inheritdoc/>
 	protected JAnnotationObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

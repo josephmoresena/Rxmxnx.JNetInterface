@@ -31,6 +31,6 @@ internal static partial class JTrace
 		if (!JVirtualMachine.TraceEnabled) return;
 		String addressText = found ? $"0x{address:x8}" : "not found";
 		Trace.WriteLine(
-			$"thread: {Environment.CurrentManagedThreadId} library handle: {handle} symbol: {addressText} {addressText}.");
+			$"thread: {Environment.CurrentManagedThreadId} library handle: {handle:x8} symbol: {name} {addressText}.");
 	}
 }

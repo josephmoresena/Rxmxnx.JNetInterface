@@ -103,6 +103,9 @@ public abstract partial class EnvironmentProxy
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 	/// <param name="value">Primitive value.</param>
 	/// <returns>A <see cref="JLocalObject"/> instance.</returns>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	public static TWrapper CreteWrapperObject<TWrapper>(JClassObject jClass, JObjectLocalRef localRef,
 		IPrimitiveType? value = default) where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper>
 	{
@@ -139,6 +142,9 @@ public abstract partial class EnvironmentProxy
 	/// <param name="message">Throwable message.</param>
 	/// <param name="stackTrace">Throwable stacktrace.</param>
 	/// <returns>A <see cref="ThrowableException"/> instance.</returns>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	public static ThrowableException CreateException<TThrowable>(VirtualMachineProxy vm, JGlobalRef globalRef,
 		out JGlobalBase jGlobal, String? message = default, params StackTraceInfo[] stackTrace)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
@@ -223,9 +229,12 @@ public abstract partial class EnvironmentProxy
 	/// <typeparam name="TPrimitive">Primitive type.</typeparam>
 	/// <param name="jWrapper">A <typeparamref name="TWrapper"/> instance.</param>
 	/// <param name="value">A <typeparamref name="TPrimitive"/> value.</param>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	public static void SetValue<TWrapper, TPrimitive>(TWrapper jWrapper, TPrimitive value)
 		where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper, TPrimitive>
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>
 	{
 		EnvironmentProxy.ThrowIfNotProxy(jWrapper);
 		PrimitiveWrapperObjectMetadata<TPrimitive> objectMetadata = new(new(jWrapper.Class)) { Value = value, };

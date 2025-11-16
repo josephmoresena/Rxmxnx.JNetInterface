@@ -13,6 +13,7 @@ public partial class Launcher
 			get => this._noReflection.Value;
 			set => this._noReflection.Value = value;
 		}
+		public JdkVersion JdkVersion { get; init; }
 
 		public static void Append(JarArgs jarArgs, Collection<String> args)
 		{
@@ -20,6 +21,12 @@ public partial class Launcher
 			args.Add($"-Ddotnet.runtime.version=net{(Byte)jarArgs.Version}.0");
 			if (jarArgs.NoReflection)
 				args.Add("-Ddotnet.reflection.disable=true");
+			args.Add(jarArgs.JdkVersion > JdkVersion.Jdk6 ? "-XX:+ErrorFileToStdout" :
+			         !SystemInfo.IsWindows ? "-XX:ErrorFile=/dev/stderr" : "");
+			args.Add("-XX:+UnlockDiagnosticVMOptions");
+			if (Boolean.TryParse(Environment.GetEnvironmentVariable("JNETINTERFACE_JNI_CHECK"),
+			                     out Boolean useJniCheck) && useJniCheck)
+				args.Add("-Xcheck:jni");
 			args.Add("-jar");
 			args.Add(jarArgs.JarName);
 		}

@@ -1,5 +1,5 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    
+
     <Import Project="..\CommonNativeProxies.targets"/>
 
     <PropertyGroup>
@@ -11,7 +11,7 @@
         <TrimUnusedDependencies>true</TrimUnusedDependencies>
         <SelfContained>true</SelfContained>
     </PropertyGroup>
-    
+
     <PropertyGroup>
         <IlcOptimizationPreference>Size</IlcOptimizationPreference>
         <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
@@ -21,7 +21,7 @@
         <IlcDisableReflection>true</IlcDisableReflection>
         <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
     </PropertyGroup>
-    
+
     <PropertyGroup>
         <AssemblyNamePrefix Condition="!$([MSBuild]::IsOSPlatform('Windows'))">lib</AssemblyNamePrefix>
         <AssemblyNameSuffix Condition="$(RuntimeIdentifier.ToLowerInvariant().EndsWith('x86'))">x86</AssemblyNameSuffix>
@@ -30,7 +30,7 @@
         <AssemblyNameSuffix Condition="$(RuntimeIdentifier.ToLowerInvariant().EndsWith('arm'))">arm</AssemblyNameSuffix>
         <AssemblyName>$(AssemblyNamePrefix)$(AssemblyName).$(AssemblyNameSuffix)</AssemblyName>
     </PropertyGroup>
-    
+
     <ItemGroup>
         <Compile Include="../../Rxmxnx.JNetInterface.NativeLibrary.Tests.Proxies/NativeProxy.cs">
             <Link>NativeProxy.cs</Link>

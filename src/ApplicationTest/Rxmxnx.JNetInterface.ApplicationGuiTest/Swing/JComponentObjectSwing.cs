@@ -9,8 +9,11 @@ public class JComponentObjectSwing : JContainerObject, IClassType<JComponentObje
 	private static readonly JClassTypeMetadata<JComponentObjectSwing> typeMetadata =
 		TypeMetadataBuilder<JContainerObject>
 			.Create<JComponentObjectSwing>("javax/swing/JComponent"u8, JTypeModifier.Abstract).Build();
+
 	static JClassTypeMetadata<JComponentObjectSwing> IClassType<JComponentObjectSwing>.Metadata
 		=> JComponentObjectSwing.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd2;
+
 	protected JComponentObjectSwing(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JComponentObjectSwing(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	protected JComponentObjectSwing(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

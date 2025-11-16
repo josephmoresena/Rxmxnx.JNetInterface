@@ -36,6 +36,28 @@ public readonly partial struct JByte : IPrimitiveEquatable
 	/// <param name="value">A <see cref="JByte"/> to implicitly convert.</param>
 	public static implicit operator JDouble(JByte value) => value._value;
 
+#pragma warning disable CS0473
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JByte>.operator JByte(UInt16 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JByte>.operator JByte(Single value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JByte>.operator JByte(Int32 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JByte>.operator JByte(Int64 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JByte>.operator JByte(Int16 value) => new(value);
+
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
@@ -45,25 +67,26 @@ public readonly partial struct JByte : IPrimitiveEquatable
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JByte>.operator Single(JByte jPrimitive) => jPrimitive._value;
+	static explicit INativeDataType<JByte>.operator Single(JByte jPrimitive) => jPrimitive._value;
 	static explicit IPrimitiveNumericType<JByte>.operator JInt(JByte jPrimitive) => jPrimitive;
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JByte>.operator Int32(JByte jPrimitive) => jPrimitive._value;
+	static explicit INativeDataType<JByte>.operator Int32(JByte jPrimitive) => jPrimitive._value;
 	static explicit IPrimitiveNumericType<JByte>.operator JLong(JByte jPrimitive) => jPrimitive;
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JByte>.operator Int64(JByte jPrimitive) => jPrimitive._value;
+	static explicit INativeDataType<JByte>.operator Int64(JByte jPrimitive) => jPrimitive._value;
 	static explicit IPrimitiveNumericType<JByte>.operator JShort(JByte jPrimitive) => jPrimitive;
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JByte>.operator Int16(JByte jPrimitive) => jPrimitive._value;
-	static explicit IPrimitiveNumericType<JByte>.operator SByte(JByte jPrimitive) => jPrimitive._value;
+	static explicit INativeDataType<JByte>.operator Int16(JByte jPrimitive) => jPrimitive._value;
+	static explicit INativeDataType<JByte>.operator SByte(JByte jPrimitive) => jPrimitive._value;
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JByte>.operator Char(JByte jPrimitive) => (Char)jPrimitive._value;
+	static explicit INativeDataType<JByte>.operator Char(JByte jPrimitive) => (Char)jPrimitive._value;
+#pragma warning restore CS0473
 }

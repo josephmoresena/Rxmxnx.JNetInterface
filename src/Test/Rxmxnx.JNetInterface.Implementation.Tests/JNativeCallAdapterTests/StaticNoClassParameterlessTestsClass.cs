@@ -24,8 +24,8 @@ public partial class JNativeCallAdapterTests
 
 			Exception ex = Assert.Throws<ArgumentException>(() => JNativeCallAdapter
 			                                                      .Create(proxyEnv.Reference,
-			                                                              JClassLocalRef.FromReference(in localRef),
-			                                                              out _).Build().FinalizeCall());
+			                                                              new JClassLocalRef(localRef), out _).Build()
+			                                                      .FinalizeCall());
 			Assert.Equal(
 				IMessageResource.GetInstance().NotTypeObject(ClassNameHelper.GetClassName(classTypeMetadata.Signature),
 				                                             ClassNameHelper.GetClassName(

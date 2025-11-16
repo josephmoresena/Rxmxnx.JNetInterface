@@ -30,7 +30,7 @@ internal partial class JPrimitiveObject
 
 		/// <inheritdoc/>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private protected override ReadOnlySpan<Byte> AsSpan() => NativeUtilities.AsBytes(this._value);
+		private protected override ReadOnlySpan<Byte> AsSpan() => NativeUtilities.AsBytes(in this._value);
 	}
 }
 

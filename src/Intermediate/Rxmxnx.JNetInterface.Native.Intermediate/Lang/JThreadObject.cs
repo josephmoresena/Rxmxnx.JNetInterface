@@ -15,9 +15,13 @@ public class JThreadObject : JLocalObject, IClassType<JThreadObject>, IInterface
 	/// Datatype interfaces.
 	/// </summary>
 	private static readonly ImmutableHashSet<JInterfaceTypeMetadata> typeInterfaces =
+#if NET8_0_OR_GREATER
 	[
 		IInterfaceType.GetMetadata<JRunnableObject>(),
 	];
+#else
+		ImmutableHashSet.Create(IInterfaceType.GetMetadata<JRunnableObject>());
+#endif
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>

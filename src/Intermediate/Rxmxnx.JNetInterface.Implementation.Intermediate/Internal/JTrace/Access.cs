@@ -55,8 +55,8 @@ internal static partial class JTrace
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		if (!JVirtualMachine.TraceEnabled) return;
-		JPrimitiveTypeMetadata typeMetadata = IPrimitiveType.GetMetadata<TPrimitive>();
-		JTrace.SetField(jLocal, jClass, definition, typeMetadata.CreateInstance(bytes), callerMethod);
+		JTrace.SetField(jLocal, jClass, definition, Unsafe.As<Byte, TPrimitive>(ref MemoryMarshal.GetReference(bytes)),
+		                callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the call of a method to the trace listeners.
@@ -188,7 +188,7 @@ internal static partial class JTrace
 			Trace.WriteLine(
 				$"thread: {Environment.CurrentManagedThreadId} {classRef} {methodId} Result {(Char)signature}: {result}",
 				callerMethod);
-		else if (classRef.IsDefault) //Instance
+		else if (classRef == default) //Instance
 			Trace.WriteLine(
 				$"thread: {Environment.CurrentManagedThreadId} {localRef} {methodId} Result {(Char)signature}: {result}",
 				callerMethod);
@@ -216,7 +216,7 @@ internal static partial class JTrace
 				!isConstructor ?
 					$"thread: {Environment.CurrentManagedThreadId} {classRef} {methodId} Result {result}" :
 					$"{classRef} {methodId} New {result}", callerMethod);
-		else if (classRef.IsDefault) //Instance
+		else if (classRef == default) //Instance
 			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {localRef} {methodId} Result {result}",
 			                callerMethod);
 		else //Non-Virtual
@@ -238,7 +238,7 @@ internal static partial class JTrace
 
 		if (localRef == default) //Static
 			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {classRef} {methodId}", callerMethod);
-		else if (classRef.IsDefault) //Instance
+		else if (classRef == default) //Instance
 			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {localRef} {methodId}", callerMethod);
 		else //Non-Virtual
 			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {localRef} {classRef} {methodId}",
@@ -264,10 +264,10 @@ internal static partial class JTrace
 	/// <param name="definition">A <see cref="JAccessibleObjectDefinition"/> instance.</param>
 	/// <param name="accessibleId">Accessible object identifier.</param>
 	/// <param name="callerMethod">Caller member name.</param>
-	public static void GetAccessibleId<TAccessibleId>(JClassLocalRef classRef, JAccessibleObjectDefinition definition,
-		TAccessibleId accessibleId, [CallerMemberName] String callerMethod = "")
-		where TAccessibleId : unmanaged, IAccessibleIdentifierType,
-		IEqualityOperators<TAccessibleId, TAccessibleId, Boolean>
+	public static void GetAccessibleId<TAccessible>(JClassLocalRef classRef, JAccessibleObjectDefinition definition,
+		TAccessible accessibleId, [CallerMemberName] String callerMethod = "")
+		where TAccessible : unmanaged, IAccessibleIdentifierType, INativePointerType<TAccessible>,
+		IEqualityOperators<TAccessible, TAccessible, Boolean>
 	{
 		if (!JVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(

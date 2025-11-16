@@ -35,6 +35,10 @@ public abstract partial class JDataTypeMetadata : ITypeInformation
 	/// Kind of the current type.
 	/// </summary>
 	public abstract JTypeKind Kind { get; }
+	/// <summary>
+	/// Specifies the minimun Java runtime version required for the current type.
+	/// </summary>
+	public abstract JRuntimeVersion Since { get; }
 
 	/// <inheritdoc/>
 	public CString ClassName => this._info.Name;
@@ -46,6 +50,21 @@ public abstract partial class JDataTypeMetadata : ITypeInformation
 	Boolean? ITypeInformation.IsFinal => this.Modifier is JTypeModifier.Final;
 
 #if PACKAGE
+	/// <summary>
+	/// Creates a <see cref="JArrayTypeMetadata"/> from current instance.
+	/// </summary>
+	/// <param name="depth">Depth of the resulting metadata type.</param>
+	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
+	public JArrayTypeMetadata GetArrayMetadata(Byte depth)
+	{
+		JArrayTypeMetadata? arrayTypeMetadata = this as JArrayTypeMetadata;
+		Int32 offset = arrayTypeMetadata is not null ? 0 : 1;
+
+		arrayTypeMetadata ??= this.GetArrayMetadata();
+		CommonValidationUtilities.ThrowIfInvalidDimension(this, arrayTypeMetadata?.Dimension - offset, depth);
+		return arrayTypeMetadata!.WithAdditionalNesting((Int32)depth - offset);
+	}
+
 	/// <summary>
 	/// Creates a <see cref="JArrayTypeMetadata"/> from current instance.
 	/// </summary>

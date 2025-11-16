@@ -103,7 +103,6 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// </summary>
 	public Int32 ArrayDimension => this._arrayDimension ??= JClassObject.GetArrayDimension(this.ClassSignature);
 
-#if NET9_0_OR_GREATER
 	/// <summary>
 	/// Registers <paramref name="calls"/> as native methods.
 	/// </summary>
@@ -111,21 +110,26 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <param name="calls">A <see cref="JNativeCallEntry"/> array.</param>
 	[ExcludeFromCodeCoverage]
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public void Register(JNativeCallEntry entry, JNativeCallEntry[] calls)
-		=> this.Register(entry, calls.AsSpan());
+	public void Register(JNativeCallEntry entry,
+#if !NET9_0_OR_GREATER
+		params JNativeCallEntry[] calls
+#else
+		JNativeCallEntry[] calls
 #endif
+	)
+		=> this.Register(entry, calls.AsReadOnlySpan());
 	/// <summary>
 	/// Registers <paramref name="calls"/> as native methods.
 	/// </summary>
 	/// <param name="entry">A <see cref="JNativeCallEntry"/> instance.</param>
 	/// <param name="calls">A <see cref="JNativeCallEntry"/> array.</param>
-	public void Register(JNativeCallEntry entry, params
-#if !NET9_0_OR_GREATER
-		JNativeCallEntry[]
+	public void Register(JNativeCallEntry entry,
+#if NET9_0_OR_GREATER
+		params ReadOnlySpan<JNativeCallEntry>
 #else
 		ReadOnlySpan<JNativeCallEntry>
 #endif
-		calls)
+			calls)
 		=> this.Environment.AccessFeature.RegisterNatives(this, [entry, .. calls,]);
 	/// <summary>
 	/// Registers <paramref name="calls"/> as native methods.
@@ -197,7 +201,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 
 	/// <inheritdoc/>
 	public override String ToString()
-		=> !this.Reference.IsDefault ?
+		=> this.Reference != default ?
 			JObject.GetObjectIdentifier(this.ClassSignature, this.Reference) :
 			$"{this.Name}";
 	/// <inheritdoc/>

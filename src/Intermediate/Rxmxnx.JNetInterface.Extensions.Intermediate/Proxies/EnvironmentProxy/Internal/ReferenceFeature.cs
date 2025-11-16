@@ -12,14 +12,14 @@ public abstract partial class EnvironmentProxy
 		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
 		return metadata.NativeType switch
 		{
-			JNativeType.JBoolean => this.CreateWrapper(NativeUtilities.Transform<TPrimitive, JBoolean>(in primitive)),
-			JNativeType.JByte => this.CreateWrapper(NativeUtilities.Transform<TPrimitive, JByte>(in primitive)),
-			JNativeType.JChar => this.CreateWrapper(NativeUtilities.Transform<TPrimitive, JChar>(in primitive)),
-			JNativeType.JDouble => this.CreateWrapper(NativeUtilities.Transform<TPrimitive, JDouble>(in primitive)),
-			JNativeType.JFloat => this.CreateWrapper(NativeUtilities.Transform<TPrimitive, JFloat>(in primitive)),
-			JNativeType.JInt => this.CreateWrapper(NativeUtilities.Transform<TPrimitive, JInt>(in primitive)),
-			JNativeType.JLong => this.CreateWrapper(NativeUtilities.Transform<TPrimitive, JLong>(in primitive)),
-			_ => this.CreateWrapper(NativeUtilities.Transform<TPrimitive, JShort>(in primitive)),
+			JNativeType.JBoolean => this.CreateWrapper((Byte)primitive == JBoolean.TrueValue),
+			JNativeType.JByte => this.CreateWrapper((SByte)primitive),
+			JNativeType.JChar => this.CreateWrapper((JChar)(Char)primitive),
+			JNativeType.JDouble => this.CreateWrapper((Double)primitive),
+			JNativeType.JFloat => this.CreateWrapper((JFloat)(Single)primitive),
+			JNativeType.JInt => this.CreateWrapper((Int32)primitive),
+			JNativeType.JLong => this.CreateWrapper((Int64)primitive),
+			_ => this.CreateWrapper((Int16)primitive),
 		};
 	}
 }

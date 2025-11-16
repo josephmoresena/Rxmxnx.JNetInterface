@@ -81,16 +81,16 @@ public sealed class JReferenceTests
 		Assert.True(ref1.Value.Equals(ref1));
 	}
 	private static void ObjectReferenceTest<TObjectRef>()
-		where TObjectRef : unmanaged, IObjectReferenceType, IEqualityOperators<TObjectRef, TObjectRef, Boolean>,
-		IEquatable<TObjectRef>, IEqualityOperators<TObjectRef, JObjectLocalRef, Boolean>
+		where TObjectRef : unmanaged, IObjectReferenceType, INativePointerType<TObjectRef>,
+		IEqualityOperators<TObjectRef, TObjectRef, Boolean>, IEquatable<TObjectRef>
 	{
 		JReferenceTests.Test<TObjectRef>();
 		TObjectRef ref1 = JReferenceTests.CreatePointer<TObjectRef>();
 		TObjectRef ref2 = JReferenceTests.CreatePointer<TObjectRef>();
 		TObjectRef defRef = default;
 
-		Assert.True(defRef.IsDefault);
-		Assert.Equal(ref1.Pointer == IntPtr.Zero, ref1.IsDefault);
+		//Assert.True(defRef.IsDefault);
+		Assert.Equal(ref1.Pointer == IntPtr.Zero, ref1 == default);
 
 		JGlobalRef globalRef = NativeUtilities.Transform<TObjectRef, JGlobalRef>(in ref1);
 		JWeakRef weakRef = NativeUtilities.Transform<TObjectRef, JWeakRef>(in ref1);
@@ -100,26 +100,22 @@ public sealed class JReferenceTests
 		Assert.True(ref1.Equals(globalRef));
 		Assert.True(ref1.Equals(ref1.Value));
 		Assert.True(ref1.Equals(IWrapper.Create(ref1.Value)));
-		Assert.True(ref1.Equals(JClassLocalRef.FromReference(in globalRef)));
-		Assert.True(ref1.Equals(JClassLocalRef.FromReference(in weakRef)));
+		Assert.True(ref1.Equals(new JClassLocalRef(globalRef)));
+		Assert.True(ref1.Equals(new JClassLocalRef(weakRef)));
 		Assert.False(ref1.Equals(ref1.Pointer));
 		Assert.True(ref1.Value.Equals(ref1));
 
 		Assert.Equal(ref1.Pointer == ref2.Pointer, ref1.Equals(ref2));
 		Assert.Equal(ref1.Pointer == IntPtr.Size, ref1.Equals(defRef));
 
-		Assert.True(ref1 == ref1.Value);
-		Assert.False(ref1 != ref1.Value);
 		Assert.Equal(ref1.Pointer == ref2.Pointer, ref1 == ref2);
 		Assert.Equal(ref1.Pointer != ref2.Pointer, ref1 != ref2);
-		Assert.Equal(ref1.Pointer == IntPtr.Size, ref1 == defRef.Value);
-		Assert.Equal(ref1.Pointer != IntPtr.Size, ref1 != defRef.Value);
+		Assert.Equal(ref1.Pointer == IntPtr.Size, ref1.Value == defRef.Value);
+		Assert.Equal(ref1.Pointer != IntPtr.Size, ref1.Value != defRef.Value);
 	}
 	private static void ArrayReferenceTest<TArrayRef>()
-		where TArrayRef : unmanaged, IArrayReferenceType, IObjectReferenceType,
-		IEqualityOperators<TArrayRef, TArrayRef, Boolean>, IEquatable<TArrayRef>,
-		IEqualityOperators<TArrayRef, JObjectLocalRef, Boolean>, IEqualityOperators<TArrayRef, JArrayLocalRef, Boolean>,
-		IEquatable<JArrayLocalRef>
+		where TArrayRef : unmanaged, IArrayReferenceType, INativePointerType<TArrayRef>,
+		IEqualityOperators<TArrayRef, TArrayRef, Boolean>, IEquatable<TArrayRef>, IEquatable<JArrayLocalRef>
 	{
 		JReferenceTests.ObjectReferenceTest<TArrayRef>();
 		TArrayRef ref1 = JReferenceTests.CreatePointer<TArrayRef>();
@@ -128,24 +124,22 @@ public sealed class JReferenceTests
 
 		JArrayLocalRef arrRef = ref1.ArrayValue;
 
-		Assert.True(defRef.IsDefault);
-		Assert.Equal(ref1.Pointer == IntPtr.Zero, ref1.IsDefault);
+		//Assert.True(defRef.IsDefault);
+		Assert.Equal(ref1.Pointer == IntPtr.Zero, ref1 == default);
 
 		Assert.True(ref1.Equals((Object)ref1));
 		Assert.True(ref1.Equals(ref1.ArrayValue));
 		Assert.True(ref1.Equals((Object)ref1.ArrayValue));
-		Assert.True(ref1.Equals(JObjectArrayLocalRef.FromReference(in arrRef)));
+		Assert.True(ref1.Equals(new JObjectArrayLocalRef(arrRef)));
 		Assert.True(ref1.ArrayValue.Equals(ref1));
 
 		Assert.Equal(ref1.Pointer == ref2.Pointer, ref1.Equals(ref2));
 		Assert.Equal(ref1.Pointer == IntPtr.Size, ref1.Equals(defRef));
 
-		Assert.True(ref1 == ref1.ArrayValue);
-		Assert.False(ref1 != ref1.ArrayValue);
 		Assert.Equal(ref1.Pointer == ref2.Pointer, ref1 == ref2);
 		Assert.Equal(ref1.Pointer != ref2.Pointer, ref1 != ref2);
-		Assert.Equal(ref1.Pointer == IntPtr.Size, ref1 == defRef.ArrayValue);
-		Assert.Equal(ref1.Pointer != IntPtr.Size, ref1 != defRef.ArrayValue);
+		Assert.Equal(ref1.Pointer == IntPtr.Size, ref1.ArrayValue == defRef.ArrayValue);
+		Assert.Equal(ref1.Pointer != IntPtr.Size, ref1.ArrayValue != defRef.ArrayValue);
 	}
 	private static TPointer CreatePointer<TPointer>()
 		where TPointer : unmanaged, IFixedPointer, INativeType, IEqualityOperators<TPointer, TPointer, Boolean>,

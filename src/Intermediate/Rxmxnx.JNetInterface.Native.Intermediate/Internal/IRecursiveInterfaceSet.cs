@@ -14,21 +14,19 @@ internal interface IRecursiveInterfaceSet : IInterfaceSet
 	/// <param name="state">Object state.</param>
 	protected void ForEach<T>(RecursiveState<T> state)
 #if NET9_0_OR_GREATER
-		where T : allows ref struct
-#endif
+		where T : allows ref struct;
+#else
 		;
+#endif
 
 	/// <summary>
 	/// State struct for recursive action.
 	/// </summary>
 	/// <typeparam name="T">Type of state object</typeparam>
-	protected readonly
 #if NET9_0_OR_GREATER
-		ref
-#endif
-		struct RecursiveState<T>
-#if NET9_0_OR_GREATER
-		where T : allows ref struct
+	protected readonly ref struct RecursiveState<T> where T : allows ref struct
+#else
+	protected readonly struct RecursiveState<T>
 #endif
 	{
 		/// <summary>

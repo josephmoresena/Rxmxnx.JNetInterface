@@ -43,6 +43,7 @@ through the `JStringObject` class.
 
 - **`Length`**: UTF-16 character count. If not initialized, calls `GetStringLength`.
 - **`Utf8Length`**: UTF-8 byte count. If not initialized, calls `GetStringUTFLength`.
+- **`Utf8LongLength`**: Same as `Utf8Length` property but in Java 24 and later, calls `GetStringUTFLengthAsLong`.
 - **`Value`**: The string content. If not initialized, calls `GetStringRegion`.
 - **`Reference`**: JNI reference to the string instance.
 
@@ -89,8 +90,6 @@ Native memory in `Rxmxnx.JNetInterface` is represented using a **memory adapter*
 
 ### Properties
 
-- **`ReleaseMode`**: Defines how memory is released. If the memory is critical (directly mapped to JVM memory), this is
-  `null`.
 - **`Values`**: Provides access via a read-only span.
 - **`Copy`**: Indicates whether the memory is a copy of the string data.
 - **`Critical`**: Indicates if the memory is directly pinned by the JVM.
@@ -127,10 +126,20 @@ The `JArrayObject<>` class exposes the following static methods:
 - **`Create(IEnvironment, Int32, JClassObject)`**: Creates an array with a specified element class.
 - **`Create(JClassObject, Int32, T)`**: Creates an array with a specified element class and initializes it.
 
+The `JArrayTypeMetadata` class exposes the method `CreateInstance(IEnvironment, Int32)` that allows to create an
+array of the class identified by the metadata with the specified length.
+
+### Primitive Array Creation
+
+Additionally to the previously mentioned methods, the `ToPrimitiveArray(IEnvironment)` extension methods allow to create
+primitives arrays from managed arrays of primitive types, including multidimensional ones.
+
 ##### Notes
 
 - Specifying an **element class** requires compatibility with the array type.
 - Initializing arrays with a default value is **only recommended** for **non-primitive** arrays.
+- There is also a `ToPrimitiveArray` extension method for read-only spans, where the dimensions of the array to be
+  created must be specified. If no dimensions are specified, a dimension of 1 is assumed.
 
 ---  
 
@@ -172,8 +181,8 @@ element access operations.
 
 ## Primitive Arrays
 
-Unlike non-primitive arrays, **primitive arrays are not polymorphic**. JNI allows direct access to **primitive array
-memory segments**.
+Unlike non-primitive arrays, **primitive arrays are not polymorphic**. JNI allows direct access to the **primitive array
+memory**.
 
 ### Special Methods for Primitive Arrays
 
@@ -200,11 +209,15 @@ Primitive array memory is **mutable** and is managed using `JPrimitiveMemory<T>`
 
 #### Properties
 
-- **`ReleaseMode`**: Defines how memory is released. If critical, this is `null`.
+- **`ReleaseMode`**: Defines how memory is released. If not copy, is set to `null`.
 - **`Values`**: Provides access via a span.
 - **`Copy`**: Indicates if the memory is a copy.
 - **`Critical`**: Indicates if the memory is pinned by the JVM.
 - **`Pointer`**: Pointer to the memory.
+
+#### Methods
+
+- **`Commit()`**: Attempt to commit the native memory to the primitive java array if it is a copy and not critical.
 
 #### Note
 

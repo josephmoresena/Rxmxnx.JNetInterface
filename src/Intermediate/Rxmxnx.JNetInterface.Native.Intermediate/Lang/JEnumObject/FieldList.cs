@@ -10,7 +10,7 @@ public partial class JEnumObject
 		/// <summary>
 		/// Empty field list.
 		/// </summary>
-		public static readonly FieldList Empty = new();
+		private static readonly FieldList empty = new();
 
 		/// <inheritdoc/>
 		public String PropertyName => nameof(JEnumTypeMetadata.Fields);
@@ -42,12 +42,8 @@ public partial class JEnumObject
 		/// <inheritdoc/>
 		public IReadOnlySet<Int32> GetMissingFields(out Int32 count, out Int32 maxOrdinal)
 		{
-			Int32[] defined = [.. this._ordinalDictionary.Keys,];
-			HashSet<Int32> result = Enumerable.Range(0, defined.Length).ToHashSet();
-			maxOrdinal = defined.Max();
-			count = defined.Length;
-			result.ExceptWith(defined);
-			return result;
+			count = this._ordinalDictionary.Keys.Count;
+			return FieldList.GetMissingFields(this._ordinalDictionary.Keys, out maxOrdinal);
 		}
 		/// <summary>
 		/// Adds a new enum field.
@@ -73,7 +69,27 @@ public partial class JEnumObject
 		{
 			if (IVirtualMachine.MetadataValidationEnabled)
 				NativeValidationUtilities.ThrowIfInvalidList(enumTypeName, this);
-			return this.Count != 0 ? this : FieldList.Empty;
+			return this.Count != 0 ? this : FieldList.empty;
+		}
+
+		/// <summary>
+		/// Retrieves the missing ordinal set.
+		/// </summary>
+		/// <param name="ordinals">Collection of ordinals.</param>
+		/// <param name="maxOrdinal">Output. Maximum enum ordinal.</param>
+		/// <returns>The missing ordinal set.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private static HashSet<Int32> GetMissingFields(Dictionary<Int32, String>.KeyCollection ordinals,
+			out Int32 maxOrdinal)
+		{
+			HashSet<Int32> result = Enumerable.Range(0, ordinals.Count).ToHashSet();
+			maxOrdinal = -1;
+			foreach (Int32 ordinal in ordinals)
+			{
+				if (maxOrdinal < ordinal) maxOrdinal = ordinal;
+				result.Remove(ordinal);
+			}
+			return result;
 		}
 	}
 }

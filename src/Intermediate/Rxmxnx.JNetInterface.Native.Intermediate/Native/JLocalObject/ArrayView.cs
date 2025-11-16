@@ -17,6 +17,7 @@ public partial class JLocalObject
 	{
 		static JTypeKind IDataType.Kind => JTypeKind.Array;
 		static Type IDataType.FamilyType => typeof(JArrayObject);
+		static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd0;
 
 		/// <summary>
 		/// Array length.

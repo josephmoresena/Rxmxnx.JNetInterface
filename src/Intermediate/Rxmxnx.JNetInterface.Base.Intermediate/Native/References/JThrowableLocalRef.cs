@@ -5,8 +5,8 @@
 /// which serves as opaque identifier for an throwable object (<c>java.lang.Throwable</c>).
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
-[StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JThrowableLocalRef : IObjectReferenceType
+[StructLayout(LayoutKind.Explicit)]
+public readonly partial struct JThrowableLocalRef : IObjectReferenceType, INativePointerType<JThrowableLocalRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JThrowable;
@@ -14,6 +14,7 @@ public readonly partial struct JThrowableLocalRef : IObjectReferenceType
 	/// <summary>
 	/// Internal <see cref="JObjectLocalRef"/> reference.
 	/// </summary>
+	[FieldOffset(0)]
 	private readonly JObjectLocalRef _value;
 
 	/// <summary>
@@ -22,4 +23,17 @@ public readonly partial struct JThrowableLocalRef : IObjectReferenceType
 	public JObjectLocalRef Value => this._value;
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._value.Pointer;
+
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private JThrowableLocalRef(IntPtr value) : this(new JObjectLocalRef(value)) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	internal JThrowableLocalRef(JObjectLocalRef value) => this._value = value;
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static JThrowableLocalRef INativePointerType<JThrowableLocalRef>.New(IntPtr value) => new(value);
 }

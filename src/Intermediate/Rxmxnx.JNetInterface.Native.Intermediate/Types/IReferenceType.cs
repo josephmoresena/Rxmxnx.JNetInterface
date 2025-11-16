@@ -11,12 +11,19 @@ public partial interface IReferenceType : IDataType, ILocalObject, IDisposable
 	[ExcludeFromCodeCoverage]
 #endif
 	static Type IDataType.FamilyType => typeof(JLocalObject);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd0;
 
 	/// <summary>
 	/// Retrieves the metadata for given reference type.
 	/// </summary>
 	/// <typeparam name="TReference">Type of the current java reference datatype.</typeparam>
 	/// <returns>The <see cref="JReferenceTypeMetadata"/> instance for given type.</returns>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public new static JReferenceTypeMetadata
 		GetMetadata<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TReference>()

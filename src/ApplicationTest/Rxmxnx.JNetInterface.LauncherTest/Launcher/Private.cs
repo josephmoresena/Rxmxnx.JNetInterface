@@ -67,7 +67,7 @@ public partial class Launcher
 	{
 		if (!Utilities.IsNativeAotSupported(jdk.JavaArchitecture, netVersion)) return;
 
-		JarArgs jarArgs = new() { Version = netVersion, JarName = jarFile.Name, };
+		JarArgs jarArgs = new() { Version = netVersion, JarName = jarFile.Name, JdkVersion = jdk.JavaVersion, };
 		String prefix = $"HelloJni.jar ({jdk.JavaVersion}, {jdk.JavaArchitecture}, {netVersion}";
 
 		String name = $"{prefix})";
@@ -76,7 +76,7 @@ public partial class Launcher
 		ConsoleNotifier.Notifier.Result(result, name);
 		results.Add(name, result);
 
-		if (netVersion > NetVersion.Net80) return;
+		if (!Utilities.IsReflectionFreeModeSupported(netVersion)) return;
 
 		jarArgs.NoReflection = true;
 		result = await this.RunJarFile(jarArgs, jdk, ConsoleNotifier.CancellationToken);
@@ -102,13 +102,14 @@ public partial class Launcher
 			registry.Unregister();
 		}
 	}
-	private async Task<Int32> RunAppFile(FileInfo appFile, Jdk jdk, String executionName)
+	private async Task<Int32> RunAppFile(FileInfo appFile, Jdk jdk, String executionName,
+		CancellationToken? ct = default)
 	{
 		using CancellationTokenSource source = new(TimeSpan.FromMinutes(5));
 		CancellationTokenRegistration registry = ConsoleNotifier.RegisterCancellation(source);
 		try
 		{
-			return await this.RunAppFile(appFile, jdk, executionName, ConsoleNotifier.CancellationToken);
+			return await this.RunAppFile(appFile, jdk, executionName, ct ?? ConsoleNotifier.CancellationToken);
 		}
 		catch (OperationCanceledException)
 		{

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>$(DefaultFramework)</TargetFramework>
         <TargetFrameworks>$(null)</TargetFrameworks>
         <OutputType>Exe</OutputType>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -13,6 +13,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Using Include="System.Buffers"/>
         <Using Include="System.Collections.Concurrent"/>
         <Using Include="System.Collections.ObjectModel"/>
         <Using Include="System.Diagnostics"/>
@@ -20,13 +21,14 @@
         <Using Include="System.IO.Compression"/>
         <Using Include="System.Runtime.InteropServices"/>
         <Using Include="System.Text"/>
+        <Using Include="System.Text.RegularExpressions"/>
 
         <Using Include="Rxmxnx.PInvoke"/>
         <Using Include="Rxmxnx.JNetInterface.ApplicationTest.Util"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="2.6.0"/>
+        <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="*"/>
     </ItemGroup>
 
 </Project>

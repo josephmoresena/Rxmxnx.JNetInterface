@@ -34,7 +34,12 @@ public sealed class ReferenceObjectTests
 		Assert.Equal(isProxy, proxy.IsProxy);
 		Assert.Equal(value.AsSpan().AsValue<JObjectLocalRef>(), proxy.As<JObjectLocalRef>());
 		Assert.Equal(value.AsSpan().AsValue<JObjectLocalRef>(), proxy.To<JObjectLocalRef>());
+#if NET8_0_OR_GREATER
 		Assert.True(Unsafe.AreSame(in value.AsSpan().AsValue<JObjectLocalRef>(), in proxy.As<JObjectLocalRef>()));
+#else
+		Assert.True(Unsafe.AreSame(ref value.AsSpan().AsValue<JObjectLocalRef>(),
+		                           ref Unsafe.AsRef(in proxy.As<JObjectLocalRef>())));
+#endif
 		Assert.Equal(value.AsSpan().AsValue<IntPtr>() == IntPtr.Zero, proxy.IsDefault);
 		Assert.Equal(value.AsSpan().AsValue<IntPtr>() == IntPtr.Zero, proxy.IsDefaultInstance());
 		Assert.Equal(synchronizer, proxy.Synchronize());
@@ -129,6 +134,7 @@ public sealed class ReferenceObjectTests
 		static JTypeKind IDataType.Kind => JTypeKind.Undefined;
 		static Type? IDataType.FamilyType => default;
 		static JDataTypeMetadata IDataType<DataTypeProxy>.Metadata => throw new();
+		static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd0;
 
 		protected DataTypeProxy(Boolean isProxy) : base(isProxy) { }
 		protected DataTypeProxy(JReferenceObject jObject) : base(jObject) { }

@@ -25,13 +25,13 @@
         <File Path="ApplicationTest\JNetInterface-Config.targets"/>
         <File Path="ApplicationTest\JNetInterface-NativeAot.targets"/>
         <File Path="ApplicationTest\JNetInterface-Frameworks.targets"/>
+        <File Path="ApplicationTest\Rxmxnx.JNetInterface.ApplicationGuiTest\java.src\com\rxmxnx\jnetinterface\NativeCallback.java"/>
     </Folder>
     <Folder Name="/Global/">
         <File Path="..\.github\workflows\release.yml"/>
         <File Path="..\.github\workflows\build.yml"/>
         <File Path="..\.gitignore"/>
         <File Path="..\README.md"/>
-        <File Path="..\Directory.Build.props"/>
         <File Path="Library.targets"/>
     </Folder>
     <Folder Name="/Global/Documentation/">
@@ -71,6 +71,7 @@
     <Folder Name="/Package/">
         <File Path="..\package\Intermediate-to-Package.targets"/>
         <File Path="..\package\Rxmxnx.JNetInterface\PACKAGE.md"/>
+        <File Path="..\package\JNetInterface.Package.targets"/>
     </Folder>
     <Folder Name="/Package/CorePackage/">
         <File Path="..\package\Rxmxnx.JNetInterface.Core\PACKAGE.md"/>
@@ -92,6 +93,8 @@
                  Type="Classic C#"/>
         <File Path="Test\Tests.targets"/>
         <File Path="Test\CommonTests.targets"/>
+        <File Path="Test\x86.runsettings"/>
+        <File Path="Test\Directory.Build.props"/>
     </Folder>
     <Folder Name="/Test/Proxies/">
         <Project

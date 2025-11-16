@@ -14,7 +14,11 @@ internal partial struct JniTransactionHandle
 		/// <summary>
 		/// Lock object.
 		/// </summary>
+#if NET9_0_OR_GREATER
+		private readonly Lock _lock = new();
+#else
 		private readonly Object _lock = new();
+#endif
 		/// <summary>
 		/// Set of references.
 		/// </summary>
@@ -38,7 +42,11 @@ internal partial struct JniTransactionHandle
 		public JObjectLocalRef Add(JObjectLocalRef localRef)
 		{
 			if (localRef == default) return default;
+#if NET9_0_OR_GREATER
+			using (this._lock.EnterScope())
+#else
 			lock (this._lock)
+#endif
 				this._references.Add(localRef.Pointer);
 			return localRef;
 		}
@@ -53,7 +61,11 @@ internal partial struct JniTransactionHandle
 		public Boolean Contains(IntPtr reference)
 		{
 			if (reference == IntPtr.Zero) return false;
+#if NET9_0_OR_GREATER
+			using (this._lock.EnterScope())
+#else
 			lock (this._lock)
+#endif
 				return this._references.Contains(reference);
 		}
 		/// <inheritdoc/>

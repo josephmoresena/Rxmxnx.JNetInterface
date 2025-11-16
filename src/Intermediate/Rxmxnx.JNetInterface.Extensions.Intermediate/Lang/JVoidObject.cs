@@ -13,6 +13,7 @@ public sealed class JVoidObject : JLocalObject.Uninstantiable<JVoidObject>, IPri
 		=> JVoidObject.typeMetadata;
 	static JPrimitiveTypeMetadata IPrimitiveWrapperType<JVoidObject>.PrimitiveMetadata
 		=> JPrimitiveTypeMetadata.VoidMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd1;
 
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]

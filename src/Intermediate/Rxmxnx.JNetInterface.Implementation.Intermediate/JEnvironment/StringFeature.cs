@@ -44,17 +44,17 @@ partial class JEnvironment
 			if (result <= 0) this.CheckJniError();
 			return result;
 		}
-		public unsafe Int64? GetUtf8LongLength(JReferenceObject jObject)
+		public Int64? GetUtf8LongLength(JReferenceObject jObject)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);
 			ImplementationValidationUtilities.ThrowIfDefault(jObject);
 			if (this.Version < NativeInterface24.RequiredVersion) return default;
 
 			ref readonly NativeInterface24 nativeInterface =
-				ref this.GetNativeInterface<NativeInterface24>(NativeInterface24.GetStringUtfLongLengthInfo);
+				ref this.GetNativeInterface<NativeInterface24>(NativeInterface24.GetStringUtfLengthAsLongInfo);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JStringLocalRef stringRef = jniTransaction.Add<JStringLocalRef>(jObject);
-			Int64 result = nativeInterface.GetStringUtfLongLength(this.Reference, stringRef);
+			Int64 result = nativeInterface.GetStringUtfLengthAsLong(this.Reference, stringRef);
 			if (result <= 0) this.CheckJniError();
 			return result;
 		}
@@ -96,7 +96,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfDefault(jString);
 			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, true);
 		}
-		public unsafe ReadOnlyValPtr<Char> GetCriticalSequence(JStringLocalRef stringRef)
+		public ReadOnlyValPtr<Char> GetCriticalSequence(JStringLocalRef stringRef)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetStringCriticalInfo);
@@ -148,7 +148,7 @@ partial class JEnvironment
 				throw;
 			}
 		}
-		public unsafe void ReleaseCriticalSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer)
+		public void ReleaseCriticalSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer)
 		{
 			try
 			{

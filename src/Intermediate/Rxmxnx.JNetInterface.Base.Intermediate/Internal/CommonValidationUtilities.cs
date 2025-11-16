@@ -83,6 +83,32 @@ internal static class CommonValidationUtilities
 		throw new InvalidOperationException(resource.VoidEquality);
 	}
 	/// <summary>
+	/// Throws an exception for an instance that cannot be cast to a <typeparamref name="T"/> value.
+	/// </summary>
+	/// <param name="nativeType">The invalid <see cref="JNativeType"/> value.</param>
+	/// <exception cref="InvalidCastException">Always throws an exception.</exception>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static T ThrowInvalidCastToNativeDataType<T>(JNativeType nativeType) where T : unmanaged
+	{
+		Byte signature = nativeType switch
+		{
+			JNativeType.JBoolean => CommonNames.BooleanSignatureChar,
+			JNativeType.JByte => CommonNames.ByteSignatureChar,
+			JNativeType.JChar => CommonNames.CharSignatureChar,
+			JNativeType.JDouble => CommonNames.DoubleSignatureChar,
+			JNativeType.JFloat => CommonNames.FloatSignatureChar,
+			JNativeType.JInt => CommonNames.IntSignatureChar,
+			JNativeType.JLong => CommonNames.DoubleSignatureChar,
+			JNativeType.JShort => CommonNames.ShortSignatureChar,
+			_ => CommonNames.ObjectSignaturePrefixChar,
+		};
+		CommonValidationUtilities.ThrowInvalidCastToPrimitive(signature);
+		return default;
+	}
+	/// <summary>
 	/// Throws an exception for an instance that cannot be cast to a <paramref name="primitiveSignature"/> value.
 	/// </summary>
 	/// <param name="primitiveSignature">A <see cref="JDataTypeMetadata"/> instance.</param>
@@ -146,18 +172,17 @@ internal static class CommonValidationUtilities
 		if (signature.IsEmpty) throw new ArgumentException(resource.InvalidSignatureMessage);
 		if (signature.Length == 1) throw new ArgumentException(resource.SignatureNotAllowed);
 
-		Byte prefix = signature[0];
-		Byte suffix = signature[^1];
+		if (signature[^1] != CommonNames.ObjectSignatureSuffixChar)
+			throw new ArgumentException(resource.InvalidSignatureMessage);
 
-		if (prefix == CommonNames.ArraySignaturePrefixChar)
-			switch (signature.Length)
-			{
-				case <= 3:
-				case > 3 when signature[1] != CommonNames.ObjectSignaturePrefixChar ||
-					suffix != CommonNames.ObjectSignatureSuffixChar:
-					throw new ArgumentException(resource.InvalidSignatureMessage);
-			}
-		else if (prefix != CommonNames.ObjectSignaturePrefixChar || suffix != CommonNames.ObjectSignatureSuffixChar)
+		Byte prefix = signature[0];
+		while (prefix == CommonNames.ArraySignaturePrefixChar && signature.Length > 2)
+		{
+			signature = signature[1..];
+			prefix = signature[0];
+		}
+
+		if (prefix != CommonNames.ObjectSignaturePrefixChar || signature.Length == 2)
 			throw new ArgumentException(resource.InvalidSignatureMessage);
 	}
 	/// <summary>
@@ -203,5 +228,30 @@ internal static class CommonValidationUtilities
 		String className = ITypeInformation.GetJavaClassName(dataTypeMetadata);
 		String message = resource.InvalidMetadata(className, typeOfT);
 		throw new ArgumentException(message);
+	}
+	/// <summary>
+	/// Throws an exception if <paramref name="level"/> is an invalid dimension for an array of dimension
+	/// <paramref name="currentDimension"/>.
+	/// </summary>
+	/// <param name="currentTypeMetadata">Current <see cref="JDataTypeMetadata"/> instance.</param>
+	/// <param name="currentDimension">Number of current datatype dimensions.</param>
+	/// <param name="level">Level of nesting for current type.</param>
+	/// <exception cref="InvalidOperationException">
+	/// Throws and exception if <paramref name="currentDimension"/> value is <see langword="null"/>.
+	/// </exception>
+	/// <exception cref="ArgumentOutOfRangeException">
+	/// Throws an exception if <paramref name="level"/> is an invalid dimension for an array of dimension
+	/// <paramref name="currentDimension"/>.
+	/// </exception>
+	public static void ThrowIfInvalidDimension(JDataTypeMetadata currentTypeMetadata, Int32? currentDimension,
+		Int32 level)
+	{
+		IMessageResource resource = IMessageResource.GetInstance();
+		if (currentDimension is null)
+			throw new InvalidOperationException(resource.MissingArrayTypeMetadata(currentTypeMetadata));
+		Int32 finalDimension = currentDimension.Value + level;
+		if (level > 0 && finalDimension <= Byte.MaxValue) return;
+		throw new ArgumentOutOfRangeException(nameof(level),
+		                                      resource.InvalidArrayDimension(255 - currentDimension.Value));
 	}
 }

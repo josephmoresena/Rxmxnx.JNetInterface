@@ -1,10 +1,10 @@
 namespace Rxmxnx.JNetInterface.Native.Values;
 
 /// <summary>
-/// Function pointer based-struct replacement for <see cref="JNativeInterface"/> type.
+/// <c>JNINativeInterface_</c> struct. Contains all pointers to the functions of JNI.
 /// </summary>
-/// <remarks>Thread Operations</remarks>
-[StructLayout(LayoutKind.Sequential)]
+/// <remarks>JNI 19</remarks>
+[StructLayout(LayoutKind.Explicit)]
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
                  Justification = CommonConstants.BinaryStructJustification)]
@@ -14,20 +14,30 @@ namespace Rxmxnx.JNetInterface.Native.Values;
 internal readonly unsafe struct NativeInterface19 : INativeInterface<NativeInterface19>
 {
 	/// <inheritdoc/>
-	public static Int32 RequiredVersion => 0x00130000;
+	public static Int32 RequiredVersion => (Int32)JRuntimeVersion.J19;
 
 	/// <summary>
-	/// Native interface for <c>JNI_VERSION_9</c>
+	/// Function set for Windows Operating System.
 	/// </summary>
-#pragma warning disable CS0169
-	private readonly NativeInterface9 _nativeInterface;
-#pragma warning restore CS0169
+	[FieldOffset(0)]
+	private readonly Windows _windows;
+	/// <summary>
+	/// Function set for Unix-like Operating System.
+	/// </summary>
+	[FieldOffset(0)]
+	private readonly Unix _unix;
 
 	/// <summary>
-	/// Pointer to <c>IsVirtualThread</c> function.
-	/// Tests whether an object is a virtual Thread.
+	/// <c>IsVirtualThread</c>.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JBoolean> IsVirtualThread;
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JBoolean IsVirtualThread(JEnvironmentRef envRef, JObjectLocalRef localRef)
+		=> SystemInfo.IsWindows ?
+			this._windows.IsVirtualThread(envRef, localRef) :
+			this._unix.IsVirtualThread(envRef, localRef);
 
 	/// <summary>
 	/// Information of <see cref="NativeInterface19.IsVirtualThread"/>
@@ -36,4 +46,44 @@ internal readonly unsafe struct NativeInterface19 : INativeInterface<NativeInter
 	{
 		Name = nameof(NativeInterface19.IsVirtualThread), Level = JniSafetyLevels.CriticalSafe,
 	};
+
+	/// <summary>
+	/// Windows function set.
+	/// </summary>
+	[StructLayout(LayoutKind.Sequential)]
+	private readonly struct Windows
+	{
+		/// <summary>
+		/// Native interface for <c>JNI_VERSION_9</c>
+		/// </summary>
+#pragma warning disable CS0169
+		private readonly NativeInterface9 _nativeInterface;
+#pragma warning restore CS0169
+
+		/// <summary>
+		/// Pointer to <c>IsVirtualThread</c> function.
+		/// Tests whether an object is a virtual Thread.
+		/// </summary>
+		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JObjectLocalRef, JBoolean> IsVirtualThread;
+	}
+
+	/// <summary>
+	/// Unix function set.
+	/// </summary>
+	[StructLayout(LayoutKind.Sequential)]
+	private readonly struct Unix
+	{
+		/// <summary>
+		/// Native interface for <c>JNI_VERSION_9</c>
+		/// </summary>
+#pragma warning disable CS0169
+		private readonly NativeInterface9 _nativeInterface;
+#pragma warning restore CS0169
+
+		/// <summary>
+		/// Pointer to <c>IsVirtualThread</c> function.
+		/// Tests whether an object is a virtual Thread.
+		/// </summary>
+		public readonly delegate* unmanaged[Cdecl]<JEnvironmentRef, JObjectLocalRef, JBoolean> IsVirtualThread;
+	}
 }

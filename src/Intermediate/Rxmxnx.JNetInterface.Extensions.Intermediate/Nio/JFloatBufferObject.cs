@@ -19,6 +19,8 @@ public class JFloatBufferObject : JBufferObject<JFloat>, IClassType<JFloatBuffer
 		InterfaceSet.ComparableSet);
 
 	static TypeMetadata IClassType<JFloatBufferObject>.Metadata => JFloatBufferObject.typeMetadata;
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd4;
 
 	/// <inheritdoc/>
 	protected JFloatBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

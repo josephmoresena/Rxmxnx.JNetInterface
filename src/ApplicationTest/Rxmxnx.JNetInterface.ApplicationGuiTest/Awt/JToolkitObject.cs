@@ -11,9 +11,13 @@ namespace Rxmxnx.JNetInterface.Awt;
 public class JToolkitObject : JLocalObject, IClassType<JToolkitObject>
 {
 	private static readonly IndeterminateCall addAwtEventListenerDef = IndeterminateCall.CreateMethodDefinition(
-		"addAWTEventListener"u8, [
-			JArgumentMetadata.Get<JAwtEventListenerObject>(), JArgumentMetadata.Get<JLong>(),
-		]);
+		"addAWTEventListener"u8,
+#if !NET9_0_OR_GREATER
+		[JArgumentMetadata.Get<JAwtEventListenerObject>(), JArgumentMetadata.Get<JLong>(),]
+#else
+		JArgumentMetadata.Get<JAwtEventListenerObject>(), JArgumentMetadata.Get<JLong>()
+#endif
+	);
 	private static readonly JClassTypeMetadata<JToolkitObject> typeMetadata =
 		TypeMetadataBuilder<JToolkitObject>.Create("java/awt/Toolkit"u8, JTypeModifier.Abstract).Build();
 	// getDefaultToolDef needs to be defined after typeMetadata.
@@ -30,7 +34,13 @@ public class JToolkitObject : JLocalObject, IClassType<JToolkitObject>
 	{
 		IEnvironment env = this.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JToolkitObject>(env);
-		JToolkitObject.addAwtEventListenerDef.MethodCall(this, jClass, false, [eventListener, (JLong)(Int64)mask,]);
+		JToolkitObject.addAwtEventListenerDef.MethodCall(this, jClass, false,
+#if !NET9_0_OR_GREATER
+		                                                 [eventListener, (JLong)(Int64)mask,]
+#else
+		                                                 eventListener, (JLong)(Int64)mask
+#endif
+		);
 	}
 
 	public static JToolkitObject GetDefaultToolkit(IEnvironment env)

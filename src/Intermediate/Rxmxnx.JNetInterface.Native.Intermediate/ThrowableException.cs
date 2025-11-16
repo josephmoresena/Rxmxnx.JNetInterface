@@ -16,11 +16,30 @@ public abstract partial class ThrowableException : JniException, IThrowableExcep
 	/// <summary>
 	/// Throwable reference.
 	/// </summary>
-	public JThrowableLocalRef ThrowableRef => this.GlobalThrowable?.To<JThrowableLocalRef>() ?? default;
+	public JThrowableLocalRef ThrowableRef
+		=> this.GlobalThrowable is JReferenceObject obj ? obj.To<JThrowableLocalRef>() : default;
+	/// <summary>
+	/// Instance metadata.
+	/// </summary>
+	public ThrowableObjectMetadata? Metadata
+	{
+		get
+		{
+			ObjectMetadata? objectMetadata = this.GlobalThrowable is JReferenceObject obj ?
+				(obj as JGlobalBase)?.ObjectMetadata :
+				default;
+			if (objectMetadata is ThrowableObjectMetadata throwableMetadata) return throwableMetadata;
+			if (objectMetadata is not null) return new(objectMetadata) { Message = this.Message, };
+			return default;
+		}
+	}
 
 	/// <summary>
 	/// Global throwable instance.
 	/// </summary>
+	[Browsable(false)]
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	[EditorBrowsable(EditorBrowsableState.Never)]
 	internal JGlobalBase GlobalThrowable { get; }
 
 	/// <summary>

@@ -26,7 +26,7 @@ partial class JEnvironment
 			{
 				JFieldDefinition fieldDefinition = NativeFunctionSetImpl.PrimitiveTypeDefinition;
 				JObjectLocalRef localRef = this.GetStaticObjectField(wrapperClass, fieldDefinition);
-				return JClassLocalRef.FromReference(in localRef);
+				return new(localRef);
 			}
 
 			JClassLocalRef classRef = this.FindMainClass(wrapperClass.Name, wrapperClass.ClassSignature);
@@ -53,7 +53,7 @@ partial class JEnvironment
 			if (typeFieldId != default)
 			{
 				JObjectLocalRef localRef = this.GetStaticObjectField(wClassRef, typeFieldId, true);
-				if (localRef != default) return JClassLocalRef.FromReference(in localRef);
+				if (localRef != default) return new(localRef);
 			}
 
 			this._env.DescribeException();

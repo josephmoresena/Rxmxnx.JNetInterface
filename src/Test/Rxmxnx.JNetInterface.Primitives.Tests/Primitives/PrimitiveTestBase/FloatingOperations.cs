@@ -4,8 +4,8 @@ public partial class PrimitiveTestBase
 {
 	private static void FloatingValueTest<TPrimitive, TValue>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IFloatingPoint<TPrimitive>, IBinaryNumber<TPrimitive>, IFloatingPointIeee754<TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IFloatingPoint<TPrimitive>,
+		IBinaryNumber<TPrimitive>, IFloatingPointIeee754<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IFloatingPoint<TValue>, IBinaryNumber<TValue>,
 		IFloatingPointIeee754<TValue>
 	{
@@ -25,8 +25,8 @@ public partial class PrimitiveTestBase
 	}
 	private static void FloatingOperationsTest<TPrimitive, TValue>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IFloatingPoint<TPrimitive>, IBinaryNumber<TPrimitive>, IFloatingPointIeee754<TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IFloatingPoint<TPrimitive>,
+		IBinaryNumber<TPrimitive>, IFloatingPointIeee754<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IFloatingPoint<TValue>, IBinaryNumber<TValue>,
 		IFloatingPointIeee754<TValue>
 	{
@@ -80,8 +80,8 @@ public partial class PrimitiveTestBase
 	}
 	private static void TrigonometricTest<TPrimitive, TValue>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IFloatingPoint<TPrimitive>, IBinaryNumber<TPrimitive>, IFloatingPointIeee754<TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IFloatingPoint<TPrimitive>,
+		IBinaryNumber<TPrimitive>, IFloatingPointIeee754<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IFloatingPoint<TValue>, IBinaryNumber<TValue>,
 		IFloatingPointIeee754<TValue>
 	{
@@ -116,8 +116,8 @@ public partial class PrimitiveTestBase
 	}
 	private static void HyperbolicTest<TPrimitive, TValue>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IFloatingPoint<TPrimitive>, IBinaryNumber<TPrimitive>, IFloatingPointIeee754<TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IFloatingPoint<TPrimitive>,
+		IBinaryNumber<TPrimitive>, IFloatingPointIeee754<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IFloatingPoint<TValue>, IBinaryNumber<TValue>,
 		IFloatingPointIeee754<TValue>
 	{
@@ -140,8 +140,8 @@ public partial class PrimitiveTestBase
 	}
 	private static void ExponentBigEndianTest<TPrimitive, TValue>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IFloatingPoint<TPrimitive>, IBinaryNumber<TPrimitive>, IFloatingPointIeee754<TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IFloatingPoint<TPrimitive>,
+		IBinaryNumber<TPrimitive>, IFloatingPointIeee754<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IFloatingPoint<TValue>, IBinaryNumber<TValue>,
 		IFloatingPointIeee754<TValue>
 	{
@@ -154,8 +154,8 @@ public partial class PrimitiveTestBase
 	}
 	private static void ExponentLittleEndianTest<TPrimitive, TValue>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IFloatingPoint<TPrimitive>, IBinaryNumber<TPrimitive>, IFloatingPointIeee754<TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IFloatingPoint<TPrimitive>,
+		IBinaryNumber<TPrimitive>, IFloatingPointIeee754<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IFloatingPoint<TValue>, IBinaryNumber<TValue>,
 		IFloatingPointIeee754<TValue>
 	{
@@ -168,8 +168,8 @@ public partial class PrimitiveTestBase
 	}
 	private static void SignificandBigEndianTest<TPrimitive, TValue>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IFloatingPoint<TPrimitive>, IBinaryNumber<TPrimitive>, IFloatingPointIeee754<TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IFloatingPoint<TPrimitive>,
+		IBinaryNumber<TPrimitive>, IFloatingPointIeee754<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IFloatingPoint<TValue>, IBinaryNumber<TValue>,
 		IFloatingPointIeee754<TValue>
 	{
@@ -182,8 +182,8 @@ public partial class PrimitiveTestBase
 	}
 	private static void SignificandLittleEndianTest<TPrimitive, TValue>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IFloatingPoint<TPrimitive>, IBinaryNumber<TPrimitive>, IFloatingPointIeee754<TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IFloatingPoint<TPrimitive>,
+		IBinaryNumber<TPrimitive>, IFloatingPointIeee754<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IFloatingPoint<TValue>, IBinaryNumber<TValue>,
 		IFloatingPointIeee754<TValue>
 	{

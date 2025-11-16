@@ -175,7 +175,7 @@ public sealed partial class TypeMetadataBuilderTests
 			=> new(initializer);
 	}
 
-	private sealed class InvalidAnnotation : JAnnotationObject<InvalidAnnotation>, IInterfaceType<InvalidAnnotation>
+	private sealed class InvalidAnnotation : JAnnotationObject<InvalidAnnotation>, IAnnotationType<InvalidAnnotation>
 	{
 		public static String SerializableName
 			=> ClassNameHelper.GetClassName(IInterfaceType.GetMetadata<JSerializableObject>().Signature);

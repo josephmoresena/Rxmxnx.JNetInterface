@@ -91,6 +91,7 @@ public class JModifierObject : JLocalObject, IClassType<JModifierObject>
 		JLocalObject.CreateBuiltInMetadata<JModifierObject>(JModifierObject.typeInfo, JTypeModifier.Extensible);
 
 	static TypeMetadata IClassType<JModifierObject>.Metadata => JModifierObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd1;
 
 	/// <inheritdoc/>
 	protected JModifierObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

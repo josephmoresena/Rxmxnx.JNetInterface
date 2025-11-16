@@ -22,6 +22,7 @@ public sealed class JTypeObject : JInterfaceObject<JTypeObject>, IInterfaceType<
 		JLocalObject.InterfaceView.CreateBuiltInMetadata<JTypeObject>(JTypeObject.typeInfo, InterfaceSet.Empty);
 
 	static TypeMetadata IInterfaceType<JTypeObject>.Metadata => JTypeObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.J5;
 
 	/// <inheritdoc/>
 	private JTypeObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

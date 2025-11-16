@@ -26,6 +26,7 @@ public class JInvocationTargetExceptionObject : JReflectiveOperationExceptionObj
 
 	static TypeMetadata IThrowableType<JInvocationTargetExceptionObject>.Metadata
 		=> JInvocationTargetExceptionObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd1;
 
 	/// <inheritdoc/>
 	protected JInvocationTargetExceptionObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

@@ -15,9 +15,13 @@ public sealed partial class JFieldObject : JAccessibleObject, IClassType<JFieldO
 	/// Type interfaces.
 	/// </summary>
 	private static readonly ImmutableHashSet<JInterfaceTypeMetadata> typeInterfaces =
+#if NET8_0_OR_GREATER
 	[
 		IInterfaceType.GetMetadata<JMemberObject>(),
 	];
+#else
+		ImmutableHashSet.Create(IInterfaceType.GetMetadata<JMemberObject>());
+#endif
 	/// <summary>
 	/// class metadata.
 	/// </summary>

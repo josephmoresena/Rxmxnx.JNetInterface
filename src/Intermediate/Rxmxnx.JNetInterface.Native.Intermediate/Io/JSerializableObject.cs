@@ -23,6 +23,7 @@ public sealed class JSerializableObject : JInterfaceObject<JSerializableObject>,
 			JSerializableObject.typeInfo, InterfaceSet.Empty);
 
 	static TypeMetadata IInterfaceType<JSerializableObject>.Metadata => JSerializableObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd1;
 
 	/// <inheritdoc/>
 	private JSerializableObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

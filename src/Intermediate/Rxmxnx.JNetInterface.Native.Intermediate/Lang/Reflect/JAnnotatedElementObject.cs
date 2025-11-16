@@ -24,6 +24,7 @@ public sealed class JAnnotatedElementObject : JInterfaceObject<JAnnotatedElement
 			JAnnotatedElementObject.typeInfo, InterfaceSet.Empty);
 
 	static TypeMetadata IInterfaceType<JAnnotatedElementObject>.Metadata => JAnnotatedElementObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.J5;
 
 	/// <inheritdoc/>
 	private JAnnotatedElementObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

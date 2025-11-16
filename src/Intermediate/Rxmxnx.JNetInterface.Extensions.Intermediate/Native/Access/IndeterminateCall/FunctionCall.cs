@@ -10,9 +10,11 @@ public abstract partial class IndeterminateCall
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
 	public IndeterminateResult FunctionCall(JLocalObject jLocal,
 #if NET9_0_OR_GREATER
-		params
+		params ReadOnlySpan<IObject?> args
+#else
+		ReadOnlySpan<IObject?> args = default
 #endif
-		ReadOnlySpan<IObject?> args)
+	)
 		=> this.FunctionCall(jLocal, jLocal.Class, false, args);
 	/// <summary>
 	/// Invokes a function on given <see cref="JLocalObject"/> instance and returns its result.
@@ -24,9 +26,11 @@ public abstract partial class IndeterminateCall
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
 	public IndeterminateResult FunctionCall(JLocalObject jLocal, JClassObject jClass, Boolean nonVirtual,
 #if NET9_0_OR_GREATER
-		params
+		params ReadOnlySpan<IObject?> args
+#else
+		ReadOnlySpan<IObject?> args = default
 #endif
-		ReadOnlySpan<IObject?> args)
+	)
 	{
 		IndeterminateResult result = IndeterminateResult.Empty;
 		switch (this.Definition)
@@ -48,9 +52,11 @@ public abstract partial class IndeterminateCall
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
 	public IndeterminateResult StaticFunctionCall(JClassObject jClass,
 #if NET9_0_OR_GREATER
-		params
+		params ReadOnlySpan<IObject?> args
+#else
+		ReadOnlySpan<IObject?> args = default
 #endif
-		ReadOnlySpan<IObject?> args)
+	)
 	{
 		IndeterminateResult result = IndeterminateResult.Empty;
 		switch (this.Definition)
@@ -64,80 +70,6 @@ public abstract partial class IndeterminateCall
 				break;
 			case JFunctionDefinition definition:
 				result = this.StaticFunctionCall(definition, jClass, args);
-				break;
-		}
-		return result;
-	}
-
-	/// <summary>
-	/// Invokes a function on given <see cref="JLocalObject"/> instance and returns its result.
-	/// </summary>
-	/// <param name="jMethod">Reflected method instance.</param>
-	/// <param name="jLocal">Target object.</param>
-	/// <param name="args">Function arguments.</param>
-	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
-	public static IndeterminateResult ReflectedFunctionCall(JMethodObject jMethod, JLocalObject jLocal,
-#if NET9_0_OR_GREATER
-		params
-#endif
-		ReadOnlySpan<IObject?> args)
-		=> IndeterminateCall.ReflectedFunctionCall(jMethod, jLocal, false, args);
-	/// <summary>
-	/// Invokes a function on given <see cref="JLocalObject"/> instance and returns its result.
-	/// </summary>
-	/// <param name="jMethod">Reflected method instance.</param>
-	/// <param name="jLocal">Target object.</param>
-	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
-	/// <param name="args">Function arguments.</param>
-	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
-	public static IndeterminateResult ReflectedFunctionCall(JMethodObject jMethod, JLocalObject jLocal,
-		Boolean nonVirtual,
-#if NET9_0_OR_GREATER
-		params
-#endif
-		ReadOnlySpan<IObject?> args)
-	{
-		IndeterminateResult result = IndeterminateResult.Empty;
-		switch (jMethod.Definition)
-		{
-			case JMethodDefinition methodDefinition:
-				IndeterminateCall.ReflectedMethodCall(methodDefinition, jMethod, jLocal, nonVirtual, args);
-				break;
-			case JFunctionDefinition definition:
-				result = IndeterminateCall.ReflectedFunctionCall(definition, jMethod, jLocal, nonVirtual, args);
-				break;
-		}
-		return result;
-	}
-	/// <summary>
-	/// Invokes a static function on the declaring class of given <see cref="JExecutableObject"/> instance and
-	/// returns its result.
-	/// </summary>
-	/// <param name="jExecutable">Reflected executable instance.</param>
-	/// <param name="args">Function arguments.</param>
-	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
-	public static IndeterminateResult ReflectedStaticFunctionCall(JExecutableObject jExecutable,
-#if NET9_0_OR_GREATER
-		params
-#endif
-		ReadOnlySpan<IObject?> args)
-	{
-		IndeterminateResult result = IndeterminateResult.Empty;
-		switch (jExecutable.Definition)
-		{
-			case JConstructorDefinition constructorDefinition:
-				JConstructorObject jConstructor = jExecutable.CastTo<JConstructorObject>();
-				JLocalObject newObject =
-					IndeterminateCall.ReflectedNewCall<JLocalObject>(constructorDefinition, jConstructor, args);
-				result = new(newObject, jConstructor.DeclaringClass.ClassSignature);
-				break;
-			case JMethodDefinition methodDefinition:
-				JMethodObject jMethod = jExecutable.CastTo<JMethodObject>();
-				IndeterminateCall.ReflectedStaticMethodCall(methodDefinition, jMethod, args);
-				break;
-			case JFunctionDefinition definition:
-				JMethodObject jFunction = jExecutable.CastTo<JMethodObject>();
-				result = IndeterminateCall.ReflectedStaticFunctionCall(definition, jFunction, args);
 				break;
 		}
 		return result;

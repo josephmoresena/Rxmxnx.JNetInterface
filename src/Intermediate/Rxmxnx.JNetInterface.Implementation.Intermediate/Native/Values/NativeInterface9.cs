@@ -1,10 +1,10 @@
 namespace Rxmxnx.JNetInterface.Native.Values;
 
 /// <summary>
-/// Function pointer based-struct replacement for <see cref="JNativeInterface"/> type.
+/// <c>JNINativeInterface_</c> struct. Contains all pointers to the functions of JNI.
 /// </summary>
-/// <remarks>Module operations</remarks>
-[StructLayout(LayoutKind.Sequential)]
+/// <remarks>JNI 9.0</remarks>
+[StructLayout(LayoutKind.Explicit)]
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
                  Justification = CommonConstants.BinaryStructJustification)]
@@ -14,29 +14,83 @@ namespace Rxmxnx.JNetInterface.Native.Values;
 internal readonly unsafe struct NativeInterface9 : INativeInterface<NativeInterface9>
 {
 	/// <inheritdoc/>
-	public static Int32 RequiredVersion => 0x00090000;
+	public static Int32 RequiredVersion => (Int32)JRuntimeVersion.J9;
 
 	/// <summary>
-	/// Native interface for <c>JNI_VERSION_1_6</c>
+	/// Function set for Windows Operating System.
 	/// </summary>
-#pragma warning disable CS0169
-	private readonly NativeInterface6 _nativeInterface;
-#pragma warning restore CS0169
+	[FieldOffset(0)]
+	private readonly Windows _windows;
+	/// <summary>
+	/// Function set for Unix-like Operating System.
+	/// </summary>
+	[FieldOffset(0)]
+	private readonly Unix _unix;
 
 	/// <summary>
-	/// Pointer to <c>GetModule</c> function.
-	/// Returns the <c>java.lang.Module</c> object for the module that the class is a member of.
+	/// <c>GetModule</c>.
 	/// </summary>
-	/// <remarks>
-	/// If the class is not in a named module then the unnamed module of the class loader for the class is returned.
-	/// If the class represents an array type then this function returns the Module object for the element type.
-	/// If the class represents a primitive type or <c>void</c>, then the Module object for the <c>java.base</c> module is
-	/// returned.
-	/// </remarks>
-	public readonly delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JObjectLocalRef> GetModule;
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JObjectLocalRef GetModule(JEnvironmentRef envRef, JClassLocalRef classRef)
+		=> SystemInfo.IsWindows ? this._windows.GetModule(envRef, classRef) : this._unix.GetModule(envRef, classRef);
 
 	/// <summary>
 	/// Information of <see cref="NativeInterface9.GetModule"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetModuleInfo = new() { Name = nameof(NativeInterface9.GetModule), };
+
+	/// <summary>
+	/// Windows function set.
+	/// </summary>
+	[StructLayout(LayoutKind.Sequential)]
+	private readonly struct Windows
+	{
+		/// <summary>
+		/// Native interface for <c>JNI_VERSION_1_6</c>
+		/// </summary>
+#pragma warning disable CS0169
+		private readonly NativeInterface6 _nativeInterface;
+#pragma warning restore CS0169
+
+		/// <summary>
+		/// Pointer to <c>GetModule</c> function.
+		/// Returns the <c>java.lang.Module</c> object for the module that the class is a member of.
+		/// </summary>
+		/// <remarks>
+		/// If the class is not in a named module then the unnamed module of the class loader for the class is returned.
+		/// If the class represents an array type then this function returns the Module object for the element type.
+		/// If the class represents a primitive type or <c>void</c>, then the Module object for the <c>java.base</c> module is
+		/// returned.
+		/// </remarks>
+		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JClassLocalRef, JObjectLocalRef> GetModule;
+	}
+
+	/// <summary>
+	/// Unix function set.
+	/// </summary>
+	[StructLayout(LayoutKind.Sequential)]
+	private readonly struct Unix
+	{
+		/// <summary>
+		/// Native interface for <c>JNI_VERSION_1_6</c>
+		/// </summary>
+#pragma warning disable CS0169
+		private readonly NativeInterface6 _nativeInterface;
+#pragma warning restore CS0169
+
+		/// <summary>
+		/// Pointer to <c>GetModule</c> function.
+		/// Returns the <c>java.lang.Module</c> object for the module that the class is a member of.
+		/// </summary>
+		/// <remarks>
+		/// If the class is not in a named module then the unnamed module of the class loader for the class is returned.
+		/// If the class represents an array type then this function returns the Module object for the element type.
+		/// If the class represents a primitive type or <c>void</c>, then the Module object for the <c>java.base</c> module is
+		/// returned.
+		/// </remarks>
+		public readonly delegate* unmanaged[Cdecl]<JEnvironmentRef, JClassLocalRef, JObjectLocalRef> GetModule;
+	}
 }

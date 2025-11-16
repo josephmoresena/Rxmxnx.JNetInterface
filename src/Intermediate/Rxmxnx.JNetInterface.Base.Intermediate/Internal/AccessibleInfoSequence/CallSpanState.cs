@@ -40,7 +40,9 @@ internal sealed unsafe partial class AccessibleInfoSequence
 		public ReadOnlySpan<JArgumentMetadata> GetArgumentsSpan()
 		{
 			if (argsCount == 0) return ReadOnlySpan<JArgumentMetadata>.Empty;
-			ref JArgumentMetadata arg0 = ref Unsafe.AsRef<JArgumentMetadata>(argsPtr);
+#pragma warning disable CS8500
+			ref JArgumentMetadata arg0 = ref *(JArgumentMetadata*)argsPtr;
+#pragma warning restore CS8500
 			return MemoryMarshal.CreateReadOnlySpan(ref arg0, argsCount);
 		}
 	}

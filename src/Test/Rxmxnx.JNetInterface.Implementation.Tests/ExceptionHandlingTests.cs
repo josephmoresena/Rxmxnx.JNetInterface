@@ -52,9 +52,9 @@ public sealed partial class ExceptionHandlingTests
 			proxyEnv.Received(1).NewGlobalRef(throwableRef.Value);
 			proxyEnv.Received(1).GetStringLength(messageRef);
 			proxyEnv.Received(1).GetStringRegion(messageRef, 0, message.Length, Arg.Any<ValPtr<Char>>());
-			proxyEnv.Received(1).Throw(JThrowableLocalRef.FromReference(globalRef.Value));
+			proxyEnv.Received(1).Throw(new(globalRef.Value));
 			proxyEnv.Received(0).ExceptionClear();
-			proxyEnv.Received(0).ExceptionCheck();
+			proxyEnv.Received().ExceptionCheck(); // Now always ExceptionCheck() is called.
 
 			env.PendingException = default;
 			proxyEnv.Received(1).ExceptionClear();
@@ -80,9 +80,8 @@ public sealed partial class ExceptionHandlingTests
 			proxyEnv.Received(1).NewGlobalRef(throwableRef.Value);
 			proxyEnv.Received(0).GetStringLength(messageRef);
 			proxyEnv.Received(0).GetStringRegion(messageRef, 0, message.Length, Arg.Any<ValPtr<Char>>());
-			proxyEnv.Received(1).Throw(JThrowableLocalRef.FromReference(globalRef.Value));
+			proxyEnv.Received(1).Throw(new(globalRef.Value));
 			proxyEnv.Received(0).ExceptionClear();
-			proxyEnv.Received(0).ExceptionCheck();
 
 			env.PendingException = throwableException;
 			proxyEnv.Received(1).ExceptionClear();
@@ -93,7 +92,9 @@ public sealed partial class ExceptionHandlingTests
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}

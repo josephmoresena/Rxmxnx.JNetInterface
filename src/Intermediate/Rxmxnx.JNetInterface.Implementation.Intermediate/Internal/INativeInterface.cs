@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
-/// This interface represents a function pointer based-struct replacement for <see cref="JInvokeInterface"/> type.
+/// This interface represents a function pointer based-struct replacement for <c>JNINativeInterface_</c> struct.
 /// </summary>
 /// <typeparam name="TNativeInterface">A <see cref="INativeInterface{TNativeInterface}"/> type.</typeparam>
 #if !PACKAGE

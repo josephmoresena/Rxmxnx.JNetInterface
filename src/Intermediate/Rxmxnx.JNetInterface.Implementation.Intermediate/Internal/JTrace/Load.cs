@@ -85,6 +85,33 @@ internal static partial class JTrace
 		                callerMethod);
 	}
 	/// <summary>
+	/// Writes a category name and the virtual machine load.
+	/// </summary>
+	/// <param name="vmRef">A <see cref="JVirtualMachineRef"/> reference.</param>
+	/// <param name="firstTime">Indicates whether the virtual machine was loaded for first time.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void VirtualMachineLoad(JVirtualMachineRef vmRef, Boolean firstTime,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!JVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {vmRef} loaded, new: {firstTime}.",
+		                callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and the environment load.
+	/// </summary>
+	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
+	/// <param name="firstTime">Indicates whether the environment was loaded for first time.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void EnvironmentLoad(JEnvironmentRef envRef, Boolean firstTime,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!JVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {envRef} loaded, new: {firstTime}.",
+		                callerMethod);
+	}
+
+	/// <summary>
 	/// Retrieves hex string from <paramref name="bytes"/> hash.
 	/// </summary>
 	/// <param name="bytes">Binary class information.</param>

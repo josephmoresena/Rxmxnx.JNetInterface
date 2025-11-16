@@ -24,7 +24,7 @@ public readonly partial struct JByte
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public JByte(Char value) => this._value = NativeUtilities.AsBytes(value).ToValue<SByte>();
+	public JByte(Char value) => this._value = Unsafe.As<Char, SByte>(ref value);
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -48,7 +48,7 @@ public readonly partial struct JByte
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public JByte(Int32 value) => this._value = NativeUtilities.AsBytes(value).ToValue<SByte>();
+	public JByte(Int32 value) => this._value = Unsafe.As<Int32, SByte>(ref value);
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -56,7 +56,7 @@ public readonly partial struct JByte
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public JByte(Int64 value) => this._value = NativeUtilities.AsBytes(value).ToValue<SByte>();
+	public JByte(Int64 value) => this._value = Unsafe.As<Int64, SByte>(ref value);
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -64,5 +64,5 @@ public readonly partial struct JByte
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public JByte(Int16 value) => this._value = NativeUtilities.AsBytes(value).ToValue<SByte>();
+	public JByte(Int16 value) => this._value = Unsafe.As<Int16, SByte>(ref value);
 }

@@ -22,6 +22,7 @@ Partial Module Program
         End If
 
         Dim helloJniByteCode As Byte() = Await File.ReadAllBytesAsync("HelloDotnet.class")
+
         Dim jvmLib As JVirtualMachineLibrary = JVirtualMachineLibrary.LoadLibrary(args(0))
 
         If jvmLib is Nothing Then
@@ -47,7 +48,7 @@ Partial Module Program
         IManagedCallback.PrintSwitches()
     End Function
 
-    Private ReadOnly VmOptions As String() = {"-DjniLib.load.disable=true"}
+    Private ReadOnly VmOptions As String() = {"-DjniLib.load.disable=true", JRuntimeInfo.JniCheckOption, "-Xrs"}
 
     Private Sub Execute(jvmLib As JVirtualMachineLibrary, classByteCode As Byte(), ByVal ParamArray args As String())
 
@@ -60,6 +61,7 @@ Partial Module Program
             Dim env as IEnvironment = Nothing
             Using vm As IInvokedVirtualMachine = jvmLib.CreateVirtualMachine(initArgs, env)
                 Try
+                    Console.WriteLine($"==== JNI 0x{env.Version:x8} ====")
                     Dim managedInstance As New IManagedCallback.Default(vm, Console.Out)
                     Using _
                         helloJniClass As JClassObject =

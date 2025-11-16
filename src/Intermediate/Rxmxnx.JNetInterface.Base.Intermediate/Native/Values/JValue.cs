@@ -58,6 +58,7 @@ internal readonly unsafe partial struct JValue : INativeType
 		this._pointerValue = IntPtr.Zero;
 	}
 
+#if !PACKAGE
 	/// <summary>
 	/// Creates a new <see cref="JValue"/> value from a <paramref name="value"/>.
 	/// </summary>
@@ -75,4 +76,5 @@ internal readonly unsafe partial struct JValue : INativeType
 		source.CopyTo(resultByte);
 		return resultSpan[0];
 	}
+#endif
 }

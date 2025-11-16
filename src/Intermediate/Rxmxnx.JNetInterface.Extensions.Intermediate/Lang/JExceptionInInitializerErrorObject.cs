@@ -26,6 +26,7 @@ public class JExceptionInInitializerErrorObject : JLinkageErrorObject,
 
 	static TypeMetadata IThrowableType<JExceptionInInitializerErrorObject>.Metadata
 		=> JExceptionInInitializerErrorObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd1;
 
 	/// <inheritdoc/>
 	protected JExceptionInInitializerErrorObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

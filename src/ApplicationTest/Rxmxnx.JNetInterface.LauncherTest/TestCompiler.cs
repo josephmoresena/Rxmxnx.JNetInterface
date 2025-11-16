@@ -33,12 +33,13 @@ public static partial class TestCompiler
 		}
 	}
 	public static async Task CompileNet(DirectoryInfo projectDirectory, String os, String outputPath,
-		Boolean onlyNativeAot = false)
+		NetVersion[] netVersions, Boolean onlyNativeAot)
 	{
-		Architecture[] architectures = OperatingSystem.IsWindows() ?
+		Architecture[] architectures = SystemInfo.IsWindows ?
 			[Architecture.X86, Architecture.X64, Architecture.Arm64,] :
-			!OperatingSystem.IsLinux() ? [Architecture.X64, Architecture.Arm64,] :
-				[Architecture.X64, Architecture.Arm, Architecture.Arm64,];
+			SystemInfo.IsMac ? [Architecture.X64, Architecture.Arm64,] :
+				SystemInfo.IsLinux ? [Architecture.X64, Architecture.Arm, Architecture.Arm64,] :
+					[RuntimeInformation.OSArchitecture,];
 
 		String? libProjectFile = projectDirectory.GetDirectories("*.LibraryTest", SearchOption.AllDirectories)
 		                                         .SelectMany(d => d.GetFiles("*.LibraryTest.csproj"))
@@ -55,7 +56,7 @@ public static partial class TestCompiler
 			if (!TestCompiler.ArchSupported(arch)) continue;
 
 			String rid = $"{os}-{Enum.GetName(arch)!.ToLower()}";
-			foreach (NetVersion netVersion in Enum.GetValues<NetVersion>())
+			foreach (NetVersion netVersion in netVersions)
 			{
 				if (!String.IsNullOrEmpty(libProjectFile))
 					await TestCompiler.CompileNetLibrary(onlyNativeAot,
@@ -87,14 +88,16 @@ public static partial class TestCompiler
 			}
 		}
 	}
-	public static async Task RunManagedTest(DirectoryInfo projectDirectory)
+	public static async Task RunManagedTest(DirectoryInfo projectDirectory, NetVersion[] netVersions)
 	{
 		String? managedTestProjectFile = projectDirectory.GetDirectories("*.ManagedTest", SearchOption.AllDirectories)
 		                                                 .SelectMany(d => d.GetFiles("*.ManagedTest.csproj"))
 		                                                 .Select(f => f.FullName).FirstOrDefault();
 
 		if (String.IsNullOrEmpty(managedTestProjectFile)) return;
-		foreach (NetVersion netVersion in Enum.GetValues<NetVersion>())
+		foreach (NetVersion netVersion in netVersions)
 			await TestCompiler.RunNetTest(new() { ProjectFile = managedTestProjectFile, Version = netVersion, });
+
+		ConsoleNotifier.ShowDiskUsage();
 	}
 }

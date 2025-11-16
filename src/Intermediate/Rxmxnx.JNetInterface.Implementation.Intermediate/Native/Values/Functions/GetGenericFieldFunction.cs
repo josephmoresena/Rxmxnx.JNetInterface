@@ -10,26 +10,49 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly unsafe struct GetGenericFieldFunction<TReceiver, TField>
-	where TReceiver : unmanaged, IWrapper<JObjectLocalRef> where TField : unmanaged, INativeType
+internal readonly unsafe struct GetGenericFieldFunction<TReceiver, TField> : IGetFieldFunction
+	where TReceiver : unmanaged, INativePointerType where TField : unmanaged, INativeDataType<TField>
 {
 	/// <summary>
 	/// Pointer to <c>Get&lt;type&gt;Field</c> function.
 	/// </summary>
-	public readonly void* _ptr;
+	private readonly IGetFieldFunction.GetFieldFunction _function;
 
 	/// <summary>
-	/// Calls to <c>Get&lt;type&gt;Field</c> function.
+	/// <c>Get&lt;type&gt;Field</c>.
 	/// </summary>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TField Get(JEnvironmentRef envRef, TReceiver receiver, JFieldId fieldId)
-	{
-		TField result = default;
-		GenericFunctionCallHelper.GetField(this._ptr, TField.Type, envRef, receiver.Value.Pointer, fieldId,
-		                                   ref Unsafe.As<TField, Byte>(ref result));
-		return result;
-	}
+		=> TField.Type switch
+		{
+			JNativeType.JBoolean when SystemInfo.IsWindows => this._function.Windows.Boolean(
+				envRef, receiver.Pointer, fieldId),
+			JNativeType.JBoolean => this._function.Unix.Boolean(envRef, receiver.Pointer, fieldId),
+			JNativeType.JByte when SystemInfo.IsWindows => this._function.Windows.Byte(
+				envRef, receiver.Pointer, fieldId),
+			JNativeType.JByte => this._function.Unix.Byte(envRef, receiver.Pointer, fieldId),
+			JNativeType.JChar when SystemInfo.IsWindows => this._function.Windows.Char(
+				envRef, receiver.Pointer, fieldId),
+			JNativeType.JChar => this._function.Unix.Char(envRef, receiver.Pointer, fieldId),
+			JNativeType.JDouble when SystemInfo.IsWindows => this._function.Windows.Double(
+				envRef, receiver.Pointer, fieldId),
+			JNativeType.JDouble => this._function.Unix.Double(envRef, receiver.Pointer, fieldId),
+			JNativeType.JFloat when SystemInfo.IsWindows => this._function.Windows.Float(
+				envRef, receiver.Pointer, fieldId),
+			JNativeType.JFloat => this._function.Unix.Float(envRef, receiver.Pointer, fieldId),
+			JNativeType.JInt when SystemInfo.IsWindows => this._function.Windows.Int(envRef, receiver.Pointer, fieldId),
+			JNativeType.JInt => this._function.Unix.Int(envRef, receiver.Pointer, fieldId),
+			JNativeType.JLong when SystemInfo.IsWindows => this._function.Windows.Long(
+				envRef, receiver.Pointer, fieldId),
+			JNativeType.JLong => this._function.Unix.Long(envRef, receiver.Pointer, fieldId),
+			JNativeType.JShort when SystemInfo.IsWindows => this._function.Windows.Short(
+				envRef, receiver.Pointer, fieldId),
+			JNativeType.JShort => this._function.Unix.Short(envRef, receiver.Pointer, fieldId),
+			_ => SystemInfo.IsWindows ?
+				this._function.Windows.Object(envRef, receiver.Pointer, fieldId) :
+				this._function.Unix.Object(envRef, receiver.Pointer, fieldId),
+		};
 }

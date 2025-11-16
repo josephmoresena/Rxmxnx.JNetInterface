@@ -55,6 +55,8 @@ internal readonly struct ThreadCreationArgs
 			ThreadPurpose.FatalError => "FatalError"u8,
 			ThreadPurpose.CheckGlobalReference => "CheckGlobalReference"u8,
 			ThreadPurpose.SynchronizeGlobalReference => "SynchronizeGlobalReference"u8,
-			_ => "CreateGlobalReference"u8,
+			ThreadPurpose.GetRuntimeVersion => "GetRuntimeVersion"u8,
+			ThreadPurpose.CreateGlobalReference => "CreateGlobalReference"u8,
+			_ => (CString?)Enum.GetName(purpose),
 		};
 }

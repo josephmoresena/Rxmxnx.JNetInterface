@@ -9,18 +9,17 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly unsafe struct NewPrimitiveArrayFunction<TArrayRef>
-	where TArrayRef : unmanaged, IArrayReferenceType, IObjectReferenceType
+internal readonly unsafe struct NewPrimitiveArrayFunction<TArrayRef> : INewPrimitiveArrayFunction
+	where TArrayRef : unmanaged, IArrayReferenceType, INativePointerType<TArrayRef>
 {
 	/// <summary>
 	/// Pointer to <c>New&lt;PrimitiveType&gt;Array</c> function.
 	/// Constructs a new primitive array object.
 	/// </summary>
-	private readonly delegate* unmanaged<JEnvironmentRef, Int32, IntPtr> _ptr;
+	private readonly INewPrimitiveArrayFunction.NewPrimitiveArrayFunction _function;
 
 	/// <summary>
-	/// Pointer to <c>New&lt;PrimitiveType&gt;Array</c> function.
-	/// Constructs a new primitive array object.
+	/// <c>New&lt;PrimitiveType&gt;Array</c>.
 	/// </summary>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -28,8 +27,9 @@ internal readonly unsafe struct NewPrimitiveArrayFunction<TArrayRef>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TArrayRef NewArray(JEnvironmentRef envRef, Int32 length)
 	{
-		TArrayRef result = default;
-		Unsafe.As<TArrayRef, IntPtr>(ref result) = this._ptr(envRef, length);
-		return result;
+		JArrayLocalRef result = SystemInfo.IsWindows ?
+			this._function.Windows(envRef, length) :
+			this._function.Unix(envRef, length);
+		return Unsafe.As<JArrayLocalRef, TArrayRef>(ref result);
 	}
 }

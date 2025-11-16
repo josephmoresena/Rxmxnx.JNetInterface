@@ -24,6 +24,7 @@ public sealed class JGenericDeclarationObject : JInterfaceObject<JGenericDeclara
 			JGenericDeclarationObject.typeInfo, InterfaceSet.AnnotatedElementSet);
 
 	static TypeMetadata IInterfaceType<JGenericDeclarationObject>.Metadata => JGenericDeclarationObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.J5;
 
 	/// <inheritdoc/>
 	private JGenericDeclarationObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

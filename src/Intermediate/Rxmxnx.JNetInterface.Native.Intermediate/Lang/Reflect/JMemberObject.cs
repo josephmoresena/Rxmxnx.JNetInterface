@@ -22,6 +22,7 @@ public sealed class JMemberObject : JInterfaceObject<JMemberObject>, IInterfaceT
 		JLocalObject.InterfaceView.CreateBuiltInMetadata<JMemberObject>(JMemberObject.typeInfo, InterfaceSet.Empty);
 
 	static TypeMetadata IInterfaceType<JMemberObject>.Metadata => JMemberObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd1;
 
 	/// <inheritdoc/>
 	private JMemberObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

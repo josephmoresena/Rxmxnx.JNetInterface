@@ -70,14 +70,11 @@ internal static partial class MetadataHelper
 					new() { FromHash = typeMetadata.Hash, ToHash = typeMetadata.BaseMetadata.Hash, };
 				this.RegisterSuperClassRelationship(assignationKey);
 			}
-			InterfaceAssignationState state = new()
-			{
-				FromHash = typeMetadata.Hash, AssignationCache = this._assignationCache,
-			};
+			InterfaceAssignationState state = new() { FromHash = typeMetadata.Hash, Storage = this, };
 			typeMetadata.Interfaces.ForEach(state, (s, i) =>
 			{
 				AssignationKey assignationKey = new() { FromHash = s.FromHash, ToHash = i.Hash, };
-				this.RegisterSuperViewRelationship(assignationKey);
+				s.Storage.RegisterSuperViewRelationship(assignationKey);
 			});
 			this._builtInTypes[hash] = true;
 		}

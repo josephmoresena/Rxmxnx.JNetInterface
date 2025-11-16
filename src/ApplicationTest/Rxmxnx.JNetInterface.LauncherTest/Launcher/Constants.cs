@@ -16,6 +16,7 @@ public partial class Launcher
 		{ JdkVersion.Jdk11, "JAVA_HOME_11_X64" },
 		{ JdkVersion.Jdk17, "JAVA_HOME_17_X64" },
 		{ JdkVersion.Jdk21, "JAVA_HOME_21_X64" },
+		{ JdkVersion.Jdk25, "JAVA_HOME_25_X64" },
 	};
 	private static readonly Dictionary<JdkVersion, String> javaHomeArm = new()
 	{
@@ -29,5 +30,6 @@ public partial class Launcher
 		{ JdkVersion.Jdk11, "JAVA_HOME_11_arm64" },
 		{ JdkVersion.Jdk17, "JAVA_HOME_17_arm64" },
 		{ JdkVersion.Jdk21, "JAVA_HOME_21_arm64" },
+		{ JdkVersion.Jdk25, "JAVA_HOME_25_arm64" },
 	};
 }

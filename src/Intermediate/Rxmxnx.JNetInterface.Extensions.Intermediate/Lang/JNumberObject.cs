@@ -25,7 +25,7 @@ public abstract partial class JNumberObject<TValue> : JNumberObject, IWrapper<TV
 	{
 		if (typeof(TPrimitive) != typeof(TValue)) return base.GetValue<TPrimitive>();
 		TValue result = this.Value;
-		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
+		return Unsafe.As<TValue, TPrimitive>(ref result);
 	}
 
 	/// <inheritdoc/>

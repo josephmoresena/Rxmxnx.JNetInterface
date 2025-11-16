@@ -3,13 +3,16 @@ namespace Rxmxnx.JNetInterface.Tests;
 public partial class JNativeCallAdapterTests
 {
 	[Theory]
-	[InlineData(0x00010002)]
-	[InlineData(0x00010003)]
-	[InlineData(0x00010004)]
-	[InlineData(0x00010005)]
-	[InlineData(0x00010006)]
-	[InlineData(0x00090000)]
-	[InlineData(0x00130000)]
+	[InlineData((Int32)JRuntimeVersion.SEd2)]
+	[InlineData((Int32)JRuntimeVersion.SEd3)]
+	[InlineData((Int32)JRuntimeVersion.SEd4)]
+	[InlineData((Int32)JRuntimeVersion.J5)]
+	[InlineData((Int32)JRuntimeVersion.J6)]
+	[InlineData((Int32)JRuntimeVersion.J9)]
+	[InlineData((Int32)JRuntimeVersion.J19)]
+	[InlineData((Int32)JRuntimeVersion.J20)]
+	[InlineData((Int32)JRuntimeVersion.J21)]
+	[InlineData((Int32)JRuntimeVersion.J24)]
 	internal void InstanceNoLocalParameterlessCall(Int32 version)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();

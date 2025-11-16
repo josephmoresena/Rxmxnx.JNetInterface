@@ -13,11 +13,17 @@ public class JImageIconObject : JLocalObject, IClassType<JImageIconObject>, IInt
 {
 	private static readonly JClassTypeMetadata<JImageIconObject> typeMetadata = TypeMetadataBuilder<JImageIconObject>
 		.Create("javax/swing/ImageIcon"u8).Implements<JIconObject>().Build();
-	private static readonly IndeterminateCall byteArrayConstructor =
-		IndeterminateCall.CreateConstructorDefinition([JArrayObject<JByte>.Metadata.ArgumentMetadata,]);
+	private static readonly IndeterminateCall byteArrayConstructor = IndeterminateCall.CreateConstructorDefinition(
+#if !NET9_0_OR_GREATER
+		[JArrayObject<JByte>.Metadata.ArgumentMetadata,]
+#else
+		JArrayObject<JByte>.Metadata.ArgumentMetadata
+#endif
+	);
 	private static readonly JFunctionDefinition<JImageObject>.Parameterless getImageDef = new("getImage"u8);
 
 	static JClassTypeMetadata<JImageIconObject> IClassType<JImageIconObject>.Metadata => JImageIconObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd2;
 
 	protected JImageIconObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JImageIconObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
@@ -38,7 +44,13 @@ public class JImageIconObject : JLocalObject, IClassType<JImageIconObject>, IInt
 		jBytes.Set(data.AsValues<Byte, JByte>());
 
 		using JClassObject jClass = JClassObject.GetClass<JImageIconObject>(env);
-		return JImageIconObject.byteArrayConstructor.NewCall<JImageIconObject>(env, [jBytes,]);
+		return JImageIconObject.byteArrayConstructor.NewCall<JImageIconObject>(env,
+#if !NET9_0_OR_GREATER
+		                                                                       [jBytes,]
+#else
+		                                                                       jBytes
+#endif
+		);
 	}
 	static JImageIconObject IClassType<JImageIconObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);

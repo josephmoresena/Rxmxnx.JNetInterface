@@ -30,7 +30,7 @@ partial class JEnvironment
 		private JWeakRef CreateWeakGlobalRef(JClassObject jClass)
 		{
 			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
-			if (!classRef.IsDefault) return this.CreateWeakGlobalRef(classRef.Value);
+			if (classRef != default) return this.CreateWeakGlobalRef(classRef.Value);
 			try
 			{
 				classRef = this.FindClass(jClass);
@@ -39,7 +39,7 @@ partial class JEnvironment
 			}
 			finally
 			{
-				if (!classRef.IsDefault)
+				if (classRef != default)
 				{
 					this._env.DeleteLocalRef(classRef.Value);
 					JTrace.ClearClass(classRef, jClass);
@@ -89,7 +89,7 @@ partial class JEnvironment
 			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
 			switch (result.IsDefault)
 			{
-				case true when classRef.IsDefault:
+				case true when classRef == default:
 					try
 					{
 						classRef = this.FindClass(jClass);
@@ -98,7 +98,7 @@ partial class JEnvironment
 					}
 					finally
 					{
-						if (!classRef.IsDefault)
+						if (classRef != default)
 						{
 							this._env.DeleteLocalRef(classRef.Value);
 							JTrace.ClearClass(classRef, jClass);

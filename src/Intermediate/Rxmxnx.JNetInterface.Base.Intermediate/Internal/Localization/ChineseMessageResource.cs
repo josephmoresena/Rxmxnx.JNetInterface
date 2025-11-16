@@ -106,6 +106,10 @@ internal sealed class ChineseMessageResource : IMessageResource
 	String IMessageResource.InvalidCallVersion(Int32 currentVersion, String functionName, Int32 requiredVersion)
 		=> $"{functionName} 需要版本 0x{requiredVersion:x8}，但当前版本为 0x{currentVersion:x8}。";
 	String IMessageResource.InvalidArrayClass(String className) => $"{className} 不是数组类。";
+	String IMessageResource.MissingArrayTypeMetadata(JDataTypeMetadata typeMetadata)
+		=> $"无法从 {typeMetadata.Signature} 类型元数据中获取 {typeMetadata.ArraySignature} 类型元数据。";
+	String IMessageResource.InvalidArrayDimension(Int32 maxLevel)
+		=> maxLevel > 0 ? $"数组维度必须在 1 到 {maxLevel} 之间。" : "数组类型的维度过多。";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

@@ -48,6 +48,9 @@ public partial class JNativeCallback
 #endif
 		JNativeCallback.RegisterNatives(env);
 	}
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	private static TInterface
 		Create<TObject, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>(
 			IEnvironment env, ReadOnlySpan<JLong> longKey, CallbackState state)
@@ -57,7 +60,11 @@ public partial class JNativeCallback
 		Boolean createState = true;
 		try
 		{
+#if !NET9_0_OR_GREATER
 			return JNativeCallback.constructorDef.NewCall<TObject>(env, [longKey[0], longKey[1],]).CastTo<TInterface>();
+#else
+			return JNativeCallback.constructorDef.NewCall<TObject>(env, longKey[0], longKey[1]).CastTo<TInterface>();
+#endif
 		}
 		catch (Exception)
 		{

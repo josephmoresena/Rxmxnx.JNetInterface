@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
 
@@ -14,6 +12,11 @@ namespace Rxmxnx.JNetInterface.SourceGenerator;
 [ExcludeFromCodeCoverage]
 internal sealed record NativeTypeHelper
 {
+	/// <summary>
+	/// FixedPointer.Pointer property name.
+	/// </summary>
+	private const String internalValueName = "Pointer";
+
 	/// <summary>
 	/// Indicates whether the native type is an array reference.
 	/// </summary>
@@ -82,7 +85,7 @@ internal sealed record NativeTypeHelper
 			this._typeSymbol.GeneratePrimitiveToString(context, valueName);
 			this._typeSymbol.GeneratePrimitiveOperators(context, underlineType, valueName, this._isNumeric);
 			if (this._isNumeric)
-				this._typeSymbol.GeneratePrimitiveNumericOperators(context, underlineType);
+				this._typeSymbol.GeneratePrimitiveNumericOperators(context, underlineType, valueName);
 			if (this._isInteger)
 				this._typeSymbol.GenerateNumericPrimitiveIntegerOperators(context, underlineType);
 			if (this._isFloatingPoint)
@@ -127,14 +130,17 @@ internal sealed record NativeTypeHelper
 		=> this._typeSymbol.Name switch
 		{
 			"JBoolean" => "Value",
+			"JChar" => "Value",
 			"JEnvironmentValue" => "_functions",
 			"JVirtualMachineValue" => "_functions",
 			"JValue" => String.Empty,
 			"JInvokeInterface" => String.Empty,
 			"JNativeInterface" => String.Empty,
-			"JObjectLocalRef" => "Pointer",
-			"JFieldId" => "Pointer",
-			"JMethodId" => "Pointer",
+			"JObjectLocalRef" => NativeTypeHelper.internalValueName,
+			"JFieldId" => NativeTypeHelper.internalValueName,
+			"JMethodId" => NativeTypeHelper.internalValueName,
+			"JEnvironmentRef" => NativeTypeHelper.internalValueName,
+			"JVirtualMachineRef" => NativeTypeHelper.internalValueName,
 			_ => "_value",
 		};
 }

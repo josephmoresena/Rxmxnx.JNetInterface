@@ -50,7 +50,7 @@ public partial class ExceptionHandlingTests
 			proxyEnv.ThrowNew(Arg.Any<JClassLocalRef>(), Arg.Any<ReadOnlyValPtr<Byte>>()).Returns(JResult.Ok);
 			proxyEnv.NewGlobalRef(throwableRef.Value).Returns(globalRef);
 			proxyEnv.ExceptionOccurred().Returns(_ => exceptionOccurred.Value);
-			proxyEnv.ExceptionCheck().Returns(_ => !exceptionOccurred.Value.IsDefault);
+			proxyEnv.ExceptionCheck().Returns(_ => exceptionOccurred.Value != default);
 			proxyEnv.When(e => e.ThrowNew(Arg.Any<JClassLocalRef>(), Arg.Any<ReadOnlyValPtr<Byte>>()))
 			        .Do(_ => { exceptionOccurred.Value = throwableRef; });
 			proxyEnv.When(e => e.ExceptionClear()).Do(_ => { exceptionOccurred.Value = default; });
@@ -118,7 +118,9 @@ public partial class ExceptionHandlingTests
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}

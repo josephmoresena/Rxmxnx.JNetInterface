@@ -5,16 +5,18 @@ internal partial struct JValue
 	/// <summary>
 	/// Primitive value struct.
 	/// </summary>
-	[StructLayout(LayoutKind.Sequential)]
+	[StructLayout(LayoutKind.Explicit, Size = sizeof(Double), Pack = 0)]
 	public readonly struct PrimitiveValue()
 	{
 		/// <summary>
 		/// Least significant integer (4 bytes).
 		/// </summary>
+		[FieldOffset(0)]
 		private readonly Int32 _lsi = 0;
 		/// <summary>
 		/// Most significant integer (4 bytes).
 		/// </summary>
+		[FieldOffset(sizeof(Int32))]
 		private readonly Int32 _msi = 0;
 
 		/// <summary>

@@ -46,9 +46,18 @@ public partial class JVirtualMachine
 		/// </summary>
 		private readonly ClassObjectMetadata _stackTraceElementMetadata;
 		/// <summary>
+		/// Metadata for <see cref="JSystemObject"/>.
+		/// </summary>
+		private readonly ClassObjectMetadata _systemMetadata;
+		/// <summary>
 		/// Metadata for <see cref="JThrowableObject"/>.
 		/// </summary>
 		private readonly ClassObjectMetadata _throwableMetadata;
+
+		/// <summary>
+		/// JVM version.
+		/// </summary>
+		private JRuntimeVersion? _version;
 
 		/// <summary>
 		/// Appends main global class to dictionary.
@@ -75,6 +84,8 @@ public partial class JVirtualMachine
 			{
 				if (!this.GlobalClassCache.TryGetValue(typeInformation.Hash, out JGlobal? jGlobal) ||
 				    !jGlobal.IsDefault) continue;
+				if (!this.IsMainLoadable(env, typeInformation.Since)) continue;
+
 				try
 				{
 					GlobalMainClasses.LoadMainClass(env, jGlobal, typeInformation);
@@ -87,18 +98,21 @@ public partial class JVirtualMachine
 			}
 		}
 		/// <summary>
-		/// Loads main class.
+		/// Indicates whether the current main class is loadable.
 		/// </summary>
 		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
-		/// <param name="mainClass">A <see cref="JGlobal"/> main class instance.</param>
-		/// <param name="typeInformation">A <see cref="ITypeInformation"/> instance.</param>
-		private static void LoadMainClass(JEnvironment env, JGlobal mainClass, ITypeInformation typeInformation)
+		/// <param name="sinceVersion">Class main's since version.</param>
+		/// <returns>
+		/// <see langword="true"/> if the since value is lower to the current JRE version; otherwise
+		/// <see langword="false"/>.
+		/// </returns>
+		private Boolean IsMainLoadable(JEnvironment env, JRuntimeVersion sinceVersion)
 		{
-			JGlobalRef globalRef = env.GetMainClassGlobalRef(typeInformation);
-			mainClass.SetValue(globalRef);
-			JTrace.MainClassLoaded(typeInformation.Signature, globalRef);
+			// The JNI version is checked to avoid check the JRE version.
+			if ((Int32)sinceVersion < env.Version) return true;
+			this._version ??= env.GetVersion(this.SystemObject.As<JClassLocalRef>(), true);
+			return sinceVersion < this._version;
 		}
-
 		/// <summary>
 		/// Loads primitive global classes.
 		/// </summary>

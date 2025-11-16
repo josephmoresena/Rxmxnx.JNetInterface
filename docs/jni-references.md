@@ -96,7 +96,7 @@ int result = environment.WithFrame(16, () => { return 42; });
 
 - Delegates should be **static**
   for [better performance](https://devblogs.microsoft.com/dotnet/understanding-the-cost-of-csharp-delegates/).
-- In **.NET 9.0+**, the **state parameter** supports `ref struct`.
+- Starting with **.NET 9.0+**, the **state parameter** supports `ref struct`.
 
 ---  
 

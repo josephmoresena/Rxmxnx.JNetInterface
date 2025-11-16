@@ -6,7 +6,9 @@ public sealed class BooleanTest : PrimitiveTestBase
 	[Fact]
 	internal void Test()
 	{
+#if NET8_0_OR_GREATER
 		PrimitiveTestBase.SpanParseableTest<JBoolean, Boolean>();
+#endif
 		Boolean value = PrimitiveTestBase.Fixture.Create<Boolean>();
 		JBoolean primitive = value;
 

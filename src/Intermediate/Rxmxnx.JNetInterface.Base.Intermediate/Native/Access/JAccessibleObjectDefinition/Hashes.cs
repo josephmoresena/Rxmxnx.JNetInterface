@@ -154,4 +154,12 @@ public abstract partial class JAccessibleObjectDefinition
 	/// Hash for <c>main(java.lang.String[])</c>.
 	/// </summary>
 	internal const String MainMethodHash = "慭湩⠀䱛慪慶氯湡⽧瑓楲杮⤻V";
+	/// <summary>
+	/// Hash for <c>java.lang.String getProperty(java.lang.String)</c>.
+	/// </summary>
+	internal const String GetPropertyFunctionHash = "敧側潲数瑲y䰨慪慶氯湡\u2f67瑓楲杮\u293b橌癡\u2f61慬杮匯牴湩㭧\0";
+	/// <summary>
+	/// Hash for <c>setProperty(java.lang.String, java.lang.String)</c>.
+	/// </summary>
+	internal const String SetPropertyMethodHash = "敳側潲数瑲y䰨慪慶氯湡\u2f67瑓楲杮䰻慪慶氯湡\u2f67瑓楲杮\u293bV";
 }

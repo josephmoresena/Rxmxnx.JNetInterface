@@ -8,23 +8,12 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly unsafe struct ReferenceFunctionSet
+internal readonly unsafe partial struct ReferenceFunctionSet
 {
 	/// <summary>
-	/// Pointer to <c>PushLocalFrame</c> function.
-	/// Creates a new local reference frame, in which at least a given number of local references can be created.
+	/// Pointers to <c>PushLocalFrame</c> and <c>PopLocalFrame</c>.
 	/// </summary>
-	/// <remarks>
-	/// Note that local references already created in previous local frames are still valid in the current local frame.
-	/// </remarks>
-	public readonly delegate* unmanaged<JEnvironmentRef, Int32, JResult> PushLocalFrame;
-	/// <summary>
-	/// Pointer to <c>PopLocalFrame</c> function.
-	/// Pops off the current local reference frame, frees all the local references, and returns a
-	/// local reference in the previous local reference frame for the given result object.
-	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JObjectLocalRef> PopLocalFrame;
-
+	private readonly FrameFunctionSet _frameFunctions;
 	/// <summary>
 	/// Pointer to <c>NewGlobalRef</c> function.
 	/// Creates a new global reference to the object referred.
@@ -45,7 +34,7 @@ internal readonly unsafe struct ReferenceFunctionSet
 	/// Pointer to <c>IsSameObject</c> function.
 	/// Tests whether two references to refer to the same Java object.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JObjectLocalRef, JBoolean> IsSameObject;
+	private readonly IsSameObjectPtr _isSameObject;
 	/// <summary>
 	/// Pointer to <c>NewLocalRef</c> function.
 	/// Creates a new local reference that refers to the given object.
@@ -55,5 +44,46 @@ internal readonly unsafe struct ReferenceFunctionSet
 	/// Pointer to <c>EnsureLocalCapacity</c> function.
 	/// Ensures that at least a given number of local references can be created in the current thread.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, Int32, JResult> EnsureLocalCapacity;
+	private readonly EnsureLocalCapacityPtr _ensureLocalCapacity;
+
+	/// <summary>
+	/// <c>PushLocalFrame</c>.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JResult PushLocalFrame(JEnvironmentRef envRef, Int32 capacity)
+		=> this._frameFunctions.PushLocalFrame(envRef, capacity);
+	/// <summary>
+	/// <c>PopLocalFrame</c>.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JObjectLocalRef PopLocalFrame(JEnvironmentRef envRef, JObjectLocalRef localRef)
+		=> this._frameFunctions.PopLocalFrame(envRef, localRef);
+	/// <summary>
+	/// <c>IsSameObject</c>.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JBoolean IsSameObject(JEnvironmentRef envRef, JObjectLocalRef localRef0, JObjectLocalRef localRef1)
+		=> SystemInfo.IsWindows ?
+			this._isSameObject.Windows(envRef, localRef0, localRef1) :
+			this._isSameObject.Unix(envRef, localRef0, localRef1);
+	/// <summary>
+	/// <c>EnsureLocalCapacity</c>.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JResult EnsureLocalCapacity(JEnvironmentRef envRef, Int32 capacity)
+		=> SystemInfo.IsWindows ?
+			this._ensureLocalCapacity.Windows(envRef, capacity) :
+			this._ensureLocalCapacity.Unix(envRef, capacity);
 }

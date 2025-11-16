@@ -182,4 +182,14 @@ public abstract partial class NativeFunctionSet
 	/// </summary>
 	private protected static readonly AccessibleInfoSequence PrimitiveTypeFieldInfo =
 		new(JAccessibleObjectDefinition.PrimitiveTypeFieldHash, 4, 17);
+	/// <summary>
+	/// Information for <c>java.lang.String getProperty(java.lang.String)</c>.
+	/// </summary>
+	private protected static readonly AccessibleInfoSequence GetPropertyFunctionInfo =
+		new(JAccessibleObjectDefinition.GetPropertyFunctionHash, 11, 38);
+	/// <summary>
+	/// Information for <c>setProperty(java.lang.String, java.lang.String)</c>.
+	/// </summary>
+	private protected static readonly AccessibleInfoSequence SetPropertyMethodInfo =
+		new(JAccessibleObjectDefinition.SetPropertyMethodHash, 11, 39);
 }

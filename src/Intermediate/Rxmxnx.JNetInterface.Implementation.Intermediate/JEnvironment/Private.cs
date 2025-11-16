@@ -26,7 +26,7 @@ partial class JEnvironment
 	/// <see langword="true"/> if both references refer to the same object; otherwise,
 	/// <see langword="false"/>.
 	/// </returns>
-	private unsafe Boolean IsSame(JObjectLocalRef localRef, JObjectLocalRef otherRef)
+	private Boolean IsSame(JObjectLocalRef localRef, JObjectLocalRef otherRef)
 	{
 		ref readonly NativeInterface nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.IsSameObjectInfo);
@@ -40,7 +40,7 @@ partial class JEnvironment
 	/// <param name="capacity">Frame capacity.</param>
 	/// <exception cref="InvalidOperationException"/>
 	/// <exception cref="JniException"/>
-	private unsafe void CreateLocalFrame(Int32 capacity)
+	private void CreateLocalFrame(Int32 capacity)
 	{
 		ref readonly NativeInterface nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.PushLocalFrameInfo);
@@ -194,7 +194,7 @@ partial class JEnvironment
 	/// <returns>A <see cref="ThrowableException"/> instance.</returns>
 	private ThrowableException? ParseException(JThrowableLocalRef throwableRef)
 	{
-		if (throwableRef.IsDefault) return default;
+		if (throwableRef == default) return default;
 		ThrowableException jniException = this._cache.CreateThrowableException(throwableRef);
 		this._cache.ThrowJniException(jniException, false);
 		return jniException;
@@ -235,18 +235,19 @@ partial class JEnvironment
 		ref readonly NativeInterface nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.DeleteLocalRefInfo);
 		nativeInterface.ReferenceFunctions.DeleteLocalRef.DeleteRef(this.Reference, localRef);
+		JTrace.DeleteReference(localRef, JReferenceType.LocalRefType);
 	}
 	/// <summary>
 	/// Retrieves object class reference.
 	/// </summary>
 	/// <param name="localRef">Object instance to get class.</param>
 	/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
-	private unsafe JClassLocalRef GetObjectClass(JObjectLocalRef localRef)
+	private JClassLocalRef GetObjectClass(JObjectLocalRef localRef)
 	{
 		ref readonly NativeInterface nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetObjectClassInfo);
 		JClassLocalRef classRef = nativeInterface.ObjectFunctions.GetObjectClass(this.Reference, localRef);
-		if (classRef.IsDefault) this._cache.CheckJniError();
+		if (classRef == default) this._cache.CheckJniError();
 		JTrace.GetObjectClass(localRef, classRef);
 		return classRef;
 	}

@@ -1,0 +1,13 @@
+<Project>
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('FREEBSD'))">
+        <DefaultFramework>net9.0</DefaultFramework>
+        <DefaultFrameworks>net9.0</DefaultFrameworks>
+    </PropertyGroup>
+    <PropertyGroup Condition="!$([MSBuild]::IsOSPlatform('FREEBSD'))">
+        <DefaultFramework>net10.0</DefaultFramework>
+        <DefaultFrameworks>net10.0;net9.0</DefaultFrameworks>
+    </PropertyGroup>
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage"/>
+    </ItemGroup>
+</Project>

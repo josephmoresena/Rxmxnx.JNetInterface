@@ -6,8 +6,8 @@
 /// This handle is valid only for the thread who owns the reference.
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
-[StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JObjectArrayLocalRef : IArrayReferenceType
+[StructLayout(LayoutKind.Explicit)]
+public readonly partial struct JObjectArrayLocalRef : IArrayReferenceType, INativePointerType<JObjectArrayLocalRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JObjectArray;
@@ -15,6 +15,7 @@ public readonly partial struct JObjectArrayLocalRef : IArrayReferenceType
 	/// <summary>
 	/// Internal <see cref="JArrayLocalRef"/> reference.
 	/// </summary>
+	[FieldOffset(0)]
 	private readonly JArrayLocalRef _value;
 
 	/// <summary>
@@ -26,7 +27,20 @@ public readonly partial struct JObjectArrayLocalRef : IArrayReferenceType
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._value.Pointer;
 
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal JObjectArrayLocalRef(IntPtr value) : this(new JArrayLocalRef(value)) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	internal JObjectArrayLocalRef(JArrayLocalRef value) => this._value = value;
+
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Boolean Equals(JArrayLocalRef other) => this._value.Equals(other);
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static JObjectArrayLocalRef INativePointerType<JObjectArrayLocalRef>.New(IntPtr value) => new(value);
 }

@@ -8,9 +8,10 @@ public partial class JMethodDefinition
 	/// <param name="methodName">Method name.</param>
 	/// <remarks>This constructor should be never inherited.</remarks>
 	private JMethodDefinition(ReadOnlySpan<Byte> methodName) : base(methodName, []) { }
+
 	/// <inheritdoc/>
-	private protected JMethodDefinition(AccessibleInfoSequence info, Int32 callSize, Int32[] sizes,
-		Int32 referenceCount) : base(info, callSize, sizes, referenceCount) { }
+	internal JMethodDefinition(AccessibleInfoSequence info, Int32 callSize, Int32[] sizes, Int32 referenceCount) : base(
+		info, callSize, sizes, referenceCount) { }
 
 	/// <summary>
 	/// Invokes <paramref name="definition"/> on <paramref name="jLocal"/> which matches with current definition.

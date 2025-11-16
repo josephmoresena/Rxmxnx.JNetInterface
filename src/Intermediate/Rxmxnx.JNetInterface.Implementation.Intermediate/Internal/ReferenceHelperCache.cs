@@ -11,7 +11,7 @@ namespace Rxmxnx.JNetInterface.Internal;
                  Justification = "All generic parameters are needed.")]
 #endif
 internal abstract class ReferenceHelperCache<TObject, TReference, TCreationArg>
-	where TObject : class, IWrapper<TReference> where TReference : unmanaged, INativeReferenceType
+	where TObject : class, IWrapper<TReference> where TReference : unmanaged, INativePointerType
 {
 	/// <summary>
 	/// Dictionary of objects.

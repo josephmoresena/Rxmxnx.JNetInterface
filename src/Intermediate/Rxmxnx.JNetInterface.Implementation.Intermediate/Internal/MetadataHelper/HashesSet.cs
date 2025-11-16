@@ -10,7 +10,11 @@ internal static partial class MetadataHelper
 		/// <summary>
 		/// Lock object.
 		/// </summary>
+#if NET9_0_OR_GREATER
+		private readonly Lock _lock = new();
+#else
 		private readonly Object _lock = new();
+#endif
 		/// <summary>
 		/// Internal hashes set.
 		/// </summary>
@@ -22,7 +26,11 @@ internal static partial class MetadataHelper
 		/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
 		public JReferenceTypeMetadata? GetViewMetadata()
 		{
+#if NET9_0_OR_GREATER
+			using (this._lock.EnterScope())
+#else
 			lock (this._lock)
+#endif
 			{
 				foreach (String hashView in this._set)
 				{
@@ -38,7 +46,12 @@ internal static partial class MetadataHelper
 		/// <param name="superViewHash">Super view class hash.</param>
 		public void Add(String superViewHash)
 		{
-			lock (this._lock) this._set.Add(superViewHash);
+#if NET9_0_OR_GREATER
+			using (this._lock.EnterScope())
+#else
+			lock (this._lock)
+#endif
+				this._set.Add(superViewHash);
 		}
 		/// <summary>
 		/// Determines whether <paramref name="superViewHash"/> is contained in the current set.
@@ -50,7 +63,11 @@ internal static partial class MetadataHelper
 		/// </returns>
 		public Boolean Contains(String superViewHash)
 		{
+#if NET9_0_OR_GREATER
+			using (this._lock.EnterScope())
+#else
 			lock (this._lock)
+#endif
 				return this._set.Contains(superViewHash);
 		}
 	}

@@ -39,7 +39,7 @@ public partial class JVirtualMachine
 		}
 
 		/// <inheritdoc/>
-		public unsafe void Dispose()
+		public void Dispose()
 		{
 			if (!this.IsDisposable || this._isDisposed.Value) return;
 			this._isDisposed.Value = true;

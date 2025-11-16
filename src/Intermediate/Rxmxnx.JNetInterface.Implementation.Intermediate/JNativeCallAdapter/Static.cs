@@ -48,6 +48,9 @@ public readonly ref partial struct JNativeCallAdapter
 	/// <param name="localRef">Call <see cref="JObjectLocalRef"/> reference.</param>
 	/// <param name="jLocal">Output. <typeparamref name="TObject"/> from <paramref name="localRef"/>.</param>
 	/// <returns>A <see cref="Builder"/> instance.</returns>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	public static Builder Create<TObject>(JEnvironmentRef envRef, JObjectLocalRef localRef, out TObject jLocal)
 		where TObject : JLocalObject, IReferenceType<TObject>
 	{
@@ -59,7 +62,7 @@ public readonly ref partial struct JNativeCallAdapter
 		if (JLocalObject.IsClassType<TObject>())
 		{
 			Unsafe.SkipInit(out jLocal);
-			JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
+			JClassLocalRef classRef = new(localRef);
 			return JNativeCallAdapter.Create(envRef, classRef, out Unsafe.As<TObject, JClassObject>(ref jLocal));
 		}
 		ImplementationValidationUtilities.ThrowIfDefault(localRef);
@@ -119,6 +122,9 @@ public readonly ref partial struct JNativeCallAdapter
 	/// <param name="localRef">Call <see cref="JObjectLocalRef"/> reference.</param>
 	/// <param name="jLocal">Output. <typeparamref name="TObject"/> from <paramref name="localRef"/>.</param>
 	/// <returns>A <see cref="Builder"/> instance.</returns>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	public static Builder Create<TObject>(IVirtualMachine vm, JEnvironmentRef envRef, JObjectLocalRef localRef,
 		out TObject jLocal) where TObject : JLocalObject, IReferenceType<TObject>
 	{
@@ -131,7 +137,7 @@ public readonly ref partial struct JNativeCallAdapter
 		if (JLocalObject.IsClassType<TObject>())
 		{
 			Unsafe.SkipInit(out jLocal);
-			JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
+			JClassLocalRef classRef = new(localRef);
 			return JNativeCallAdapter.Create(vm, envRef, classRef, out Unsafe.As<TObject, JClassObject>(ref jLocal));
 		}
 		ImplementationValidationUtilities.ThrowIfDefault(localRef);

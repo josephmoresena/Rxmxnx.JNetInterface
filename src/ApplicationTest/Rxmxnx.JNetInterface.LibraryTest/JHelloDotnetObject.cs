@@ -24,6 +24,7 @@ public sealed partial class JHelloDotnetObject : JLocalObject, IClassType<JHello
 	public static JClassObject LoadClass<TManaged>(IEnvironment env, Byte[] classByteCode, TManaged managed)
 		where TManaged : IManagedCallback
 	{
+		JVirtualMachine.SetMainClass<JHelloDotnetObject>(); // When native app, use defined class as main.
 		managed.Writer.WriteLine($"Loading bytecode... {classByteCode.LongLength / 1024.0:0.00} KiB");
 		JClassObject result = JClassObject.LoadClass<JHelloDotnetObject>(env, classByteCode);
 		JniCallback.RegisterNativeMethods(result, managed);
@@ -41,8 +42,23 @@ public sealed partial class JHelloDotnetObject : JLocalObject, IClassType<JHello
 		for (JInt i = 0; i < count; i++)
 		{
 			using JLocalObject? jLocal = GetObjectDefinition.Instance.Invoke(helloJniClass, i);
-			Console.WriteLine($"getObject({i}) -> {jLocal}");
+			JDataTypeMetadata? runtimeTypeMetadata = jLocal?.Class.GetRuntimeTypeMetadata();
+			String typeDescription = runtimeTypeMetadata is null ? " (null)" :
+				runtimeTypeMetadata.Kind is not JTypeKind.Array && !runtimeTypeMetadata.Signature.AsSpan()
+					.SequenceEqual(jLocal?.Class.ClassSignature) ? $" {runtimeTypeMetadata.Signature}" : String.Empty;
+			Console.WriteLine($"getObject({i}) -> {jLocal}{typeDescription}");
 		}
+
+		IEnvironment env = helloJniClass.Environment;
+		using JArrayObject<JArrayObject<JChar>> chars = JHelloDotnetObject.anyaChars.ToPrimitiveArray(env);
+		IndeterminateCall
+#if NET9_0_OR_GREATER
+			.CreateMethodDefinition("printCharArray"u8, JArgumentMetadata.Get<JArrayObject<JArrayObject<JChar>>>())
+			.StaticMethodCall(helloJniClass, chars);
+#else
+			.CreateMethodDefinition("printCharArray"u8, [JArgumentMetadata.Get<JArrayObject<JArrayObject<JChar>>>(),])
+			.StaticMethodCall(helloJniClass, [chars,]);
+#endif
 	}
 
 	static JHelloDotnetObject IClassType<JHelloDotnetObject>.Create(IReferenceType.ClassInitializer initializer)

@@ -21,15 +21,15 @@ public partial class JNativeCallback
 		IInterfaceObject<JActionListenerObject>, IInterfaceObject<JEventListenerObject>
 	{
 		private static readonly JMethodDefinition actionPerformedDef = (JMethodDefinition)IndeterminateCall
-			.CreateMethodDefinition(
-				"actionListener_actionPerformed"u8,
+			.CreateMethodDefinition("actionListener_actionPerformed"u8,
 #if !NET9_0_OR_GREATER
-				[
-#endif
-					JArgumentMetadata.Get<JLong>(), JArgumentMetadata.Get<JLong>(),
-					JArgumentMetadata.Get<JActionEventObject>()
-#if !NET9_0_OR_GREATER
-				]
+			                        [
+				                        JArgumentMetadata.Get<JLong>(), JArgumentMetadata.Get<JLong>(),
+				                        JArgumentMetadata.Get<JActionEventObject>(),
+			                        ]
+#else
+			                        JArgumentMetadata.Get<JLong>(), JArgumentMetadata.Get<JLong>(),
+			                        JArgumentMetadata.Get<JActionEventObject>()
 #endif
 			).Definition;
 		private static readonly JClassTypeMetadata<ActionListener> nestedTypeMetadata =

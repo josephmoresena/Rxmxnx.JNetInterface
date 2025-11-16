@@ -10,9 +10,11 @@ using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
 using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Swing;
+using Rxmxnx.JNetInterface.Util;
 using Rxmxnx.JNetInterface.Util.Concurrent;
 using Rxmxnx.PInvoke;
 
+JVirtualMachine.SetMainClass<JRootPaneContainerObject>();
 JVirtualMachine.SetMainClass<JFrameObjectSwing>();
 JVirtualMachine.SetMainClass<JWindowObject>();
 JVirtualMachine.SetMainClass<JComponentObject>();
@@ -20,6 +22,7 @@ JVirtualMachine.SetMainClass<JContainerObject>();
 JVirtualMachine.SetMainClass<JAbstractButtonObject>();
 JVirtualMachine.SetMainClass<JCountDownLatchObject>();
 JVirtualMachine.SetMainClass<JToolkitObject>();
+JVirtualMachine.SetMainClass<JEventObject>();
 JVirtualMachine.SetMainClass<JAwtEventObject>();
 
 JVirtualMachineLibrary? jvmLib = default;
@@ -52,8 +55,9 @@ static void InitGui(JVirtualMachineLibrary jvmLib)
 	using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out IEnvironment env);
 	try
 	{
-		using JFrameObjectSwing frame = CreateFrame(env, $"Hello .NET - JNI 0x{env.Version:x8}");
-		using JCountDownLatchObject countDownLatch = GetCountDownAwait(frame);
+		using JFrameObjectSwing frame =
+			CreateFrame(env, $"Hello .NET - JNI 0x{env.Version:x8} - {env.VirtualMachine.Version.GetRuntimeName()}");
+		using JCountDownLatchObject? countDownLatch = GetCountDownAwait(frame);
 		using (JLabelObject frameContent = CreateFrameLabel(env))
 		{
 			using (JButtonObject jButton = JButtonObject.Create(env, "Click me!!!"u8))
@@ -73,7 +77,12 @@ static void InitGui(JVirtualMachineLibrary jvmLib)
 		frame.SetCloseOperation(JFrameObjectSwing.CloseOperation.Exit);
 
 		Show(frame);
-		countDownLatch.Await();
+		if (countDownLatch is not null)
+			countDownLatch.Await();
+		else
+			do
+				Task.Delay(200).Wait();
+			while (frame.IsVisible());
 	}
 	catch (Exception ex)
 	{
@@ -87,7 +96,8 @@ static void InitGui(JVirtualMachineLibrary jvmLib)
 
 static JVirtualMachineInitArg GetInitialArgs(JVirtualMachineLibrary virtualMachineLibrary)
 {
-	JVirtualMachineInitArg virtualMachineInitArg = virtualMachineLibrary.GetDefaultArgument();
+	JVirtualMachineInitArg virtualMachineInitArg =
+		virtualMachineLibrary.GetDefaultArgument((Int32)JRuntimeVersion.SEd2);
 	String jarPath = ExtractJar().Replace(" ", @"\ ");
 	return new(virtualMachineInitArg.Version)
 	{
@@ -106,15 +116,13 @@ static String ExtractJar()
 }
 static String GetImageName()
 {
-	if (OperatingSystem.IsWindows())
+	if (SystemInfo.IsWindows)
 		return "windows.png";
-	if (OperatingSystem.IsLinux())
+	if (SystemInfo.IsLinux)
 		return "linux.png";
-	if (OperatingSystem.IsFreeBSD())
+	if (SystemInfo.IsFreeBsd)
 		return "freebsd.png";
-	return !OperatingSystem.IsBrowser() ?
-		"macosx.png" :
-		throw new PlatformNotSupportedException("Unsupported platform.");
+	return !SystemInfo.IsWebRuntime ? "macosx.png" : throw new PlatformNotSupportedException("Unsupported platform.");
 }
 static Byte[] GetResourceBytes(String fileName)
 {
@@ -137,26 +145,31 @@ static void Show(JComponentObject component)
 }
 static JFrameObjectSwing CreateFrame(IEnvironment env, String title)
 {
-	using JClassObject graphicsEnv = JClassObject.GetClass(env, "java/awt/GraphicsEnvironment"u8);
-	JFunctionDefinition<JBoolean>.Parameterless isHeadlessDef = new("isHeadless"u8);
+	if (env.Version >= (Int32)JRuntimeVersion.SEd4)
+	{
+		using JClassObject graphicsEnv = JClassObject.GetClass(env, "java/awt/GraphicsEnvironment"u8);
+		JFunctionDefinition<JBoolean>.Parameterless isHeadlessDef = new("isHeadless"u8);
 
-	if (isHeadlessDef.StaticInvoke(graphicsEnv).Value)
-		throw new InvalidOperationException("Java is running in Headless mode.");
+		if (isHeadlessDef.StaticInvoke(graphicsEnv).Value)
+			throw new InvalidOperationException("Java is running in Headless mode.");
+	}
 
 	JFrameObjectSwing result = JFrameObjectSwing.Create(env, title);
 
 	using JImageIconObject icon = JImageIconObject.Create(env, GetResourceBytes("icon.png"))!;
 	using JImageObject image = icon.GetImage();
-	if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux() || OperatingSystem.IsFreeBSD())
+	if (SystemInfo.IsWindows || SystemInfo.IsLinux || SystemInfo.IsFreeBsd)
 		result.SetIcon(image);
 	else
 		JWindowObject.SetApplicationIcon(image);
 
 	return result;
 }
-static JCountDownLatchObject GetCountDownAwait(JWindowObject window)
+static JCountDownLatchObject? GetCountDownAwait(JWindowObject window)
 {
 	IEnvironment env = window.Environment;
+	if (env.VirtualMachine.Version < JRuntimeVersion.J5) return default;
+
 	JCountDownLatchObject result = JCountDownLatchObject.Create(window.Environment, 1);
 	using JToolkitObject toolkit = JToolkitObject.GetDefaultToolkit(env);
 	using JAwtEventListenerObject listener =

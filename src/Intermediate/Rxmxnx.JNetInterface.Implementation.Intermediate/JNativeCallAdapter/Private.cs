@@ -37,10 +37,11 @@ public readonly ref partial struct JNativeCallAdapter
 	/// <param name="result">A <see cref="JClassObject"/> result.</param>
 	/// <typeparam name="TResult">Type of reference result.</typeparam>
 	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
-	private TResult FinalizeCall<TResult>(JLocalObject? result) where TResult : unmanaged, IObjectReferenceType
+	private TResult FinalizeCall<TResult>(JLocalObject? result)
+		where TResult : unmanaged, IObjectReferenceType, INativePointerType<TResult>
 	{
 		JObjectLocalRef jniResult = this.FinalizeCall(result);
-		return NativeUtilities.Transform<JObjectLocalRef, TResult>(in jniResult);
+		return TResult.New(jniResult.Pointer);
 	}
 
 	public readonly ref partial struct Builder
@@ -92,6 +93,9 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <typeparam name="TObject">A <see cref="IReferenceType"/> type.</typeparam>
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 		/// <returns>Initial <typaramref name="TObject"/> instance for <paramref name="localRef"/>.</returns>
+#if !NET8_0_OR_GREATER
+		[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 		private TObject CreateFinalObject<TObject>(JObjectLocalRef localRef)
 			where TObject : JReferenceObject, IReferenceType<TObject>
 		{

@@ -16,7 +16,7 @@ internal partial interface IReferenceFeature
 	/// <param name="primitive">A primitive value.</param>
 	/// <returns>A <see cref="JLocalObject"/> wrapper instance for <paramref name="primitive"/> value.</returns>
 	internal JLocalObject CreateWrapper<TPrimitive>(TPrimitive primitive)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, INativeDataType<TPrimitive>;
 	/// <summary>
 	/// Enters to monitor.
 	/// </summary>

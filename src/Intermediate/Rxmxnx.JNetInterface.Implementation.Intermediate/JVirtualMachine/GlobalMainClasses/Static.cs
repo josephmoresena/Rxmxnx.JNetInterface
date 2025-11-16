@@ -28,5 +28,17 @@ public partial class JVirtualMachine
 				_ => true,
 				// If the class is not basic, VM initialization should continue.
 			};
+		/// <summary>
+		/// Loads main class.
+		/// </summary>
+		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
+		/// <param name="mainClass">A <see cref="JGlobal"/> main class instance.</param>
+		/// <param name="typeInformation">A <see cref="ITypeInformation"/> instance.</param>
+		private static void LoadMainClass(JEnvironment env, JGlobal mainClass, ITypeInformation typeInformation)
+		{
+			JGlobalRef globalRef = env.GetMainClassGlobalRef(typeInformation);
+			mainClass.SetValue(globalRef);
+			JTrace.MainClassLoaded(typeInformation.Signature, globalRef);
+		}
 	}
 }

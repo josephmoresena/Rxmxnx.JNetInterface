@@ -28,6 +28,7 @@ public class JClassNotFoundExceptionObject : JReflectiveOperationExceptionObject
 
 	static TypeMetadata IThrowableType<JClassNotFoundExceptionObject>.Metadata
 		=> JClassNotFoundExceptionObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd0;
 
 	/// <inheritdoc/>
 	protected JClassNotFoundExceptionObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

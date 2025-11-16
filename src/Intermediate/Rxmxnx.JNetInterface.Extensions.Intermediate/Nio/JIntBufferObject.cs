@@ -19,6 +19,8 @@ public class JIntBufferObject : JBufferObject<JInt>, IClassType<JIntBufferObject
 		InterfaceSet.ComparableSet);
 
 	static TypeMetadata IClassType<JIntBufferObject>.Metadata => JIntBufferObject.typeMetadata;
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd4;
 
 	/// <inheritdoc/>
 	protected JIntBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

@@ -8,6 +8,7 @@ public abstract class InvokeInterfaceProxy
 	public JGlobalRef ClassGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
 	public JGlobalRef ThrowableGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
 	public JGlobalRef StackTraceElementGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
+	public JGlobalRef SystemGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
 	public JGlobalRef NumberGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
 	public JGlobalRef VoidGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
 	public JGlobalRef BooleanGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
@@ -38,6 +39,7 @@ public abstract class InvokeInterfaceProxy
 	public JMethodId StackTraceElementGetFileNameMethodId { get; } = ReferenceHelper.Fixture.Create<JMethodId>();
 	public JMethodId StackTraceElementGetMethodNameMethodId { get; } = ReferenceHelper.Fixture.Create<JMethodId>();
 	public JMethodId StackTraceElementIsNativeMethodMethodId { get; } = ReferenceHelper.Fixture.Create<JMethodId>();
+	public JMethodId SystemGetPropertyMethodId { get; } = ReferenceHelper.Fixture.Create<JMethodId>();
 
 	public JVirtualMachineRef Reference { get; private set; }
 	public Int32? AllowedThread { get; set; } = Environment.CurrentManagedThreadId;

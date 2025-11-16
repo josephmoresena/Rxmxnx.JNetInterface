@@ -28,15 +28,17 @@ public abstract partial class EnvironmentProxy : IEnvironment
 	public abstract void WithFrame(Int32 capacity, Action action);
 	public abstract void WithFrame<TState>(Int32 capacity, TState state, Action<TState> action)
 #if NET9_0_OR_GREATER
-		where TState : allows ref struct
+		where TState : allows ref struct;
+#else
+	;
 #endif
-		;
 	public abstract TResult WithFrame<TResult>(Int32 capacity, Func<TResult> func);
 	public abstract TResult WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func)
 #if NET9_0_OR_GREATER
-		where TState : allows ref struct
-#endif
+		where TState : allows ref struct;
+#else
 	;
+#endif
 	public abstract void DescribeException();
 	public abstract Boolean? IsVirtual(JThreadObject jThread);
 

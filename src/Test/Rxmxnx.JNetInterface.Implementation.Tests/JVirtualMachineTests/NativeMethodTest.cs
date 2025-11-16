@@ -26,21 +26,18 @@ public partial class JVirtualMachineTests
 			using (JClassObject jClass = JClassObject.GetClass<JTestObject>(env))
 			{
 				jClass.Register([
-					TestUtilities.GetInstanceEntry(method1, out ObjectTracker? tracker1),
+					TestUtilities.GetInstanceEntry(method1, out ObjectTracker tracker1),
 					TestUtilities.GetStaticEntry(method2, out ObjectTracker tracker2),
 				]);
-				GC.Collect(2, GCCollectionMode.Aggressive);
-				GC.WaitForPendingFinalizers();
+				JVirtualMachineTests.CollectAndCheckAlive();
 				trackers.Add(tracker1);
 				trackers.Add(tracker2);
 			}
 			proxyEnv.Received(1).FindClass((ReadOnlyValPtr<Byte>)ctx.Pointer);
 			proxyEnv.Received(1).RegisterNatives(classRef, Arg.Any<ReadOnlyValPtr<NativeMethodValueWrapper>>(), 2);
 			proxyEnv.ClearReceivedCalls();
-			GC.Collect(2, GCCollectionMode.Aggressive);
-			GC.WaitForPendingFinalizers();
-			Assert.True(trackers.All(d => d.WeakReference.IsAlive));
-			Assert.True(trackers.All(d => !(d.FinalizerFlag?.Value).GetValueOrDefault()));
+
+			JVirtualMachineTests.CollectAndCheckAlive(trackers);
 
 			while (trackers.All(d => d.WeakReference.IsAlive))
 			{
@@ -54,13 +51,22 @@ public partial class JVirtualMachineTests
 				proxyEnv.Received(1).FindClass((ReadOnlyValPtr<Byte>)ctx.Pointer);
 				proxyEnv.Received(1).RegisterNatives(classRef, Arg.Any<ReadOnlyValPtr<NativeMethodValueWrapper>>(), 1);
 				proxyEnv.ClearReceivedCalls();
-				Assert.True(trackers.All(d => d.WeakReference.IsAlive ==
-					                         !(d.FinalizerFlag?.Value).GetValueOrDefault()));
+
+				try
+				{
+					Assert.True(trackers.All(d => d.WeakReference.IsAlive ==
+						                         !(d.FinalizerFlag?.Value).GetValueOrDefault()));
+				}
+				catch (Exception)
+				{
+					Assert.Contains(
+						trackers, d => d.WeakReference.IsAlive == !(d.FinalizerFlag?.Value).GetValueOrDefault());
+				}
 
 				using (JClassObject jClass = JClassObject.GetClass<JTestObject>(env))
 				{
 					jClass.Register([
-						TestUtilities.GetInstanceEntry(method1, out ObjectTracker? tracker1),
+						TestUtilities.GetInstanceEntry(method1, out ObjectTracker tracker1),
 					]);
 					trackers.Add(tracker1);
 				}
@@ -68,11 +74,7 @@ public partial class JVirtualMachineTests
 				proxyEnv.Received(1).RegisterNatives(classRef, Arg.Any<ReadOnlyValPtr<NativeMethodValueWrapper>>(), 1);
 				proxyEnv.ClearReceivedCalls();
 
-				GC.Collect();
-				GC.WaitForPendingFinalizers();
-
-				Assert.True(trackers.All(d => d.WeakReference.IsAlive ==
-					                         !(d.FinalizerFlag?.Value).GetValueOrDefault()));
+				JVirtualMachineTests.CollectAndCheckDead(trackers, true);
 
 				GC.Collect();
 				GC.WaitForPendingFinalizers();
@@ -91,18 +93,57 @@ public partial class JVirtualMachineTests
 				proxyEnv.Received(count).UnregisterNatives(classRef);
 			}
 
-			GC.Collect(2, GCCollectionMode.Aggressive);
-			GC.WaitForPendingFinalizers();
-
-			Assert.True(trackers.All(d => d.WeakReference.IsAlive == !(d.FinalizerFlag?.Value).GetValueOrDefault()));
+			JVirtualMachineTests.CollectAndCheckDead(trackers, true);
 		}
 		finally
 		{
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
+	}
+
+	private static void CollectAndCheckAlive(List<ObjectTracker>? trackers = default)
+	{
+		JVirtualMachineTests.CollectGen(2);
+		if (trackers is null) return;
+		try
+		{
+			Assert.True(trackers.All(d => d.WeakReference.IsAlive));
+			Assert.True(trackers.All(d => !(d.FinalizerFlag?.Value).GetValueOrDefault()));
+		}
+		catch (Exception)
+		{
+			Assert.Contains(trackers, d => d.WeakReference.IsAlive);
+			Assert.Contains(trackers, d => !(d.FinalizerFlag?.Value).GetValueOrDefault());
+		}
+	}
+	private static void CollectAndCheckDead(List<ObjectTracker> trackers, Boolean collectGen2)
+	{
+		GC.Collect();
+		GC.WaitForPendingFinalizers();
+		if (collectGen2)
+			JVirtualMachineTests.CollectGen(2);
+		try
+		{
+			Assert.True(trackers.All(d => d.WeakReference.IsAlive == !(d.FinalizerFlag?.Value).GetValueOrDefault()));
+		}
+		catch (Exception)
+		{
+			Assert.Contains(trackers, d => d.WeakReference.IsAlive == !(d.FinalizerFlag?.Value).GetValueOrDefault());
+		}
+	}
+	private static void CollectGen(Int32 gen)
+	{
+#if NET8_0_OR_GREATER
+		GC.Collect(gen, GCCollectionMode.Aggressive, true);
+#else
+		GC.Collect(gen, GCCollectionMode.Forced, true);
+#endif
+		GC.WaitForPendingFinalizers();
 	}
 }

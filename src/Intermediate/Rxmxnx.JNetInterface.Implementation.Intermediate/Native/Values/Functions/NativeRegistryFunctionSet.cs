@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// <summary>
 /// Set of function pointers to register/unregister native methods in Java classes through JNI.
 /// </summary>
-[StructLayout(LayoutKind.Sequential)]
+[StructLayout(LayoutKind.Explicit)]
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
@@ -11,14 +11,75 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 internal readonly unsafe struct NativeRegistryFunctionSet
 {
 	/// <summary>
-	/// Pointer to <c>RegisterNatives</c> function.
-	/// Registers native methods with the specified class.
+	/// Function set for Windows Operating System.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JClassLocalRef, NativeMethodValue*, Int32, JResult>
-		RegisterNatives;
+	[FieldOffset(0)]
+	private readonly Windows _windows;
 	/// <summary>
-	/// Pointer to <c>UnregisterNatives</c> function.
-	/// Unregisters native methods of a class.
+	/// Function set for Unix-like Operating System.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JResult> UnregisterNatives;
+	[FieldOffset(0)]
+	private readonly Unix _unix;
+
+	/// <summary>
+	/// <c>RegisterNatives</c>.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JResult RegisterNatives(JEnvironmentRef envRef, JClassLocalRef classRef, NativeMethodValue* methodsPtr,
+		Int32 methodsCount)
+		=> SystemInfo.IsWindows ?
+			this._windows.RegisterNatives(envRef, classRef, methodsPtr, methodsCount) :
+			this._unix.RegisterNatives(envRef, classRef, methodsPtr, methodsCount);
+	/// <summary>
+	/// <c>UnregisterNatives</c>.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JResult UnregisterNatives(JEnvironmentRef envRef, JClassLocalRef classRef)
+		=> SystemInfo.IsWindows ?
+			this._windows.UnregisterNatives(envRef, classRef) :
+			this._unix.UnregisterNatives(envRef, classRef);
+
+	/// <summary>
+	/// Windows function set.
+	/// </summary>
+	[StructLayout(LayoutKind.Sequential)]
+	private readonly struct Windows
+	{
+		/// <summary>
+		/// Pointer to <c>RegisterNatives</c> function.
+		/// Registers native methods with the specified class.
+		/// </summary>
+		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JClassLocalRef, NativeMethodValue*, Int32, JResult
+			> RegisterNatives;
+		/// <summary>
+		/// Pointer to <c>UnregisterNatives</c> function.
+		/// Unregisters native methods of a class.
+		/// </summary>
+		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JClassLocalRef, JResult> UnregisterNatives;
+	}
+
+	/// <summary>
+	/// Unix function set.
+	/// </summary>
+	[StructLayout(LayoutKind.Sequential)]
+	private readonly struct Unix
+	{
+		/// <summary>
+		/// Pointer to <c>RegisterNatives</c> function.
+		/// Registers native methods with the specified class.
+		/// </summary>
+		public readonly delegate* unmanaged[Cdecl]<JEnvironmentRef, JClassLocalRef, NativeMethodValue*, Int32, JResult >
+			RegisterNatives;
+		/// <summary>
+		/// Pointer to <c>UnregisterNatives</c> function.
+		/// Unregisters native methods of a class.
+		/// </summary>
+		public readonly delegate* unmanaged[Cdecl]<JEnvironmentRef, JClassLocalRef, JResult> UnregisterNatives;
+	}
 }

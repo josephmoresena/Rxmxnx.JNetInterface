@@ -32,7 +32,7 @@ internal static class TestUtilities
 	{
 		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
 		JObjectLocalRef localRef = JClassObject.GetClass<JClassObject>(env).Global.Reference.Value;
-		JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
+		JClassLocalRef classRef = new(localRef);
 		JObjectArrayLocalRef arrayRef = TestUtilities.fixture.Create<JObjectArrayLocalRef>();
 		proxyEnv.NewObjectArray(length, classRef, Arg.Any<JObjectLocalRef>()).Returns(arrayRef);
 		Boolean withInitial = Random.Shared.Next(0, 2) < 1;
@@ -317,7 +317,7 @@ internal static class TestUtilities
 				(JBoolean)TestUtilities.fixture.Create<Boolean>(),
 			],
 			CallType.MultipleValues => Enumerable.Range(0, TestUtilities.multipleValueLength)
-			                                     .SelectMany(i => new IObject[]
+			                                     .SelectMany(_ => new IObject[]
 			                                     {
 				                                     (JInt)TestUtilities.fixture.Create<Int32>(),
 				                                     (JDouble)TestUtilities.fixture.Create<Double>(),
@@ -345,10 +345,9 @@ internal static class TestUtilities
 		{
 			using IReadOnlyFixedContext<JValueWrapper>.IDisposable ctx = ptr.GetUnsafeFixedContext(args.Length);
 			Span<Byte> byteSpan = stackalloc Byte[JValue.Size];
-			ReadOnlySpan<Byte> blank = stackalloc Byte[JValue.Size];
 			for (Int32 i = 0; i < args.Length; i++)
 			{
-				blank.CopyTo(byteSpan);
+				byteSpan.Clear();
 				args[i].CopyTo(byteSpan);
 				if (!NativeUtilities.AsBytes(in ctx.Values[i]).SequenceEqual(byteSpan))
 					return false;

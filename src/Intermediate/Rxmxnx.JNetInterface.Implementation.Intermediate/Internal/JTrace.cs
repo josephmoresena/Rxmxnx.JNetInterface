@@ -21,7 +21,7 @@ internal static partial class JTrace
 	{
 		if (!JVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(
-			!classRef.IsDefault ?
+			classRef != default ?
 				$"thread: {Environment.CurrentManagedThreadId} {classRef} name: {className}" :
 				$"thread: {Environment.CurrentManagedThreadId} name: {className}", callerMethod);
 	}
@@ -62,7 +62,7 @@ internal static partial class JTrace
 		                callerMethod);
 	}
 	/// <summary>
-	/// Writes a category name and registiring reference instance to the trace listeners.
+	/// Writes a category name and registering reference instance to the trace listeners.
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
 	/// <param name="cacheId">Cache identifier.</param>
@@ -80,7 +80,7 @@ internal static partial class JTrace
 	/// <summary>
 	/// Writes a category name and deleting local reference to the trace listeners.
 	/// </summary>
-	/// <param name="isRegistered">Indicates whether current reference is registred.</param>
+	/// <param name="isRegistered">Indicates whether current reference is registered.</param>
 	/// <param name="isAttached">Indicates whether current thread is attached to VM.</param>
 	/// <param name="isAlive">Indicates whether current VM is alive.</param>
 	/// <param name="localRef">A local object reference.</param>
@@ -136,7 +136,7 @@ internal static partial class JTrace
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void ReleaseMemory<TObjectRef>(Boolean isCritical, Boolean isAttached, Boolean isAlive,
 		Boolean released, TObjectRef objectRef, IntPtr pointer, [CallerMemberName] String callerMethod = "")
-		where TObjectRef : unmanaged, IObjectReferenceType
+		where TObjectRef : unmanaged, IObjectReferenceType, INativePointerType<TObjectRef>
 	{
 		if (!JVirtualMachine.TraceEnabled) return;
 		JTrace.ReleaseNonGenericMemory(isCritical, isAttached, isAlive, released, pointer, $"{objectRef}",
@@ -147,7 +147,7 @@ internal static partial class JTrace
 	/// </summary>
 	/// <param name="isAttached">Indicates whether current thread is attached to VM.</param>
 	/// <param name="isAlive">Indicates whether current VM is alive.</param>
-	/// <param name="exited">Indicates whether monitor was successfully exited.</param>
+	/// <param name="exited">Indicates whether monitor was successfully released.</param>
 	/// <param name="localRef">Object reference.</param>
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void MonitorExit(Boolean isAttached, Boolean isAlive, Boolean exited, JObjectLocalRef localRef,
@@ -378,7 +378,7 @@ internal static partial class JTrace
 		                callerMethod);
 	}
 	/// <summary>
-	/// Writes a category name and retrieving class using it's type metadata to the trace listeners.
+	/// Writes a category name and retrieving class using its type metadata to the trace listeners.
 	/// </summary>
 	/// <param name="typeMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
 	/// <param name="callerMethod">Caller member name.</param>
@@ -399,7 +399,7 @@ internal static partial class JTrace
 		[CallerMemberName] String callerMethod = "")
 	{
 		if (!JVirtualMachine.TraceEnabled) return;
-		if (classRef.IsDefault) return;
+		if (classRef == default) return;
 		Trace.WriteLine(
 			$"thread: {Environment.CurrentManagedThreadId} {typeInformation.ClassName} already loaded {classRef}.",
 			callerMethod);
@@ -444,6 +444,20 @@ internal static partial class JTrace
 	{
 		if (!JVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {classRef} loaded to {jClass.ToTraceText()}.",
+		                callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and deletes <paramref name="jniReference"/> a JNI reference of
+	/// <paramref name="referenceType"/> to the trace listeners.
+	/// </summary>
+	/// <param name="jniReference">A <see cref="JObjectLocalRef"/> reference.</param>
+	/// <param name="referenceType">A <see cref="JReferenceType"/> type.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void DeleteReference(JObjectLocalRef jniReference, JReferenceType referenceType,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!JVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {jniReference} {referenceType} deleted.",
 		                callerMethod);
 	}
 }

@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 using Rxmxnx.JNetInterface.Io;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Lang.Annotation;
@@ -15,6 +17,12 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 /// </summary>
 public static class JRuntimeInfo
 {
+	public static Boolean MatchArch = RuntimeInformation.OSArchitecture == RuntimeInformation.ProcessArchitecture;
+	public static String JniCheckOption
+		=> Boolean.TryParse(Environment.GetEnvironmentVariable("JNETINTERFACE_JNI_CHECK"), out Boolean useJniCheck) &&
+			useJniCheck ?
+				"-Xcheck:jni" :
+				String.Empty;
 	public static void PrintMetadataInfo()
 	{
 		JRuntimeInfo.PrintBuiltInMetadata();
@@ -30,6 +38,21 @@ public static class JRuntimeInfo
 		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JClassObject>.Metadata, 5);
 		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JThrowableObject>.Metadata, 5);
 		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JStringObject>.Metadata, 5);
+	}
+	public static void PrintJaggedArrayMetadataInfo()
+	{
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JBoolean>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JByte>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JChar>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JDouble>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JFloat>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JInt>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JLong>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JShort>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JLocalObject>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JClassObject>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JThrowableObject>.Metadata);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JStringObject>.Metadata);
 	}
 	public static void PrintVirtualMachineInfo(IEnvironment env, IInvokedVirtualMachine vm,
 		JVirtualMachineLibrary jvmLib)
@@ -79,6 +102,24 @@ public static class JRuntimeInfo
 			Console.WriteLine(arrMetadata.ElementMetadata.Signature);
 			arrMetadata = arrMetadata.ElementMetadata as JArrayTypeMetadata;
 		}
+	}
+	private static void PrintArrayMetadata(JArrayTypeMetadata arrMetadata)
+	{
+		ReadOnlySpan<Byte> signature = arrMetadata.Signature;
+		Console.Write(arrMetadata.ElementMetadata.Signature);
+		Console.Write("->");
+		Console.Write(arrMetadata.Signature);
+		for (Int32 i = 0; i < 32; i++)
+		{
+			if (arrMetadata.GetArrayMetadata() is not { } arrMet2) break;
+			arrMetadata = arrMet2;
+		}
+		if (!signature.SequenceEqual(arrMetadata.Signature))
+		{
+			Console.Write("->");
+			Console.Write(arrMetadata.Signature);
+		}
+		Console.WriteLine();
 	}
 	private static void PrintBuiltInMetadata()
 	{

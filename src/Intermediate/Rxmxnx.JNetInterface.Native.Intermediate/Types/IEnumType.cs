@@ -5,18 +5,24 @@ namespace Rxmxnx.JNetInterface.Types;
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface IEnumType : IReferenceType
+public interface IEnumType : IClassType
 {
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
 	static JTypeKind IDataType.Kind => JTypeKind.Enum;
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static Type IDataType.FamilyType => typeof(JEnumObject);
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.J5;
 
 	/// <summary>
 	/// Retrieves the metadata for given enum type.
 	/// </summary>
 	/// <typeparam name="TEnum">Type of the current java enum datatype.</typeparam>
 	/// <returns>The <see cref="JEnumTypeMetadata"/> instance for given type.</returns>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public new static JEnumTypeMetadata GetMetadata<TEnum>() where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>
 		=> (JEnumTypeMetadata)IDataType.GetMetadata<TEnum>();

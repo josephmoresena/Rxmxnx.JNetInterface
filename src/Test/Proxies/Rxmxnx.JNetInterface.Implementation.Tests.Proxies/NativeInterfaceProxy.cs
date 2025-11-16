@@ -17,7 +17,8 @@ public abstract class NativeInterfaceProxy
 
 	public JClassLocalRef ClassLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
 	public JClassLocalRef ThrowableLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
-	public JClassLocalRef StackTraceObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef StackTraceElementLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef SystemLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
 	public JClassLocalRef NumberObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
 	public JClassLocalRef VoidObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
 	public JClassLocalRef BooleanObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
@@ -54,7 +55,9 @@ public abstract class NativeInterfaceProxy
 		if (ReferenceHelper.IsClassName<JThrowableObject>(className))
 			return this.ThrowableLocalRef;
 		if (ReferenceHelper.IsClassName<JStackTraceElementObject>(className))
-			return this.StackTraceObjectLocalRef;
+			return this.StackTraceElementLocalRef;
+		if (ReferenceHelper.IsClassName<JSystemObject>(className))
+			return this.SystemLocalRef;
 		if (ReferenceHelper.IsClassName<JNumberObject>(className))
 			return this.NumberObjectLocalRef;
 		if (ReferenceHelper.IsClassName<JVoidObject>(className))
@@ -83,10 +86,10 @@ public abstract class NativeInterfaceProxy
 			return this.VirtualMachine.ClassGlobalRef;
 		if (classRef == this.ThrowableLocalRef)
 			return this.VirtualMachine.ThrowableGlobalRef;
-		if (classRef == this.StackTraceObjectLocalRef)
+		if (classRef == this.StackTraceElementLocalRef)
 			return this.VirtualMachine.StackTraceElementGlobalRef;
-		if (classRef == this.StackTraceObjectLocalRef)
-			return this.VirtualMachine.StackTraceElementGlobalRef;
+		if (classRef == this.SystemLocalRef)
+			return this.VirtualMachine.SystemGlobalRef;
 
 		if (classRef == this.NumberObjectLocalRef)
 			return this.VirtualMachine.NumberGlobalRef;
@@ -129,7 +132,7 @@ public abstract class NativeInterfaceProxy
 			return this.VirtualMachine.ShortPGlobalRef;
 		return null;
 	}
-	public unsafe JFieldId? GetPrimitiveWrapperClassTypeField(JClassLocalRef classRef, Byte* fieldName)
+	public unsafe JFieldId? GetMainStaticFieldId(JClassLocalRef classRef, Byte* fieldName)
 	{
 		if (!ReferenceHelper.IsTypeField(fieldName)) return default;
 		if (classRef == this.VoidObjectLocalRef || classRef.Value == this.VirtualMachine.VoidGlobalRef.Value)
@@ -173,7 +176,7 @@ public abstract class NativeInterfaceProxy
 				return this.VirtualMachine.ThrowableGetStackTraceMethodId;
 		}
 		else if (classRef.Value == this.VirtualMachine.StackTraceElementGlobalRef.Value ||
-		         classRef == this.StackTraceObjectLocalRef)
+		         classRef == this.StackTraceElementLocalRef)
 		{
 			if (ReferenceHelper.IsGetClassNameMethod(methodName))
 				return this.VirtualMachine.StackTraceElementGetClassNameMethodId;
@@ -186,6 +189,13 @@ public abstract class NativeInterfaceProxy
 			if (ReferenceHelper.IsIsNativeMethodMethod(methodName))
 				return this.VirtualMachine.StackTraceElementIsNativeMethodMethodId;
 		}
+		return default;
+	}
+	public unsafe JMethodId? GetMainStaticMethodId(JClassLocalRef classRef, Byte* methodName)
+	{
+		if (classRef.Value == this.VirtualMachine.SystemGlobalRef.Value || classRef == this.SystemLocalRef)
+			if (ReferenceHelper.IsGetPropertyMethod(methodName))
+				return this.VirtualMachine.SystemGetPropertyMethodId;
 		return default;
 	}
 	public JClassLocalRef? GetPrimitiveClass(JClassLocalRef classRef, JFieldId fieldId)

@@ -9,22 +9,16 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly unsafe struct NewRefFunction<TReference>
-	where TReference : unmanaged, INativeType, IWrapper<JObjectLocalRef>
+internal readonly unsafe struct NewRefFunction<TReference> : INewRefFunction
+	where TReference : unmanaged, INativeReferenceType, INativePointerType<TReference>
 {
 	/// <summary>
 	/// Pointer to <c>New<typeparamref name="TReference"/>Ref</c> function.
-	/// Creates a new global reference to the object referred.
 	/// </summary>
-	/// <remarks>
-	/// Created references must be explicitly disposed of by calling
-	/// <c>Delete<typeparamref name="TReference"/>Ref()</c>.
-	/// </remarks>
-	private readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, IntPtr> _ptr;
+	private readonly INewRefFunction.NewRefFunction _function;
 
 	/// <summary>
-	/// Pointer to <c>New<typeparamref name="TReference"/>Ref</c> function.
-	/// Creates a new global reference to the object referred.
+	/// Creates a new <typeparamref name="TReference"/> reference to the object referred.
 	/// </summary>
 	/// <remarks>
 	/// Created references must be explicitly disposed of by calling
@@ -36,8 +30,9 @@ internal readonly unsafe struct NewRefFunction<TReference>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TReference NewRef(JEnvironmentRef envRef, JObjectLocalRef localRef)
 	{
-		TReference result = default;
-		Unsafe.As<TReference, IntPtr>(ref result) = this._ptr(envRef, localRef);
-		return result;
+		IntPtr result = SystemInfo.IsWindows ?
+			this._function.Windows(envRef, localRef) :
+			this._function.Unix(envRef, localRef);
+		return TReference.New(result);
 	}
 }

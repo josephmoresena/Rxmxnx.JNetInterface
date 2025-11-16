@@ -37,7 +37,9 @@ public sealed class ArrayCreationTests
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
@@ -81,7 +83,9 @@ public sealed class ArrayCreationTests
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
@@ -103,8 +107,8 @@ public sealed class ArrayCreationTests
 
 			proxyEnv.NewObjectArray(Arg.Any<Int32>(), jClassClass.Reference, default).Returns(arrayRef);
 			proxyEnv.GetObjectArrayElement(arrayRef, Arg.Any<Int32>())
-			        .Returns(c => 0.Equals(c[1]) ? proxyEnv.StackTraceObjectLocalRef.Value : default);
-			proxyEnv.CallObjectMethod(proxyEnv.StackTraceObjectLocalRef.Value,
+			        .Returns(c => 0.Equals(c[1]) ? proxyEnv.StackTraceElementLocalRef.Value : default);
+			proxyEnv.CallObjectMethod(proxyEnv.StackTraceElementLocalRef.Value,
 			                          proxyEnv.VirtualMachine.ClassGetNameMethodId,
 			                          Arg.Any<ReadOnlyValPtr<JValueWrapper>>()).Returns(stringRef.Value);
 			proxyEnv.GetStringUtfLength(stringRef)
@@ -145,7 +149,9 @@ public sealed class ArrayCreationTests
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}

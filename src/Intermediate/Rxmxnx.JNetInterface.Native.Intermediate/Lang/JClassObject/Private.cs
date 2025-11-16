@@ -12,12 +12,19 @@ public partial class JClassObject
 	/// Datatype interfaces.
 	/// </summary>
 	private static readonly ImmutableHashSet<JInterfaceTypeMetadata> typeInterfaces =
+#if NET8_0_OR_GREATER
 	[
 		IInterfaceType.GetMetadata<JSerializableObject>(),
 		IInterfaceType.GetMetadata<JAnnotatedElementObject>(),
 		IInterfaceType.GetMetadata<JGenericDeclarationObject>(),
 		IInterfaceType.GetMetadata<JTypeObject>(),
 	];
+#else
+		ImmutableHashSet.Create(IInterfaceType.GetMetadata<JSerializableObject>(),
+		                        IInterfaceType.GetMetadata<JAnnotatedElementObject>(),
+		                        IInterfaceType.GetMetadata<JGenericDeclarationObject>(),
+		                        IInterfaceType.GetMetadata<JTypeObject>());
+#endif
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
@@ -82,7 +89,7 @@ public partial class JClassObject
 	{
 		IEnvironment env = initializer.Class.Environment;
 		JObjectLocalRef localRef = initializer.LocalReference;
-		JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
+		JClassLocalRef classRef = new(localRef);
 		return env.ClassFeature.AsClassObject(classRef);
 	}
 	static JClassObject IClassType<JClassObject>.Create(IReferenceType.ObjectInitializer initializer)

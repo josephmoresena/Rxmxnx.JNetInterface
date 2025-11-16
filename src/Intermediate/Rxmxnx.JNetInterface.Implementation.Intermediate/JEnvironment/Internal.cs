@@ -44,6 +44,34 @@ partial class JEnvironment
 		return this.GetMainClassGlobalRef(typeInformation, classRef);
 	}
 	/// <summary>
+	/// Retrieves the current JRE version.
+	/// </summary>
+	/// <param name="systemClassRef"><c>java.lang.System</c> class reference.</param>
+	/// <param name="initializing">Indicates whether the current call occurs on VM initializing.</param>
+	/// <returns>Current JRE version.</returns>
+	internal JRuntimeVersion GetVersion(JClassLocalRef systemClassRef, Boolean initializing)
+	{
+		if (!initializing) this.CheckJniError();
+		JMethodId getPropertyId = this.GetStaticMethodId(NativeFunctionSetImpl.GetPropertyDefinition, systemClassRef);
+		using LocalFrame? _ = !initializing ? new(this, IVirtualMachine.GetVersionCapacity) : default;
+		if (getPropertyId != default)
+		{
+			Decimal jreVersion = this._cache.GetRuntimeVersion(systemClassRef, getPropertyId);
+			switch (jreVersion)
+			{
+				case < 1:
+					break;
+				case < 2:
+					return JRuntimeVersion.SEd0 + (Int32)(10 * (jreVersion - 1.0m));
+				default:
+					return (JRuntimeVersion)((Int32)JRuntimeVersion.SEd0 * jreVersion);
+			}
+		}
+		this._cache.ClearException();
+		// If it was not possible to determine the JRE version, the JNI version is assumed.
+		return (JRuntimeVersion)this.Version;
+	}
+	/// <summary>
 	/// Retrieves a global reference for given class name.
 	/// </summary>
 	/// <param name="classMetadata">Class metadata.</param>
@@ -68,6 +96,7 @@ partial class JEnvironment
 		ref readonly NativeInterface nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.DeleteGlobalRefInfo);
 		nativeInterface.ReferenceFunctions.DeleteGlobalRef.DeleteRef(this.Reference, globalRef);
+		JTrace.DeleteReference(globalRef.Value, JReferenceType.GlobalRefType);
 	}
 	/// <summary>
 	/// Deletes <paramref name="weakRef"/>.
@@ -78,6 +107,7 @@ partial class JEnvironment
 		ref readonly NativeInterface nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.DeleteWeakGlobalRefInfo);
 		nativeInterface.WeakGlobalFunctions.DeleteWeakGlobalRef.DeleteRef(this.Reference, weakRef);
+		JTrace.DeleteReference(weakRef.Value, JReferenceType.WeakGlobalRefType);
 	}
 	/// <summary>
 	/// Retrieves field identifier for <paramref name="definition"/> in <paramref name="classRef"/>.
@@ -170,7 +200,7 @@ partial class JEnvironment
 	/// </summary>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 	/// <returns>A <see cref="JReferenceType"/> value.</returns>
-	internal unsafe JReferenceType GetReferenceType(JObjectLocalRef localRef)
+	internal JReferenceType GetReferenceType(JObjectLocalRef localRef)
 	{
 		ref readonly NativeInterface6 nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface6>(NativeInterface6.GetObjectRefTypeInfo);

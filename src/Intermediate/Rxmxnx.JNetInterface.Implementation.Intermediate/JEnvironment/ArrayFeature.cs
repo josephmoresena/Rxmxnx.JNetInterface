@@ -12,11 +12,12 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfInvalidArrayLength(length);
 			JArrayLocalRef arrayRef = default;
-			if (MetadataHelper.GetExactMetadata<TElement>() is JPrimitiveTypeMetadata metadata)
+			if (!RuntimeHelpers.IsReferenceOrContainsReferences<TElement>())
 			{
+				Byte primitiveSignature = IDataType.GetMetadata<TElement>().Signature[0];
 				ref readonly ArrayFunctionSet arrayFunctions =
-					ref this.GetArrayFunctions(metadata.Signature[0], ArrayFunctionSet.PrimitiveFunction.NewArray);
-				arrayRef = metadata.Signature[0] switch
+					ref this.GetArrayFunctions(primitiveSignature, ArrayFunctionSet.PrimitiveFunction.NewArray);
+				arrayRef = primitiveSignature switch
 				{
 					CommonNames.BooleanSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions.NewBooleanArray
 					                                                  .NewArray(this.Reference, length).ArrayValue,
@@ -36,7 +37,7 @@ partial class JEnvironment
 					                                                .NewArray(this.Reference, length).ArrayValue,
 					_ => arrayRef,
 				};
-				if (arrayRef.IsDefault) this.CheckJniError();
+				if (arrayRef == default) this.CheckJniError();
 			}
 			else
 			{
@@ -58,11 +59,11 @@ partial class JEnvironment
 			where TElement : IDataType<TElement>
 		{
 			JArrayObject<TElement> result;
-			if (MetadataHelper.GetExactMetadata<TElement>() is JPrimitiveTypeMetadata metadata)
+			if (!RuntimeHelpers.IsReferenceOrContainsReferences<TElement>())
 			{
 				result = this.CreateArray<TElement>(length);
 				if (length > 0 && !initialElement.IsDefault())
-					this.FillPrimitiveArray(result, metadata, initialElement);
+					this.FillPrimitiveArray(result, IDataType.GetMetadata<TElement>(), initialElement);
 			}
 			else
 			{
@@ -81,7 +82,7 @@ partial class JEnvironment
 				this.CreateArray(length, initialElement) :
 				this.CreateObjectArray<TElement>(jClass, length, initialElement as JReferenceObject);
 		}
-		public unsafe Int32 GetArrayLength(JReferenceObject jObject)
+		public Int32 GetArrayLength(JReferenceObject jObject)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);
 			ref readonly NativeInterface nativeInterface =
@@ -94,14 +95,14 @@ partial class JEnvironment
 			where TElement : IDataType<TElement>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
-			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TElement>();
-			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
+			if (!RuntimeHelpers.IsReferenceOrContainsReferences<TElement>())
 			{
-				Span<Byte> buffer = stackalloc Byte[primitiveMetadata.SizeOf];
+				JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TElement>();
+				Span<Byte> buffer = stackalloc Byte[metadata.SizeOf];
 				fixed (Byte* ptr = &MemoryMarshal.GetReference(buffer))
-					this.GetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature[0], new(ptr), index);
+					this.GetPrimitiveArrayRegion(jArray, metadata.Signature[0], new(ptr), index);
 				this.CheckJniError();
-				return (TElement)primitiveMetadata.CreateInstance(buffer);
+				return Unsafe.As<Byte, TElement>(ref MemoryMarshal.GetReference(buffer));
 			}
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
@@ -111,13 +112,13 @@ partial class JEnvironment
 			where TElement : IDataType<TElement>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
-			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TElement>();
-			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
+			if (!RuntimeHelpers.IsReferenceOrContainsReferences<TElement>())
 			{
-				Span<Byte> buffer = stackalloc Byte[primitiveMetadata.SizeOf];
+				JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TElement>();
+				Span<Byte> buffer = stackalloc Byte[metadata.SizeOf];
 				value!.CopyTo(buffer);
 				fixed (Byte* ptr = &MemoryMarshal.GetReference(buffer))
-					this.SetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature[0], new(ptr), index);
+					this.SetPrimitiveArrayRegion(jArray, metadata.Signature[0], new(ptr), index);
 				this.CheckJniError();
 			}
 			else
@@ -130,12 +131,11 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
 			ImplementationValidationUtilities.ThrowIfDefault(jArray);
-			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TElement>();
 
-			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
+			if (RuntimeHelpers.IsReferenceOrContainsReferences<TElement>())
 				return this.IndexOfObject(jArray, item as JReferenceObject);
 
-			Span<Byte> itemSpan = stackalloc Byte[primitiveMetadata.SizeOf];
+			Span<Byte> itemSpan = stackalloc Byte[IDataType.GetMetadata<TElement>().SizeOf];
 			item!.CopyTo(itemSpan);
 			return this.IndexOfPrimitive(jArray, itemSpan);
 		}
@@ -144,11 +144,10 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
 			ImplementationValidationUtilities.ThrowIfDefault(jArray);
-			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(array.Length);
+			ImplementationValidationUtilities.ThrowIfInvalidArrayLength(array.Length);
 
-			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TElement>();
-			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
-				this.CopyToPrimitive(jArray, primitiveMetadata.SizeOf, array, arrayIndex);
+			if (!RuntimeHelpers.IsReferenceOrContainsReferences<TElement>())
+				this.CopyToPrimitive(jArray, IDataType.GetMetadata<TElement>().SizeOf, array, arrayIndex);
 			else
 				this.CopyToObject(jArray, array.AsSpan()[arrayIndex..]); // Offset for destination array
 		}
@@ -169,20 +168,21 @@ partial class JEnvironment
 		public IntPtr GetPrimitiveSequence<TPrimitive>(JArrayLocalRef arrayRef, out Boolean isCopy)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
-			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
+			JDataTypeMetadata metadata = IDataType.GetMetadata<TPrimitive>();
 			IntPtr result = this.GetPrimitiveArrayElements(arrayRef, metadata.Signature[0], out JBoolean isCopyJ);
 			if (result == IntPtr.Zero) this.CheckJniError();
 			isCopy = isCopyJ.Value;
 			return result;
 		}
-		public unsafe ValPtr<Byte> GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef)
+		public IntPtr GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef, out Boolean isCopy)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetPrimitiveArrayCriticalInfo);
-			ValPtr<Byte> result =
+			IntPtr result =
 				nativeInterface.PrimitiveArrayCriticalFunctions.GetPrimitiveArrayCritical(
-					this.Reference, arrayRef, out _);
-			if (result == ValPtr<Byte>.Zero) this.CheckJniError();
+					this.Reference, arrayRef, out JBoolean isCopyJ);
+			if (result == IntPtr.Zero) this.CheckJniError();
+			isCopy = isCopyJ.Value;
 			this._criticalCount++;
 			return result;
 		}
@@ -193,7 +193,7 @@ partial class JEnvironment
 			{
 				if (this._env.IsAttached && this.VirtualMachine.IsAlive)
 				{
-					JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
+					JDataTypeMetadata metadata = IDataType.GetMetadata<TPrimitive>();
 					this.ReleasePrimitiveArrayElements(arrayRef, metadata.Signature[0], pointer, mode);
 					this.CheckJniError();
 				}
@@ -206,7 +206,7 @@ partial class JEnvironment
 				throw;
 			}
 		}
-		public unsafe void ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, ValPtr<Byte> criticalPtr)
+		public void ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, IntPtr criticalPtr, JReleaseMode mode)
 		{
 			try
 			{
@@ -215,7 +215,7 @@ partial class JEnvironment
 					ref readonly NativeInterface nativeInterface =
 						ref this.GetNativeInterface<NativeInterface>(NativeInterface.ReleasePrimitiveArrayCriticalInfo);
 					nativeInterface.PrimitiveArrayCriticalFunctions.ReleasePrimitiveArrayCritical(
-						this.Reference, arrayRef, criticalPtr, JReleaseMode.Abort);
+						this.Reference, arrayRef, criticalPtr, mode);
 					this.CheckJniError();
 					this._criticalCount--;
 				}
@@ -234,7 +234,7 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
 			ImplementationValidationUtilities.ThrowIfDefault(jArray);
-			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
+			JDataTypeMetadata metadata = IDataType.GetMetadata<TPrimitive>();
 			fixed (TPrimitive* ptr = &MemoryMarshal.GetReference(elements))
 				this.GetPrimitiveArrayRegion(jArray, metadata.Signature[0], new(ptr), startIndex, elements.Length);
 			this.CheckJniError();
@@ -244,7 +244,7 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
 			ImplementationValidationUtilities.ThrowIfDefault(jArray);
-			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
+			JDataTypeMetadata metadata = IDataType.GetMetadata<TPrimitive>();
 			fixed (TPrimitive* ptr = &MemoryMarshal.GetReference(elements))
 				this.SetPrimitiveArrayRegion(jArray, metadata.Signature[0], new(ptr), startIndex, elements.Length);
 			this.CheckJniError();

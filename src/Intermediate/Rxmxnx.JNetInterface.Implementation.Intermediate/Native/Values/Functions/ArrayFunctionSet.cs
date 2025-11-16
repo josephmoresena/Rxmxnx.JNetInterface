@@ -8,7 +8,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly unsafe struct ArrayFunctionSet
+internal readonly unsafe partial struct ArrayFunctionSet
 {
 	/// <summary>
 	/// Primitive array functions.
@@ -26,7 +26,7 @@ internal readonly unsafe struct ArrayFunctionSet
 	/// Pointer to <c>GetArrayLength</c> function.
 	/// Returns the number of elements in the array.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JArrayLocalRef, Int32> GetArrayLength;
+	private readonly GetArrayLengthPtr _getArrayLength;
 	/// <summary>
 	/// Pointers to <c>NewObjectArray</c>, <c>GetObjectArrayElement</c> and <c>SetObjectArrayElement</c> functions.
 	/// </summary>
@@ -58,4 +58,16 @@ internal readonly unsafe struct ArrayFunctionSet
 	/// <c>SetDoubleArrayRegion</c> functions.
 	/// </summary>
 	public readonly PrimitiveArrayRegionFunctionSet RegionFunctions;
+
+	/// <summary>
+	/// <c>GetArrayLength</c>.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public Int32 GetArrayLength(JEnvironmentRef envRef, JArrayLocalRef arrayRef)
+		=> SystemInfo.IsWindows ?
+			this._getArrayLength.Windows(envRef, arrayRef) :
+			this._getArrayLength.Unix(envRef, arrayRef);
 }

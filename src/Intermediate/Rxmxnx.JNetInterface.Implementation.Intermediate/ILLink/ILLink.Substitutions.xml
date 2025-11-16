@@ -144,6 +144,8 @@
                     body="stub"/>
             <method signature="System.Void ReloadClass(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,Rxmxnx.JNetInterface.Lang.JClassObject,System.String)"
                     body="stub"/>
+            <method signature="System.Void DeleteReference(Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,Rxmxnx.JNetInterface.Native.JReferenceType,System.String)"
+                    body="stub"/>
             <!-- Access -->
             <method signature="System.Void GetField(Rxmxnx.JNetInterface.Native.JLocalObject,Rxmxnx.JNetInterface.Lang.JClassObject,Rxmxnx.JNetInterface.Native.Access.JFieldDefinition,System.String)"
                     body="stub"/>
@@ -192,6 +194,8 @@
             <method signature="System.Void DefiningClass(Rxmxnx.JNetInterface.Native.References.JEnvironmentRef,Rxmxnx.PInvoke.CString,System.ReadOnlySpan`1&lt;System.Byte&gt;,System.String)"
                     body="stub"/>
             <method signature="System.Void DefiningClass(Rxmxnx.JNetInterface.Native.References.JEnvironmentRef,Rxmxnx.PInvoke.CString,Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.String)"
+                    body="stub"/>
+            <method signature="System.Void VirtualMachineLoad(Rxmxnx.JNetInterface.Native.References.JVirtualMachineRef,System.Boolean,System.String)"
                     body="stub"/>
             <method signature="System.String GetSha256Hex(System.ReadOnlySpan`1&lt;System.Byte&gt;)"
                     body="remove"/>

@@ -21,5 +21,9 @@ public class GetObjectDefinition : JFunctionDefinition<JLocalObject>
 	private GetObjectDefinition() : base("getObject"u8, JArgumentMetadata.Get<JInt>()) { }
 
 	public JLocalObject? Invoke(JClassObject helloDotnetClass, JInt value)
+#if !NET9_0_OR_GREATER
 		=> this.StaticInvoke(helloDotnetClass, [value,]);
+#else
+		=> this.StaticInvoke(helloDotnetClass, value);
+#endif
 }

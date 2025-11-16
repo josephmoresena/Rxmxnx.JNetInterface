@@ -15,9 +15,7 @@ partial class JEnvironment
 		/// <returns>A <see cref="IVirtualMachine"/> instance.</returns>
 		public static unsafe JVirtualMachine GetVirtualMachine(JEnvironmentRef envRef)
 		{
-			ref readonly JEnvironmentValue refValue = ref envRef.Reference;
-			ref readonly NativeInterface nativeInterface =
-				ref Unsafe.AsRef<NativeInterface>(refValue.Pointer.ToPointer());
+			ref readonly NativeInterface nativeInterface = ref *(NativeInterface*)envRef.InterfacePointer;
 			JniException? jniException = nativeInterface.GetVirtualMachine(envRef, out JVirtualMachineRef vmRef);
 			if (jniException is null)
 				return (JVirtualMachine)JVirtualMachine.GetVirtualMachine(vmRef);

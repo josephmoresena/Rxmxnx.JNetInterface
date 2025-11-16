@@ -9,11 +9,22 @@ namespace Rxmxnx.JNetInterface.Awt;
 
 public class JComponentObject : JLocalObject, IClassType<JComponentObject>
 {
-	private static readonly IndeterminateCall setVisibleDef =
-		IndeterminateCall.CreateMethodDefinition("setVisible"u8, [JArgumentMetadata.Get<JBoolean>(),]);
-	private static readonly IndeterminateCall setSizeCoordinateDef =
-		IndeterminateCall.CreateMethodDefinition("setSize"u8,
-		                                         [JArgumentMetadata.Get<JInt>(), JArgumentMetadata.Get<JInt>(),]);
+	private static readonly IndeterminateCall setVisibleDef = IndeterminateCall.CreateMethodDefinition("setVisible"u8,
+#if !NET9_0_OR_GREATER
+			[JArgumentMetadata.Get<JBoolean>(),]
+#else
+			JArgumentMetadata.Get<JBoolean>()
+#endif
+	);
+	private static readonly JFunctionDefinition<JBoolean>.Parameterless isVisibleDef = new("isVisible"u8);
+	private static readonly IndeterminateCall setSizeCoordinateDef = IndeterminateCall.CreateMethodDefinition(
+		"setSize"u8,
+#if !NET9_0_OR_GREATER
+		[JArgumentMetadata.Get<JInt>(), JArgumentMetadata.Get<JInt>(),]
+#else
+		JArgumentMetadata.Get<JInt>(), JArgumentMetadata.Get<JInt>()
+#endif
+	);
 	private static readonly JFunctionDefinition<JInt>.Parameterless getHeightDef = new("getHeight"u8);
 	private static readonly JFunctionDefinition<JInt>.Parameterless getWidthDef = new("getWidth"u8);
 	private static readonly JClassTypeMetadata<JComponentObject> typeMetadata = TypeMetadataBuilder<JComponentObject>
@@ -48,14 +59,32 @@ public class JComponentObject : JLocalObject, IClassType<JComponentObject>
 	{
 		IEnvironment env = this.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JComponentObject>(env);
-		JComponentObject.setVisibleDef.MethodCall(this, jClass, false, [(JBoolean)visible,]);
+		JComponentObject.setVisibleDef.MethodCall(this, jClass, false,
+#if !NET9_0_OR_GREATER
+		                                          [(JBoolean)visible,]
+#else
+		                                          (JBoolean)visible
+#endif
+		);
+	}
+	public Boolean IsVisible()
+	{
+		IEnvironment env = this.Environment;
+		using JClassObject jClass = JClassObject.GetClass<JComponentObject>(env);
+		return JComponentObject.isVisibleDef.Invoke(this, jClass).Value;
 	}
 
 	public void SetSize(Int32 width, Int32 height)
 	{
 		IEnvironment env = this.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JComponentObject>(env);
-		JComponentObject.setSizeCoordinateDef.MethodCall(this, jClass, false, [(JInt)width, (JInt)height,]);
+		JComponentObject.setSizeCoordinateDef.MethodCall(this, jClass, false,
+#if !NET9_0_OR_GREATER
+		                                                 [(JInt)width, (JInt)height,]
+#else
+		                                                 (JInt)width, (JInt)height
+#endif
+		);
 	}
 
 	static JComponentObject IClassType<JComponentObject>.Create(IReferenceType.ClassInitializer initializer)

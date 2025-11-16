@@ -57,7 +57,7 @@ public sealed class PrimitiveObjectTests
 		(obj as IObject).CopyTo(jValues, 1);
 
 		Assert.Equal(value, values[0]);
-		Assert.Equal(obj.ToByte(), bytes[0]);
+		Assert.Equal(obj.ToByte(), value.Equals(default) ? 0 : 1);
 		Assert.Equal(jValues[1], JValue.Create(value));
 
 		Assert.Equal(value, values[2]);

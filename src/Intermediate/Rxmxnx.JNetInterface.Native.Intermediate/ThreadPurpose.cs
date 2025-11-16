@@ -38,4 +38,8 @@ public enum ThreadPurpose : Byte
 	/// Indicates the purpose of the thread sending fatal error signal to VM.
 	/// </summary>
 	FatalError = 8,
+	/// <summary>
+	/// Indicates the purpose of the thread retrieving runtime version from VM.
+	/// </summary>
+	GetRuntimeVersion = 9,
 }

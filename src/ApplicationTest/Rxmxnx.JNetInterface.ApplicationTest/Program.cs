@@ -1,5 +1,4 @@
-﻿using System.Buffers;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 using Rxmxnx.JNetInterface.Lang;
@@ -13,16 +12,26 @@ public static class Program
 {
 	public static async Task Main(String[] args)
 	{
-#if NET8_0
-		if (IVirtualMachine.TypeMetadataToStringEnabled) JRuntimeInfo.PrintMetadataInfo();
+		if (IVirtualMachine.TypeMetadataToStringEnabled && JRuntimeInfo.MatchArch && AotInfo.IsNativeAot)
+#if !NET9_0_OR_GREATER
+			JRuntimeInfo.PrintMetadataInfo();
+#else
+			if (IVirtualMachine.JaggedArrayAutoGenerationEnabled)
+				JRuntimeInfo.PrintJaggedArrayMetadataInfo();
 #endif
 
 		if (args.Length < 1)
 			throw new ArgumentException("Please set JVM library path.");
 
-		Byte[] helloJniByteCode = await File.ReadAllBytesAsync("HelloDotnet.class");
+		Byte[] helloJniByteCode = await (args.Length > 1 && !String.IsNullOrWhiteSpace(args[1]) ?
+			File.ReadAllBytesAsync(Path.Combine(args[1], "HelloDotnet.class")) :
+			File.ReadAllBytesAsync("HelloDotnet.class"));
+		Console.WriteLine($"HelloDotnet.class: {helloJniByteCode.Length} bytes");
+
 		JVirtualMachineLibrary jvmLib = JVirtualMachineLibrary.LoadLibrary(args[0]) ??
 			throw new ArgumentException("Invalid JVM library.");
+
+		Console.WriteLine($"JVM Library handle: 0x{jvmLib.Handle:x8}");
 
 		String[] jMainArgs = AotInfo.IsReflectionDisabled ?
 			[$"System Path: {Environment.SystemDirectory}",] :
@@ -59,21 +68,30 @@ public static class Program
 		try
 		{
 			JVirtualMachineInitArg initArgs = jvmLib.GetDefaultArgument();
-#if NET8_0
-			if (IVirtualMachine.TypeMetadataToStringEnabled) Console.WriteLine(initArgs);
-#endif
-			initArgs = new(initArgs.Version)
+			Int32 jdkVersion = jvmLib.GetLatestSupportedVersion();
+			if (IVirtualMachine.TypeMetadataToStringEnabled && JRuntimeInfo.MatchArch && initArgs.Options.Count != 0)
+				Console.WriteLine(initArgs);
+			Console.WriteLine($"Supported JNI Version: 0x{jdkVersion:x8}");
+
+			initArgs = new(jdkVersion)
 			{
-				Options = new("-DjniLib.load.disable=true", JVirtualMachine.TraceEnabled ? "-verbose:jni" : default,
+				Options = new("-DjniLib.load.disable=true", JRuntimeInfo.JniCheckOption, "-Xrs",
+				              jdkVersion > (Int32)JRuntimeVersion.J8 ? "-XX:+ErrorFileToStdout" :
+				              SystemInfo.IsWindows ? "-XX:ErrorFile=/dev/stderr" : default,
+				              JVirtualMachine.TraceEnabled ? "-verbose:jni" : default,
 				              JVirtualMachine.TraceEnabled ? "-verbose:class" : default,
-				              JVirtualMachine.TraceEnabled ? "-verbose:gc" : default),
+				              JVirtualMachine.TraceEnabled ? "-verbose:gc" : default,
+				              JVirtualMachine.TraceEnabled ? "-XX:+UnlockDiagnosticVMOptions" : default),
 			};
 			using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out IEnvironment env);
 			try
 			{
-#if NET8_0
-				if (IVirtualMachine.TypeMetadataToStringEnabled) JRuntimeInfo.PrintVirtualMachineInfo(env, vm, jvmLib);
+#if !NET9_0_OR_GREATER
+				if (IVirtualMachine.TypeMetadataToStringEnabled && JRuntimeInfo.MatchArch) 
+					JRuntimeInfo.PrintVirtualMachineInfo(env, vm, jvmLib);
 #endif
+				Console.WriteLine($"==== JNI 0x{env.Version:x8} - {env.VirtualMachine.Version.GetRuntimeName()} ====");
+
 				IManagedCallback.Default managedInstance = new(vm, Console.Out);
 				using JClassObject helloJniClass = JHelloDotnetObject.LoadClass(env, classByteCode, managedInstance);
 				Console.WriteLine("==== Begin psvm ===");

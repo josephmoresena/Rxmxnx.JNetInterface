@@ -6,8 +6,12 @@
 /// <remarks>
 /// This identifier will be valid until the library is unloaded or the JVM instance is destroyed.
 /// </remarks>
-[StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JVirtualMachineRef : INativeReferenceType, IReadOnlyReferenceable<JVirtualMachineValue>
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
+[StructLayout(LayoutKind.Explicit)]
+public readonly unsafe partial struct JVirtualMachineRef : INativePointerType
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JVirtualMachineRef;
@@ -15,26 +19,28 @@ public readonly partial struct JVirtualMachineRef : INativeReferenceType, IReadO
 	/// <summary>
 	/// Internal pointer value.
 	/// </summary>
-	private readonly ReadOnlyValPtr<JVirtualMachineValue> _value;
+	[FieldOffset(0)]
+	private readonly void** _value;
 
 	/// <inheritdoc/>
-	public IntPtr Pointer => this._value;
+	public IntPtr Pointer => (IntPtr)this._value;
 
 	/// <summary>
-	/// <see langword="readonly ref"/> <see cref="JVirtualMachineValue"/> from this pointer.
+	/// Pointer to native interface.
 	/// </summary>
-	internal ref readonly JVirtualMachineValue Reference => ref this._value.Reference;
+	[Browsable(false)]
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	internal void* InterfacePointer => *this._value;
 
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
-	public JVirtualMachineRef() => this._value = ReadOnlyValPtr<JVirtualMachineValue>.Zero;
-
-	ref readonly JVirtualMachineValue IReadOnlyReferenceable<JVirtualMachineValue>.Reference => ref this.Reference;
+	public JVirtualMachineRef() => this._value = (void**)IntPtr.Zero;
 
 	/// <inheritdoc/>
-	public override Int32 GetHashCode() => this._value.GetHashCode();
+	public override Int32 GetHashCode() => this.Pointer.GetHashCode();
 	/// <inheritdoc/>
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)
-		=> obj is JVirtualMachineRef jVirtualMRef && this._value.Equals(jVirtualMRef._value);
+		=> obj is JVirtualMachineRef jVirtualMRef && this.Pointer.Equals(jVirtualMRef.Pointer);
 }

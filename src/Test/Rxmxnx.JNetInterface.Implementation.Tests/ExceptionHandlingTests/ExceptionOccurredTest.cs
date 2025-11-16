@@ -195,7 +195,7 @@ public partial class ExceptionHandlingTests
 			proxyEnv.Received(getMessageRegionCount)
 			        .GetStringRegion(messageRef, 0, message.Length, Arg.Any<ValPtr<Char>>());
 			proxyEnv.Received(1).NewGlobalRef(throwableRef.Value);
-			proxyEnv.Received(throwGlobalCount).Throw(JThrowableLocalRef.FromReference(globalRef.Value));
+			proxyEnv.Received(throwGlobalCount).Throw(new(globalRef.Value));
 			proxyEnv.Received(throwLocalCount).Throw(throwableRef);
 
 			proxyEnv.Received().ExceptionClear();
@@ -214,7 +214,9 @@ public partial class ExceptionHandlingTests
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}

@@ -50,6 +50,11 @@ public abstract partial class JNativeMemory
 	/// </summary>
 	/// <returns>A <see cref="IReadOnlyFixedContext{Byte}"/> instance</returns>
 	internal IReadOnlyFixedContext<Byte> GetBinaryContext() => this._context;
+
+	/// <summary>
+	/// Commits changes in the native memory.
+	/// </summary>
+	internal void Commit() => this._adapter.Release(JReleaseMode.Commit);
 }
 
 public sealed partial class JNativeMemory<TValue>

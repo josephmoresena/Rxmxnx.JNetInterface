@@ -40,7 +40,7 @@ internal class LocalCache
 	/// <summary>
 	/// Current class cache.
 	/// </summary>
-	public ClassCache ClassCache { get; set; }
+	public ClassCache ClassCache { get; }
 
 	/// <summary>
 	/// Constructor.
@@ -89,15 +89,18 @@ internal class LocalCache
 	/// <param name="recursive">Indicates whether current clear must do recursively.</param>
 	public void ClearCache(JEnvironment env, Boolean recursive, JObjectLocalRef exclude = default)
 	{
+		if (!Object.ReferenceEquals(env.LocalCache, this))
+			return; // Current cache is not active.
+
 		if (this._objects.Remove(exclude)) // Removes excluded result and unloads its class cache.
-			this.ClassCache.Unload(JClassLocalRef.FromReference(in exclude));
+			this.ClassCache.Unload(new JClassLocalRef(exclude));
 
 		JObjectLocalRef[] keys = this._objects.Keys.ToArray();
 		foreach (JObjectLocalRef key in keys)
 			this.Remove(key); // Removes each reference in cache.
 
-		if (this._previous is null || !Object.ReferenceEquals(env.LocalCache, this))
-			return; // Current cache is initial or is not active.
+		if (this._previous is null)
+			return; // Current cache is initial.
 
 		if (!recursive)
 			env.SetObjectCache(this._previous); // Restores to previous cache.
@@ -114,7 +117,7 @@ internal class LocalCache
 			this._previous?.Remove(localRef);
 		if (lifetime is null) return;
 		lifetime.Dispose(); // Disposes current instance.
-		this.ClassCache.Unload(JClassLocalRef.FromReference(localRef)); // Unloads class cache.
+		this.ClassCache.Unload(new JClassLocalRef(localRef)); // Unloads class cache.
 	}
 	/// <summary>
 	/// Indicates whether <paramref name="localRef"/> is JNI method parameter reference.

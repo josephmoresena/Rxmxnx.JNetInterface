@@ -35,7 +35,7 @@ public readonly ref partial struct JNativeCallAdapter
 			{
 				env.SetObjectCache(previous);
 			}
-			JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
+			JClassLocalRef classRef = new(localRef);
 			return this.CreateInitialClass(classRef);
 		}
 		/// <summary>
@@ -44,6 +44,9 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <typeparam name="TObject">A <see cref="IReferenceType"/> type.</typeparam>
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 		/// <returns>Initial <typaramref name="TObject"/> instance for <paramref name="localRef"/>.</returns>
+#if !NET8_0_OR_GREATER
+		[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 		internal TObject? CreateInitialObject<TObject>(JObjectLocalRef localRef)
 			where TObject : JReferenceObject, IReferenceType<TObject>
 		{
@@ -62,12 +65,12 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <returns>Initial <see cref="JClassObject"/> instance for <paramref name="classRef"/>.</returns>
 		internal JClassObject? CreateInitialClass(JClassLocalRef classRef, Boolean validateReference = false)
 		{
-			if (classRef.IsDefault) return default;
+			if (classRef == default) return default;
 
 			JEnvironment env = this._callAdapter._env;
 			if (validateReference) this.ThrowIfNotClassObject(classRef.Value);
 			JClassObject result = env.GetReferenceTypeClass(classRef, true);
-			if (classRef == result.LocalReference)
+			if (classRef.Value == result.LocalReference)
 			{
 				// Class is owned by this class.
 				this._callAdapter._cache.RegisterParameter(classRef, result);

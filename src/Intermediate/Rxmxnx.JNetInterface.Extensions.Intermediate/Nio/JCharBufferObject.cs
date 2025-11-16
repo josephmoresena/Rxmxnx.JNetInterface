@@ -16,12 +16,19 @@ public class JCharBufferObject : JBufferObject<JChar>, IClassType<JCharBufferObj
 	/// Type interfaces.
 	/// </summary>
 	private static readonly ImmutableHashSet<JInterfaceTypeMetadata> typeInterfaces =
+#if NET8_0_OR_GREATER
 	[
 		IInterfaceType.GetMetadata<JComparableObject>(),
 		IInterfaceType.GetMetadata<JCharSequenceObject>(),
 		IInterfaceType.GetMetadata<JAppendableObject>(),
 		IInterfaceType.GetMetadata<JReadableObject>(),
 	];
+#else
+		ImmutableHashSet.Create(IInterfaceType.GetMetadata<JComparableObject>(),
+		                        IInterfaceType.GetMetadata<JCharSequenceObject>(),
+		                        IInterfaceType.GetMetadata<JAppendableObject>(),
+		                        IInterfaceType.GetMetadata<JReadableObject>());
+#endif
 	/// <summary>
 	/// Type metadata.
 	/// </summary>
@@ -30,6 +37,8 @@ public class JCharBufferObject : JBufferObject<JChar>, IClassType<JCharBufferObj
 		JCharBufferObject.typeInterfaces);
 
 	static TypeMetadata IClassType<JCharBufferObject>.Metadata => JCharBufferObject.typeMetadata;
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd4;
 
 	/// <inheritdoc/>
 	protected JCharBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

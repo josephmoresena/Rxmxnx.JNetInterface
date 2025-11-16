@@ -6,9 +6,10 @@ public partial class Launcher
 	{
 		ConsoleNotifier.PlatformNotifier.BeginDetection();
 
-		OSPlatform platform = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? OSPlatform.Windows :
-			RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? OSPlatform.OSX :
-			RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? OSPlatform.Linux : default;
+		OSPlatform platform = SystemInfo.IsWindows ? OSPlatform.Windows :
+			SystemInfo.IsMac ? OSPlatform.OSX :
+			SystemInfo.IsLinux ? OSPlatform.Linux :
+			SystemInfo.IsFreeBsd ? OSPlatform.FreeBSD : default;
 
 		if (platform == OSPlatform.OSX)
 			return await Launcher.Create<Mac>(outputDirectory);
@@ -16,6 +17,8 @@ public partial class Launcher
 			return await Launcher.Create<Windows>(outputDirectory);
 		if (platform == OSPlatform.Linux)
 			return await Launcher.Create<Linux>(outputDirectory);
+		if (platform == OSPlatform.FreeBSD)
+			return await Launcher.Create<FreeBsd>(outputDirectory);
 
 		throw new InvalidOperationException("Unsupported platform");
 	}

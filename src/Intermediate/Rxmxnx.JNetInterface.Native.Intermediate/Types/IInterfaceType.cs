@@ -9,12 +9,16 @@ public interface IInterfaceType : IReferenceType
 {
 	static JTypeKind IDataType.Kind => JTypeKind.Interface;
 	static Type IDataType.FamilyType => typeof(JLocalObject.InterfaceView);
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd0;
 
 	/// <summary>
 	/// Retrieves the metadata for given interface type.
 	/// </summary>
 	/// <typeparam name="TInterface">Type of the current java interface datatype.</typeparam>
 	/// <returns>The <see cref="JInterfaceTypeMetadata"/> instance for given type.</returns>
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public new static JInterfaceTypeMetadata GetMetadata<TInterface>()
 		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>

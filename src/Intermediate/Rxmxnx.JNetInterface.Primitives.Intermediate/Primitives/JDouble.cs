@@ -2,8 +2,7 @@ namespace Rxmxnx.JNetInterface.Primitives;
 
 using TypeMetadata = JPrimitiveTypeMetadata<JDouble>;
 using IPrimitiveValueType = IPrimitiveType<JDouble, Double>;
-using IPrimitiveFloatingPointType = IPrimitiveFloatingPointType<JDouble, Double>;
-using IPrimitiveSignedType = IPrimitiveSignedType<JDouble, Double>;
+using IPrimitiveNumericType = IPrimitiveNumericType<JDouble>;
 
 /// <summary>
 /// Primitive <c>double</c>. Represents a double-precision floating-point number.
@@ -12,9 +11,8 @@ using IPrimitiveSignedType = IPrimitiveSignedType<JDouble, Double>;
 /// This struct is not ABI-compliant, so you should avoid using it as a return or parameter type in native or
 /// interop calls.
 /// </remarks>
-[StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JDouble : INativeType, IComparable<JDouble>, IEquatable<JDouble>,
-	IPrimitiveFloatingPointType, IPrimitiveSignedType
+[StructLayout(LayoutKind.Explicit, Size = sizeof(Double), Pack = 0)]
+public readonly partial struct JDouble : IPrimitiveFloatingPointType, IPrimitiveNumericType, IPrimitiveValueType
 {
 	/// <summary>
 	/// Primitive type info.
@@ -39,6 +37,9 @@ public readonly partial struct JDouble : INativeType, IComparable<JDouble>, IEqu
 	/// <summary>
 	/// Internal double-precision floating-point number value.
 	/// </summary>
+	[FieldOffset(0)]
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	private readonly Double _value;
 
 	/// <summary>
@@ -71,10 +72,10 @@ public readonly partial struct JDouble : INativeType, IComparable<JDouble>, IEqu
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JDouble(JObject jObj)
 		=> CommonValidationUtilities.ThrowIfInvalidCast<Double>(jObj as IConvertible);
-	/// <inheritdoc/>
+	/// <inheritdoc cref="INativeDataType{TNativeType}.op_Implicit(SByte)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JDouble(Double value) => new(value);
 
-	static JDouble IPrimitiveNumericType<JDouble>.FromDouble(Double value) => new(value);
-	static Double IPrimitiveNumericType<JDouble>.ToDouble(JDouble value) => value._value;
+	static JDouble IPrimitiveNumericType.FromDouble(Double value) => new(value);
+	static Double IPrimitiveNumericType.ToDouble(JDouble value) => value._value;
 }

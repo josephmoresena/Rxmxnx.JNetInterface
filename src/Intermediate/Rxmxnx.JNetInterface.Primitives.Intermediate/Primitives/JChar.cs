@@ -2,13 +2,14 @@ namespace Rxmxnx.JNetInterface.Primitives;
 
 using TypeMetadata = JPrimitiveTypeMetadata<JChar>;
 using IPrimitiveValueType = IPrimitiveType<JChar, Char>;
-using IPrimitiveIntegerType = IPrimitiveIntegerType<JChar, Char>;
+using IPrimitiveNumericType = IPrimitiveNumericType<JChar>;
 
 /// <summary>
 /// Primitive <c>char</c>. Represents a character as a UTF-16 code unit.
 /// </summary>
-[StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JChar : INativeType, IComparable<JChar>, IEquatable<JChar>, IPrimitiveIntegerType
+[StructLayout(LayoutKind.Explicit, Size = sizeof(UInt16), Pack = 0)]
+[DebuggerDisplay(nameof(JChar.Value))]
+public readonly partial struct JChar : IPrimitiveIntegerType, IPrimitiveNumericType, IPrimitiveValueType
 {
 	/// <summary>
 	/// Primitive type info.
@@ -33,13 +34,15 @@ public readonly partial struct JChar : INativeType, IComparable<JChar>, IEquatab
 	/// <summary>
 	/// Internal UTF-16 code unit character.
 	/// </summary>
-	[MarshalAs(UnmanagedType.U2)]
-	private readonly Char _value;
+	[FieldOffset(0)]
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	private readonly UInt16 _value;
 
 	/// <summary>
 	/// <see cref="Char"/> representation of the current instance.
 	/// </summary>
-	public Char Value => this._value;
+	public Char Value => (Char)this._value;
 	/// <inheritdoc/>
 	public CString ObjectClassName => IPrimitiveType.GetMetadata<JChar>().ClassName;
 	/// <inheritdoc/>
@@ -76,6 +79,6 @@ public readonly partial struct JChar : INativeType, IComparable<JChar>, IEquatab
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JChar(Int16 value) => new((Char)value);
 
-	static JChar IPrimitiveNumericType<JChar>.FromDouble(Double value) => new(value);
-	static Double IPrimitiveNumericType<JChar>.ToDouble(JChar value) => value._value;
+	static JChar IPrimitiveNumericType.FromDouble(Double value) => new(value);
+	static Double IPrimitiveNumericType.ToDouble(JChar value) => value._value;
 }

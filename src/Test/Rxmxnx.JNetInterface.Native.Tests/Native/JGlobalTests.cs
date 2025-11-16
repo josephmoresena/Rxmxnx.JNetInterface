@@ -18,7 +18,7 @@ public sealed class JGlobalTests : GlobalObjectTestsBase
 		JGlobalRef globalRef0 = GlobalObjectTestsBase.Fixture.Create<JGlobalRef>();
 		JGlobalRef globalRef1 = GlobalObjectTestsBase.Fixture.Create<JGlobalRef>();
 
-		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
+		vm.InitializeThread(Arg.Any<CString?>(), version: Arg.Any<Int32>()).Returns(thread);
 		env.ReferenceFeature.Unload(Arg.Any<JGlobal>()).Returns(true);
 		env.IsValidationAvoidable(Arg.Any<JGlobalBase>()).Returns(true);
 		env.Version.Returns(IVirtualMachine.MinimalVersion - (minVersion ? 0 : 1));
@@ -90,14 +90,14 @@ public sealed class JGlobalTests : GlobalObjectTestsBase
 		env.ReferenceFeature.ClearReceivedCalls();
 		jGlobal2.Dispose();
 
-		vm.Received(1).InitializeThread(Arg.Any<CString?>());
+		vm.Received(1).InitializeThread(Arg.Any<CString?>(), version: Arg.Any<Int32>());
 		env.ReferenceFeature.Received(1).Unload(jGlobal2);
 		Assert.Equal(default, jGlobal2.Reference);
 
 		vm.ClearReceivedCalls();
 		env.ReferenceFeature.ClearReceivedCalls();
 		jGlobal2.Dispose();
-		vm.Received(1).InitializeThread(Arg.Any<CString?>());
+		vm.Received(1).InitializeThread(Arg.Any<CString?>(), version: Arg.Any<Int32>());
 		env.ReferenceFeature.Received(0).Unload(jGlobal2);
 
 		env.ClearReceivedCalls();
@@ -131,7 +131,7 @@ public sealed class JGlobalTests : GlobalObjectTestsBase
 		using JClassObject jClassClass = new(env);
 		using JGlobal jGlobal = new(jClassClass, globalRef);
 
-		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
+		vm.InitializeThread(Arg.Any<CString?>(), version: Arg.Any<Int32>()).Returns(thread);
 		jClassClass.SetAssignableTo<JClassObject>(true);
 		jClassClass.SetAssignableTo<JStringObject>(false);
 
@@ -152,7 +152,7 @@ public sealed class JGlobalTests : GlobalObjectTestsBase
 
 		env.JniSecure().Returns(jniSecure.GetValueOrDefault());
 		vm.GetEnvironment().Returns(jniSecure.HasValue ? env : default);
-		vm.WhenForAnyArgs(v => v.InitializeThread(Arg.Any<CString?>())).Do(c =>
+		vm.WhenForAnyArgs(v => v.InitializeThread(Arg.Any<CString?>(), version: Arg.Any<Int32>())).Do(c =>
 		{
 			if (!c[0]!.ToString()!.StartsWith("CheckAssignability-")) return;
 			if (!jniSecure.GetValueOrDefault())
@@ -163,7 +163,7 @@ public sealed class JGlobalTests : GlobalObjectTestsBase
 		Assert.False(jGlobal.InstanceOf<JArrayObject<JLocalObject>>());
 		vm.Received(1).GetEnvironment();
 		env.Received(jniSecure.HasValue ? 1 : 0).JniSecure();
-		vm.Received(1).InitializeThread(Arg.Any<CString?>());
+		vm.Received(1).InitializeThread(Arg.Any<CString?>(), version: Arg.Any<Int32>());
 		env.ClassFeature.Received(1).IsInstanceOf<JArrayObject<JLocalObject>>(jGlobal);
 	}
 
@@ -180,7 +180,7 @@ public sealed class JGlobalTests : GlobalObjectTestsBase
 		using JClassObject jClassClass = new(env);
 		using JGlobal jGlobal = new(jClassClass, globalRef);
 
-		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
+		vm.InitializeThread(Arg.Any<CString?>(), version: Arg.Any<Int32>()).Returns(thread);
 		env.ReferenceFeature.GetSynchronizer(Arg.Any<JGlobal>()).Returns(synchronizer);
 
 		if (isDefault)

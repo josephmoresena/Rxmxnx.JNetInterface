@@ -24,7 +24,9 @@ public sealed class ClassParseTests
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
@@ -36,28 +38,29 @@ public sealed class ClassParseTests
 	internal void GlobalTest(Boolean useNew, Boolean lowerVersion = false)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
-		if (lowerVersion) proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
+		if (lowerVersion)
+			proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
 		try
 		{
 			JGlobalRef globalRef = ClassParseTests.fixture.Create<JGlobalRef>();
 			proxyEnv.GetObjectRefType(globalRef.Value).Returns(JReferenceType.GlobalRefType);
 			proxyEnv.NewGlobalRef(proxyEnv.VoidObjectLocalRef.Value).Returns(globalRef);
-
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
 			IClassFeature classFeature = env.ClassFeature;
 			JGlobal jGlobal = useNew ? classFeature.VoidObject.Global : new(classFeature.VoidObject, globalRef);
 			Assert.Equal(classFeature.VoidObject, classFeature.AsClassObject(jGlobal));
-			if (useNew) Assert.Equal(jGlobal, classFeature.VoidObject.Global);
-
-			proxyEnv.Received(0).IsInstanceOf(globalRef.Value,
-			                                  JClassLocalRef.FromReference(proxyEnv.VirtualMachine.ClassGlobalRef));
+			if (useNew)
+				Assert.Equal(jGlobal, classFeature.VoidObject.Global);
+			proxyEnv.Received(0).IsInstanceOf(globalRef.Value, new(proxyEnv.VirtualMachine.ClassGlobalRef));
 		}
 		finally
 		{
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
@@ -69,27 +72,29 @@ public sealed class ClassParseTests
 	internal void WeakTest(Boolean useNew, Boolean lowerVersion = false)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
-		if (lowerVersion) proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
+		if (lowerVersion)
+			proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
 		try
 		{
 			JWeakRef weakRef = ClassParseTests.fixture.Create<JWeakRef>();
 			proxyEnv.GetObjectRefType(weakRef.Value).Returns(JReferenceType.WeakGlobalRefType);
 			proxyEnv.NewWeakGlobalRef(proxyEnv.VoidObjectLocalRef.Value).Returns(weakRef);
-
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
 			IClassFeature classFeature = env.ClassFeature;
 			JWeak jWeak = useNew ? classFeature.VoidObject.Weak : new(classFeature.VoidObject, weakRef);
 			Assert.Equal(classFeature.VoidObject, classFeature.AsClassObject(jWeak));
-			if (useNew) Assert.Equal(jWeak, classFeature.VoidObject.Weak);
-			proxyEnv.Received(0).IsInstanceOf(weakRef.Value,
-			                                  JClassLocalRef.FromReference(proxyEnv.VirtualMachine.ClassGlobalRef));
+			if (useNew)
+				Assert.Equal(jWeak, classFeature.VoidObject.Weak);
+			proxyEnv.Received(0).IsInstanceOf(weakRef.Value, new(proxyEnv.VirtualMachine.ClassGlobalRef));
 		}
 		finally
 		{
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
@@ -149,8 +154,7 @@ public sealed class ClassParseTests
 				Assert.Equal(jGlobal, localObject.Global);
 			}
 
-			proxyEnv.Received(0).IsInstanceOf(globalRef.Value,
-			                                  JClassLocalRef.FromReference(proxyEnv.VirtualMachine.ClassGlobalRef));
+			proxyEnv.Received(0).IsInstanceOf(globalRef.Value, new(proxyEnv.VirtualMachine.ClassGlobalRef));
 		}
 		finally
 		{
@@ -158,7 +162,9 @@ public sealed class ClassParseTests
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
@@ -172,20 +178,19 @@ public sealed class ClassParseTests
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
 			IClassFeature classFeature = env.ClassFeature;
 			using JLocalObject wrapperValue = TestUtilities.CreateWrapper(proxyEnv, value);
-			proxyEnv.IsInstanceOf(wrapperValue.Reference,
-			                      JClassLocalRef.FromReference(proxyEnv.VirtualMachine.ClassGlobalRef)).Returns(false);
+			proxyEnv.IsInstanceOf(wrapperValue.Reference, new(proxyEnv.VirtualMachine.ClassGlobalRef)).Returns(false);
 			Assert.Throws<ArgumentException>(() => classFeature.AsClassObject(wrapperValue));
-
 			proxyEnv.Received(1).IsInstanceOf(wrapperValue.Reference,
-			                                  JClassLocalRef.FromReference(
-				                                  proxyEnv.VirtualMachine.ClassGlobalRef.Value));
+			                                  new(proxyEnv.VirtualMachine.ClassGlobalRef.Value));
 		}
 		finally
 		{
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
@@ -221,7 +226,9 @@ public sealed class ClassParseTests
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}

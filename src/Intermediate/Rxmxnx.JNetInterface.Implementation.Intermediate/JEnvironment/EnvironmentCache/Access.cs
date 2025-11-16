@@ -128,11 +128,11 @@ partial class JEnvironment
 		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 		/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
 		private unsafe TResult? CallObjectFunction<TResult>(JFunctionDefinition definition, JObjectLocalRef localRef,
-			JClassLocalRef classRef, ReadOnlySpan<IObject?> args, INativeTransaction jniTransaction, JMethodId methodId)
-			where TResult : IDataType<TResult>
+			JClassLocalRef? classRef, ReadOnlySpan<IObject?> args, INativeTransaction jniTransaction,
+			JMethodId methodId) where TResult : IDataType<TResult>
 		{
 			ref readonly InstanceMethodFunctionSet instanceMethodFunctions =
-				ref this.GetInstanceMethodFunctions(CommonNames.ObjectSignaturePrefixChar, !classRef.IsDefault);
+				ref this.GetInstanceMethodFunctions(CommonNames.ObjectSignaturePrefixChar, classRef != default);
 			using StackDisposable stackDisposable =
 				this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
 			Rented<Byte> rented = default;
@@ -143,14 +143,14 @@ partial class JEnvironment
 			JObjectLocalRef resultLocalRef;
 			fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
 			{
-				resultLocalRef = classRef.IsDefault ?
+				resultLocalRef = classRef is null ?
 					instanceMethodFunctions.MethodFunctions.CallObjectMethod.Call(
 						this.Reference, localRef, methodId, ptr) :
 					instanceMethodFunctions.NonVirtualFunctions.CallNonVirtualObjectMethod.Call(
-						this.Reference, localRef, classRef, methodId, ptr);
+						this.Reference, localRef, classRef.Value, methodId, ptr);
 			}
 			rented.Free();
-			JTrace.CallObjectFunction(localRef, classRef, methodId, resultLocalRef, false);
+			JTrace.CallObjectFunction(localRef, classRef.GetValueOrDefault(), methodId, resultLocalRef, false);
 			this.CheckJniError();
 			return this.CreateObject<TResult>(resultLocalRef, true, MetadataHelper.IsFinalType<TResult>());
 		}
@@ -165,7 +165,7 @@ partial class JEnvironment
 		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 		/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
 		private unsafe void CallPrimitiveFunction(Span<Byte> bytes, JFunctionDefinition definition,
-			JObjectLocalRef localRef, JClassLocalRef classRef, ReadOnlySpan<IObject?> args,
+			JObjectLocalRef localRef, JClassLocalRef? classRef, ReadOnlySpan<IObject?> args,
 			INativeTransaction jniTransaction, JMethodId methodId)
 		{
 			using StackDisposable stackDisposable =
@@ -177,11 +177,11 @@ partial class JEnvironment
 				                                        EnvironmentCache.HeapAlloc(requiredBytes, ref rented));
 			fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
 			{
-				if (classRef.IsDefault)
+				if (classRef is null)
 					this.CallPrimitiveFunction(bytes, localRef, definition.Descriptor[^1], methodId, ptr);
 				else
-					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, definition.Descriptor[^1], methodId,
-					                                     ptr);
+					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef.Value, definition.Descriptor[^1],
+					                                     methodId, ptr);
 			}
 			rented.Free();
 			this.CheckJniError();
@@ -229,11 +229,11 @@ partial class JEnvironment
 		/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 		/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
-		private unsafe void CallMethod(JMethodDefinition definition, JObjectLocalRef localRef, JClassLocalRef classRef,
+		private unsafe void CallMethod(JMethodDefinition definition, JObjectLocalRef localRef, JClassLocalRef? classRef,
 			ReadOnlySpan<IObject?> args, INativeTransaction jniTransaction, JMethodId methodId)
 		{
 			ref readonly InstanceMethodFunctionSet instanceMethodFunctions =
-				ref this.GetInstanceMethodFunctions(CommonNames.VoidSignatureChar, !classRef.IsDefault);
+				ref this.GetInstanceMethodFunctions(CommonNames.VoidSignatureChar, classRef != default);
 			using StackDisposable stackDisposable =
 				this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
 			Rented<Byte> rented = default;
@@ -243,15 +243,15 @@ partial class JEnvironment
 				                                        EnvironmentCache.HeapAlloc(requiredBytes, ref rented));
 			fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
 			{
-				if (classRef.IsDefault)
+				if (classRef is null)
 					instanceMethodFunctions.MethodFunctions.CallVoidMethod.Call(
 						this.Reference, localRef, methodId, ptr);
 				else
 					instanceMethodFunctions.NonVirtualFunctions.CallNonVirtualVoidMethod.Call(
-						this.Reference, localRef, classRef, methodId, ptr);
+						this.Reference, localRef, classRef.Value, methodId, ptr);
 			}
 			rented.Free();
-			JTrace.CallMethod(localRef, classRef, methodId);
+			JTrace.CallMethod(localRef, classRef.GetValueOrDefault(), methodId);
 			this.CheckJniError();
 		}
 		/// <summary>

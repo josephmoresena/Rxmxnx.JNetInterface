@@ -73,14 +73,16 @@ public sealed class JVirtualMachineInitArg
 	/// Copies current options strings to <paramref name="optionSpan"/>.
 	/// </summary>
 	/// <param name="optionSpan">A <see cref="VirtualMachineInitOptionValue"/> span.</param>
-	internal void CopyOptions(Span<VirtualMachineInitOptionValue> optionSpan)
+	internal unsafe void CopyOptions(Span<VirtualMachineInitOptionValue> optionSpan)
 	{
-		ReadOnlyValPtr<Byte> value = NativeUtilities.GetUnsafeValPtr(in this.Options.GetPinnableReference());
-		Span<Int32> offsets = stackalloc Int32[optionSpan.Length];
-
-		this.Options.GetOffsets(offsets);
-		for (Int32 i = 0; i < optionSpan.Length; i++)
-			optionSpan[i] = new(value + offsets[i]);
+		fixed (void* ptr = &this.Options.GetPinnableReference())
+		{
+			ReadOnlyValPtr<Byte> value = (Byte*)ptr;
+			Span<Int32> offsets = stackalloc Int32[optionSpan.Length];
+			this.Options.GetOffsets(offsets);
+			for (Int32 i = 0; i < optionSpan.Length; i++)
+				optionSpan[i] = new(value + offsets[i]);
+		}
 	}
 
 	/// <summary>
@@ -96,8 +98,9 @@ public sealed class JVirtualMachineInitArg
 		Int32 index = 0;
 		foreach (VirtualMachineInitOptionValue option in optionsValue)
 		{
-			if (option.OptionString.IsZero || option.OptionString.Reference == (Byte)'\0') continue;
-			options[index] = option.OptionString;
+			ReadOnlyValPtr<Byte> optionString = option.OptionString;
+			if (optionString.IsZero || optionString.Reference == (Byte)'\0') continue;
+			options[index] = optionString;
 			index++;
 		}
 		return CStringSequence.GetUnsafe(options[..index]);

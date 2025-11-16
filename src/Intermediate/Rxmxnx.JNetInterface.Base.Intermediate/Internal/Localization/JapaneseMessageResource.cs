@@ -111,6 +111,10 @@ internal sealed class JapaneseMessageResource : IMessageResource
 	String IMessageResource.InvalidCallVersion(Int32 currentVersion, String functionName, Int32 requiredVersion)
 		=> $"{functionName} はバージョン 0x{requiredVersion:x8} を必要としますが、現在のバージョンは 0x{currentVersion:x8} です。";
 	String IMessageResource.InvalidArrayClass(String className) => $"{className} は配列クラスではありません。";
+	String IMessageResource.MissingArrayTypeMetadata(JDataTypeMetadata typeMetadata)
+		=> $"{typeMetadata.Signature} の型メタデータから {typeMetadata.ArraySignature} の型メタデータを取得できませんでした。";
+	String IMessageResource.InvalidArrayDimension(Int32 maxLevel)
+		=> maxLevel > 0 ? $"配列の次元は 1 から {maxLevel} の範囲でなければなりません。" : "配列型の次元が多すぎます。";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

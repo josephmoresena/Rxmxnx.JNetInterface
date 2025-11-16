@@ -1,0 +1,24 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+        <IsTempPackage Condition="'$(Version)' == '9999.99.99.99-tmp'">true</IsTempPackage>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Rxmxnx.JNetInterface</RootNamespace>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <EnablePackageValidation>true</EnablePackageValidation>
+        <SigningKeyFile>..\Rxmxnx.JNetInterface.snk</SigningKeyFile>
+        <IntermediateSourceBasePath>..\..\src\Intermediate</IntermediateSourceBasePath>
+        <DefineConstants Condition="'$(IsTempPackage)' == 'true'">$(DefineConstants);TEMP_PACKAGE</DefineConstants>
+    </PropertyGroup>
+
+    <Import Project="..\src\Library.targets"/>
+    <Import Project="Intermediate-to-Package.targets"/>
+
+    <!-- Validations -->
+    <PropertyGroup>
+        <ApiCompatPreserveUnnecessarySuppressions>true</ApiCompatPreserveUnnecessarySuppressions>
+        <ApiCompatRespectInternals>true</ApiCompatRespectInternals>
+    </PropertyGroup>
+
+</Project>

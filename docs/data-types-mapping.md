@@ -4,12 +4,12 @@
 instances of `JDataTypeMetadata` used for identification.  
 The following table illustrates how data type mapping works.
 
-| Java Declaration                | Base Type                                   | Interface                               | Metadata                                                                                    | Inheritance                                             |
-|---------------------------------|---------------------------------------------|-----------------------------------------|---------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `class JavaClassName`           | `JLocalObject`<sup>1</sup>                  | `IClassType<NetClassName>`              | `JClassTypeMetadata<NetClassName> { ClassName = package/JavaClassName }`                    | `: NetClassName`<sup>2</sup>                            |
-| `interface JavaInterfaceName`   | `JInterfaceObject<NetInterfaceClassName>`   | `IInterfaceType<NetInterfaceClassName>` | `JInterfaceTypeMetadata<NetInterfaceClassName> { ClassName = package/JavaInterfaceName }`   | `: IInterfaceObject<NetInterfaceClassName>`<sup>3</sup> |
-| `enum JavaEnumName`             | `JEnumObject<NetEnumClassName>`             | `IEnumType<NetEnumClassName>`           | `JEnumTypeMetadata<NetEnumClassName> { ClassName = package/JavaEnumName }`                  | N/A                                                     |
-| `@interface JavaAnnotationName` | `JAnnotationObject<NetAnnotationClassName>` | `IInterfaceType<NetInterfaceClassName>` | `JInterfaceTypeMetadata<NetAnnotationClassName> { ClassName = package/JavaAnnotationName }` | N/A<sup>4</sup>                                         |
+| Java Declaration                | Base Type                                   | Interface                                 | Metadata                                                                                    | Inheritance                                             |
+|---------------------------------|---------------------------------------------|-------------------------------------------|---------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `class JavaClassName`           | `JLocalObject`<sup>1</sup>                  | `IClassType<NetClassName>`                | `JClassTypeMetadata<NetClassName> { ClassName = package/JavaClassName }`                    | `: NetClassName`<sup>2</sup>                            |
+| `interface JavaInterfaceName`   | `JInterfaceObject<NetInterfaceClassName>`   | `IInterfaceType<NetInterfaceClassName>`   | `JInterfaceTypeMetadata<NetInterfaceClassName> { ClassName = package/JavaInterfaceName }`   | `: IInterfaceObject<NetInterfaceClassName>`<sup>3</sup> |
+| `enum JavaEnumName`             | `JEnumObject<NetEnumClassName>`             | `IEnumType<NetEnumClassName>`             | `JEnumTypeMetadata<NetEnumClassName> { ClassName = package/JavaEnumName }`                  | N/A                                                     |
+| `@interface JavaAnnotationName` | `JAnnotationObject<NetAnnotationClassName>` | `IAnnotationType<NetAnnotationClassName>` | `JInterfaceTypeMetadata<NetAnnotationClassName> { ClassName = package/JavaAnnotationName }` | N/A<sup>4</sup>                                         |
 
 1. The base type depends on the hierarchy of the mapped class.
 2. To extend a class, the superclass must be defined when constructing the `TypeMetadataBuilder` instance.
@@ -17,6 +17,15 @@ The following table illustrates how data type mapping works.
    `IInterfaceObject<..>` enables covariance.
 4. While Java annotations (`@interface`) are not meant to be inherited, they are treated as interfaces in the mapping,
    allowing inheritance.
+
+##### Notes
+
+- By default, the static property `IDataType.Since` is initialized with the value `JRuntimeVersion.SEd0` (Java 1.0) but
+  can be overridden in any mapped type.
+- In .NET 8.0 and later, the value of the static property `IDataType.Since` is inherited from the base class but can be
+  overridden in any subclass.
+- The minimum allowed value for the static property `IDataType.Since`, both for annotations and enums, is
+  `JRuntimeVersion.J5` (Java 1.5).
 
 ## Specialized Types
 
@@ -27,7 +36,8 @@ The following table illustrates how data type mapping works.
 | **Array**      | N/A                                                     | N/A                | `IArrayType<JArrayObject<..>>`                      | `JArrayTypeMetadata`                                   | N/A<sup>2</sup>                       |
 
 1. Primitive types cannot be inherited, just like in Java. In CLR, they are value-type structures, and additional
-   primitive types cannot be created.
+   primitive types cannot be
+   created. [They are blittable but may not be usable for function marshalling.](https://github.com/dotnet/runtime/issues/117778#issuecomment-3085491218).
 2. Arrays, like in Java, are views. While inheritance is not allowed, the `IArrayObject<..>` interface enables
    covariance for class-type arrays. For example, a `JArrayObject<JStringObject>` instance can be assigned to a variable
    of type `IArrayObject<JLocalObject>` or `IArrayObject<IInterfaceObject<JSerializableObject>>`.
@@ -36,7 +46,7 @@ The following table illustrates how data type mapping works.
 
 All JNI-interoperable types implement the `IObject` interface and extend or can be converted to `JObject`.
 
-![InterfaceHierarchy](https://github.com/user-attachments/assets/b7bc1605-ad6b-48fb-abf2-8e937a433809)
+![InterfaceHierarchy2](https://github.com/user-attachments/assets/8b704ba6-7c56-4053-a65a-82483e019770)
 
 All JNI-interoperable objects are instances of `JObject`. Primitives undergo boxing when converted to `JObject`.
 

@@ -9,7 +9,7 @@ namespace Rxmxnx.JNetInterface.Tests.Internal;
 internal unsafe struct InternalInvokeInterface
 {
 #pragma warning disable CS0169
-	private readonly JInvokeInterface.ComReserved _reserved;
+	private readonly InvokeInterface.ComReserved _reserved;
 #pragma warning restore CS0169
 
 	public delegate* unmanaged<JVirtualMachineRef, JResult> DestroyVirtualMachine;

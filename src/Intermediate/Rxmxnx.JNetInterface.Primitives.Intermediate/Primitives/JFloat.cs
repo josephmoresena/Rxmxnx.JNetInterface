@@ -2,8 +2,7 @@ namespace Rxmxnx.JNetInterface.Primitives;
 
 using TypeMetadata = JPrimitiveTypeMetadata<JFloat>;
 using IPrimitiveValueType = IPrimitiveType<JFloat, Single>;
-using IPrimitiveFloatingPointType = IPrimitiveFloatingPointType<JFloat, Single>;
-using IPrimitiveSignedType = IPrimitiveSignedType<JFloat, Single>;
+using IPrimitiveNumericType = IPrimitiveNumericType<JFloat>;
 
 /// <summary>
 /// Primitive <c>float</c>. Represents a single-precision floating-point number.
@@ -12,9 +11,8 @@ using IPrimitiveSignedType = IPrimitiveSignedType<JFloat, Single>;
 /// This struct is not ABI-compliant, so you should avoid using it as a return or parameter type in native or
 /// interop calls.
 /// </remarks>
-[StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JFloat : INativeType, IComparable<JFloat>, IEquatable<JFloat>,
-	IPrimitiveFloatingPointType, IPrimitiveSignedType
+[StructLayout(LayoutKind.Explicit, Size = sizeof(Single), Pack = 0)]
+public readonly partial struct JFloat : IPrimitiveFloatingPointType, IPrimitiveNumericType, IPrimitiveValueType
 {
 	/// <summary>
 	/// Primitive type info.
@@ -39,6 +37,9 @@ public readonly partial struct JFloat : INativeType, IComparable<JFloat>, IEquat
 	/// <summary>
 	/// Internal single-precision floating-point number value.
 	/// </summary>
+	[FieldOffset(0)]
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	private readonly Single _value;
 
 	/// <summary>
@@ -71,10 +72,10 @@ public readonly partial struct JFloat : INativeType, IComparable<JFloat>, IEquat
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JFloat(JObject jObj)
 		=> CommonValidationUtilities.ThrowIfInvalidCast<Single>(jObj as IConvertible);
-	/// <inheritdoc/>
+	/// <inheritdoc cref="INativeDataType{TNativeType}.op_Implicit(SByte)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JFloat(Single value) => new(value);
 
-	static JFloat IPrimitiveNumericType<JFloat>.FromDouble(Double value) => IPrimitiveNumericType.GetSingleValue(value);
-	static Double IPrimitiveNumericType<JFloat>.ToDouble(JFloat value) => value._value;
+	static JFloat IPrimitiveNumericType.FromDouble(Double value) => IPrimitiveNumericType.GetSingleValue(value);
+	static Double IPrimitiveNumericType.ToDouble(JFloat value) => value._value;
 }

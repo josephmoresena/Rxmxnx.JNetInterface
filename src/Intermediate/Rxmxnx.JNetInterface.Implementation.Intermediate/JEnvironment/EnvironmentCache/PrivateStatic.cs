@@ -27,9 +27,7 @@ partial class JEnvironment
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static unsafe Int32 GetVersion(JEnvironmentRef envRef)
 		{
-			ref readonly JEnvironmentValue refValue = ref envRef.Reference;
-			ref readonly NativeInterface nativeInterface =
-				ref Unsafe.AsRef<NativeInterface>(refValue.Pointer.ToPointer());
+			ref readonly NativeInterface nativeInterface = ref *(NativeInterface*)envRef.InterfacePointer;
 			return nativeInterface.GetVersion(envRef);
 		}
 		/// <summary>

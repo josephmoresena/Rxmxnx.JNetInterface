@@ -22,9 +22,13 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 	/// Type interfaces.
 	/// </summary>
 	private static readonly ImmutableHashSet<JInterfaceTypeMetadata> typeInterfaces =
+#if NET8_0_OR_GREATER
 	[
 		IInterfaceType.GetMetadata<JDirectBufferObject>(),
 	];
+#else
+		ImmutableHashSet.Create(IInterfaceType.GetMetadata<JDirectBufferObject>());
+#endif
 	/// <summary>
 	/// Type metadata.
 	/// </summary>
@@ -33,6 +37,8 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 		JDirectByteBufferObject.typeInterfaces);
 
 	static TypeMetadata IClassType<JDirectByteBufferObject>.Metadata => JDirectByteBufferObject.typeMetadata;
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd4;
 
 	/// <summary>
 	/// Internal memory.

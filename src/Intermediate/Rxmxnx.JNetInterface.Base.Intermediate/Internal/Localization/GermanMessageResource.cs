@@ -121,6 +121,12 @@ internal sealed class GermanMessageResource : IMessageResource
 	String IMessageResource.InvalidCallVersion(Int32 currentVersion, String functionName, Int32 requiredVersion)
 		=> $"{functionName} erfordert Version 0x{requiredVersion:x8}, aber die aktuelle Version ist 0x{currentVersion:x8}.";
 	String IMessageResource.InvalidArrayClass(String className) => $"{className} ist keine Array-Klasse.";
+	String IMessageResource.MissingArrayTypeMetadata(JDataTypeMetadata typeMetadata)
+		=> $"Metadaten des Typs {typeMetadata.ArraySignature} konnten nicht aus den Metadaten des Typs {typeMetadata.Signature} abgerufen werden.";
+	String IMessageResource.InvalidArrayDimension(Int32 maxLevel)
+		=> maxLevel > 0 ?
+			$"Array-Dimensionen müssen zwischen 1 und {maxLevel} liegen." :
+			"Der Array-Typ hat zu viele Dimensionen.";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

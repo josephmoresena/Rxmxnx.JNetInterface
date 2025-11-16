@@ -18,14 +18,13 @@ public partial class JReferenceObject
 	/// <inheritdoc/>
 	private protected override void CopyTo(Span<JValue> span, Int32 index)
 	{
-		JObjectLocalRef localRef = this.To<JObjectLocalRef>();
-		NativeUtilities.AsBytes(in localRef).CopyTo(span[index..].AsBytes());
+		span[index] = default; // Clears the current value
+		Unsafe.As<JValue, JObjectLocalRef>(ref span[index]) = this.To<JObjectLocalRef>();
 	}
 	/// <inheritdoc/>
 	private protected override void CopyTo(Span<Byte> span, ref Int32 offset)
 	{
-		JObjectLocalRef localRef = this.To<JObjectLocalRef>();
-		NativeUtilities.AsBytes(in localRef).CopyTo(span[offset..]);
+		Unsafe.As<Byte, JObjectLocalRef>(ref span[offset]) = this.To<JObjectLocalRef>();
 		offset += IntPtr.Size;
 	}
 	/// <summary>

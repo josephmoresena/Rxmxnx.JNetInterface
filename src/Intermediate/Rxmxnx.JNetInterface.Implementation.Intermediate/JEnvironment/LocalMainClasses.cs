@@ -21,6 +21,8 @@ partial class JEnvironment
 		public override JClassObject ThrowableObject { get; } = default!;
 		/// <inheritdoc/>
 		public override JClassObject StackTraceElementObject { get; } = default!;
+		/// <inheritdoc/>
+		public override JClassObject SystemObject { get; } = default!;
 		/// <summary>
 		/// Class for Java <c>void</c> type.
 		/// </summary>
@@ -77,6 +79,7 @@ partial class JEnvironment
 
 			this.ClassObject = jClass;
 			this.ThrowableObject = new(jClass, MetadataHelper.GetExactMetadata<JThrowableObject>());
+			this.SystemObject = new(jClass, MetadataHelper.GetExactMetadata<JSystemObject>());
 			this.StackTraceElementObject = new(jClass, MetadataHelper.GetExactMetadata<JStackTraceElementObject>());
 
 			this.VoidPrimitive = new(jClass, JPrimitiveTypeMetadata.VoidMetadata);

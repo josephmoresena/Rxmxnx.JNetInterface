@@ -68,6 +68,10 @@ internal partial interface IClassFeature
 	/// </summary>
 	JClassObject StackTraceElementObject { get; }
 	/// <summary>
+	/// <c>java.lang.System</c> class instance.
+	/// </summary>
+	JClassObject SystemObject { get; }
+	/// <summary>
 	/// <c>java.lang.String</c> class instance.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]

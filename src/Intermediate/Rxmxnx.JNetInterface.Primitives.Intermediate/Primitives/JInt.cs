@@ -2,15 +2,13 @@ namespace Rxmxnx.JNetInterface.Primitives;
 
 using TypeMetadata = JPrimitiveTypeMetadata<JInt>;
 using IPrimitiveValueType = IPrimitiveType<JInt, Int32>;
-using IPrimitiveIntegerType = IPrimitiveIntegerType<JInt, Int32>;
-using IPrimitiveSignedType = IPrimitiveSignedType<JInt, Int32>;
+using IPrimitiveNumericType = IPrimitiveNumericType<JInt>;
 
 /// <summary>
 /// Primitive <c>int</c>. Represents a primitive 32-bit signed integer.
 /// </summary>
-[StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JInt : INativeType, IComparable<JInt>, IEquatable<JInt>, IPrimitiveIntegerType,
-	IPrimitiveSignedType
+[StructLayout(LayoutKind.Explicit, Size = sizeof(Int32), Pack = 0)]
+public readonly partial struct JInt : IPrimitiveIntegerType, IPrimitiveNumericType, IPrimitiveValueType
 {
 	/// <summary>
 	/// Primitive type info.
@@ -35,6 +33,9 @@ public readonly partial struct JInt : INativeType, IComparable<JInt>, IEquatable
 	/// <summary>
 	/// Internal 32-bit signed integer value.
 	/// </summary>
+	[FieldOffset(0)]
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	private readonly Int32 _value;
 
 	/// <summary>
@@ -67,10 +68,10 @@ public readonly partial struct JInt : INativeType, IComparable<JInt>, IEquatable
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JInt(JObject jObj)
 		=> CommonValidationUtilities.ThrowIfInvalidCast<Int32>(jObj as IConvertible);
-	/// <inheritdoc/>
+	/// <inheritdoc cref="INativeDataType{TNativeType}.op_Implicit(SByte)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JInt(Int32 value) => new(value);
 
-	static JInt IPrimitiveNumericType<JInt>.FromDouble(Double value) => new(value);
-	static Double IPrimitiveNumericType<JInt>.ToDouble(JInt value) => value._value;
+	static JInt IPrimitiveNumericType.FromDouble(Double value) => new(value);
+	static Double IPrimitiveNumericType.ToDouble(JInt value) => value._value;
 }

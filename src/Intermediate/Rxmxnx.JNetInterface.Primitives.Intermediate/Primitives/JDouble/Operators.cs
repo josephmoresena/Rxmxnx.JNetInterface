@@ -41,6 +41,32 @@ public readonly partial struct JDouble : IPrimitiveEquatable
 	/// <param name="value">A <see cref="JDouble"/> to implicitly convert.</param>
 	public static implicit operator JFloat(JDouble value) => IPrimitiveNumericType.GetSingleValue(value.Value);
 
+#pragma warning disable CS0473
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JDouble>.operator JDouble(SByte value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JDouble>.operator JDouble(UInt16 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JDouble>.operator JDouble(Single value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JDouble>.operator JDouble(Int32 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JDouble>.operator JDouble(Int64 value) => new(value);
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	static implicit INativeDataType<JDouble>.operator JDouble(Int16 value) => new(value);
+
 	static explicit IPrimitiveNumericType<JDouble>.operator JFloat(JDouble jPrimitive) => jPrimitive;
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -49,31 +75,32 @@ public readonly partial struct JDouble : IPrimitiveEquatable
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JDouble>.operator SByte(JDouble jPrimitive)
+	static explicit INativeDataType<JDouble>.operator SByte(JDouble jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<SByte, Double>(jPrimitive._value);
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JDouble>.operator Int64(JDouble jPrimitive)
+	static explicit INativeDataType<JDouble>.operator Int64(JDouble jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Int64, Double>(jPrimitive._value);
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JDouble>.operator Int16(JDouble jPrimitive)
+	static explicit INativeDataType<JDouble>.operator Int16(JDouble jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Int16, Double>(jPrimitive._value);
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JDouble>.operator Single(JDouble jPrimitive)
+	static explicit INativeDataType<JDouble>.operator Single(JDouble jPrimitive)
 		=> IPrimitiveNumericType.GetSingleValue(jPrimitive.Value);
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JDouble>.operator Int32(JDouble jPrimitive)
+	static explicit INativeDataType<JDouble>.operator Int32(JDouble jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Int32, Double>(jPrimitive._value);
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	static explicit IPrimitiveNumericType<JDouble>.operator Char(JDouble jPrimitive)
+	static explicit INativeDataType<JDouble>.operator Char(JDouble jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Char, Double>(jPrimitive._value);
+#pragma warning restore CS0473
 }

@@ -2,14 +2,13 @@ namespace Rxmxnx.JNetInterface.Primitives;
 
 using TypeMetadata = JPrimitiveTypeMetadata<JByte>;
 using IPrimitiveValueType = IPrimitiveType<JByte, SByte>;
-using IPrimitiveIntegerType = IPrimitiveIntegerType<JByte, SByte>;
-using IPrimitiveSignedType = IPrimitiveSignedType<JByte, SByte>;
+using IPrimitiveNumericType = IPrimitiveNumericType<JByte>;
 
 /// <summary>
 /// Primitive <c>byte</c>. Represents an 8-bit signed integer.
 /// </summary>
-public readonly partial struct JByte : INativeType, IComparable<JByte>, IEquatable<JByte>, IPrimitiveIntegerType,
-	IPrimitiveSignedType
+[StructLayout(LayoutKind.Explicit, Size = sizeof(SByte), Pack = 0)]
+public readonly partial struct JByte : IPrimitiveIntegerType, IPrimitiveNumericType, IPrimitiveValueType
 {
 	/// <summary>
 	/// Primitive type info.
@@ -34,6 +33,9 @@ public readonly partial struct JByte : INativeType, IComparable<JByte>, IEquatab
 	/// <summary>
 	/// Internal 8-bit signed integer value.
 	/// </summary>
+	[FieldOffset(0)]
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	private readonly SByte _value;
 
 	/// <summary>
@@ -66,10 +68,10 @@ public readonly partial struct JByte : INativeType, IComparable<JByte>, IEquatab
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JByte(JObject jObj)
 		=> CommonValidationUtilities.ThrowIfInvalidCast<SByte>(jObj as IConvertible);
-	/// <inheritdoc/>
+	/// <inheritdoc cref="INativeDataType{TNativeType}.op_Implicit(SByte)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JByte(SByte value) => new(value);
 
-	static JByte IPrimitiveNumericType<JByte>.FromDouble(Double value) => new(value);
-	static Double IPrimitiveNumericType<JByte>.ToDouble(JByte value) => value._value;
+	static JByte IPrimitiveNumericType.FromDouble(Double value) => new(value);
+	static Double IPrimitiveNumericType.ToDouble(JByte value) => value._value;
 }

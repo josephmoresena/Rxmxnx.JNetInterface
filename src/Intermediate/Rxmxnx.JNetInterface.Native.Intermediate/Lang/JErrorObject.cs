@@ -18,6 +18,7 @@ public class JErrorObject : JThrowableObject, IThrowableType<JErrorObject>
 		new(JLocalObject.CreateBuiltInMetadata<JErrorObject>(JErrorObject.typeInfo,
 		                                                     IClassType.GetMetadata<JThrowableObject>(),
 		                                                     JTypeModifier.Extensible));
+
 	static TypeMetadata IThrowableType<JErrorObject>.Metadata => JErrorObject.typeMetadata;
 
 	/// <inheritdoc/>

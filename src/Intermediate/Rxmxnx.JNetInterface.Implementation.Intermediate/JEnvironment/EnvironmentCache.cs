@@ -57,8 +57,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfUnsafe(info.Name, this.JniSecure(info.Level));
 			ImplementationValidationUtilities.ThrowIfInvalidVersion(info.Name, TNativeInterface.RequiredVersion,
 			                                                        this.Version);
-			ref readonly JEnvironmentValue refValue = ref this.Reference.Reference;
-			return ref Unsafe.AsRef<TNativeInterface>(refValue.Pointer.ToPointer());
+			return ref *(TNativeInterface*)this.Reference.InterfacePointer;
 		}
 		/// <summary>
 		/// Checks JNI occurred error.
@@ -67,7 +66,7 @@ partial class JEnvironment
 		{
 			if (this._criticalCount > 0 || this._buildingException)
 				this.ExceptionCheck();
-			else
+			else if (this.HasPendingException()) // Calls to ExceptionCheck.
 				this.ExceptionOccurred();
 			this.Thrown = default; // Clears current exception.
 		}
@@ -118,7 +117,7 @@ partial class JEnvironment
 		/// Retrieves exception occured reference.
 		/// </summary>
 		/// <returns>Pending exception <see cref="JThrowableLocalRef"/> reference.</returns>
-		public unsafe JThrowableLocalRef GetPendingException()
+		public JThrowableLocalRef GetPendingException()
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionOccurredInfo);
@@ -128,7 +127,7 @@ partial class JEnvironment
 		/// Checks if there is a pending JNI exception.
 		/// </summary>
 		/// <returns><see langword="true"/> if there is pending JNI exception; otherwise, <see langword="false"/>.</returns>
-		public unsafe Boolean HasPendingException()
+		public Boolean HasPendingException()
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionCheckInfo);
@@ -175,7 +174,7 @@ partial class JEnvironment
 		/// Deletes the current local reference frame.
 		/// </summary>
 		/// <param name="result">Current result.</param>
-		public unsafe void DeleteLocalFrame(JLocalObject? result)
+		public void DeleteLocalFrame(JLocalObject? result)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.PopLocalFrameInfo);
@@ -187,7 +186,7 @@ partial class JEnvironment
 		/// <summary>
 		/// Clears pending JNI exception.
 		/// </summary>
-		public unsafe void ClearException()
+		public void ClearException()
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionClearInfo);

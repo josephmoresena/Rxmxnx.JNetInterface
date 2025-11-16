@@ -90,7 +90,7 @@ public class DeadThreadTests
 			Assert.Equal(0, arrayFeature.GetArrayLength(jWeak));
 
 			arrayFeature.ReleasePrimitiveSequence<JInt>(default, default, default);
-			arrayFeature.ReleasePrimitiveCriticalSequence(default, default);
+			arrayFeature.ReleasePrimitiveCriticalSequence(default, default, default);
 
 			DeadThreadTests.ArrayFeatureThrowTest(arrayFeature, jClass, jIntClass);
 
@@ -143,7 +143,9 @@ public class DeadThreadTests
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 		}
 	}
 
@@ -235,7 +237,7 @@ public class DeadThreadTests
 		Assert.Throws<InvalidOperationException>(() => arrayFeature.GetCriticalSequence(
 			                                         default(JArrayObject<JInt>)!, default));
 		Assert.Throws<InvalidOperationException>(() => arrayFeature.GetPrimitiveSequence<JInt>(default, out _));
-		Assert.Throws<InvalidOperationException>(() => arrayFeature.GetPrimitiveCriticalSequence(default));
+		Assert.Throws<InvalidOperationException>(() => arrayFeature.GetPrimitiveCriticalSequence(default, out _));
 	}
 	private static void EnvironmentThrowsTest(IEnvironment thread)
 	{

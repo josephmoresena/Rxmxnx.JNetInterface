@@ -45,8 +45,8 @@ public interface IObject
 	/// <returns><see langword="true"/> if current instance is default; otherwise, <see langword="false"/>.</returns>
 	internal sealed Boolean IsDefault()
 	{
-		Span<Byte> values = stackalloc Byte[JValue.Size];
-		this.CopyTo(values);
-		return values.SequenceEqual(NativeUtilities.AsBytes(in JValue.Empty));
+		Span<JValue> value = stackalloc JValue[1];
+		this.CopyTo(value, 0);
+		return value[0].IsDefault;
 	}
 }

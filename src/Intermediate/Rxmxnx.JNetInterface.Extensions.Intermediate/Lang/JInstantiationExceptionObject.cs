@@ -28,6 +28,7 @@ public class JInstantiationExceptionObject : JReflectiveOperationExceptionObject
 
 	static TypeMetadata IThrowableType<JInstantiationExceptionObject>.Metadata
 		=> JInstantiationExceptionObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd0;
 
 	/// <inheritdoc/>
 	protected JInstantiationExceptionObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

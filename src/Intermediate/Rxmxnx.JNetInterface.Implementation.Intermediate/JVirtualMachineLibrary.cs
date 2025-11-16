@@ -27,20 +27,26 @@ public sealed unsafe class JVirtualMachineLibrary
 	/// </summary>
 	private static readonly Int32[] jniVersions =
 	[
-		0x00010006, //JNI_VERSION_1_6
-		0x00010008, //JNI_VERSION_1_8
-		0x00090000, //JNI_VERSION_9
-		0x000a0000, //JNI_VERSION_10
-		0x00130000, //JNI_VERSION_19
-		0x00140000, //JNI_VERSION_20
-		0x00150000, //JNI_VERSION_21
-		0x00180000, //JNI_VERSION_24
+		(Int32)JRuntimeVersion.SEd2, //JNI_VERSION_1_2
+		(Int32)JRuntimeVersion.SEd4, //JNI_VERSION_1_4
+		(Int32)JRuntimeVersion.J6, //JNI_VERSION_1_6
+		(Int32)JRuntimeVersion.J8, //JNI_VERSION_1_8
+		(Int32)JRuntimeVersion.J9, //JNI_VERSION_9
+		(Int32)JRuntimeVersion.J10, //JNI_VERSION_10
+		(Int32)JRuntimeVersion.J19, //JNI_VERSION_19
+		(Int32)JRuntimeVersion.J20, //JNI_VERSION_20
+		(Int32)JRuntimeVersion.J21, //JNI_VERSION_21
+		(Int32)JRuntimeVersion.J24, //JNI_VERSION_24
 	];
 
 	/// <summary>
 	/// Pointer to exported Java Library functions.
 	/// </summary>
 	private readonly InvocationFunctionSet _functions;
+	/// <summary>
+	/// Indicates whether the function <c>JNI_GetCreatedJavaVMs</c> is available on the current library.
+	/// </summary>
+	private readonly Boolean _hasCreatedVm;
 
 	/// <summary>
 	/// Library handle.
@@ -52,10 +58,14 @@ public sealed unsafe class JVirtualMachineLibrary
 	/// </summary>
 	/// <param name="handle">Library handle.</param>
 	/// <param name="functions">A <see cref="InvocationFunctionSet"/> value.</param>
-	private JVirtualMachineLibrary(IntPtr handle, InvocationFunctionSet functions)
+	/// <param name="hasCreatedVm">
+	/// Indicates whether the function <c>JNI_GetCreatedJavaVMs</c> is available on the current library.
+	/// </param>
+	private JVirtualMachineLibrary(IntPtr handle, InvocationFunctionSet functions, Boolean hasCreatedVm)
 	{
 		this.Handle = handle;
 		this._functions = functions;
+		this._hasCreatedVm = hasCreatedVm;
 	}
 
 	/// <summary>
@@ -65,7 +75,7 @@ public sealed unsafe class JVirtualMachineLibrary
 	public Int32 GetLatestSupportedVersion()
 	{
 		Int32 version = -1;
-		foreach (Int32 jniVersion in JVirtualMachineLibrary.jniVersions)
+		foreach (Int32 jniVersion in JVirtualMachineLibrary.jniVersions.AsSpan())
 		{
 			VirtualMachineInitArgumentValue initValue = new() { Version = jniVersion, };
 			if (this._functions.GetDefaultVirtualMachineInitArgs(ref initValue) != JResult.Ok)
@@ -80,7 +90,7 @@ public sealed unsafe class JVirtualMachineLibrary
 	/// <param name="jniVersion">The requested JNI version.</param>
 	/// <returns>A <see cref="JVirtualMachineInitArg"/> instance.</returns>
 	/// <exception cref="JniException">If JNI call ends with an error.</exception>
-	public JVirtualMachineInitArg GetDefaultArgument(Int32 jniVersion = 0x00010006)
+	public JVirtualMachineInitArg GetDefaultArgument(Int32 jniVersion = (Int32)JRuntimeVersion.J6)
 	{
 		VirtualMachineInitArgumentValue initValue = new()
 		{
@@ -131,6 +141,8 @@ public sealed unsafe class JVirtualMachineLibrary
 	/// <exception cref="JniException">If JNI call ends with an error.</exception>
 	public IVirtualMachine[] GetCreatedVirtualMachines()
 	{
+		if (!this._hasCreatedVm)
+			ImplementationValidationUtilities.ThrowIfInvalidResult(JResult.VersionError);
 		_ = this._functions.GetCreatedVirtualMachines(default, 0, out Int32 vmCount);
 		if (vmCount <= 0) return [];
 		JVirtualMachineRef[] arr = this.GetCreatedVirtualMachines(vmCount, out JResult result);
@@ -176,14 +188,17 @@ public sealed unsafe class JVirtualMachineLibrary
 	/// </returns>
 	public static JVirtualMachineLibrary? Create(IntPtr handle)
 	{
-		Span<IntPtr> functions = stackalloc IntPtr[3];
+		Span<IntPtr> functions = stackalloc IntPtr[4];
 		if (JVirtualMachineLibrary.TryGetJniExport(handle, JVirtualMachineLibrary.GetDefaultVirtualMachineInitArgsName,
 		                                           out functions[0]) &&
 		    JVirtualMachineLibrary.TryGetJniExport(handle, JVirtualMachineLibrary.CreateVirtualMachineName,
-		                                           out functions[1]) &&
-		    JVirtualMachineLibrary.TryGetJniExport(handle, JVirtualMachineLibrary.GetCreatedVirtualMachinesName,
-		                                           out functions[2]))
-			return new(handle, Unsafe.As<IntPtr, InvocationFunctionSet>(ref functions[0]));
+		                                           out functions[1]))
+		{
+			Boolean hasCreatedVm =
+				JVirtualMachineLibrary.TryGetJniExport(handle, JVirtualMachineLibrary.GetCreatedVirtualMachinesName,
+				                                       out functions[2]);
+			return new(handle, Unsafe.As<IntPtr, InvocationFunctionSet>(ref functions[0]), hasCreatedVm);
+		}
 		NativeLibrary.Free(handle);
 		return default;
 	}

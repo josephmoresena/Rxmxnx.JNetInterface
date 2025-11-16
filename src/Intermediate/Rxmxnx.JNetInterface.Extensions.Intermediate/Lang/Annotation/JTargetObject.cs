@@ -9,7 +9,7 @@ using TypeMetadata = JInterfaceTypeMetadata<JTargetObject>;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
 #endif
-public sealed class JTargetObject : JAnnotationObject<JTargetObject>, IInterfaceType<JTargetObject>
+public sealed class JTargetObject : JAnnotationObject<JTargetObject>, IAnnotationType<JTargetObject>
 {
 	/// <summary>
 	/// Datatype information.

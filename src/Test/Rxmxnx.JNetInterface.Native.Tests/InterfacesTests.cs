@@ -6,10 +6,9 @@ public sealed class InterfacesTests
 	[Fact]
 	internal void EnvironmentTest()
 	{
-		JNativeInterface jni = default;
-		IntPtr jniPtr = NativeUtilities.GetUnsafeIntPtr(in jni);
-		JEnvironmentValue envValue = jniPtr.Transform<IntPtr, JEnvironmentValue>();
-		IntPtr valPtr = NativeUtilities.GetUnsafeIntPtr(in envValue);
+		Span<IntPtr> jni = stackalloc IntPtr[5];
+		IntPtr jniPtr = NativeUtilities.GetUnsafeIntPtr(in MemoryMarshal.GetReference(jni));
+		IntPtr valPtr = NativeUtilities.GetUnsafeIntPtr(in jniPtr);
 		JEnvironmentRef envRef = valPtr.Transform<IntPtr, JEnvironmentRef>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		env.Reference.Returns(envRef);
@@ -19,10 +18,9 @@ public sealed class InterfacesTests
 	[Fact]
 	internal void VirtualMachineTest()
 	{
-		JInvokeInterface jii = default;
-		IntPtr jiiPtr = NativeUtilities.GetUnsafeIntPtr(in jii);
-		JVirtualMachineValue vmValue = jiiPtr.Transform<IntPtr, JVirtualMachineValue>();
-		IntPtr valPtr = NativeUtilities.GetUnsafeIntPtr(in vmValue);
+		Span<IntPtr> jii = stackalloc IntPtr[4];
+		IntPtr jiiPtr = NativeUtilities.GetUnsafeIntPtr(in MemoryMarshal.GetReference(jii));
+		IntPtr valPtr = NativeUtilities.GetUnsafeIntPtr(in jiiPtr);
 		JVirtualMachineRef vmRef = valPtr.Transform<IntPtr, JVirtualMachineRef>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		env.VirtualMachine.Reference.Returns(vmRef);
@@ -33,7 +31,8 @@ public sealed class InterfacesTests
 		{
 			String threadName = $"{Enum.GetName(purpose)}-{Environment.CurrentManagedThreadId}";
 			using IThread thread = (env.VirtualMachine as IVirtualMachine).CreateThread(purpose);
-			env.VirtualMachine.Received(1).InitializeThread(Arg.Is<CString?>(c => c!.ToString() == threadName));
+			env.VirtualMachine.Received(1).InitializeThread(Arg.Is<CString?>(c => c!.ToString() == threadName),
+			                                                version: (Int32)JRuntimeVersion.SEd2);
 		}
 	}
 	[Fact]

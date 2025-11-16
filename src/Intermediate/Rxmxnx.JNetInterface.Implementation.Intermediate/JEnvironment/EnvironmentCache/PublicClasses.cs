@@ -56,7 +56,7 @@ partial class JEnvironment
 		{
 			this._classes[jClass.Hash] = jClass;
 			this.VirtualMachine.LoadGlobal(jClass);
-			if (classRef != jClass.LocalReference) return;
+			if (classRef.Value != jClass.LocalReference) return;
 			JTrace.RegisterObject(jClass, frame.Id, frame.Name);
 			frame[classRef.Value] = jClass.Lifetime.GetCacheable();
 		}
@@ -74,7 +74,7 @@ partial class JEnvironment
 				JTrace.FindClass(className);
 				classRef = this.FindClass(ptr, true);
 			}
-			if (!classRef.IsDefault) return classRef;
+			if (classRef != default) return classRef;
 
 			this._env.DescribeException();
 			this.ClearException();
@@ -92,9 +92,8 @@ partial class JEnvironment
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
 		public JClassObject GetInterfaceClass(JArrayLocalRef arrayRef, Int32 index)
 		{
-			JObjectLocalRef localRef =
-				this.GetObjectArrayElement(JObjectArrayLocalRef.FromReference(in arrayRef), index);
-			return this.AsClassObject(JClassLocalRef.FromReference(in localRef), JTypeKind.Interface);
+			JObjectLocalRef localRef = this.GetObjectArrayElement(new(arrayRef), index);
+			return this.AsClassObject(new(localRef), JTypeKind.Interface);
 		}
 		/// <summary>
 		/// Reloads current class object.
@@ -107,7 +106,7 @@ partial class JEnvironment
 			Boolean isMainClass = JVirtualMachine.IsMainClass(jClass.Hash);
 			JGlobal? jGlobal = isMainClass ? this.VirtualMachine.LoadGlobal(jClass) : default;
 			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
-			Boolean findClass = classRef.IsDefault;
+			Boolean findClass = classRef == default;
 
 			if (jGlobal is not null)
 			{

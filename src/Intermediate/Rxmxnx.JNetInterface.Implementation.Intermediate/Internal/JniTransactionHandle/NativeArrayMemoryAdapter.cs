@@ -1,6 +1,10 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal partial struct JniTransactionHandle
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
+internal unsafe partial struct JniTransactionHandle
 {
 	/// <summary>
 	/// Represents a JNI native array memory adapter.
@@ -9,7 +13,7 @@ internal partial struct JniTransactionHandle
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		/// <inheritdoc cref="UnaryTransaction.LocalRef"/>
-		private new JArrayLocalRef LocalRef => JArrayLocalRef.FromReference(in base.LocalRef);
+		private new JArrayLocalRef LocalRef => new(base.LocalRef);
 
 		/// <summary>
 		/// Constructor.
@@ -19,14 +23,14 @@ internal partial struct JniTransactionHandle
 		/// <param name="critical">Indicates this adapter is for a critical sequence.</param>
 		public NativeArrayMemoryAdapter(JArrayObject<TPrimitive> jArray, JMemoryReferenceKind referenceKind,
 			Boolean critical) : base(jArray, referenceKind, critical)
-			=> this.BinarySize = jArray.Length * IPrimitiveType.GetMetadata<TPrimitive>().SizeOf;
+			=> this.BinarySize = jArray.Length * sizeof(TPrimitive);
 
 		/// <inheritdoc/>
 		public override void Activate(IEnvironment env)
 		{
 			this.Pointer = !this.Critical ?
 				env.ArrayFeature.GetPrimitiveSequence<TPrimitive>(this.LocalRef, out this.IsCopy) :
-				env.ArrayFeature.GetPrimitiveCriticalSequence(this.LocalRef);
+				env.ArrayFeature.GetPrimitiveCriticalSequence(this.LocalRef, out this.IsCopy);
 		}
 		/// <inheritdoc/>
 		public override void Release(JReleaseMode mode = JReleaseMode.Free)
@@ -36,8 +40,11 @@ internal partial struct JniTransactionHandle
 			if (!this.Critical)
 				thread.ArrayFeature.ReleasePrimitiveSequence<TPrimitive>(this.LocalRef, this.Pointer, mode);
 			else
-				thread.ArrayFeature.ReleasePrimitiveCriticalSequence(this.LocalRef, (ValPtr<Byte>)this.Pointer);
-			base.Release(mode);
+				thread.ArrayFeature.ReleasePrimitiveCriticalSequence(this.LocalRef, this.Pointer, mode);
+
+			if (this.Critical || mode is not JReleaseMode.Commit)
+				// Release if the memory is critical or the mode is not Commit.
+				base.Release(mode);
 		}
 	}
 }

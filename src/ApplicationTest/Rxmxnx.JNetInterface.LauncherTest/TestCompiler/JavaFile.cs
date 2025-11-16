@@ -7,10 +7,11 @@ public partial class TestCompiler
 import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.Date;
 
 public class HelloDotnet {
-    public static final int COUNT = 20;
+    public static final int COUNT = 22;
 
     static {
         if (!Boolean.parseBoolean(System.getProperty(""jniLib.load.disable"")))
@@ -135,8 +136,23 @@ public class HelloDotnet {
                 return (byte)120; 
             case 19:
                 return true; 
+            case 20:
+                return new ParseException(""This is the exception message"", 0); 
+            case 21:
+                return new Date(); 
             default:
-                return null;
+                return null; 
+        }
+    }
+
+    public static void printCharArray(char[][] array) {
+        if (array == null) return;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == null) continue;
+            for (int j = 0; j < array[i].length; j++) {
+                System.out.print(array[i][j]);
+            }
+            System.out.println();
         }
     }
 
@@ -430,6 +446,15 @@ public class HelloDotnet {
       {
         ""name"": ""getStackTrace"",
         ""parameterTypes"": []
+      }
+    ]
+  },
+  {
+    ""name"": ""java.lang.System"",
+    ""methods"": [
+      {
+        ""name"": ""getProperty"",
+        ""parameterTypes"": [ ""java.lang.String"" ]
       }
     ]
   },

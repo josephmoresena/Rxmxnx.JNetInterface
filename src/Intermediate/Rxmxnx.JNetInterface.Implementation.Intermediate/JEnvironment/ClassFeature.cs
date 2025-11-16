@@ -77,12 +77,18 @@ partial class JEnvironment
 			ReadOnlySpan<Byte> utf8Message = JEnvironment.GetSafeSpan(message);
 			this.ThrowNew(jClass, throwableMetadata, utf8Message, throwException, message?.ToString());
 		}
+#if !NET8_0_OR_GREATER
+		[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 		public void ThrowNew<TThrowable>(CString? message, Boolean throwException)
 			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
 			ReadOnlySpan<Byte> utf8Message = JEnvironment.GetSafeSpan(message);
 			this.ThrowNew<TThrowable>(utf8Message, throwException, message?.ToString());
 		}
+#if !NET8_0_OR_GREATER
+		[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 		public void ThrowNew<TThrowable>(String? message, Boolean throwException)
 			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
@@ -124,14 +130,15 @@ partial class JEnvironment
 			JClassObject jClass = this.GetClass(classRef, true, kind, true);
 			return this.Register(jClass);
 		}
-		public unsafe JClassObject? GetSuperClass(JClassObject jClass)
+		public JClassObject? GetSuperClass(JClassObject jClass)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
 			if (jClass.IsPrimitive || jClass.IsInterface || jClass.Name.AsSpan().SequenceEqual(CommonNames.Object))
 				return default; // Primitive classes, Interfaces classes or Object class has no super-class.
 			if (jClass.ClassSignature[0] == CommonNames.ArraySignaturePrefixChar)
 				return this.GetClass<JLocalObject>(); // Super-class of Array classes is Object class.
-			if (MetadataHelper.GetExactMetadata(jClass.Hash)?.BaseMetadata is { } metadata)
+			if (MetadataHelper.GetExactMetadata(jClass.Hash)?.BaseMetadata is { } metadata &&
+			    metadata.Since <= this.VirtualMachine.Version) // Only if super class is compatible with current JRE.
 				return this.GetOrFindClass(metadata); // Well-known class.
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
@@ -140,7 +147,7 @@ partial class JEnvironment
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetSuperclassInfo);
 			JClassLocalRef superClassRef =
 				jniTransaction.Add(nativeInterface.ClassFunctions.GetSuperclass(this.Reference, classRef));
-			if (!superClassRef.IsDefault)
+			if (superClassRef != default)
 			{
 				JClassObject jSuperClass =
 					this.AsClassObject(superClassRef, new() { Kind = JTypeKind.Class, IsFinal = false, });
@@ -193,7 +200,7 @@ partial class JEnvironment
 			Boolean isLocalRef = this.IsLocalObject(jClass, out JReferenceType referenceType);
 			JTrace.GetClassInfo(classRef, referenceType);
 
-			if (classRef.IsDefault)
+			if (classRef == default)
 			{
 				IMessageResource resource = IMessageResource.GetInstance();
 				throw new ArgumentException(resource.UnloadedClass);

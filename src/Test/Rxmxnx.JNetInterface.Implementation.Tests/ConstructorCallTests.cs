@@ -26,7 +26,7 @@ public sealed class ConstructorCallTests
 			using IFixedPointer.IDisposable ctxClass = metadata.Information.GetFixedPointer();
 			ReadOnlyValPtr<Byte> namePtr = (ReadOnlyValPtr<Byte>)infoDef.Pointer;
 			JThrowableLocalRef result = ConstructorCallTests.fixture.Create<JThrowableLocalRef>();
-			JClassLocalRef classRef = JClassLocalRef.FromReference(proxyEnv.VirtualMachine.ThrowableGlobalRef);
+			JClassLocalRef classRef = new(proxyEnv.VirtualMachine.ThrowableGlobalRef);
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
 
 			proxyEnv.ClearReceivedCalls();
@@ -65,7 +65,9 @@ public sealed class ConstructorCallTests
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}

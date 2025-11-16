@@ -19,6 +19,8 @@ public class JShortBufferObject : JBufferObject<JShort>, IClassType<JShortBuffer
 		InterfaceSet.ComparableSet);
 
 	static TypeMetadata IClassType<JShortBufferObject>.Metadata => JShortBufferObject.typeMetadata;
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd4;
 
 	/// <inheritdoc/>
 	protected JShortBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

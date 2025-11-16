@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Native.Values;
 
 /// <summary>
-/// Function pointer based-struct replacement for <see cref="JNativeInterface"/> type.
+/// <c>JNINativeInterface_</c> struct. Contains all pointers to the functions of JNI.
 /// </summary>
 /// <remarks>JNI 1.2</remarks>
 [StructLayout(LayoutKind.Sequential)]
@@ -17,11 +17,13 @@ internal readonly unsafe partial struct NativeInterface : INativeInterface<Nativ
 	/// Internal reserved entries.
 	/// </summary>
 #pragma warning disable CS0169
-	private readonly JNativeInterface.ComReserved _reserved;
+	private readonly ComReserved _reserved;
 #pragma warning restore CS0169
 
-	/// <inheritdoc cref="JNativeInterface.GetVersionPointer"/>
-	public readonly delegate* unmanaged<JEnvironmentRef, Int32> GetVersion;
+	/// <summary>
+	/// Pointer to <c>GetVersion</c> function. Retrieves the version of the <c>JNIEnv</c> interface.
+	/// </summary>
+	private readonly GetVersionPtr _getVersion;
 	/// <summary>
 	/// Pointers to <c>DefineClass</c>, <c>FindClass</c>, <c>FromReflectedMethod</c>,
 	/// <c>FromReflectedField</c>, <c>ToReflectedMethod</c>, <c>GetSuperclass</c>,
@@ -80,7 +82,7 @@ internal readonly unsafe partial struct NativeInterface : INativeInterface<Nativ
 	/// Pointer to <c>GetJavaVM</c> function.
 	/// Returns the Java VM interface (used in the Invocation API) associated with the current thread.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, out JVirtualMachineRef, JResult> GetVirtualMachine;
+	private readonly GetVirtualMachinePtr _getVirtualMachine;
 	/// <summary>
 	/// Pointers to <c>GetStringRegion</c> and <c>GetStringUTFRegion</c> functions.
 	/// </summary>
@@ -101,5 +103,40 @@ internal readonly unsafe partial struct NativeInterface : INativeInterface<Nativ
 	/// Pointer to <c>ExceptionCheck</c> function.
 	/// Checks for pending exceptions without creating a local reference to the exception object.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JBoolean> ExceptionCheck;
+	private readonly ExceptionCheckPtr _exceptionCheck;
+
+	/// <summary>
+	/// <c>GetVersion</c>.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public Int32 GetVersion(JEnvironmentRef envRef)
+		=> SystemInfo.IsWindows ? this._getVersion.Windows(envRef) : this._getVersion.Unix(envRef);
+	/// <summary>
+	/// <c>ExceptionCheck</c>.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JBoolean ExceptionCheck(JEnvironmentRef envRef)
+		=> SystemInfo.IsWindows ? this._exceptionCheck.Windows(envRef) : this._exceptionCheck.Unix(envRef);
+	/// <summary>
+	/// <c>GetVirtualMachine</c>.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JResult GetVirtualMachine(JEnvironmentRef envRef, out JVirtualMachineRef vmRef)
+	{
+		fixed (JVirtualMachineRef* vmRefPtr = &vmRef)
+		{
+			return SystemInfo.IsWindows ?
+				this._getVirtualMachine.Windows(envRef, vmRefPtr) :
+				this._getVirtualMachine.Unix(envRef, vmRefPtr);
+		}
+	}
 }

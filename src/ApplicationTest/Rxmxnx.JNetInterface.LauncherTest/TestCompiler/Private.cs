@@ -54,15 +54,22 @@ public partial class TestCompiler
 	}
 	private static async Task RunNetTest(RestoreNetArgs restoreArgs)
 	{
-		await TestCompiler.RestoreNet(restoreArgs);
-		ExecuteState<RestoreNetArgs> state = new()
+		try
 		{
-			ExecutablePath = "dotnet",
-			ArgState = restoreArgs,
-			AppendArgs = RestoreNetArgs.AppendTest,
-			Notifier = ConsoleNotifier.Notifier,
-		};
-		await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
+			await TestCompiler.RestoreNet(restoreArgs);
+			ExecuteState<RestoreNetArgs> state = new()
+			{
+				ExecutablePath = "dotnet",
+				ArgState = restoreArgs,
+				AppendArgs = RestoreNetArgs.AppendTest,
+				Notifier = ConsoleNotifier.Notifier,
+			};
+			await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
+		}
+		finally
+		{
+			TestCompiler.NetCleanUp(restoreArgs);
+		}
 	}
 	private static async Task CompileNetLibrary(Boolean onlyNativeAot, RestoreNetArgs restoreArgs, Architecture arch,
 		String outputPath)
@@ -74,14 +81,21 @@ public partial class TestCompiler
 			EnableTrace = onlyNativeAot, BuildDependencies = true, Publish = Publish.JniLibrary,
 		};
 
-		await TestCompiler.RestoreNet(restoreArgs);
+		try
+		{
+			await TestCompiler.RestoreNet(restoreArgs);
 
-		await TestCompiler.CompileNet(compileArgs);
-		if (restoreArgs.Version > NetVersion.Net80) return;
-		compileArgs.BuildDependencies = false;
+			await TestCompiler.CompileNet(compileArgs);
+			if (!Utilities.IsReflectionFreeModeSupported(restoreArgs.Version)) return;
+			compileArgs.BuildDependencies = false;
 
-		compileArgs.Publish |= Publish.NoReflection;
-		await TestCompiler.CompileNet(compileArgs);
+			compileArgs.Publish |= Publish.NoReflection;
+			await TestCompiler.CompileNet(compileArgs);
+		}
+		finally
+		{
+			TestCompiler.NetCleanUp(restoreArgs);
+		}
 	}
 	private static async Task CompileNetGuiApp(Boolean onlyNativeAot, RestoreNetArgs restoreArgs, Architecture arch,
 		String outputPath)
@@ -93,8 +107,15 @@ public partial class TestCompiler
 			EnableTrace = onlyNativeAot, BuildDependencies = true, Publish = Publish.NativeAot,
 		};
 
-		await TestCompiler.RestoreNet(restoreArgs);
-		await TestCompiler.CompileNet(compileArgs);
+		try
+		{
+			await TestCompiler.RestoreNet(restoreArgs);
+			await TestCompiler.CompileNet(compileArgs);
+		}
+		finally
+		{
+			TestCompiler.NetCleanUp(restoreArgs);
+		}
 	}
 	private static async Task CompileNetApp(Boolean onlyNativeAot, RestoreNetArgs restoreArgs, Architecture arch,
 		String outputPath)
@@ -104,27 +125,38 @@ public partial class TestCompiler
 			EnableTrace = onlyNativeAot, BuildDependencies = true, Publish = Publish.SelfContained,
 		};
 
-		await TestCompiler.RestoreNet(restoreArgs);
-
-		if (!onlyNativeAot)
+		try
 		{
-			await TestCompiler.CompileNet(compileArgs);
-			compileArgs.BuildDependencies = false;
+			await TestCompiler.RestoreNet(restoreArgs);
 
-			compileArgs.Publish = Publish.ReadyToRun;
+			if (!onlyNativeAot)
+			{
+				await TestCompiler.CompileNet(compileArgs);
+				compileArgs.BuildDependencies = false;
+
+				if (!SystemInfo.IsFreeBsd)
+				{
+					compileArgs.Publish = Publish.ReadyToRun;
+					await TestCompiler.CompileNet(compileArgs);
+				}
+			}
+
+			if (!Utilities.IsNativeAotSupported(arch, restoreArgs.Version)) return;
+
+			compileArgs.Publish = Publish.NativeAot;
+			await TestCompiler.CompileNet(compileArgs);
+
+			if (!restoreArgs.ProjectFile.EndsWith(".csproj") ||
+			    !Utilities.IsReflectionFreeModeSupported(restoreArgs.Version)) return;
+
+			compileArgs.BuildDependencies = false;
+			compileArgs.Publish |= Publish.NoReflection;
 			await TestCompiler.CompileNet(compileArgs);
 		}
-
-		if (!Utilities.IsNativeAotSupported(arch, restoreArgs.Version)) return;
-
-		compileArgs.Publish = Publish.NativeAot;
-		await TestCompiler.CompileNet(compileArgs);
-
-		if (!restoreArgs.ProjectFile.EndsWith(".csproj") || restoreArgs.Version > NetVersion.Net80) return;
-
-		compileArgs.BuildDependencies = false;
-		compileArgs.Publish |= Publish.NoReflection;
-		await TestCompiler.CompileNet(compileArgs);
+		finally
+		{
+			TestCompiler.NetCleanUp(restoreArgs);
+		}
 	}
 	private static async Task CompileNet(CompileNetArgs args)
 	{
@@ -136,6 +168,8 @@ public partial class TestCompiler
 			Notifier = ConsoleNotifier.Notifier,
 		};
 		await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
+		if (Utilities.ShowDiagnostics)
+			ConsoleNotifier.ShowDiskUsage();
 	}
 	private static async Task RestoreNet(RestoreNetArgs args)
 	{
@@ -162,10 +196,22 @@ public partial class TestCompiler
 		Architecture currentArch = RuntimeInformation.OSArchitecture;
 		return arch == currentArch || currentArch switch
 		{
-			Architecture.X86 => false,
-			Architecture.Arm => false,
-			Architecture.Armv6 => false,
-			_ => true,
+			Architecture.X86 => SystemInfo.IsWindows,
+			Architecture.Arm or Architecture.Armv6 => SystemInfo.IsLinux,
+			_ => !SystemInfo.IsFreeBsd,
 		};
+	}
+	private static void NetCleanUp(RestoreNetArgs restoreArgs)
+	{
+		try
+		{
+			DirectoryInfo projectDirectory = new FileInfo(restoreArgs.ProjectFile).Directory!;
+			projectDirectory.GetDirectories("bin", SearchOption.TopDirectoryOnly).FirstOrDefault()?.Delete();
+			projectDirectory.GetDirectories("obj", SearchOption.TopDirectoryOnly).FirstOrDefault()?.Delete();
+		}
+		catch (Exception)
+		{
+			// Ignore
+		}
 	}
 }

@@ -29,6 +29,10 @@ public interface ITypeInformation
 	/// Indicates whether current type is final;
 	/// </summary>
 	Boolean? IsFinal { get; }
+	/// <summary>
+	/// Specifies the minimun Java runtime version required for the current type.
+	/// </summary>
+	JRuntimeVersion Since => JRuntimeVersion.Undefined;
 
 	/// <summary>
 	/// Retrieves the Java class name.

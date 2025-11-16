@@ -236,6 +236,9 @@ partial class JEnvironment
 		/// <param name="message">
 		/// The message used to construct the <see cref="ThrowableException"/> instance.
 		/// </param>
+#if !NET8_0_OR_GREATER
+		[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
 		private void ThrowNew<TThrowable>(ReadOnlySpan<Byte> utf8Message, Boolean throwException, String? message)
 			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
@@ -366,7 +369,7 @@ partial class JEnvironment
 			JObjectLocalRef localRef =
 				nativeInterface.InstanceMethodFunctions.MethodFunctions.CallObjectMethod.Call(
 					this.Reference, throwableRef.Value, getNameId, default);
-			if (localRef == default) this.CheckJniError();
+			this.CheckJniError();
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return new(jStringClass, localRef.Transform<JObjectLocalRef, JStringLocalRef>());
 		}
@@ -374,7 +377,7 @@ partial class JEnvironment
 		/// Sets given <see cref="JThrowableLocalRef"/> reference as pending exception.
 		/// </summary>
 		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
-		private unsafe void Throw(JThrowableLocalRef throwableRef)
+		private void Throw(JThrowableLocalRef throwableRef)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ThrowInfo);
@@ -431,7 +434,7 @@ partial class JEnvironment
 		private void ExceptionOccurred()
 		{
 			JThrowableLocalRef throwableRef = this.GetPendingException();
-			if (throwableRef.IsDefault) return;
+			if (throwableRef == default) return;
 			this._buildingException = true; // To avoid CheckJniError stack overflow.
 			ThrowableException jniException;
 			try

@@ -81,7 +81,9 @@ new instances. `Rxmxnx.JNetInterface` provides this functionality through `JCall
 
 - `JMethodDefinition`, `JFunctionDefinition<..>`, and `JConstructorDefinition` expose these APIs as protected.
 - `Parameterless` variants do not accept arguments.
-- In .NET 9.0+, `ReadOnlySpan<IObject?>` supports `params`.
+- Starting with .NET 9.0, `ReadOnlySpan<IObject?>` supports `params`.
+- The methods that take `ReadOnlySpan<IObject?>` also have an overload in .NET 8.0 that takes `IObject?[]`. In .NET 8.0
+  or earlier, use the `params` keyword.
 - If a class is used as a declaring class or function argument but is not loaded, a local reference is created.
 
 ## Indeterminate Fields
@@ -179,6 +181,9 @@ to be dynamically executed.
 
 - If `Signature` represents a non-primitive type, `Object` contains the result; otherwise, primitive values are used.
 - If the result is non-null, `BooleanValue` is always `true`.
+- If the result is a primitive object wrapper, the properties `BooleanValue`, `ByteValue`, `CharValue`, `DoubleValue`,
+  `FloatValue`, `IntValue`, `LongValue`, and `ShortValue` expose its primitive value.
+- Whenever `Object` is not null, calling `Dispose` on that instance is always mandatory.
 - `IndeterminateResult` is a `ref struct` type, making it incompatible with Visual Basic.
 
 ## Defining Native Java Calls

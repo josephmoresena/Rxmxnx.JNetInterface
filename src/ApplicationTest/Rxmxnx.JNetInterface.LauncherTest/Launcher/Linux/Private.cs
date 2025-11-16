@@ -55,7 +55,7 @@ public partial class Launcher
 		{
 			ExecuteState state = new()
 			{
-				ExecutablePath = tempFileName, AppendArgs = a => { }, WorkingDirectory = jdkPath,
+				ExecutablePath = tempFileName, AppendArgs = _ => { }, WorkingDirectory = jdkPath,
 			};
 			await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
 		}
@@ -67,7 +67,7 @@ public partial class Launcher
 				QemuExecutable = qemuExe,
 				QemuRoot = qemuRoot,
 				ExecutablePath = tempFileName,
-				AppendArgs = a => { },
+				AppendArgs = _ => { },
 				WorkingDirectory = jdkPath,
 			};
 			await Utilities.QemuExecute(state, ConsoleNotifier.CancellationToken);

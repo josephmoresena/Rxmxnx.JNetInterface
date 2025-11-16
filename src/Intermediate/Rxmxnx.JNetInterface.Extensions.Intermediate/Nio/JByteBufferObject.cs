@@ -19,6 +19,8 @@ public class JByteBufferObject : JBufferObject<JByte>, IClassType<JByteBufferObj
 		InterfaceSet.ComparableSet);
 
 	static TypeMetadata IClassType<JByteBufferObject>.Metadata => JByteBufferObject.typeMetadata;
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd4;
 
 	/// <inheritdoc/>
 	private protected JByteBufferObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
@@ -61,7 +63,7 @@ public class JByteBufferObject : JBufferObject<JByte>, IClassType<JByteBufferObj
 	public static void WithDirectBuffer<TState>(IEnvironment env, Int32 capacity, TState state,
 		Action<JByteBufferObject, TState> action)
 #if NET9_0_OR_GREATER
-	where TState : allows ref struct
+		where TState : allows ref struct
 #endif
 		=> env.NioFeature.WithDirectByteBuffer(capacity, state, action);
 	/// <summary>
@@ -88,7 +90,7 @@ public class JByteBufferObject : JBufferObject<JByte>, IClassType<JByteBufferObj
 	public static TResult WithDirectBuffer<TState, TResult>(IEnvironment env, Int32 capacity, TState state,
 		Func<JByteBufferObject, TState, TResult> func)
 #if NET9_0_OR_GREATER
-	where TState : allows ref struct
+		where TState : allows ref struct
 #endif
 		=> env.NioFeature.WithDirectByteBuffer(capacity, state, func);
 

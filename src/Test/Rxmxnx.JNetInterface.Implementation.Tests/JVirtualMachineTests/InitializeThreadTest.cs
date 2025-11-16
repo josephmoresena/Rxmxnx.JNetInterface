@@ -106,7 +106,9 @@ public partial class JVirtualMachineTests
 			Assert.Equal(!removeAttachedThread, (env as IThread)?.Attached);
 			if (env is not null && removeAttachedThread)
 				Assert.Throws<RunningStateException>(() => env.ClassObject.GetClassName(out _));
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}

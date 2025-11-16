@@ -3,7 +3,7 @@
 /// <summary>
 /// This interface exposes a JNI instance.
 /// </summary>
-public interface IEnvironment : IWrapper<JEnvironmentRef>
+public partial interface IEnvironment : IWrapper<JEnvironmentRef>
 {
 	/// <summary>
 	/// JNI reference to the interface.
@@ -34,51 +34,8 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// Actual number of bytes usable by JNI calls from stack.
 	/// </summary>
 	Int32 UsableStackBytes { get; set; }
-
-	/// <summary>
-	/// Accessing feature.
-	/// </summary>
-	internal IAccessFeature AccessFeature { get; }
-	/// <summary>
-	/// Classing feature.
-	/// </summary>
-	internal IClassFeature ClassFeature { get; }
-	/// <summary>
-	/// Referencing feature.
-	/// </summary>
-	internal IReferenceFeature ReferenceFeature { get; }
-	/// <summary>
-	/// String feature.
-	/// </summary>
-	internal IStringFeature StringFeature { get; }
-	/// <summary>
-	/// Array feature.
-	/// </summary>
-	internal IArrayFeature ArrayFeature { get; }
-	/// <summary>
-	/// Native I/O feature.
-	/// </summary>
-	internal INioFeature NioFeature { get; }
-	/// <summary>
-	/// Function cache.
-	/// </summary>
-	internal NativeFunctionSet FunctionSet { get; }
-	/// <summary>
-	/// Indicates whether the current instance is not a proxy.
-	/// </summary>
-	internal Boolean NoProxy { get; }
-
 	JEnvironmentRef IWrapper<JEnvironmentRef>.Value => this.Reference;
 
-	/// <summary>
-	/// Indicates whether validation of <paramref name="jGlobal"/> can be avoided.
-	/// </summary>
-	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
-	/// <returns>
-	/// <see langword="true"/> if <paramref name="jGlobal"/> validation can be avoided;
-	/// otherwise, <see langword="false"/>;
-	/// </returns>
-	internal Boolean IsValidationAvoidable(JGlobalBase jGlobal);
 	/// <summary>
 	/// Retrieves the JNI type reference of <paramref name="jObject"/>.
 	/// </summary>
@@ -121,9 +78,10 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// <param name="action">An action to invoke inside created new local reference.</param>
 	void WithFrame<TState>(Int32 capacity, TState state, Action<TState> action)
 #if NET9_0_OR_GREATER
-	where TState : allows ref struct
-#endif
+		where TState : allows ref struct;
+#else
 		;
+#endif
 	/// <summary>
 	/// Creates a new local reference frame and executes <paramref name="func"/> inside of it.
 	/// </summary>
@@ -138,9 +96,10 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// <param name="func">A function to execute inside created new local reference.</param>
 	TResult WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func)
 #if NET9_0_OR_GREATER
-	where TState : allows ref struct
-#endif
+		where TState : allows ref struct;
+#else
 		;
+#endif
 
 	/// <summary>
 	/// JNI pending exception describe.

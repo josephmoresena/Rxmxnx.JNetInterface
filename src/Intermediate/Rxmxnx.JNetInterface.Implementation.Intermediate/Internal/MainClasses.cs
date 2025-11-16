@@ -137,4 +137,8 @@ internal abstract class MainClasses<TClass> : MainClasses where TClass : JRefere
 	/// Class for <see cref="JStackTraceElementObject"/>
 	/// </summary>
 	public abstract TClass StackTraceElementObject { get; }
+	/// <summary>
+	/// Class for <see cref="SystemObject"/>
+	/// </summary>
+	public abstract TClass SystemObject { get; }
 }

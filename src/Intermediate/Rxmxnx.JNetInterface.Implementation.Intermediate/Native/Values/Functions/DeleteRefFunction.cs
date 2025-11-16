@@ -9,14 +9,13 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly unsafe struct DeleteRefFunction<TReference>
-	where TReference : unmanaged, INativeType, IWrapper<JObjectLocalRef>
+internal readonly unsafe struct DeleteRefFunction<TReference> : IDeleteRefFunction
+	where TReference : unmanaged, INativeReferenceType, INativePointerType<TReference>
 {
 	/// <summary>
 	/// Pointer to <c>Delete<typeparamref name="TReference"/>Ref</c> function.
-	/// Deletes the given <typeparamref name="TReference"/> reference.
 	/// </summary>
-	private readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, void> _ptr;
+	private readonly IDeleteRefFunction.DeleteRefFunction _function;
 
 	/// <summary>
 	/// Pointer to <c>Delete<typeparamref name="TReference"/>Ref</c> function.
@@ -26,5 +25,11 @@ internal readonly unsafe struct DeleteRefFunction<TReference>
 	[ExcludeFromCodeCoverage]
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public void DeleteRef(JEnvironmentRef envRef, TReference objRef) => this._ptr(envRef, objRef.Value);
+	public void DeleteRef(JEnvironmentRef envRef, TReference objRef)
+	{
+		if (SystemInfo.IsWindows)
+			this._function.Windows(envRef, objRef.Pointer);
+		else
+			this._function.Unix(envRef, objRef.Pointer);
+	}
 }

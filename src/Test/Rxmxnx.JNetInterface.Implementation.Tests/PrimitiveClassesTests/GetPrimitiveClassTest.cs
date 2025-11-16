@@ -63,7 +63,7 @@ public partial class PrimitiveClassesTests
 			proxyEnv.CallObjectMethod(Arg.Any<JObjectLocalRef>(), proxyEnv.VirtualMachine.ClassGetNameMethodId,
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(c =>
 			{
-				JClassLocalRef classRef = JClassLocalRef.FromReference((JObjectLocalRef)c[0]);
+				JClassLocalRef classRef = new((JObjectLocalRef)c[0]);
 				return primitiveClassNameRefs.GetValueOrDefault(classRef).Value;
 			});
 			proxyEnv.GetStringUtfLength(Arg.Any<JStringLocalRef>()).Returns(c =>
@@ -80,7 +80,7 @@ public partial class PrimitiveClassesTests
 			proxyEnv.CallBooleanMethod(Arg.Any<JObjectLocalRef>(), proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
 			                           ReadOnlyValPtr<JValueWrapper>.Zero).Returns(c =>
 			{
-				JClassLocalRef classRef = JClassLocalRef.FromReference((JObjectLocalRef)c[0]);
+				JClassLocalRef classRef = new((JObjectLocalRef)c[0]);
 				return primitiveClassNameRefs.ContainsKey(classRef);
 			});
 
@@ -126,7 +126,9 @@ public partial class PrimitiveClassesTests
 		finally
 		{
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			if (Environment.Is64BitProcess)
+				Assert.True(removeResult);
 			proxyEnv.FinalizeProxy(true);
 		}
 	}

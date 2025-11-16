@@ -428,7 +428,7 @@ internal unsafe partial class ReferenceHelper
 	{
 		NativeInterfaceProxy proxy = ReferenceHelper.GetProxy(envRef);
 		if (!proxy.UseDefaultClassRef) return proxy.NewGlobalRef(localRef);
-		return proxy.GetMainClassGlobalRef(JClassLocalRef.FromReference(in localRef)) ?? proxy.NewGlobalRef(localRef);
+		return proxy.GetMainClassGlobalRef(new(localRef)) ?? proxy.NewGlobalRef(localRef);
 	}
 	[UnmanagedCallersOnly]
 	private static void DeleteGlobalRef(JEnvironmentRef envRef, JGlobalRef globalRef)
@@ -450,7 +450,7 @@ internal unsafe partial class ReferenceHelper
 			if (proxy.VirtualMachine.ThrowableGlobalRef.Value == localRef)
 				return proxy.ThrowableLocalRef.Value;
 			if (proxy.VirtualMachine.StackTraceElementGlobalRef.Value == localRef)
-				return proxy.StackTraceObjectLocalRef.Value;
+				return proxy.StackTraceElementLocalRef.Value;
 			if (proxy.VirtualMachine.NumberGlobalRef.Value == localRef)
 				return proxy.NumberObjectLocalRef.Value;
 
@@ -690,15 +690,18 @@ internal unsafe partial class ReferenceHelper
 	private static void SetFloatField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId, Single value)
 		=> ReferenceHelper.GetProxy(envRef).SetFloatField(localRef, fieldId, value);
 	[UnmanagedCallersOnly]
-	private static void SetDoubleField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId,
-		Double value)
+	private static void SetDoubleField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId, Double value)
 		=> ReferenceHelper.GetProxy(envRef).SetDoubleField(localRef, fieldId, value);
 
 	[UnmanagedCallersOnly]
 	private static JMethodId GetStaticMethodId(JEnvironmentRef envRef, JClassLocalRef classRef, Byte* methodName,
 		Byte* methodDescriptor)
-		=> ReferenceHelper.GetProxy(envRef).GetStaticMethodId(classRef, (ReadOnlyValPtr<Byte>)(IntPtr)methodName,
-		                                                      (ReadOnlyValPtr<Byte>)(IntPtr)methodDescriptor);
+	{
+		NativeInterfaceProxy proxy = ReferenceHelper.GetProxy(envRef);
+		return (proxy.UseDefaultClassRef ? proxy.GetMainStaticMethodId(classRef, methodName) : default) ??
+			proxy.GetStaticMethodId(classRef, (ReadOnlyValPtr<Byte>)(IntPtr)methodName,
+			                        (ReadOnlyValPtr<Byte>)(IntPtr)methodDescriptor);
+	}
 	[UnmanagedCallersOnly]
 	private static JObjectLocalRef CallStaticObjectMethod(JEnvironmentRef envRef, JClassLocalRef classRef,
 		JMethodId methodId, JValueWrapper* args)
@@ -756,7 +759,7 @@ internal unsafe partial class ReferenceHelper
 		Byte* fieldDescriptor)
 	{
 		NativeInterfaceProxy proxy = ReferenceHelper.GetProxy(envRef);
-		return (proxy.UseDefaultClassRef ? proxy.GetPrimitiveWrapperClassTypeField(classRef, fieldName) : default) ??
+		return (proxy.UseDefaultClassRef ? proxy.GetMainStaticFieldId(classRef, fieldName) : default) ??
 			proxy.GetStaticFieldId(classRef, (ReadOnlyValPtr<Byte>)(IntPtr)fieldName,
 			                       (ReadOnlyValPtr<Byte>)(IntPtr)fieldDescriptor);
 	}
@@ -1147,6 +1150,8 @@ internal unsafe partial class ReferenceHelper
 			if (proxy.VirtualMachine.StackTraceElementGlobalRef.Value == localRef)
 				return JReferenceType.GlobalRefType;
 			if (proxy.VirtualMachine.NumberGlobalRef.Value == localRef)
+				return JReferenceType.GlobalRefType;
+			if (proxy.VirtualMachine.SystemGlobalRef.Value == localRef)
 				return JReferenceType.GlobalRefType;
 
 			if (proxy.VirtualMachine.VoidGlobalRef.Value == localRef)

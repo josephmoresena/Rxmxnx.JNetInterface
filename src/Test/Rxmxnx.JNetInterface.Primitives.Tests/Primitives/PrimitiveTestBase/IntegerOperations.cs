@@ -4,8 +4,8 @@ public partial class PrimitiveTestBase
 {
 	private static void IntegerValueTest<TPrimitive, TValue>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryInteger<TPrimitive>, IShiftOperators<TPrimitive, Int32, TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IBinaryInteger<TPrimitive>,
+		IShiftOperators<TPrimitive, Int32, TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryInteger<TValue>,
 		IShiftOperators<TValue, Int32, TValue>
 	{
@@ -15,15 +15,17 @@ public partial class PrimitiveTestBase
 		foreach (CultureInfo culture in PrimitiveTestBase.GetCultures(10))
 		{
 			PrimitiveTestBase.TryFormatCharTest<TPrimitive, TValue>(primitive, culture);
+#if NET8_0_OR_GREATER
 			PrimitiveTestBase.TryFormatByteTest<TPrimitive, TValue>(primitive, culture);
+#endif
 			PrimitiveTestBase.IntegerBigEndianTest<TPrimitive, TValue>(primitive);
 			PrimitiveTestBase.IntegerLittleEndianTest<TPrimitive, TValue>(primitive);
 		}
 	}
 	private static void TryFormatCharTest<TPrimitive, TValue>(TPrimitive primitive, CultureInfo culture)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryInteger<TPrimitive>, IShiftOperators<TPrimitive, Int32, TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IBinaryInteger<TPrimitive>,
+		IShiftOperators<TPrimitive, Int32, TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryInteger<TValue>,
 		IShiftOperators<TValue, Int32, TValue>
 	{
@@ -34,10 +36,11 @@ public partial class PrimitiveTestBase
 		Assert.Equal(charsW0, charsW1);
 		Assert.True(span0.SequenceEqual(span1));
 	}
+#if NET8_0_OR_GREATER
 	private static void TryFormatByteTest<TPrimitive, TValue>(TPrimitive primitive, CultureInfo culture)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryInteger<TPrimitive>, IShiftOperators<TPrimitive, Int32, TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IBinaryInteger<TPrimitive>,
+		IShiftOperators<TPrimitive, Int32, TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryInteger<TValue>,
 		IShiftOperators<TValue, Int32, TValue>
 	{
@@ -48,10 +51,11 @@ public partial class PrimitiveTestBase
 		Assert.Equal(bytesW0, bytesW1);
 		Assert.True(span0.SequenceEqual(span1));
 	}
+#endif
 	private static void IntegerBigEndianTest<TPrimitive, TValue>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryInteger<TPrimitive>, IShiftOperators<TPrimitive, Int32, TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IBinaryInteger<TPrimitive>,
+		IShiftOperators<TPrimitive, Int32, TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryInteger<TValue>,
 		IShiftOperators<TValue, Int32, TValue>
 	{
@@ -65,8 +69,8 @@ public partial class PrimitiveTestBase
 	}
 	private static void IntegerReadBigEndianTest<TPrimitive, TValue>(Span<Byte> bytes0, Span<Byte> bytes1)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryInteger<TPrimitive>, IShiftOperators<TPrimitive, Int32, TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IBinaryInteger<TPrimitive>,
+		IShiftOperators<TPrimitive, Int32, TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryInteger<TValue>,
 		IShiftOperators<TValue, Int32, TValue>
 	{
@@ -77,8 +81,8 @@ public partial class PrimitiveTestBase
 	}
 	private static void IntegerLittleEndianTest<TPrimitive, TValue>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryInteger<TPrimitive>, IShiftOperators<TPrimitive, Int32, TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IBinaryInteger<TPrimitive>,
+		IShiftOperators<TPrimitive, Int32, TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryInteger<TValue>,
 		IShiftOperators<TValue, Int32, TValue>
 	{
@@ -92,8 +96,8 @@ public partial class PrimitiveTestBase
 	}
 	private static void IntegerReadLittleEndianTest<TPrimitive, TValue>(Span<Byte> bytes0, Span<Byte> bytes1)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryInteger<TPrimitive>, IShiftOperators<TPrimitive, Int32, TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IBinaryInteger<TPrimitive>,
+		IShiftOperators<TPrimitive, Int32, TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryInteger<TValue>,
 		IShiftOperators<TValue, Int32, TValue>
 	{
@@ -104,8 +108,8 @@ public partial class PrimitiveTestBase
 	}
 	private static void ShiftTest<TPrimitive, TValue>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryInteger<TPrimitive>, IShiftOperators<TPrimitive, Int32, TPrimitive>
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IBinaryInteger<TPrimitive>,
+		IShiftOperators<TPrimitive, Int32, TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryInteger<TValue>,
 		IShiftOperators<TValue, Int32, TValue>
 	{

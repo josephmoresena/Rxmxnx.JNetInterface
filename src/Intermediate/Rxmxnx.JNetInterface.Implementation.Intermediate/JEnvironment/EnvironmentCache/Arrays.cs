@@ -32,7 +32,7 @@ partial class JEnvironment
 		/// <param name="jArray">A <see cref="JReferenceObject"/> instance.</param>
 		/// <param name="index">Element index.</param>
 		/// <param name="value">Object instance.</param>
-		private unsafe void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value)
+		private void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(value);
 			jArray.ValidateObjectElement(value);
@@ -70,7 +70,7 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JArrayLocalRef arrayRef = jniTransaction.Add(jArray);
 			JObjectLocalRef localRef = jniTransaction.Add(item);
-			JObjectArrayLocalRef objectArrayRef = JObjectArrayLocalRef.FromReference(in arrayRef);
+			JObjectArrayLocalRef objectArrayRef = new(arrayRef);
 			using LocalFrame _ = new(this._env, IVirtualMachine.IndexOfObjectCapacity);
 			for (Int32 i = 0; i < jArray.Length; i++)
 			{
@@ -87,15 +87,15 @@ partial class JEnvironment
 		/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
 		/// <param name="itemSpan">The binary information to locate in <paramref name="jArray"/>.</param>
 		/// <returns>The index of <paramref name="itemSpan"/> if found in <paramref name="jArray"/>; otherwise, -1.</returns>
-		private Int32 IndexOfPrimitive(JArrayObject jArray, ReadOnlySpan<Byte> itemSpan)
+		private unsafe Int32 IndexOfPrimitive(JArrayObject jArray, ReadOnlySpan<Byte> itemSpan)
 		{
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JArrayLocalRef arrayRef = jniTransaction.Add(jArray);
 			Int32 binaryLength = jArray.Length * itemSpan.Length;
-			ValPtr<Byte> criticalPtr = this.GetPrimitiveCriticalSequence(arrayRef);
+			IntPtr criticalPtr = this.GetPrimitiveCriticalSequence(arrayRef, out _);
 			try
 			{
-				Span<Byte> span = criticalPtr.Pointer.GetUnsafeSpan<Byte>(binaryLength);
+				ReadOnlySpan<Byte> span = MemoryMarshal.CreateReadOnlySpan(ref *(Byte*)criticalPtr, binaryLength);
 				for (Int32 offset = 0; offset < binaryLength; offset += itemSpan.Length)
 				{
 					if (itemSpan.SequenceEqual(span.Slice(offset, itemSpan.Length)))
@@ -104,7 +104,7 @@ partial class JEnvironment
 			}
 			finally
 			{
-				this.ReleasePrimitiveCriticalSequence(arrayRef, criticalPtr);
+				this.ReleasePrimitiveCriticalSequence(arrayRef, criticalPtr, JReleaseMode.Abort);
 			}
 			return -1;
 		}
@@ -120,22 +120,23 @@ partial class JEnvironment
 		/// <param name="arrayIndex">
 		/// The zero-based index in <paramref name="array"/> at which copying begins.
 		/// </param>
-		private void CopyToPrimitive(JArrayObject jArray, Int32 sizeOf, Array array, Int32 arrayIndex)
+		private unsafe void CopyToPrimitive(JArrayObject jArray, Int32 sizeOf, Array array, Int32 arrayIndex)
 		{
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			Span<Byte> bytes =
 				MemoryMarshal.CreateSpan(ref MemoryMarshal.GetArrayDataReference(array), sizeOf * array.Length);
 			JArrayLocalRef arrayRef = jniTransaction.Add(jArray);
 			Int32 offset = sizeOf * arrayIndex;
-			ValPtr<Byte> criticalPtr = this.GetPrimitiveCriticalSequence(arrayRef);
+			IntPtr criticalPtr = this.GetPrimitiveCriticalSequence(arrayRef, out _);
 			try
 			{
-				Span<Byte> span = criticalPtr.Pointer.GetUnsafeSpan<Byte>(sizeOf * jArray.Length);
+				ReadOnlySpan<Byte> span =
+					MemoryMarshal.CreateReadOnlySpan(ref *(Byte*)criticalPtr, sizeOf * jArray.Length);
 				span.CopyTo(bytes[offset..]); // Offset for destination array
 			}
 			finally
 			{
-				this.ReleasePrimitiveCriticalSequence(arrayRef, criticalPtr);
+				this.ReleasePrimitiveCriticalSequence(arrayRef, criticalPtr, JReleaseMode.Abort);
 			}
 		}
 		/// <summary>
@@ -164,7 +165,7 @@ partial class JEnvironment
 		/// <param name="index">Element index.</param>
 		/// <returns>The element with <paramref name="index"/> on <paramref name="arrayRef"/>.</returns>
 		/// <returns>A <see cref="JObjectLocalRef"/> reference.</returns>
-		private unsafe JObjectLocalRef GetObjectArrayElement(JObjectArrayLocalRef arrayRef, Int32 index)
+		private JObjectLocalRef GetObjectArrayElement(JObjectArrayLocalRef arrayRef, Int32 index)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetObjectArrayElementInfo);
@@ -183,35 +184,35 @@ partial class JEnvironment
 			{
 				case CommonNames.BooleanSignatureChar:
 					result = arrayFunctions.GetElementsFunctions.GetBooleanArrayElements.Get(
-						this.Reference, JBooleanArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+						this.Reference, new(arrayRef), out isCopyJ);
 					break;
 				case CommonNames.ByteSignatureChar:
 					result = arrayFunctions.GetElementsFunctions.GetByteArrayElements.Get(
-						this.Reference, JByteArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+						this.Reference, new(arrayRef), out isCopyJ);
 					break;
 				case CommonNames.CharSignatureChar:
 					result = arrayFunctions.GetElementsFunctions.GetCharArrayElements.Get(
-						this.Reference, JCharArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+						this.Reference, new(arrayRef), out isCopyJ);
 					break;
 				case CommonNames.DoubleSignatureChar:
 					result = arrayFunctions.GetElementsFunctions.GetDoubleArrayElements.Get(
-						this.Reference, JDoubleArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+						this.Reference, new(arrayRef), out isCopyJ);
 					break;
 				case CommonNames.FloatSignatureChar:
 					result = arrayFunctions.GetElementsFunctions.GetFloatArrayElements.Get(
-						this.Reference, JFloatArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+						this.Reference, new(arrayRef), out isCopyJ);
 					break;
 				case CommonNames.IntSignatureChar:
 					result = arrayFunctions.GetElementsFunctions.GetIntArrayElements.Get(
-						this.Reference, JIntArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+						this.Reference, new(arrayRef), out isCopyJ);
 					break;
 				case CommonNames.LongSignatureChar:
 					result = arrayFunctions.GetElementsFunctions.GetLongArrayElements.Get(
-						this.Reference, JLongArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+						this.Reference, new(arrayRef), out isCopyJ);
 					break;
 				case CommonNames.ShortSignatureChar:
 					result = arrayFunctions.GetElementsFunctions.GetShortArrayElements.Get(
-						this.Reference, JShortArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+						this.Reference, new(arrayRef), out isCopyJ);
 					break;
 				default:
 					isCopyJ = false;
@@ -228,43 +229,35 @@ partial class JEnvironment
 			{
 				case CommonNames.BooleanSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseBooleanArrayElements.Release(
-						this.Reference, JBooleanArrayLocalRef.FromReference(in arrayRef),
-						(ReadOnlyValPtr<JBoolean>)pointer, mode);
+						this.Reference, new(arrayRef), (ReadOnlyValPtr<JBoolean>)pointer, mode);
 					break;
 				case CommonNames.ByteSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseByteArrayElements.Release(
-						this.Reference, JByteArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JByte>)pointer,
-						mode);
+						this.Reference, new(arrayRef), (ReadOnlyValPtr<JByte>)pointer, mode);
 					break;
 				case CommonNames.CharSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseCharArrayElements.Release(
-						this.Reference, JCharArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JChar>)pointer,
-						mode);
+						this.Reference, new(arrayRef), (ReadOnlyValPtr<JChar>)pointer, mode);
 					break;
 				case CommonNames.DoubleSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseDoubleArrayElements.Release(
-						this.Reference, JDoubleArrayLocalRef.FromReference(in arrayRef),
-						(ReadOnlyValPtr<JDouble>)pointer, mode);
+						this.Reference, new(arrayRef), (ReadOnlyValPtr<JDouble>)pointer, mode);
 					break;
 				case CommonNames.FloatSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseFloatArrayElements.Release(
-						this.Reference, JFloatArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JFloat>)pointer,
-						mode);
+						this.Reference, new(arrayRef), (ReadOnlyValPtr<JFloat>)pointer, mode);
 					break;
 				case CommonNames.IntSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseIntArrayElements.Release(
-						this.Reference, JIntArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JInt>)pointer,
-						mode);
+						this.Reference, new(arrayRef), (ReadOnlyValPtr<JInt>)pointer, mode);
 					break;
 				case CommonNames.LongSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseLongArrayElements.Release(
-						this.Reference, JLongArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JLong>)pointer,
-						mode);
+						this.Reference, new(arrayRef), (ReadOnlyValPtr<JLong>)pointer, mode);
 					break;
 				case CommonNames.ShortSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseShortArrayElements.Release(
-						this.Reference, JShortArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JShort>)pointer,
-						mode);
+						this.Reference, new(arrayRef), (ReadOnlyValPtr<JShort>)pointer, mode);
 					break;
 			}
 		}
@@ -393,8 +386,7 @@ partial class JEnvironment
 		/// <param name="jClass">Array class.</param>
 		/// <param name="jObject">Initializer array element.</param>
 		/// <returns>Created array <see cref="JArrayLocalRef"/> reference.</returns>
-		private unsafe JArrayLocalRef NewObjectArray(Int32 length, JClassObject jClass,
-			JReferenceObject? jObject = default)
+		private JArrayLocalRef NewObjectArray(Int32 length, JClassObject jClass, JReferenceObject? jObject = default)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.NewArrayObjectInfo);
@@ -404,7 +396,7 @@ partial class JEnvironment
 			JObjectArrayLocalRef arrayRef =
 				nativeInterface.ArrayFunctions.ObjectArrayFunctions.NewObjectArray(
 					this.Reference, length, classRef, initialRef);
-			if (arrayRef.IsDefault) this.CheckJniError();
+			if (arrayRef == default) this.CheckJniError();
 			return arrayRef.ArrayValue;
 		}
 		/// <summary>

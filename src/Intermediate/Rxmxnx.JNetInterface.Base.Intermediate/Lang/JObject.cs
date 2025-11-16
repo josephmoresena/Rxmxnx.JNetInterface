@@ -5,6 +5,22 @@
 /// </summary>
 public abstract class JObject : IObject, IEquatable<JObject>
 {
+#if !PACKAGE || TEMP_PACKAGE
+	/// <summary>
+	/// Target framework for the current build.
+	/// </summary>
+	public const String CompilationFramework =
+#if NET10_0_OR_GREATER
+			".NET 10.0"
+#elif NET9_0_OR_GREATER
+			".NET 9.0"
+#elif NET8_0_OR_GREATER
+			".NET 8.0"
+#else
+			".NET 7.0"
+#endif
+		;
+#endif
 	/// <summary>
 	/// Object type information.
 	/// </summary>
@@ -90,11 +106,11 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// <summary>
 	/// Retrieves an object identifier using <paramref name="classSignature"/> and <paramref name="objRef"/>.
 	/// </summary>
-	/// <typeparam name="TObjectRef">Type of <see cref="IObjectReferenceType"/>.</typeparam>
+	/// <typeparam name="TObjectRef">Type of <see cref="INativePointerType{TObjectRef}"/>.</typeparam>
 	/// <param name="classSignature">Object class signature.</param>
 	/// <param name="objRef">Object reference.</param>
 	/// <returns>An object identifier using <paramref name="classSignature"/> and <paramref name="objRef"/>.</returns>
 	internal static String GetObjectIdentifier<TObjectRef>(CString classSignature, TObjectRef objRef)
-		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>
+		where TObjectRef : unmanaged, INativePointerType<TObjectRef>
 		=> $"{ClassNameHelper.GetClassName(classSignature)} {objRef}";
 }

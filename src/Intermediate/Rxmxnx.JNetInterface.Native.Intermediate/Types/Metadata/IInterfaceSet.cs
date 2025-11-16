@@ -21,7 +21,8 @@ public interface IInterfaceSet : IEnumerable<JInterfaceTypeMetadata>
 	/// <param name="action">A <see cref="Action{T, JInterfaceTypeMetadata}"/> delegate.</param>
 	void ForEach<T>(T state, Action<T, JInterfaceTypeMetadata> action)
 #if NET9_0_OR_GREATER
-		where T : allows ref struct
-#endif
+		where T : allows ref struct;
+#else
 		;
+#endif
 }

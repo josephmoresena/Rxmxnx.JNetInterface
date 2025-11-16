@@ -15,8 +15,9 @@ internal partial interface IArrayFeature
 	/// Retrieves a direct pointer to <paramref name="arrayRef"/> elements.
 	/// </summary>
 	/// <param name="arrayRef">A <see cref="JArrayLocalRef"/> reference.</param>
+	/// <param name="isCopy">Output. Indicates whether the resulting pointer references a data copy.</param>
 	/// <returns>Pointer to <paramref name="arrayRef"/> data.</returns>
-	internal ValPtr<Byte> GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef);
+	internal IntPtr GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef, out Boolean isCopy);
 	/// <summary>
 	/// Releases the pointer associated to <paramref name="arrayRef"/>.
 	/// </summary>
@@ -31,5 +32,6 @@ internal partial interface IArrayFeature
 	/// </summary>
 	/// <param name="arrayRef">A <see cref="JArrayLocalRef"/> reference.</param>
 	/// <param name="criticalPtr">Pointer to release to.</param>
-	internal void ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, ValPtr<Byte> criticalPtr);
+	/// <param name="mode">Release mode.</param>
+	internal void ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, IntPtr criticalPtr, JReleaseMode mode);
 }
