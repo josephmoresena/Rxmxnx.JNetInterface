@@ -64,7 +64,9 @@ public partial class JVirtualMachine
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 #endif
 	public static Boolean Register<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
-		=> MetadataHelper.Register<TReference>();
+		=> (!JVirtualMachine.IsFixedRuntimeVersion || JVirtualMachine.FixedRuntimeVersion >= TReference.Since) &&
+			// Fixed runtime version supports the type. 
+			MetadataHelper.Register<TReference>();
 	/// <summary>
 	/// Retrieves the <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.
 	/// </summary>
@@ -98,6 +100,9 @@ public partial class JVirtualMachine
 #endif
 	public static void SetMainClass<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
 	{
+		if (JVirtualMachine.IsFixedRuntimeVersion && JVirtualMachine.FixedRuntimeVersion < TReference.Since)
+			// Fixed runtime version doesn't support the type. 
+			return;
 		JDataTypeMetadata typeMetadata = MetadataHelper.GetExactMetadata<TReference>();
 		MainClasses.AppendMainClass(JVirtualMachine.userMainClasses, typeMetadata);
 	}

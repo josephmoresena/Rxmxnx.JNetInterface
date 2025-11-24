@@ -23,4 +23,18 @@ public partial class JVirtualMachine
 	[ExcludeFromCodeCoverage]
 #endif
 	internal static Boolean NioAutoRegistered => true;
+	/// <summary>
+	/// Indicates whether the current execution has a fixed runtime version.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	internal static Boolean IsFixedRuntimeVersion => false;
+	/// <summary>
+	/// Fixed runtime version.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	internal static JRuntimeVersion FixedRuntimeVersion => default;
 }

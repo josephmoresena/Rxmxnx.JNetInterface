@@ -10,10 +10,12 @@ partial class JEnvironment
 		/// Managed thread.
 		/// </summary>
 		public readonly Thread Thread = Thread.CurrentThread;
-		/// <inheritdoc cref="IEnvironment.Version"/>
-		public readonly Int32 Version;
 		/// <inheritdoc cref="JEnvironment.VirtualMachine"/>
 		public readonly JVirtualMachine VirtualMachine;
+
+		/// <inheritdoc cref="IEnvironment.Version"/>
+		/// <remarks>This field must be a property in order to be substituted through ILLink.Substitutions.</remarks>
+		public Int32 Version { get; }
 
 		/// <inheritdoc/>
 		public override JClassObject ClassObject { get; } = default!;
