@@ -206,4 +206,559 @@
                     body="stub"/>
         </type>
     </assembly>
+    <!-- Fixed Java Version Feature -->
+    <assembly fullname="Rxmxnx.JNetInterface.Implementation.Intermediate">
+        <!-- Runtime Feature SEd2 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.SEd2"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="65538"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="65538"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.SEd2" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="65538"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.SEd2"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65538"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="65538"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.SEd2" featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65538"/>
+        </type>
+        <!-- Runtime Feature SEd3 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.SEd3"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="65539"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="65539"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.SEd3" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="65539"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.SEd3"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65538"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="65539"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.SEd3" featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65538"/>
+        </type>
+        <!-- Runtime Feature SEd4 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.SEd4"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="65540"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="65540"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.SEd4" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="65540"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.SEd4"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65540"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="65540"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.SEd4" featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65540"/>
+        </type>
+        <!-- Runtime Feature J5 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.J5"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="65541"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="65541"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.J5" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="65541"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.J5"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65540"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="65541"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.J5"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65540"/>
+        </type>
+        <!-- Runtime Feature J6 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.J6"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="65542"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="65542"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.J6" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="65542"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.J6"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="65542"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.J6"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
+        </type>
+        <!-- Runtime Feature J7 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.J7"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="65543"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="65543"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.J7" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="65543"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.J7"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="65543"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.J7"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
+        </type>
+        <!-- Runtime Feature J8 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.J8"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="65544"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="65544"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.J8" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="65544"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.J8"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65544"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="65544"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.J8"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65544"/>
+        </type>
+        <!-- Runtime Feature J9 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.J9"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="589824"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="589824"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.J9" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="589824"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.J9"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="589824"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="589824"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.J9"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="589824"/>
+        </type>
+        <!-- Runtime Feature J10 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.J10"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="655360"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="655360"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.J10" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="655360"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.J10"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="655360"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.J10"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
+        </type>
+        <!-- Runtime Feature J11 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.J11"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="720896"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="720896"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.J11" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="720896"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.J11"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="720896"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.J11"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
+        </type>
+        <!-- Runtime Feature J12 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.J12"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="786432"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="786432"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.J12" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="786432"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.J12"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="786432"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.J12"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
+        </type>
+        <!-- Runtime Feature J13 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.J13"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="851968"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="851968"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.J13" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="851968"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.J13"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="851968"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.J13"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
+        </type>
+        <!-- Runtime Feature J14 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.J14"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="917504"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="917504"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.J14" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="917504"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.J14"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="917504"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.J14"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
+        </type>
+        <!-- Runtime Feature J15 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.J15"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="983040"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="983040"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.J15" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="983040"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.J15"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="983040"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.J15"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
+        </type>
+        <!-- Runtime Feature J16 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.J16"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="1048576"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="1048576"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.J16" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="1048576"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.J16"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="1048576"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.J16"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
+        </type>
+        <!-- Runtime Feature J17 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.J17"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="1114112"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="1114112"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.J17" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="1114112"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.J17"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="1114112"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.J17"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
+        </type>
+        <!-- Runtime Feature J18 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.J18"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="1179648"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="1179648"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.J18" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="1179648"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.J18"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="1179648"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.J18"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
+        </type>
+        <!-- Runtime Feature J19 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.J19"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="1245184"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="1245184"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.J19" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="1245184"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.J19"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="1245184"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="1245184"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.J19"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="1245184"/>
+        </type>
+        <!-- Runtime Feature J20 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.J20"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="1310720"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="1310720"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.J20" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="1310720"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.J20"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="1310720"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="1310720"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.J20"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="1310720"/>
+        </type>
+        <!-- Runtime Feature J21 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.J21"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="1376256"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="1376256"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.J21" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="1376256"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.J21"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="1376256"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="1376256"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.J21"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="1376256"/>
+        </type>
+        <!-- Runtime Feature J22 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.J22"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="1441792"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="1441792"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.J22" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="1441792"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.J22"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="1376256"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="1441792"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.J22"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="1376256"/>
+        </type>
+        <!-- Runtime Feature J23 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.J23"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="1507328"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="1507328"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.J23" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="1507328"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.J23"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="1376256"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="1507328"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.J23"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="1376256"/>
+        </type>
+        <!-- Runtime Feature J24 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.J24"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="1572864"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="1572864"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.J24" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="1572864"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.J24"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="1572864"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="1572864"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.J24"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="1572864"/>
+        </type>
+        <!-- Runtime Feature J25 -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.J25"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="1638400"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="1638400"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.J25" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="1638400"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.J25"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="1572864"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="1638400"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.J25"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="1572864"/>
+        </type>
+    </assembly>
 </linker>
