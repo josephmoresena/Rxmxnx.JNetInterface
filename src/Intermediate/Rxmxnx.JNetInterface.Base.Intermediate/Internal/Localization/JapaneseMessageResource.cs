@@ -50,6 +50,7 @@ internal sealed class JapaneseMessageResource : IMessageResource
 	String IMessageResource.NotAttachedThread => "現在のスレッドは JVM にアタッチされていません。";
 	String IMessageResource.IncompatibleLibrary => "互換性のない JVM ライブラリです。";
 	String IMessageResource.UnmanagedMemoryContext => "メモリブロックはアンマネージドです。";
+	String IMessageResource.AotRequired => "この操作には Native AOT ランタイムが必要です。";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} はインスタンス化できない型です。";
 	String IMessageResource.InvalidCastTo(Type type) => $"{type} へのキャストが無効です。";

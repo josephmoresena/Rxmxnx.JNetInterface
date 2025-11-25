@@ -7,21 +7,8 @@ namespace Rxmxnx.JNetInterface;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-public sealed unsafe class JVirtualMachineLibrary
+public abstract unsafe partial class JVirtualMachineLibrary
 {
-	/// <summary>
-	/// Name of <c>JNI_GetDefaultJavaVMInitArgs</c> function.
-	/// </summary>
-	private const String GetDefaultVirtualMachineInitArgsName = "JNI_GetDefaultJavaVMInitArgs";
-	/// <summary>
-	/// Name of <c>JNI_CreateJavaVM</c> function.
-	/// </summary>
-	private const String CreateVirtualMachineName = "JNI_CreateJavaVM";
-	/// <summary>
-	/// Name of <c>JNI_GetCreatedJavaVMs</c> function.
-	/// </summary>
-	private const String GetCreatedVirtualMachinesName = "JNI_GetCreatedJavaVMs";
-
 	/// <summary>
 	/// Support JNI versions.
 	/// </summary>
@@ -40,10 +27,6 @@ public sealed unsafe class JVirtualMachineLibrary
 	];
 
 	/// <summary>
-	/// Pointer to exported Java Library functions.
-	/// </summary>
-	private readonly InvocationFunctionSet _functions;
-	/// <summary>
 	/// Indicates whether the function <c>JNI_GetCreatedJavaVMs</c> is available on the current library.
 	/// </summary>
 	private readonly Boolean _hasCreatedVm;
@@ -57,14 +40,12 @@ public sealed unsafe class JVirtualMachineLibrary
 	/// Private constructor.
 	/// </summary>
 	/// <param name="handle">Library handle.</param>
-	/// <param name="functions">A <see cref="InvocationFunctionSet"/> value.</param>
 	/// <param name="hasCreatedVm">
 	/// Indicates whether the function <c>JNI_GetCreatedJavaVMs</c> is available on the current library.
 	/// </param>
-	private JVirtualMachineLibrary(IntPtr handle, InvocationFunctionSet functions, Boolean hasCreatedVm)
+	private JVirtualMachineLibrary(IntPtr handle, Boolean hasCreatedVm)
 	{
 		this.Handle = handle;
-		this._functions = functions;
 		this._hasCreatedVm = hasCreatedVm;
 	}
 
@@ -78,7 +59,7 @@ public sealed unsafe class JVirtualMachineLibrary
 		foreach (Int32 jniVersion in JVirtualMachineLibrary.jniVersions.AsSpan())
 		{
 			VirtualMachineInitArgumentValue initValue = new() { Version = jniVersion, };
-			if (this._functions.GetDefaultVirtualMachineInitArgs(ref initValue) != JResult.Ok)
+			if (this.GetDefaultVirtualMachineInitArgs(ref initValue) != JResult.Ok)
 				break;
 			version = jniVersion;
 		}
@@ -98,8 +79,7 @@ public sealed unsafe class JVirtualMachineLibrary
 				JVirtualMachineLibrary.jniVersions[0] :
 				jniVersion,
 		};
-		ImplementationValidationUtilities.ThrowIfInvalidResult(
-			this._functions.GetDefaultVirtualMachineInitArgs(ref initValue));
+		ImplementationValidationUtilities.ThrowIfInvalidResult(this.GetDefaultVirtualMachineInitArgs(ref initValue));
 		return new(initValue);
 	}
 	/// <summary>
@@ -127,8 +107,7 @@ public sealed unsafe class JVirtualMachineLibrary
 					IgnoreUnrecognized = arg.IgnoreUnrecognized,
 				};
 				JResult result =
-					this._functions.CreateVirtualMachine(out JVirtualMachineRef vmRef, out JEnvironmentRef envRef,
-					                                     in value);
+					this.CreateVirtualMachine(out JVirtualMachineRef vmRef, out JEnvironmentRef envRef, in value);
 				ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 				return JVirtualMachine.GetVirtualMachine(vmRef, envRef, out env);
 			}
@@ -143,7 +122,7 @@ public sealed unsafe class JVirtualMachineLibrary
 	{
 		if (!this._hasCreatedVm)
 			ImplementationValidationUtilities.ThrowIfInvalidResult(JResult.VersionError);
-		_ = this._functions.GetCreatedVirtualMachines(default, 0, out Int32 vmCount);
+		_ = this.GetCreatedVirtualMachines(default, 0, out Int32 vmCount);
 		if (vmCount <= 0) return [];
 		JVirtualMachineRef[] arr = this.GetCreatedVirtualMachines(vmCount, out JResult result);
 		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
@@ -160,10 +139,22 @@ public sealed unsafe class JVirtualMachineLibrary
 	{
 		JVirtualMachineRef[] arr = new JVirtualMachineRef[vmCount];
 		fixed (JVirtualMachineRef* ptr = arr)
-			result = this._functions.GetCreatedVirtualMachines(ptr, arr.Length, out vmCount);
+			result = this.GetCreatedVirtualMachines(ptr, arr.Length, out vmCount);
 		return arr;
 	}
 
+	/// <summary>
+	/// Loads the virtual machine library linked statically to the current binary.
+	/// </summary>
+	/// <returns>
+	/// A <see cref="JVirtualMachineLibrary"/> instance for the current binary.
+	/// </returns>
+	/// <remarks>When this method is used, the <c>jvm</c> library must be statically linked.</remarks>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	public static JVirtualMachineLibrary LoadStaticLibrary()
+		=> JVirtualMachineLibrary.Create<VirtualMachineStaticLibrary>();
 	/// <summary>
 	/// Loads a virtual machine library exposed by <paramref name="libraryPath"/>.
 	/// </summary>
@@ -176,7 +167,21 @@ public sealed unsafe class JVirtualMachineLibrary
 	{
 		IntPtr? handle = NativeUtilities.LoadNativeLib(libraryPath);
 		JTrace.LoadLibrary(libraryPath, handle);
-		return handle.HasValue ? JVirtualMachineLibrary.Create(handle.Value) : default;
+		return handle.HasValue ? JVirtualMachineLibrary.Create(handle.Value, true) : default;
+	}
+	/// <summary>
+	/// Creates a virtual machine library using <typeparamref name="TLibrary"/> type.
+	/// </summary>
+	/// <typeparam name="TLibrary">A <see cref="IVirtualMachineLibraryType"/> type.</typeparam>
+	/// <returns>
+	/// A <see cref="JVirtualMachineLibrary"/> instance by <typeparamref name="TLibrary"/>.
+	/// </returns>
+	public static JVirtualMachineLibrary Create<TLibrary>() where TLibrary : IVirtualMachineLibraryType
+	{
+		if (!AotInfo.IsNativeAot && TLibrary.IsStatic)
+			throw new ArgumentException(IMessageResource.GetInstance().AotRequired);
+		return new Impl<PInvokeInvocation>(default, PInvokeInvocation.GetInvocationSet<TLibrary>(),
+		                                   TLibrary.HasCreatedVmMethod);
 	}
 	/// <summary>
 	/// Creates a virtual machine library using loaded JVM library.
@@ -186,23 +191,34 @@ public sealed unsafe class JVirtualMachineLibrary
 	/// A <see cref="JVirtualMachineLibrary"/> instance if <paramref name="handle"/> is
 	/// valid for a JVM library; otherwise, <see langword="null"/>.
 	/// </returns>
-	public static JVirtualMachineLibrary? Create(IntPtr handle)
+	public static JVirtualMachineLibrary? Create(IntPtr handle) => JVirtualMachineLibrary.Create(handle, false);
+
+	/// <summary>
+	/// Creates a virtual machine library using loaded JVM library.
+	/// </summary>
+	/// <param name="handle">Handle of loaded JVM library.</param>
+	/// <param name="ownHandle">Indicates whether <paramref name="handle"/> is own by the current call.</param>
+	/// <returns>
+	/// A <see cref="JVirtualMachineLibrary"/> instance if <paramref name="handle"/> is
+	/// valid for a JVM library; otherwise, <see langword="null"/>.
+	/// </returns>
+	private static Impl<InvocationFunctionSet>? Create(IntPtr handle, Boolean ownHandle)
 	{
 		Span<IntPtr> functions = stackalloc IntPtr[4];
-		if (JVirtualMachineLibrary.TryGetJniExport(handle, JVirtualMachineLibrary.GetDefaultVirtualMachineInitArgsName,
-		                                           out functions[0]) &&
-		    JVirtualMachineLibrary.TryGetJniExport(handle, JVirtualMachineLibrary.CreateVirtualMachineName,
+		if (JVirtualMachineLibrary.TryGetJniExport(
+			    handle, IVirtualMachineLibraryType.GetDefaultVirtualMachineInitArgsSymbol, out functions[0]) &&
+		    JVirtualMachineLibrary.TryGetJniExport(handle, IVirtualMachineLibraryType.CreateVirtualMachineSymbol,
 		                                           out functions[1]))
 		{
 			Boolean hasCreatedVm =
-				JVirtualMachineLibrary.TryGetJniExport(handle, JVirtualMachineLibrary.GetCreatedVirtualMachinesName,
-				                                       out functions[2]);
+				JVirtualMachineLibrary.TryGetJniExport(
+					handle, IVirtualMachineLibraryType.GetCreatedVirtualMachinesSymbol, out functions[2]);
 			return new(handle, Unsafe.As<IntPtr, InvocationFunctionSet>(ref functions[0]), hasCreatedVm);
 		}
-		NativeLibrary.Free(handle);
+		if (ownHandle)
+			NativeLibrary.Free(handle);
 		return default;
 	}
-
 	/// <summary>
 	/// Gets the address of JNI exported symbol and returns a value that indicates whether
 	/// the method call succeeded.

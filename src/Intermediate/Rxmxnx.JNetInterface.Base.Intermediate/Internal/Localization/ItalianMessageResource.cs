@@ -14,7 +14,7 @@ internal sealed class ItalianMessageResource : IMessageResource
 	static IMessageResource IMessageResource.Instance => ItalianMessageResource.instance;
 
 	/// <summary>
-	/// Costruttore privato.
+	/// Private constructor.
 	/// </summary>
 	private ItalianMessageResource() { }
 
@@ -52,6 +52,7 @@ internal sealed class ItalianMessageResource : IMessageResource
 	String IMessageResource.NotAttachedThread => "Il thread corrente non è collegato alla JVM.";
 	String IMessageResource.IncompatibleLibrary => "Libreria JVM incompatibile.";
 	String IMessageResource.UnmanagedMemoryContext => "Il blocco di memoria è non gestito.";
+	String IMessageResource.AotRequired => "Questa operazione richiede un runtime Native AOT.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} non è un tipo istanziabile.";
 	String IMessageResource.InvalidCastTo(Type type) => $"Cast non valido a {type}.";

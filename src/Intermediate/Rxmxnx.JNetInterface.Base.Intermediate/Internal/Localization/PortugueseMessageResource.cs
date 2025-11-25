@@ -52,6 +52,7 @@ internal sealed class PortugueseMessageResource : IMessageResource
 	String IMessageResource.NotAttachedThread => "A thread atual não está anexada à JVM.";
 	String IMessageResource.IncompatibleLibrary => "Biblioteca JVM incompatível.";
 	String IMessageResource.UnmanagedMemoryContext => "O bloco de memória é não gerenciado.";
+	String IMessageResource.AotRequired => "Esta operação requer um runtime Native AOT.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} não é um tipo instanciável.";
 	String IMessageResource.InvalidCastTo(Type type) => $"Conversão inválida para {type}.";

@@ -2,23 +2,6 @@ namespace Rxmxnx.JNetInterface.Tests;
 
 public sealed unsafe partial class JVirtualMachineLibraryTests
 {
-	[ThreadStatic]
-	private static Int32 count;
-	[ThreadStatic]
-	private static Int32 jniVersion;
-	[ThreadStatic]
-	private static Exception? nativeException;
-	[ThreadStatic]
-	private static JVirtualMachineInitArg? args;
-	[ThreadStatic]
-	private static JResult result;
-	[ThreadStatic]
-	private static NativeInterfaceProxy? proxyEnv;
-	[ThreadStatic]
-	private static ReadOnlyValPtr<VirtualMachineInitOptionValue> optionsPtr;
-	[ThreadStatic]
-	private static NativeInterfaceProxy[]? proxies;
-
 	private static JResult GetDefaultVirtualMachineInitArgsForGetLatestSupportedVersionTest(
 		ref VirtualMachineInitArgumentValue initValue)
 	{
@@ -31,9 +14,9 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 #endif
 				ref Unsafe.AsRef<VirtualMachineInitOptionValue>(initValue.Options);
 
-			if (JVirtualMachineLibraryTests.count == 0)
+			if (LibraryBaseTests.Count == 0)
 				Assert.Equal((Int32)JRuntimeVersion.SEd2, initValue.Version);
-			JVirtualMachineLibraryTests.count++;
+			LibraryBaseTests.Count++;
 #if NET8_0_OR_GREATER
 			Assert.True(Unsafe.IsNullRef(in options));
 #else
@@ -42,7 +25,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 			Assert.Equal(default, initValue.OptionsLength);
 			Assert.Equal(default, initValue.IgnoreUnrecognized);
 
-			if (initValue.Version > JVirtualMachineLibraryTests.jniVersion)
+			if (initValue.Version > LibraryBaseTests.JniVersion)
 				return JResult.VersionError;
 
 			initValue = new()
@@ -56,14 +39,14 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 		}
 		catch (Exception ex)
 		{
-			JVirtualMachineLibraryTests.nativeException = ex;
+			LibraryBaseTests.NativeException = ex;
 			return JResult.Ok;
 		}
 	}
 	private static JResult CreateVirtualMachineForCreateVirtualMachineTest(out JVirtualMachineRef vmRef,
 		out JEnvironmentRef envRef, in VirtualMachineInitArgumentValue value)
 	{
-		if (JVirtualMachineLibraryTests.proxyEnv is null || JVirtualMachineLibraryTests.args is null)
+		if (LibraryBaseTests.ProxyEnv is null || LibraryBaseTests.Args is null)
 		{
 			vmRef = default;
 			envRef = default;
@@ -85,8 +68,8 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 #endif
 
 			Assert.Equal((Int32)JRuntimeVersion.J6, value.Version);
-			Assert.Equal(JVirtualMachineLibraryTests.args.Options.NonEmptyCount, value.OptionsLength);
-			Assert.Equal(JVirtualMachineLibraryTests.args.IgnoreUnrecognized, value.IgnoreUnrecognized);
+			Assert.Equal(LibraryBaseTests.Args.Options.NonEmptyCount, value.OptionsLength);
+			Assert.Equal(LibraryBaseTests.Args.IgnoreUnrecognized, value.IgnoreUnrecognized);
 			if (!nullOptions && (ReadOnlyValPtr<Byte>)options.OptionString is { IsZero: false, } optionString)
 			{
 #if NET8_0_OR_GREATER
@@ -94,7 +77,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 #else
 				ref Byte optionsBuffer =
 #endif
-					ref Unsafe.AsRef(in JVirtualMachineLibraryTests.args.Options.GetPinnableReference());
+					ref Unsafe.AsRef(in LibraryBaseTests.Args.Options.GetPinnableReference());
 #if NET8_0_OR_GREATER
 				Assert.True(Unsafe.AreSame(in optionsBuffer, in optionString.Reference));
 #else
@@ -106,29 +89,29 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 				Assert.Equal(0, value.OptionsLength);
 			}
 
-			if (JVirtualMachineLibraryTests.result != JResult.Ok)
+			if (LibraryBaseTests.Result != JResult.Ok)
 			{
 				vmRef = default;
 				envRef = default;
-				return JVirtualMachineLibraryTests.result;
+				return LibraryBaseTests.Result;
 			}
 
-			vmRef = JVirtualMachineLibraryTests.proxyEnv.VirtualMachine.Reference;
-			envRef = JVirtualMachineLibraryTests.proxyEnv.Reference;
+			vmRef = LibraryBaseTests.ProxyEnv.VirtualMachine.Reference;
+			envRef = LibraryBaseTests.ProxyEnv.Reference;
 			return JResult.Ok;
 		}
 		catch (Exception ex)
 		{
-			JVirtualMachineLibraryTests.nativeException = ex;
+			LibraryBaseTests.NativeException = ex;
 			vmRef = default;
 			envRef = default;
-			return JVirtualMachineLibraryTests.result;
+			return LibraryBaseTests.Result;
 		}
 	}
 	private static JResult GetDefaultVirtualMachineInitArgsForGetDefaultArgumentTest(
 		ref VirtualMachineInitArgumentValue initValue)
 	{
-		if (JVirtualMachineLibraryTests.args is null) return JResult.DetachedThreadError;
+		if (LibraryBaseTests.Args is null) return JResult.DetachedThreadError;
 		try
 		{
 #if NET8_0_OR_GREATER
@@ -145,7 +128,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 #endif
 
 			Assert.InRange(initValue.Version, (Int32)JRuntimeVersion.SEd2,
-			               Math.Max(JVirtualMachineLibraryTests.args.Version, (Int32)JRuntimeVersion.SEd2));
+			               Math.Max(LibraryBaseTests.Args.Version, (Int32)JRuntimeVersion.SEd2));
 			Assert.True(nullOptions);
 			Assert.Equal(default, initValue.OptionsLength);
 			Assert.Equal(default, initValue.IgnoreUnrecognized);
@@ -153,31 +136,31 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 			initValue = new()
 			{
 				Version = initValue.Version,
-				OptionsLength = JVirtualMachineLibraryTests.args.Options.Count,
-				Options = JVirtualMachineLibraryTests.optionsPtr,
-				IgnoreUnrecognized = JVirtualMachineLibraryTests.args.IgnoreUnrecognized,
+				OptionsLength = LibraryBaseTests.Args.Options.Count,
+				Options = LibraryBaseTests.OptionsPtr,
+				IgnoreUnrecognized = LibraryBaseTests.Args.IgnoreUnrecognized,
 			};
-			return JVirtualMachineLibraryTests.result;
+			return LibraryBaseTests.Result;
 		}
 		catch (Exception ex)
 		{
-			JVirtualMachineLibraryTests.nativeException = ex;
-			return JVirtualMachineLibraryTests.result;
+			LibraryBaseTests.NativeException = ex;
+			return LibraryBaseTests.Result;
 		}
 	}
 	private static JResult GetCreatedJavaVMs(ValPtr<JVirtualMachineRef> vmBuf, Int32 bufLen, out Int32 nVMs)
 	{
-		if (JVirtualMachineLibraryTests.proxies is null)
+		if (LibraryBaseTests.Proxies is null)
 		{
 			nVMs = 0;
 			return JResult.DetachedThreadError;
 		}
 		try
 		{
-			nVMs = JVirtualMachineLibraryTests.proxies.Length;
-			JVirtualMachineLibraryTests.count++;
+			nVMs = LibraryBaseTests.Proxies.Length;
+			LibraryBaseTests.Count++;
 
-			if (JVirtualMachineLibraryTests.count == 1)
+			if (LibraryBaseTests.Count == 1)
 			{
 				Assert.True(Unsafe.IsNullRef(ref vmBuf.Reference));
 				Assert.Equal(0, bufLen);
@@ -185,26 +168,16 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 			}
 
 			Span<JVirtualMachineRef> vmRefs = MemoryMarshal.CreateSpan(ref vmBuf.Reference, bufLen);
-			Assert.Equal(JVirtualMachineLibraryTests.proxies.Length, vmRefs.Length);
-			JVirtualMachineLibraryTests.proxies.Select(p => p.VirtualMachine.Reference).ToArray().CopyTo(vmRefs);
+			Assert.Equal(LibraryBaseTests.Proxies.Length, vmRefs.Length);
+			LibraryBaseTests.Proxies.Select(p => p.VirtualMachine.Reference).ToArray().CopyTo(vmRefs);
 			nVMs = vmRefs.Length;
-			return JVirtualMachineLibraryTests.result;
+			return LibraryBaseTests.Result;
 		}
 		catch (Exception ex)
 		{
-			JVirtualMachineLibraryTests.nativeException = ex;
+			LibraryBaseTests.NativeException = ex;
 			nVMs = -1;
-			return JVirtualMachineLibraryTests.result;
+			return LibraryBaseTests.Result;
 		}
-	}
-	private static void CleanUp()
-	{
-		JVirtualMachineLibraryTests.count = default;
-		JVirtualMachineLibraryTests.jniVersion = default;
-		JVirtualMachineLibraryTests.nativeException = default;
-		JVirtualMachineLibraryTests.result = default;
-		JVirtualMachineLibraryTests.proxyEnv = default;
-		JVirtualMachineLibraryTests.optionsPtr = default;
-		JVirtualMachineLibraryTests.proxies = default;
 	}
 }

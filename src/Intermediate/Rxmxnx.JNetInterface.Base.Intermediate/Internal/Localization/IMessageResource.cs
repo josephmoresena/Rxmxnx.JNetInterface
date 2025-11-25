@@ -138,6 +138,10 @@ internal partial interface IMessageResource
 	/// Message for unmanaged memory context exception.
 	/// </summary>
 	String UnmanagedMemoryContext { get; }
+	/// <summary>
+	/// Message for non-Native AOT runtime.
+	/// </summary>
+	String AotRequired { get; }
 
 	/// <summary>
 	/// Message for instantiation exception.

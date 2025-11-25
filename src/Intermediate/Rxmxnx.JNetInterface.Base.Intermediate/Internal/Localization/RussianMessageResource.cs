@@ -52,6 +52,7 @@ internal sealed class RussianMessageResource : IMessageResource
 	String IMessageResource.NotAttachedThread => "Текущий поток не подключен к JVM.";
 	String IMessageResource.IncompatibleLibrary => "Несовместимая библиотека JVM.";
 	String IMessageResource.UnmanagedMemoryContext => "Блок памяти не управляем.";
+	String IMessageResource.AotRequired => "Для этой операции требуется среда выполнения Native AOT.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} не является создаваемым типом.";
 	String IMessageResource.InvalidCastTo(Type type) => $"Недопустимое приведение к {type}.";

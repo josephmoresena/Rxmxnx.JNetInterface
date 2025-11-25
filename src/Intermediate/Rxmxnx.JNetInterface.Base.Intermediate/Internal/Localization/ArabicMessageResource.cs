@@ -108,6 +108,7 @@ internal sealed class ArabicMessageResource : IMessageResource
 	String IMessageResource.MainClassUnavailable(String mainClassName) => $"الفئة الرئيسية {mainClassName} غير متاحة.";
 	String IMessageResource.PrimitiveClassUnavailable(String primitiveClassName)
 		=> $"الفئة البدائية {primitiveClassName} غير متوفرة.";
+	String IMessageResource.AotRequired => "تتطلب هذه العملية وقت تشغيل Native AOT.";
 
 	String IMessageResource.OverflowTransactionCapacity(Int32 transactionCapacity)
 		=> $"تجاوز سعة المعاملة: {transactionCapacity}.";

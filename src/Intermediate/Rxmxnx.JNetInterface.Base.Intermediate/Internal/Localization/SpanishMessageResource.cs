@@ -54,6 +54,7 @@ internal sealed class SpanishMessageResource : IMessageResource
 	String IMessageResource.NotAttachedThread => "El hilo actual no está adjunto a la JVM.";
 	String IMessageResource.IncompatibleLibrary => "Biblioteca JVM incompatible.";
 	String IMessageResource.UnmanagedMemoryContext => "El bloque de memoria es no administrado.";
+	String IMessageResource.AotRequired => "Esta operación requiere un entorno de ejecución Native AOT.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} no es un tipo instanciable.";
 	String IMessageResource.InvalidCastTo(Type type) => $"Conversión no válida a {type}.";

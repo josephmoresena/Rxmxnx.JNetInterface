@@ -52,6 +52,7 @@ internal sealed class FrenchMessageResource : IMessageResource
 	String IMessageResource.NotAttachedThread => "Le thread actuel n'est pas attaché à la JVM.";
 	String IMessageResource.IncompatibleLibrary => "Bibliothèque JVM incompatible.";
 	String IMessageResource.UnmanagedMemoryContext => "Le bloc mémoire est non géré.";
+	String IMessageResource.AotRequired => "Cette opération nécessite un runtime Native AOT.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} n'est pas un type instantiable.";
 	String IMessageResource.InvalidCastTo(Type type) => $"Conversion invalide vers {type}.";
