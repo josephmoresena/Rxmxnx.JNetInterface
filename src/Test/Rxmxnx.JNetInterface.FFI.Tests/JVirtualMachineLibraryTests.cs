@@ -81,12 +81,12 @@ public sealed unsafe partial class JVirtualMachineLibraryTests : LibraryBaseTest
 
 		Skip.If(library is null, "JVM library not loaded.");
 
-		LibraryBaseTests.JniVersion = jniVersionTest;
+		JVirtualMachineLibraryTests.jniVersion = jniVersionTest;
 
 		delegate* unmanaged<FuncPtr<GetDefaultVirtualMachineInitArgsDelegate>, FuncPtr<CreateVirtualMachineDelegate>,
 			FuncPtr<GetCreatedJavaVMsDelegate>, void> arrangeInvocation =
 				JVirtualMachineLibraryTests.GetProxyMethods(library, out delegate* unmanaged<void> reset);
-		LibraryBaseTests.Count = 0;
+		JVirtualMachineLibraryTests.count = 0;
 
 		GetDefaultVirtualMachineInitArgsDelegate getDefaultVirtualMachineInitArgs = JVirtualMachineLibraryTests
 			.GetDefaultVirtualMachineInitArgsForGetLatestSupportedVersionTest;
@@ -95,14 +95,14 @@ public sealed unsafe partial class JVirtualMachineLibraryTests : LibraryBaseTest
 			reset();
 			arrangeInvocation(getDefaultVirtualMachineInitArgs.GetUnsafeFuncPtr(), default, default);
 
-			if (LibraryBaseTests.JniVersion < (Int32)JRuntimeVersion.SEd2)
+			if (JVirtualMachineLibraryTests.jniVersion < (Int32)JRuntimeVersion.SEd2)
 				Assert.Throws<JavaVersionException>(() => library.GetLatestSupportedVersion());
 			else
-				Assert.Equal(LibraryBaseTests.JniVersion, library.GetLatestSupportedVersion());
+				Assert.Equal(JVirtualMachineLibraryTests.jniVersion, library.GetLatestSupportedVersion());
 
 			if (LibraryBaseTests.NativeException is not null)
 				throw new AggregateException(LibraryBaseTests.NativeException);
-			Assert.Equal(LibraryBaseTests.JniVersion switch
+			Assert.Equal(JVirtualMachineLibraryTests.jniVersion switch
 			{
 				(Int32)JRuntimeVersion.SEd2 => 2,
 				(Int32)JRuntimeVersion.SEd4 => 3,
@@ -115,12 +115,12 @@ public sealed unsafe partial class JVirtualMachineLibraryTests : LibraryBaseTest
 				(Int32)JRuntimeVersion.J21 => 10,
 				(Int32)JRuntimeVersion.J24 => 10,
 				_ => 1,
-			}, LibraryBaseTests.Count);
+			}, JVirtualMachineLibraryTests.count);
 		}
 		finally
 		{
 			reset();
-			LibraryBaseTests.CleanUp();
+			JVirtualMachineLibraryTests.CleanUp();
 		}
 	}
 
@@ -138,18 +138,18 @@ public sealed unsafe partial class JVirtualMachineLibraryTests : LibraryBaseTest
 
 		Skip.If(library is null, "JVM library not loaded.");
 
-		LibraryBaseTests.Result = resultTest;
+		JVirtualMachineLibraryTests.result = resultTest;
 
 		delegate* unmanaged<FuncPtr<GetDefaultVirtualMachineInitArgsDelegate>, FuncPtr<CreateVirtualMachineDelegate>,
 			FuncPtr<GetCreatedJavaVMsDelegate>, void> arrangeInvocation =
 				JVirtualMachineLibraryTests.GetProxyMethods(library, out delegate* unmanaged<void> reset);
-		LibraryBaseTests.Args = new((Int32)JRuntimeVersion.J6)
+		JVirtualMachineLibraryTests.args = new((Int32)JRuntimeVersion.J6)
 		{
 			Options = JVirtualMachineLibraryTests.CreateOptionsSequence(),
 			IgnoreUnrecognized = JVirtualMachineLibraryTests.fixture.Create<Boolean>(),
 		};
 
-		LibraryBaseTests.ProxyEnv = NativeInterfaceProxy.CreateProxy();
+		JVirtualMachineLibraryTests.proxyEnv = NativeInterfaceProxy.CreateProxy();
 		CreateVirtualMachineDelegate createVirtualMachine =
 			JVirtualMachineLibraryTests.CreateVirtualMachineForCreateVirtualMachineTest;
 		try
@@ -157,34 +157,36 @@ public sealed unsafe partial class JVirtualMachineLibraryTests : LibraryBaseTest
 			reset();
 			arrangeInvocation(default, createVirtualMachine.GetUnsafeFuncPtr(), default);
 
-			if (LibraryBaseTests.Result != JResult.Ok)
+			if (JVirtualMachineLibraryTests.result != JResult.Ok)
 			{
-				Assert.Equal(LibraryBaseTests.Result,
+				Assert.Equal(JVirtualMachineLibraryTests.result,
 				             Assert.Throws<JniException>(() => library.CreateVirtualMachine(
-					                                         LibraryBaseTests.Args, out IEnvironment __)).Result);
+					                                         JVirtualMachineLibraryTests.args, out IEnvironment __))
+				                   .Result);
 				if (LibraryBaseTests.NativeException is not null)
 					throw new AggregateException(LibraryBaseTests.NativeException);
 				return;
 			}
 
 			using IInvokedVirtualMachine invoked =
-				library.CreateVirtualMachine(LibraryBaseTests.Args, out IEnvironment env);
+				library.CreateVirtualMachine(JVirtualMachineLibraryTests.args, out IEnvironment env);
 
 			if (LibraryBaseTests.NativeException is not null)
 				throw new AggregateException(LibraryBaseTests.NativeException);
-			Assert.Equal(LibraryBaseTests.ProxyEnv.Reference, env.Reference);
-			Assert.Equal(LibraryBaseTests.ProxyEnv.VirtualMachine.Reference, invoked.Reference);
+			Assert.Equal(JVirtualMachineLibraryTests.proxyEnv.Reference, env.Reference);
+			Assert.Equal(JVirtualMachineLibraryTests.proxyEnv.VirtualMachine.Reference, invoked.Reference);
 		}
 		finally
 		{
 			reset();
-			JVirtualMachine.RemoveEnvironment(LibraryBaseTests.ProxyEnv.VirtualMachine.Reference,
-			                                  LibraryBaseTests.ProxyEnv.Reference);
+			JVirtualMachine.RemoveEnvironment(JVirtualMachineLibraryTests.proxyEnv.VirtualMachine.Reference,
+			                                  JVirtualMachineLibraryTests.proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
-			Assert.False(JVirtualMachine.RemoveVirtualMachine(LibraryBaseTests.ProxyEnv.VirtualMachine.Reference));
-			LibraryBaseTests.ProxyEnv.FinalizeProxy(true);
-			LibraryBaseTests.CleanUp();
+			Assert.False(
+				JVirtualMachine.RemoveVirtualMachine(JVirtualMachineLibraryTests.proxyEnv.VirtualMachine.Reference));
+			JVirtualMachineLibraryTests.proxyEnv.FinalizeProxy(true);
+			JVirtualMachineLibraryTests.CleanUp();
 		}
 	}
 
@@ -237,22 +239,22 @@ public sealed unsafe partial class JVirtualMachineLibraryTests : LibraryBaseTest
 
 		Skip.If(library is null, "JVM library not loaded.");
 
-		LibraryBaseTests.JniVersion = jniVersionTest;
-		LibraryBaseTests.Result = resultTest;
+		JVirtualMachineLibraryTests.jniVersion = jniVersionTest;
+		JVirtualMachineLibraryTests.result = resultTest;
 
 		delegate* unmanaged<FuncPtr<GetDefaultVirtualMachineInitArgsDelegate>, FuncPtr<CreateVirtualMachineDelegate>,
 			FuncPtr<GetCreatedJavaVMsDelegate>, void> arrangeInvocation =
 				JVirtualMachineLibraryTests.GetProxyMethods(library, out delegate* unmanaged<void> reset);
-		LibraryBaseTests.Args = new(LibraryBaseTests.JniVersion)
+		JVirtualMachineLibraryTests.args = new(JVirtualMachineLibraryTests.jniVersion)
 		{
 			Options = useOptions ? JVirtualMachineLibraryTests.CreateOptionsSequence() : CStringSequence.Empty,
 			IgnoreUnrecognized = JVirtualMachineLibraryTests.fixture.Create<Boolean>(),
 		};
-		using MemoryHandle seqHandle = LibraryBaseTests.Args.Options.ToString().AsMemory().Pin();
+		using MemoryHandle seqHandle = JVirtualMachineLibraryTests.args.Options.ToString().AsMemory().Pin();
 		Span<VirtualMachineInitOptionValue> optionSpan =
-			stackalloc VirtualMachineInitOptionValue[LibraryBaseTests.Args.Options.Count];
-		LibraryBaseTests.OptionsPtr =
-			JVirtualMachineLibraryTests.GetOptionsPtr(optionSpan, LibraryBaseTests.Args.Options);
+			stackalloc VirtualMachineInitOptionValue[JVirtualMachineLibraryTests.args.Options.Count];
+		JVirtualMachineLibraryTests.optionsPtr =
+			JVirtualMachineLibraryTests.GetOptionsPtr(optionSpan, JVirtualMachineLibraryTests.args.Options);
 
 		GetDefaultVirtualMachineInitArgsDelegate getDefaultVirtualMachineInitArgs =
 			JVirtualMachineLibraryTests.GetDefaultVirtualMachineInitArgsForGetDefaultArgumentTest;
@@ -261,32 +263,33 @@ public sealed unsafe partial class JVirtualMachineLibraryTests : LibraryBaseTest
 			reset();
 			arrangeInvocation(getDefaultVirtualMachineInitArgs.GetUnsafeFuncPtr(), default, default);
 
-			if (LibraryBaseTests.Result != JResult.Ok)
+			if (JVirtualMachineLibraryTests.result != JResult.Ok)
 			{
-				Assert.Throws<JniException>(() => library.GetDefaultArgument(LibraryBaseTests.JniVersion));
+				Assert.Throws<JniException>(() => library.GetDefaultArgument(JVirtualMachineLibraryTests.jniVersion));
 				if (LibraryBaseTests.NativeException is not null)
 					throw new AggregateException(LibraryBaseTests.NativeException);
 				return;
 			}
 
-			JVirtualMachineInitArg defaultValue = library.GetDefaultArgument(LibraryBaseTests.JniVersion);
+			JVirtualMachineInitArg defaultValue = library.GetDefaultArgument(JVirtualMachineLibraryTests.jniVersion);
 
 			if (LibraryBaseTests.NativeException is not null)
 				throw new AggregateException(LibraryBaseTests.NativeException);
 
 			Assert.Equal(
-				LibraryBaseTests.JniVersion < (Int32)JRuntimeVersion.SEd2 ?
+				JVirtualMachineLibraryTests.jniVersion < (Int32)JRuntimeVersion.SEd2 ?
 					(Int32)JRuntimeVersion.SEd2 :
-					LibraryBaseTests.JniVersion, defaultValue.Version);
-			Assert.Equal(LibraryBaseTests.Args.Options.NonEmptyCount, defaultValue.Options.Count);
-			Assert.Equal(LibraryBaseTests.Args.Options.ToString(), defaultValue.Options.ToString());
-			Assert.Equal(!useOptions, Object.ReferenceEquals(LibraryBaseTests.Args.Options, defaultValue.Options));
-			Assert.Equal(LibraryBaseTests.Args.IgnoreUnrecognized, defaultValue.IgnoreUnrecognized);
+					JVirtualMachineLibraryTests.jniVersion, defaultValue.Version);
+			Assert.Equal(JVirtualMachineLibraryTests.args.Options.NonEmptyCount, defaultValue.Options.Count);
+			Assert.Equal(JVirtualMachineLibraryTests.args.Options.ToString(), defaultValue.Options.ToString());
+			Assert.Equal(!useOptions,
+			             Object.ReferenceEquals(JVirtualMachineLibraryTests.args.Options, defaultValue.Options));
+			Assert.Equal(JVirtualMachineLibraryTests.args.IgnoreUnrecognized, defaultValue.IgnoreUnrecognized);
 		}
 		finally
 		{
 			reset();
-			LibraryBaseTests.CleanUp();
+			JVirtualMachineLibraryTests.CleanUp();
 		}
 	}
 
@@ -314,21 +317,21 @@ public sealed unsafe partial class JVirtualMachineLibraryTests : LibraryBaseTest
 				JVirtualMachineLibraryTests.GetProxyMethods(library, out delegate* unmanaged<void> reset);
 		GetCreatedJavaVMsDelegate getCreatedJavaVMs = JVirtualMachineLibraryTests.GetCreatedJavaVMs;
 
-		LibraryBaseTests.Proxies = createdVms > 0 ? new NativeInterfaceProxy[createdVms] : [];
-		LibraryBaseTests.Count = 0;
-		LibraryBaseTests.Result = resultTest;
+		JVirtualMachineLibraryTests.proxies = createdVms > 0 ? new NativeInterfaceProxy[createdVms] : [];
+		JVirtualMachineLibraryTests.count = 0;
+		JVirtualMachineLibraryTests.result = resultTest;
 
 		reset();
 		arrangeInvocation(default, default, getCreatedJavaVMs.GetUnsafeFuncPtr());
 
 		for (Int32 i = 0; i < createdVms; i++)
-			LibraryBaseTests.Proxies[i] = NativeInterfaceProxy.CreateProxy();
+			JVirtualMachineLibraryTests.proxies[i] = NativeInterfaceProxy.CreateProxy();
 
 		try
 		{
-			if (LibraryBaseTests.Result != JResult.Ok && createdVms > 0)
+			if (JVirtualMachineLibraryTests.result != JResult.Ok && createdVms > 0)
 			{
-				Assert.Equal(LibraryBaseTests.Result,
+				Assert.Equal(JVirtualMachineLibraryTests.result,
 				             Assert.Throws<JniException>(() => library.GetCreatedVirtualMachines()).Result);
 				if (LibraryBaseTests.NativeException is not null)
 					throw new AggregateException(LibraryBaseTests.NativeException);
@@ -339,15 +342,15 @@ public sealed unsafe partial class JVirtualMachineLibraryTests : LibraryBaseTest
 
 			if (LibraryBaseTests.NativeException is not null)
 				throw new AggregateException(LibraryBaseTests.NativeException);
-			Assert.Equal(LibraryBaseTests.Proxies.Length, vms.Length);
-			Assert.Equal(LibraryBaseTests.Proxies.Select(p => p.VirtualMachine.Reference),
+			Assert.Equal(JVirtualMachineLibraryTests.proxies.Length, vms.Length);
+			Assert.Equal(JVirtualMachineLibraryTests.proxies.Select(p => p.VirtualMachine.Reference),
 			             vms.Select(v => v.Reference));
 		}
 		finally
 		{
 			reset();
-			Assert.Equal(createdVms > 0 ? 2 : 1, LibraryBaseTests.Count);
-			foreach (NativeInterfaceProxy proxyEnvT in LibraryBaseTests.Proxies)
+			Assert.Equal(createdVms > 0 ? 2 : 1, JVirtualMachineLibraryTests.count);
+			foreach (NativeInterfaceProxy proxyEnvT in JVirtualMachineLibraryTests.proxies)
 			{
 				JVirtualMachine.RemoveEnvironment(proxyEnvT.VirtualMachine.Reference, proxyEnvT.Reference);
 				GC.Collect();
@@ -355,7 +358,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests : LibraryBaseTest
 				JVirtualMachine.RemoveVirtualMachine(proxyEnvT.VirtualMachine.Reference);
 				proxyEnvT.FinalizeProxy(true);
 			}
-			LibraryBaseTests.CleanUp();
+			JVirtualMachineLibraryTests.CleanUp();
 		}
 	}
 }

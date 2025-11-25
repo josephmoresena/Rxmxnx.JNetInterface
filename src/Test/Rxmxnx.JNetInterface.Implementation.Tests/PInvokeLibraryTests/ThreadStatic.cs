@@ -11,5 +11,5 @@ public sealed partial class PInvokeLibraryTests
 	[ThreadStatic]
 	private static CreateVirtualMachineDelegate? createVirtualMachine;
 	[ThreadStatic]
-	private static GetCreatedVirtualMachinesDelegate? getCreatedVirtualMachines;
+	private static GetCreatedJavaVMsDelegate? getCreatedVirtualMachines;
 }

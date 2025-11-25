@@ -15,7 +15,7 @@ public abstract unsafe partial class JVirtualMachineLibrary
 	///     cref="IInvocationFunctionSet.CreateVirtualMachine(out JVirtualMachineRef, out JEnvironmentRef, in VirtualMachineInitArgumentValue)"/>
 	private protected abstract JResult CreateVirtualMachine(out JVirtualMachineRef vmRef, out JEnvironmentRef envRef,
 		in VirtualMachineInitArgumentValue initArg);
-	/// <inheritdoc cref="IInvocationFunctionSet.GetCreatedVirtualMachines(JVirtualMachineRef* Int32, out Int32)"/>
+	/// <inheritdoc cref="IInvocationFunctionSet.GetCreatedVirtualMachines(JVirtualMachineRef*, Int32, out Int32)"/>
 	private protected abstract JResult GetCreatedVirtualMachines(JVirtualMachineRef* arr, Int32 arrSize,
 		out Int32 count);
 }

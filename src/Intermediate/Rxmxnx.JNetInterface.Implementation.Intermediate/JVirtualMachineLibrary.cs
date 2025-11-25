@@ -179,7 +179,7 @@ public abstract unsafe partial class JVirtualMachineLibrary
 	public static JVirtualMachineLibrary Create<TLibrary>() where TLibrary : IVirtualMachineLibraryType
 	{
 		if (!AotInfo.IsNativeAot && TLibrary.IsStatic)
-			throw new ArgumentException(IMessageResource.GetInstance().AotRequired);
+			throw new InvalidOperationException(IMessageResource.GetInstance().AotRequired);
 		return new Impl<PInvokeInvocation>(default, PInvokeInvocation.GetInvocationSet<TLibrary>(),
 		                                   TLibrary.HasCreatedVmMethod);
 	}
