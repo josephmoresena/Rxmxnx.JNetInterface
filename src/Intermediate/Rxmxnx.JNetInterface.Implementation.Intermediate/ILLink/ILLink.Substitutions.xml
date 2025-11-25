@@ -206,6 +206,142 @@
                     body="stub"/>
         </type>
     </assembly>
+    <!-- Fixed Android Version Feature -->
+    <assembly fullname="Rxmxnx.JNetInterface.Implementation.Intermediate">
+        <!-- Runtime Feature Android (JNI Fixed to J6) -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.Android"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.Android"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.Android" featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
+        </type>
+        <!-- Runtime Feature Dalvik (Android 1.0 to 4.2) -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.Dalvik"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="65542"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="65542"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.Dalvik" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="65542"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.Dalvik"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="65542"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.Dalvik" featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
+        </type>
+        <!-- Runtime Feature ART (Android 4.4 to 7.0) -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.ART"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="65543"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="65543"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.ART" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="65543"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.ART"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="65543"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedJavaVersion.ART"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
+        </type>
+        <!-- Runtime Feature ART8 (Android 8.0 to 11.0) -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.ART8"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="65544"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="65544"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.ART8" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="65544"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.ART8"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="65544"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.ART8" featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
+        </type>
+        <!-- Runtime Feature ART11 (Android 12.0 to Android 13.0) -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.ART11"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="720896"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="720896"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.ART11" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="720896"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.ART11"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="720896"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.ART11" featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
+        </type>
+        <!-- Runtime Feature ART17 (Android 14.0+) -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.ART17"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="1114112"/>
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
+                    value="1114112"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.ART17" featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
+                    body="stub" value="1114112"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.ART17"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
+            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
+                    body="stub" value="1114112"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.ART17" featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
+        </type>
+    </assembly>
     <!-- Fixed Java Version Feature -->
     <assembly fullname="Rxmxnx.JNetInterface.Implementation.Intermediate">
         <!-- Runtime Feature SEd2 -->
@@ -213,6 +349,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="65538"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="65538"/>
         </type>
@@ -236,6 +373,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="65539"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="65539"/>
         </type>
@@ -259,6 +397,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="65540"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="65540"/>
         </type>
@@ -282,6 +421,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="65541"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="65541"/>
         </type>
@@ -305,6 +445,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="65542"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="65542"/>
         </type>
@@ -328,6 +469,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="65543"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="65543"/>
         </type>
@@ -351,6 +493,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="65544"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="65544"/>
         </type>
@@ -374,6 +517,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="589824"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="589824"/>
         </type>
@@ -397,6 +541,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="655360"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="655360"/>
         </type>
@@ -420,6 +565,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="720896"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="720896"/>
         </type>
@@ -443,6 +589,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="786432"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="786432"/>
         </type>
@@ -466,6 +613,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="851968"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="851968"/>
         </type>
@@ -489,6 +637,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="917504"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="917504"/>
         </type>
@@ -512,6 +661,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="983040"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="983040"/>
         </type>
@@ -535,6 +685,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="1048576"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="1048576"/>
         </type>
@@ -558,6 +709,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="1114112"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="1114112"/>
         </type>
@@ -581,6 +733,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="1179648"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="1179648"/>
         </type>
@@ -604,6 +757,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="1245184"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="1245184"/>
         </type>
@@ -627,6 +781,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="1310720"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="1310720"/>
         </type>
@@ -650,6 +805,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="1376256"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="1376256"/>
         </type>
@@ -673,6 +829,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="1441792"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="1441792"/>
         </type>
@@ -696,6 +853,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="1507328"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="1507328"/>
         </type>
@@ -719,6 +877,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="1572864"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="1572864"/>
         </type>
@@ -742,6 +901,7 @@
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="1638400"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="false"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="1638400"/>
         </type>

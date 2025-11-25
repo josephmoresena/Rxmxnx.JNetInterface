@@ -24,6 +24,13 @@ public partial class JVirtualMachine
 #endif
 	internal static Boolean NioAutoRegistered => true;
 	/// <summary>
+	/// Indicates whether the current execution has a fixed android version.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	internal static Boolean IsFixedAndroid => false;
+	/// <summary>
 	/// Indicates whether the current execution has a fixed runtime version.
 	/// </summary>
 #if !PACKAGE

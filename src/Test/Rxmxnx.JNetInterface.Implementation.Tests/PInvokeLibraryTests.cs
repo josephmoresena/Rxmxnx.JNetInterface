@@ -281,6 +281,7 @@ public sealed partial class PInvokeLibraryTests : LibraryBaseTests, IVirtualMach
 		PInvokeLibraryTests.createVirtualMachine = default;
 		PInvokeLibraryTests.getCreatedVirtualMachines = default;
 	}
+
 	static JResult IVirtualMachineLibraryType.GetDefaultVirtualMachineInitArgs(
 		ref VirtualMachineInitArgumentValue initArg)
 		=> PInvokeLibraryTests.getDefaultVirtualMachineInitArgs?.Invoke(ref initArg) ?? JResult.DetachedThreadError;
