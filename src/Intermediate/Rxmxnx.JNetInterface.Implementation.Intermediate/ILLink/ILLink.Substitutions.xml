@@ -221,8 +221,8 @@
     </assembly>
     <!-- Fixed Android Version Feature -->
     <assembly fullname="Rxmxnx.JNetInterface.Implementation.Intermediate">
-        <!-- Runtime Feature Android (Android 1.0 to 4.2) -->
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.Android"
+        <!-- Runtime Feature Dalvik (Android 1.0 to 4.2) -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.Dalvik"
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="65542"/>
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
@@ -231,18 +231,18 @@
                     value="65542"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedJavaVersion.Android" featurevalue="true">
+              feature="JNetInterface.FixedJavaVersion.Dalvik" featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
                     body="stub" value="65542"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.Android"
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.Dalvik"
               featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
                     body="stub" value="65542"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses"
-              feature="JNetInterface.FixedJavaVersion.Android" featurevalue="true">
+              feature="JNetInterface.FixedJavaVersion.Dalvik" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
         </type>
         <!-- Runtime Feature ART (Android 4.4 to 7.0) -->
