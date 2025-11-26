@@ -67,6 +67,7 @@ partial class JEnvironment
 								this.Reference, propValueRef, 0, versionLength, charsPtr);
 						}
 #endif
+						JTrace.GetRuntimeVersion(this.Reference, this.Version, chars);
 						if (Decimal.TryParse(chars, CultureInfo.InvariantCulture, out Decimal result)) return result;
 					}
 				}

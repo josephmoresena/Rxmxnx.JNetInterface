@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <linker>
+    <!-- Auto-registration Features -->
     <assembly fullname="Rxmxnx.JNetInterface.Implementation.Intermediate">
+        <!-- Throwable classes Auto-registration -->
         <type fullname="Rxmxnx.JNetInterface.JVirtualMachine"
               feature="JNetInterface.DisableBuiltInThrowableAutoRegistration"
               featurevalue="true">
@@ -12,6 +14,7 @@
             <method signature="System.Void BuiltInThrowableRegistration(System.Collections.Generic.IDictionary`2&lt;System.String,Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata&gt;)"
                     body="stub"/>
         </type>
+        <!-- Reflection classes Auto-registration -->
         <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.DisableReflectionAutoRegistration"
               featurevalue="true">
             <method signature="System.Boolean get_ReflectionAutoRegistered()" body="stub" value="false"/>
@@ -22,6 +25,7 @@
             <method signature="System.Void BuiltInThrowableRegistration(System.Collections.Generic.IDictionary`2&lt;System.String,Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata&gt;)"
                     body="stub"/>
         </type>
+        <!-- Native IO classes Auto-registration -->
         <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.DisableNioAutoRegistration"
               featurevalue="true">
             <method signature="System.Boolean get_NioAutoRegistered()" body="stub" value="false"/>
@@ -32,6 +36,9 @@
             <method signature="System.Void NioRegistration(System.Collections.Generic.IDictionary`2&lt;System.String,Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata&gt;)"
                     body="stub"/>
         </type>
+    </assembly>
+    <!-- Runtime Check Bypass Features -->
+    <assembly fullname="Rxmxnx.JNetInterface.Implementation.Intermediate">
         <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.EnableFinalUserTypeRuntime"
               featurevalue="false" featuredefault="true">
             <method signature="System.Boolean get_FinalUserTypeRuntimeEnabled()" body="stub" value="false"/>
@@ -44,6 +51,9 @@
               featurevalue="false">
             <method signature="System.Boolean get_CheckClassRefNativeCallEnabled()" body="stub" value="false"/>
         </type>
+    </assembly>
+    <!-- Main Classes Features -->
+    <assembly fullname="Rxmxnx.JNetInterface.Implementation.Intermediate">
         <type fullname="Rxmxnx.JNetInterface.Internal.MainClasses" feature="JNetInterface.EnableVoidObjectMainClass"
               featurevalue="false" featuredefault="true">
             <method signature="System.Boolean get_VoidObjectMainClassEnabled()" body="stub" value="false"/>
@@ -85,6 +95,9 @@
               featurevalue="false">
             <method signature="System.Boolean get_PrimitiveMainClassesEnabled()" body="stub" value="false"/>
         </type>
+    </assembly>
+    <!-- Trace Feature -->
+    <assembly fullname="Rxmxnx.JNetInterface.Implementation.Intermediate">
         <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.EnableTrace"
               featurevalue="false" featuredefault="true">
             <method signature="System.Boolean get_TraceEnabled()" body="stub" value="false"/>
