@@ -3,6 +3,12 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Helper for android.
 /// </summary>
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3963,
+                 Justification = CommonConstants.ReflectionFreeModeJustification)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3011,
+                 Justification = CommonConstants.ReflectionPrivateUseJustification)]
+#endif
 internal static unsafe class AndroidHelper
 {
 	/// <summary>
@@ -28,7 +34,7 @@ internal static unsafe class AndroidHelper
 			delegate* unmanaged<Byte*, Byte*, Int32> propertyGet =
 				(delegate* unmanaged<Byte*, Byte*, Int32>)propertyGetPtr;
 			Span<Byte> propertyValue = stackalloc Byte[AndroidHelper.PropValueMaxLength];
-			Int32 propertyLength = 0;
+			Int32 propertyLength;
 			fixed (Byte* namePtr = &MemoryMarshal.GetReference(sdkVersionPropName))
 			fixed (Byte* valuePtr = &MemoryMarshal.GetReference(propertyValue))
 				propertyLength = propertyGet(namePtr, valuePtr);

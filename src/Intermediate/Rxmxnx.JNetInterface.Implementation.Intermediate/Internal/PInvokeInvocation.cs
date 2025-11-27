@@ -3,6 +3,10 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// P/Invoke definition of <see cref="IInvocationFunctionSet"/> interface.
 /// </summary>
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal abstract class PInvokeInvocation : IInvocationFunctionSet
 {
 	/// <inheritdoc/>
