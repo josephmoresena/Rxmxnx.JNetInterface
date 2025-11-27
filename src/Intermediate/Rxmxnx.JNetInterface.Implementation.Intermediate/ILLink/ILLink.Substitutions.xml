@@ -221,6 +221,19 @@
     </assembly>
     <!-- Fixed Android Version Feature -->
     <assembly fullname="Rxmxnx.JNetInterface.Implementation.Intermediate">
+        <!-- Runtime Feature Android -->
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.Android"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedJavaVersion.Android"
+              featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses"
+              feature="JNetInterface.FixedJavaVersion.Android" featurevalue="true">
+            <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
+        </type>
         <!-- Runtime Feature Dalvik (Android 1.0 to 4.2) -->
         <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedJavaVersion.Dalvik"
               featurevalue="true">
