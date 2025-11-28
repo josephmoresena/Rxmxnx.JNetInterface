@@ -53,6 +53,8 @@ internal sealed class ItalianMessageResource : IMessageResource
 	String IMessageResource.IncompatibleLibrary => "Libreria JVM incompatibile.";
 	String IMessageResource.UnmanagedMemoryContext => "Il blocco di memoria è non gestito.";
 	String IMessageResource.AotRequired => "Questa operazione richiede un runtime Native AOT.";
+	String IMessageResource.AndroidRuntimeRequired =>
+		"Il processo corrente deve essere eseguito esclusivamente sul sistema operativo Android.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} non è un tipo istanziabile.";
 	String IMessageResource.InvalidCastTo(Type type) => $"Cast non valido a {type}.";

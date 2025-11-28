@@ -142,6 +142,10 @@ internal partial interface IMessageResource
 	/// Message for non-Native AOT runtime.
 	/// </summary>
 	String AotRequired { get; }
+	/// <summary>
+	/// Message for Android runtime required.
+	/// </summary>
+	String AndroidRuntimeRequired { get; }
 
 	/// <summary>
 	/// Message for instantiation exception.

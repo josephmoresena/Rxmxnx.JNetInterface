@@ -53,6 +53,8 @@ internal sealed class DefaultMessageResource : IMessageResource
 	String IMessageResource.IncompatibleLibrary => "Incompatible JVM library.";
 	String IMessageResource.UnmanagedMemoryContext => "The memory block is unmanaged.";
 	String IMessageResource.AotRequired => "This operation requires a Native AOT runtime.";
+	String IMessageResource.AndroidRuntimeRequired =>
+		"The current process must be executed exclusively on the Android operating system.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} is not an instantiable type.";
 	String IMessageResource.InvalidCastTo(Type type) => $"Invalid cast to {type}.";

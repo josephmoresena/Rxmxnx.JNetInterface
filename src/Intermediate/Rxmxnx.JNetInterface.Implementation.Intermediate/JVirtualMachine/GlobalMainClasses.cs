@@ -26,12 +26,8 @@ public partial class JVirtualMachine
 		/// <param name="vm">A <see cref="JVirtualMachine"/> instance.</param>
 		protected GlobalMainClasses(IVirtualMachine vm)
 		{
-			// TODO: Messages
 			if (!JVirtualMachine.AndroidApiLevel.HasValue && JVirtualMachine.IsFixedAndroid)
-				throw new InvalidOperationException("ANDROID_SET_NOT_ANDROID_RUNTIME");
-			if (JVirtualMachine.AndroidApiLevel.HasValue && !JVirtualMachine.IsFixedAndroid &&
-			    JVirtualMachine.IsFixedRuntimeVersion)
-				throw new InvalidOperationException("NOT_ANDROID_SET_ANDROID_RUNTIME");
+				throw new InvalidOperationException(IMessageResource.GetInstance().AndroidRuntimeRequired);
 
 			this._classMetadata = ClassObjectMetadata.Create<JClassObject>();
 			this._throwableMetadata = ClassObjectMetadata.Create<JThrowableObject>();

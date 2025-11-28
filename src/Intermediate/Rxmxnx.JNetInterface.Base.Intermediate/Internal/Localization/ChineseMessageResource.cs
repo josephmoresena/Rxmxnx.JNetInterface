@@ -51,6 +51,8 @@ internal sealed class ChineseMessageResource : IMessageResource
 	String IMessageResource.IncompatibleLibrary => "不兼容的 JVM 库。";
 	String IMessageResource.UnmanagedMemoryContext => "内存块未受管理。";
 	String IMessageResource.AotRequired => "此操作需要 Native AOT 运行时。";
+	String IMessageResource.AndroidRuntimeRequired =>
+		"当前进程必须只能在 Android 操作系统上执行。";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} 不是可实例化的类型。";
 	String IMessageResource.InvalidCastTo(Type type) => $"无法转换为 {type}。";
