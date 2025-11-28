@@ -4,10 +4,10 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// Helper for android.
 /// </summary>
 #if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3963,
                  Justification = CommonConstants.ReflectionFreeModeJustification)]
-[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3011,
-                 Justification = CommonConstants.ReflectionPrivateUseJustification)]
 #endif
 internal static unsafe class AndroidHelper
 {
