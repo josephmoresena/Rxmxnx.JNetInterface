@@ -107,6 +107,10 @@ partial class JEnvironment
 		/// JNI runtime version.
 		/// </summary>
 		/// <returns>The current JNI runtime version.</returns>
+#if !PACKAGE
+		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
+		                 Justification = CommonConstants.NoMethodOverloadingJustification)]
+#endif
 		public Int32 GetInterfaceVersion() => this._jniVersion;
 
 		/// <summary>
