@@ -8,7 +8,11 @@ public partial class JVirtualMachine : IVirtualMachine
 	/// <summary>
 	/// Android API level.
 	/// </summary>
-	public static Int32? AndroidApiLevel => AndroidHelper.ApiLevel;
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	public static Int32? AndroidApiLevel // Android API Level is valid only when running on Dalvik or ART VM.
+		=> AndroidHelper.ArtVm || AndroidHelper.DalvikVm ? AndroidHelper.ApiLevel : default;
 
 	/// <summary>
 	/// Indicates whether the current virtual machine remains alive.

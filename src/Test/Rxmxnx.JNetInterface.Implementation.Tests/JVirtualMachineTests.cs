@@ -8,6 +8,9 @@ public sealed partial class JVirtualMachineTests
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 
 	[Fact]
+	internal void AndroidApiLevelTest() => Assert.Null(JVirtualMachine.AndroidApiLevel);
+
+	[Fact]
 	internal async Task RegisterTest()
 	{
 		Assert.False(JVirtualMachine.Register<JClassObject>());
@@ -160,8 +163,10 @@ public sealed partial class JVirtualMachineTests
 			if (forceLocal) jLocal?.SetValue(proxyEnv.VoidObjectLocalRef);
 
 			jLocal?.Dispose();
-			jWeak?.Dispose();
-			jGlobal?.Dispose();
+			if (jWeak is IDisposable dw)
+				dw.Dispose();
+			if (jGlobal is IDisposable dg)
+				dg.Dispose();
 
 			Assert.True(JObject.IsNullOrDefault(jLocal));
 			Assert.True(JObject.IsNullOrDefault(jWeak));

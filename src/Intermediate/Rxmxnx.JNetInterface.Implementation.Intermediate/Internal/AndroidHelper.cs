@@ -4,6 +4,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// Helper for android.
 /// </summary>
 #if !PACKAGE
+[ExcludeFromCodeCoverage]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3963,
@@ -17,6 +18,14 @@ internal static unsafe class AndroidHelper
 	private const Int32 PropValueMaxLength = 92;
 
 	/// <summary>
+	/// Indicates whether the current JVM is Dalvik.
+	/// </summary>
+	public static readonly Boolean DalvikVm;
+	/// <summary>
+	/// Indicates whether the current JVM is ART.
+	/// </summary>
+	public static readonly Boolean ArtVm;
+	/// <summary>
 	/// Android API Level.
 	/// </summary>
 	public static readonly Int32? ApiLevel;
@@ -27,6 +36,8 @@ internal static unsafe class AndroidHelper
 	static AndroidHelper()
 	{
 		AndroidHelper.ApiLevel = default;
+		AndroidHelper.ArtVm = false;
+		AndroidHelper.DalvikVm = false;
 		if (!SystemInfo.IsLinux || NativeUtilities.LoadNativeLib("libc") is not { } libcH) return;
 		ReadOnlySpan<Byte> sdkVersionPropName = "ro.build.version.sdk"u8;
 		if (NativeLibrary.TryGetExport(libcH, "__system_property_get", out IntPtr propertyGetPtr))
@@ -57,7 +68,15 @@ internal static unsafe class AndroidHelper
 					propertyReadPtr;
 			propertyRead(propInfo, &ReadSdkVersionProp, default);
 		}
+
+		if (!AndroidHelper.ApiLevel.HasValue) return;
+
+		fixed (Byte* artNamePtr = &MemoryMarshal.GetReference("libart.so"u8))
+			AndroidHelper.ArtVm = AndroidHelper.LoadLinuxLibrary(artNamePtr, 0x00004) != default;
+		fixed (Byte* dalvikNamePtr = &MemoryMarshal.GetReference("libdvm.so"u8))
+			AndroidHelper.DalvikVm = AndroidHelper.LoadLinuxLibrary(dalvikNamePtr, 0x00004) != default;
 		return;
+
 		[UnmanagedCallersOnly]
 		static void ReadSdkVersionProp(void* cookie, Byte* name, Byte* value, UInt32 serial)
 		{
@@ -65,6 +84,11 @@ internal static unsafe class AndroidHelper
 			AndroidHelper.SetApiLevelValue(propValue);
 		}
 	}
+
+	[DllImport("libdl.so", EntryPoint = "dlopen")]
+#pragma warning disable SYSLIB1054
+	private static extern IntPtr LoadLinuxLibrary(Byte* libName, Int32 flags);
+#pragma warning restore SYSLIB1054
 
 	/// <summary>
 	/// Sets the value of <see cref="AndroidHelper.ApiLevel"/> from <paramref name="sdkVersionValue"/>.
