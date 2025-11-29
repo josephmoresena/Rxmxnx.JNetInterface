@@ -1,3 +1,5 @@
+// ReSharper disable ConvertToExtensionBlock
+
 namespace Rxmxnx.JNetInterface;
 
 /// <summary>
@@ -122,39 +124,38 @@ public enum JRuntimeVersion
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class JRuntimeVersionExtensions
 {
+	/// <summary>
+	/// Retrieves the Java runtime version name.
+	/// </summary>
 	/// <param name="jreVersion">A <see cref="JRuntimeVersion"/> value.</param>
-	extension(JRuntimeVersion jreVersion)
+	/// <returns>The name of <paramref name="jreVersion"/> value.</returns>
+	public static String GetRuntimeName(this JRuntimeVersion jreVersion)
 	{
-		/// <summary>
-		/// Retrieves the Java runtime version name.
-		/// </summary>
-		/// <returns>The name of <paramref name="jreVersion"/> value.</returns>
-		public String GetRuntimeName()
-		{
-			const Int32 j0 = (Int32)JRuntimeVersion.SEd0;
-			Int32 intValue = (Int32)jreVersion;
-			return jreVersion >= JRuntimeVersion.SEd0 && (intValue % j0 == 0 || jreVersion <= JRuntimeVersion.J8) ?
-				$"JRE {jreVersion.GetNumericValue().ToString("0.0", CultureInfo.InvariantCulture)}" :
-				$"JRE 0x{intValue:x8}"; // Invalid Version
-		}
-		/// <summary>
-		/// Retrieves the Java runtime version numeric value.
-		/// </summary>
-		/// <returns>The numeric <paramref name="jreVersion"/> value.</returns>
-		public Decimal GetNumericValue()
-			=> jreVersion switch
-			{
-				< JRuntimeVersion.SEd0 => default,
-				< JRuntimeVersion.SEd1 => 1.0m,
-				< JRuntimeVersion.SEd2 => 1.1m,
-				< JRuntimeVersion.SEd3 => 1.2m,
-				< JRuntimeVersion.SEd4 => 1.3m,
-				< JRuntimeVersion.J5 => 1.4m,
-				< JRuntimeVersion.J6 => 1.5m,
-				< JRuntimeVersion.J7 => 1.6m,
-				< JRuntimeVersion.J8 => 1.7m,
-				< JRuntimeVersion.J9 => 1.8m,
-				_ => new((Int32)jreVersion / (Int32)JRuntimeVersion.SEd0),
-			};
+		const Int32 j0 = (Int32)JRuntimeVersion.SEd0;
+		Int32 intValue = (Int32)jreVersion;
+		return jreVersion >= JRuntimeVersion.SEd0 && (intValue % j0 == 0 || jreVersion <= JRuntimeVersion.J8) ?
+			$"JRE {jreVersion.GetNumericValue().ToString("0.0", CultureInfo.InvariantCulture)}" :
+			$"JRE 0x{intValue:x8}"; // Invalid Version
 	}
+
+	/// <summary>
+	/// Retrieves the Java runtime version numeric value.
+	/// </summary>
+	/// <param name="jreVersion">A <see cref="JRuntimeVersion"/> value.</param>
+	/// <returns>The numeric <paramref name="jreVersion"/> value.</returns>
+	public static Decimal GetNumericValue(this JRuntimeVersion jreVersion)
+		=> jreVersion switch
+		{
+			< JRuntimeVersion.SEd0 => default,
+			< JRuntimeVersion.SEd1 => 1.0m,
+			< JRuntimeVersion.SEd2 => 1.1m,
+			< JRuntimeVersion.SEd3 => 1.2m,
+			< JRuntimeVersion.SEd4 => 1.3m,
+			< JRuntimeVersion.J5 => 1.4m,
+			< JRuntimeVersion.J6 => 1.5m,
+			< JRuntimeVersion.J7 => 1.6m,
+			< JRuntimeVersion.J8 => 1.7m,
+			< JRuntimeVersion.J9 => 1.8m,
+			_ => new((Int32)jreVersion / (Int32)JRuntimeVersion.SEd0),
+		};
 }

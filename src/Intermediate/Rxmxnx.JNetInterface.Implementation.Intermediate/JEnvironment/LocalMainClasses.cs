@@ -1,3 +1,5 @@
+// ReSharper disable once ConvertToAutoPropertyWhenPossible
+
 namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
@@ -22,7 +24,6 @@ partial class JEnvironment
 		/// <remarks>
 		/// This field must be a property in order to be substituted through <c>ILLink.Substitutions</c>.
 		/// </remarks>
-		// ReSharper disable once ConvertToAutoPropertyWhenPossible
 		public Int32 Version => this._jniVersion;
 
 		/// <inheritdoc/>
