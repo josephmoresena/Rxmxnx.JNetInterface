@@ -7,8 +7,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 [ExcludeFromCodeCoverage]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
-[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3963,
-                 Justification = CommonConstants.ReflectionFreeModeJustification)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3963)]
 #endif
 internal static unsafe class AndroidHelper
 {
