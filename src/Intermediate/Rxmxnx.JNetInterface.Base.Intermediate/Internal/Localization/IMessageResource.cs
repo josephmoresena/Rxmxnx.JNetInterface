@@ -294,4 +294,8 @@ internal partial interface IMessageResource
 	/// </summary>
 	/// <param name="maxLevel">Maximum level.</param>
 	String InvalidArrayDimension(Int32 maxLevel);
+	/// <summary>
+	/// Message for interface version.
+	/// </summary>
+	String InvalidInterfaceVersion(Int32 currentVersion, Int32 requiredVersion);
 }

@@ -106,4 +106,11 @@ public partial class JVirtualMachine
 		JDataTypeMetadata typeMetadata = MetadataHelper.GetExactMetadata<TReference>();
 		MainClasses.AppendMainClass(JVirtualMachine.userMainClasses, typeMetadata);
 	}
+	/// <summary>
+	/// Retrieves the JNI version for <paramref name="jreVersion"/>.
+	/// </summary>
+	/// <param name="jreVersion">A <see cref="JRuntimeVersion"/> value.</param>
+	/// <returns>The JNI version for <paramref name="jreVersion"/>.</returns>
+	public static Int32 GetInterfaceVersion(JRuntimeVersion jreVersion)
+		=> JVirtualMachine.GetInterfaceVersion((Int32)jreVersion);
 }

@@ -84,6 +84,25 @@ public sealed class DataTypeTests
 			Assert.Equal(value, jreVersion.GetRuntimeName());
 		}
 	}
+	[Fact]
+	internal void GetRuntimeValueTest()
+	{
+		JRuntimeVersion[] values = Enum.GetValues<JRuntimeVersion>();
+		Int32 maxValue = (Int32)values.Max() * 2;
+		foreach (JRuntimeVersion jreVersion in values.Concat(Enumerable.Repeat(0, values.Length * 2)
+		                                                               .Select(_ => (JRuntimeVersion)Random.Shared.Next(
+			                                                                       0, maxValue))))
+		{
+			Decimal value = jreVersion switch
+			{
+				< JRuntimeVersion.SEd0 => default,
+				<= JRuntimeVersion.J8 => 1m + ((Decimal)jreVersion - (Int32)JRuntimeVersion.SEd0) / 10,
+				< JRuntimeVersion.J9 => 1.8m,
+				_ => new((Int32)jreVersion / (Int32)JRuntimeVersion.SEd0),
+			};
+			Assert.Equal(value, jreVersion.GetNumericValue());
+		}
+	}
 
 	private static void PrimitiveTest<TPrimitive>() where TPrimitive : IPrimitiveType
 	{

@@ -10,23 +10,6 @@ namespace Rxmxnx.JNetInterface;
 public abstract unsafe partial class JVirtualMachineLibrary
 {
 	/// <summary>
-	/// Support JNI versions.
-	/// </summary>
-	private static readonly Int32[] jniVersions =
-	[
-		(Int32)JRuntimeVersion.SEd2, //JNI_VERSION_1_2
-		(Int32)JRuntimeVersion.SEd4, //JNI_VERSION_1_4
-		(Int32)JRuntimeVersion.J6, //JNI_VERSION_1_6
-		(Int32)JRuntimeVersion.J8, //JNI_VERSION_1_8
-		(Int32)JRuntimeVersion.J9, //JNI_VERSION_9
-		(Int32)JRuntimeVersion.J10, //JNI_VERSION_10
-		(Int32)JRuntimeVersion.J19, //JNI_VERSION_19
-		(Int32)JRuntimeVersion.J20, //JNI_VERSION_20
-		(Int32)JRuntimeVersion.J21, //JNI_VERSION_21
-		(Int32)JRuntimeVersion.J24, //JNI_VERSION_24
-	];
-
-	/// <summary>
 	/// Indicates whether the function <c>JNI_GetCreatedJavaVMs</c> is available on the current library.
 	/// </summary>
 	private readonly Boolean _hasCreatedVm;
@@ -56,7 +39,7 @@ public abstract unsafe partial class JVirtualMachineLibrary
 	public Int32 GetLatestSupportedVersion()
 	{
 		Int32 version = -1;
-		foreach (Int32 jniVersion in JVirtualMachineLibrary.jniVersions.AsSpan())
+		foreach (Int32 jniVersion in JVirtualMachine.JniVersions)
 		{
 			VirtualMachineInitArgumentValue initValue = new() { Version = jniVersion, };
 			if (this.GetDefaultVirtualMachineInitArgs(ref initValue) != JResult.Ok)
@@ -68,6 +51,14 @@ public abstract unsafe partial class JVirtualMachineLibrary
 	/// <summary>
 	/// Retrieves the default VM initialization argument for the current JVM library.
 	/// </summary>
+	/// <param name="jreVersion">The requested JRE version.</param>
+	/// <returns>A <see cref="JVirtualMachineInitArg"/> instance.</returns>
+	/// <exception cref="JniException">If JNI call ends with an error.</exception>
+	public JVirtualMachineInitArg GetDefaultArgument(JRuntimeVersion jreVersion)
+		=> this.GetDefaultArgument((Int32)jreVersion);
+	/// <summary>
+	/// Retrieves the default VM initialization argument for the current JVM library.
+	/// </summary>
 	/// <param name="jniVersion">The requested JNI version.</param>
 	/// <returns>A <see cref="JVirtualMachineInitArg"/> instance.</returns>
 	/// <exception cref="JniException">If JNI call ends with an error.</exception>
@@ -75,9 +66,7 @@ public abstract unsafe partial class JVirtualMachineLibrary
 	{
 		VirtualMachineInitArgumentValue initValue = new()
 		{
-			Version = jniVersion < JVirtualMachineLibrary.jniVersions[0] ?
-				JVirtualMachineLibrary.jniVersions[0] :
-				jniVersion,
+			Version = jniVersion < JVirtualMachine.JniVersions[0] ? JVirtualMachine.JniVersions[0] : jniVersion,
 		};
 		ImplementationValidationUtilities.ThrowIfInvalidResult(this.GetDefaultVirtualMachineInitArgs(ref initValue));
 		return new(initValue);

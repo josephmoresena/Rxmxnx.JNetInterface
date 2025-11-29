@@ -51,8 +51,7 @@ internal sealed class ChineseMessageResource : IMessageResource
 	String IMessageResource.IncompatibleLibrary => "不兼容的 JVM 库。";
 	String IMessageResource.UnmanagedMemoryContext => "内存块未受管理。";
 	String IMessageResource.AotRequired => "此操作需要 Native AOT 运行时。";
-	String IMessageResource.AndroidRuntimeRequired =>
-		"当前进程必须只能在 Android 操作系统上执行。";
+	String IMessageResource.AndroidRuntimeRequired => "当前进程必须只能在 Android 操作系统上执行。";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} 不是可实例化的类型。";
 	String IMessageResource.InvalidCastTo(Type type) => $"无法转换为 {type}。";
@@ -113,6 +112,8 @@ internal sealed class ChineseMessageResource : IMessageResource
 		=> $"无法从 {typeMetadata.Signature} 类型元数据中获取 {typeMetadata.ArraySignature} 类型元数据。";
 	String IMessageResource.InvalidArrayDimension(Int32 maxLevel)
 		=> maxLevel > 0 ? $"数组维度必须在 1 到 {maxLevel} 之间。" : "数组类型的维度过多。";
+	String IMessageResource.InvalidInterfaceVersion(Int32 currentVersion, Int32 requiredVersion)
+		=> $"当前进程必须使用与 0x{requiredVersion:x8} 兼容的 JNI 版本运行，但检测到的版本是 0x{currentVersion:x8}。";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

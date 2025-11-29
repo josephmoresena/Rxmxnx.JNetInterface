@@ -51,8 +51,7 @@ internal sealed class JapaneseMessageResource : IMessageResource
 	String IMessageResource.IncompatibleLibrary => "互換性のない JVM ライブラリです。";
 	String IMessageResource.UnmanagedMemoryContext => "メモリブロックはアンマネージドです。";
 	String IMessageResource.AotRequired => "この操作には Native AOT ランタイムが必要です。";
-	String IMessageResource.AndroidRuntimeRequired =>
-		"現在のプロセスは Android OS 上でのみ実行される必要があります。";
+	String IMessageResource.AndroidRuntimeRequired => "現在のプロセスは Android OS 上でのみ実行される必要があります。";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} はインスタンス化できない型です。";
 	String IMessageResource.InvalidCastTo(Type type) => $"{type} へのキャストが無効です。";
@@ -118,6 +117,8 @@ internal sealed class JapaneseMessageResource : IMessageResource
 		=> $"{typeMetadata.Signature} の型メタデータから {typeMetadata.ArraySignature} の型メタデータを取得できませんでした。";
 	String IMessageResource.InvalidArrayDimension(Int32 maxLevel)
 		=> maxLevel > 0 ? $"配列の次元は 1 から {maxLevel} の範囲でなければなりません。" : "配列型の次元が多すぎます。";
+	String IMessageResource.InvalidInterfaceVersion(Int32 currentVersion, Int32 requiredVersion)
+		=> $"現在のプロセスは 0x{requiredVersion:x8} と互換性のある JNI バージョンで実行する必要がありますが、検出されたバージョンは 0x{currentVersion:x8} です。";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

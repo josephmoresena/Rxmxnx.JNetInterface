@@ -91,6 +91,10 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 #endif
 	public sealed override Int32 GetHashCode() => this._cache.GetHashCode();
 
+	/// <inheritdoc cref="LocalMainClasses.GetInterfaceVersion()"/>
+	[return: NotNullIfNotNull(nameof(env))]
+	public static Int32? GetInterfaceVersion(JEnvironment? env) => env?._cache.GetInterfaceVersion();
+
 	/// <summary>
 	/// Determines whether a specified <see cref="JEnvironment"/> and a <see cref="JEnvironment"/> instance
 	/// have the same value.

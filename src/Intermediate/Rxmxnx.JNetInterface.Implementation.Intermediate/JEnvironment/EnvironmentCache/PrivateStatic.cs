@@ -18,18 +18,6 @@ partial class JEnvironment
 		/// </summary>
 		private static readonly IFixedContext<Byte>.IDisposable zeroByteContext =
 			default(Memory<Byte>).GetFixedContext();
-
-		/// <summary>
-		/// Retrieves JNI version for <paramref name="envRef"/>.
-		/// </summary>
-		/// <param name="envRef">A <see cref="JEnvironmentRef"/> instance.</param>
-		/// <returns>JNI version for <paramref name="envRef"/>.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static unsafe Int32 GetVersion(JEnvironmentRef envRef)
-		{
-			ref readonly NativeInterface nativeInterface = ref *(NativeInterface*)envRef.InterfacePointer;
-			return nativeInterface.GetVersion(envRef);
-		}
 		/// <summary>
 		/// Indicates whether <paramref name="jGlobal"/> is a main global object or default.
 		/// </summary>

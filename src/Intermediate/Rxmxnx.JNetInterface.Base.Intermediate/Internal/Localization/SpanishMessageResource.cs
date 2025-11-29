@@ -55,8 +55,8 @@ internal sealed class SpanishMessageResource : IMessageResource
 	String IMessageResource.IncompatibleLibrary => "Biblioteca JVM incompatible.";
 	String IMessageResource.UnmanagedMemoryContext => "El bloque de memoria es no administrado.";
 	String IMessageResource.AotRequired => "Esta operación requiere un entorno de ejecución Native AOT.";
-	String IMessageResource.AndroidRuntimeRequired =>
-		"El proceso actual debe ejecutarse exclusivamente en el sistema operativo Android.";
+	String IMessageResource.AndroidRuntimeRequired
+		=> "El proceso actual debe ejecutarse exclusivamente en el sistema operativo Android.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} no es un tipo instanciable.";
 	String IMessageResource.InvalidCastTo(Type type) => $"Conversión no válida a {type}.";
@@ -131,6 +131,8 @@ internal sealed class SpanishMessageResource : IMessageResource
 		=> maxLevel > 0 ?
 			$"Las dimensiones del arreglo deben estar entre 1 y {maxLevel}." :
 			"El tipo de arreglo tiene demasiadas dimensiones.";
+	String IMessageResource.InvalidInterfaceVersion(Int32 currentVersion, Int32 requiredVersion)
+		=> $"El proceso actual debe ejecutarse con una versión de JNI compatible con 0x{requiredVersion:x8}, pero la versión detectada es 0x{currentVersion:x8}.";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

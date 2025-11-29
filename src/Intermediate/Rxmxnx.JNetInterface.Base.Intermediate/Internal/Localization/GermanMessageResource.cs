@@ -54,8 +54,8 @@ internal sealed class GermanMessageResource : IMessageResource
 	String IMessageResource.IncompatibleLibrary => "Inkompatible JVM-Bibliothek.";
 	String IMessageResource.UnmanagedMemoryContext => "Der Speicherblock ist nicht verwaltet.";
 	String IMessageResource.AotRequired => "Für diesen Vorgang ist eine Native AOT-Laufzeit erforderlich.";
-	String IMessageResource.AndroidRuntimeRequired =>
-		"Der aktuelle Prozess darf ausschließlich auf dem Android-Betriebssystem ausgeführt werden.";
+	String IMessageResource.AndroidRuntimeRequired
+		=> "Der aktuelle Prozess darf ausschließlich auf dem Android-Betriebssystem ausgeführt werden.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} ist kein instanziierbarer Typ.";
 	String IMessageResource.InvalidCastTo(Type type) => $"Ungültige Umwandlung in {type}.";
@@ -130,6 +130,8 @@ internal sealed class GermanMessageResource : IMessageResource
 		=> maxLevel > 0 ?
 			$"Array-Dimensionen müssen zwischen 1 und {maxLevel} liegen." :
 			"Der Array-Typ hat zu viele Dimensionen.";
+	String IMessageResource.InvalidInterfaceVersion(Int32 currentVersion, Int32 requiredVersion)
+		=> $"Der aktuelle Prozess muss mit einer JNI-Version ausgeführt werden, die mit 0x{requiredVersion:x8} kompatibel ist, aber die erkannte Version ist 0x{currentVersion:x8}.";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

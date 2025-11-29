@@ -7,6 +7,24 @@ namespace Rxmxnx.JNetInterface;
 public partial class JVirtualMachine
 {
 	/// <summary>
+	/// Support JNI versions.
+	/// </summary>
+	internal static ReadOnlySpan<Int32> JniVersions
+		=>
+		[
+			(Int32)JRuntimeVersion.SEd2, //JNI_VERSION_1_2
+			(Int32)JRuntimeVersion.SEd4, //JNI_VERSION_1_4
+			(Int32)JRuntimeVersion.J6, //JNI_VERSION_1_6
+			(Int32)JRuntimeVersion.J8, //JNI_VERSION_1_8
+			(Int32)JRuntimeVersion.J9, //JNI_VERSION_9
+			(Int32)JRuntimeVersion.J10, //JNI_VERSION_10
+			(Int32)JRuntimeVersion.J19, //JNI_VERSION_19
+			(Int32)JRuntimeVersion.J20, //JNI_VERSION_20
+			(Int32)JRuntimeVersion.J21, //JNI_VERSION_21
+			(Int32)JRuntimeVersion.J24, //JNI_VERSION_24
+		];
+
+	/// <summary>
 	/// Retrieves the <see cref="IEnvironment"/> instance that <paramref name="envRef"/>
 	/// references to.
 	/// </summary>
@@ -241,4 +259,26 @@ public partial class JVirtualMachine
 	/// <see langword="false"/>.
 	/// </returns>
 	internal static Boolean IsMainClass(String hash) => JVirtualMachine.userMainClasses.ContainsKey(hash);
+	/// <summary>
+	/// Retrieves the JNI version for <paramref name="version"/>.
+	/// </summary>
+	/// <param name="version">A <see cref="JRuntimeVersion"/> value.</param>
+	/// <returns>The JNI version for <paramref name="version"/>.</returns>
+	public static Int32 GetInterfaceVersion(Int32 version)
+		=> version switch
+		{
+			(Int32)JRuntimeVersion.Undefined => default,
+			< (Int32)JRuntimeVersion.SEd1 => (Int32)JRuntimeVersion.SEd0,
+			< (Int32)JRuntimeVersion.SEd2 => (Int32)JRuntimeVersion.SEd1,
+			< (Int32)JRuntimeVersion.SEd4 => (Int32)JRuntimeVersion.SEd2,
+			< (Int32)JRuntimeVersion.J6 => (Int32)JRuntimeVersion.SEd4,
+			< (Int32)JRuntimeVersion.J8 => (Int32)JRuntimeVersion.J6,
+			< (Int32)JRuntimeVersion.J9 => (Int32)JRuntimeVersion.J8,
+			< (Int32)JRuntimeVersion.J10 => (Int32)JRuntimeVersion.J9,
+			< (Int32)JRuntimeVersion.J19 => (Int32)JRuntimeVersion.J10,
+			< (Int32)JRuntimeVersion.J20 => (Int32)JRuntimeVersion.J19,
+			< (Int32)JRuntimeVersion.J21 => (Int32)JRuntimeVersion.J20,
+			< (Int32)JRuntimeVersion.J24 => (Int32)JRuntimeVersion.J21,
+			_ => (Int32)JRuntimeVersion.J24,
+		};
 }

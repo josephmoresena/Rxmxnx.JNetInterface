@@ -52,8 +52,7 @@ internal sealed class ArabicMessageResource : IMessageResource
 	String IMessageResource.NotAttachedThread => "لم يتم إرفاق الخيط الحالي بـ JVM.";
 	String IMessageResource.IncompatibleLibrary => "مكتبة JVM غير متوافقة.";
 	String IMessageResource.UnmanagedMemoryContext => "كتلة الذاكرة غير مدارة.";
-	String IMessageResource.AndroidRuntimeRequired =>
-		"يجب تنفيذ العملية الحالية حصريًا على نظام التشغيل Android.";
+	String IMessageResource.AndroidRuntimeRequired => "يجب تنفيذ العملية الحالية حصريًا على نظام التشغيل Android.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} ليس نوعًا قابلاً للإنشاء.";
 	String IMessageResource.InvalidCastTo(Type type) => $"تحويل غير صالح إلى {type}.";
@@ -130,6 +129,8 @@ internal sealed class ArabicMessageResource : IMessageResource
 		=> maxLevel > 0 ?
 			$"يجب أن تكون أبعاد المصفوفة بين 1 و {maxLevel}." :
 			"نوع المصفوفة يحتوي على عدد كبير جدًا من الأبعاد.";
+	String IMessageResource.InvalidInterfaceVersion(Int32 currentVersion, Int32 requiredVersion)
+		=> $"يجب تشغيل العملية الحالية باستخدام إصدار JNI متوافق مع 0x{requiredVersion:x8}، ولكن الإصدار المكتشف هو 0x{currentVersion:x8}.";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

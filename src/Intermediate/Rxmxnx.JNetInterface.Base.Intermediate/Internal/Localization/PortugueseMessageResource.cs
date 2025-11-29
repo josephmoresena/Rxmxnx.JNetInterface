@@ -53,8 +53,8 @@ internal sealed class PortugueseMessageResource : IMessageResource
 	String IMessageResource.IncompatibleLibrary => "Biblioteca JVM incompatível.";
 	String IMessageResource.UnmanagedMemoryContext => "O bloco de memória é não gerenciado.";
 	String IMessageResource.AotRequired => "Esta operação requer um runtime Native AOT.";
-	String IMessageResource.AndroidRuntimeRequired =>
-		"O processo atual deve ser executado exclusivamente no sistema operacional Android.";
+	String IMessageResource.AndroidRuntimeRequired
+		=> "O processo atual deve ser executado exclusivamente no sistema operacional Android.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} não é um tipo instanciável.";
 	String IMessageResource.InvalidCastTo(Type type) => $"Conversão inválida para {type}.";
@@ -128,6 +128,8 @@ internal sealed class PortugueseMessageResource : IMessageResource
 		=> maxLevel > 0 ?
 			$"As dimensões do array devem estar entre 1 e {maxLevel}." :
 			"O tipo de array possui dimensões demais.";
+	String IMessageResource.InvalidInterfaceVersion(Int32 currentVersion, Int32 requiredVersion)
+		=> $"O processo atual deve ser executado com uma versão do JNI compatível com 0x{requiredVersion:x8}, mas a versão detectada é 0x{currentVersion:x8}.";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

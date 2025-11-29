@@ -53,8 +53,8 @@ internal sealed class DefaultMessageResource : IMessageResource
 	String IMessageResource.IncompatibleLibrary => "Incompatible JVM library.";
 	String IMessageResource.UnmanagedMemoryContext => "The memory block is unmanaged.";
 	String IMessageResource.AotRequired => "This operation requires a Native AOT runtime.";
-	String IMessageResource.AndroidRuntimeRequired =>
-		"The current process must be executed exclusively on the Android operating system.";
+	String IMessageResource.AndroidRuntimeRequired
+		=> "The current process must be executed exclusively on the Android operating system.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} is not an instantiable type.";
 	String IMessageResource.InvalidCastTo(Type type) => $"Invalid cast to {type}.";
@@ -125,6 +125,8 @@ internal sealed class DefaultMessageResource : IMessageResource
 		=> $"Unable to retrieve {typeMetadata.ArraySignature} type metadata from {typeMetadata.Signature} type metadata.";
 	String IMessageResource.InvalidArrayDimension(Int32 maxLevel)
 		=> maxLevel > 0 ? $"Array dimensions must be between 1 and {maxLevel}." : "Array type has too many dimensions";
+	String IMessageResource.InvalidInterfaceVersion(Int32 currentVersion, Int32 requiredVersion)
+		=> $"The current process must run with a JNI version compatible with 0x{requiredVersion:x8}, but the detected version is 0x{currentVersion:x8}.";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

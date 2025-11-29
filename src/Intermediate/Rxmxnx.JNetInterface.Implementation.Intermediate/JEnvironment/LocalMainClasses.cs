@@ -4,6 +4,11 @@ partial class JEnvironment
 {
 	private abstract class LocalMainClasses : MainClasses<JClassObject>
 	{
+		/// <summary>
+		/// JNI version.
+		/// </summary>
+		private readonly Int32 _jniVersion;
+
 		/// <inheritdoc cref="JEnvironment.Reference"/>
 		public readonly JEnvironmentRef Reference;
 		/// <summary>
@@ -14,8 +19,11 @@ partial class JEnvironment
 		public readonly JVirtualMachine VirtualMachine;
 
 		/// <inheritdoc cref="IEnvironment.Version"/>
-		/// <remarks>This field must be a property in order to be substituted through ILLink.Substitutions.</remarks>
-		public Int32 Version { get; }
+		/// <remarks>
+		/// This field must be a property in order to be substituted through <c>ILLink.Substitutions</c>.
+		/// </remarks>
+		// ReSharper disable once ConvertToAutoPropertyWhenPossible
+		public Int32 Version => this._jniVersion;
 
 		/// <inheritdoc/>
 		public override JClassObject ClassObject { get; } = default!;
@@ -72,10 +80,9 @@ partial class JEnvironment
 		{
 			this.VirtualMachine = vm;
 			this.Reference = envRef;
-			this.Version = EnvironmentCache.GetVersion(envRef);
+			this._jniVersion = LocalMainClasses.GetVersion(envRef);
 
-			if (this.Version < NativeInterface.RequiredVersion)
-				return; // Avoid class instantiation if unsupported version.
+			if (!this.InstantiationCheck()) return; // Avoid class instantiation.
 
 			JClassObject jClass = new(env); // java.lang.Class<?> class.
 
@@ -96,6 +103,38 @@ partial class JEnvironment
 		}
 
 		/// <summary>
+		/// JNI runtime version.
+		/// </summary>
+		/// <returns>The current JNI runtime version.</returns>
+		public Int32 GetInterfaceVersion() => this._jniVersion;
+
+		/// <summary>
+		/// Performs the instantiation checks.
+		/// </summary>
+		/// <returns>
+		/// <see langword="true"/> if the instantiation checks are passed; otherwise, <see langword="false"/>.
+		/// </returns>
+#if !PACKAGE
+		[ExcludeFromCodeCoverage]
+#endif
+		private Boolean InstantiationCheck()
+		{
+			IMessageResource resource = IMessageResource.GetInstance();
+			if (JVirtualMachine.IsFixedAndroid)
+			{
+				// If fixed on Android, JNI should be 0x00010006
+				if (this._jniVersion != (Int32)JRuntimeVersion.J6)
+					throw new InvalidOperationException(resource.AndroidRuntimeRequired);
+			}
+			else if (JVirtualMachine.IsFixedRuntimeVersion && this.Version > this._jniVersion)
+			{
+				// If fixed runtime version, JNI version should be compatible with the fixed JNI version.
+				throw new InvalidOperationException(resource.InvalidInterfaceVersion(this._jniVersion, this.Version));
+			}
+			return this._jniVersion >= NativeInterface.RequiredVersion; // Avoid instantiation if unsupported version.
+		}
+
+		/// <summary>
 		/// Indicates whether <paramref name="jGlobal"/> is a main global class.
 		/// </summary>
 		/// <param name="jGlobal">A <see cref="JGlobal"/> instance.</param>
@@ -108,6 +147,18 @@ partial class JEnvironment
 			if (jGlobal?.ObjectMetadata is not ClassObjectMetadata classMetadata) return false;
 			JVirtualMachine vm = (jGlobal.VirtualMachine as JVirtualMachine)!;
 			return vm.IsMainGlobal(classMetadata.Hash, jGlobal);
+		}
+
+		/// <summary>
+		/// Retrieves JNI version for <paramref name="envRef"/>.
+		/// </summary>
+		/// <param name="envRef">A <see cref="JEnvironmentRef"/> instance.</param>
+		/// <returns>JNI version for <paramref name="envRef"/>.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private static unsafe Int32 GetVersion(JEnvironmentRef envRef)
+		{
+			ref readonly NativeInterface nativeInterface = ref *(NativeInterface*)envRef.InterfacePointer;
+			return nativeInterface.GetVersion(envRef);
 		}
 	}
 }
