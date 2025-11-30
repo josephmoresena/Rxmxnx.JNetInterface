@@ -44,4 +44,11 @@ public partial class JVirtualMachine
 	[ExcludeFromCodeCoverage]
 #endif
 	internal static JRuntimeVersion FixedRuntimeVersion => default;
+	/// <summary>
+	/// Maximum Android API level.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	internal static Int32 MaxAndroidApiLevel => Int16.MaxValue;
 }
