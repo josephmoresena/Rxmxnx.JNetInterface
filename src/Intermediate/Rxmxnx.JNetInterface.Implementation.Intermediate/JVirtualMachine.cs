@@ -25,6 +25,7 @@ public partial class JVirtualMachine : IVirtualMachine
 
 	Boolean IVirtualMachine.NoProxy => true;
 	IEnvironment? IVirtualMachine.GetEnvironment() => this.GetEnvironment();
+	Int32 IVirtualMachine.AndroidApiLevel => JVirtualMachine.AndroidApiLevel ?? -1; // -1: Not Android classes support.
 
 	IThread IVirtualMachine.CreateThread(ThreadPurpose purpose)
 	{

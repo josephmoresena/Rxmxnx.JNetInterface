@@ -13,6 +13,9 @@ public abstract class VirtualMachineProxy : IVirtualMachine
 	/// <inheritdoc/>
 	public abstract JVirtualMachineRef Reference { get; }
 
+	/// <inheritdoc/>
+	public virtual Int32 AndroidApiLevel => 0;
+
 	Boolean IVirtualMachine.NoProxy => false;
 	IEnvironment? IVirtualMachine.GetEnvironment() => this.GetEnvironment();
 	IThread IVirtualMachine.CreateThread(ThreadPurpose purpose) => this.CreateThread(purpose);
