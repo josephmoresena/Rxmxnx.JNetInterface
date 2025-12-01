@@ -13,6 +13,7 @@ public class JFlowLayoutObject : JLocalObject, IClassType<JFlowLayoutObject>, II
 	private static readonly JConstructorDefinition.Parameterless constructor = new();
 	static JClassTypeMetadata<JFlowLayoutObject> IClassType<JFlowLayoutObject>.Metadata
 		=> JFlowLayoutObject.typeMetadata;
+	static Int32 IDataType.AndroidApiLevel => -1;
 
 	protected JFlowLayoutObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JFlowLayoutObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

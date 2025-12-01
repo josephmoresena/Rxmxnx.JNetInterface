@@ -12,6 +12,7 @@ public sealed class JActionListenerObject : JInterfaceObject<JActionListenerObje
 
 	static JInterfaceTypeMetadata<JActionListenerObject> IInterfaceType<JActionListenerObject>.Metadata
 		=> JActionListenerObject.typeMetadata;
+	static Int32 IDataType.AndroidApiLevel => -1;
 
 	private JActionListenerObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 	static JActionListenerObject IInterfaceType<JActionListenerObject>.Create(

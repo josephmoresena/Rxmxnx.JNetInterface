@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
 /// <summary>
-/// This class represents a local <c>java.lang.Byte</c> instance.
+/// This class represents a local <c>java.lang.Character</c> instance.
 /// </summary>
 public sealed partial class JCharacterObject : JLocalObject, IPrimitiveEquatable,
 	IPrimitiveWrapperType<JCharacterObject, JChar>, IInterfaceObject<JSerializableObject>,

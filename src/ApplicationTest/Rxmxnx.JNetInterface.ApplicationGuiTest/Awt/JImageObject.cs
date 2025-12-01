@@ -10,6 +10,7 @@ public class JImageObject : JLocalObject, IClassType<JImageObject>
 		TypeMetadataBuilder<JImageObject>.Create("java/awt/Image"u8, JTypeModifier.Abstract).Build();
 
 	static JClassTypeMetadata<JImageObject> IClassType<JImageObject>.Metadata => JImageObject.typeMetadata;
+	static Int32 IDataType.AndroidApiLevel => -1;
 
 	protected JImageObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JImageObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

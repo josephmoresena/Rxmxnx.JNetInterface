@@ -23,6 +23,7 @@ public sealed class JSwingUtilitiesObject : JLocalObject.Uninstantiable<JSwingUt
 	static JClassTypeMetadata<JSwingUtilitiesObject> IClassType<JSwingUtilitiesObject>.Metadata
 		=> JSwingUtilitiesObject.typeMetadata;
 	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd2;
+	static Int32 IDataType.AndroidApiLevel => -1;
 
 	public static void InvokeAndWait(JRunnableObject runnableObject)
 	{

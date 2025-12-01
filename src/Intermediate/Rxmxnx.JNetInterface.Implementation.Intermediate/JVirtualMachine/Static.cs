@@ -64,9 +64,7 @@ public partial class JVirtualMachine
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 #endif
 	public static Boolean Register<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
-		=> (!JVirtualMachine.IsFixedRuntimeVersion || JVirtualMachine.FixedRuntimeVersion >= TReference.Since) &&
-			// Fixed runtime version supports the type. 
-			MetadataHelper.Register<TReference>();
+		=> JVirtualMachine.IsCompileCompliant<TReference>() && MetadataHelper.Register<TReference>();
 	/// <summary>
 	/// Retrieves the <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.
 	/// </summary>

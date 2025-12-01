@@ -264,7 +264,7 @@ public partial class JVirtualMachine
 	/// </summary>
 	/// <param name="version">A <see cref="JRuntimeVersion"/> value.</param>
 	/// <returns>The JNI version for <paramref name="version"/>.</returns>
-	public static Int32 GetInterfaceVersion(Int32 version)
+	internal static Int32 GetInterfaceVersion(Int32 version)
 		=> version switch
 		{
 			(Int32)JRuntimeVersion.Undefined => default,
@@ -281,4 +281,26 @@ public partial class JVirtualMachine
 			< (Int32)JRuntimeVersion.J24 => (Int32)JRuntimeVersion.J21,
 			_ => (Int32)JRuntimeVersion.J24,
 		};
+	/// <summary>
+	/// Indicates whether <typeparamref name="TDataType"/> is compatible with current compilation.
+	/// </summary>
+	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
+	/// <returns>
+	/// <see langword="true"/> if current datatype is compatible with the current compilation; otherwise,
+	/// <see langword="false"/>.
+	/// </returns>
+	internal static Boolean IsCompileCompliant<TDataType>() where TDataType : IDataType
+	{
+		if (JVirtualMachine.MaxAndroidApiLevel == -1 && TDataType.Since is JRuntimeVersion.Undefined)
+			// Fixed Java SE Runtime doesn't support non-standard type.
+			return false;
+		if (JVirtualMachine.IsFixedAndroid && TDataType.AndroidApiLevel == -1)
+			// Fixed Android doesn't support Android incompatible type.
+			return false;
+		if (JVirtualMachine.MaxAndroidApiLevel < TDataType.AndroidApiLevel)
+			// Fixed maximum Android API level doesn't support the type.
+			return false;
+		// Fixed runtime version doesn't support the type. 
+		return !JVirtualMachine.IsFixedRuntimeVersion || JVirtualMachine.FixedRuntimeVersion >= TDataType.Since;
+	}
 }

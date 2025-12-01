@@ -61,6 +61,8 @@ public abstract class JInterfaceTypeMetadata<TInterface> : JInterfaceTypeMetadat
 		=> this.Kind is JTypeKind.Interface || TInterface.Since >= JRuntimeVersion.J5 ?
 			TInterface.Since :
 			JRuntimeVersion.J5;
+	/// <inheritdoc/>
+	public sealed override Int32 AndroidApiLevel => TInterface.AndroidApiLevel;
 
 	/// <inheritdoc/>
 	private protected JInterfaceTypeMetadata(ReadOnlySpan<Byte> interfaceName, Boolean isAnnotation) : base(

@@ -43,6 +43,8 @@ public abstract class JEnumTypeMetadata<TEnum> : JEnumTypeMetadata where TEnum :
 	/// <inheritdoc/>
 	public sealed override JRuntimeVersion Since
 		=> TEnum.Since >= JRuntimeVersion.J5 ? TEnum.Since : JRuntimeVersion.J5;
+	/// <inheritdoc/>
+	public sealed override Int32 AndroidApiLevel => TEnum.AndroidApiLevel;
 
 	/// <inheritdoc/>
 	private protected JEnumTypeMetadata(ReadOnlySpan<Byte> className) : base(className) { }

@@ -17,6 +17,7 @@ public sealed class JRootPaneContainerObject : JInterfaceObject<JRootPaneContain
 
 	static JInterfaceTypeMetadata<JRootPaneContainerObject> IInterfaceType<JRootPaneContainerObject>.Metadata
 		=> JRootPaneContainerObject.typeMetadata;
+	static Int32 IDataType.AndroidApiLevel => -1;
 
 	private JRootPaneContainerObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 

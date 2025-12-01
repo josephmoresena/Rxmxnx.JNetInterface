@@ -19,6 +19,7 @@ public sealed class JModuleObject : JLocalObject, IClassType<JModuleObject>, IIn
 
 	static TypeMetadata IClassType<JModuleObject>.Metadata => JModuleObject.typeMetadata;
 	static JRuntimeVersion IDataType.Since => JRuntimeVersion.J9;
+	static Int32 IDataType.AndroidApiLevel => -1;
 
 	/// <inheritdoc/>
 	private JModuleObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

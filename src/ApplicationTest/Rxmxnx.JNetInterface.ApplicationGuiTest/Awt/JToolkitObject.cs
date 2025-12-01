@@ -25,6 +25,7 @@ public class JToolkitObject : JLocalObject, IClassType<JToolkitObject>
 		new("getDefaultToolkit"u8);
 
 	static JClassTypeMetadata<JToolkitObject> IClassType<JToolkitObject>.Metadata => JToolkitObject.typeMetadata;
+	static Int32 IDataType.AndroidApiLevel => -1;
 
 	protected JToolkitObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JToolkitObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

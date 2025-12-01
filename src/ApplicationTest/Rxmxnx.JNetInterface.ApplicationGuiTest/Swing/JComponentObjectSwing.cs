@@ -13,6 +13,10 @@ public class JComponentObjectSwing : JContainerObject, IClassType<JComponentObje
 	static JClassTypeMetadata<JComponentObjectSwing> IClassType<JComponentObjectSwing>.Metadata
 		=> JComponentObjectSwing.typeMetadata;
 	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd2;
+#if !NET8_0_OR_GREATER
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static Int32 IDataType.AndroidApiLevel => -1;
+#endif
 
 	protected JComponentObjectSwing(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JComponentObjectSwing(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

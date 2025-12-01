@@ -56,6 +56,8 @@ public abstract partial class JClassTypeMetadata<
 	public sealed override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TClass>();
 	/// <inheritdoc/>
 	public sealed override JRuntimeVersion Since => TClass.Since;
+	/// <inheritdoc/>
+	public sealed override Int32 AndroidApiLevel => TClass.AndroidApiLevel;
 
 	/// <inheritdoc/>
 	private protected JClassTypeMetadata(ReadOnlySpan<Byte> className) : base(className) { }

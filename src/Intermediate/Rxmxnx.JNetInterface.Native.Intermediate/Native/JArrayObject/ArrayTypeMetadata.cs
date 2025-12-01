@@ -26,6 +26,8 @@ public partial class JArrayObject<TElement>
 		public override JClassTypeMetadata BaseMetadata => JLocalObject.ObjectClassMetadata;
 		/// <inheritdoc/>
 		public override JRuntimeVersion Since => TElement.Since;
+		/// <inheritdoc/>
+		public override Int32 AndroidApiLevel => TElement.AndroidApiLevel;
 
 		/// <summary>
 		/// Constructor.

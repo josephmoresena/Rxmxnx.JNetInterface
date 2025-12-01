@@ -84,7 +84,7 @@ public partial class JVirtualMachine
 			{
 				if (!this.GlobalClassCache.TryGetValue(typeInformation.Hash, out JGlobal? jGlobal) ||
 				    !jGlobal.IsDefault) continue;
-				if (!this.IsMainLoadable(env, typeInformation.Since)) continue;
+				if (!this.IsMainLoadable(env, typeInformation.Since, typeInformation.AndroidApiLevel)) continue;
 
 				try
 				{
@@ -102,14 +102,20 @@ public partial class JVirtualMachine
 		/// </summary>
 		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
 		/// <param name="sinceVersion">Class main's since version.</param>
+		/// <param name="apiLevel">Class main's Android API level.</param>
 		/// <returns>
 		/// <see langword="true"/> if the since value is lower to the current JRE version; otherwise
 		/// <see langword="false"/>.
 		/// </returns>
-		private Boolean IsMainLoadable(JEnvironment env, JRuntimeVersion sinceVersion)
+		private Boolean IsMainLoadable(JEnvironment env, JRuntimeVersion sinceVersion, Int32 apiLevel)
 		{
 			// The JNI version is checked to avoid check the JRE version.
 			if ((Int32)sinceVersion < env.Version) return true;
+			// If running on Android, checks the API level.
+			if (JVirtualMachine.AndroidApiLevel.HasValue)
+				return apiLevel >= 0 && JVirtualMachine.AndroidApiLevel >= apiLevel;
+			// If no running on Android, avoid load classes with undefined version.
+			if (sinceVersion is JRuntimeVersion.Undefined) return false;
 			this._version ??= env.GetVersion(this.SystemObject.As<JClassLocalRef>(), true);
 			return sinceVersion < this._version;
 		}

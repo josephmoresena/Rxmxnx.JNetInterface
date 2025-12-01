@@ -18,6 +18,8 @@ public partial class JNativeCallback : JLocalObject, IClassType<JNativeCallback>
 	private static Boolean nativesRegistered;
 
 	static JClassTypeMetadata<JNativeCallback> IClassType<JNativeCallback>.Metadata => JNativeCallback.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd2;
+	static Int32 IDataType.AndroidApiLevel => -1;
 
 	private JNativeCallback(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	private JNativeCallback(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

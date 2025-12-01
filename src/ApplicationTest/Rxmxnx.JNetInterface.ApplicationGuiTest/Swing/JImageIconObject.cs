@@ -24,6 +24,7 @@ public class JImageIconObject : JLocalObject, IClassType<JImageIconObject>, IInt
 
 	static JClassTypeMetadata<JImageIconObject> IClassType<JImageIconObject>.Metadata => JImageIconObject.typeMetadata;
 	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd2;
+	static Int32 IDataType.AndroidApiLevel => -1;
 
 	protected JImageIconObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JImageIconObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

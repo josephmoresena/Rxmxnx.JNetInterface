@@ -22,6 +22,7 @@ public class JReflectiveOperationExceptionObject : JExceptionObject, IThrowableT
 	static TypeMetadata IThrowableType<JReflectiveOperationExceptionObject>.Metadata
 		=> JReflectiveOperationExceptionObject.typeMetadata;
 	static JRuntimeVersion IDataType.Since => JRuntimeVersion.J7;
+	static Int32 IDataType.AndroidApiLevel => 19;
 
 	/// <inheritdoc/>
 	protected JReflectiveOperationExceptionObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

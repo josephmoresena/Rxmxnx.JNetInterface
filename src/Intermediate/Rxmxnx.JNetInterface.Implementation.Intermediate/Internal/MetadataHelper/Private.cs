@@ -113,7 +113,8 @@ internal static partial class MetadataHelper
 		MetadataHelper.InitialRegister<JLongBufferObject>(result);
 		MetadataHelper.InitialRegister<JShortBufferObject>(result);
 		MetadataHelper.InitialRegister<JMappedByteBufferObject>(result);
-		MetadataHelper.InitialRegister<JDirectByteBufferObject>(result);
+		if (!JVirtualMachine.IsFixedAndroid && !JVirtualMachine.AndroidApiLevel.HasValue)
+			MetadataHelper.InitialRegister<JDirectByteBufferObject>(result);
 		// Interfaces
 		MetadataHelper.InitialRegister<JAppendableObject>(result);
 		MetadataHelper.InitialRegister<JReadableObject>(result);
@@ -152,7 +153,7 @@ internal static partial class MetadataHelper
 			IDictionary<String, JReferenceTypeMetadata> result)
 		where TReference : JReferenceObject, IReferenceType<TReference>
 	{
-		if (JVirtualMachine.IsFixedRuntimeVersion && JVirtualMachine.FixedRuntimeVersion < TReference.Since)
+		if (!JVirtualMachine.IsCompileCompliant<TReference>())
 			// Fixed runtime version doesn't support the type. 
 			return;
 		JReferenceTypeMetadata typeMetadata = IReferenceType.GetMetadata<TReference>();

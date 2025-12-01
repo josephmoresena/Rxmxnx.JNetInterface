@@ -30,9 +30,13 @@ public interface ITypeInformation
 	/// </summary>
 	Boolean? IsFinal { get; }
 	/// <summary>
-	/// Specifies the minimun Java runtime version required for the current type.
+	/// Specifies the minimum Java runtime version required for the current type.
 	/// </summary>
 	JRuntimeVersion Since => JRuntimeVersion.Undefined;
+	/// <summary>
+	/// Specifies the minimum Android Level API required for the current type.
+	/// </summary>
+	Int32 AndroidApiLevel => default;
 
 	/// <summary>
 	/// Retrieves the Java class name.
