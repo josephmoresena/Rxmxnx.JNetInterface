@@ -16,6 +16,7 @@
         <RuntimeHostConfigurationOption Include="JNetInterface.EnableFinalUserTypeRuntime" Value="true" Trim="true"/>
         <RuntimeHostConfigurationOption Include="JNetInterface.CheckRefTypeNativeCallEnabled" Value="true" Trim="true"/>
         <RuntimeHostConfigurationOption Include="JNetInterface.DisableCheckClassRefNativeCall" Value="true" Trim="true"/>
+        <RuntimeHostConfigurationOption Include="JNetInterface.FixedRuntime.Standard" Value="true" Trim="true"/>
     </ItemGroup>
 
     <Target Name="CopyTarget" Condition="'$(JNI_LIBRARY)' == 'true' Or '$(JNI_APP)' == 'true'" AfterTargets="Publish">
