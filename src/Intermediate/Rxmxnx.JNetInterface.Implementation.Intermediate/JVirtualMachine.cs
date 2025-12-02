@@ -11,8 +11,9 @@ public partial class JVirtualMachine : IVirtualMachine
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public static Int32? AndroidApiLevel // Android API Level is valid only when running on Dalvik or ART VM.
-		=> AndroidHelper.ArtVm || AndroidHelper.DalvikVm ? AndroidHelper.ApiLevel : default;
+	public static Int32?
+		AndroidApiLevel // Android API Level is valid only when the current process is forked from Zygote.
+		=> AndroidHelper.IsZygote ? AndroidHelper.ApiLevel : default;
 
 	/// <summary>
 	/// Indicates whether the current virtual machine remains alive.
@@ -48,6 +49,7 @@ public partial class JVirtualMachine : IVirtualMachine
 				case ThreadPurpose.ExceptionExecution:
 				case ThreadPurpose.CreateGlobalReference:
 				case ThreadPurpose.FatalError:
+				case ThreadPurpose.GetRuntimeVersion:
 				default:
 					throw;
 			}
