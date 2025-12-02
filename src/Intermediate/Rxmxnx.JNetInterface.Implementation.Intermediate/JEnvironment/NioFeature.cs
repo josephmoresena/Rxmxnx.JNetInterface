@@ -19,10 +19,10 @@ partial class JEnvironment
 	{
 		public JByteBufferBuffer NewDirectByteBuffer(IFixedMemory.IDisposable memory)
 		{
-			Boolean isAndroid = JVirtualMachine.AndroidApiLevel.HasValue;
-			JClassObject jClass = isAndroid ?
-				this.GetClass<JByteBufferBuffer>() :
-				this.GetClass<JDirectByteBufferObject>();
+			JClassObject jClass =
+				JVirtualMachine.AndroidApiLevel.HasValue && JVirtualMachine.AndroidApiLevel.Value < 3 ?
+					this.GetClass<JByteBufferBuffer>() :
+					this.GetClass<JDirectByteBufferObject>();
 			ref readonly NativeInterface4 nativeInterface =
 				ref this.GetNativeInterface<NativeInterface4>(NativeInterface4.NewDirectByteBufferInfo);
 			JObjectLocalRef localRef =

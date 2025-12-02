@@ -113,13 +113,11 @@ internal static partial class MetadataHelper
 		MetadataHelper.InitialRegister<JLongBufferObject>(result);
 		MetadataHelper.InitialRegister<JShortBufferObject>(result);
 		MetadataHelper.InitialRegister<JMappedByteBufferObject>(result);
-		if (!JVirtualMachine.IsFixedAndroid && !JVirtualMachine.AndroidApiLevel.HasValue)
-			MetadataHelper.InitialRegister<JDirectByteBufferObject>(result);
+		MetadataHelper.InitialRegister<JDirectByteBufferObject>(result);
 		// Interfaces
 		MetadataHelper.InitialRegister<JAppendableObject>(result);
 		MetadataHelper.InitialRegister<JReadableObject>(result);
-		if (!JVirtualMachine.IsFixedAndroid && !JVirtualMachine.AndroidApiLevel.HasValue)
-			MetadataHelper.InitialRegister<JDirectBufferObject>(result);
+		MetadataHelper.InitialRegister<JDirectBufferObject>(result);
 	}
 	/// <summary>
 	/// Registers all reflection types metadata.

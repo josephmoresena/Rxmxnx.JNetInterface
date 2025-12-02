@@ -254,7 +254,7 @@
               feature="JNetInterface.FixedRuntime.Dalvik" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
         </type>
-        <!-- Runtime Feature ART (Android 4.4 to 7.0) -->
+        <!-- Runtime Feature ART (Android 4.4 to 7.1) -->
         <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.FixedRuntime.ART"
               featurevalue="true">
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_Version()" body="stub" value="65543"/>
@@ -336,7 +336,6 @@
             <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="1114112"/>
-            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="34"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
               feature="JNetInterface.FixedRuntime.ART17" featurevalue="true">
