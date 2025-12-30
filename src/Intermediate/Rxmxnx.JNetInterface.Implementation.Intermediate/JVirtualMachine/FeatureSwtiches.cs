@@ -50,5 +50,6 @@ public partial class JVirtualMachine
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
+	// ReSharper disable once MemberCanBePrivate.Global
 	internal static Int32 MaxAndroidApiLevel => Int16.MaxValue;
 }

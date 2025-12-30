@@ -41,6 +41,7 @@ public readonly partial struct JByte : IPrimitiveIntegerType, IPrimitiveNumericT
 	/// <summary>
 	/// <see cref="SByte"/> representation of the current instance.
 	/// </summary>
+	// ReSharper disable once ConvertToAutoPropertyWhenPossible
 	public SByte Value => this._value;
 	/// <inheritdoc/>
 	public CString ObjectClassName => IPrimitiveType.GetMetadata<JByte>().ClassName;

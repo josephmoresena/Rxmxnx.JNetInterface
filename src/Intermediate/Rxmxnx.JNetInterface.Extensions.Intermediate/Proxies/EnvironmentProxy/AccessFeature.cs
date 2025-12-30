@@ -1,3 +1,5 @@
+// ReSharper disable MemberCanBeProtected.Global
+
 namespace Rxmxnx.JNetInterface.Proxies;
 
 public abstract partial class EnvironmentProxy

@@ -8,6 +8,7 @@ public partial class JBufferObject : JLocalObject, IClassType<JBufferObject>
 	/// <summary>
 	/// Indicates whether the current instance is a direct buffer.
 	/// </summary>
+	// ReSharper disable once MemberCanBePrivate.Global
 	public Boolean IsDirect => this._isDirect ??= this.Environment.FunctionSet.IsDirectBuffer(this);
 	/// <summary>
 	/// Buffer's capacity.
@@ -36,6 +37,7 @@ public partial class JBufferObject : JLocalObject, IClassType<JBufferObject>
 	ObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>
+	// ReSharper disable once VirtualMemberNeverOverridden.Global
 	protected new virtual BufferObjectMetadata CreateMetadata()
 		=> new(base.CreateMetadata())
 		{

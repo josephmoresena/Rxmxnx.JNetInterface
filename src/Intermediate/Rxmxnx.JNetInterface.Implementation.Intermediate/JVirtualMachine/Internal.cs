@@ -264,6 +264,7 @@ public partial class JVirtualMachine
 	/// </summary>
 	/// <param name="version">A <see cref="JRuntimeVersion"/> value.</param>
 	/// <returns>The JNI version for <paramref name="version"/>.</returns>
+	// ReSharper disable once MemberCanBePrivate.Global
 	internal static Int32 GetInterfaceVersion(Int32 version)
 		=> version switch
 		{
@@ -294,13 +295,10 @@ public partial class JVirtualMachine
 		if (JVirtualMachine.MaxAndroidApiLevel == -1 && TDataType.Since is JRuntimeVersion.Undefined)
 			// Fixed Java SE Runtime doesn't support non-standard type.
 			return false;
-		if (JVirtualMachine.IsFixedAndroid && TDataType.AndroidApiLevel == -1)
-			// Fixed Android doesn't support Android incompatible type.
-			return false;
-		if (JVirtualMachine.MaxAndroidApiLevel < TDataType.AndroidApiLevel)
-			// Fixed maximum Android API level doesn't support the type.
-			return false;
-		// Fixed runtime version doesn't support the type. 
+		if (JVirtualMachine.IsFixedAndroid)
+			// Fixed Android doesn't support Android incompatible type or Android API level doesn't support the type.
+			return TDataType.AndroidApiLevel != -1 && JVirtualMachine.MaxAndroidApiLevel >= TDataType.AndroidApiLevel;
+		// Fixed runtime version doesn't support the type.
 		return !JVirtualMachine.IsFixedRuntimeVersion || JVirtualMachine.FixedRuntimeVersion >= TDataType.Since;
 	}
 }

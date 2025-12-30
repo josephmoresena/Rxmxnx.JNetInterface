@@ -59,6 +59,7 @@ internal interface INativeDataType<TNativeType> : INativeType
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
+	// ReSharper disable once UnusedParameter.Global
 	static virtual explicit operator Double(TNativeType value)
 		=> CommonValidationUtilities.ThrowInvalidCastToNativeDataType<Double>(JNativeType.JDouble);
 	/// <summary>

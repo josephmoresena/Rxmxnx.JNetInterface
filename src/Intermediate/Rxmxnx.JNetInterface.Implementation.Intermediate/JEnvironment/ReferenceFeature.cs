@@ -38,6 +38,7 @@ partial class JEnvironment
 			JLocalObject result;
 			NativeFunctionSetImpl.SingleObjectBuffer buffer = new();
 			Span<IObject?> span = NativeFunctionSetImpl.SingleObjectBuffer.GetSpan(ref buffer);
+			// ReSharper disable once HeapView.BoxingAllocation
 			span[0] = primitive;
 			switch (metadata.Signature[0])
 			{

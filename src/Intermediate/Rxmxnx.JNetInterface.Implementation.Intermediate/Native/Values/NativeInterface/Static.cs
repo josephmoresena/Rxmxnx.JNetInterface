@@ -157,72 +157,72 @@ internal partial struct NativeInterface
 		Name = nameof(ObjectFunctionSet.IsInstanceOf), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JObjectLocalRef}.GetMethodId"/>
+	/// Information of <see cref="MethodFunctionSet{T}.GetMethodId"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetMethodIdInfo = new()
 	{
 		Name = "GetMethodID", Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JObjectLocalRef}.CallObjectMethod"/>
+	/// Information of <see cref="MethodFunctionSet{T}.CallObjectMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallObjectMethodInfo = new()
 	{
-		Name = nameof(MethodFunctionSet<JObjectLocalRef>.CallObjectMethod),
+		Name = nameof(MethodFunctionSet<>.CallObjectMethod),
 	};
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JObjectLocalRef}.CallBooleanMethod"/>
+	/// Information of <see cref="MethodFunctionSet{T}.CallBooleanMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallBooleanMethodInfo = new()
 	{
-		Name = nameof(MethodFunctionSet<JObjectLocalRef>.CallBooleanMethod),
+		Name = nameof(MethodFunctionSet<>.CallBooleanMethod),
 	};
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JObjectLocalRef}.CallByteMethod"/>
+	/// Information of <see cref="MethodFunctionSet{T}.CallByteMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallByteMethodInfo =
-		new() { Name = nameof(MethodFunctionSet<JObjectLocalRef>.CallByteMethod), };
+		new() { Name = nameof(MethodFunctionSet<>.CallByteMethod), };
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JObjectLocalRef}.CallCharMethod"/>
+	/// Information of <see cref="MethodFunctionSet{T}.CallCharMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallCharMethodInfo =
-		new() { Name = nameof(MethodFunctionSet<JObjectLocalRef>.CallCharMethod), };
+		new() { Name = nameof(MethodFunctionSet<>.CallCharMethod), };
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JObjectLocalRef}.CallShortMethod"/>
+	/// Information of <see cref="MethodFunctionSet{T}.CallShortMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallShortMethodInfo = new()
 	{
-		Name = nameof(MethodFunctionSet<JObjectLocalRef>.CallShortMethod),
+		Name = nameof(MethodFunctionSet<>.CallShortMethod),
 	};
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JObjectLocalRef}.CallIntMethod"/>
+	/// Information of <see cref="MethodFunctionSet{T}.CallIntMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallIntMethodInfo =
-		new() { Name = nameof(MethodFunctionSet<JObjectLocalRef>.CallIntMethod), };
+		new() { Name = nameof(MethodFunctionSet<>.CallIntMethod), };
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JObjectLocalRef}.CallLongMethod"/>
+	/// Information of <see cref="MethodFunctionSet{T}.CallLongMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallLongMethodInfo =
-		new() { Name = nameof(MethodFunctionSet<JObjectLocalRef>.CallLongMethod), };
+		new() { Name = nameof(MethodFunctionSet<>.CallLongMethod), };
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JObjectLocalRef}.CallFloatMethod"/>
+	/// Information of <see cref="MethodFunctionSet{T}.CallFloatMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallFloatMethodInfo = new()
 	{
-		Name = nameof(MethodFunctionSet<JObjectLocalRef>.CallShortMethod),
+		Name = nameof(MethodFunctionSet<>.CallShortMethod),
 	};
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JObjectLocalRef}.CallDoubleMethod"/>
+	/// Information of <see cref="MethodFunctionSet{T}.CallDoubleMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallDoubleMethodInfo = new()
 	{
-		Name = nameof(MethodFunctionSet<JObjectLocalRef>.CallDoubleMethod),
+		Name = nameof(MethodFunctionSet<>.CallDoubleMethod),
 	};
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JObjectLocalRef}.CallVoidMethod"/>
+	/// Information of <see cref="MethodFunctionSet{T}.CallVoidMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallVoidMethodInfo =
-		new() { Name = nameof(MethodFunctionSet<JObjectLocalRef>.CallVoidMethod), };
+		new() { Name = nameof(MethodFunctionSet<>.CallVoidMethod), };
 	/// <summary>
 	/// Information of see cref="MethodFunctionSet.CallNonVirtualObjectMethod"/>
 	/// </summary>
@@ -294,303 +294,303 @@ internal partial struct NativeInterface
 		Name = nameof(NonVirtualMethodFunctionSet.CallNonVirtualVoidMethod),
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JObjectLocalRef}.GetFieldId"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetFieldId"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetFieldIdInfo = new()
 	{
 		Name = "GetFieldID", Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JObjectLocalRef}.GetObjectField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetObjectField"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetObjectFieldInfo =
-		new() { Name = nameof(FieldFunctionSet<JObjectLocalRef>.GetObjectField), };
+		new() { Name = nameof(FieldFunctionSet<>.GetObjectField), };
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JObjectLocalRef}.GetBooleanField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetBooleanField"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetBooleanFieldInfo = new()
 	{
-		Name = nameof(FieldFunctionSet<JObjectLocalRef>.GetBooleanField), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(FieldFunctionSet<>.GetBooleanField), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JObjectLocalRef}.GetByteField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetByteField"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetByteFieldInfo = new()
 	{
-		Name = nameof(FieldFunctionSet<JObjectLocalRef>.GetByteField), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(FieldFunctionSet<>.GetByteField), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JObjectLocalRef}.GetByteField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetByteField"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetCharFieldInfo = new()
 	{
-		Name = nameof(FieldFunctionSet<JObjectLocalRef>.GetCharField), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(FieldFunctionSet<>.GetCharField), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JObjectLocalRef}.GetShortField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetShortField"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetShortFieldInfo = new()
 	{
-		Name = nameof(FieldFunctionSet<JObjectLocalRef>.GetShortField), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(FieldFunctionSet<>.GetShortField), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JObjectLocalRef}.GetIntField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetIntField"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetIntFieldInfo = new()
 	{
-		Name = nameof(FieldFunctionSet<JObjectLocalRef>.GetIntField), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(FieldFunctionSet<>.GetIntField), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JObjectLocalRef}.GetLongField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetLongField"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetLongFieldInfo = new()
 	{
-		Name = nameof(FieldFunctionSet<JObjectLocalRef>.GetLongField), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(FieldFunctionSet<>.GetLongField), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JObjectLocalRef}.GetFloatField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetFloatField"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetFloatFieldInfo = new()
 	{
-		Name = nameof(FieldFunctionSet<JObjectLocalRef>.GetFloatField), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(FieldFunctionSet<>.GetFloatField), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JObjectLocalRef}.GetFloatField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetFloatField"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetDoubleFieldInfo = new()
 	{
-		Name = nameof(FieldFunctionSet<JObjectLocalRef>.GetDoubleField), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(FieldFunctionSet<>.GetDoubleField), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JObjectLocalRef}.SetObjectField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.SetObjectField"/>
 	/// </summary>
 	public static readonly JniMethodInfo SetObjectFieldInfo =
-		new() { Name = nameof(FieldFunctionSet<JObjectLocalRef>.SetObjectField), };
+		new() { Name = nameof(FieldFunctionSet<>.SetObjectField), };
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JObjectLocalRef}.SetBooleanField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.SetBooleanField"/>
 	/// </summary>
 	public static readonly JniMethodInfo SetBooleanFieldInfo = new()
 	{
-		Name = nameof(FieldFunctionSet<JObjectLocalRef>.SetBooleanField), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(FieldFunctionSet<>.SetBooleanField), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JObjectLocalRef}.SetByteField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.SetByteField"/>
 	/// </summary>
 	public static readonly JniMethodInfo SetByteFieldInfo = new()
 	{
-		Name = nameof(FieldFunctionSet<JObjectLocalRef>.SetByteField), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(FieldFunctionSet<>.SetByteField), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JObjectLocalRef}.SetByteField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.SetByteField"/>
 	/// </summary>
 	public static readonly JniMethodInfo SetCharFieldInfo = new()
 	{
-		Name = nameof(FieldFunctionSet<JObjectLocalRef>.SetCharField), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(FieldFunctionSet<>.SetCharField), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JObjectLocalRef}.SetShortField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.SetShortField"/>
 	/// </summary>
 	public static readonly JniMethodInfo SetShortFieldInfo = new()
 	{
-		Name = nameof(FieldFunctionSet<JObjectLocalRef>.SetShortField), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(FieldFunctionSet<>.SetShortField), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JObjectLocalRef}.SetIntField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.SetIntField"/>
 	/// </summary>
 	public static readonly JniMethodInfo SetIntFieldInfo = new()
 	{
-		Name = nameof(FieldFunctionSet<JObjectLocalRef>.SetIntField), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(FieldFunctionSet<>.SetIntField), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JObjectLocalRef}.SetLongField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.SetLongField"/>
 	/// </summary>
 	public static readonly JniMethodInfo SetLongFieldInfo = new()
 	{
-		Name = nameof(FieldFunctionSet<JObjectLocalRef>.SetLongField), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(FieldFunctionSet<>.SetLongField), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JObjectLocalRef}.SetFloatField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.SetFloatField"/>
 	/// </summary>
 	public static readonly JniMethodInfo SetFloatFieldInfo = new()
 	{
-		Name = nameof(FieldFunctionSet<JObjectLocalRef>.SetFloatField), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(FieldFunctionSet<>.SetFloatField), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JObjectLocalRef}.SetFloatField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.SetFloatField"/>
 	/// </summary>
 	public static readonly JniMethodInfo SetDoubleFieldInfo = new()
 	{
-		Name = nameof(FieldFunctionSet<JObjectLocalRef>.SetDoubleField), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(FieldFunctionSet<>.SetDoubleField), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JClassLocalRef}.GetMethodId"/>
+	/// Information of <see cref="MethodFunctionSet{T}.GetMethodId"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetStaticMethodIdInfo = new()
 	{
 		Name = "GetStaticMethodID", Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JClassLocalRef}.CallObjectMethod"/>
+	/// Information of <see cref="MethodFunctionSet{T}.CallObjectMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallStaticObjectMethodInfo = new() { Name = "CallStaticObjectMethod", };
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JClassLocalRef}.CallBooleanMethod"/>
+	/// Information of <see cref="MethodFunctionSet{T}.CallBooleanMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallStaticBooleanMethodInfo = new() { Name = "CallStaticBooleanMethod", };
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JClassLocalRef}.CallByteMethod"/>
+	/// Information of <see cref="MethodFunctionSet{T}.CallByteMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallStaticByteMethodInfo = new() { Name = "CallStaticByteMethod", };
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JClassLocalRef}.CallCharMethod"/>
+	/// Information of <see cref="MethodFunctionSet{T}.CallCharMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallStaticCharMethodInfo = new() { Name = "CallStaticCharMethod", };
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JClassLocalRef}.CallShortMethod"/>
+	/// Information of <see cref="MethodFunctionSet{T}.CallShortMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallStaticShortMethodInfo = new() { Name = "CallStaticShortMethod", };
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JClassLocalRef}.CallIntMethod"/>
+	/// Information of <see cref="MethodFunctionSet{T}.CallIntMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallStaticIntMethodInfo = new() { Name = "CallStaticIntMethod", };
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JClassLocalRef}.CallLongMethod"/>
+	/// Information of <see cref="MethodFunctionSet{T}.CallLongMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallStaticLongMethodInfo = new() { Name = "CallStaticLongMethod", };
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JClassLocalRef}.CallFloatMethod"/>
+	/// Information of <see cref="MethodFunctionSet{T}.CallFloatMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallStaticFloatMethodInfo = new() { Name = "CallStaticFloatMethod", };
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JClassLocalRef}.CallDoubleMethod"/>
+	/// Information of <see cref="MethodFunctionSet{T}.CallDoubleMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallStaticDoubleMethodInfo = new() { Name = "CallStaticDoubleMethod", };
 	/// <summary>
-	/// Information of <see cref="MethodFunctionSet{JClassLocalRef}.CallVoidMethod"/>
+	/// Information of <see cref="MethodFunctionSet{T}.CallVoidMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallStaticVoidMethodInfo = new() { Name = "CallStaticVoidMethod", };
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JClassLocalRef}.GetFieldId"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetFieldId"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetStaticFieldIdInfo = new()
 	{
 		Name = "GetStaticFieldID", Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JClassLocalRef}.GetObjectField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetObjectField"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetStaticObjectFieldInfo = new() { Name = "GetStaticObjectField", };
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JClassLocalRef}.GetBooleanField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetBooleanField"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetStaticBooleanFieldInfo = new()
 	{
 		Name = "GetStaticBooleanField", Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JClassLocalRef}.GetByteField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetByteField"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetStaticByteFieldInfo = new()
 	{
 		Name = "GetStaticByteField", Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JClassLocalRef}.GetByteField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetByteField"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetStaticCharFieldInfo = new()
 	{
 		Name = "GetStaticCharField", Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JClassLocalRef}.GetShortField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetShortField"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetStaticShortFieldInfo = new()
 	{
 		Name = "GetStaticShortField", Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JClassLocalRef}.GetIntField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetIntField"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetStaticIntFieldInfo = new()
 	{
 		Name = "GetStaticIntField", Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JClassLocalRef}.GetLongField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetLongField"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetStaticLongFieldInfo = new()
 	{
 		Name = "GetStaticLongField", Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JClassLocalRef}.GetFloatField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetFloatField"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetStaticFloatFieldInfo = new()
 	{
 		Name = "GetStaticFloatField", Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JClassLocalRef}.GetFloatField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetFloatField"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetStaticDoubleFieldInfo = new()
 	{
 		Name = "GetStaticDoubleField", Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JClassLocalRef}.GetObjectField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetObjectField"/>
 	/// </summary>
 	public static readonly JniMethodInfo SetStaticObjectFieldInfo = new() { Name = "SetStaticObjectField", };
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JClassLocalRef}.GetBooleanField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.GetBooleanField"/>
 	/// </summary>
 	public static readonly JniMethodInfo SetStaticBooleanFieldInfo = new()
 	{
 		Name = "SetStaticBooleanField", Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JClassLocalRef}.SetByteField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.SetByteField"/>
 	/// </summary>
 	public static readonly JniMethodInfo SetStaticByteFieldInfo = new()
 	{
 		Name = "SetStaticByteField", Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JClassLocalRef}.SetByteField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.SetByteField"/>
 	/// </summary>
 	public static readonly JniMethodInfo SetStaticCharFieldInfo = new()
 	{
 		Name = "SetStaticCharField", Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JClassLocalRef}.SetShortField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.SetShortField"/>
 	/// </summary>
 	public static readonly JniMethodInfo SetStaticShortFieldInfo = new()
 	{
 		Name = "SetStaticShortField", Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JClassLocalRef}.SetIntField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.SetIntField"/>
 	/// </summary>
 	public static readonly JniMethodInfo SetStaticIntFieldInfo = new()
 	{
 		Name = "SetStaticIntField", Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JClassLocalRef}.SetLongField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.SetLongField"/>
 	/// </summary>
 	public static readonly JniMethodInfo SetStaticLongFieldInfo = new()
 	{
 		Name = "SetStaticLongField", Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JClassLocalRef}.SetFloatField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.SetFloatField"/>
 	/// </summary>
 	public static readonly JniMethodInfo SetStaticFloatFieldInfo = new()
 	{
 		Name = "SetStaticFloatField", Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="FieldFunctionSet{JClassLocalRef}.SetFloatField"/>
+	/// Information of <see cref="FieldFunctionSet{T}.SetFloatField"/>
 	/// </summary>
 	public static readonly JniMethodInfo SetStaticDoubleFieldInfo = new()
 	{
@@ -608,21 +608,21 @@ internal partial struct NativeInterface
 	/// </summary>
 	public static readonly JniMethodInfo GetStringLengthInfo = new()
 	{
-		Name = nameof(StringFunctionSet<Char>.GetStringLength), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(StringFunctionSet<>.GetStringLength), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
 	/// Information of <see cref="StringFunctionSet{TChar}.GetStringChars"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetStringCharsInfo = new()
 	{
-		Name = nameof(StringFunctionSet<Char>.GetStringChars), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(StringFunctionSet<>.GetStringChars), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
 	/// Information of <see cref="StringFunctionSet{TChar}.ReleaseStringChars"/>
 	/// </summary>
 	public static readonly JniMethodInfo ReleaseStringCharsInfo = new()
 	{
-		Name = nameof(StringFunctionSet<Byte>.ReleaseStringChars),
+		Name = nameof(StringFunctionSet<>.ReleaseStringChars),
 		Level = JniSafetyLevels.ErrorSafe | JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
@@ -1011,14 +1011,14 @@ internal partial struct NativeInterface
 		Name = "GetJavaVM", Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="GetStringRegionFunction{Char}.GetStringRegion"/>
+	/// Information of <see cref="GetStringRegionFunction{T}.GetStringRegion"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetStringRegionInfo = new()
 	{
-		Name = nameof(GetStringRegionFunction<Char>.GetStringRegion), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(GetStringRegionFunction<>.GetStringRegion), Level = JniSafetyLevels.CriticalSafe,
 	};
 	/// <summary>
-	/// Information of <see cref="GetStringRegionFunction{Byte}.GetStringRegion"/>
+	/// Information of <see cref="GetStringRegionFunction{T}.GetStringRegion"/>
 	/// </summary>
 	public static readonly JniMethodInfo GetStringUtfRegionInfo = new()
 	{

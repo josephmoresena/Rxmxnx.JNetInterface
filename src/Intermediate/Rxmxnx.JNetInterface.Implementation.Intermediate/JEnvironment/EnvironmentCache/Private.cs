@@ -426,6 +426,7 @@ partial class JEnvironment
 		{
 			StackDisposable disposable = new(this, stackSpan.Length);
 			ValPtr<Byte> ptr = (ValPtr<Byte>)stackSpan.GetUnsafeIntPtr();
+			// ReSharper disable once HeapView.BoxingAllocation
 			return ptr.GetUnsafeFixedContext(stackSpan.Length, disposable);
 		}
 		/// <summary>

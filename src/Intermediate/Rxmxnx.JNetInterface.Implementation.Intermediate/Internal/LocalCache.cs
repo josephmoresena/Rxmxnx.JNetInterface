@@ -40,6 +40,7 @@ internal class LocalCache
 	/// <summary>
 	/// Current class cache.
 	/// </summary>
+	// ReSharper disable once MemberCanBePrivate.Global
 	public ClassCache ClassCache { get; }
 
 	/// <summary>

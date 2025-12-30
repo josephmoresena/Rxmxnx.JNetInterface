@@ -28,7 +28,9 @@ public partial class JVirtualMachine
 		/// <see langword="true"/> if <paramref name="jniRef"/> is begin using by a transaction;
 		/// otherwise, <see langword="false"/>.
 		/// </returns>
+		// ReSharper disable once HeapView.ClosureAllocation
 		public Boolean InTransaction(IntPtr jniRef)
+			// ReSharper disable once HeapView.DelegateAllocation
 			=> this._transactions.Values.AsParallel().Any(t => t.Contains(jniRef));
 	}
 }

@@ -78,6 +78,7 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 		=> JObject.GetObjectIdentifier(this.Class.ClassSignature, this.Reference);
 
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>
+	// ReSharper disable once VirtualMemberNeverOverridden.Global
 	protected new virtual ThrowableObjectMetadata CreateMetadata()
 		=> new(base.CreateMetadata()) { Message = this.Message, StackTrace = this._stackTrace, };
 

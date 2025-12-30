@@ -1,3 +1,5 @@
+// ReSharper disable HeapView.BoxingAllocation
+
 namespace Rxmxnx.JNetInterface.Types;
 
 internal partial interface IPrimitiveType<TPrimitive, TValue>

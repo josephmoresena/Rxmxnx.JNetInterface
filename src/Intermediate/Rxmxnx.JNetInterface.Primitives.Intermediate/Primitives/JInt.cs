@@ -41,6 +41,7 @@ public readonly partial struct JInt : IPrimitiveIntegerType, IPrimitiveNumericTy
 	/// <summary>
 	/// <see cref="Int32"/> representation of the current instance.
 	/// </summary>
+	// ReSharper disable once ConvertToAutoPropertyWhenPossible
 	public Int32 Value => this._value;
 	/// <inheritdoc/>
 	public CString ObjectClassName => IPrimitiveType.GetMetadata<JInt>().ClassName;

@@ -5,6 +5,7 @@ public partial class JConstructorDefinition
 	/// <summary>
 	/// Constructor.
 	/// </summary>
+	// ReSharper disable once MemberCanBePrivate.Global
 	protected JConstructorDefinition(
 #if NET9_0_OR_GREATER
 		params ReadOnlySpan<JArgumentMetadata> metadata

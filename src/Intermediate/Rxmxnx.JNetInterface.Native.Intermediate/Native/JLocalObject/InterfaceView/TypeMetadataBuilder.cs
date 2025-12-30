@@ -12,6 +12,7 @@ public partial class JLocalObject
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 		                 Justification = CommonConstants.NoMethodOverloadingJustification)]
 #endif
+		// ReSharper disable once MemberHidesStaticFromOuterClass
 		protected ref struct TypeMetadataBuilder<
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>

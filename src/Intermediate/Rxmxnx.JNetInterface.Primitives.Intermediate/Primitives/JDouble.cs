@@ -45,6 +45,7 @@ public readonly partial struct JDouble : IPrimitiveFloatingPointType, IPrimitive
 	/// <summary>
 	/// <see cref="Double"/> representation of the current instance.
 	/// </summary>
+	// ReSharper disable once ConvertToAutoPropertyWhenPossible
 	public Double Value => this._value;
 	/// <inheritdoc/>
 	public CString ObjectClassName => IPrimitiveType.GetMetadata<JDouble>().ClassName;

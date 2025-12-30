@@ -69,6 +69,7 @@ partial class JEnvironment
 		}
 		this._cache.ClearException();
 		// If it was not possible to determine the JRE version, the JNI version is assumed.
+		if (JVirtualMachine.IsFixedRuntimeVersion) return JVirtualMachine.FixedRuntimeVersion;
 		return (JRuntimeVersion)this.Version;
 	}
 	/// <summary>

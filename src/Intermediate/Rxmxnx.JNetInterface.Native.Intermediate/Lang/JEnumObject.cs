@@ -1,3 +1,6 @@
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable MemberCanBeProtected.Global
+
 namespace Rxmxnx.JNetInterface.Lang;
 
 /// <summary>
@@ -38,6 +41,7 @@ public partial class JEnumObject : JLocalObject, IClassType<JEnumObject>, IInter
 	}
 
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>
+	// ReSharper disable once VirtualMemberNeverOverridden.Global
 	protected new virtual EnumObjectMetadata CreateMetadata()
 		=> new(base.CreateMetadata()) { Ordinal = this.Ordinal, Name = this.Name, };
 

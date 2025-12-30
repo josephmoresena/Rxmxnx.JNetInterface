@@ -114,8 +114,11 @@ public partial class JVirtualMachine
 			// If running on Android, checks the API level.
 			if (JVirtualMachine.AndroidApiLevel.HasValue)
 				return apiLevel >= 0 && JVirtualMachine.AndroidApiLevel >= apiLevel;
-			// If no running on Android, avoid load classes with undefined version.
+			// If no running on Android, avoid to load classes with undefined version.
 			if (sinceVersion is JRuntimeVersion.Undefined) return false;
+			// If fixed JRE version, avoid to check the JRE version.
+			if (JVirtualMachine.FixedRuntimeVersion >= sinceVersion) return true;
+			// Check java.specification.version property.
 			this._version ??= env.GetVersion(this.SystemObject.As<JClassLocalRef>(), true);
 			return sinceVersion < this._version;
 		}

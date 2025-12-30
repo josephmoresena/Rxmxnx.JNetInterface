@@ -239,16 +239,9 @@
                     value="65542"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="18"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.Dalvik" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="65542"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.Dalvik"
               featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="65542"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses"
               feature="JNetInterface.FixedRuntime.Dalvik" featurevalue="true">
@@ -264,15 +257,8 @@
                     value="65543"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="25"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.ART" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="65543"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.ART" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="65543"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.ART"
               featurevalue="true">
@@ -288,16 +274,9 @@
                     value="65544"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="30"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.ART8" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="65544"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.ART8"
               featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="65544"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses"
               feature="JNetInterface.FixedRuntime.ART8" featurevalue="true">
@@ -313,16 +292,9 @@
                     value="720896"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="13"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.ART11" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="720896"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.ART11"
               featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="720896"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses"
               feature="JNetInterface.FixedRuntime.ART11" featurevalue="true">
@@ -337,16 +309,9 @@
             <method signature="Rxmxnx.JNetInterface.JRuntimeVersion get_FixedRuntimeVersion()" body="stub"
                     value="1114112"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.ART17" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="1114112"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.ART17"
               featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="1114112"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses"
               feature="JNetInterface.FixedRuntime.ART17" featurevalue="true">
@@ -369,16 +334,9 @@
                     value="65538"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.SEd2" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="65538"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.SEd2"
               featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="65538"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="65538"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses"
               feature="JNetInterface.FixedRuntime.SEd2" featurevalue="true">
@@ -393,16 +351,9 @@
                     value="65539"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.SEd3" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="65539"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.SEd3"
               featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="65538"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="65539"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses"
               feature="JNetInterface.FixedRuntime.SEd3" featurevalue="true">
@@ -417,16 +368,9 @@
                     value="65540"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.SEd4" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="65540"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.SEd4"
               featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="65540"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="65540"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses"
               feature="JNetInterface.FixedRuntime.SEd4" featurevalue="true">
@@ -441,15 +385,8 @@
                     value="65541"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.J5" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="65541"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.J5" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="65540"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="65541"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.J5"
               featurevalue="true">
@@ -464,15 +401,8 @@
                     value="65542"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.J6" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="65542"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.J6" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="65542"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.J6"
               featurevalue="true">
@@ -487,15 +417,8 @@
                     value="65543"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.J7" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="65543"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.J7" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="65542"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="65543"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.J7"
               featurevalue="true">
@@ -510,15 +433,8 @@
                     value="65544"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.J8" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="65544"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.J8" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="65544"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="65544"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.J8"
               featurevalue="true">
@@ -533,15 +449,8 @@
                     value="589824"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.J9" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="589824"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.J9" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="589824"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="589824"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.J9"
               featurevalue="true">
@@ -556,15 +465,8 @@
                     value="655360"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.J10" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="655360"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.J10" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="655360"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.J10"
               featurevalue="true">
@@ -579,15 +481,8 @@
                     value="720896"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.J11" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="720896"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.J11" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="720896"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.J11"
               featurevalue="true">
@@ -602,15 +497,8 @@
                     value="786432"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.J12" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="786432"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.J12" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="786432"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.J12"
               featurevalue="true">
@@ -625,15 +513,8 @@
                     value="851968"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.J13" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="851968"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.J13" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="851968"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.J13"
               featurevalue="true">
@@ -648,15 +529,8 @@
                     value="917504"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.J14" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="917504"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.J14" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="917504"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.J14"
               featurevalue="true">
@@ -671,15 +545,8 @@
                     value="983040"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.J15" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="983040"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.J15" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="983040"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.J15"
               featurevalue="true">
@@ -694,15 +561,8 @@
                     value="1048576"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.J16" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="1048576"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.J16" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="1048576"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.J16"
               featurevalue="true">
@@ -717,15 +577,8 @@
                     value="1114112"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.J17" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="1114112"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.J17" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="1114112"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.J17"
               featurevalue="true">
@@ -740,15 +593,8 @@
                     value="1179648"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.J18" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="1179648"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.J18" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="655360"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="1179648"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.J18"
               featurevalue="true">
@@ -763,15 +609,8 @@
                     value="1245184"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.J19" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="1245184"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.J19" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="1245184"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="1245184"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.J19"
               featurevalue="true">
@@ -786,15 +625,8 @@
                     value="1310720"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.J20" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="1310720"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.J20" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="1310720"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="1310720"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.J20"
               featurevalue="true">
@@ -809,15 +641,8 @@
                     value="1376256"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.J21" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="1376256"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.J21" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="1376256"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="1376256"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.J21"
               featurevalue="true">
@@ -832,15 +657,8 @@
                     value="1441792"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.J22" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="1441792"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.J22" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="1376256"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="1441792"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.J22"
               featurevalue="true">
@@ -855,15 +673,8 @@
                     value="1507328"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.J23" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="1507328"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.J23" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="1376256"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="1507328"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.J23"
               featurevalue="true">
@@ -878,15 +689,8 @@
                     value="1572864"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.J24" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="1572864"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.J24" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="1572864"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="1572864"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.J24"
               featurevalue="true">
@@ -901,15 +705,8 @@
                     value="1638400"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="-1"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine/GlobalMainClasses"
-              feature="JNetInterface.FixedRuntime.J25" featurevalue="true">
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.IVirtualMachine)"
-                    body="stub" value="1638400"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment" feature="JNetInterface.FixedRuntime.J25" featurevalue="true">
             <method signature="System.Int32 get_Version()" body="stub" value="1572864"/>
-            <method signature="Rxmxnx.JNetInterface.JRuntimeVersion GetVersion(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Boolean)"
-                    body="stub" value="1638400"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.JEnvironment/LocalMainClasses" feature="JNetInterface.FixedRuntime.J25"
               featurevalue="true">

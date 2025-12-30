@@ -27,7 +27,7 @@ public sealed class
 	private protected override ClassProperty GetPrimaryProperty()
 		=> new()
 		{
-			PropertyName = nameof(JPrimitiveWrapperTypeMetadata<TWrapper>.PrimitiveMetadata),
+			PropertyName = nameof(JPrimitiveWrapperTypeMetadata<>.PrimitiveMetadata),
 			Value = ITypeInformation.GetJavaClassName(this.PrimitiveMetadata),
 		};
 }

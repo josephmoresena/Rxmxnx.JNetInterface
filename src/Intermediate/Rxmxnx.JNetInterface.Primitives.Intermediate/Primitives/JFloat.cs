@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.Primitives;
 using TypeMetadata = JPrimitiveTypeMetadata<JFloat>;
 using IPrimitiveValueType = IPrimitiveType<JFloat, Single>;
 using IPrimitiveNumericType = IPrimitiveNumericType<JFloat>;
+using INumericType = IPrimitiveNumericType;
 
 /// <summary>
 /// Primitive <c>float</c>. Represents a single-precision floating-point number.
@@ -45,6 +46,7 @@ public readonly partial struct JFloat : IPrimitiveFloatingPointType, IPrimitiveN
 	/// <summary>
 	/// <see cref="Single"/> representation of the current instance.
 	/// </summary>
+	// ReSharper disable once ConvertToAutoPropertyWhenPossible
 	public Single Value => this._value;
 	/// <inheritdoc/>
 	public CString ObjectClassName => IPrimitiveType.GetMetadata<JFloat>().ClassName;
@@ -76,6 +78,6 @@ public readonly partial struct JFloat : IPrimitiveFloatingPointType, IPrimitiveN
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JFloat(Single value) => new(value);
 
-	static JFloat IPrimitiveNumericType.FromDouble(Double value) => IPrimitiveNumericType.GetSingleValue(value);
+	static JFloat IPrimitiveNumericType.FromDouble(Double value) => INumericType.GetSingleValue(value);
 	static Double IPrimitiveNumericType.ToDouble(JFloat value) => value._value;
 }

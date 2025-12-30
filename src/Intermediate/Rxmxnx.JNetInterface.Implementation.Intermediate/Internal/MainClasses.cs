@@ -1,3 +1,6 @@
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMemberInSuper.Global
+
 namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
@@ -76,6 +79,7 @@ internal abstract partial class MainClasses
 	/// Indicates whether primitive classes are main classes.
 	/// </summary>
 #if !PACKAGE
+	// ReSharper disable MemberCanBeProtected.Global
 	[ExcludeFromCodeCoverage]
 #endif
 	public static Boolean PrimitiveMainClassesEnabled => true;

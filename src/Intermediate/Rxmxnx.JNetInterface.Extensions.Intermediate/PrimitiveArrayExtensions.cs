@@ -1,3 +1,5 @@
+// ReSharper disable ConvertToExtensionBlock
+
 namespace Rxmxnx.JNetInterface;
 
 /// <summary>

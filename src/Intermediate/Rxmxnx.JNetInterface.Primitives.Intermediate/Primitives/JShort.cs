@@ -41,6 +41,7 @@ public readonly partial struct JShort : IPrimitiveIntegerType, IPrimitiveNumeric
 	/// <summary>
 	/// <see cref="Int16"/> representation of the current instance.
 	/// </summary>
+	// ReSharper disable once ConvertToAutoPropertyWhenPossible
 	public Int16 Value => this._value;
 	/// <inheritdoc/>
 	public CString ObjectClassName => IPrimitiveType.GetMetadata<JShort>().ClassName;
@@ -78,6 +79,6 @@ public readonly partial struct JShort : IPrimitiveIntegerType, IPrimitiveNumeric
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JShort(Char value) => new((Int16)value);
 
-	static JShort IPrimitiveNumericType<JShort>.FromDouble(Double value) => new(value);
-	static Double IPrimitiveNumericType<JShort>.ToDouble(JShort value) => value._value;
+	static JShort IPrimitiveNumericType.FromDouble(Double value) => new(value);
+	static Double IPrimitiveNumericType.ToDouble(JShort value) => value._value;
 }

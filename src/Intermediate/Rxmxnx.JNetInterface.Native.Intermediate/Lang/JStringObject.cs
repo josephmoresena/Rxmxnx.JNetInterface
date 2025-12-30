@@ -124,6 +124,7 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// An <see cref="CString"/> containing a copy of the UTF-8 chars on the current
 	/// <see cref="JStringObject"/> instance.
 	/// </returns>
+	// ReSharper disable once MemberCanBePrivate.Global
 	public CString GetUtf8Chars(Int32 startIndex, Int32 count)
 	{
 		Int32 length = count - startIndex;
@@ -138,6 +139,7 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// </summary>
 	/// <param name="chars">A <see cref="Span{Char}"/> to copy to.</param>
 	/// <param name="startIndex">Initial UTF-16 char to copy from.</param>
+	// ReSharper disable once MemberCanBePrivate.Global
 	public void Get(Span<Char> chars, Int32 startIndex = 0)
 	{
 		IEnvironment env = this.Environment;

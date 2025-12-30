@@ -27,6 +27,7 @@ internal readonly unsafe struct SetGenericFieldFunction<TReceiver, TField> : ISe
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void Set(JEnvironmentRef envRef, TReceiver receiver, JFieldId fieldId, TField value)
 	{
+		// ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 		switch (TField.Type)
 		{
 			case JNativeType.JBoolean when SystemInfo.IsWindows:

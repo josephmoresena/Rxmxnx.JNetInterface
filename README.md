@@ -1,17 +1,12 @@
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=josephmoresena_Rxmxnx.JNetInterface)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=bugs)](https://sonarcloud.io/summary/new_code?id=josephmoresena_Rxmxnx.JNetInterface)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=coverage)](https://sonarcloud.io/summary/new_code?id=josephmoresena_Rxmxnx.JNetInterface)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=josephmoresena_Rxmxnx.JNetInterface)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=josephmoresena_Rxmxnx.JNetInterface)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=josephmoresena_Rxmxnx.JNetInterface)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=josephmoresena_Rxmxnx.JNetInterface)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=alert_status)![Bugs](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=bugs)![Coverage](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=coverage)![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=ncloc)![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=reliability_rating)![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=sqale_rating)![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=josephmoresena_Rxmxnx.JNetInterface)
+
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/josephmoresena/Rxmxnx.JNetInterface)
 
 #### Package Information
 
-| **Core Assembly**                                                                                                                     | **Main Assembly**                                                                                                     |
-|---------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
-| [![NuGet(Core)](https://img.shields.io/nuget/v/Rxmxnx.JNetInterface.Core)](https://www.nuget.org/packages/Rxmxnx.JNetInterface.Core/) | [![NuGet](https://img.shields.io/nuget/v/Rxmxnx.JNetInterface)](https://www.nuget.org/packages/Rxmxnx.JNetInterface/) |
+| **Core Assembly**                                                                                                                                                                                                                         | **Main Assembly**                                                                                                                                                                                                    |
+|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [![NuGet(Core)](https://img.shields.io/nuget/v/Rxmxnx.JNetInterface.Core)![Downloads](https://img.shields.io/nuget/dt/Rxmxnx.JNetInterface.Core?style=flat-square&color=blue)](https://www.nuget.org/packages/Rxmxnx.JNetInterface.Core/) | [![NuGet](https://img.shields.io/nuget/v/Rxmxnx.JNetInterface)![Downloads](https://img.shields.io/nuget/dt/Rxmxnx.JNetInterface?style=flat-square&color=blue)](https://www.nuget.org/packages/Rxmxnx.JNetInterface/) |
 
 # Description
 
@@ -113,3 +108,45 @@ types when declaring methods, function pointers, or delegates.
 - [Direct Buffer Handling](docs/direct-buffers.md)
 - [Java Error Handling](docs/error-handling.md)
 - [Invocation API, JVirtualMachine and JEnvironment classes](docs/jni-classes.md)
+
+## Disclaimer:
+
+> The software is provided "as is," without warranty of any kind. The authors are not liable for any damages or issues
+> that may arise from its use.
+
+For more details, refer to the full license text included in the [LICENSE](LICENSE.md) file.
+
+---
+
+# Contributing
+
+We warmly welcome contributions to this open-source project! Whether you're here to report issues, propose enhancements,
+or contribute directly to the codebase, your help is greatly appreciated.
+
+For more details, refer to the [CONTRIBUTING](CONTRIBUTING.md) file.
+
+## Translations
+
+We currently support only a few languages, but we are open to adding more! If you'd like to help with translations,
+please open an issue or reach out to us. Your contributions to expanding the project's accessibility are highly valued.
+
+This library currently supports translations for the following languages:
+
+* **English**
+* **Arabic**
+* **Chinese**
+* **French**
+* **German**
+* **Italian**
+* **Japanese**
+* **Portuguese**
+* **Russian**
+* **Spanish**
+
+## Collaboration Guidelines
+
+When contributing, please be respectful and constructive. We aim to create an inclusive and welcoming environment for
+everyone.
+
+Thank you for considering contributing to this project! Your involvement, whether through reporting, coding, or
+translating, helps make this project better for everyone. 🚀
