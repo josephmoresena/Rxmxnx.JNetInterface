@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="..\JNetInterface-Frameworks.targets"/>
+    <Import Project="..\JNetInterface-Frameworks.props"/>
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
@@ -18,18 +18,8 @@
         <AssemblyName Condition="$(RuntimeIdentifier.ToLower().EndsWith('arm64'))">$(AssemblyName).arm64</AssemblyName>
     </PropertyGroup>
 
+    <Import Project="..\JNetInterface-PackageReference.props"/>
     <Import Condition="'$(JNI_LIBRARY)' == 'true'" Project="..\JNetInterface-NativeAot.targets"/>
-
-    <ItemGroup Condition="'$(UsePackage)' != 'true'">
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj"/>
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj"/>
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(UsePackage)' == 'true'">
-        <PackageReference Include="Rxmxnx.JNetInterface" Version="9999.99.99.99-tmp"/>
-    </ItemGroup>
+    <Import Condition="'$(JNI_LIBRARY)' == 'true'" Project="..\JNetInterface-Artifact.targets"/>
 
 </Project>

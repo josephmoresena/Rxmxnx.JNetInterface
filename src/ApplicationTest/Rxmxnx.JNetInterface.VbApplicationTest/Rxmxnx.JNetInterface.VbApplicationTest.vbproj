@@ -6,6 +6,10 @@
         <AssemblyName>ApplicationTest.VbNet</AssemblyName>
     </PropertyGroup>
 
-    <Import Project="..\JNetInterface-App.targets"/>
+    <Import Project="..\JNetInterface-App.props"/>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.ConsoleTest\Rxmxnx.JNetInterface.ConsoleTest.csproj"/>
+    </ItemGroup>
 
 </Project>

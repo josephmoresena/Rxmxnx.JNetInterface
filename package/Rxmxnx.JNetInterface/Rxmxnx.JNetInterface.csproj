@@ -5,7 +5,8 @@
     <CoreVersion Condition="'$(CoreVersion)' == '' And '$(Version)' == ''">*</CoreVersion>
   </PropertyGroup>
   
-  <Import Project="..\JNetInterface.Package.targets" />
+  <Import Project="..\JNetInterface.Package.props" />
+  <Import Project="..\Intermediate-to-Package.targets"/>
 
   <!-- Validations -->
   <PropertyGroup>
@@ -31,22 +32,13 @@
   <PropertyGroup>
     <Authors>Joseph Moreno</Authors>
     <Product>Rxmxnx.JNetInterface</Product>
-    <Description>
-        Rxmxnx.JNetInterface provides an implementation of the Java Native Interface and Invocation API for use within the .NET ecosystem.
-    </Description>
+    <Description>Rxmxnx.JNetInterface provides an implementation of the Java Native Interface and Invocation API for use within the .NET ecosystem.</Description>
     <Copyright>Copyright © Joseph Moreno 2024</Copyright>
-    <Summary>
-        Rxmxnx.JNetInterface provides an implementation of the Java Native Interface and Invocation API for use within the .NET ecosystem.
-    </Summary>
+    <Summary>Rxmxnx.JNetInterface provides an implementation of the Java Native Interface and Invocation API for use within the .NET ecosystem.</Summary>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Title>Rxmxnx.JNetInterface</Title>
     <PackageId>Rxmxnx.JNetInterface</PackageId>
-    <PackageTags>
-        PInvoke;Binary;Unmanaged;Memory;NativeAOT;JNI;JNA;Java;JVM;
-        JDK;JRE;NDK;Android;Bionic;FFI;;JNICALL;JNIEXPORT;JNI_OnLoad;JNI_CreateJavaVM;
-        JObject;JClass;JString;JThrowable;JArray;
-        JBoolean;JByte;JChar;JDouble;JFloat;JInt;JLong;JShort
-    </PackageTags>
+    <PackageTags>PInvoke;Binary;Unmanaged;Memory;NativeAOT;JNI;JNA;Java;JVM;JDK;JRE;NDK;Android;Bionic;FFI;;JNICALL;JNIEXPORT;JNI_OnLoad;JNI_CreateJavaVM;JObject;JClass;JString;JThrowable;JArray;JBoolean;JByte;JChar;JDouble;JFloat;JInt;JLong;JShort</PackageTags>
     <PackageReadmeFile>PACKAGE.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>

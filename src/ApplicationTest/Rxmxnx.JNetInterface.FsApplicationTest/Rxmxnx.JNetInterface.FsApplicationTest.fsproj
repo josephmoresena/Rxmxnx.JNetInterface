@@ -5,10 +5,14 @@
         <AssemblyName>ApplicationTest.FSharp</AssemblyName>
     </PropertyGroup>
 
-    <Import Project="..\JNetInterface-App.targets"/>
+    <Import Project="..\JNetInterface-App.props"/>
 
     <ItemGroup>
         <Compile Include="Program.fs"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.ConsoleTest\Rxmxnx.JNetInterface.ConsoleTest.csproj"/>
     </ItemGroup>
 
 </Project>

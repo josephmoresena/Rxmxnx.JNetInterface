@@ -1,0 +1,13 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <ItemGroup Condition="'$(UsePackage)' != 'true'">
+        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj"/>
+        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
+        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
+        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj"/>
+        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(UsePackage)' == 'true'">
+        <PackageReference Include="Rxmxnx.JNetInterface" Version="9999.99.99.99-tmp"/>
+    </ItemGroup>
+</Project>
