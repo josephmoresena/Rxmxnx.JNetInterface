@@ -19,7 +19,7 @@
     </PropertyGroup>
 
     <Import Project="..\JNetInterface-PackageReference.props"/>
-    <Import Condition="'$(JNI_LIBRARY)' == 'true'" Project="..\JNetInterface-NativeAot.targets"/>
+    <Import Condition="'$(JNI_LIBRARY)' == 'true'" Project="..\JNetInterface-NativeAot.props"/>
     <Import Condition="'$(JNI_LIBRARY)' == 'true'" Project="..\JNetInterface-Artifact.targets"/>
 
 </Project>
