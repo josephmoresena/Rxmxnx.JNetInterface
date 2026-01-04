@@ -111,6 +111,7 @@ partial class JEnvironment
 #if !PACKAGE
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 		                 Justification = CommonConstants.NoMethodOverloadingJustification)]
+		[ExcludeFromCodeCoverage]
 #endif
 		public Int32 GetInterfaceVersion() => this._jniVersion;
 

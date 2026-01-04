@@ -60,12 +60,16 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	{
 		ImplementationValidationUtilities.ThrowIfProxy(jThread);
 		ImplementationValidationUtilities.ThrowIfDefault(jThread);
-		if (this.Version < NativeInterface19.RequiredVersion) return default;
-		ref readonly NativeInterface19 nativeInterface =
-			ref this._cache.GetNativeInterface<NativeInterface19>(NativeInterface19.IsVirtualThreadInfo);
-		using INativeTransaction jniTransaction = this._cache.VirtualMachine.CreateTransaction(1);
-		JObjectLocalRef localRef = jniTransaction.Add(jThread);
-		return nativeInterface.IsVirtualThread(this.Reference, localRef).Value;
+		if (this.Version >= NativeInterface19.RequiredVersion)
+		{
+			ref readonly NativeInterface19 nativeInterface =
+				ref this._cache.GetNativeInterface<NativeInterface19>(NativeInterface19.IsVirtualThreadInfo);
+			using INativeTransaction jniTransaction = this._cache.VirtualMachine.CreateTransaction(1);
+			JObjectLocalRef localRef = jniTransaction.Add(jThread);
+			return nativeInterface.IsVirtualThread(this.Reference, localRef).Value;
+		}
+		//TODO: Call java function.
+		return default;
 	}
 
 	/// <inheritdoc/>

@@ -107,6 +107,9 @@ public partial class JVirtualMachine
 		/// <see langword="true"/> if the since value is lower to the current JRE version; otherwise
 		/// <see langword="false"/>.
 		/// </returns>
+#if !PACKAGE
+		[ExcludeFromCodeCoverage]
+#endif
 		private Boolean IsMainLoadable(JEnvironment env, JRuntimeVersion sinceVersion, Int32 apiLevel)
 		{
 			// The JNI version is checked to avoid check the JRE version.

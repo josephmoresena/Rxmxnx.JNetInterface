@@ -207,6 +207,16 @@ internal partial class NativeFunctionSetImpl
 		new(NativeFunctionSet.PrimitiveTypeFieldInfo);
 
 	/// <summary>
+	/// <c>Thread.isVirtual()</c> definition.
+	/// </summary>
+	public static readonly JFieldDefinition<JBoolean> IsVirtualDefinition = new(NativeFunctionSet.IsVirtualMethodInfo);
+	/// <summary>
+	/// <c>Class.getModule()</c> definition.
+	/// </summary>
+	public static readonly JFieldDefinition<JModuleObject> GetModuleDefinition =
+		new(NativeFunctionSet.GetModuleMethodInfo);
+
+	/// <summary>
 	/// Indicates whether an array class is final.
 	/// </summary>
 	/// <param name="arrayClass">A <see cref="JClassObject"/> instance.</param>

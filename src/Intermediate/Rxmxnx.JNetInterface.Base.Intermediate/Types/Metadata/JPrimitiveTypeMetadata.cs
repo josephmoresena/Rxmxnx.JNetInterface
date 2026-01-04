@@ -38,7 +38,7 @@ public abstract partial class JPrimitiveTypeMetadata : JDataTypeMetadata
 	/// <inheritdoc/>
 	public override JRuntimeVersion Since => JRuntimeVersion.SEd1;
 	/// <inheritdoc/>
-	public sealed override Int32 AndroidApiLevel => default;
+	public sealed override Int32 AndroidApiLevel => 0;
 
 	/// <summary>
 	/// Information of wrapper class.

@@ -22,7 +22,7 @@ public interface IDataType : IObject
 	/// <summary>
 	/// Specifies the minimum Android API level required for the current type.
 	/// </summary>
-	static virtual Int32 AndroidApiLevel => default;
+	static virtual Int32 AndroidApiLevel => 0;
 
 	/// <summary>
 	/// Retrieves the metadata for given type.

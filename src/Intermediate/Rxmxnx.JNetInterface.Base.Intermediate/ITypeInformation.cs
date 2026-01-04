@@ -36,7 +36,26 @@ public interface ITypeInformation
 	/// <summary>
 	/// Specifies the minimum Android Level API required for the current type.
 	/// </summary>
-	Int32 AndroidApiLevel => default;
+	/// <remarks>
+	///     <list type="table">
+	///         <listheader>
+	///             <term>Value</term>
+	///             <description>Description</description>
+	///         </listheader>
+	///         <item>
+	///             <term>-1</term>
+	///             <description>The current type is not supported by Android.</description>
+	///         </item>
+	///         <item>
+	///             <term>&gt;= 0</term>
+	///             <description>The JVM is running on Android and the value represents the Android API level.</description>
+	///         </item>
+	///     </list>
+	/// </remarks>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	Int32 AndroidApiLevel => 0;
 
 	/// <summary>
 	/// Retrieves the Java class name.

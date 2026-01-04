@@ -32,6 +32,9 @@ public partial interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	///         </item>
 	///     </list>
 	/// </remarks>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	Int32 AndroidApiLevel => 0; // 0: Not Android, but supports Android classes.
 	/// <summary>
 	/// JNI reference to the interface.

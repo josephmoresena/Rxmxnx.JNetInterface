@@ -180,6 +180,9 @@ public abstract unsafe partial class JVirtualMachineLibrary
 	/// A <see cref="JVirtualMachineLibrary"/> instance if <paramref name="handle"/> is
 	/// valid for a JVM library; otherwise, <see langword="null"/>.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	public static JVirtualMachineLibrary? Create(IntPtr handle) => JVirtualMachineLibrary.Create(handle, false);
 
 	/// <summary>

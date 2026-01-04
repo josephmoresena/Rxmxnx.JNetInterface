@@ -473,14 +473,19 @@ public sealed class NativeFunctionSetImplTests
 		env.ClassFeature.Received(1).GetClass<JMemberObject>();
 		env.AccessFeature.Received(1).CallFunction<JClassObject>(jField, jMemberClass, definition, false, []);
 	}
-	[Fact]
-	internal void GetParameterTypesTest()
+	[Theory]
+	[InlineData(JRuntimeVersion.J6)]
+	[InlineData(JRuntimeVersion.J8)]
+	internal void GetParameterTypesTest(JRuntimeVersion jreVersion)
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JConstructorObject>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JObjectLocalRef localRef = NativeFunctionSetImplTests.fixture.Create<JObjectLocalRef>();
 		JArrayLocalRef arrayRef = NativeFunctionSetImplTests.fixture.Create<JArrayLocalRef>();
 		JFunctionDefinition definition = JFunctionDefinition<JArrayObject<JClassObject>>.Create("getParameterTypes"u8);
+
+		env.Version.Returns((Int32)jreVersion);
+
 		using JClassObject jClass = new(env);
 		using JClassObject jExecutableClass = new(jClass, IClassType.GetMetadata<JExecutableObject>());
 		using JClassObject jConstructorClass = new(jClass, typeMetadata);
@@ -493,12 +498,16 @@ public sealed class NativeFunctionSetImplTests
 		env.AccessFeature
 		   .CallFunction<JArrayObject<JClassObject>>(jConstructor, jExecutableClass, definition, false, [])
 		   .Returns(parametersTypes);
+		env.AccessFeature
+		   .CallFunction<JArrayObject<JClassObject>>(jConstructor, jConstructorClass, definition, false, [])
+		   .Returns(parametersTypes);
 
 		Assert.Equal(parametersTypes, NativeFunctionSetImpl.Instance.GetParameterTypes(jConstructor));
 
-		env.ClassFeature.Received(1).GetClass<JExecutableObject>();
-		env.AccessFeature.Received(1)
-		   .CallFunction<JArrayObject<JClassObject>>(jConstructor, jExecutableClass, definition, false, []);
+		env.ClassFeature.Received(jreVersion >= JRuntimeVersion.J8 ? 1 : 0).GetClass<JExecutableObject>();
+		env.AccessFeature.Received(1).CallFunction<JArrayObject<JClassObject>>(
+			jConstructor, jreVersion >= JRuntimeVersion.J8 ? jExecutableClass : jConstructorClass, definition, false,
+			[]);
 	}
 	[Theory]
 	[InlineData(0)]

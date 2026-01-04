@@ -27,6 +27,9 @@ public partial class JArrayObject<TElement>
 		/// <inheritdoc/>
 		public override JRuntimeVersion Since => TElement.Since;
 		/// <inheritdoc/>
+#if !PACKAGE
+		[ExcludeFromCodeCoverage]
+#endif
 		public override Int32 AndroidApiLevel => TElement.AndroidApiLevel;
 
 		/// <summary>

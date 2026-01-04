@@ -19,6 +19,22 @@ public sealed class JInterfaceObjectTests
 		{ typeof(JSerializableObject), new("java/io/Serializable"u8) },
 		{ typeof(JTypeObject), new("java/lang/reflect/Type"u8) },
 	};
+	private static readonly Dictionary<Type, JRuntimeVersion> classVersion = new()
+	{
+		{ typeof(JAnnotatedElementObject), JRuntimeVersion.J5 },
+		{ typeof(JAnnotationObject), JRuntimeVersion.J5 },
+		{ typeof(JAppendableObject), JRuntimeVersion.J5 },
+		{ typeof(JCharSequenceObject), JRuntimeVersion.SEd4 },
+		{ typeof(JCloneableObject), JRuntimeVersion.SEd0 },
+		{ typeof(JComparableObject), JRuntimeVersion.SEd2 },
+		{ typeof(JDirectBufferObject), JRuntimeVersion.SEd4 },
+		{ typeof(JGenericDeclarationObject), JRuntimeVersion.J5 },
+		{ typeof(JMemberObject), JRuntimeVersion.SEd1 },
+		{ typeof(JReadableObject), JRuntimeVersion.J5 },
+		{ typeof(JRunnableObject), JRuntimeVersion.SEd0 },
+		{ typeof(JSerializableObject), JRuntimeVersion.SEd1 },
+		{ typeof(JTypeObject), JRuntimeVersion.J5 },
+	};
 	private static readonly Dictionary<Type, CString> classSignatures =
 		JInterfaceObjectTests.classNames.ToDictionary(p => p.Key, p => CString.Concat("L"u8, p.Value, ";"u8));
 	private static readonly Dictionary<Type, CString> arraySignatures =
@@ -197,6 +213,8 @@ public sealed class JInterfaceObjectTests
 		Assert.Equal(JInterfaceObjectTests.classSignatures[typeof(TInterface)], interfaceTypeMetadata.Signature);
 		Assert.Equal(JInterfaceObjectTests.arraySignatures[typeof(TInterface)], interfaceTypeMetadata.ArraySignature);
 		Assert.Equal(JInterfaceObjectTests.hashes[typeof(TInterface)].ToString(), interfaceTypeMetadata.Hash);
+		Assert.Equal(JInterfaceObjectTests.classVersion[typeof(TInterface)], interfaceTypeMetadata.Since);
+		Assert.Equal(typeof(TInterface) != typeof(JDirectBufferObject) ? 0 : 24, interfaceTypeMetadata.AndroidApiLevel);
 		Assert.IsType<JFunctionDefinition<TInterface>.Parameterless>(
 			interfaceTypeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFunctionDefinition<TInterface>>(

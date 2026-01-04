@@ -21,10 +21,16 @@ public interface IVirtualMachineLibraryType
 	/// <summary>
 	/// Indicates whether the current <c>jvm</c> library is statically linked.
 	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	static virtual Boolean IsStatic => false;
 	/// <summary>
 	/// Indicates whether the function <c>JNI_GetCreatedJavaVMs</c> is available on the current library.
 	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	static virtual Boolean HasCreatedVmMethod => true;
 
 	/// <summary>

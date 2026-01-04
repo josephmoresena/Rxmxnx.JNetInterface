@@ -54,10 +54,15 @@ partial class JEnvironment
 		public JModuleObject? GetModule(JClassObject jClass)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
-			if (this.Version < NativeInterface9.RequiredVersion) return default;
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
-			return this.GetModule(classRef);
+			if (this.Version >= NativeInterface9.RequiredVersion)
+			{
+				using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+				JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
+				return this.GetModule(classRef);
+			}
+			if (JVirtualMachine.AndroidApiLevel > 0 || this.VirtualMachine.Version < JRuntimeVersion.J9) return default;
+			//TODO: Call java function.
+			return default;
 		}
 		public void ThrowNew(JClassObject jClass, String? message, Boolean throwException)
 		{
@@ -138,7 +143,8 @@ partial class JEnvironment
 			if (jClass.ClassSignature[0] == CommonNames.ArraySignaturePrefixChar)
 				return this.GetClass<JLocalObject>(); // Super-class of Array classes is Object class.
 			if (MetadataHelper.GetExactMetadata(jClass.Hash)?.BaseMetadata is { } metadata &&
-			    metadata.Since <= this.VirtualMachine.Version) // Only if super class is compatible with current JRE.
+			    metadata.IsCompatibleWith(this._env))
+				// Only if super class is compatible with current JRE or Android API.
 				return this.GetOrFindClass(metadata); // Well-known class.
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));

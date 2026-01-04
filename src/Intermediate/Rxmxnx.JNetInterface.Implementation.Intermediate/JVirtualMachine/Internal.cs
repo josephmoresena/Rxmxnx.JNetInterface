@@ -93,6 +93,9 @@ public partial class JVirtualMachine
 	/// </summary>
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
 	/// <returns>A <see cref="ClassObjectMetadata"/> instance.</returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	internal ClassObjectMetadata? LoadMetadataGlobal(JGlobalBase jGlobal)
 	{
 		ClassObjectMetadata? result = jGlobal.ObjectMetadata as ClassObjectMetadata;
@@ -119,6 +122,9 @@ public partial class JVirtualMachine
 	/// </summary>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <returns>A <see cref="AccessCache"/> instance.</returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	internal AccessCache? GetAccess(JClassLocalRef classRef)
 		=> this._cache.GlobalClassCache[classRef] ?? this._cache.WeakClassCache[classRef];
 	/// <summary>
@@ -204,6 +210,9 @@ public partial class JVirtualMachine
 	/// </summary>
 	/// <param name="classHash">Class hash.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	internal void ReloadAccess(String classHash)
 	{
 		if (!this._cache.GlobalClassCache.TryGetValue(classHash, out JGlobal? jGlobal) || jGlobal.IsDefault) return;
@@ -260,29 +269,6 @@ public partial class JVirtualMachine
 	/// </returns>
 	internal static Boolean IsMainClass(String hash) => JVirtualMachine.userMainClasses.ContainsKey(hash);
 	/// <summary>
-	/// Retrieves the JNI version for <paramref name="version"/>.
-	/// </summary>
-	/// <param name="version">A <see cref="JRuntimeVersion"/> value.</param>
-	/// <returns>The JNI version for <paramref name="version"/>.</returns>
-	// ReSharper disable once MemberCanBePrivate.Global
-	internal static Int32 GetInterfaceVersion(Int32 version)
-		=> version switch
-		{
-			(Int32)JRuntimeVersion.Undefined => default,
-			< (Int32)JRuntimeVersion.SEd1 => (Int32)JRuntimeVersion.SEd0,
-			< (Int32)JRuntimeVersion.SEd2 => (Int32)JRuntimeVersion.SEd1,
-			< (Int32)JRuntimeVersion.SEd4 => (Int32)JRuntimeVersion.SEd2,
-			< (Int32)JRuntimeVersion.J6 => (Int32)JRuntimeVersion.SEd4,
-			< (Int32)JRuntimeVersion.J8 => (Int32)JRuntimeVersion.J6,
-			< (Int32)JRuntimeVersion.J9 => (Int32)JRuntimeVersion.J8,
-			< (Int32)JRuntimeVersion.J10 => (Int32)JRuntimeVersion.J9,
-			< (Int32)JRuntimeVersion.J19 => (Int32)JRuntimeVersion.J10,
-			< (Int32)JRuntimeVersion.J20 => (Int32)JRuntimeVersion.J19,
-			< (Int32)JRuntimeVersion.J21 => (Int32)JRuntimeVersion.J20,
-			< (Int32)JRuntimeVersion.J24 => (Int32)JRuntimeVersion.J21,
-			_ => (Int32)JRuntimeVersion.J24,
-		};
-	/// <summary>
 	/// Indicates whether <typeparamref name="TDataType"/> is compatible with current compilation.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
@@ -290,14 +276,17 @@ public partial class JVirtualMachine
 	/// <see langword="true"/> if current datatype is compatible with the current compilation; otherwise,
 	/// <see langword="false"/>.
 	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	internal static Boolean IsCompileCompliant<TDataType>() where TDataType : IDataType
 	{
-		if (JVirtualMachine.MaxAndroidApiLevel == -1 && TDataType.Since is JRuntimeVersion.Undefined)
+		if (JVirtualMachine.MaxAndroidApiLevel < 0 && TDataType.Since is JRuntimeVersion.Undefined)
 			// Fixed Java SE Runtime doesn't support non-standard type.
 			return false;
 		if (JVirtualMachine.IsFixedAndroid)
 			// Fixed Android doesn't support Android incompatible type or Android API level doesn't support the type.
-			return TDataType.AndroidApiLevel != -1 && JVirtualMachine.MaxAndroidApiLevel >= TDataType.AndroidApiLevel;
+			return TDataType.AndroidApiLevel >= 0 && JVirtualMachine.MaxAndroidApiLevel >= TDataType.AndroidApiLevel;
 		// Fixed runtime version doesn't support the type.
 		return !JVirtualMachine.IsFixedRuntimeVersion || JVirtualMachine.FixedRuntimeVersion >= TDataType.Since;
 	}
