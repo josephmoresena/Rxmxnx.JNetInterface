@@ -7,7 +7,7 @@
         <DefaultFramework>net10.0</DefaultFramework>
         <DefaultFrameworks>net10.0;net9.0</DefaultFrameworks>
     </PropertyGroup>
-    <PropertyGroup>
+    <PropertyGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
         <TargetFramework Condition="'$(RequiredFramework)' != ''">$(RequiredFramework)</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
@@ -18,7 +18,7 @@
         <NoWarn>$(NoWarn);NU1801</NoWarn>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
-    <ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
         <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage"/>
     </ItemGroup>
 </Project>
