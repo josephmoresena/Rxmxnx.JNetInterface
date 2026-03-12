@@ -89,7 +89,7 @@ jobs:
 
       - name: Create Native Artifact Logs
         if: inputs.build_artifacts == true && inputs.package_version == ''
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: FreeBSD.14-Artifact-Logs
           path: |
@@ -130,7 +130,7 @@ jobs:
 
       - name: Create Native Artifact
         if: inputs.build_artifacts == true && inputs.package_version == ''
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: FreeBSD.14-Artifact
           path: |

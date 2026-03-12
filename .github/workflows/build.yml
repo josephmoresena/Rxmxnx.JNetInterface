@@ -175,7 +175,7 @@ jobs:
           enableCrossOsArchive: true
       - name: Create Java Artifact
         if: needs.freebsd-actions.result == 'success' || needs.cross-actions.result == 'success'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: Java-Artifact
           path: |
