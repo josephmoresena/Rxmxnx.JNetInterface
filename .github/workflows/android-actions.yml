@@ -1,0 +1,326 @@
+name: FreeBSD Actions
+on:
+  workflow_call:
+    inputs:
+      package_version:
+        required: false
+        default: ''
+        type: string
+
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PackageVersion: ${{ inputs.package_version }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 1
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+      - name: Restore Internal NuGet Package
+        uses: actions/cache/restore@v5
+        with:
+          path: ./package/Nuget
+          key: internal-nuget-${{ github.run_id }}
+          fail-on-cache-miss: true
+          enableCrossOsArchive: true
+      - name: Clone NativeAOT-AndroidHelloJniLib
+        run: |
+          git config --global url.https://github.com/.insteadOf git://github.com/
+          git clone --single-branch --branch jnetinterface \
+            https://github.com/josephmoresena/NativeAOT-AndroidHelloJniLib.git
+
+          echo '<Project>' > Directory.Build.props
+          echo '  <PropertyGroup>' >> Directory.Build.props
+          echo '    <TargetFrameworks>net10.0;net9.0;net8.0</TargetFrameworks>' >> Directory.Build.props
+          echo '    <LangVersion>latest</LangVersion>' >> Directory.Build.props
+          echo '  </PropertyGroup>' >> Directory.Build.props
+          echo '</Project>' >> Directory.Build.props  
+
+      - name: Create nuget.config for bionic-libs
+        working-directory: ./NativeAOT-AndroidHelloJniLib
+        run: |
+          dotnet new nugetconfig
+          dotnet nuget add source "../package/Nuget/" -n TmpSource
+          export PackageVersion=${PackageVersion:="9999.99.99.99-tmp"}
+          dotnet add package Rxmxnx.JNetInterface --version 9999.99.99.99-tmp
+
+      - name: Build bionic-libs (.NET 10.0)
+        working-directory: ./NativeAOT-AndroidHelloJniLib
+        run: |
+          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:TargetFramework=net10.0 \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net10.0/arm64-v8a
+          dotnet publish -r linux-bionic-arm -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:TargetFramework=net10.0 \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net10.0/armeabi-v7a
+          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:TargetFramework=net10.0 \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net10.0/x86_64
+
+      - name: Build bionic-libs (.NET 9.0)
+        working-directory: ./NativeAOT-AndroidHelloJniLib
+        run: |
+          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:TargetFramework=net9.0 \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0/arm64-v8a
+          dotnet publish -r linux-bionic-arm -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:TargetFramework=net9.0 \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0/armeabi-v7a
+          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:TargetFramework=net9.0 \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0/x86_64
+      - name: Build bionic-libs (.NET 9.0 - RFM)
+        working-directory: ./NativeAOT-AndroidHelloJniLib
+        run: |
+          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:TargetFramework=net9.0 -p:IlcDisableReflection=true \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0-RFM/arm64-v8a
+          dotnet publish -r linux-bionic-arm -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:TargetFramework=net9.0 -p:IlcDisableReflection=true \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0-RFM/armeabi-v7a
+          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:TargetFramework=net8.0 -p:IlcDisableReflection=true \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0-RFM/x86_64
+      - name: Build bionic-libs (.NET 8.0)
+        working-directory: ./NativeAOT-AndroidHelloJniLib
+        run: |
+          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:TargetFramework=net8.0 \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0/arm64-v8a
+          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:TargetFramework=net8.0 \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0/x86_64
+      - name: Build bionic-libs (.NET 8.0 - RFM)
+        working-directory: ./NativeAOT-AndroidHelloJniLib
+        run: |
+          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:TargetFramework=net8.0 -p:IlcDisableReflection=true \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0-RFM/arm64-v8a
+          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:TargetFramework=net8.0 -p:IlcDisableReflection=true \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0-RFM/x86_64
+
+      - name: Create Android project structure
+        env:
+          APK_KEYSTORE_BASE64: ${{ secrets.APK_KEYSTORE }}
+        run: |
+          mkdir ./hello-jni_apk 
+          mkdir ./hello-jni_apk/main
+          mkdir ./hello-jni_apk/main/java
+          mkdir ./hello-jni_apk/main/java/com
+          mkdir ./hello-jni_apk/main/java/com/example
+          mkdir ./hello-jni_apk/main/java/com/example/hellojni
+          mkdir ./hello-jni_apk/class
+          mkdir ./hello-jni_apk/dex
+          mkdir ./hello-jni_apk/lib
+
+          echo "${APK_KEYSTORE_BASE64}" | base64 -d > ./hello-jni_apk/jnetinterface-apk.keystore
+      - name: Create Android java file
+        working-directory: ./hello-jni_apk/main/java/com/example/hellojni
+        run: |
+          echo 'package com.example.hellojni;
+
+          import android.app.Activity;
+          import android.os.Bundle;
+          import android.view.Gravity;
+          import android.view.View;
+          import android.widget.LinearLayout;
+          import android.widget.TextView;
+
+          public class HelloJni extends Activity {
+            static {
+              System.loadLibrary("hello-jni");
+            }
+
+            @Override
+            protected void onCreate(Bundle savedInstanceState) {
+              super.onCreate(savedInstanceState);
+
+              LinearLayout rootLayout = new LinearLayout(this);
+              rootLayout.setOrientation(LinearLayout.VERTICAL);
+              rootLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+              ));
+              rootLayout.setGravity(Gravity.CENTER);
+
+              TextView textView = new TextView(this);
+              textView.setText(stringFromJNI());
+              textView.setTextSize(12);
+
+              LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1f
+              );
+              textView.setLayoutParams(params);
+
+              textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                  textView.setText(stringFromJNI());
+                }
+              });
+
+              rootLayout.addView(textView);
+              setContentView(rootLayout);
+            }
+
+            private native String stringFromJNI();
+          }
+          ' > HelloJni.java 
+
+      - name: Create Android manifest file
+        working-directory: ./hello-jni_apk/main
+        run: |
+          echo '<?xml version="1.0" encoding="utf-8"?>
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.hellojni" android:theme="@android:style/Theme.DeviceDefault">
+            <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+            <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30"/>
+            <application android:label="JNetInterfaceTestApp">
+              <activity android:name=".HelloJni" android:label="JNetInterfaceTestApp">
+              <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+              </intent-filter>
+              </activity>
+            </application>
+          </manifest>' > AndroidManifest.xml
+
+      - name: Compile Android App
+        working-directory: ./hello-jni_apk
+        shell: bash
+        run: |
+          shopt -s globstar 
+          $JAVA_HOME_8_X64/**/javac -d ./class -sourcepath ./main/java \
+            -bootclasspath $ANDROID_HOME/platforms/android-35/android.jar \
+            ./main/java/**/*.java 
+
+          $ANDROID_HOME/build-tools/35.0.0/d8 --lib $ANDROID_HOME/platforms/android-35/android.jar \
+            --output ./dex \
+            class/**/*.class 
+      - name: Build Android Apk (.NET 10.0)
+        env:
+          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
+          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
+        working-directory: ./hello-jni_apk
+        shell: bash
+        run: |
+          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
+            -I $ANDROID_HOME/platforms/android-35/android.jar \
+            -F jnetinterface-apptest-net10.0.apk ./dex 
+
+          mv ../lib-net10.0/* lib/
+          zip -ur jnetinterface-apptest-net10.0.apk lib/
+          rm -rf lib/*
+
+          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
+            --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
+            --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
+            --out ./../jnetinterface-apptest-net10.0.apk jnetinterface-apptest-net10.0.apk 
+
+      - name: Build Android Apk (.NET 9.0)
+        env:
+          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
+          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
+        working-directory: ./hello-jni_apk
+        shell: bash
+        run: |
+          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
+            -I $ANDROID_HOME/platforms/android-35/android.jar \
+            -F jnetinterface-apptest-net9.0.apk ./dex 
+
+          mv ../lib-net9.0/* lib/
+          zip -ur jnetinterface-apptest-net9.0.apk lib/
+          rm -rf lib/*
+
+          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
+            --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
+            --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
+            --out ./../jnetinterface-apptest-net9.0.apk jnetinterface-apptest-net9.0.apk 
+      - name: Build Android Apk (.NET 9.0 - RFM)
+        env:
+          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
+          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
+        working-directory: ./hello-jni_apk
+        shell: bash
+        run: |
+          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
+          -I $ANDROID_HOME/platforms/android-35/android.jar \
+          -F jnetinterface-apptest-net9.0-RFM.apk ./dex 
+
+          mv ../lib-net9.0-RFM/* lib/
+          zip -ur jnetinterface-apptest-net9.0-RFM.apk lib/ 
+          rm -rf lib/*
+
+          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
+          --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
+          --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
+          --out ./../jnetinterface-apptest-net9.0-RFM.apk jnetinterface-apptest-net9.0-RFM.apk 
+      - name: Build Android Apk (.NET 8.0)
+        env:
+          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
+          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
+        working-directory: ./hello-jni_apk
+        shell: bash
+        run: |
+          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
+            -I $ANDROID_HOME/platforms/android-35/android.jar \
+            -F jnetinterface-apptest-net8.0.apk ./dex 
+
+          mv ../lib-net8.0/* lib/
+          zip -ur jnetinterface-apptest-net8.0.apk lib/ 
+          rm -rf lib/*
+
+          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
+            --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
+            --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
+            --out ./../jnetinterface-apptest-net8.0.apk jnetinterface-apptest-net8.0.apk 
+      - name: Build Android Apk (.NET 8.0 - RFM)
+        env:
+          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
+          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
+        working-directory: ./hello-jni_apk
+        shell: bash
+        run: |
+          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
+          -I $ANDROID_HOME/platforms/android-35/android.jar \
+          -F jnetinterface-apptest-net8.0-RFM.apk ./dex 
+
+          mv ../lib-net8.0-RFM/* lib/
+          zip -ur jnetinterface-apptest-net8.0-RFM.apk lib/ 
+          rm -rf lib/*
+
+          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
+          --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
+          --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
+          --out ./../jnetinterface-apptest-net8.0-RFM.apk jnetinterface-apptest-net8.0-RFM.apk
+
+      - name: Create Native Artifact
+        if: inputs.package_version == ''
+        uses: actions/upload-artifact@v5
+        with:
+          name: Android-Artifact
+          path: jnetinterface-apptest-*.apk
+      - name: Create Release Assets
+        if: inputs.package_version != ''
+        shell: pwsh
+        run: |
+          $binPatterns = @(
+            "jnetinterface-apptest-*.apk"
+          )
+          ./ZipAndClean.ps1 -ZipName "Android-Assets.zip" -Patterns $binPatterns
+
+      - name: Upload Release Assets
+        if: inputs.package_version != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          gh release upload ${{ github.ref_name }} ./*-Assets*.zip --clobber

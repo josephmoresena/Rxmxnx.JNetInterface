@@ -5,6 +5,7 @@ public partial class Launcher
 	private Launcher(DirectoryInfo outputDirectory)
 	{
 		this.OutputDirectory = outputDirectory;
+		this.OutputJavaDirectory = new(outputDirectory.FullName + "-java");
 		this.CurrentArch = RuntimeInformation.OSArchitecture;
 	}
 

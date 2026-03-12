@@ -27,6 +27,7 @@ public partial class Launcher
 				JdkVersion.Jdk11 => "openjdk11",
 				JdkVersion.Jdk17 => "openjdk17",
 				JdkVersion.Jdk21 => "openjdk21",
+				JdkVersion.Jdk25 => "openjdk25",
 				_ => default,
 			};
 			await FreeBsd.pkgSemaphore.WaitAsync();

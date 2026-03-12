@@ -1,4 +1,8 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <PackageVersion Condition="'$(PackageVersion)' == ''">9999.99.99.99-tmp</PackageVersion>
+        <DefineConstants Condition="'$(PackageVersion)' != '9999.99.99.99-tmp'">$(DefineConstants);RELEASE_PACKAGE</DefineConstants>
+    </PropertyGroup>
     <ItemGroup Condition="'$(UsePackage)' != 'true'">
         <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj"/>
         <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
@@ -8,6 +12,6 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(UsePackage)' == 'true'">
-        <PackageReference Include="Rxmxnx.JNetInterface" Version="9999.99.99.99-tmp"/>
+        <PackageReference Include="Rxmxnx.JNetInterface" Version="$(PackageVersion)"/>
     </ItemGroup>
 </Project>
