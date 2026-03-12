@@ -139,7 +139,7 @@ public abstract partial class Launcher
 			ExecutablePath = jdk.JavaExecutable,
 			ArgState = jarArgs,
 			AppendArgs = JarArgs.Append,
-			WorkingDirectory = this.OutputDirectory.FullName,
+			WorkingDirectory = this.OutputJavaDirectory.FullName,
 			Notifier = ConsoleNotifier.Notifier,
 		};
 		Int32 result = await Utilities.Execute(state, cancellationToken);

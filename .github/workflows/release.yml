@@ -50,7 +50,7 @@ jobs:
           done
           echo "-----------------------------------"
       - name: Cache NuGet Package
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: ./package/Nuget
           key: internal-nuget-${{ github.run_id }}
@@ -106,7 +106,7 @@ jobs:
         if: needs.freebsd-actions.result == 'success' && needs.cross-actions.result == 'success'
         with:
           path: ./artifacts-java
-          key: internal-macos-${{ github.run_id }}
+          key: internal-macOS-${{ github.run_id }}
           fail-on-cache-miss: true
           enableCrossOsArchive: true
       - name: Java Linux Libraries
@@ -114,7 +114,7 @@ jobs:
         if: needs.freebsd-actions.result == 'success' && needs.cross-actions.result == 'success'
         with:
           path: ./artifacts-java
-          key: internal-linux-${{ github.run_id }}
+          key: internal-Linux-${{ github.run_id }}
           fail-on-cache-miss: true
           enableCrossOsArchive: true
       - name: Java Windows Libraries
@@ -122,7 +122,7 @@ jobs:
         if: needs.freebsd-actions.result == 'success' && needs.cross-actions.result == 'success'
         with:
           path: ./artifacts-java
-          key: internal-windows-${{ github.run_id }}
+          key: internal-Windows-${{ github.run_id }}
           fail-on-cache-miss: true
           enableCrossOsArchive: true
       - name: Create Release Assets
@@ -156,7 +156,6 @@ jobs:
           echo "Deleting caches..."
           gh cache delete "internal-nuget-${{ github.run_id }}" || true
           gh cache delete "internal-freebsd-bin-${{ github.run_id }}" || true
-          gh cache delete "internal-windows-bin-${{ github.run_id }}" || true
-          gh cache delete "internal-linux-bin-${{ github.run_id }}" || true
-          gh cache delete "internal-macos-bin-${{ github.run_id }}" || true
-          gh cache delete "internal-tests-bin-${{ github.run_id }}" || true
+          gh cache delete "internal-Windows-bin-${{ github.run_id }}" || true
+          gh cache delete "internal-Linux-bin-${{ github.run_id }}" || true
+          gh cache delete "internal-macOS-bin-${{ github.run_id }}" || true

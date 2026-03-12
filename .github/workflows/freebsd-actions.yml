@@ -39,7 +39,7 @@ jobs:
           enableCrossOsArchive: true
       - name: Restore Compiled Tests
         if: inputs.run_tests == true
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: |
             ./src/Test/**/bin/Release/net9.0
@@ -117,7 +117,7 @@ jobs:
           rm ./artifacts-java/*.jar;
       - name: Cache Java FreeBSD Libraries
         if: inputs.build_artifacts == true
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: ./artifacts-java
           key: internal-freebsd-${{ github.run_id }}

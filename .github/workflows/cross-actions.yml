@@ -249,9 +249,9 @@ jobs:
       - name: Remove Jar File
         if: inputs.build_artifacts == true && runner.os != 'Windows'
         run: rm ./artifacts-java/*.jar
-      - name: Cache Java FreeBSD Libraries
+      - name: Cache Java Libraries
         if: inputs.build_artifacts == true
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: ./artifacts-java
           key: internal-${{ runner.os }}-${{ github.run_id }}
