@@ -2,6 +2,15 @@ name: FreeBSD Actions
 on:
   workflow_call:
     inputs:
+      apk_key_pass:
+        required: true
+        type: string
+      apk_key_alias:
+        required: true
+        type: string
+      apk_key_store:
+        required: true
+        type: string
       package_version:
         required: false
         default: ''
@@ -14,8 +23,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PackageVersion: ${{ inputs.package_version }}
-      APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-      APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
     steps:
       - uses: actions/checkout@v5
         with:
@@ -110,7 +117,7 @@ jobs:
 
       - name: Create Android project structure
         env:
-          APK_KEYSTORE_BASE64: ${{ secrets.APK_KEYSTORE }}
+          APK_KEYSTORE_BASE64: ${{ inputs.apk_key_store }}
         run: |
           mkdir ./hello-jni_apk 
           mkdir ./hello-jni_apk/main
@@ -209,8 +216,8 @@ jobs:
             class/**/*.class 
       - name: Build Android Apk (.NET 10.0)
         env:
-          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
+          APK_KEY_PASS: ${{ inputs.apk_key_pass }}
+          APK_KEY_ALIAS: ${{ inputs.apk_key_alias }}
         working-directory: ./hello-jni_apk
         shell: bash
         run: |
@@ -229,8 +236,8 @@ jobs:
 
       - name: Build Android Apk (.NET 9.0)
         env:
-          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
+          APK_KEY_PASS: ${{ inputs.apk_key_pass }}
+          APK_KEY_ALIAS: ${{ inputs.apk_key_alias }}
         working-directory: ./hello-jni_apk
         shell: bash
         run: |
@@ -248,8 +255,8 @@ jobs:
             --out ./../jnetinterface-apptest-net9.0.apk jnetinterface-apptest-net9.0.apk 
       - name: Build Android Apk (.NET 9.0 - RFM)
         env:
-          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
+          APK_KEY_PASS: ${{ inputs.apk_key_pass }}
+          APK_KEY_ALIAS: ${{ inputs.apk_key_alias }}
         working-directory: ./hello-jni_apk
         shell: bash
         run: |
@@ -267,8 +274,8 @@ jobs:
           --out ./../jnetinterface-apptest-net9.0-RFM.apk jnetinterface-apptest-net9.0-RFM.apk 
       - name: Build Android Apk (.NET 8.0)
         env:
-          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
+          APK_KEY_PASS: ${{ inputs.apk_key_pass }}
+          APK_KEY_ALIAS: ${{ inputs.apk_key_alias }}
         working-directory: ./hello-jni_apk
         shell: bash
         run: |
@@ -286,8 +293,8 @@ jobs:
             --out ./../jnetinterface-apptest-net8.0.apk jnetinterface-apptest-net8.0.apk 
       - name: Build Android Apk (.NET 8.0 - RFM)
         env:
-          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
+          APK_KEY_PASS: ${{ inputs.apk_key_pass }}
+          APK_KEY_ALIAS: ${{ inputs.apk_key_alias }}
         working-directory: ./hello-jni_apk
         shell: bash
         run: |

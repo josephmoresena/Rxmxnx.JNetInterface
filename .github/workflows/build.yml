@@ -110,11 +110,21 @@ jobs:
           path: ./package/Nuget
           key: internal-nuget-${{ github.run_id }}
           enableCrossOsArchive: true
+      - name: Cache Compiled Tests
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ./src/Test/**/bin/Release/net9.0
+          key: internal-tests-bin-${{ github.run_id }}
   
   android-actions:
     needs: [ build ]
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     uses: ./.github/workflows/android-actions.yml
+    with:
+      apk_key_pass: ${{ secrets.APK_KEY_PASS }}
+      apk_key_alias: ${{ secrets.APK_KEY_ALIAS }}
+      apk_key_store: ${{ secrets.APK_KEYSTORE }}
   freebsd-actions:
     needs: [ build ]
     uses: ./.github/workflows/freebsd-actions.yml
@@ -144,7 +154,7 @@ jobs:
           enableCrossOsArchive: true
       - name: Java MacOS Libraries
         uses: actions/cache/restore@v5
-        if: needs.freebsd-actions.result == 'success' && needs.cross-actions.result == 'success'
+        if: needs.cross-actions.result == 'success'
         with:
           path: ./artifacts-java
           key: internal-macos-${{ github.run_id }}
@@ -152,7 +162,7 @@ jobs:
           enableCrossOsArchive: true
       - name: Java Linux Libraries
         uses: actions/cache/restore@v5
-        if: needs.freebsd-actions.result == 'success' && needs.cross-actions.result == 'success'
+        if: needs.cross-actions.result == 'success'
         with:
           path: ./artifacts-java
           key: internal-linux-${{ github.run_id }}
@@ -160,14 +170,14 @@ jobs:
           enableCrossOsArchive: true
       - name: Java Windows Libraries
         uses: actions/cache/restore@v5
-        if: needs.freebsd-actions.result == 'success' && needs.cross-actions.result == 'success'
+        if: needs.cross-actions.result == 'success'
         with:
           path: ./artifacts-java
           key: internal-windows-${{ github.run_id }}
           fail-on-cache-miss: true
           enableCrossOsArchive: true
       - name: Create Java Artifact
-        if: needs.freebsd-actions.result == 'success' && needs.cross-actions.result == 'success'
+        if: needs.freebsd-actions.result == 'success' || needs.cross-actions.result == 'success'
         uses: actions/upload-artifact@v5
         with:
           name: Java-Artifact
