@@ -124,13 +124,21 @@ jobs:
           key: internal-windows-${{ github.run_id }}
           fail-on-cache-miss: true
           enableCrossOsArchive: true
-      - name: Create Java Artifact
+      - name: Create Release Assets
         if: needs.freebsd-actions.result == 'success' && needs.cross-actions.result == 'success'
-        uses: actions/upload-artifact@v5
-        with:
-          name: Java-Artifact
-          path: |
-            ./artifacts-java/*
+        shell: pwsh
+        run: |
+          $binPatterns = @(
+            "./artifacts-java/*"
+          )
+          ./ZipAndClean.ps1 -ZipName "Java-Assets.zip" -Patterns $binPatterns
+      - name: Upload Release Assets
+        if: needs.freebsd-actions.result == 'success' && needs.cross-actions.result == 'success'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          gh release upload ${{ github.ref_name }} ./*-Assets*.zip --clobber
       - name: Push NuGet Package
         working-directory: ./package/Nuget
         if: |
