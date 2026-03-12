@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PackageVersion: ${{ inputs.package_version }}
+      APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
+      APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
     steps:
       - uses: actions/checkout@v5
         with:

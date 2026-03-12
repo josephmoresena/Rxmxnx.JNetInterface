@@ -174,12 +174,14 @@ jobs:
         run: |
           dotnet test src /p:MultipleFrameworkTest=true --no-build --no-restore --configuration Release  --logger "console;verbosity=detailed"
 
+      - name: Publish launcher
+        working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest
+        run: dotnet publish
       - name: Run launcher (compile)
         if: inputs.build_artifacts == true
         shell: pwsh
         run: |
           if ($IsWindows) {
-            $env:PATH = "C:\msys64\mingw32\bin;" + $env:PATH
             ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "compile"
 
             Remove-Item -Recurse -Force "$env:WINDIR\SoftwareDistribution\Download" -ErrorAction SilentlyContinue
