@@ -121,10 +121,7 @@ jobs:
     needs: [ build ]
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     uses: ./.github/workflows/android-actions.yml
-    with:
-      apk_key_pass: ${{ secrets.APK_KEY_PASS }}
-      apk_key_alias: ${{ secrets.APK_KEY_ALIAS }}
-      apk_key_store: ${{ secrets.APK_KEYSTORE }}
+    secrets: inherit
   freebsd-actions:
     needs: [ build ]
     uses: ./.github/workflows/freebsd-actions.yml

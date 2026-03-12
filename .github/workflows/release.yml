@@ -61,10 +61,8 @@ jobs:
     needs: [ build ]
     uses: ./.github/workflows/android-actions.yml
     with:
-      apk_key_pass: ${{ secrets.APK_KEY_PASS }}
-      apk_key_alias: ${{ secrets.APK_KEY_ALIAS }}
-      apk_key_store: ${{ secrets.APK_KEYSTORE }}
       package_version: ${{ github.event.release.tag_name }}
+    secrets: inherit
   freebsd-actions:
     name: Build Native-AOT FreeBSD Artifacts
     needs: [ build ]
