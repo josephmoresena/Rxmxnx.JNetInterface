@@ -226,7 +226,7 @@ public class HelloDotnet {
                 libraryName += "".FreeBSD"";
             else if (osName.contains(""netbsd""))
                 libraryName += "".NetBSD"";
-            else if (osName.contains(""sunos"") || osName.contains(""solaris"") || os.contains(""illumos""))
+            else if (osName.contains(""sunos"") || osName.contains(""solaris"") || osName.contains(""illumos""))
                 libraryName += "".Solaris"";
         }
         
