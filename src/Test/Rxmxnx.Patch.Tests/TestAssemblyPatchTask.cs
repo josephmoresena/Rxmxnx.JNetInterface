@@ -104,6 +104,7 @@ public abstract class TestAssemblyPatchTask : MsBuildTask
 			catch
 			{
 				if (!name.Name.Contains(".Intermediate") || String.IsNullOrWhiteSpace(this._formatPath)) throw;
+				throw new Exception(String.Format(this._formatPath!, name.Name));
 				this.AddSearchDirectory(String.Format(this._formatPath!, name.Name));
 				return base.Resolve(name);
 			}
