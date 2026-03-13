@@ -1,6 +1,4 @@
-﻿using Microsoft.Build.Utilities;
-
-using MsBuildTask = Microsoft.Build.Utilities.Task;
+﻿using MsBuildTask = Microsoft.Build.Utilities.Task;
 
 namespace Rxmxnx.PInvoke.Patch.Tests;
 
@@ -66,7 +64,7 @@ public abstract class TestAssemblyPatchTask : MsBuildTask
 	// ReSharper disable once MemberCanBePrivate.Global
 	protected void AssemblyPatch(String assemblyPath, Boolean withDebugSymbols)
 	{
-		IntermediateResolver resolver = new(this.Log, this.OutputPath!);
+		IntermediateResolver resolver = new(this.OutputPath!);
 		ReaderParameters readParameters =
 			new() { ReadWrite = true, ReadSymbols = withDebugSymbols, AssemblyResolver = resolver, };
 		using AssemblyDefinition? assembly = AssemblyDefinition.ReadAssembly(assemblyPath, readParameters);
@@ -86,7 +84,7 @@ public abstract class TestAssemblyPatchTask : MsBuildTask
 	/// </returns>
 	protected abstract Boolean IlPatch(ModuleDefinition mainModule);
 
-	public sealed class IntermediateResolver(TaskLoggingHelper log, String outputPath) : DefaultAssemblyResolver
+	private sealed class IntermediateResolver(String outputPath) : DefaultAssemblyResolver
 	{
 		public override AssemblyDefinition Resolve(AssemblyNameReference name)
 		{
@@ -96,11 +94,8 @@ public abstract class TestAssemblyPatchTask : MsBuildTask
 			}
 			catch
 			{
-				String intermediatePath = Path.Combine("..", "..", "Intermediate", name.Name, outputPath);
-				log.LogError("Resolver missing assemblyName: {0} directory: {1}", name.Name, intermediatePath);
-
 				if (!name.Name.Contains(".Intermediate")) throw;
-				this.AddSearchDirectory(intermediatePath);
+				this.AddSearchDirectory(Path.Combine("..", "..", "Intermediate", name.Name, outputPath));
 				return base.Resolve(name);
 			}
 		}
