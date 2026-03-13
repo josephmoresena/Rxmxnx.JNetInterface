@@ -64,7 +64,13 @@ public abstract class TestAssemblyPatchTask : MsBuildTask
 	// ReSharper disable once MemberCanBePrivate.Global
 	protected void AssemblyPatch(String assemblyPath, Boolean withDebugSymbols)
 	{
-		IgnoreMissingResolver resolver = new();
+		String resolvingPath = Path.Combine("Test", this.TestAssemblyName!);
+		DefaultAssemblyResolver resolver = new();
+
+		resolver.AddSearchDirectory(assemblyPath.Replace(resolvingPath,
+		                                                 Path.Combine("Intermediate",
+		                                                              "Rxmxnx.JNetInterface.Base.Intermediate")));
+
 		ReaderParameters readParameters =
 			new() { ReadWrite = true, ReadSymbols = withDebugSymbols, AssemblyResolver = resolver, };
 		using AssemblyDefinition? assembly = AssemblyDefinition.ReadAssembly(assemblyPath, readParameters);
@@ -83,19 +89,4 @@ public abstract class TestAssemblyPatchTask : MsBuildTask
 	/// <see langword="true"/> if <see cref="mainModule"/> was modified; otherwise; <see langword="false"/>.
 	/// </returns>
 	protected abstract Boolean IlPatch(ModuleDefinition mainModule);
-	
-	private sealed class IgnoreMissingResolver : DefaultAssemblyResolver
-	{
-		public override AssemblyDefinition Resolve(AssemblyNameReference name)
-		{
-			try
-			{
-				return base.Resolve(name);
-			}
-			catch
-			{
-				return default!;
-			}
-		}
-	}
 }
