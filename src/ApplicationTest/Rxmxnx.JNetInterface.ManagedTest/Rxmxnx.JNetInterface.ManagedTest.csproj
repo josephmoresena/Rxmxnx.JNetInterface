@@ -14,4 +14,6 @@
         <ProjectReference Include="..\Rxmxnx.JNetInterface.LibraryTest\Rxmxnx.JNetInterface.LibraryTest.csproj"/>
     </ItemGroup>
 
+    <Import Condition="!$([MSBuild]::IsOSPlatform('FREEBSD'))" Project="..\..\Test\Tests.targets"/>
+
 </Project>

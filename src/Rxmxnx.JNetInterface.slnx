@@ -81,6 +81,7 @@
                 Path="SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj"/>
     </Folder>
     <Folder Name="/Test/">
+        <Project Path="Test/Rxmxnx.Patch.Tests/Rxmxnx.Patch.Tests.csproj"/>
         <Project Path="Test\Rxmxnx.JNetInterface.Base.Tests\Rxmxnx.JNetInterface.Base.Tests.csproj"/>
         <Project Path="Test\Rxmxnx.JNetInterface.Extensions.Tests\Rxmxnx.JNetInterface.Extensions.Tests.csproj"/>
         <Project Path="Test\Rxmxnx.JNetInterface.FFI.Tests\Rxmxnx.JNetInterface.FFI.Tests.csproj"/>
@@ -90,6 +91,7 @@
         <Project Path="Test\Rxmxnx.JNetInterface.Primitives.Tests\Rxmxnx.JNetInterface.Primitives.Tests.csproj"/>
         <File Path="Test\Tests.props"/>
         <File Path="Test\CommonTests.props"/>
+        <File Path="Test\Tests.targets"/>
         <File Path="Test\x86.runsettings"/>
         <File Path="Test\Directory.Build.props"/>
     </Folder>
