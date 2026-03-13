@@ -22,7 +22,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Proxies\Rxmxnx.JNetInterface.Implementation.Tests.Proxies\Rxmxnx.JNetInterface.Implementation.Tests.Proxies.csproj"/>
-        <ProjectReference Include="..\..\..\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
+        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
     </ItemGroup>
 
     <!-- Ensure proxy libraries are built before tests -->
