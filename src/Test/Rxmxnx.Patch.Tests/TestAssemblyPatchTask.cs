@@ -1,4 +1,6 @@
-﻿using MsBuildTask = Microsoft.Build.Utilities.Task;
+﻿using Microsoft.Build.Utilities;
+
+using MsBuildTask = Microsoft.Build.Utilities.Task;
 
 namespace Rxmxnx.PInvoke.Patch.Tests;
 
@@ -64,7 +66,7 @@ public abstract class TestAssemblyPatchTask : MsBuildTask
 	// ReSharper disable once MemberCanBePrivate.Global
 	protected void AssemblyPatch(String assemblyPath, Boolean withDebugSymbols)
 	{
-		IntermediateResolver resolver = new(this.OutputPath!, this.TestAssemblyName!);
+		IntermediateResolver resolver = new(this.Log, this.OutputPath!, this.TestAssemblyName!);
 		ReaderParameters readParameters =
 			new() { ReadWrite = true, ReadSymbols = withDebugSymbols, AssemblyResolver = resolver, };
 		using AssemblyDefinition? assembly = AssemblyDefinition.ReadAssembly(assemblyPath, readParameters);
@@ -86,13 +88,20 @@ public abstract class TestAssemblyPatchTask : MsBuildTask
 
 	public sealed class IntermediateResolver : DefaultAssemblyResolver
 	{
+		private readonly TaskLoggingHelper _log;
 		private readonly String? _formatPath;
 
-		public IntermediateResolver(String outputPath, String assemblyName)
+		public IntermediateResolver(TaskLoggingHelper log, String outputPath, String assemblyName)
 		{
 			String srcTestPath = Path.Combine("src", "Test", assemblyName);
+			String srcIntermediate = Path.Combine("src", "Intermediate", "{0}");
+			this._log = log;
+
+			this._log.LogMessage("Resolver outputPath: {0} assemblyName: {1} pattern: {2} intermediateFormat: {3}",
+			                     outputPath, assemblyName, srcTestPath, srcIntermediate);
+
 			if (!outputPath.Contains(srcTestPath)) return;
-			this._formatPath = outputPath.Replace(srcTestPath, Path.Combine("src", "Intermediate", "{0}"));
+			this._formatPath = outputPath.Replace(srcTestPath, srcIntermediate);
 		}
 
 		public override AssemblyDefinition Resolve(AssemblyNameReference name)
@@ -103,8 +112,9 @@ public abstract class TestAssemblyPatchTask : MsBuildTask
 			}
 			catch
 			{
+				this._log.LogMessage("Resolver missing assemblyName: {0} directory: {1}", name.Name, String.Format(this._formatPath!, name.Name));
+
 				if (!name.Name.Contains(".Intermediate") || String.IsNullOrWhiteSpace(this._formatPath)) throw;
-				throw new Exception(String.Format(this._formatPath!, name.Name));
 				this.AddSearchDirectory(String.Format(this._formatPath!, name.Name));
 				return base.Resolve(name);
 			}
