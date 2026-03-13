@@ -66,7 +66,7 @@ public abstract class TestAssemblyPatchTask : MsBuildTask
 	// ReSharper disable once MemberCanBePrivate.Global
 	protected void AssemblyPatch(String assemblyPath, Boolean withDebugSymbols)
 	{
-		IntermediateResolver resolver = new(this.Log, this.OutputPath!, this.TestAssemblyName!);
+		IntermediateResolver resolver = new(this.Log, this.OutputPath!);
 		ReaderParameters readParameters =
 			new() { ReadWrite = true, ReadSymbols = withDebugSymbols, AssemblyResolver = resolver, };
 		using AssemblyDefinition? assembly = AssemblyDefinition.ReadAssembly(assemblyPath, readParameters);
@@ -86,24 +86,8 @@ public abstract class TestAssemblyPatchTask : MsBuildTask
 	/// </returns>
 	protected abstract Boolean IlPatch(ModuleDefinition mainModule);
 
-	public sealed class IntermediateResolver : DefaultAssemblyResolver
+	public sealed class IntermediateResolver(TaskLoggingHelper log, String outputPath) : DefaultAssemblyResolver
 	{
-		private readonly TaskLoggingHelper _log;
-		private readonly String? _formatPath;
-
-		public IntermediateResolver(TaskLoggingHelper log, String outputPath, String assemblyName)
-		{
-			String srcTestPath = Path.Combine("src", "Test", assemblyName);
-			String srcIntermediate = Path.Combine("src", "Intermediate", "{0}");
-			this._log = log;
-
-			this._log.LogError("Resolver outputPath: {0} assemblyName: {1} pattern: {2} intermediateFormat: {3}",
-			                     outputPath, assemblyName, srcTestPath, srcIntermediate);
-
-			if (!outputPath.Contains(srcTestPath)) return;
-			this._formatPath = outputPath.Replace(srcTestPath, srcIntermediate);
-		}
-
 		public override AssemblyDefinition Resolve(AssemblyNameReference name)
 		{
 			try
@@ -112,10 +96,11 @@ public abstract class TestAssemblyPatchTask : MsBuildTask
 			}
 			catch
 			{
-				this._log.LogError("Resolver missing assemblyName: {0} directory: {1}", name.Name, String.Format(this._formatPath!, name.Name));
+				String intermediatePath = Path.Combine("..", "..", "Intermediate", name.Name, outputPath);
+				log.LogError("Resolver missing assemblyName: {0} directory: {1}", name.Name, intermediatePath);
 
-				if (!name.Name.Contains(".Intermediate") || String.IsNullOrWhiteSpace(this._formatPath)) throw;
-				this.AddSearchDirectory(String.Format(this._formatPath!, name.Name));
+				if (!name.Name.Contains(".Intermediate")) throw;
+				this.AddSearchDirectory(intermediatePath);
 				return base.Resolve(name);
 			}
 		}
