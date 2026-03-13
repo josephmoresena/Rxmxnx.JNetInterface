@@ -214,6 +214,7 @@ public class HelloDotnet {
         String dotnetVersion = System.getProperty(""dotnet.runtime.version"");
         String arch = System.getProperty(""os.arch"");
         String osName = System.getProperty(""os.name"");
+        boolean reflectionFreeMode = Boolean.parseBoolean(System.getProperty(""dotnet.reflection.disable""));
         
         currentPath = currentPath.substring(0, currentPath.length() - 2);
         
@@ -241,8 +242,12 @@ public class HelloDotnet {
         
         if (dotnetVersion != null && !dotnetVersion.equals("""")) 
             libraryName += '.' + dotnetVersion;
+        else if (reflectionFreeMode || libraryName.contains("".FreeBSD""))
+            libraryName += "".net9.0"";
+        else
+            libraryName += ""net10.0"";
         
-        if (Boolean.parseBoolean(System.getProperty(""dotnet.reflection.disable"")))
+        if (reflectionFreeMode)
             libraryName += "".RFM"";
         
         return libraryName;
