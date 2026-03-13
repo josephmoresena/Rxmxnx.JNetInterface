@@ -1,92 +1,108 @@
 ﻿<Solution>
     <Folder Name="/ApplicationTest/">
-        <Project Path="ApplicationTest\Rxmxnx.JNetInterface.ApplicationGuiTest\Rxmxnx.JNetInterface.ApplicationGuiTest.csproj" />
-        <Project Path="ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj" />
-        <Project Path="ApplicationTest\Rxmxnx.JNetInterface.ConsoleTest\Rxmxnx.JNetInterface.ConsoleTest.csproj" />
-        <Project Path="ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest.fsproj" />
-        <Project Path="ApplicationTest\Rxmxnx.JNetInterface.LauncherTest\Rxmxnx.JNetInterface.LauncherTest.csproj" />
-        <Project Path="ApplicationTest\Rxmxnx.JNetInterface.LibraryTest\Rxmxnx.JNetInterface.LibraryTest.csproj" />
-        <Project Path="ApplicationTest\Rxmxnx.JNetInterface.ManagedTest\Rxmxnx.JNetInterface.ManagedTest.csproj" />
-        <Project Path="ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest.vbproj" />
-        <File Path="ApplicationTest\Directory.Build.props" />
-        <File Path="ApplicationTest\JNetInterface-PackageReference.props" />
-        <File Path="ApplicationTest\nuget.config" />
-        <File Path="ApplicationTest\README.md" />
-        <File Path="ApplicationTest\JNetInterface-App.props" />
-        <File Path="ApplicationTest\JNetInterface-Config.props" />
-        <File Path="ApplicationTest\JNetInterface-Artifact.targets" />
-        <File Path="ApplicationTest\JNetInterface-NativeAot.props" />
-        <File Path="ApplicationTest\JNetInterface-Frameworks.props" />
-        <File Path="ApplicationTest\Rxmxnx.JNetInterface.ApplicationGuiTest\java.src\com\rxmxnx\jnetinterface\NativeCallback.java" />
+        <Project
+                Path="ApplicationTest\Rxmxnx.JNetInterface.ApplicationGuiTest\Rxmxnx.JNetInterface.ApplicationGuiTest.csproj"/>
+        <Project
+                Path="ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj"/>
+        <Project Path="ApplicationTest\Rxmxnx.JNetInterface.ConsoleTest\Rxmxnx.JNetInterface.ConsoleTest.csproj"/>
+        <Project
+                Path="ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest.fsproj"/>
+        <Project Path="ApplicationTest\Rxmxnx.JNetInterface.LauncherTest\Rxmxnx.JNetInterface.LauncherTest.csproj"/>
+        <Project Path="ApplicationTest\Rxmxnx.JNetInterface.LibraryTest\Rxmxnx.JNetInterface.LibraryTest.csproj"/>
+        <Project Path="ApplicationTest\Rxmxnx.JNetInterface.ManagedTest\Rxmxnx.JNetInterface.ManagedTest.csproj"/>
+        <Project
+                Path="ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest.vbproj"/>
+        <File Path="ApplicationTest\Directory.Build.props"/>
+        <File Path="ApplicationTest\JNetInterface-PackageReference.props"/>
+        <File Path="ApplicationTest\nuget.config"/>
+        <File Path="ApplicationTest\README.md"/>
+        <File Path="ApplicationTest\JNetInterface-App.props"/>
+        <File Path="ApplicationTest\JNetInterface-Config.props"/>
+        <File Path="ApplicationTest\JNetInterface-Artifact.targets"/>
+        <File Path="ApplicationTest\JNetInterface-NativeAot.props"/>
+        <File Path="ApplicationTest\JNetInterface-Frameworks.props"/>
+        <File Path="ApplicationTest\Rxmxnx.JNetInterface.ApplicationGuiTest\java.src\com\rxmxnx\jnetinterface\NativeCallback.java"/>
     </Folder>
     <Folder Name="/Global/">
-        <File Path="..\.github\workflows\cross-actions.yml" />
-        <File Path="..\.github\workflows\freebsd-actions.yml" />
-        <File Path="..\.github\workflows\release.yml" />
-        <File Path="..\.github\workflows\android-actions.yml" />
-        <File Path="..\.github\workflows\build.yml" />
-        <File Path="..\.gitignore" />
-        <File Path="..\CONTRIBUTING.md" />
-        <File Path="..\LICENSE.md" />
-        <File Path="..\README.md" />
-        <File Path="..\ZipAndClean.ps1" />
-        <File Path="Library.props" />
-        <File Path="PInvoke.Reference.props" />
+        <File Path="..\.github\workflows\cross-actions.yml"/>
+        <File Path="..\.github\workflows\freebsd-actions.yml"/>
+        <File Path="..\.github\workflows\release.yml"/>
+        <File Path="..\.github\workflows\android-actions.yml"/>
+        <File Path="..\.github\workflows\build.yml"/>
+        <File Path="..\.gitignore"/>
+        <File Path="..\CONTRIBUTING.md"/>
+        <File Path="..\LICENSE.md"/>
+        <File Path="..\README.md"/>
+        <File Path="..\ZipAndClean.ps1"/>
+        <File Path="Library.props"/>
+        <File Path="PInvoke.Reference.props"/>
     </Folder>
     <Folder Name="/Global/Documentation/">
-        <File Path="..\docs\class-object.md" />
-        <File Path="..\docs\data-types-mapping.md" />
-        <File Path="..\docs\data-types-metadata.md" />
-        <File Path="..\docs\direct-buffers.md" />
-        <File Path="..\docs\error-handling.md" />
-        <File Path="..\docs\jni-accessing.md" />
-        <File Path="..\docs\jni-classes.md" />
-        <File Path="..\docs\jni-interfaces.md" />
-        <File Path="..\docs\jni-references.md" />
-        <File Path="..\docs\native-objects.md" />
+        <File Path="..\docs\class-object.md"/>
+        <File Path="..\docs\data-types-mapping.md"/>
+        <File Path="..\docs\data-types-metadata.md"/>
+        <File Path="..\docs\direct-buffers.md"/>
+        <File Path="..\docs\error-handling.md"/>
+        <File Path="..\docs\jni-accessing.md"/>
+        <File Path="..\docs\jni-classes.md"/>
+        <File Path="..\docs\jni-interfaces.md"/>
+        <File Path="..\docs\jni-references.md"/>
+        <File Path="..\docs\native-objects.md"/>
     </Folder>
     <Folder Name="/Global/NativeImage/">
-        <File Path="..\native-image\README.md" />
-        <File Path="..\native-image\jni-config.json" />
+        <File Path="..\native-image\README.md"/>
+        <File Path="..\native-image\jni-config.json"/>
     </Folder>
     <Folder Name="/Intermediate/">
-        <Project Path="Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj" />
-        <Project Path="Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj" />
-        <Project Path="Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj" />
-        <Project Path="Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj" />
-        <Project Path="Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj" />
-        <File Path="Intermediate\Intermediate.Library.props" />
+        <Project
+                Path="Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj"/>
+        <Project
+                Path="Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
+        <Project
+                Path="Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
+        <Project
+                Path="Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj"/>
+        <Project
+                Path="Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj"/>
+        <File Path="Intermediate\Intermediate.Library.props"/>
     </Folder>
     <Folder Name="/Package/">
-        <File Path="..\package\Rxmxnx.JNetInterface\CompatibilitySuppressions.xml" />
-        <File Path="..\package\Rxmxnx.JNetInterface\PACKAGE.md" />
-        <File Path="..\package\Intermediate-to-Package.targets" />
-        <File Path="..\package\JNetInterface.Package.props" />
+        <File Path="..\package\Rxmxnx.JNetInterface\CompatibilitySuppressions.xml"/>
+        <File Path="..\package\Rxmxnx.JNetInterface\PACKAGE.md"/>
+        <File Path="..\package\Intermediate-to-Package.targets"/>
+        <File Path="..\package\JNetInterface.Package.props"/>
     </Folder>
     <Folder Name="/Package/CorePackage/">
-        <File Path="..\package\Rxmxnx.JNetInterface.Core\CompatibilitySuppressions.xml" />
-        <File Path="..\package\Rxmxnx.JNetInterface.Core\PACKAGE.md" />
+        <File Path="..\package\Rxmxnx.JNetInterface.Core\CompatibilitySuppressions.xml"/>
+        <File Path="..\package\Rxmxnx.JNetInterface.Core\PACKAGE.md"/>
     </Folder>
     <Folder Name="/SourceGenerator/">
-        <Project Path="SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj" />
+        <Project
+                Path="SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj"/>
     </Folder>
     <Folder Name="/Test/">
-        <Project Path="Test/Rxmxnx.Patch.Tests/Rxmxnx.Patch.Tests.csproj" />
-        <Project Path="Test\Rxmxnx.JNetInterface.Base.Tests\Rxmxnx.JNetInterface.Base.Tests.csproj" />
-        <Project Path="Test\Rxmxnx.JNetInterface.Extensions.Tests\Rxmxnx.JNetInterface.Extensions.Tests.csproj" />
-        <Project Path="Test\Rxmxnx.JNetInterface.Implementation.Tests\Rxmxnx.JNetInterface.Implementation.Tests.csproj" />
-        <Project Path="Test\Rxmxnx.JNetInterface.Native.Tests\Rxmxnx.JNetInterface.Native.Tests.csproj" />
-        <Project Path="Test\Rxmxnx.JNetInterface.Primitives.Tests\Rxmxnx.JNetInterface.Primitives.Tests.csproj" />
-        <File Path="Test\Tests.props" />
-        <File Path="Test\CommonTests.props" />
-        <File Path="Test\Tests.targets" />
-        <File Path="Test\x86.runsettings" />
-        <File Path="Test\Directory.Build.props" />
+        <Project Path="Test/Rxmxnx.Patch.Tests/Rxmxnx.Patch.Tests.csproj"/>
+        <Project Path="Test\Rxmxnx.JNetInterface.Base.Tests\Rxmxnx.JNetInterface.Base.Tests.csproj"/>
+        <Project Path="Test\Rxmxnx.JNetInterface.Extensions.Tests\Rxmxnx.JNetInterface.Extensions.Tests.csproj"/>
+        <Project Path="Test\Rxmxnx.JNetInterface.FFI.Tests\Rxmxnx.JNetInterface.FFI.Tests.csproj"/>
+        <Project
+                Path="Test\Rxmxnx.JNetInterface.Implementation.Tests\Rxmxnx.JNetInterface.Implementation.Tests.csproj"/>
+        <Project Path="Test\Rxmxnx.JNetInterface.Native.Tests\Rxmxnx.JNetInterface.Native.Tests.csproj"/>
+        <Project Path="Test\Rxmxnx.JNetInterface.Primitives.Tests\Rxmxnx.JNetInterface.Primitives.Tests.csproj"/>
+        <File Path="Test\Tests.props"/>
+        <File Path="Test\CommonTests.props"/>
+        <File Path="Test\Tests.targets"/>
+        <File Path="Test\x86.runsettings"/>
+        <File Path="Test\Directory.Build.props"/>
     </Folder>
     <Folder Name="/Test/Proxies/">
-        <Project Path="Test\Proxies\Rxmxnx.JNetInterface.Implementation.Tests.Proxies\Rxmxnx.JNetInterface.Implementation.Tests.Proxies.csproj" />
-        <Project Path="Test\Proxies\Rxmxnx.JNetInterface.Native.Tests.Proxies\Rxmxnx.JNetInterface.Native.Tests.Proxies.csproj" />
-        <File Path="Test\Proxies\CommonNativeProxies.props" />
-        <File Path="Test\Proxies\Native\NativeProxies.props" />
+        <Project
+                Path="Test\Proxies\Rxmxnx.JNetInterface.Implementation.Tests.Proxies\Rxmxnx.JNetInterface.Implementation.Tests.Proxies.csproj"/>
+        <Project
+                Path="Test\Proxies\Rxmxnx.JNetInterface.Native.Tests.Proxies\Rxmxnx.JNetInterface.Native.Tests.Proxies.csproj"/>
+        <Project
+                Path="Test\Proxies\Rxmxnx.JNetInterface.NativeLibrary.Tests.Proxies\Rxmxnx.JNetInterface.NativeLibrary.Tests.Proxies.csproj"/>
+        <File Path="Test\Proxies\CommonNativeProxies.props"/>
+        <File Path="Test\Proxies\Native\NativeProxies.props"/>
     </Folder>
 </Solution>
