@@ -1,5 +1,8 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+    <PropertyGroup>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="$(MSBuildThisFileDirectory)Rxmxnx.Patch.Tests\Rxmxnx.Patch.Tests.csproj">
             <PrivateAssets>all</PrivateAssets>
@@ -7,7 +10,6 @@
             <SetTargetFramework>TargetFramework=netstandard2.0</SetTargetFramework>
             <Private>False</Private>
         </ProjectReference>
-        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     </ItemGroup>
 
     <UsingTask TaskName="XUnitDisplayNamePatch"
