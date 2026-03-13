@@ -82,7 +82,7 @@ jobs:
           Architectures: armhf
           EOF'
           fi
-      - name: Setup Mono Framework and NativeAOT pre-requisites (Linux)
+      - name: Setup NativeAOT pre-requisites (Linux)
         if: runner.os == 'Linux'
         run: |
           sudo dpkg --add-architecture arm64
@@ -91,12 +91,14 @@ jobs:
           sudo bash -c 'cat > /etc/apt/sources.list.d/arm64.list <<EOF
           deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports/ noble main restricted
           deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted
+          deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports noble-security main restricted universe multiverse
           deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports/ noble-backports main restricted universe multiverse
           EOF'
           
           sudo bash -c 'cat > /etc/apt/sources.list.d/armhf.list <<EOF
           deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports/ noble main restricted
           deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted
+          deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports noble-security main restricted universe multiverse
           deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports/ noble-backports main restricted universe multiverse
           EOF'
           
@@ -104,7 +106,6 @@ jobs:
           sudo sed -i -e 's/deb mirror/deb [arch=amd64] mirror/g' /etc/apt/sources.list
           
           sudo apt update 
-          sudo apt upgrade --assume-yes
           sudo apt-get install coreutils clang llvm zlib1g-dev libkrb5-dev libssl-dev \
             qemu-user qemu-user-static binfmt-support libicu74:arm64 libicu74:armhf \
             libstdc++-14-dev:arm64 libstdc++-14-dev:arm64 \

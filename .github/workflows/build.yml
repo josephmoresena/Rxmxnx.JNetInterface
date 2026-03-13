@@ -149,7 +149,7 @@ jobs:
     steps:
       - name: Java FreeBSD Libraries
         uses: actions/cache/restore@v5
-        if: needs.freebsd-actions.result == 'success' && needs.cross-actions.result == 'success'
+        if: needs.freebsd-actions.result == 'success'
         with:
           path: ./artifacts-java
           key: internal-freebsd-${{ github.run_id }}
@@ -157,7 +157,7 @@ jobs:
           enableCrossOsArchive: true
       - name: Java FreeBSD arm64 Libraries
         uses: actions/cache/restore@v5
-        if: needs.freebsd-arm64-actions.result == 'success' && needs.cross-actions.result == 'success'
+        if: needs.freebsd-arm64-actions.result == 'success'
         with:
           path: ./artifacts-java
           key: internal-freebsd-${{ github.run_id }}
@@ -188,7 +188,7 @@ jobs:
           fail-on-cache-miss: true
           enableCrossOsArchive: true
       - name: Create Java Artifact
-        if: needs.freebsd-actions.result == 'success' || needs.cross-actions.result == 'success'
+        if: needs.freebsd-actions.result == 'success' || needs.freebsd-arm64-actions.result == 'success' || needs.cross-actions.result == 'success'
         uses: actions/upload-artifact@v6
         with:
           name: Java-Artifact
