@@ -7,6 +7,7 @@
             <SetTargetFramework>TargetFramework=netstandard2.0</SetTargetFramework>
             <Private>False</Private>
         </ProjectReference>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     </ItemGroup>
 
     <UsingTask TaskName="XUnitDisplayNamePatch"
