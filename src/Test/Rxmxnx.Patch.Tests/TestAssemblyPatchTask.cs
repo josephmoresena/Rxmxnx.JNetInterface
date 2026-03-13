@@ -64,7 +64,7 @@ public abstract class TestAssemblyPatchTask : MsBuildTask
 	// ReSharper disable once MemberCanBePrivate.Global
 	protected void AssemblyPatch(String assemblyPath, Boolean withDebugSymbols)
 	{
-		DefaultAssemblyResolver resolver = new();
+		IntermediateResolver resolver = new(this.OutputPath!, this.TestAssemblyName!);
 		ReaderParameters readParameters =
 			new() { ReadWrite = true, ReadSymbols = withDebugSymbols, AssemblyResolver = resolver, };
 		using AssemblyDefinition? assembly = AssemblyDefinition.ReadAssembly(assemblyPath, readParameters);
