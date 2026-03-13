@@ -26,6 +26,7 @@
     <Folder Name="/Global/">
         <File Path="..\.github\workflows\cross-actions.yml"/>
         <File Path="..\.github\workflows\freebsd-actions.yml"/>
+        <File Path="..\.github\workflows\freebsd-arm64-actions.yml"/>
         <File Path="..\.github\workflows\release.yml"/>
         <File Path="..\.github\workflows\android-actions.yml"/>
         <File Path="..\.github\workflows\build.yml"/>

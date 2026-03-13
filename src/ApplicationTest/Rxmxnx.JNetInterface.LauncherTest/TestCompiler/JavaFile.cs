@@ -242,10 +242,12 @@ public class HelloDotnet {
         
         if (dotnetVersion != null && !dotnetVersion.equals("""")) 
             libraryName += '.' + dotnetVersion;
-        else if (reflectionFreeMode || libraryName.contains("".FreeBSD""))
+        else if (libraryName.contains("".FreeBSD""))
             libraryName += "".net9.0"";
+        else if (reflectionFreeMode)
+            libraryName += "".net8.0"";
         else
-            libraryName += ""net10.0"";
+            libraryName += "".net10.0"";
         
         if (reflectionFreeMode)
             libraryName += "".RFM"";

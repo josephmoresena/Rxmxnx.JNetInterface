@@ -71,6 +71,14 @@ jobs:
       run_tests: false
       build_artifacts: true
       package_version: ${{ github.event.release.tag_name }}
+  freebsd-arm64-actions:
+    name: Build Native-AOT FreeBSD arm64 Artifacts
+    needs: [ build ]
+    uses: ./.github/workflows/freebsd-arm64-actions.yml
+    with:
+      run_tests: false
+      build_artifacts: true
+      package_version: ${{ github.event.release.tag_name }}
   cross-actions:
     name: Build Native-AOT Windows, Linux and macOS Artifacts
     needs: [ build ]
@@ -82,7 +90,7 @@ jobs:
   
   push-package:
     name: Push NuGet Package Release
-    needs: [ android-actions, freebsd-actions, cross-actions ]
+    needs: [ android-actions, freebsd-actions, freebsd-arm64-actions, cross-actions ]
     runs-on: ubuntu-latest
     if: always()
     steps:
@@ -99,6 +107,14 @@ jobs:
         with:
           path: ./artifacts-java
           key: internal-freebsd-${{ github.run_id }}
+          fail-on-cache-miss: true
+          enableCrossOsArchive: true
+      - name: Java FreeBSD arm64 Libraries
+        uses: actions/cache/restore@v5
+        if: needs.freebsd-arm64-actions.result == 'success' && needs.cross-actions.result == 'success'
+        with:
+          path: ./artifacts-java
+          key: internal-freebsd-arm64-${{ github.run_id }}
           fail-on-cache-miss: true
           enableCrossOsArchive: true
       - name: Java MacOS Libraries
@@ -145,6 +161,7 @@ jobs:
         if: |
           needs.android-actions.result == 'success' &&
           needs.freebsd-actions.result == 'success' &&
+          needs.freebsd-arm64-actions.result == 'success' &&
           needs.cross-actions.result == 'success'
         run: |
           dotnet nuget push *.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
@@ -155,7 +172,8 @@ jobs:
         run: |
           echo "Deleting caches..."
           gh cache delete "internal-nuget-${{ github.run_id }}" || true
-          gh cache delete "internal-freebsd-bin-${{ github.run_id }}" || true
-          gh cache delete "internal-Windows-bin-${{ github.run_id }}" || true
-          gh cache delete "internal-Linux-bin-${{ github.run_id }}" || true
-          gh cache delete "internal-macOS-bin-${{ github.run_id }}" || true
+          gh cache delete "internal-freebsd-${{ github.run_id }}" || true
+          gh cache delete "internal-freebsd-arm64-${{ github.run_id }}" || true
+          gh cache delete "internal-Windows-${{ github.run_id }}" || true
+          gh cache delete "internal-Linux-${{ github.run_id }}" || true
+          gh cache delete "internal-macOS-${{ github.run_id }}" || true

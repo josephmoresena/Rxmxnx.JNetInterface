@@ -1,4 +1,4 @@
-name: FreeBSD Actions
+name: FreeBSD Arm64 Actions
 on:
   workflow_call:
     inputs:
@@ -49,6 +49,7 @@ jobs:
         id: vm
         uses: vmactions/freebsd-vm@v1.4.3
         with:
+          arch: aarch64
           release: "14.3"
           usesh: true
           copyback: false
@@ -56,7 +57,7 @@ jobs:
           envs: 'PackageVersion SHOW_DIAGNOSTICS JNETINTERFACE_ONLY_NATIVE_TEST JNETINTERFACE_JNI_CHECK'
           prepare: |
             #mkdir -p /usr/local/etc/pkg/repos
-            #echo 'FreeBSD: { url: "pkg+http://pkg.freebsd.org/FreeBSD:14:amd64/latest" }' > /usr/local/etc/pkg/repos/FreeBSD.conf
+            #echo 'FreeBSD: { url: "pkg+http://pkg.freebsd.org/FreeBSD:14:arm64/latest" }' > /usr/local/etc/pkg/repos/FreeBSD.conf
             
             pkg update -f 
             pkg install -y python311 py311-pillow sqlite3 unixODBC libgdiplus zip ca_root_nss dotnet openjdk8 openjdk11 openjdk17 openjdk21 openjdk25
@@ -78,7 +79,7 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE;
           cd ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest;
-          dotnet publish -r freebsd.14-x64;
+          dotnet publish -r freebsd.14-arm64;
       - name: Run launcher - Compile (FreeBSD 14.5)
         if: inputs.build_artifacts == true
         shell: freebsd {0}
@@ -91,7 +92,7 @@ jobs:
         if: inputs.build_artifacts == true && inputs.package_version == ''
         uses: actions/upload-artifact@v6
         with:
-          name: FreeBSD.14-Artifact-Logs
+          name: FreeBSD.14.arm64-Artifact-Logs
           path: |
             ./artifacts/native/*
             ./artifacts-java/native/*
@@ -103,7 +104,7 @@ jobs:
             "./artifacts/native/*"
             "./artifacts-java/native/*"
           )
-          ./ZipAndClean.ps1 -ZipName "FreeBSD.14-Assets-Logs.zip" -Patterns $logPatterns
+          ./ZipAndClean.ps1 -ZipName "FreeBSD.14.arm64-Assets-Logs.zip" -Patterns $logPatterns
 
       - name: Run launcher - Run (FreeBSD)
         if: inputs.build_artifacts == true
@@ -118,12 +119,12 @@ jobs:
           cd $GITHUB_WORKSPACE;
           rm ./artifacts-java/*.jar;
           rm -rf ./artifacts-java/native
-      - name: Cache Java FreeBSD Libraries
+      - name: Cache Java FreeBSD arm64 Libraries
         if: inputs.build_artifacts == true
         uses: actions/cache/save@v5
         with:
           path: ./artifacts-java
-          key: internal-freebsd-${{ github.run_id }}
+          key: internal-freebsd-arm64-${{ github.run_id }}
           enableCrossOsArchive: true
       - name: Remove Java Libraries File
         if: inputs.build_artifacts == true
@@ -135,7 +136,7 @@ jobs:
         if: inputs.build_artifacts == true && inputs.package_version == ''
         uses: actions/upload-artifact@v6
         with:
-          name: FreeBSD.14-Artifact
+          name: FreeBSD.14.arm64-Artifact
           path: |
             ./artifacts/*.class
             ./artifacts/*NAOT*
@@ -146,10 +147,10 @@ jobs:
         run: |
           $binPatterns = @(
             "./artifacts/*.class",
-            "./artifacts/*x64*NAOT*",
-            "./artifacts/*x64*RFM*"
+            "./artifacts/*arm64*NAOT*",
+            "./artifacts/*arm64*RFM*"
           )
-          ./ZipAndClean.ps1 -ZipName "FreeBSD.14-x64-Assets.zip" -Patterns $binPatterns
+          ./ZipAndClean.ps1 -ZipName "FreeBSD.14-arm64-Assets.zip" -Patterns $binPatterns
 
       - name: Upload Release Assets
         if: inputs.build_artifacts == true && inputs.package_version != ''

@@ -33,7 +33,7 @@ jobs:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Cache SonarCloud packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/sonar/cache
           key: ${{ runner.os }}-sonar
@@ -41,7 +41,7 @@ jobs:
 
       - name: Cache SonarCloud scanner
         id: cache-sonar-scanner
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ./.sonar/scanner
           key: ${{ runner.os }}-sonar-scanner
@@ -128,6 +128,12 @@ jobs:
     with:
       run_tests: true
       build_artifacts: ${{ github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' }}
+  freebsd-arm64-actions:
+    needs: [ build ]
+    uses: ./.github/workflows/freebsd-arm64-actions.yml
+    with:
+      run_tests: true
+      build_artifacts: ${{ github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' }}
   cross-actions:
     needs: [ build ]
     uses: ./.github/workflows/cross-actions.yml
@@ -144,6 +150,14 @@ jobs:
       - name: Java FreeBSD Libraries
         uses: actions/cache/restore@v5
         if: needs.freebsd-actions.result == 'success' && needs.cross-actions.result == 'success'
+        with:
+          path: ./artifacts-java
+          key: internal-freebsd-${{ github.run_id }}
+          fail-on-cache-miss: true
+          enableCrossOsArchive: true
+      - name: Java FreeBSD arm64 Libraries
+        uses: actions/cache/restore@v5
+        if: needs.freebsd-arm64-actions.result == 'success' && needs.cross-actions.result == 'success'
         with:
           path: ./artifacts-java
           key: internal-freebsd-${{ github.run_id }}
@@ -188,8 +202,9 @@ jobs:
         run: |
           echo "Deleting caches..."
           gh cache delete "internal-nuget-${{ github.run_id }}" || true
-          gh cache delete "internal-freebsd-bin-${{ github.run_id }}" || true
-          gh cache delete "internal-Windows-bin-${{ github.run_id }}" || true
-          gh cache delete "internal-Linux-bin-${{ github.run_id }}" || true
-          gh cache delete "internal-macOS-bin-${{ github.run_id }}" || true
-          gh cache delete "internal-tests-bin-${{ github.run_id }}" || true
+          gh cache delete "internal-freebsd-${{ github.run_id }}" || true
+          gh cache delete "internal-freebsd-arm64-${{ github.run_id }}" || true
+          gh cache delete "internal-Windows-${{ github.run_id }}" || true
+          gh cache delete "internal-Linux-${{ github.run_id }}" || true
+          gh cache delete "internal-macOS-${{ github.run_id }}" || true
+          gh cache delete "internal-tests-${{ github.run_id }}" || true
