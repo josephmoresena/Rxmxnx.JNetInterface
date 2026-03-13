@@ -3,9 +3,8 @@
     <Import Project="..\..\CommonTests.props"/>
 
     <ItemGroup>
-        <ProjectReference Include="..\Rxmxnx.JNetInterface.Native.Tests.Proxies\Rxmxnx.JNetInterface.Native.Tests.Proxies.csproj"/>
-        <ProjectReference Include="..\..\..\Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj"/>
         <ProjectReference Include="..\..\..\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.Native.Tests.Proxies\Rxmxnx.JNetInterface.Native.Tests.Proxies.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
