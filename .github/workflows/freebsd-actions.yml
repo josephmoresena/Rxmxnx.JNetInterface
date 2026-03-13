@@ -47,7 +47,7 @@ jobs:
           fail-on-cache-miss: true
       - name: Init FreeBSD 14.3 VM
         id: vm
-        uses: vmactions/freebsd-vm@v1.3.6
+        uses: vmactions/freebsd-vm@v1.4.2
         with:
           release: "14.3"
           usesh: true
@@ -94,12 +94,14 @@ jobs:
           name: FreeBSD.14-Artifact-Logs
           path: |
             ./artifacts/native/*
+            ./artifacts-java/native/*
       - name: Create Release Logs Assets
         if: inputs.build_artifacts == true && inputs.package_version != ''
         shell: pwsh
         run: |
           $logPatterns = @(
             "./artifacts/native/*"
+            "./artifacts-java/native/*"
           )
           ./ZipAndClean.ps1 -ZipName "FreeBSD.14-Assets-Logs.zip" -Patterns $logPatterns
 
@@ -115,6 +117,7 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE;
           rm ./artifacts-java/*.jar;
+          rm -rf ./artifacts-java/native
       - name: Cache Java FreeBSD Libraries
         if: inputs.build_artifacts == true
         uses: actions/cache/save@v5

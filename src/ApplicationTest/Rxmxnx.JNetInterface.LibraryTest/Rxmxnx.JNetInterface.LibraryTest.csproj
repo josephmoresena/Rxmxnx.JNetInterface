@@ -4,6 +4,11 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
+        <IsFreeBSD Condition="$([MSBuild]::IsOSPlatform('FreeBSD'))">True</IsFreeBSD>
+        <IsNetBSD Condition="$([MSBuild]::IsOSPlatform('NetBSD'))">True</IsNetBSD>
+        <IsSolaris Condition="$([MSBuild]::IsOSPlatform('SunOS'))">True</IsSolaris>
+        <IsSolaris Condition="$([MSBuild]::IsOSPlatform('IllumOS'))">True</IsSolaris>
+        <IsSolaris Condition="$([MSBuild]::IsOSPlatform('Solaris'))">True</IsSolaris>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(JNI_LIBRARY)' == 'true'">
@@ -12,6 +17,9 @@
         <AssemblyName Condition="$(IsWindowsHost) == 'true'">HelloJni</AssemblyName>
         <AssemblyName Condition="$(IsWindowsHost) != 'true'">libHelloJni</AssemblyName>
         <!-- Assembly name must specify which platform it was compiled for -->
+        <AssemblyName Condition="'$(IsFreeBSD)' == 'True'">$(AssemblyName).FreeBSD</AssemblyName>
+        <AssemblyName Condition="'$(IsNetBSD)' == 'True'">$(AssemblyName).NetBSD</AssemblyName>
+        <AssemblyName Condition="'$(IsSolaris)' == 'True'">$(AssemblyName).Solaris</AssemblyName>
         <AssemblyName Condition="$(RuntimeIdentifier.ToLower().EndsWith('x86'))">$(AssemblyName).x86</AssemblyName>
         <AssemblyName Condition="$(RuntimeIdentifier.ToLower().EndsWith('x64'))">$(AssemblyName).x64</AssemblyName>
         <AssemblyName Condition="$(RuntimeIdentifier.ToLower().EndsWith('arm'))">$(AssemblyName).arm</AssemblyName>

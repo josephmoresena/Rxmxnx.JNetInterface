@@ -4,6 +4,7 @@
 
     <PropertyGroup>
         <SelfContained Condition="'$(TargetFramework)' == 'net7.0'">true</SelfContained>
+        <StripSymbols Condition="'$(TargetFramework)' == 'net7.0'">true</StripSymbols>
     </PropertyGroup>
 
     <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">

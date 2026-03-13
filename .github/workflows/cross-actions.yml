@@ -221,12 +221,14 @@ jobs:
           name: ${{ runner.os }}-Artifact-Logs
           path: |
             ./artifacts/native/*
+            ./artifacts-java/native/*
       - name: Create Release Logs Assets
         if: inputs.build_artifacts == true && inputs.package_version != ''
         shell: pwsh
         run: |
           $logPatterns = @(
             "./artifacts/native/*"
+            "./artifacts-java/native/*"
           )
           ./ZipAndClean.ps1 -ZipName "${{ runner.os }}-Assets-Logs.zip" -Patterns $logPatterns
       - name: Remove Native Logs
@@ -234,7 +236,10 @@ jobs:
         shell: pwsh
         run: |
           if (Test-Path ./artifacts/native) {
-              Remove-Item -Recurse -Force ./artifacts/Native/* -ErrorAction SilentlyContinue
+              Remove-Item -Recurse -Force ./artifacts/native/* -ErrorAction SilentlyContinue
+          }
+          if (Test-Path ./artifacts-java/native) {
+              Remove-Item -Recurse -Force ./artifacts-java/native/* -ErrorAction SilentlyContinue
           }
 
       - name: Run launcher (run - Java Archive)

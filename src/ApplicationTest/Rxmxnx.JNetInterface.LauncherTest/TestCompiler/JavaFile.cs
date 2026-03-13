@@ -213,11 +213,22 @@ public class HelloDotnet {
         String libraryPath = System.getProperty(""java.library.path"");
         String dotnetVersion = System.getProperty(""dotnet.runtime.version"");
         String arch = System.getProperty(""os.arch"");
+        String osName = System.getProperty(""os.name"");
         
         currentPath = currentPath.substring(0, currentPath.length() - 2);
         
         if (!libraryPath.equals(currentPath) && !libraryPath.contains(currentPath + File.pathSeparator) && !libraryPath.contains(File.pathSeparator + currentPath))
             System.setProperty(""java.library.path"", currentPath + File.pathSeparator + libraryPath);
+        
+        if (osName != null) {
+            osName = osName.toLowerCase();
+            if (osName.contains(""freebsd"")) {
+                libraryName += "".FreeBSD"";
+            else if (osName.contains(""netbsd"")) {
+                libraryName += "".NetBSD"";
+            else if (osName.contains(""sunos"") || osName.contains(""solaris"") || os.contains(""illumos"")) {
+                libraryName += "".Solaris"";
+        }
         
         if (arch.equals(""amd64"") || arch.equals(""x86_64""))
             libraryName += "".x64"";
