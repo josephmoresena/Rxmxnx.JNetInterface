@@ -222,11 +222,11 @@ public class HelloDotnet {
         
         if (osName != null) {
             osName = osName.toLowerCase();
-            if (osName.contains(""freebsd"")) {
+            if (osName.contains(""freebsd""))
                 libraryName += "".FreeBSD"";
-            else if (osName.contains(""netbsd"")) {
+            else if (osName.contains(""netbsd""))
                 libraryName += "".NetBSD"";
-            else if (osName.contains(""sunos"") || osName.contains(""solaris"") || os.contains(""illumos"")) {
+            else if (osName.contains(""sunos"") || osName.contains(""solaris"") || os.contains(""illumos""))
                 libraryName += "".Solaris"";
         }
         
