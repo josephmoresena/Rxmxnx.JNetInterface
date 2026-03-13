@@ -97,7 +97,7 @@ public abstract class TestAssemblyPatchTask : MsBuildTask
 			String srcIntermediate = Path.Combine("src", "Intermediate", "{0}");
 			this._log = log;
 
-			this._log.LogMessage("Resolver outputPath: {0} assemblyName: {1} pattern: {2} intermediateFormat: {3}",
+			this._log.LogError("Resolver outputPath: {0} assemblyName: {1} pattern: {2} intermediateFormat: {3}",
 			                     outputPath, assemblyName, srcTestPath, srcIntermediate);
 
 			if (!outputPath.Contains(srcTestPath)) return;
@@ -112,7 +112,7 @@ public abstract class TestAssemblyPatchTask : MsBuildTask
 			}
 			catch
 			{
-				this._log.LogMessage("Resolver missing assemblyName: {0} directory: {1}", name.Name, String.Format(this._formatPath!, name.Name));
+				this._log.LogError("Resolver missing assemblyName: {0} directory: {1}", name.Name, String.Format(this._formatPath!, name.Name));
 
 				if (!name.Name.Contains(".Intermediate") || String.IsNullOrWhiteSpace(this._formatPath)) throw;
 				this.AddSearchDirectory(String.Format(this._formatPath!, name.Name));
