@@ -1,9 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-    
-    <Import Project="..\NativeProxies.props"/>
-    
-    <PropertyGroup>
-        <DefineConstants>$(DefineConstants);DISABLE_CREATE_VM</DefineConstants>
-    </PropertyGroup>
-    
-</Project>
