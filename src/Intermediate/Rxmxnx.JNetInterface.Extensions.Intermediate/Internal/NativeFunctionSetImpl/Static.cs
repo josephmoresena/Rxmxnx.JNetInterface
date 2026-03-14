@@ -209,11 +209,12 @@ internal partial class NativeFunctionSetImpl
 	/// <summary>
 	/// <c>Thread.isVirtual()</c> definition.
 	/// </summary>
-	public static readonly JFieldDefinition<JBoolean> IsVirtualDefinition = new(NativeFunctionSet.IsVirtualMethodInfo);
+	public static readonly JFunctionDefinition<JBoolean>.Parameterless IsVirtualDefinition =
+		new(NativeFunctionSet.IsVirtualMethodInfo);
 	/// <summary>
 	/// <c>Class.getModule()</c> definition.
 	/// </summary>
-	public static readonly JFieldDefinition<JModuleObject> GetModuleDefinition =
+	public static readonly JFunctionDefinition<JModuleObject>.Parameterless GetModuleDefinition =
 		new(NativeFunctionSet.GetModuleMethodInfo);
 
 	/// <summary>

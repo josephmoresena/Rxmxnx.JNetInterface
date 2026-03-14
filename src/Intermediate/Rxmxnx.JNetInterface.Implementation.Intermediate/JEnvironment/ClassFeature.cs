@@ -61,8 +61,7 @@ partial class JEnvironment
 				return this.GetModule(classRef);
 			}
 			if (JVirtualMachine.AndroidApiLevel > 0 || this.VirtualMachine.Version < JRuntimeVersion.J9) return default;
-			//TODO: Call java function.
-			return default;
+			return EnvironmentCache.GetModule(this, jClass);
 		}
 		public void ThrowNew(JClassObject jClass, String? message, Boolean throwException)
 		{

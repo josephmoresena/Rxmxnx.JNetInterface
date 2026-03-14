@@ -18,6 +18,7 @@ partial class JEnvironment
 		/// </summary>
 		private static readonly IFixedContext<Byte>.IDisposable zeroByteContext =
 			default(Memory<Byte>).GetFixedContext();
+
 		/// <summary>
 		/// Indicates whether <paramref name="jGlobal"/> is a main global object or default.
 		/// </summary>
@@ -90,6 +91,25 @@ partial class JEnvironment
 					JTrace.SetField<JShort>(jLocal, jClass, definition, bytes);
 					break;
 			}
+		}
+		/// <summary>
+		/// Retrieves the <see cref="JModuleObject"/> from <paramref name="jClass"/>.
+		/// </summary>
+		/// <param name="cache">A <see cref="EnvironmentCache"/> instance.</param>
+		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+		/// <returns>A <see cref="JModuleObject"/> instance.</returns>
+		/// <exception cref="InvalidOperationException">
+		/// Throws if JNI version doesn't support modules.
+		/// </exception>
+		private static JModuleObject? GetModule(EnvironmentCache cache, JClassObject jClass)
+		{
+			JClassObject jClassClass = jClass.Class;
+			JFunctionDefinition functionDefinition = NativeFunctionSetImpl.GetModuleDefinition;
+			using INativeTransaction jniTransaction = cache.GetInstanceTransaction(
+				jClassClass, jClass, functionDefinition, out JObjectLocalRef localRef, out JMethodId methodId);
+			JTrace.CallMethod(jClass, jClassClass, functionDefinition, false);
+			return cache.CallObjectFunction<JModuleObject>(functionDefinition, localRef, default, default,
+			                                               jniTransaction, methodId);
 		}
 		/// <summary>
 		/// Retrieves the <c>boolean</c> <see cref="JniMethodInfo"/> instance for <paramref name="arrayFunction"/>.

@@ -68,8 +68,8 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 			JObjectLocalRef localRef = jniTransaction.Add(jThread);
 			return nativeInterface.IsVirtualThread(this.Reference, localRef).Value;
 		}
-		//TODO: Call java function.
-		return default;
+		if (JVirtualMachine.AndroidApiLevel > 0 || this.VirtualMachine.Version < JRuntimeVersion.J21) return default;
+		return this._cache.IsVirtual(jThread);
 	}
 
 	/// <inheritdoc/>

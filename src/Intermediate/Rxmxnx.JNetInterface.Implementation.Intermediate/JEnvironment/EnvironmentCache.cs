@@ -206,5 +206,16 @@ partial class JEnvironment
 				                                      $"Usable stack bytes should be greater or equal to {min}.");
 			this.MaxStackBytes = value;
 		}
+		/// <inheritdoc cref="IEnvironment.IsVirtual(JThreadObject)"/>
+		public Boolean IsVirtual(JThreadObject jThread)
+		{
+			Span<JBoolean> result = stackalloc JBoolean[1];
+			Span<Byte> bytes = MemoryMarshal.AsBytes(result);
+			JFunctionDefinition functionDefinition = NativeFunctionSetImpl.IsVirtualDefinition;
+			using INativeTransaction jniTransaction = this.GetInstanceTransaction(
+				jThread.Class, jThread, functionDefinition, out JObjectLocalRef localRef, out JMethodId methodId);
+			this.CallPrimitiveFunction(bytes, functionDefinition, localRef, default, [], jniTransaction, methodId);
+			return result[0].Value;
+		}
 	}
 }

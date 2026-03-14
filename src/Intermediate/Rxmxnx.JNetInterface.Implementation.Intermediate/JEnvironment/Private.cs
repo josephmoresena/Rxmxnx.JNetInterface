@@ -296,6 +296,7 @@ partial class JEnvironment
 		String message = resource.MainClassGlobalError(className);
 		throw new NotSupportedException(message);
 	}
+
 	/// <summary>
 	/// Indicates whether validation of <paramref name="jGlobal"/> can be avoided.
 	/// </summary>
