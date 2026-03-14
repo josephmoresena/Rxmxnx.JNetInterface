@@ -207,6 +207,9 @@ partial class JEnvironment
 			this.MaxStackBytes = value;
 		}
 		/// <inheritdoc cref="IEnvironment.IsVirtual(JThreadObject)"/>
+#if !PACKAGE
+		[ExcludeFromCodeCoverage]
+#endif
 		public Boolean IsVirtual(JThreadObject jThread)
 		{
 			Span<JBoolean> result = stackalloc JBoolean[1];

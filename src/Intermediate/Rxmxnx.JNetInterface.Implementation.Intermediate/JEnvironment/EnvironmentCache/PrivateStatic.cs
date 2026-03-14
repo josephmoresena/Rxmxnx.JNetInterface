@@ -98,9 +98,9 @@ partial class JEnvironment
 		/// <param name="cache">A <see cref="EnvironmentCache"/> instance.</param>
 		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 		/// <returns>A <see cref="JModuleObject"/> instance.</returns>
-		/// <exception cref="InvalidOperationException">
-		/// Throws if JNI version doesn't support modules.
-		/// </exception>
+#if !PACKAGE
+		[ExcludeFromCodeCoverage]
+#endif
 		private static JModuleObject? GetModule(EnvironmentCache cache, JClassObject jClass)
 		{
 			JClassObject jClassClass = jClass.Class;
