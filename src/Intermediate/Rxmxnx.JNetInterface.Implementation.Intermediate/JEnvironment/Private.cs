@@ -298,6 +298,93 @@ partial class JEnvironment
 	}
 
 	/// <summary>
+	/// Retrieves field identifier for <paramref name="definition"/> in <paramref name="classRef"/>.
+	/// </summary>
+	/// <param name="definition">A <see cref="JFieldDefinition"/> instance.</param>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <returns>A <see cref="JFieldId"/> identifier.</returns>
+	private unsafe JFieldId GetFieldId(JFieldDefinition definition, JClassLocalRef classRef)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetFieldIdInfo);
+		JFieldId fieldId;
+		fixed (Byte* namePtr = &MemoryMarshal.GetReference(definition.Name.AsSpan()))
+		fixed (Byte* signaturePtr = &MemoryMarshal.GetReference(definition.Descriptor.AsSpan()))
+		{
+			fieldId = nativeInterface.InstanceFieldFunctions.GetFieldId.GetId(
+				this.Reference, classRef, namePtr, signaturePtr);
+		}
+		JTrace.GetAccessibleId(classRef, definition, fieldId);
+		if (fieldId == default) this._cache.CheckJniError();
+		return fieldId;
+	}
+	/// <summary>
+	/// Retrieves static field identifier for <paramref name="definition"/> in <paramref name="classRef"/>.
+	/// </summary>
+	/// <param name="definition">A <see cref="JFieldDefinition"/> instance.</param>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <param name="withNoCheckError">Indicates whether <see cref="CheckJniError"/> should not be called.</param>
+	/// <returns>A <see cref="JFieldId"/> identifier.</returns>
+	private unsafe JFieldId GetStaticFieldId(JFieldDefinition definition, JClassLocalRef classRef,
+		Boolean withNoCheckError = false)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetStaticFieldIdInfo);
+		JFieldId fieldId;
+		fixed (Byte* namePtr = &MemoryMarshal.GetReference(definition.Name.AsSpan()))
+		fixed (Byte* signaturePtr = &MemoryMarshal.GetReference(definition.Descriptor.AsSpan()))
+		{
+			fieldId = nativeInterface.StaticFieldFunctions.GetFieldId.GetId(
+				this.Reference, classRef, namePtr, signaturePtr);
+		}
+		JTrace.GetAccessibleId(classRef, definition, fieldId);
+		if (fieldId == default && !withNoCheckError) this._cache.CheckJniError();
+		return fieldId;
+	}
+	/// <summary>
+	/// Retrieves method identifier for <paramref name="definition"/> in <paramref name="classRef"/>.
+	/// </summary>
+	/// <param name="definition">A <see cref="JCallDefinition"/> instance.</param>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <returns>A <see cref="JMethodId"/> identifier.</returns>
+	private unsafe JMethodId GetMethodId(JCallDefinition definition, JClassLocalRef classRef)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetMethodIdInfo);
+		JMethodId methodId;
+		fixed (Byte* namePtr = &MemoryMarshal.GetReference(definition.Name.AsSpan()))
+		fixed (Byte* signaturePtr = &MemoryMarshal.GetReference(definition.Descriptor.AsSpan()))
+		{
+			methodId = nativeInterface.InstanceMethodFunctions.MethodFunctions.GetMethodId.GetId(
+				this.Reference, classRef, namePtr, signaturePtr);
+		}
+		JTrace.GetAccessibleId(classRef, definition, methodId);
+		if (methodId == default) this._cache.CheckJniError();
+		return methodId;
+	}
+	/// <summary>
+	/// Retrieves static method identifier for <paramref name="definition"/> in <paramref name="classRef"/>.
+	/// </summary>
+	/// <param name="definition">A <see cref="JCallDefinition"/> instance.</param>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <returns>A <see cref="JMethodId"/> identifier.</returns>
+	private unsafe JMethodId GetStaticMethodId(JCallDefinition definition, JClassLocalRef classRef)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetStaticMethodIdInfo);
+		JMethodId methodId;
+		fixed (Byte* namePtr = &MemoryMarshal.GetReference(definition.Name.AsSpan()))
+		fixed (Byte* signaturePtr = &MemoryMarshal.GetReference(definition.Descriptor.AsSpan()))
+		{
+			methodId = nativeInterface.StaticMethodFunctions.GetMethodId.GetId(
+				this.Reference, classRef, namePtr, signaturePtr);
+		}
+		JTrace.GetAccessibleId(classRef, definition, methodId);
+		if (methodId == default) this._cache.CheckJniError();
+		return methodId;
+	}
+
+	/// <summary>
 	/// Indicates whether validation of <paramref name="jGlobal"/> can be avoided.
 	/// </summary>
 	/// <param name="cache">A <see cref="EnvironmentCache"/> instance.</param>
@@ -314,7 +401,6 @@ partial class JEnvironment
 			return true;
 		return Random.Shared.Next(0, 10) > (!isWeak ? 5 : 2);
 	}
-
 	/// <summary>
 	/// Retrieves the <see cref="JClassTypeMetadata"/> instance from <paramref name="jClass"/>
 	/// superclass.

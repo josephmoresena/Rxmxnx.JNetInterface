@@ -11,7 +11,7 @@ public sealed class ClassParseTests
 	internal void ClassTest(Boolean lowerVersion = false)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
-		if (lowerVersion) proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
+		if (lowerVersion) proxyEnv.GetVersion().Returns((Int32)JRuntimeVersion.SEd4);
 		try
 		{
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
@@ -39,7 +39,7 @@ public sealed class ClassParseTests
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		if (lowerVersion)
-			proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
+			proxyEnv.GetVersion().Returns((Int32)JRuntimeVersion.SEd4);
 		try
 		{
 			JGlobalRef globalRef = ClassParseTests.fixture.Create<JGlobalRef>();
@@ -73,7 +73,7 @@ public sealed class ClassParseTests
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		if (lowerVersion)
-			proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
+			proxyEnv.GetVersion().Returns((Int32)JRuntimeVersion.SEd4);
 		try
 		{
 			JWeakRef weakRef = ClassParseTests.fixture.Create<JWeakRef>();
@@ -109,7 +109,7 @@ public sealed class ClassParseTests
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JVoidObject>();
 		using IFixedPointer.IDisposable clsCtx =
 			typeMetadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameCtx);
-		if (lowerVersion) proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
+		if (lowerVersion) proxyEnv.GetVersion().Returns((Int32)JRuntimeVersion.SEd4);
 		try
 		{
 			JGlobalRef globalRef = ClassParseTests.fixture.Create<JGlobalRef>();

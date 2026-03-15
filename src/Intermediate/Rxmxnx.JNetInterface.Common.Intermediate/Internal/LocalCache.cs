@@ -4,6 +4,9 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// Local object cache.
 /// </summary>
 internal class LocalCache
+#if !PACKAGE
+	: IMutableWrapper<Int32?>
+#endif
 {
 	/// <summary>
 	/// Object dictionary.
@@ -63,6 +66,14 @@ internal class LocalCache
 		this.Id = Guid.NewGuid();
 	}
 
+#if !PACKAGE
+	Int32? IMutableWrapper<Int32?>.Value
+	{
+		get => this.Capacity;
+		set => this.Capacity = value;
+	}
+#endif
+
 	/// <summary>
 	/// Indicates whether current value is registered in the cache tree.
 	/// </summary>
@@ -85,12 +96,12 @@ internal class LocalCache
 	/// <summary>
 	/// Clear current cache.
 	/// </summary>
-	/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
+	/// <param name="owner">A <see cref="ILocalCacheOwner"/> instance.</param>
 	/// <param name="exclude">A <see cref="JObjectLocalRef"/> reference to exclude.</param>
 	/// <param name="recursive">Indicates whether current clear must do recursively.</param>
-	public void ClearCache(JEnvironment env, Boolean recursive, JObjectLocalRef exclude = default)
+	public void ClearCache(ILocalCacheOwner owner, Boolean recursive, JObjectLocalRef exclude = default)
 	{
-		if (!Object.ReferenceEquals(env.LocalCache, this))
+		if (!Object.ReferenceEquals(owner.LocalCache, this))
 			return; // Current cache is not active.
 
 		if (this._objects.Remove(exclude)) // Removes excluded result and unloads its class cache.
@@ -104,9 +115,9 @@ internal class LocalCache
 			return; // Current cache is initial.
 
 		if (!recursive)
-			env.SetObjectCache(this._previous); // Restores to previous cache.
+			owner.LocalCache = this._previous; // Restores to previous cache.
 		else
-			this._previous.ClearCache(env, recursive, exclude);
+			this._previous.ClearCache(owner, recursive, exclude);
 	}
 	/// <summary>
 	/// Removes current local reference.

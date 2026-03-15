@@ -17,6 +17,8 @@
 
   <!-- Include intermediate assemblies -->
   <ItemGroup>
+    <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Trace.Intermediate"/>
+    <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Common.Intermediate"/>
     <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Implementation.Intermediate"/>
   </ItemGroup>
   

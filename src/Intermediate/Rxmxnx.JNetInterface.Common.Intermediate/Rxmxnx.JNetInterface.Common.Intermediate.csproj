@@ -4,26 +4,22 @@
 
     <ItemGroup>
         <Using Include="System.Buffers"/>
-        <Using Include="System.Collections"/>
         <Using Include="System.Collections.Concurrent"/>
-        <Using Include="System.Collections.Immutable"/>
-        <Using Include="System.ComponentModel"/>
         <Using Include="System.Diagnostics"/>
         <Using Include="System.Diagnostics.CodeAnalysis"/>
         <Using Include="System.Globalization"/>
         <Using Include="System.Numerics"/>
         <Using Include="System.Runtime.CompilerServices"/>
         <Using Include="System.Runtime.InteropServices"/>
-        <Using Include="System.Security.Cryptography"/>
         <Using Include="System.Text"/>
         <Using Include="Rxmxnx.PInvoke"/>
-        <Using Include="Rxmxnx.JNetInterface.Io"/>
+
         <Using Include="Rxmxnx.JNetInterface.Internal"/>
         <Using Include="Rxmxnx.JNetInterface.Internal.Localization"/>
+        <Using Include="Rxmxnx.JNetInterface.Io"/>
         <Using Include="Rxmxnx.JNetInterface.Lang"/>
-        <Using Include="Rxmxnx.JNetInterface.Lang.Reflect"/>
         <Using Include="Rxmxnx.JNetInterface.Lang.Annotation"/>
-        <Using Include="Rxmxnx.JNetInterface.Net"/>
+        <Using Include="Rxmxnx.JNetInterface.Lang.Reflect"/>
         <Using Include="Rxmxnx.JNetInterface.Native"/>
         <Using Include="Rxmxnx.JNetInterface.Native.Access"/>
         <Using Include="Rxmxnx.JNetInterface.Native.Identifiers"/>
@@ -31,6 +27,7 @@
         <Using Include="Rxmxnx.JNetInterface.Native.Values"/>
         <Using Include="Rxmxnx.JNetInterface.Native.Values.Functions"/>
         <Using Include="Rxmxnx.JNetInterface.Native.Values.Interfaces"/>
+        <Using Include="Rxmxnx.JNetInterface.Net"/>
         <Using Include="Rxmxnx.JNetInterface.Nio"/>
         <Using Include="Rxmxnx.JNetInterface.Nio.Ch"/>
         <Using Include="Rxmxnx.JNetInterface.Primitives"/>
@@ -41,26 +38,17 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
-        <ProjectReference Include="..\Rxmxnx.JNetInterface.Common.Intermediate\Rxmxnx.JNetInterface.Common.Intermediate.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <EmbeddedResource Include="ILLink\ILLink.Substitutions.xml">
-            <LogicalName>ILLink.Substitutions.xml</LogicalName>
-        </EmbeddedResource>
-    </ItemGroup>
-
-    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>Rxmxnx.JNetInterface.Implementation.Intermediate</_Parameter1>
+        </AssemblyAttribute>
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
             <_Parameter1>Rxmxnx.JNetInterface.Implementation.Tests.Proxies</_Parameter1>
         </AssemblyAttribute>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>Rxmxnx.JNetInterface.Implementation.Tests</_Parameter1>
-        </AssemblyAttribute>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>Rxmxnx.JNetInterface.FFI.Tests</_Parameter1>
-        </AssemblyAttribute>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.Trace.Intermediate\Rxmxnx.JNetInterface.Trace.Intermediate.csproj"/>
     </ItemGroup>
 
 </Project>

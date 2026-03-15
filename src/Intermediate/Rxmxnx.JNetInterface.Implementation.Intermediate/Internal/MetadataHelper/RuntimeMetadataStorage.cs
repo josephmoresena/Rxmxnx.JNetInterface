@@ -47,11 +47,11 @@ internal static partial class MetadataHelper
 			this._assignationCache = new();
 			this._classTree = new();
 			this._viewTree = new();
-			if (JVirtualMachine.BuiltInThrowableAutoRegistered)
+			if (MetadataHelper.BuiltInThrowableAutoRegistered)
 				MetadataHelper.BuiltInThrowableRegistration(this._runtimeMetadata);
-			if (JVirtualMachine.ReflectionAutoRegistered)
+			if (MetadataHelper.ReflectionAutoRegistered)
 				MetadataHelper.ReflectionRegistration(this._runtimeMetadata);
-			if (JVirtualMachine.NioAutoRegistered) MetadataHelper.NioRegistration(this._runtimeMetadata);
+			if (MetadataHelper.NioAutoRegistered) MetadataHelper.NioRegistration(this._runtimeMetadata);
 		}
 
 		/// <summary>

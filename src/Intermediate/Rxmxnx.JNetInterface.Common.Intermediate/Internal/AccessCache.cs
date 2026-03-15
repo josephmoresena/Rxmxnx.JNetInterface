@@ -32,34 +32,34 @@ internal sealed class AccessCache
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> instance.</param>
 	public AccessCache(JClassLocalRef classRef) => this._classRef = classRef;
 
-	public JFieldId GetFieldId(JFieldDefinition definition, JEnvironment env)
+	public JFieldId GetFieldId(JFieldDefinition definition, IAccessibleManager manager)
 	{
 		String hash = definition.Hash;
 		if (this._fields.TryGetValue(hash, out JFieldId result)) return result;
 		JTrace.GetAccessibleId(this._classRef, definition);
-		result = env.GetFieldId(definition, this._classRef);
+		result = manager.GetFieldId(definition, this._classRef);
 		this._fields.TryAdd(hash, result);
 		return result;
 	}
-	public JFieldId GetStaticFieldId(JFieldDefinition definition, JEnvironment env)
+	public JFieldId GetStaticFieldId(JFieldDefinition definition, IAccessibleManager manager)
 	{
 		String hash = definition.Hash;
 		if (this._staticFields.TryGetValue(hash, out JFieldId result)) return result;
 		JTrace.GetAccessibleId(this._classRef, definition);
-		result = env.GetStaticFieldId(definition, this._classRef);
+		result = manager.GetStaticFieldId(definition, this._classRef);
 		this._staticFields.TryAdd(hash, result);
 		return result;
 	}
-	public JMethodId GetMethodId(JCallDefinition definition, JEnvironment env)
+	public JMethodId GetMethodId(JCallDefinition definition, IAccessibleManager manager)
 	{
 		String hash = definition.Hash;
 		if (this._methods.TryGetValue(hash, out JMethodId result)) return result;
 		JTrace.GetAccessibleId(this._classRef, definition);
-		result = env.GetMethodId(definition, this._classRef);
+		result = manager.GetMethodId(definition, this._classRef);
 		this._methods.TryAdd(hash, result);
 		return result;
 	}
-	public JMethodId GetStaticMethodId(JCallDefinition definition, JEnvironment env)
+	public JMethodId GetStaticMethodId(JCallDefinition definition, IAccessibleManager env)
 	{
 		String hash = definition.Hash;
 		if (this._staticMethods.TryGetValue(hash, out JMethodId result)) return result;

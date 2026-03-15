@@ -58,6 +58,8 @@
         <Project
                 Path="Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj"/>
         <Project
+                Path="Intermediate\Rxmxnx.JNetInterface.Common.Intermediate\Rxmxnx.JNetInterface.Common.Intermediate.csproj"/>
+        <Project
                 Path="Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
         <Project
                 Path="Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
@@ -66,6 +68,8 @@
         <Project
                 Path="Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj"/>
         <File Path="Intermediate\Intermediate.Library.props"/>
+        <Project
+                Path="Intermediate\Rxmxnx.JNetInterface.Trace.Intermediate\Rxmxnx.JNetInterface.Trace.Intermediate.csproj"/>
     </Folder>
     <Folder Name="/Package/">
         <File Path="..\package\Rxmxnx.JNetInterface\CompatibilitySuppressions.xml"/>

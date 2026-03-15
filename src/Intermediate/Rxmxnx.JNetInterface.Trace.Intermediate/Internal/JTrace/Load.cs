@@ -15,7 +15,7 @@ internal static partial class JTrace
 	public static void MainClassesLoading(JVirtualMachineRef vmRef, JEnvironmentRef envRef,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {vmRef} {envRef} loading.", callerMethod);
 	}
 	/// <summary>
@@ -27,7 +27,7 @@ internal static partial class JTrace
 	public static void MainClassesLoaded(JVirtualMachineRef vmRef, JEnvironmentRef envRef,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {vmRef} {envRef} loaded.", callerMethod);
 	}
 	/// <summary>
@@ -39,7 +39,7 @@ internal static partial class JTrace
 	public static void MainClassLoaded(CString classSignature, JGlobalRef globalRef,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		String className = ClassNameHelper.GetClassName(classSignature);
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} class: {className} {globalRef} loaded.",
 		                callerMethod);
@@ -51,7 +51,7 @@ internal static partial class JTrace
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void AccessLoaded(JReferenceObject jObject, [CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		String classText = jObject.ToTraceText();
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {classText} access loaded.", callerMethod);
 	}
@@ -65,7 +65,7 @@ internal static partial class JTrace
 	public static void DefiningClass(JEnvironmentRef envRef, CString className, ReadOnlySpan<Byte> buffer,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine(
 			$"thread: {Environment.CurrentManagedThreadId} {envRef} defining class: {className} {JTrace.GetSha256Hex(buffer)}.",
 			callerMethod);
@@ -80,7 +80,7 @@ internal static partial class JTrace
 	public static void DefiningClass(JEnvironmentRef envRef, CString className, JClassLocalRef classRef,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {envRef} defined class: {className} {classRef}.",
 		                callerMethod);
 	}
@@ -93,7 +93,7 @@ internal static partial class JTrace
 	public static void VirtualMachineLoad(JVirtualMachineRef vmRef, Boolean firstTime,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {vmRef} loaded, new: {firstTime}.",
 		                callerMethod);
 	}
@@ -106,7 +106,7 @@ internal static partial class JTrace
 	public static void EnvironmentLoad(JEnvironmentRef envRef, Boolean firstTime,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {envRef} loaded, new: {firstTime}.",
 		                callerMethod);
 	}
@@ -120,7 +120,7 @@ internal static partial class JTrace
 	public static void GetRuntimeVersion(JEnvironmentRef envRef, Int32 jniVersion,
 		ReadOnlySpan<Char> specificationVersion, [CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		String jVersion = new(specificationVersion);
 		Trace.WriteLine(
 			$"thread: {Environment.CurrentManagedThreadId} {envRef} (0x{jniVersion:x8}) java.specification.version: {jVersion}.",
@@ -137,7 +137,7 @@ internal static partial class JTrace
 	public static void GetRuntimeVersion(JEnvironmentRef envRef, Int32 jniVersion,
 		ReadOnlySpan<Byte> specificationVersion, [CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		String jVersion = Encoding.UTF8.GetString(specificationVersion);
 		Trace.WriteLine(
 			$"thread: {Environment.CurrentManagedThreadId} {envRef} (0x{jniVersion:x8}) java.specification.version: {jVersion}.",

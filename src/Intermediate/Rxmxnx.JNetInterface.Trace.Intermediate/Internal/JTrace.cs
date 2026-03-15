@@ -11,6 +11,18 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal static partial class JTrace
 {
 	/// <summary>
+	/// Indicates whether trace output is enabled.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	public static Boolean TraceEnabled
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get => AppContext.TryGetSwitch("JNetInterface.EnableTrace", out Boolean enable) && enable;
+	}
+
+	/// <summary>
 	/// Writes a category name and retrieving class using a <see cref="JClassLocalRef"/> reference
 	/// to the trace listeners.
 	/// </summary>
@@ -19,7 +31,7 @@ internal static partial class JTrace
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void GetClass(JClassLocalRef classRef, CString className, [CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine(
 			classRef != default ?
 				$"thread: {Environment.CurrentManagedThreadId} {classRef} name: {className}" :
@@ -33,7 +45,7 @@ internal static partial class JTrace
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void GetMetadataOrFindClass(JClassObject jClass, [CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {jClass.Name}", callerMethod);
 	}
 	/// <summary>
@@ -43,7 +55,7 @@ internal static partial class JTrace
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void FindClass(CString className, [CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {className}", callerMethod);
 	}
 	/// <summary>
@@ -57,7 +69,7 @@ internal static partial class JTrace
 	public static void GetSuperTypeMetadata(JClassObject jClass, JClassObject jSuperClass,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {jClass.Name} <- {jSuperClass.Name}",
 		                callerMethod);
 	}
@@ -71,7 +83,7 @@ internal static partial class JTrace
 	public static void RegisterObject(JReferenceObject? jObject, Guid cacheId, String cacheName,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		if (jObject is not null)
 			Trace.WriteLine(
 				$"thread: {Environment.CurrentManagedThreadId} {jObject.ToTraceText()} at {cacheName} cache {cacheId}",
@@ -90,7 +102,7 @@ internal static partial class JTrace
 	public static void Unload(Boolean isRegistered, Boolean isAttached, Boolean isAlive, JObjectLocalRef localRef,
 		Guid cacheId, String cacheName, [CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		if (localRef == default) return;
 		if (!isRegistered)
 			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} Unable to remove unregistered {localRef}.",
@@ -120,7 +132,7 @@ internal static partial class JTrace
 		where TGlobalRef : unmanaged, IObjectGlobalReferenceType, INativeType,
 		IEqualityOperators<TGlobalRef, TGlobalRef, Boolean>
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		if (globalRef == default) return;
 		JTrace.UnloadNonGenericGlobal(isAttached, isAlive, $"{globalRef}", callerMethod);
 	}
@@ -138,7 +150,7 @@ internal static partial class JTrace
 		Boolean released, TObjectRef objectRef, IntPtr pointer, [CallerMemberName] String callerMethod = "")
 		where TObjectRef : unmanaged, IObjectReferenceType, INativePointerType<TObjectRef>
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		JTrace.ReleaseNonGenericMemory(isCritical, isAttached, isAlive, released, pointer, $"{objectRef}",
 		                               callerMethod);
 	}
@@ -183,7 +195,7 @@ internal static partial class JTrace
 			JTrace.GetClassInfo(classRef, referenceType, callerMethod);
 			return;
 		}
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine(
 			$"thread: {Environment.CurrentManagedThreadId} {classRef} {referenceType} {classObjectMetadata}.",
 			callerMethod);
@@ -197,7 +209,7 @@ internal static partial class JTrace
 	public static void AsClassObject(CString className, JReferenceObject jObject,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {jObject.ToTraceText()} -> {className}.",
 		                callerMethod);
 	}
@@ -210,7 +222,7 @@ internal static partial class JTrace
 	public static void GetClassInfo(JClassLocalRef classRef, JReferenceType referenceType,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {classRef} {referenceType}.", callerMethod);
 	}
 	/// <summary>
@@ -223,7 +235,7 @@ internal static partial class JTrace
 	public static void LoadGlobalClass(JClassObject jClass, Boolean found, JGlobalRef globalRef,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		String referenceText = globalRef != default ? $" {globalRef}" : String.Empty;
 		Trace.WriteLine(
 			$"thread: {Environment.CurrentManagedThreadId} {jClass.ToTraceText()}{referenceText} {(!found ? "created" : "found")}.",
@@ -237,7 +249,7 @@ internal static partial class JTrace
 	public static void LoadClassMetadata(ClassObjectMetadata classObjectMetadata,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {classObjectMetadata.ToTraceText()}",
 		                callerMethod);
 	}
@@ -251,7 +263,7 @@ internal static partial class JTrace
 		[CallerMemberName] String callerMethod = "")
 		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		JTrace.CreateNonGenericLocalRef($"{objectRef}", localRef, callerMethod);
 	}
 	/// <summary>
@@ -265,7 +277,7 @@ internal static partial class JTrace
 		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>, IObjectGlobalReferenceType,
 		IEqualityOperators<TObjectRef, TObjectRef, Boolean>
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		JTrace.CreateNonGenericGlobalRef(localRef, globalRef != default ? $"{globalRef}" : String.Empty, callerMethod);
 	}
 	/// <summary>
@@ -275,7 +287,7 @@ internal static partial class JTrace
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void FinalizeCall(JReferenceObject result, [CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {result.ToTraceText()}", callerMethod);
 	}
 	/// <summary>
@@ -288,7 +300,7 @@ internal static partial class JTrace
 	public static void UseTypeMetadata(JClassObject jClass, JReferenceTypeMetadata typeMetadata,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine(
 			$"thread: {Environment.CurrentManagedThreadId} {jClass.Name} uses type metadata from {typeMetadata.ClassName}.",
 			callerMethod);
@@ -303,7 +315,7 @@ internal static partial class JTrace
 	public static void UseTypeMetadata(ReadOnlySpan<Byte> arraySignature, JArrayTypeMetadata typeMetadata,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine(
 			$"thread: {Environment.CurrentManagedThreadId} {Encoding.UTF8.GetString(arraySignature)} uses type metadata from {typeMetadata.ClassName}.",
 			callerMethod);
@@ -316,7 +328,7 @@ internal static partial class JTrace
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void InvokeAt(IThread thread, [CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine(
 			$"thread: {Environment.CurrentManagedThreadId} {thread.Reference} name: {thread.Name} daemon: {thread.Daemon}",
 			callerMethod);
@@ -330,7 +342,7 @@ internal static partial class JTrace
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void SetObjectCache(Guid cacheId, String nameCache, [CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {nameCache} cache: {cacheId}", callerMethod);
 	}
 	/// <summary>
@@ -343,7 +355,7 @@ internal static partial class JTrace
 	public static void DeleteObjectCache(Guid cacheId, JLocalObject? result,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine(
 			result is null ?
 				$"thread: {Environment.CurrentManagedThreadId} local cache: {cacheId}" :
@@ -359,7 +371,7 @@ internal static partial class JTrace
 	public static void GetTypeInformation(String classHash, ITypeInformation? result,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine(
 			result is not null ?
 				$"thread: {Environment.CurrentManagedThreadId} {result.ClassName} found in runtime cache." :
@@ -373,7 +385,7 @@ internal static partial class JTrace
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void ClassFound(JClassObject jClass, [CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {jClass.Name} found in current environment.",
 		                callerMethod);
 	}
@@ -384,7 +396,7 @@ internal static partial class JTrace
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void ClassFound(JReferenceTypeMetadata typeMetadata, [CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine(
 			$"thread: {Environment.CurrentManagedThreadId} {typeMetadata.ClassName} found in type metadata cache.",
 			callerMethod);
@@ -398,7 +410,7 @@ internal static partial class JTrace
 	public static void ClassFound(ITypeInformation typeInformation, JClassLocalRef classRef,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		if (classRef == default) return;
 		Trace.WriteLine(
 			$"thread: {Environment.CurrentManagedThreadId} {typeInformation.ClassName} already loaded {classRef}.",
@@ -413,7 +425,7 @@ internal static partial class JTrace
 	public static void GetObjectClass(JObjectLocalRef localRef, JClassLocalRef classRef,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {localRef} instance of {classRef}.",
 		                callerMethod);
 	}
@@ -427,7 +439,7 @@ internal static partial class JTrace
 	public static void ClearClass(JClassLocalRef classRef, JReferenceObject jClass,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine(
 			$"thread: {Environment.CurrentManagedThreadId} {classRef} cleared from {jClass.ToTraceText()} view: {jClass is ILocalViewObject}.",
 			callerMethod);
@@ -442,7 +454,7 @@ internal static partial class JTrace
 	public static void ReloadClass(JClassLocalRef classRef, JClassObject jClass,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {classRef} loaded to {jClass.ToTraceText()}.",
 		                callerMethod);
 	}
@@ -456,7 +468,7 @@ internal static partial class JTrace
 	public static void DeleteReference(JObjectLocalRef jniReference, JReferenceType referenceType,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {jniReference} {referenceType} deleted.",
 		                callerMethod);
 	}

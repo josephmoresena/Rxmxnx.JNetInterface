@@ -13,7 +13,7 @@ internal static partial class JTrace
 	/// <param name="handle">Loaded handle.</param>
 	public static void LoadLibrary(String libraryPath, IntPtr? handle)
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		String handleText = handle.HasValue ? $"0x{handle.Value:x8}" : "null";
 		Trace.WriteLine(
 			$"thread: {Environment.CurrentManagedThreadId} library: {libraryPath} loaded with {handleText} handle.");
@@ -28,7 +28,7 @@ internal static partial class JTrace
 	/// <param name="address">Symbol address.</param>
 	public static void GetJniExport(IntPtr handle, String name, Boolean found, IntPtr address)
 	{
-		if (!JVirtualMachine.TraceEnabled) return;
+		if (!JTrace.TraceEnabled) return;
 		String addressText = found ? $"0x{address:x8}" : "not found";
 		Trace.WriteLine(
 			$"thread: {Environment.CurrentManagedThreadId} library handle: {handle:x8} symbol: {name} {addressText}.");

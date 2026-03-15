@@ -53,16 +53,15 @@ public class DeadThreadTests
 			}
 
 			using IThread thread = vm.CreateThread(purpose);
-			DeadThread deadThread = Assert.IsType<DeadThread>(thread);
 			IArrayFeature arrayFeature = thread.ArrayFeature;
 			IClassFeature classFeature = thread.ClassFeature;
 			IReferenceFeature referenceFeature = thread.ReferenceFeature;
 			IStringFeature stringFeature = thread.StringFeature;
 
-			Assert.Same(deadThread, arrayFeature);
-			Assert.Same(deadThread, classFeature);
-			Assert.Same(deadThread, referenceFeature);
-			Assert.Same(deadThread, stringFeature);
+			Assert.Same(thread, arrayFeature);
+			Assert.Same(thread, classFeature);
+			Assert.Same(thread, referenceFeature);
+			Assert.Same(thread, stringFeature);
 
 			Assert.Same(vm, thread.VirtualMachine);
 			Assert.Equal(CString.Empty, thread.Name);

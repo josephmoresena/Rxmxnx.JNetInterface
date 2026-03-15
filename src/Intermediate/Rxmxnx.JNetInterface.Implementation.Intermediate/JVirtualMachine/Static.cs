@@ -8,11 +8,7 @@ public partial class JVirtualMachine
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public static Boolean TraceEnabled
-	{
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get => AppContext.TryGetSwitch("JNetInterface.EnableTrace", out Boolean enable) && enable;
-	}
+	public static Boolean TraceEnabled => JTrace.TraceEnabled;
 	/// <summary>
 	/// Indicates whether final user-types should be treated as real classes at runtime.
 	/// </summary>
