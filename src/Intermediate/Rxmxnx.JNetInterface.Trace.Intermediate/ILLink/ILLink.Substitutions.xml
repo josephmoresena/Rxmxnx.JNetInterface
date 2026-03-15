@@ -2,12 +2,9 @@
 <linker>
     <!-- Trace Feature -->
     <assembly fullname="Rxmxnx.JNetInterface.Trace.Intermediate">
-        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.EnableTrace" featurevalue="false"
-              featuredefault="true">
-            <method signature="System.Boolean get_TraceEnabled()" body="stub" value="false"/>
-        </type>
         <type fullname="Rxmxnx.JNetInterface.Internal.JTrace" feature="JNetInterface.EnableTrace" featurevalue="false"
               featuredefault="true">
+            <method signature="System.Boolean get_TraceEnabled()" body="stub" value="false"/>
             <method signature="System.Void GetClass(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,Rxmxnx.PInvoke.CString,System.String)"
                     body="stub"/>
             <method signature="System.Void GetMetadataOrFindClass(Rxmxnx.JNetInterface.Lang.JClassObject,System.String)"
