@@ -37,7 +37,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj"/>
         <ProjectReference Include="..\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj"/>
     </ItemGroup>
 

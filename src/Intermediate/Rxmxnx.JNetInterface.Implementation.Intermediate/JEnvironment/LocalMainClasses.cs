@@ -6,11 +6,6 @@ partial class JEnvironment
 {
 	private abstract class LocalMainClasses : MainClasses<JClassObject>
 	{
-		/// <summary>
-		/// JNI version.
-		/// </summary>
-		private readonly Int32 _jniVersion;
-
 		/// <inheritdoc cref="JEnvironment.Reference"/>
 		public readonly JEnvironmentRef Reference;
 		/// <summary>
@@ -21,11 +16,7 @@ partial class JEnvironment
 		public readonly JVirtualMachine VirtualMachine;
 
 		/// <inheritdoc cref="IEnvironment.Version"/>
-		/// <remarks>
-		/// This field must be a property in order to be substituted through <c>ILLink.Substitutions</c>.
-		/// </remarks>
-		// ReSharper disable once ConvertToAutoPropertyWhenPossible
-		public Int32 Version => this._jniVersion;
+		public Int32 Version { get; }
 
 		/// <inheritdoc/>
 		public override JClassObject ClassObject { get; } = default!;
@@ -82,7 +73,7 @@ partial class JEnvironment
 		{
 			this.VirtualMachine = vm;
 			this.Reference = envRef;
-			this._jniVersion = LocalMainClasses.GetVersion(envRef);
+			this.Version = LocalMainClasses.GetVersion(envRef);
 
 			if (!this.InstantiationCheck()) return; // Avoid class instantiation.
 
@@ -105,17 +96,6 @@ partial class JEnvironment
 		}
 
 		/// <summary>
-		/// JNI runtime version.
-		/// </summary>
-		/// <returns>The current JNI runtime version.</returns>
-#if !PACKAGE
-		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
-		                 Justification = CommonConstants.NoMethodOverloadingJustification)]
-		[ExcludeFromCodeCoverage]
-#endif
-		public Int32 GetInterfaceVersion() => this._jniVersion;
-
-		/// <summary>
 		/// Performs the instantiation checks.
 		/// </summary>
 		/// <returns>
@@ -127,18 +107,18 @@ partial class JEnvironment
 		private Boolean InstantiationCheck()
 		{
 			IMessageResource resource = IMessageResource.GetInstance();
-			if (JVirtualMachine.IsFixedAndroid)
+			if (AndroidFeature.IsFixedAndroid)
 			{
 				// If fixed on Android, JNI should be 0x00010006
-				if (this._jniVersion != (Int32)JRuntimeVersion.J6)
+				if (this.Version != (Int32)JRuntimeVersion.J6)
 					throw new InvalidOperationException(resource.AndroidRuntimeRequired);
 			}
-			else if (JVirtualMachine.IsFixedRuntimeVersion && this.Version > this._jniVersion)
+			else if (JavaStandardFeature.GetInterfaceVersion() is { } jniVersion && jniVersion > this.Version)
 			{
 				// If fixed runtime version, JNI version should be compatible with the fixed JNI version.
-				throw new InvalidOperationException(resource.InvalidInterfaceVersion(this._jniVersion, this.Version));
+				throw new InvalidOperationException(resource.InvalidInterfaceVersion(this.Version, jniVersion));
 			}
-			return this._jniVersion >= NativeInterface.RequiredVersion; // Avoid instantiation if unsupported version.
+			return this.Version >= NativeInterface.RequiredVersion; // Avoid instantiation if unsupported version.
 		}
 
 		/// <summary>

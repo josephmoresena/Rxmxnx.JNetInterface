@@ -41,8 +41,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
         <ProjectReference Include="..\Rxmxnx.JNetInterface.Common.Intermediate\Rxmxnx.JNetInterface.Common.Intermediate.csproj"/>
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.Jni.Intermediate\Rxmxnx.JNetInterface.Jni.Intermediate.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

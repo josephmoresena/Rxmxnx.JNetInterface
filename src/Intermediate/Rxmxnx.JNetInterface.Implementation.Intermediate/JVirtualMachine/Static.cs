@@ -15,11 +15,7 @@ public partial class JVirtualMachine
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public static Boolean FinalUserTypeRuntimeEnabled
-	{
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get => AppContext.TryGetSwitch("JNetInterface.EnableFinalUserTypeRuntime", out Boolean enable) && enable;
-	}
+	public static Boolean FinalUserTypeRuntimeEnabled => MetadataHelper.FinalUserTypeRuntimeEnabled;
 	/// <summary>
 	/// Indicates whether native call adapters should check parameter references type.
 	/// </summary>
@@ -60,7 +56,7 @@ public partial class JVirtualMachine
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 #endif
 	public static Boolean Register<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
-		=> JVirtualMachine.IsCompileCompliant<TReference>() && MetadataHelper.Register<TReference>();
+		=> MetadataHelper.IsCompileCompliant<TReference>() && MetadataHelper.Register<TReference>();
 	/// <summary>
 	/// Retrieves the <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.
 	/// </summary>
@@ -94,17 +90,15 @@ public partial class JVirtualMachine
 #endif
 	public static void SetMainClass<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
 	{
-		if (JVirtualMachine.IsFixedRuntimeVersion && JVirtualMachine.FixedRuntimeVersion < TReference.Since)
-			// Fixed runtime version doesn't support the type. 
-			return;
+		if (JavaStandardFeature.IsFixedRuntimeVersion && TReference.Since is JRuntimeVersion.Undefined)
+			return; // Datatype is not compatible with Java Standard Edition.
+		if (AndroidFeature.IsFixedAndroid && TReference.AndroidApiLevel == -1)
+			return; // Datatype is not compatible with Android Runtime.
+		if (AndroidFeature.ApiLevel is { } apiLevel && apiLevel < TReference.AndroidApiLevel)
+			return; // Fixed Android API level doesn't support the type. 
+		if (JavaStandardFeature.GetRuntimeVersion() is { } jreVersion && jreVersion < TReference.Since)
+			return; // Fixed Java runtime version doesn't support the type.
 		JDataTypeMetadata typeMetadata = MetadataHelper.GetExactMetadata<TReference>();
 		MainClasses.AppendMainClass(JVirtualMachine.userMainClasses, typeMetadata);
 	}
-	/// <summary>
-	/// Retrieves the JNI version for <paramref name="jreVersion"/>.
-	/// </summary>
-	/// <param name="jreVersion">A <see cref="JRuntimeVersion"/> value.</param>
-	/// <returns>The JNI version for <paramref name="jreVersion"/>.</returns>
-	public static Int32 GetInterfaceVersion(JRuntimeVersion jreVersion)
-		=> JVirtualMachine.GetInterfaceVersion((Int32)jreVersion);
 }

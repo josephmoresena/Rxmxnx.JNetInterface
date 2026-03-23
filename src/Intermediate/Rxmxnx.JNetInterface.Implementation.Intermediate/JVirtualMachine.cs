@@ -11,22 +11,36 @@ public partial class JVirtualMachine : IVirtualMachine
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public static Int32?
-		AndroidApiLevel // Android API Level is valid only when the current process is forked from Zygote.
-		=> AndroidHelper.IsZygote ? AndroidHelper.ApiLevel : default;
+	public static Int32? AndroidApiLevel => AndroidHelper.IsZygote ? AndroidHelper.ApiLevel : default;
 
 	/// <summary>
 	/// Indicates whether the current virtual machine remains alive.
 	/// </summary>
 	public virtual Boolean IsAlive => true;
-	/// <inheritdoc/>
+	/// <inheritdoc cref="IVirtualMachine.Version"/>
 	public JRuntimeVersion Version => this._cache.GetVersion(this);
 	/// <inheritdoc/>
 	public JVirtualMachineRef Reference => this._cache.Reference;
 
 	Boolean IVirtualMachine.NoProxy => true;
 	IEnvironment? IVirtualMachine.GetEnvironment() => this.GetEnvironment();
-	Int32 IVirtualMachine.AndroidApiLevel => JVirtualMachine.AndroidApiLevel ?? -1; // -1: Not Android classes support.
+	JRuntimeVersion IVirtualMachine.Version
+	{
+		get
+		{
+			if (JavaStandardFeature.GetRuntimeVersion() is { } jre) return jre;
+			return AndroidFeature.IsFixedAndroid ? JRuntimeVersion.J6 : this.Version;
+		}
+	}
+	Int32 IVirtualMachine.AndroidApiLevel
+	{
+		get
+		{
+			if (JavaStandardFeature.IsFixedRuntimeVersion) return -1;
+			if (AndroidFeature.ApiLevel is { } apiLevel) return apiLevel;
+			return JVirtualMachine.AndroidApiLevel ?? -1;
+		}
+	}
 
 	IThread IVirtualMachine.CreateThread(ThreadPurpose purpose)
 	{

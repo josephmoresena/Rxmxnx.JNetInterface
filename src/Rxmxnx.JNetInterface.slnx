@@ -56,18 +56,28 @@
     </Folder>
     <Folder Name="/Intermediate/">
         <Project
-                Path="Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj"/>
+                Path="Intermediate/Rxmxnx.JNetInterface.Jni.Intermediate/Rxmxnx.JNetInterface.Jni.Intermediate.csproj"/>
         <Project
                 Path="Intermediate\Rxmxnx.JNetInterface.Common.Intermediate\Rxmxnx.JNetInterface.Common.Intermediate.csproj"/>
         <Project
-                Path="Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
-        <Project
                 Path="Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
+        <File Path="Intermediate\Intermediate.Library.props"/>
+    </Folder>
+    <Folder Name="/Intermediate/Core/">
+        <Project
+                Path="Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj"/>
+        <Project
+                Path="Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
         <Project
                 Path="Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj"/>
         <Project
                 Path="Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj"/>
-        <File Path="Intermediate\Intermediate.Library.props"/>
+    </Folder>
+    <Folder Name="/Intermediate/Features/">
+        <Project
+                Path="Intermediate\Rxmxnx.JNetInterface.Android.Intermediate\Rxmxnx.JNetInterface.Android.Intermediate.csproj"/>
+        <Project
+                Path="Intermediate\Rxmxnx.JNetInterface.Java.Intermediate\Rxmxnx.JNetInterface.Java.Intermediate.csproj"/>
         <Project
                 Path="Intermediate\Rxmxnx.JNetInterface.Trace.Intermediate\Rxmxnx.JNetInterface.Trace.Intermediate.csproj"/>
     </Folder>

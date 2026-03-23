@@ -120,7 +120,8 @@ public partial class JVirtualMachine
 			// If no running on Android, avoid to load classes with undefined version.
 			if (sinceVersion is JRuntimeVersion.Undefined) return false;
 			// If fixed JRE version, avoid to check the JRE version.
-			if (JVirtualMachine.FixedRuntimeVersion >= sinceVersion) return true;
+			if (JavaStandardFeature.GetRuntimeVersion() is { } jreVersion && jreVersion >= sinceVersion)
+				return true;
 			// Check java.specification.version property.
 			this._version ??= env.GetVersion(this.SystemObject.As<JClassLocalRef>(), true);
 			return sinceVersion < this._version;

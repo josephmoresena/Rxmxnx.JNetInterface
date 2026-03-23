@@ -14,7 +14,7 @@ internal static unsafe class AndroidHelper
 	/// <summary>
 	/// Property value maximum length.
 	/// </summary>
-	private const Int32 PropValueMaxLength = 92;
+	private const Int32 propValueMaxLength = 92;
 
 	/// <summary>
 	/// Indicates whether the current process is from Zygote.
@@ -73,7 +73,7 @@ internal static unsafe class AndroidHelper
 	{
 		delegate* unmanaged<Byte*, Byte*, Int32>
 			propertyGet = (delegate* unmanaged<Byte*, Byte*, Int32>)propertyGetAddr;
-		Span<Byte> propertyValue = stackalloc Byte[AndroidHelper.PropValueMaxLength];
+		Span<Byte> propertyValue = stackalloc Byte[AndroidHelper.propValueMaxLength];
 		Int32 propertyLength;
 		fixed (Byte* namePtr = &MemoryMarshal.GetReference(AndroidHelper.SdkVersionPropName))
 		fixed (Byte* valuePtr = &MemoryMarshal.GetReference(propertyValue))
@@ -115,7 +115,7 @@ internal static unsafe class AndroidHelper
 	/// </returns>
 	private static Boolean IsForkedFromZygote(IntPtr readlinkAddr)
 	{
-		Span<Byte> exeLinkContent = stackalloc Byte[AndroidHelper.PropValueMaxLength];
+		Span<Byte> exeLinkContent = stackalloc Byte[AndroidHelper.propValueMaxLength];
 		Int32 exeLinkContentLength;
 		delegate* unmanaged<Byte*, Byte*, UIntPtr, IntPtr> readlink =
 			(delegate* unmanaged<Byte*, Byte*, UIntPtr, IntPtr>)readlinkAddr;

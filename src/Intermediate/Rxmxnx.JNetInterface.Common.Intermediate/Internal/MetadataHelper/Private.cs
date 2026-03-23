@@ -152,7 +152,7 @@ internal static partial class MetadataHelper
 			IDictionary<String, JReferenceTypeMetadata> result)
 		where TReference : JReferenceObject, IReferenceType<TReference>
 	{
-		if (!JVirtualMachine.IsCompileCompliant<TReference>())
+		if (!MetadataHelper.IsCompileCompliant<TReference>())
 			// Fixed runtime version doesn't support the type. 
 			return;
 		JReferenceTypeMetadata typeMetadata = IReferenceType.GetMetadata<TReference>();

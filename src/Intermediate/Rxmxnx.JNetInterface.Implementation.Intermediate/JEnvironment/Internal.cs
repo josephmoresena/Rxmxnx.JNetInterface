@@ -69,7 +69,8 @@ partial class JEnvironment
 		}
 		this._cache.ClearException();
 		// If it was not possible to determine the JRE version, the JNI version is assumed.
-		if (JVirtualMachine.IsFixedRuntimeVersion) return JVirtualMachine.FixedRuntimeVersion;
+		if (JavaStandardFeature.GetRuntimeVersion() is { } jre) return jre;
+		if (AndroidFeature.IsFixedAndroid) return JRuntimeVersion.J6; // Android runtime is based on JRE 1.6.
 		return (JRuntimeVersion)this.Version;
 	}
 	/// <summary>

@@ -40,15 +40,22 @@
         <ProjectReference Include="..\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj"/>
     </ItemGroup>
 
+    <!-- Implementation Assemblies -->
     <ItemGroup>
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
             <_Parameter1>Rxmxnx.JNetInterface.Implementation.Intermediate</_Parameter1>
         </AssemblyAttribute>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>Rxmxnx.JNetInterface.Extensions.Tests</_Parameter1>
-        </AssemblyAttribute>
+    </ItemGroup>
+    <!-- Test Proxies Assemblies -->
+    <ItemGroup>
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
             <_Parameter1>Rxmxnx.JNetInterface.Implementation.Tests.Proxies</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+    <!-- Test Assemblies -->
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>Rxmxnx.JNetInterface.Extensions.Tests</_Parameter1>
         </AssemblyAttribute>
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
             <_Parameter1>Rxmxnx.JNetInterface.Implementation.Tests</_Parameter1>

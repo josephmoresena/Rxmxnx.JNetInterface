@@ -18,7 +18,7 @@ internal static partial class MetadataHelper
 		JDataTypeMetadata typeMetadata = MetadataHelper.GetExactMetadata<TDataType>();
 		if (typeMetadata.Modifier is not JTypeModifier.Final)
 			return false;
-		return JVirtualMachine.FinalUserTypeRuntimeEnabled || MetadataHelper.IsBuiltInFinalType(typeMetadata);
+		return MetadataHelper.FinalUserTypeRuntimeEnabled || MetadataHelper.IsBuiltInFinalType(typeMetadata);
 	}
 	/// <summary>
 	/// Retrieves <see cref="JArgumentMetadata"/> metadata for <paramref name="jClass"/>.
@@ -328,5 +328,29 @@ internal static partial class MetadataHelper
 		AssignationKey assignationKey = new() { FromHash = hashView, ToHash = superViewHash, };
 		if (assignationKey.IsSame) return;
 		MetadataHelper.storage.RegisterSuperViewRelationship(assignationKey);
+	}
+
+	/// <summary>
+	/// Indicates whether <typeparamref name="TDataType"/> is compatible with current compilation.
+	/// </summary>
+	/// <typeparam name="TDataType">A <see cref="Rxmxnx.JNetInterface.Types.IDataType"/> type.</typeparam>
+	/// <returns>
+	/// <see langword="true"/> if current datatype is compatible with the current compilation; otherwise,
+	/// <see langword="false"/>.
+	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	public static Boolean IsCompileCompliant<TDataType>() where TDataType : IDataType
+	{
+		if (JavaStandardFeature.IsFixedRuntimeVersion && TDataType.Since is JRuntimeVersion.Undefined)
+			return false; // Datatype is not compatible with Java Standard Edition.
+		if (AndroidFeature.IsFixedAndroid && TDataType.AndroidApiLevel == -1)
+			return false; // Datatype is not compatible with Android Runtime.
+		if (AndroidFeature.ApiLevel is { } apiLevel)
+			return apiLevel >= TDataType.AndroidApiLevel;
+		if (JavaStandardFeature.GetRuntimeVersion() is { } jreVersion)
+			return jreVersion >= TDataType.Since;
+		return true;
 	}
 }

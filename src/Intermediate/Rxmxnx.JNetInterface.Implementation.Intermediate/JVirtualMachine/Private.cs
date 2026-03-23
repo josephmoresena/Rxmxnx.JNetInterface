@@ -109,30 +109,4 @@ public partial class JVirtualMachine
 		VirtualMachineArgumentValue arg = new(version, namePtr, threadGroupRef);
 		return arg;
 	}
-	/// <summary>
-	/// Retrieves the JNI version for <paramref name="version"/>.
-	/// </summary>
-	/// <param name="version">A <see cref="JRuntimeVersion"/> value.</param>
-	/// <returns>The JNI version for <paramref name="version"/>.</returns>
-	// ReSharper disable once MemberCanBePrivate.Global
-#if !PACKAGE
-	[ExcludeFromCodeCoverage]
-#endif
-	private static Int32 GetInterfaceVersion(Int32 version)
-		=> version switch
-		{
-			(Int32)JRuntimeVersion.Undefined => default,
-			< (Int32)JRuntimeVersion.SEd1 => (Int32)JRuntimeVersion.SEd0,
-			< (Int32)JRuntimeVersion.SEd2 => (Int32)JRuntimeVersion.SEd1,
-			< (Int32)JRuntimeVersion.SEd4 => (Int32)JRuntimeVersion.SEd2,
-			< (Int32)JRuntimeVersion.J6 => (Int32)JRuntimeVersion.SEd4,
-			< (Int32)JRuntimeVersion.J8 => (Int32)JRuntimeVersion.J6,
-			< (Int32)JRuntimeVersion.J9 => (Int32)JRuntimeVersion.J8,
-			< (Int32)JRuntimeVersion.J10 => (Int32)JRuntimeVersion.J9,
-			< (Int32)JRuntimeVersion.J19 => (Int32)JRuntimeVersion.J10,
-			< (Int32)JRuntimeVersion.J20 => (Int32)JRuntimeVersion.J19,
-			< (Int32)JRuntimeVersion.J21 => (Int32)JRuntimeVersion.J20,
-			< (Int32)JRuntimeVersion.J24 => (Int32)JRuntimeVersion.J21,
-			_ => (Int32)JRuntimeVersion.J24,
-		};
 }

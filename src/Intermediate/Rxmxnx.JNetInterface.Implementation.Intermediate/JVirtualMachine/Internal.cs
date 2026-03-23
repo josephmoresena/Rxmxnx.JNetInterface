@@ -268,26 +268,4 @@ public partial class JVirtualMachine
 	/// <see langword="false"/>.
 	/// </returns>
 	internal static Boolean IsMainClass(String hash) => JVirtualMachine.userMainClasses.ContainsKey(hash);
-	/// <summary>
-	/// Indicates whether <typeparamref name="TDataType"/> is compatible with current compilation.
-	/// </summary>
-	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
-	/// <returns>
-	/// <see langword="true"/> if current datatype is compatible with the current compilation; otherwise,
-	/// <see langword="false"/>.
-	/// </returns>
-#if !PACKAGE
-	[ExcludeFromCodeCoverage]
-#endif
-	internal static Boolean IsCompileCompliant<TDataType>() where TDataType : IDataType
-	{
-		if (JVirtualMachine.MaxAndroidApiLevel < 0 && TDataType.Since is JRuntimeVersion.Undefined)
-			// Fixed Java SE Runtime doesn't support non-standard type.
-			return false;
-		if (JVirtualMachine.IsFixedAndroid)
-			// Fixed Android doesn't support Android incompatible type or Android API level doesn't support the type.
-			return TDataType.AndroidApiLevel >= 0 && JVirtualMachine.MaxAndroidApiLevel >= TDataType.AndroidApiLevel;
-		// Fixed runtime version doesn't support the type.
-		return !JVirtualMachine.IsFixedRuntimeVersion || JVirtualMachine.FixedRuntimeVersion >= TDataType.Since;
-	}
 }

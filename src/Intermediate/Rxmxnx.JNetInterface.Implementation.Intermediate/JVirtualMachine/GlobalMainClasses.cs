@@ -26,7 +26,7 @@ public partial class JVirtualMachine
 		/// <param name="vm">A <see cref="JVirtualMachine"/> instance.</param>
 		protected GlobalMainClasses(IVirtualMachine vm)
 		{
-			if (JVirtualMachine.IsFixedAndroid && !JVirtualMachine.AndroidApiLevel.HasValue)
+			if (AndroidFeature.IsFixedAndroid && !AndroidHelper.IsZygote)
 				throw new InvalidOperationException(IMessageResource.GetInstance().AndroidRuntimeRequired);
 
 			this._classMetadata = ClassObjectMetadata.Create<JClassObject>();

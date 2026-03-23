@@ -22,6 +22,8 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	/// Indicates whether current thread is attached to a JVM.
 	/// </summary>
 	public virtual Boolean IsAttached => this._cache.VirtualMachine.IsAlive;
+	/// <inheritdoc cref="IEnvironment.Version"/>
+	public Int32 Version => this._cache.Version;
 	/// <inheritdoc cref="IEnvironment.PendingException"/>
 	public ThrowableException? PendingException
 	{
@@ -34,14 +36,22 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	/// <inheritdoc/>
 	public IVirtualMachine VirtualMachine => this._cache.VirtualMachine;
 	/// <inheritdoc/>
-	public Int32 Version => this._cache.Version;
-	/// <inheritdoc/>
 	public Int32 UsedStackBytes => this._cache.UsedStackBytes;
 	/// <inheritdoc/>
 	public Int32 UsableStackBytes
 	{
 		get => this._cache.MaxStackBytes;
 		set => this._cache.SetUsableStackBytes(value);
+	}
+
+	Int32 IEnvironment.Version
+	{
+		get
+		{
+			if (AndroidFeature.IsFixedAndroid) return (Int32)JRuntimeVersion.J6;
+			if (JavaStandardFeature.GetInterfaceVersion() is { } jniVersion) return jniVersion;
+			return this.Version;
+		}
 	}
 
 	void IEnvironment.WithFrame(Int32 capacity, Action action)
@@ -94,10 +104,6 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	[ExcludeFromCodeCoverage]
 #endif
 	public sealed override Int32 GetHashCode() => this._cache.GetHashCode();
-
-	/// <inheritdoc cref="LocalMainClasses.GetInterfaceVersion()"/>
-	[return: NotNullIfNotNull(nameof(env))]
-	public static Int32? GetInterfaceVersion(JEnvironment? env) => env?._cache.GetInterfaceVersion();
 
 	/// <summary>
 	/// Determines whether a specified <see cref="JEnvironment"/> and a <see cref="JEnvironment"/> instance
