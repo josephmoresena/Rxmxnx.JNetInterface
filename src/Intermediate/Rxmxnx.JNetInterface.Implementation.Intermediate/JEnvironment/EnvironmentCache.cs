@@ -11,6 +11,11 @@ partial class JEnvironment
 #endif
 	private sealed partial class EnvironmentCache : LocalMainClasses
 	{
+		/// <inheritdoc cref="JEnvironment.Reference"/>
+		public readonly JEnvironmentRef Reference;
+		/// <inheritdoc cref="JEnvironment.VirtualMachine"/>
+		public readonly JVirtualMachine VirtualMachine;
+
 		/// <summary>
 		/// Current thrown exception.
 		/// </summary>
@@ -34,8 +39,11 @@ partial class JEnvironment
 		/// <param name="vm">A <see cref="JVirtualMachine"/> instance.</param>
 		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
 		/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
-		public EnvironmentCache(JVirtualMachine vm, JEnvironment env, JEnvironmentRef envRef) : base(vm, envRef, env)
+		public EnvironmentCache(JVirtualMachine vm, JEnvironment env, JEnvironmentRef envRef) : base(envRef, env)
 		{
+			this.Reference = envRef;
+			this.VirtualMachine = vm;
+
 			this._env = env;
 			this._objects = new(this._classes);
 			if (this.Version < NativeInterface.RequiredVersion) return; // Avoid class loading if unsupported version.

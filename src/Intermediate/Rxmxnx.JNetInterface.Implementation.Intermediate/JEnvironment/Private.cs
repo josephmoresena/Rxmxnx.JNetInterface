@@ -35,30 +35,6 @@ partial class JEnvironment
 		return result.Value;
 	}
 	/// <summary>
-	/// Creates a new local reference frame.
-	/// </summary>
-	/// <param name="capacity">Frame capacity.</param>
-	/// <exception cref="InvalidOperationException"/>
-	/// <exception cref="JniException"/>
-	private void CreateLocalFrame(Int32 capacity)
-	{
-		ref readonly NativeInterface nativeInterface =
-			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.PushLocalFrameInfo);
-		JResult result = nativeInterface.ReferenceFunctions.PushLocalFrame(this.Reference, capacity);
-		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
-	}
-	/// <summary>
-	/// Deletes the current local reference frame.
-	/// </summary>
-	/// <param name="frame">A <see cref="LocalFrame"/> instance.</param>
-	/// <param name="result">Current result.</param>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private void DeleteLocalFrame(LocalFrame frame, JLocalObject? result)
-	{
-		this._cache.DeleteLocalFrame(result);
-		JTrace.DeleteObjectCache(frame.Id, result);
-	}
-	/// <summary>
 	/// Retrieves the <see cref="JArrayTypeMetadata"/> instance for given <paramref name="arraySignature"/>.
 	/// </summary>
 	/// <param name="arraySignature">JNI array signature.</param>

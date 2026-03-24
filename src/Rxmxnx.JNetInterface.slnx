@@ -56,7 +56,7 @@
     </Folder>
     <Folder Name="/Intermediate/">
         <Project
-                Path="Intermediate/Rxmxnx.JNetInterface.Jni.Intermediate/Rxmxnx.JNetInterface.Jni.Intermediate.csproj"/>
+                Path="Intermediate/Rxmxnx.JNetInterface.Environment.Intermediate/Rxmxnx.JNetInterface.Environment.Intermediate.csproj"/>
         <Project
                 Path="Intermediate\Rxmxnx.JNetInterface.Common.Intermediate\Rxmxnx.JNetInterface.Common.Intermediate.csproj"/>
         <Project
@@ -80,6 +80,12 @@
                 Path="Intermediate\Rxmxnx.JNetInterface.Java.Intermediate\Rxmxnx.JNetInterface.Java.Intermediate.csproj"/>
         <Project
                 Path="Intermediate\Rxmxnx.JNetInterface.Trace.Intermediate\Rxmxnx.JNetInterface.Trace.Intermediate.csproj"/>
+    </Folder>
+    <Folder Name="/Intermediate/NativeInterface/">
+        <Project
+                Path="Intermediate/Rxmxnx.JNetInterface.Jni.Intermediate/Rxmxnx.JNetInterface.Jni.Intermediate.csproj"/>
+        <Project
+                Path="Intermediate/Rxmxnx.JNetInterface.ModernJni.Intermediate/Rxmxnx.JNetInterface.ModernJni.Intermediate.csproj"/>
     </Folder>
     <Folder Name="/Package/">
         <File Path="..\package\Rxmxnx.JNetInterface\CompatibilitySuppressions.xml"/>

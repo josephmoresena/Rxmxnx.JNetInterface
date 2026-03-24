@@ -19,6 +19,20 @@ partial class JEnvironment : ILocalCacheOwner, IAccessibleManager, IMainClassLoa
 		get => this.LocalCache;
 		set => this.SetObjectCache(value);
 	}
+	void ILocalCacheOwner.CreateLocalFrame(Int32 capacity)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.PushLocalFrameInfo);
+		JResult result = nativeInterface.ReferenceFunctions.PushLocalFrame(this.Reference, capacity);
+		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
+		this._cache.CheckJniError();
+	}
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void ILocalCacheOwner.DeleteLocalFrame(LocalFrame frame, JLocalObject? result)
+	{
+		this._cache.DeleteLocalFrame(result);
+		JTrace.DeleteObjectCache(frame.Id, result);
+	}
 	JVirtualMachineRef IMainClassLoader.VirtualMachineRef => this.VirtualMachine.Reference;
 	JEnvironmentRef IMainClassLoader.EnvironmentRef => this.Reference;
 	JGlobalRef IMainClassLoader.GetMainClassGlobalRef(ITypeInformation typeInformation)

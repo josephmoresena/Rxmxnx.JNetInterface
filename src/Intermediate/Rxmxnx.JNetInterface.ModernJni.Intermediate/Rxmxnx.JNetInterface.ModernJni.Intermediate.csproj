@@ -3,27 +3,18 @@
     <Import Project="..\Intermediate.Library.props"/>
 
     <ItemGroup>
-        <Using Include="System.Buffers"/>
         <Using Include="System.Diagnostics.CodeAnalysis"/>
-        <Using Include="System.Numerics"/>
         <Using Include="System.Runtime.CompilerServices"/>
         <Using Include="System.Runtime.InteropServices"/>
 
         <Using Include="Rxmxnx.PInvoke"/>
 
         <Using Include="Rxmxnx.JNetInterface.Internal"/>
-        <Using Include="Rxmxnx.JNetInterface.Native.Identifiers"/>
         <Using Include="Rxmxnx.JNetInterface.Native.References"/>
-        <Using Include="Rxmxnx.JNetInterface.Native.Values.Functions"/>
-        <Using Include="Rxmxnx.JNetInterface.Native.Values.Interfaces"/>
         <Using Include="Rxmxnx.JNetInterface.Primitives"/>
-        <Using Include="Rxmxnx.JNetInterface.Types"/>
     </ItemGroup>
 
     <ItemGroup>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>Rxmxnx.JNetInterface.ModernJni.Intermediate</_Parameter1>
-        </AssemblyAttribute>
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
             <_Parameter1>Rxmxnx.JNetInterface.Environment.Intermediate</_Parameter1>
         </AssemblyAttribute>
@@ -36,7 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.Jni.Intermediate\Rxmxnx.JNetInterface.Jni.Intermediate.csproj"/>
     </ItemGroup>
 
 </Project>
