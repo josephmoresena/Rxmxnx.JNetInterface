@@ -20,7 +20,7 @@ public sealed class LocalFrameTests
 			{
 				(env as IEnvironment).WithFrame(capacity, env, e =>
 				{
-					IWrapper.IBase<Int32?> cache = e.LocalCache;
+					IMutableWrapper<Int32?> cache = e.LocalCache;
 					Assert.Equal(capacity, cache.Value);
 				});
 			});
