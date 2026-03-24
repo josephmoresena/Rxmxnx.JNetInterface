@@ -6,4 +6,5 @@ public interface IDownloadNotifier
 	void Begin(String url, Int64? total);
 	void Progress(String url, Int64? total, Int64 progress, ref Int32 cursorTop, ref Int32 textLength);
 	void End(String url, Int64 total, String destinationPath);
+	void Fail(String stateUrl);
 }

@@ -31,6 +31,7 @@ public partial class Launcher
 
 			String jdkPath = $"jdk_{arch}_{version}";
 			if (this.GetJdk(version, arch, jdkPath) is { } result) return result;
+
 			IReadOnlyDictionary<JdkVersion, String> urls = arch is Architecture.X64 ? Mac.amd64Url : Mac.arm64Url;
 			String tempFileName = Path.GetTempFileName();
 			try
