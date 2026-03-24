@@ -61,7 +61,7 @@ public static class Utilities
 		}
 		catch
 		{
-			state.Notifier.Fail(state.Url);
+			state.Notifier?.Fail(state.Url);
 			throw;
 		}
 	}
