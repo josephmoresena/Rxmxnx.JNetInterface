@@ -1,0 +1,162 @@
+namespace Rxmxnx.JNetInterface.Internal;
+
+internal partial class GlobalMainClasses
+{
+	/// <summary>
+	/// Metadata for <see cref="JBoolean"/>.
+	/// </summary>
+	private readonly ClassObjectMetadata _booleanMetadata;
+	/// <summary>
+	/// Metadata for <see cref="JByte"/>.
+	/// </summary>
+	private readonly ClassObjectMetadata _byteMetadata;
+	/// <summary>
+	/// Metadata for <see cref="JChar"/>.
+	/// </summary>
+	private readonly ClassObjectMetadata _charMetadata;
+
+	/// <summary>
+	/// Metadata for <see cref="JClassObject"/>.
+	/// </summary>
+	private readonly ClassObjectMetadata _classMetadata;
+	/// <summary>
+	/// Main class set.
+	/// </summary>
+	private readonly IMainClassSet _classSet;
+	/// <summary>
+	/// Metadata for <see cref="JDouble"/>.
+	/// </summary>
+	private readonly ClassObjectMetadata _doubleMetadata;
+	/// <summary>
+	/// Metadata for <see cref="JFloat"/>.
+	/// </summary>
+	private readonly ClassObjectMetadata _floatMetadata;
+	/// <summary>
+	/// Metadata for <see cref="JInt"/>.
+	/// </summary>
+	private readonly ClassObjectMetadata _intMetadata;
+	/// <summary>
+	/// Metadata for <see cref="JLong"/>.
+	/// </summary>
+	private readonly ClassObjectMetadata _longMetadata;
+	/// <summary>
+	/// Metadata for <see cref="JShort"/>.
+	/// </summary>
+	private readonly ClassObjectMetadata _shortMetadata;
+	/// <summary>
+	/// Metadata for <see cref="JStackTraceElementObject"/>.
+	/// </summary>
+	private readonly ClassObjectMetadata _stackTraceElementMetadata;
+	/// <summary>
+	/// Metadata for <see cref="JSystemObject"/>.
+	/// </summary>
+	private readonly ClassObjectMetadata _systemMetadata;
+	/// <summary>
+	/// Metadata for <see cref="JThrowableObject"/>.
+	/// </summary>
+	private readonly ClassObjectMetadata _throwableMetadata;
+
+	/// <summary>
+	/// JVM version.
+	/// </summary>
+	private JRuntimeVersion? _version;
+
+	/// <summary>
+	/// Appends main global class to dictionary.
+	/// </summary>
+	/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
+	/// <param name="classMetadata">A <see cref="_classMetadata"/> instance.</param>
+	private void AppendGlobal(IVirtualMachine vm, ClassObjectMetadata classMetadata)
+	{
+		String hash = classMetadata.Hash;
+		if (!this.GlobalClassCache.TryGetValue(hash, out JGlobal? mainClass))
+		{
+			mainClass = new(vm, classMetadata, default);
+			this.GlobalClassCache[hash] = mainClass;
+		}
+		this.GlobalClassCache[classMetadata.Hash] = mainClass;
+	}
+	/// <summary>
+	/// Loads user global classes.
+	/// </summary>
+	/// <param name="env">A <see cref="IMainClassLoader"/> instance.</param>
+	private void LoadUserMainClasses(IMainClassLoader env)
+	{
+		foreach (ITypeInformation typeInformation in this._classSet.ClassesInformation)
+		{
+			if (!this.GlobalClassCache.TryGetValue(typeInformation.Hash, out JGlobal? jGlobal) ||
+			    !jGlobal.IsDefault) continue;
+			if (!this.IsMainLoadable(env, typeInformation.Since, typeInformation.AndroidApiLevel)) continue;
+
+			try
+			{
+				GlobalMainClasses.LoadMainClass(env, jGlobal, typeInformation);
+			}
+			catch (Exception)
+			{
+				if (!GlobalMainClasses.CanProceedWithout(typeInformation))
+					throw;
+			}
+		}
+	}
+	/// <summary>
+	/// Indicates whether the current main class is loadable.
+	/// </summary>
+	/// <param name="loader">A <see cref="IMainClassLoader"/> instance.</param>
+	/// <param name="sinceVersion">Class main's since version.</param>
+	/// <param name="apiLevel">Class main's Android API level.</param>
+	/// <returns>
+	/// <see langword="true"/> if the since value is lower to the current JRE version; otherwise
+	/// <see langword="false"/>.
+	/// </returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	private Boolean IsMainLoadable(IMainClassLoader loader, JRuntimeVersion sinceVersion, Int32 apiLevel)
+	{
+		// The JNI version is checked to avoid check the JRE version.
+		if ((Int32)sinceVersion < loader.Version) return true;
+		// If running on Android, checks the API level.
+		if (AndroidHelper.IsZygote)
+			return apiLevel >= 0 && AndroidHelper.ApiLevel >= apiLevel;
+		// If no running on Android, avoid to load classes with undefined version.
+		if (sinceVersion is JRuntimeVersion.Undefined) return false;
+		// If fixed JRE version, avoid to check the JRE version.
+		if (JavaStandardFeature.GetRuntimeVersion() is { } jreVersion && jreVersion >= sinceVersion)
+			return true;
+		// Check java.specification.version property.
+		this._version ??= loader.GetVersion(this.SystemObject.As<JClassLocalRef>(), true);
+		return sinceVersion < this._version;
+	}
+	/// <summary>
+	/// Loads primitive global classes.
+	/// </summary>
+	/// <param name="loader">A <see cref="IMainClassLoader"/> instance.</param>
+	private void LoadPrimitiveMainClasses(IMainClassLoader loader)
+	{
+		this.LoadPrimitiveMainClass(loader, ClassObjectMetadata.VoidMetadata, ClassNameHelper.VoidObjectHash);
+		this.LoadPrimitiveMainClass(loader, this._booleanMetadata, ClassNameHelper.BooleanObjectHash);
+		this.LoadPrimitiveMainClass(loader, this._byteMetadata, ClassNameHelper.ByteObjectHash);
+		this.LoadPrimitiveMainClass(loader, this._charMetadata, ClassNameHelper.CharacterObjectHash);
+		this.LoadPrimitiveMainClass(loader, this._doubleMetadata, ClassNameHelper.DoubleObjectHash);
+		this.LoadPrimitiveMainClass(loader, this._floatMetadata, ClassNameHelper.FloatObjectHash);
+		this.LoadPrimitiveMainClass(loader, this._intMetadata, ClassNameHelper.IntegerObjectHash);
+		this.LoadPrimitiveMainClass(loader, this._longMetadata, ClassNameHelper.LongObjectHash);
+		this.LoadPrimitiveMainClass(loader, this._shortMetadata, ClassNameHelper.ShortObjectHash);
+	}
+	/// <summary>
+	/// Loads a primitive global class.
+	/// </summary>
+	/// <param name="loader">A <see cref="IMainClassLoader"/> instance.</param>
+	/// <param name="classMetadata">A <see cref="ClassObjectMetadata"/> instance.</param>
+	/// <param name="wrapperClassHash">Wrapper class hash.</param>
+	private void LoadPrimitiveMainClass(IMainClassLoader loader, ClassObjectMetadata classMetadata,
+		String wrapperClassHash)
+	{
+		JGlobal pGlobalClass = this.GlobalClassCache[classMetadata.Hash];
+		this.GlobalClassCache.TryGetValue(wrapperClassHash, out JGlobal? wGlobalClass);
+		JGlobalRef globalRef = loader.GetPrimitiveMainClassGlobalRef(classMetadata, wGlobalClass);
+		pGlobalClass.SetValue(globalRef);
+		JTrace.MainClassLoaded(classMetadata.ClassSignature, globalRef);
+	}
+}

@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// This class implements the <see cref="IVirtualMachine"/> interface.
 /// </summary>
-public partial class JVirtualMachine : IVirtualMachine
+public partial class JVirtualMachine : IVirtualMachine, IMainClassSet
 {
 	/// <summary>
 	/// Android API level.

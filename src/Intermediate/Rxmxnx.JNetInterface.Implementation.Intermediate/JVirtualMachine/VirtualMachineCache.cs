@@ -31,7 +31,7 @@ public partial class JVirtualMachine
 		/// </summary>
 		/// <param name="vm">A <see cref="JVirtualMachine"/> instance.</param>
 		/// <param name="vmRef">A <see cref="JVirtualMachineRef"/> reference.</param>
-		public VirtualMachineCache(JVirtualMachine vm, JVirtualMachineRef vmRef) : base(vm)
+		public VirtualMachineCache(JVirtualMachine vm, JVirtualMachineRef vmRef) : base(vm, vm)
 		{
 			this._vm = vm;
 			this.Reference = vmRef;

@@ -34,62 +34,6 @@ partial class JEnvironment
 		this._cache.SetObjectCache(localCache);
 	}
 	/// <summary>
-	/// Retrieves a global reference for given class name.
-	/// </summary>
-	/// <param name="typeInformation">Type information.</param>
-	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
-	internal JGlobalRef GetMainClassGlobalRef(ITypeInformation typeInformation)
-	{
-		JClassLocalRef classRef = this._cache.FindMainClass(typeInformation.ClassName, typeInformation.Signature);
-		return this.GetMainClassGlobalRef(typeInformation, classRef);
-	}
-	/// <summary>
-	/// Retrieves the current JRE version.
-	/// </summary>
-	/// <param name="systemClassRef"><c>java.lang.System</c> class reference.</param>
-	/// <param name="initializing">Indicates whether the current call occurs on VM initializing.</param>
-	/// <returns>Current JRE version.</returns>
-	internal JRuntimeVersion GetVersion(JClassLocalRef systemClassRef, Boolean initializing)
-	{
-		if (!initializing) this.CheckJniError();
-		JMethodId getPropertyId = this.GetStaticMethodId(NativeFunctionSetImpl.GetPropertyDefinition, systemClassRef);
-		using LocalFrame? _ = !initializing ? new(this, IVirtualMachine.GetVersionCapacity) : default;
-		if (getPropertyId != default)
-		{
-			Decimal jreVersion = this._cache.GetRuntimeVersion(systemClassRef, getPropertyId);
-			switch (jreVersion)
-			{
-				case < 1:
-					break;
-				case < 2:
-					return JRuntimeVersion.SEd0 + (Int32)(10 * (jreVersion - 1.0m));
-				default:
-					return (JRuntimeVersion)((Int32)JRuntimeVersion.SEd0 * jreVersion);
-			}
-		}
-		this._cache.ClearException();
-		// If it was not possible to determine the JRE version, the JNI version is assumed.
-		if (JavaStandardFeature.GetRuntimeVersion() is { } jre) return jre;
-		if (AndroidFeature.IsFixedAndroid) return JRuntimeVersion.J6; // Android runtime is based on JRE 1.6.
-		return (JRuntimeVersion)this.Version;
-	}
-	/// <summary>
-	/// Retrieves a global reference for given class name.
-	/// </summary>
-	/// <param name="classMetadata">Class metadata.</param>
-	/// <param name="wClassGlobal">Wrapper class global instance.</param>
-	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
-	internal JGlobalRef GetPrimitiveMainClassGlobalRef(ClassObjectMetadata classMetadata,
-		JGlobalBase? wClassGlobal = default)
-	{
-		Byte signature = classMetadata.ClassSignature[0];
-		String className = ClassNameHelper.GetPrimitiveClassName(signature);
-		JClassLocalRef classRef = !JObject.IsNullOrDefault(wClassGlobal) ?
-			this._cache.FindPrimitiveClass(wClassGlobal.As<JClassLocalRef>(), className) :
-			this._cache.FindPrimitiveClass(signature);
-		return this.GetMainClassGlobalRef(classMetadata, classRef);
-	}
-	/// <summary>
 	/// Deletes <paramref name="globalRef"/>.
 	/// </summary>
 	/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>

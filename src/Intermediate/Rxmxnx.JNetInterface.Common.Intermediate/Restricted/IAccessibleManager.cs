@@ -1,5 +1,8 @@
 namespace Rxmxnx.JNetInterface.Restricted;
 
+/// <summary>
+/// Represents an accessible manager object.
+/// </summary>
 internal interface IAccessibleManager
 {
 	/// <summary>
