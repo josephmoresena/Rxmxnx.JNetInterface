@@ -47,6 +47,9 @@ jobs:
           echo '    <TargetFrameworks>net10.0;net9.0;net8.0</TargetFrameworks>' >> Directory.Build.props
           echo '    <LangVersion>latest</LangVersion>' >> Directory.Build.props
           echo '  </PropertyGroup>' >> Directory.Build.props
+          echo '  <ItemGroup>' >> Directory.Build.props
+          echo '    <RuntimeHostConfigurationOption Include="JNetInterface.FixedRuntime.Android" Value="true" Trim="true"/>' >> Directory.Build.props
+          echo '  </ItemGroup>' >> Directory.Build.props
           echo '</Project>' >> Directory.Build.props  
 
       - name: Create nuget.config for bionic-libs

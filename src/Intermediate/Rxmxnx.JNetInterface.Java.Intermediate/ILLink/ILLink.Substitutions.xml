@@ -3,7 +3,7 @@
     <!-- Fixed Java Version Feature -->
     <assembly fullname="Rxmxnx.JNetInterface.Java.Intermediate">
         <!-- Runtime Feature Standard -->
-        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.SEd2"
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.Standard"
               featurevalue="true">
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
         </type>
