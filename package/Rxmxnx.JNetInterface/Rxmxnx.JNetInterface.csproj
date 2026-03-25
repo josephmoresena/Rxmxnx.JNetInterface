@@ -17,12 +17,12 @@
 
   <!-- Include intermediate assemblies -->
   <ItemGroup>
-    <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Trace.Intermediate"/>
     <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Android.Intermediate"/>
     <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Java.Intermediate"/>
-    <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Jni.Intermediate"/>
-    <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.MordernJni.Intermediate"/>
+    <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Trace.Intermediate"/>
     <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Common.Intermediate"/>
+    <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Jni.Intermediate"/>
+    <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.ModernJni.Intermediate"/>
     <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Environment.Intermediate"/>
     <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Implementation.Intermediate"/>
   </ItemGroup>
