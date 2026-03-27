@@ -104,7 +104,7 @@ partial class JEnvironment
 				this.CheckJniError();
 				return Unsafe.As<Byte, TElement>(ref MemoryMarshal.GetReference(buffer));
 			}
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
 			return this.GetElementObject<TElement>(arrayRef, index);
 		}
@@ -156,14 +156,14 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
 			ImplementationValidationUtilities.ThrowIfDefault(jArray);
-			return this.VirtualMachine.CreateMemoryAdapter(jArray, referenceKind, false);
+			return this.Host.MemoryManager.CreateMemoryAdapter(jArray, referenceKind, false);
 		}
 		public INativeMemoryAdapter GetCriticalSequence<TPrimitive>(JArrayObject<TPrimitive> jArray,
 			JMemoryReferenceKind referenceKind) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
 			ImplementationValidationUtilities.ThrowIfDefault(jArray);
-			return this.VirtualMachine.CreateMemoryAdapter(jArray, referenceKind, true);
+			return this.Host.MemoryManager.CreateMemoryAdapter(jArray, referenceKind, true);
 		}
 		public IntPtr GetPrimitiveSequence<TPrimitive>(JArrayLocalRef arrayRef, out Boolean isCopy)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
@@ -191,18 +191,17 @@ partial class JEnvironment
 		{
 			try
 			{
-				if (this._env.IsAttached && this.VirtualMachine.IsAlive)
+				if (this._env.IsAttached && this.Host.IsRunning)
 				{
 					JDataTypeMetadata metadata = IDataType.GetMetadata<TPrimitive>();
 					this.ReleasePrimitiveArrayElements(arrayRef, metadata.Signature[0], pointer, mode);
 					this.CheckJniError();
 				}
-				JTrace.ReleaseMemory(false, this._env.IsAttached, this.VirtualMachine.IsAlive, true, arrayRef, pointer);
+				JTrace.ReleaseMemory(false, this._env.IsAttached, this.Host.IsRunning, true, arrayRef, pointer);
 			}
 			catch (Exception)
 			{
-				JTrace.ReleaseMemory(false, this._env.IsAttached, this.VirtualMachine.IsAlive, false, arrayRef,
-				                     pointer);
+				JTrace.ReleaseMemory(false, this._env.IsAttached, this.Host.IsRunning, false, arrayRef, pointer);
 				throw;
 			}
 		}
@@ -210,7 +209,7 @@ partial class JEnvironment
 		{
 			try
 			{
-				if (this._env.IsAttached && this.VirtualMachine.IsAlive)
+				if (this._env.IsAttached && this.Host.IsRunning)
 				{
 					ref readonly NativeInterface nativeInterface =
 						ref this.GetNativeInterface<NativeInterface>(NativeInterface.ReleasePrimitiveArrayCriticalInfo);
@@ -219,13 +218,11 @@ partial class JEnvironment
 					this.CheckJniError();
 					this._criticalCount--;
 				}
-				JTrace.ReleaseMemory(true, this._env.IsAttached, this.VirtualMachine.IsAlive, true, arrayRef,
-				                     criticalPtr);
+				JTrace.ReleaseMemory(true, this._env.IsAttached, this.Host.IsRunning, true, arrayRef, criticalPtr);
 			}
 			catch (Exception)
 			{
-				JTrace.ReleaseMemory(true, this._env.IsAttached, this.VirtualMachine.IsAlive, false, arrayRef,
-				                     criticalPtr);
+				JTrace.ReleaseMemory(true, this._env.IsAttached, this.Host.IsRunning, false, arrayRef, criticalPtr);
 				throw;
 			}
 		}

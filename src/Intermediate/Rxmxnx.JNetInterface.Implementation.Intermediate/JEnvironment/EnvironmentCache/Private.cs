@@ -40,7 +40,7 @@ partial class JEnvironment
 		private AccessCache GetAccess(INativeTransaction jniTransaction, JClassObject jClass)
 		{
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
-			return this._classes[classRef] ?? this.VirtualMachine.GetAccess(classRef) ??
+			return this._classes[classRef] ?? this.Host.TypeManager.GetAccess(classRef) ??
 				throw new ArgumentException(IMessageResource.GetInstance().InvalidClass, jClass.ToTraceText());
 		}
 		/// <summary>
@@ -283,7 +283,7 @@ partial class JEnvironment
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ThrowNewInfo);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(2);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			fixed (Byte* ptr = &MemoryMarshal.GetReference(message))
 				return nativeInterface.ErrorFunctions.ThrowNew(this.Reference, classRef, ptr);
@@ -317,7 +317,7 @@ partial class JEnvironment
 			try
 			{
 				JGlobalRef globalRef = this.CreateGlobalRef(throwableRef.Value);
-				JGlobal jGlobalThrowable = new(this.VirtualMachine, objectMetadata, globalRef);
+				JGlobal jGlobalThrowable = new(this.Host.Value, objectMetadata, globalRef);
 				return throwableMetadata?.CreateException(jGlobalThrowable, message) ??
 					// Use java.lang.Throwable type metadata.
 					JThrowableObject.CreateException(jGlobalThrowable, message);
@@ -342,7 +342,7 @@ partial class JEnvironment
 		/// <returns>Throwable message.</returns>
 		private String GetThrowableMessage(JThrowableLocalRef throwableRef)
 		{
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, this.GetClass<JThrowableObject>());
 			jniTransaction.Add(throwableRef);
 			using JStringObject throwableMessage = this.GetThrowableMessage(throwableRef, access);

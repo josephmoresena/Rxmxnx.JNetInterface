@@ -1,3 +1,5 @@
+using Rxmxnx.JNetInterface.Restricted;
+
 namespace Rxmxnx.JNetInterface.Internal;
 
 #if !PACKAGE
@@ -125,7 +127,7 @@ internal abstract class LocalMainClasses : MainClasses<JClassObject>
 	public static Boolean IsMainGlobal(JGlobal? jGlobal)
 	{
 		if (jGlobal?.ObjectMetadata is not ClassObjectMetadata classMetadata) return false;
-		GlobalMainClasses mainClasses = (jGlobal.VirtualMachine as IWrapper<GlobalMainClasses>)!.Value;
+		GlobalMainClasses mainClasses = (jGlobal.VirtualMachine as IVirtualMachineHost)!.MainClasses;
 		return mainClasses.IsMainGlobal(classMetadata.Hash, jGlobal);
 	}
 

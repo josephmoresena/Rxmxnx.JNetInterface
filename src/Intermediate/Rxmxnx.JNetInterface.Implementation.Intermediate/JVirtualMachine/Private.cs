@@ -51,7 +51,7 @@ public partial class JVirtualMachine
 	{
 		ImplementationValidationUtilities.ThrowIfProxy(args.ThreadGroup);
 		if (this.GetEnvironment() is { } env) return new JEnvironment.JThread(env);
-		using INativeTransaction jniTransaction = this.CreateTransaction(1);
+		using INativeTransaction jniTransaction = this._cache.CreateTransaction(1);
 		fixed (Byte* ptr = &MemoryMarshal.GetReference((ReadOnlySpan<Byte>)args.Name))
 		{
 			VirtualMachineArgumentValue arg = JVirtualMachine.CreateAttachArgument(jniTransaction, ptr, args);

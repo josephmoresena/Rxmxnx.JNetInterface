@@ -31,7 +31,7 @@ public partial class JVirtualMachine
 		/// </summary>
 		/// <param name="vm">A <see cref="JVirtualMachine"/> instance.</param>
 		/// <param name="vmRef">A <see cref="JVirtualMachineRef"/> reference.</param>
-		public VirtualMachineCache(JVirtualMachine vm, JVirtualMachineRef vmRef) : base(vm, vm)
+		public VirtualMachineCache(JVirtualMachine vm, JVirtualMachineRef vmRef) : base(vm)
 		{
 			this._vm = vm;
 			this.Reference = vmRef;
@@ -45,55 +45,6 @@ public partial class JVirtualMachine
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public unsafe ref readonly InvokeInterface GetInvokeInterface()
 			=> ref *(InvokeInterface*)this.Reference.InterfacePointer;
-		/// <summary>
-		/// Register a <see cref="JGlobal"/> instance.
-		/// </summary>
-		/// <param name="jGlobal">A <see cref="JGlobal"/> instance.</param>
-		/// <returns>Registered <see cref="JGlobal"/> instance.</returns>
-		[return: NotNullIfNotNull(nameof(jGlobal))]
-		public JGlobal? Register(JGlobal? jGlobal)
-		{
-			if (jGlobal is null || jGlobal.IsDefault) return jGlobal;
-			using IThread thread = this._vm.CreateThread(ThreadPurpose.CheckGlobalReference);
-			this._globalObjects[jGlobal.Reference] = new(jGlobal.GetCacheable(thread));
-			if (CommonNames.ClassObject.SequenceEqual(jGlobal.ObjectMetadata.ObjectClassName))
-				this.GlobalClassCache.Load(jGlobal.As<JClassLocalRef>());
-			return jGlobal;
-		}
-		/// <summary>
-		/// Register a <see cref="JWeak"/> instance.
-		/// </summary>
-		/// <param name="jWeak">A <see cref="JWeak"/> instance.</param>
-		/// <returns>Registered <see cref="JWeak"/> instance.</returns>
-		[return: NotNullIfNotNull(nameof(jWeak))]
-		public JWeak? Register(JWeak? jWeak)
-		{
-			if (jWeak is null || jWeak.IsDefault) return jWeak;
-			this._weakObjects[jWeak.Reference] = new(jWeak);
-			if (CommonNames.ClassObject.SequenceEqual(jWeak.ObjectMetadata.ObjectClassName))
-				this.WeakClassCache.Load(jWeak.As<JClassLocalRef>());
-			return jWeak;
-		}
-		/// <summary>
-		/// Removes <see cref="JGlobalRef"/> from current cache.
-		/// </summary>
-		/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>
-		public void Remove(JGlobalRef globalRef)
-		{
-			if (globalRef == default) return;
-			this._globalObjects.Remove(globalRef, out _);
-			this.GlobalClassCache.Unload(new JClassLocalRef(globalRef));
-		}
-		/// <summary>
-		/// Removes <see cref="JWeakRef"/> from current cache.
-		/// </summary>
-		/// <param name="weakRef">A <see cref="JWeakRef"/> reference.</param>
-		public void Remove(JWeakRef weakRef)
-		{
-			if (weakRef == default) return;
-			this._weakObjects.Remove(weakRef, out _);
-			this.WeakClassCache.Unload(new JClassLocalRef(weakRef));
-		}
 		/// <summary>
 		/// Clears cache.
 		/// </summary>
@@ -119,5 +70,8 @@ public partial class JVirtualMachine
 					env.DeleteGlobalRef(jGlobal.Reference);
 			}
 		}
+		/// <inheritdoc cref="INativeMemoryManager.CreateTransaction(Int32)"/>
+		public INativeTransaction CreateTransaction(Int32 capacity)
+			=> JniTransactionHandle.CreateTransaction(capacity, this._transactions);
 	}
 }

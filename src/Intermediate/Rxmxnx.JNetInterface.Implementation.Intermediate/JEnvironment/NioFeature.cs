@@ -83,7 +83,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfDefault(buffer);
 			ref readonly NativeInterface4 nativeInterface =
 				ref this.GetNativeInterface<NativeInterface4>(NativeInterface4.GetDirectBufferAddressInfo);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(buffer);
 			IntPtr result = nativeInterface.NioFunctions.GetDirectBufferAddress(this.Reference, localRef);
 			this.CheckJniError();
@@ -95,7 +95,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfDefault(buffer);
 			ref readonly NativeInterface4 nativeInterface =
 				ref this.GetNativeInterface<NativeInterface4>(NativeInterface4.GetDirectBufferAddressInfo);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(buffer);
 			Int64 result = nativeInterface.NioFunctions.GetDirectBufferCapacity(this.Reference, localRef);
 			this.CheckJniError();

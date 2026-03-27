@@ -81,7 +81,7 @@ partial class JEnvironment
 			out JMethodId methodId, Boolean execution = true)
 		{
 			INativeTransaction jniTransaction =
-				this.VirtualMachine.CreateTransaction(1 + (execution ? definition.ReferenceCount : 0));
+				this.Host.MemoryManager.CreateTransaction(1 + (execution ? definition.ReferenceCount : 0));
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			methodId = access.GetStaticMethodId(definition, this._env);
 			return jniTransaction;
@@ -96,7 +96,7 @@ partial class JEnvironment
 		private INativeTransaction GetInstanceTransaction(JClassObject jClass, JCallDefinition definition,
 			out JMethodId methodId)
 		{
-			INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			methodId = access.GetMethodId(definition, this._env);
 			return jniTransaction;
@@ -113,7 +113,8 @@ partial class JEnvironment
 		private INativeTransaction GetInstanceTransaction(JClassObject jClass, JLocalObject jLocal,
 			JCallDefinition definition, out JObjectLocalRef localRef, out JMethodId methodId)
 		{
-			INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2 + definition.ReferenceCount);
+			INativeTransaction jniTransaction =
+				this.Host.MemoryManager.CreateTransaction(2 + definition.ReferenceCount);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			methodId = access.GetMethodId(definition, this._env);
 			localRef = this.UseObject(jniTransaction, jLocal);

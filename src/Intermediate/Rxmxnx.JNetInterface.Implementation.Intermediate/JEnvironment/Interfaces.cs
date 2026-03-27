@@ -26,12 +26,12 @@ partial class JEnvironment : IEquatable<IEnvironment>, IEquatable<JEnvironment>
 	{
 		if (jObject is not JReferenceObject jRefObj || jRefObj.IsDefault || jRefObj.IsProxy)
 			return JReferenceType.InvalidRefType;
-		using INativeTransaction jniTransaction = this._cache.VirtualMachine.CreateTransaction(1);
+		using INativeTransaction jniTransaction = this._cache.Host.MemoryManager.CreateTransaction(1);
 		JObjectLocalRef localRef = jniTransaction.Add(jRefObj);
 		JReferenceType result = this.GetReferenceType(localRef);
 		if (result == JReferenceType.InvalidRefType)
 		{
-			if (jRefObj is JGlobalBase jGlobal) (this.VirtualMachine as JVirtualMachine)!.Remove(jGlobal);
+			if (jRefObj is JGlobalBase jGlobal) this._cache.Host.GlobalManager.Remove(jGlobal);
 			else this._cache.Remove(jRefObj as JLocalObject);
 			jRefObj.ClearValue();
 		}
@@ -57,7 +57,7 @@ partial class JEnvironment : IEquatable<IEnvironment>, IEquatable<JEnvironment>
 
 		ImplementationValidationUtilities.ThrowIfProxy(jRefObj);
 		ImplementationValidationUtilities.ThrowIfProxy(jRefOther);
-		using INativeTransaction jniTransaction = this._cache.VirtualMachine.CreateTransaction(2);
+		using INativeTransaction jniTransaction = this._cache.Host.MemoryManager.CreateTransaction(2);
 		JObjectLocalRef localRef = jniTransaction.Add(jRefObj);
 		JObjectLocalRef otherLocalRef = jniTransaction.Add(jRefOther);
 		return this.IsSame(localRef, otherLocalRef);

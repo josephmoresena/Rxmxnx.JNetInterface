@@ -46,7 +46,7 @@ partial class JEnvironment
 		{
 			if (jClass is null) return;
 			this._classes[jClass.Hash] = jClass;
-			this.VirtualMachine.LoadGlobal(jClass);
+			this.Host.TypeManager.LoadGlobal(jClass);
 		}
 		/// <inheritdoc cref="JEnvironment.LoadClass(JClassObject?)"/>
 		/// <param name="frame">A <see cref="LocalFrame"/> instance.</param>
@@ -55,7 +55,7 @@ partial class JEnvironment
 		public void LoadClass(LocalFrame frame, JClassLocalRef classRef, JClassObject jClass)
 		{
 			this._classes[jClass.Hash] = jClass;
-			this.VirtualMachine.LoadGlobal(jClass);
+			this.Host.TypeManager.LoadGlobal(jClass);
 			if (classRef.Value != jClass.LocalReference) return;
 			JTrace.RegisterObject(jClass, frame.Id, frame.Name);
 			frame[classRef.Value] = jClass.Lifetime.GetCacheable();
@@ -104,7 +104,7 @@ partial class JEnvironment
 		{
 			if (jClass is null) return default;
 			Boolean isMainClass = JVirtualMachine.IsMainClass(jClass.Hash);
-			JGlobal? jGlobal = isMainClass ? this.VirtualMachine.LoadGlobal(jClass) : default;
+			JGlobal? jGlobal = isMainClass ? this.Host.TypeManager.LoadGlobal(jClass) : default;
 			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
 			Boolean findClass = classRef == default;
 
@@ -115,7 +115,7 @@ partial class JEnvironment
 					if (findClass) classRef = this.FindClass(jClass);
 					ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
 					jGlobal.SetValue(this._env.GetMainClassGlobalRef(classMetadata, classRef, findClass));
-					this.VirtualMachine.ReloadAccess(jClass.Hash);
+					this.Host.TypeManager.ReloadAccess(jClass.Hash);
 				}
 				// Always use the global reference if it is a main class.
 				classRef = jGlobal.As<JClassLocalRef>();

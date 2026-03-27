@@ -371,7 +371,7 @@ partial class JEnvironment
 	/// </returns>
 	private static Boolean IsValidationAvoidable(EnvironmentCache? cache, JGlobalBase jGlobal)
 	{
-		if (cache is null || !cache.VirtualMachine.SecureRemove(jGlobal.As<JObjectLocalRef>())) return true;
+		if (cache is null || !cache.Host.MemoryManager.SecureRemove(jGlobal.As<JObjectLocalRef>())) return true;
 		Boolean isWeak = jGlobal is JWeak;
 		if (!isWeak && LocalMainClasses.IsMainGlobal(jGlobal as JGlobal))
 			return true;

@@ -51,7 +51,7 @@ partial class JEnvironment
 		private JObjectLocalRef GetStaticObjectField(JClassObject jClass, JFieldDefinition definition)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._env);
 			return this.GetStaticObjectField(jClass.Reference, fieldId);
@@ -293,7 +293,7 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction =
-				this.VirtualMachine.CreateTransaction(1 + definition.ReferenceCount);
+				this.Host.MemoryManager.CreateTransaction(1 + definition.ReferenceCount);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JMethodId methodId = access.GetMethodId(definition, this._env);
 			return this.NewObject(definition, jClass.Reference, args, jniTransaction, methodId);

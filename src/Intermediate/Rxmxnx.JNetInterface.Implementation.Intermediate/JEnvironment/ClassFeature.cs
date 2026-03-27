@@ -56,11 +56,11 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
 			if (this.Version >= NativeInterface9.RequiredVersion)
 			{
-				using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+				using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 				JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 				return this.GetModule(classRef);
 			}
-			if (JVirtualMachine.AndroidApiLevel > 0 || this.VirtualMachine.Version < JRuntimeVersion.J9) return default;
+			if (JVirtualMachine.AndroidApiLevel > 0 || this.Host.Value.Version < JRuntimeVersion.J9) return default;
 			return EnvironmentCache.GetModule(this, jClass);
 		}
 		public void ThrowNew(JClassObject jClass, String? message, Boolean throwException)
@@ -102,7 +102,7 @@ partial class JEnvironment
 		public JClassObject GetClass(ReadOnlySpan<Byte> className)
 		{
 			TypeInfoSequence classInformation = MetadataHelper.GetClassInformation(className, false);
-			ITypeInformation typeInformation = this.VirtualMachine.GetTypeInformation(classInformation.ToString()) ??
+			ITypeInformation typeInformation = this.Host.TypeManager.GetTypeInformation(classInformation.ToString()) ??
 				new TypeInformation(classInformation);
 			return this.GetOrFindClass(typeInformation);
 		}
@@ -119,15 +119,16 @@ partial class JEnvironment
 		public JClassObject GetObjectClass(ObjectMetadata objectMetadata)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(objectMetadata);
-			ITypeInformation typeInformation = this.VirtualMachine.GetTypeInformation(objectMetadata.ObjectClassHash) ??
-				new TypeInformation(new(objectMetadata.ObjectClassHash, objectMetadata.ObjectClassName.Length,
-				                        objectMetadata.ObjectSignature.Length));
+			ITypeInformation typeInformation =
+				this.Host.TypeManager.GetTypeInformation(objectMetadata.ObjectClassHash) ?? new TypeInformation(
+					new(objectMetadata.ObjectClassHash, objectMetadata.ObjectClassName.Length,
+					    objectMetadata.ObjectSignature.Length));
 			return this.GetOrFindClass(typeInformation);
 		}
 		public JClassObject GetObjectClass(JLocalObject jLocal)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(jLocal);
 			JClassLocalRef classRef = this._env.GetObjectClass(localRef);
 			JTypeKind kind = jLocal is JArrayObject ? JTypeKind.Array : JTypeKind.Class;
@@ -145,7 +146,7 @@ partial class JEnvironment
 			    metadata.IsCompatibleWith(this._env))
 				// Only if super class is compatible with current JRE or Android API.
 				return this.GetOrFindClass(metadata); // Well-known class.
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(2);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			ImplementationValidationUtilities.ThrowIfDefault(jClass);
 			ref readonly NativeInterface nativeInterface =
@@ -169,7 +170,7 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(2);
 			JObjectLocalRef localRef = jniTransaction.Add(jObject);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			return this.IsInstanceOf(localRef, classRef);
@@ -200,7 +201,7 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
 			ImplementationValidationUtilities.ThrowIfDefault(jClass);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add(jClass);
 			Boolean isLocalRef = this.IsLocalObject(jClass, out JReferenceType referenceType);
 			JTrace.GetClassInfo(classRef, referenceType);

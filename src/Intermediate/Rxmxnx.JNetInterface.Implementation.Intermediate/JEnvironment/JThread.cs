@@ -53,10 +53,9 @@ partial class JEnvironment
 			if (!this.IsDisposable || this._isDisposed.Value) return;
 			this._isDisposed.Value = true;
 
-			JVirtualMachine.RemoveEnvironment(this._cache.VirtualMachine.Reference, this.Reference);
+			JVirtualMachine.RemoveEnvironment(this._cache.Host.Value.Reference, this.Reference);
 			this._cache.FreeReferences();
-			JVirtualMachine.DetachCurrentThread(this._cache.VirtualMachine.Reference, this.Reference,
-			                                    this._cache.Thread);
+			JVirtualMachine.DetachCurrentThread(this._cache.Host.Value.Reference, this.Reference, this._cache.Thread);
 		}
 	}
 }

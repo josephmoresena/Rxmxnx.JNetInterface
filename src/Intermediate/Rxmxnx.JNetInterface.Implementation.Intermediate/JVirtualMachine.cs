@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// This class implements the <see cref="IVirtualMachine"/> interface.
 /// </summary>
-public partial class JVirtualMachine : IVirtualMachine, IMainClassSet, IWrapper<GlobalMainClasses>
+public partial class JVirtualMachine : IVirtualMachine
 {
 	/// <summary>
 	/// Android API level.
@@ -87,5 +87,4 @@ public partial class JVirtualMachine : IVirtualMachine, IMainClassSet, IWrapper<
 		JEnvironment env = this.GetEnvironment(thread.Reference);
 		env.FatalError(utf8Message);
 	}
-	GlobalMainClasses IWrapper<GlobalMainClasses>.Value => this._cache;
 }

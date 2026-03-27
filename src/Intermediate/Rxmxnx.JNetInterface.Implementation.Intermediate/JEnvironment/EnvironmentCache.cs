@@ -11,10 +11,12 @@ partial class JEnvironment
 #endif
 	private sealed partial class EnvironmentCache : LocalMainClasses
 	{
+		/// <summary>
+		/// Virtual machine host.
+		/// </summary>
+		public readonly IVirtualMachineHost Host;
 		/// <inheritdoc cref="JEnvironment.Reference"/>
 		public readonly JEnvironmentRef Reference;
-		/// <inheritdoc cref="JEnvironment.VirtualMachine"/>
-		public readonly JVirtualMachine VirtualMachine;
 
 		/// <summary>
 		/// Current thrown exception.
@@ -42,7 +44,7 @@ partial class JEnvironment
 		public EnvironmentCache(JVirtualMachine vm, JEnvironment env, JEnvironmentRef envRef) : base(envRef, env)
 		{
 			this.Reference = envRef;
-			this.VirtualMachine = vm;
+			this.Host = vm;
 
 			this._env = env;
 			this._objects = new(this._classes);
@@ -60,7 +62,7 @@ partial class JEnvironment
 			where TNativeInterface : unmanaged, INativeInterface<TNativeInterface>
 		{
 			ImplementationValidationUtilities.ThrowIfDifferentThread(this.Reference, this.Thread);
-			ImplementationValidationUtilities.ThrowIfInvalidVirtualMachine(this.VirtualMachine.IsAlive);
+			ImplementationValidationUtilities.ThrowIfInvalidVirtualMachine(this.Host.IsRunning);
 			ImplementationValidationUtilities.ThrowIfNotAttached(this._env.IsAttached);
 			ImplementationValidationUtilities.ThrowIfUnsafe(info.Name, this.JniSecure(info.Level));
 			ImplementationValidationUtilities.ThrowIfInvalidVersion(info.Name, TNativeInterface.RequiredVersion,

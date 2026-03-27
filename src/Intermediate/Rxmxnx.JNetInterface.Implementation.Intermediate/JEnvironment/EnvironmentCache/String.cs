@@ -19,7 +19,7 @@ partial class JEnvironment
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetStringRegionInfo);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			JStringLocalRef stringRef = jniTransaction.Add(jString);
 			nativeInterface.StringRegionFunctions.Utf16.GetStringRegion(this.Reference, stringRef, startIndex, length,
 			                                                            (ValPtr<Char>)charsPtr);
@@ -35,7 +35,7 @@ partial class JEnvironment
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetStringUtfRegionInfo);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			JStringLocalRef stringRef = jniTransaction.Add(jString);
 			nativeInterface.StringRegionFunctions.Utf8.GetStringRegion(this.Reference, stringRef, startIndex, length,
 			                                                           (ValPtr<Byte>)unitsPtr);

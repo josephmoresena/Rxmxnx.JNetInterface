@@ -45,7 +45,7 @@ partial class JEnvironment
 		/// <returns>A <see cref="JStringObject"/> instance.</returns>
 		private JStringObject GetClassName(JClassLocalRef classRef, Boolean isReferenceType, out Boolean isPrimitive)
 		{
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, this.GetClass<JClassObject>());
 			jniTransaction.Add(classRef);
 			isPrimitive = !isReferenceType && this.IsPrimitiveClass(classRef, access);
@@ -281,7 +281,7 @@ partial class JEnvironment
 			JClassLoaderObject? jClassLoader)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jClassLoader);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(2);
 			JObjectLocalRef localRef = jniTransaction.Add(jClassLoader);
 			JClassLocalRef classRef = this.DefineClass(typeInformation.ClassName, buffer, localRef);
 			if (this._classes.TryGetValue(typeInformation.Hash, out JClassObject? result))
@@ -354,13 +354,13 @@ partial class JEnvironment
 		/// <param name="deleteLocalRef">Indicates whether local class reference should be deleted.</param>
 		private void LoadMainClass(JClassObject jClass, JClassLocalRef classRef, Boolean deleteLocalRef = true)
 		{
-			JGlobal jGlobal = this.VirtualMachine.LoadGlobal(jClass);
+			JGlobal jGlobal = this.Host.TypeManager.LoadGlobal(jClass);
 			ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
 			if (jGlobal.IsDefault)
 			{
 				// A global-reference is created only if the existing one is default.
 				jGlobal.SetValue(this._env.GetMainClassGlobalRef(classMetadata, classRef, deleteLocalRef));
-				this.VirtualMachine.ReloadAccess(jClass.Hash);
+				this.Host.TypeManager.ReloadAccess(jClass.Hash);
 			}
 			else if (deleteLocalRef)
 			{
@@ -377,7 +377,7 @@ partial class JEnvironment
 			=> jObject switch
 			{
 				ILocalObject local => ILocalObject.CreateMetadata(local) as ClassObjectMetadata,
-				JGlobalBase jGlobal => this.VirtualMachine.LoadMetadataGlobal(jGlobal),
+				JGlobalBase jGlobal => this.Host.TypeManager.LoadMetadataGlobal(jGlobal),
 				_ => default,
 			};
 		/// <summary>
@@ -387,7 +387,7 @@ partial class JEnvironment
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
 		private JClassObject AsClassObjectUnchecked(JReferenceObject jObject)
 		{
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add<JClassLocalRef>(jObject);
 			Boolean isLocalRef = this.IsLocalObject(jObject, out JReferenceType referenceType);
 			ClassObjectMetadata? classObjectMetadata = this.GetClassObjectMetadata(jObject);
@@ -448,7 +448,7 @@ partial class JEnvironment
 				return result.Value; // Cached assignation.
 
 			using LocalFrame? _ = createFrame?.Invoke(this._env);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(2);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			JClassLocalRef otherClassRef = jniTransaction.Add(this.ReloadClass(otherClass));
 			result = this.IsAssignableFrom(classRef, otherClassRef);

@@ -21,9 +21,7 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	/// <summary>
 	/// Indicates whether current thread is attached to a JVM.
 	/// </summary>
-	public virtual Boolean IsAttached => this._cache.VirtualMachine.IsAlive;
-	/// <inheritdoc cref="IEnvironment.Version"/>
-	public Int32 Version => this._cache.Version;
+	public virtual Boolean IsAttached => this._cache.Host.IsRunning;
 	/// <inheritdoc cref="IEnvironment.PendingException"/>
 	public ThrowableException? PendingException
 	{
@@ -34,7 +32,7 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	/// <inheritdoc/>
 	public JEnvironmentRef Reference => this._cache.Reference;
 	/// <inheritdoc/>
-	public IVirtualMachine VirtualMachine => this._cache.VirtualMachine;
+	public IVirtualMachine VirtualMachine => this._cache.Host.Value;
 	/// <inheritdoc/>
 	public Int32 UsedStackBytes => this._cache.UsedStackBytes;
 	/// <inheritdoc/>
@@ -74,7 +72,7 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 		{
 			ref readonly NativeInterface19 nativeInterface =
 				ref this._cache.GetNativeInterface<NativeInterface19>(NativeInterface19.IsVirtualThreadInfo);
-			using INativeTransaction jniTransaction = this._cache.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this._cache.Host.MemoryManager.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(jThread);
 			return nativeInterface.IsVirtualThread(this.Reference, localRef).Value;
 		}
@@ -91,6 +89,8 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionDescribeInfo);
 		nativeInterface.ErrorFunctions.ExceptionDescribe(this.Reference);
 	}
+	/// <inheritdoc cref="IEnvironment.Version"/>
+	public Int32 Version => this._cache.Version;
 
 	/// <inheritdoc/>
 #if !PACKAGE

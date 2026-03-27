@@ -12,7 +12,7 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);
 			ImplementationValidationUtilities.ThrowIfDefault(jObject);
-			return this.VirtualMachine.CreateSynchronized(this._env, jObject);
+			return this.Host.MemoryManager.CreateSynchronized(this._env, jObject);
 		}
 		public ObjectLifetime GetLifetime(JLocalObject jLocal, InternalClassInitializer initializer)
 		{
@@ -96,11 +96,11 @@ partial class JEnvironment
 				JWeakRef weakRef = jClass is not null ?
 					this.CreateWeakGlobalRef(jClass) :
 					this.CreateWeakGlobalRef(jLocal);
-				return (TGlobal)(Object)this.VirtualMachine.Register(new JWeak(jLocal, weakRef));
+				return (TGlobal)(Object)this.Host.GlobalManager.Register(new JWeak(jLocal, weakRef));
 			}
 
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			JGlobal? jGlobal;
 
 			if (jClass is not null)
@@ -118,12 +118,12 @@ partial class JEnvironment
 			}
 
 			this.ReloadGlobal(jGlobal, jLocal, jniTransaction);
-			return (TGlobal)(Object)this.VirtualMachine.Register(jGlobal);
+			return (TGlobal)(Object)this.Host.GlobalManager.Register(jGlobal);
 		}
 		public JWeak CreateWeak(JGlobalBase jGlobal)
 		{
 			JWeakRef weakRef = this.CreateWeakGlobalRef(jGlobal);
-			return this.VirtualMachine.Register(new JWeak(jGlobal, weakRef));
+			return this.Host.GlobalManager.Register(new JWeak(jGlobal, weakRef));
 		}
 		public void LocalLoad(JGlobalBase jGlobal, JLocalObject jLocal)
 		{
@@ -142,7 +142,7 @@ partial class JEnvironment
 			JObjectLocalRef localRef = jLocal.LocalReference;
 			LocalCache objects = this._objects;
 			Boolean isRegistered = this._objects.IsRegistered(localRef);
-			if (!this.VirtualMachine.SecureRemove(localRef)) return false;
+			if (!this.Host.MemoryManager.SecureRemove(localRef)) return false;
 			if (JLocalObject.FinalizerExecution && isRegistered && objects.IsFromLocalFrame(localRef))
 				// Required to avoid finalizer calls JNI when object is at local frame.
 				return false;
@@ -167,7 +167,7 @@ partial class JEnvironment
 				if (jGlobal is JGlobal)
 				{
 					JGlobalRef globalRef = jGlobal.As<JGlobalRef>();
-					if (!this.VirtualMachine.SecureRemove(globalRef))
+					if (!this.Host.MemoryManager.SecureRemove(globalRef))
 					{
 						keepReference = true;
 						return false;
@@ -177,7 +177,7 @@ partial class JEnvironment
 				else
 				{
 					JWeakRef weakRef = jGlobal.As<JWeakRef>();
-					if (!this.VirtualMachine.SecureRemove(weakRef))
+					if (!this.Host.MemoryManager.SecureRemove(weakRef))
 					{
 						keepReference = true;
 						return false;
@@ -189,7 +189,7 @@ partial class JEnvironment
 			{
 				if (!keepReference)
 				{
-					this.VirtualMachine.Remove(jGlobal);
+					this.Host.GlobalManager.Remove(jGlobal);
 					jGlobal.ClearValue();
 				}
 			}
@@ -206,13 +206,13 @@ partial class JEnvironment
 		public void MonitorExit(JObjectLocalRef localRef)
 		{
 			JResult result = JResult.Ok;
-			if (this._env.IsAttached && this.VirtualMachine.IsAlive)
+			if (this._env.IsAttached && this.Host.IsRunning)
 			{
 				ref readonly NativeInterface nativeInterface =
 					ref this.GetNativeInterface<NativeInterface>(NativeInterface.MonitorExitInfo);
 				result = nativeInterface.MonitorFunctions.MonitorExit(this.Reference, localRef);
 			}
-			JTrace.MonitorExit(this._env.IsAttached, this.VirtualMachine.IsAlive, result == JResult.Ok, localRef);
+			JTrace.MonitorExit(this._env.IsAttached, this.Host.IsRunning, result == JResult.Ok, localRef);
 			this.CheckJniError();
 			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 		}

@@ -38,7 +38,7 @@ partial class JEnvironment
 			jArray.ValidateObjectElement(value);
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.SetObjectArrayElementInfo);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(2);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, value);
 			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
 			nativeInterface.ArrayFunctions.ObjectArrayFunctions.SetObjectArrayElement(
@@ -67,7 +67,7 @@ partial class JEnvironment
 		private Int32 IndexOfObject(JArrayObject jArray, JReferenceObject? item)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(item);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(2);
 			JArrayLocalRef arrayRef = jniTransaction.Add(jArray);
 			JObjectLocalRef localRef = jniTransaction.Add(item);
 			JObjectArrayLocalRef objectArrayRef = new(arrayRef);
@@ -89,7 +89,7 @@ partial class JEnvironment
 		/// <returns>The index of <paramref name="itemSpan"/> if found in <paramref name="jArray"/>; otherwise, -1.</returns>
 		private unsafe Int32 IndexOfPrimitive(JArrayObject jArray, ReadOnlySpan<Byte> itemSpan)
 		{
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			JArrayLocalRef arrayRef = jniTransaction.Add(jArray);
 			Int32 binaryLength = jArray.Length * itemSpan.Length;
 			IntPtr criticalPtr = this.GetPrimitiveCriticalSequence(arrayRef, out _);
@@ -122,7 +122,7 @@ partial class JEnvironment
 		/// </param>
 		private unsafe void CopyToPrimitive(JArrayObject jArray, Int32 sizeOf, Array array, Int32 arrayIndex)
 		{
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			Span<Byte> bytes =
 				MemoryMarshal.CreateSpan(ref MemoryMarshal.GetArrayDataReference(array), sizeOf * array.Length);
 			JArrayLocalRef arrayRef = jniTransaction.Add(jArray);
@@ -152,7 +152,7 @@ partial class JEnvironment
 		private void CopyToObject<TElement>(JArrayObject jArray, Span<TElement?> span)
 			where TElement : IDataType<TElement>
 		{
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
 			for (Int32 i = 0; i < jArray.Length; i++)
 				span[i] = this.GetElementObject<TElement>(arrayRef, i);
@@ -273,7 +273,7 @@ partial class JEnvironment
 		private void GetPrimitiveArrayRegion(JArrayObject jArray, Byte signature, IntPtr bufferPtr, Int32 index,
 			Int32 count = 1)
 		{
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			ref readonly ArrayFunctionSet arrayFunctions =
 				ref this.GetArrayFunctions(signature, ArrayFunctionSet.PrimitiveFunction.GetRegion);
 			switch (signature)
@@ -332,7 +332,7 @@ partial class JEnvironment
 		private void SetPrimitiveArrayRegion(JArrayObject jArray, Byte signature, IntPtr bufferPtr, Int32 index,
 			Int32 count = 1)
 		{
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			ref readonly ArrayFunctionSet arrayFunctions =
 				ref this.GetArrayFunctions(signature, ArrayFunctionSet.PrimitiveFunction.SetRegion);
 			switch (signature)
@@ -390,7 +390,7 @@ partial class JEnvironment
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.NewArrayObjectInfo);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(2);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			JObjectLocalRef initialRef = this.UseObject(jniTransaction, jObject);
 			JObjectArrayLocalRef arrayRef =

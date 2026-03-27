@@ -20,5 +20,38 @@ public partial class JVirtualMachine
 		/// Weak global object dictionary.
 		/// </summary>
 		private readonly ConcurrentDictionary<JWeakRef, WeakReference<JWeak>> _weakObjects = new();
+
+		/// <summary>
+		/// Removes <see cref="JGlobalRef"/> from current cache.
+		/// </summary>
+		/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>
+		private void Remove(JGlobalRef globalRef)
+		{
+			if (globalRef == default) return;
+			this._globalObjects.Remove(globalRef, out _);
+			this.GlobalClassCache.Unload(new JClassLocalRef(globalRef));
+		}
+		/// <summary>
+		/// Removes <see cref="JWeakRef"/> from current cache.
+		/// </summary>
+		/// <param name="weakRef">A <see cref="JWeakRef"/> reference.</param>
+		private void Remove(JWeakRef weakRef)
+		{
+			if (weakRef == default) return;
+			this._weakObjects.Remove(weakRef, out _);
+			this.WeakClassCache.Unload(new JClassLocalRef(weakRef));
+		}
+		/// <summary>
+		/// Indicates whether given <paramref name="jniRef"/> is begin using by a transaction.
+		/// </summary>
+		/// <param name="jniRef">A <see cref="IntPtr"/> value.</param>
+		/// <returns>
+		/// <see langword="true"/> if <paramref name="jniRef"/> is begin using by a transaction;
+		/// otherwise, <see langword="false"/>.
+		/// </returns>
+		// ReSharper disable once HeapView.ClosureAllocation
+		private Boolean InTransaction(IntPtr jniRef)
+			// ReSharper disable once HeapView.DelegateAllocation
+			=> this._transactions.Values.AsParallel().Any(t => t.Contains(jniRef));
 	}
 }

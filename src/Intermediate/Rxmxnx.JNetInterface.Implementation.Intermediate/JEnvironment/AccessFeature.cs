@@ -15,7 +15,7 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this._env);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
@@ -27,7 +27,7 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this._env);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
@@ -37,7 +37,7 @@ partial class JEnvironment
 		public void GetPrimitiveStaticField(Span<Byte> bytes, JClassObject jClass, JFieldDefinition definition)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._env);
 			JTrace.GetField(default, jClass, definition);
@@ -46,7 +46,7 @@ partial class JEnvironment
 		public void SetPrimitiveStaticField(JClassObject jClass, JFieldDefinition definition, ReadOnlySpan<Byte> bytes)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._env);
 			EnvironmentCache.TraceSetPrimitiveField(default, jClass, definition, bytes);
@@ -82,7 +82,7 @@ partial class JEnvironment
 			}
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this._env);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
@@ -95,7 +95,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfProxy(jField);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jField.Definition);
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(2);
 			_ = jniTransaction.Add(jField);
 			JFieldId fieldId = jField.FieldId;
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
@@ -120,7 +120,7 @@ partial class JEnvironment
 			}
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(3);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(3);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this._env);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
@@ -133,7 +133,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfProxy(jField);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jField.Definition);
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(3);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(3);
 			_ = jniTransaction.Add(jField);
 			JFieldId fieldId = jField.FieldId;
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
@@ -165,7 +165,7 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jField);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jField.Definition);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(2);
 			_ = jniTransaction.Add(jField);
 			JFieldId fieldId = jField.FieldId;
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jField.DeclaringClass));
@@ -190,7 +190,7 @@ partial class JEnvironment
 				return;
 			}
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._env);
 			JTrace.SetField(default, jClass, definition, value);
@@ -201,7 +201,7 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jField);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jField.Definition);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(3);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(3);
 			_ = jniTransaction.Add(jField);
 			JFieldId fieldId = jField.FieldId;
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jField.DeclaringClass));
@@ -237,7 +237,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jConstructor.Definition);
 			this.CheckClassCompatibility<TObject>(jConstructor.DeclaringClass, out Boolean sameClass);
 			using INativeTransaction jniTransaction =
-				this.VirtualMachine.CreateTransaction(2 + definition.ReferenceCount);
+				this.Host.MemoryManager.CreateTransaction(2 + definition.ReferenceCount);
 			_ = jniTransaction.Add(jConstructor);
 			JMethodId methodId = jConstructor.MethodId;
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jConstructor.DeclaringClass));
@@ -268,7 +268,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfProxy(jMethod);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jMethod.Definition);
 			using INativeTransaction jniTransaction =
-				this.VirtualMachine.CreateTransaction(2 + definition.ReferenceCount);
+				this.Host.MemoryManager.CreateTransaction(2 + definition.ReferenceCount);
 			_ = jniTransaction.Add(jMethod);
 			JMethodId methodId = jMethod.MethodId;
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jMethod.DeclaringClass));
@@ -292,7 +292,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfProxy(jMethod);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jMethod.Definition);
 			using INativeTransaction jniTransaction =
-				this.VirtualMachine.CreateTransaction(2 + definition.ReferenceCount);
+				this.Host.MemoryManager.CreateTransaction(2 + definition.ReferenceCount);
 			_ = jniTransaction.Add(jMethod);
 			JMethodId methodId = jMethod.MethodId;
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jMethod.DeclaringClass));
@@ -326,7 +326,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jMethod.Definition);
 			Int32 initialCapacity = nonVirtual ? 3 : 2;
 			using INativeTransaction jniTransaction =
-				this.VirtualMachine.CreateTransaction(initialCapacity + definition.ReferenceCount);
+				this.Host.MemoryManager.CreateTransaction(initialCapacity + definition.ReferenceCount);
 			_ = jniTransaction.Add(jMethod);
 			JMethodId methodId = jMethod.MethodId;
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
@@ -358,7 +358,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jMethod.Definition);
 			Int32 initialCapacity = nonVirtual ? 3 : 2;
 			using INativeTransaction jniTransaction =
-				this.VirtualMachine.CreateTransaction(initialCapacity + definition.ReferenceCount);
+				this.Host.MemoryManager.CreateTransaction(initialCapacity + definition.ReferenceCount);
 			_ = jniTransaction.Add(jMethod);
 			JMethodId methodId = jMethod.MethodId;
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
@@ -383,7 +383,7 @@ partial class JEnvironment
 				buffer[i] = NativeMethodValue.Create(calls[i], handles);
 			try
 			{
-				using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+				using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 				JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 				JResult result;
 				fixed (NativeMethodValue* ptr = &MemoryMarshal.GetReference(buffer))
@@ -393,7 +393,7 @@ partial class JEnvironment
 				}
 				this.CheckJniError();
 				ImplementationValidationUtilities.ThrowIfInvalidResult(result);
-				this.VirtualMachine.RegisterNatives(jClass.Hash, calls);
+				this.Host.TypeManager.RegisterNatives(jClass.Hash, calls);
 			}
 			finally
 			{
@@ -406,11 +406,11 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.UnregisterNativesInfo);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			JResult jResult = nativeInterface.NativeRegistryFunctions.UnregisterNatives(this.Reference, classRef);
 			ImplementationValidationUtilities.ThrowIfInvalidResult(jResult);
-			this.VirtualMachine.UnregisterNatives(jClass.Hash);
+			this.Host.TypeManager.UnregisterNatives(jClass.Hash);
 		}
 		public JCallDefinition GetDefinition(JStringObject memberName, JArrayObject<JClassObject> parameterTypes,
 			JClassObject? returnType)
@@ -449,7 +449,7 @@ partial class JEnvironment
 			Boolean isStatic)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(declaringClass);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, declaringClass);
 			JFieldId fieldId = isStatic ?
 				access.GetStaticFieldId(definition, this._env) :
@@ -467,7 +467,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfProxy(jExecutable);
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.FromReflectedMethodInfo);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(jExecutable);
 			JMethodId result =
 				nativeInterface.ClassFunctions.FromReflectedMethod.FromReflected(this.Reference, localRef);
@@ -479,7 +479,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfProxy(jField);
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.FromReflectedMethodInfo);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(jField);
 			JFieldId result = nativeInterface.ClassFunctions.FromReflectedField.FromReflected(this.Reference, localRef);
 			if (result == default) this.CheckJniError();

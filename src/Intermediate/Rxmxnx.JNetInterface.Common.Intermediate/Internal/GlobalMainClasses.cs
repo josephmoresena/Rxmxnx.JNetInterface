@@ -21,14 +21,13 @@ internal abstract partial class GlobalMainClasses : MainClasses<JGlobal>
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
-	/// <param name="classSet">A <see cref="IMainClassSet"/> instance.</param>
-	protected GlobalMainClasses(IVirtualMachine vm, IMainClassSet classSet)
+	/// <param name="virtualHost">A <see cref="IVirtualMachineHost"/> instance.</param>
+	protected GlobalMainClasses(IVirtualMachineHost virtualHost)
 	{
 		if (AndroidFeature.IsFixedAndroid && !AndroidHelper.IsZygote)
 			throw new InvalidOperationException(IMessageResource.GetInstance().AndroidRuntimeRequired);
 
-		this._classSet = classSet;
+		this._typeManager = virtualHost.TypeManager;
 
 		this._classMetadata = ClassObjectMetadata.Create<JClassObject>();
 		this._throwableMetadata = ClassObjectMetadata.Create<JThrowableObject>();
@@ -43,20 +42,20 @@ internal abstract partial class GlobalMainClasses : MainClasses<JGlobal>
 		this._longMetadata = ClassObjectMetadata.Create<JLong>();
 		this._shortMetadata = ClassObjectMetadata.Create<JShort>();
 
-		this.AppendGlobal(vm, this._classMetadata);
-		this.AppendGlobal(vm, this._throwableMetadata);
-		this.AppendGlobal(vm, this._stackTraceElementMetadata);
-		this.AppendGlobal(vm, this._systemMetadata);
+		this.AppendGlobal(virtualHost.Value, this._classMetadata);
+		this.AppendGlobal(virtualHost.Value, this._throwableMetadata);
+		this.AppendGlobal(virtualHost.Value, this._stackTraceElementMetadata);
+		this.AppendGlobal(virtualHost.Value, this._systemMetadata);
 
-		this.AppendGlobal(vm, ClassObjectMetadata.VoidMetadata);
-		this.AppendGlobal(vm, this._booleanMetadata);
-		this.AppendGlobal(vm, this._byteMetadata);
-		this.AppendGlobal(vm, this._charMetadata);
-		this.AppendGlobal(vm, this._doubleMetadata);
-		this.AppendGlobal(vm, this._floatMetadata);
-		this.AppendGlobal(vm, this._intMetadata);
-		this.AppendGlobal(vm, this._longMetadata);
-		this.AppendGlobal(vm, this._shortMetadata);
+		this.AppendGlobal(virtualHost.Value, ClassObjectMetadata.VoidMetadata);
+		this.AppendGlobal(virtualHost.Value, this._booleanMetadata);
+		this.AppendGlobal(virtualHost.Value, this._byteMetadata);
+		this.AppendGlobal(virtualHost.Value, this._charMetadata);
+		this.AppendGlobal(virtualHost.Value, this._doubleMetadata);
+		this.AppendGlobal(virtualHost.Value, this._floatMetadata);
+		this.AppendGlobal(virtualHost.Value, this._intMetadata);
+		this.AppendGlobal(virtualHost.Value, this._longMetadata);
+		this.AppendGlobal(virtualHost.Value, this._shortMetadata);
 	}
 
 	/// <summary>
@@ -87,7 +86,7 @@ internal abstract partial class GlobalMainClasses : MainClasses<JGlobal>
 			ClassNameHelper.LongPrimitiveHash => MainClasses.PrimitiveMainClassesEnabled,
 			ClassNameHelper.ShortPrimitiveHash => MainClasses.PrimitiveMainClassesEnabled,
 			// User main classes
-			_ => this._classSet.Contains(classHash),
+			_ => this._typeManager.Contains(classHash),
 		} && Object.ReferenceEquals(jGlobal, this.GlobalClassCache[classHash]);
 	/// <summary>
 	/// Loads global classes.

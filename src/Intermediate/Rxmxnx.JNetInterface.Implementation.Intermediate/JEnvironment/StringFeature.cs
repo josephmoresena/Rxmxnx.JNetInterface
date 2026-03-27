@@ -26,7 +26,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfDefault(jObject);
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetStringLengthInfo);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			JStringLocalRef stringRef = jniTransaction.Add<JStringLocalRef>(jObject);
 			Int32 result = nativeInterface.StringFunctions.Utf16.GetStringLength(this.Reference, stringRef);
 			if (result <= 0) this.CheckJniError();
@@ -38,7 +38,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfDefault(jObject);
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetStringUtfLengthInfo);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			JStringLocalRef stringRef = jniTransaction.Add<JStringLocalRef>(jObject);
 			Int32 result = nativeInterface.StringFunctions.Utf8.GetStringLength(this.Reference, stringRef);
 			if (result <= 0) this.CheckJniError();
@@ -52,7 +52,7 @@ partial class JEnvironment
 
 			ref readonly NativeInterface24 nativeInterface =
 				ref this.GetNativeInterface<NativeInterface24>(NativeInterface24.GetStringUtfLengthAsLongInfo);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			JStringLocalRef stringRef = jniTransaction.Add<JStringLocalRef>(jObject);
 			Int64 result = nativeInterface.GetStringUtfLengthAsLong(this.Reference, stringRef);
 			if (result <= 0) this.CheckJniError();
@@ -62,7 +62,7 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jString);
 			ImplementationValidationUtilities.ThrowIfDefault(jString);
-			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, false);
+			return this.Host.MemoryManager.CreateMemoryAdapter(jString, referenceKind, false);
 		}
 		public ReadOnlyValPtr<Char> GetSequence(JStringLocalRef stringRef, out Boolean isCopy)
 		{
@@ -78,7 +78,7 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jString);
 			ImplementationValidationUtilities.ThrowIfDefault(jString);
-			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, default);
+			return this.Host.MemoryManager.CreateMemoryAdapter(jString, referenceKind, default);
 		}
 		public ReadOnlyValPtr<Byte> GetUtf8Sequence(JStringLocalRef stringRef, out Boolean isCopy)
 		{
@@ -94,7 +94,7 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jString);
 			ImplementationValidationUtilities.ThrowIfDefault(jString);
-			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, true);
+			return this.Host.MemoryManager.CreateMemoryAdapter(jString, referenceKind, true);
 		}
 		public ReadOnlyValPtr<Char> GetCriticalSequence(JStringLocalRef stringRef)
 		{
@@ -110,20 +110,18 @@ partial class JEnvironment
 		{
 			try
 			{
-				if (this._env.IsAttached && this.VirtualMachine.IsAlive)
+				if (this._env.IsAttached && this.Host.IsRunning)
 				{
 					ref readonly NativeInterface nativeInterface =
 						ref this.GetNativeInterface<NativeInterface>(NativeInterface.ReleaseStringCharsInfo);
 					nativeInterface.StringFunctions.Utf16.ReleaseStringChars(this.Reference, stringRef, pointer);
 					this.CheckJniError();
 				}
-				JTrace.ReleaseMemory(false, this._env.IsAttached, this.VirtualMachine.IsAlive, true, stringRef,
-				                     pointer);
+				JTrace.ReleaseMemory(false, this._env.IsAttached, this.Host.IsRunning, true, stringRef, pointer);
 			}
 			catch (Exception)
 			{
-				JTrace.ReleaseMemory(false, this._env.IsAttached, this.VirtualMachine.IsAlive, false, stringRef,
-				                     pointer);
+				JTrace.ReleaseMemory(false, this._env.IsAttached, this.Host.IsRunning, false, stringRef, pointer);
 				throw;
 			}
 		}
@@ -131,20 +129,18 @@ partial class JEnvironment
 		{
 			try
 			{
-				if (this._env.IsAttached && this.VirtualMachine.IsAlive)
+				if (this._env.IsAttached && this.Host.IsRunning)
 				{
 					ref readonly NativeInterface nativeInterface =
 						ref this.GetNativeInterface<NativeInterface>(NativeInterface.ReleaseStringUtfCharsInfo);
 					nativeInterface.StringFunctions.Utf8.ReleaseStringChars(this.Reference, stringRef, pointer);
 					this.CheckJniError();
 				}
-				JTrace.ReleaseMemory(false, this._env.IsAttached, this.VirtualMachine.IsAlive, true, stringRef,
-				                     pointer);
+				JTrace.ReleaseMemory(false, this._env.IsAttached, this.Host.IsRunning, true, stringRef, pointer);
 			}
 			catch (Exception)
 			{
-				JTrace.ReleaseMemory(false, this._env.IsAttached, this.VirtualMachine.IsAlive, false, stringRef,
-				                     pointer);
+				JTrace.ReleaseMemory(false, this._env.IsAttached, this.Host.IsRunning, false, stringRef, pointer);
 				throw;
 			}
 		}
@@ -152,7 +148,7 @@ partial class JEnvironment
 		{
 			try
 			{
-				if (this._env.IsAttached && this.VirtualMachine.IsAlive)
+				if (this._env.IsAttached && this.Host.IsRunning)
 				{
 					ref readonly NativeInterface nativeInterface =
 						ref this.GetNativeInterface<NativeInterface>(NativeInterface.ReleaseStringUtfCharsInfo);
@@ -160,12 +156,11 @@ partial class JEnvironment
 					this.CheckJniError();
 					this._criticalCount--;
 				}
-				JTrace.ReleaseMemory(true, this._env.IsAttached, this.VirtualMachine.IsAlive, true, stringRef, pointer);
+				JTrace.ReleaseMemory(true, this._env.IsAttached, this.Host.IsRunning, true, stringRef, pointer);
 			}
 			catch (Exception)
 			{
-				JTrace.ReleaseMemory(true, this._env.IsAttached, this.VirtualMachine.IsAlive, false, stringRef,
-				                     pointer);
+				JTrace.ReleaseMemory(true, this._env.IsAttached, this.Host.IsRunning, false, stringRef, pointer);
 				throw;
 			}
 		}

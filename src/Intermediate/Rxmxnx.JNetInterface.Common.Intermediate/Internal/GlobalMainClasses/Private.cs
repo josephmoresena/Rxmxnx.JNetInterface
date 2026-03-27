@@ -20,10 +20,6 @@ internal partial class GlobalMainClasses
 	/// </summary>
 	private readonly ClassObjectMetadata _classMetadata;
 	/// <summary>
-	/// Main class set.
-	/// </summary>
-	private readonly IMainClassSet _classSet;
-	/// <summary>
 	/// Metadata for <see cref="JDouble"/>.
 	/// </summary>
 	private readonly ClassObjectMetadata _doubleMetadata;
@@ -55,6 +51,10 @@ internal partial class GlobalMainClasses
 	/// Metadata for <see cref="JThrowableObject"/>.
 	/// </summary>
 	private readonly ClassObjectMetadata _throwableMetadata;
+	/// <summary>
+	/// Java type manager.
+	/// </summary>
+	private readonly ITypeManager _typeManager;
 
 	/// <summary>
 	/// JVM version.
@@ -79,18 +79,18 @@ internal partial class GlobalMainClasses
 	/// <summary>
 	/// Loads user global classes.
 	/// </summary>
-	/// <param name="env">A <see cref="IMainClassLoader"/> instance.</param>
-	private void LoadUserMainClasses(IMainClassLoader env)
+	/// <param name="classLoader">A <see cref="IMainClassLoader"/> instance.</param>
+	private void LoadUserMainClasses(IMainClassLoader classLoader)
 	{
-		foreach (ITypeInformation typeInformation in this._classSet.ClassesInformation)
+		foreach (ITypeInformation typeInformation in this._typeManager.ClassesInformation)
 		{
 			if (!this.GlobalClassCache.TryGetValue(typeInformation.Hash, out JGlobal? jGlobal) ||
 			    !jGlobal.IsDefault) continue;
-			if (!this.IsMainLoadable(env, typeInformation.Since, typeInformation.AndroidApiLevel)) continue;
+			if (!this.IsMainLoadable(classLoader, typeInformation.Since, typeInformation.AndroidApiLevel)) continue;
 
 			try
 			{
-				GlobalMainClasses.LoadMainClass(env, jGlobal, typeInformation);
+				GlobalMainClasses.LoadMainClass(classLoader, jGlobal, typeInformation);
 			}
 			catch (Exception)
 			{

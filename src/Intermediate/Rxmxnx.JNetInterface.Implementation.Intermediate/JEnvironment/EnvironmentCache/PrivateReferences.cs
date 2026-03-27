@@ -18,7 +18,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);
 			ImplementationValidationUtilities.ThrowIfDefault(jObject);
 			using LocalFrame _ = new(this._env, IVirtualMachine.GetObjectClassCapacity);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jObject);
 			return this.CreateWeakGlobalRef(localRef);
 		}
@@ -85,7 +85,7 @@ partial class JEnvironment
 		private JGlobal? LoadGlobal(JClassObject? jClass)
 		{
 			if (jClass is null) return default;
-			JGlobal result = this.VirtualMachine.LoadGlobal(jClass);
+			JGlobal result = this.Host.TypeManager.LoadGlobal(jClass);
 			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
 			switch (result.IsDefault)
 			{
@@ -142,9 +142,9 @@ partial class JEnvironment
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference to unload.</param>
 		private void Unload(Boolean isRegistered, JObjectLocalRef localRef)
 		{
-			if (isRegistered && this._env.IsAttached && this.VirtualMachine.IsAlive)
+			if (isRegistered && this._env.IsAttached && this.Host.IsRunning)
 				this._env.DeleteLocalRef(localRef);
-			JTrace.Unload(isRegistered, this._env.IsAttached, this.VirtualMachine.IsAlive, localRef, this._objects.Id,
+			JTrace.Unload(isRegistered, this._env.IsAttached, this.Host.IsRunning, localRef, this._objects.Id,
 			              this._objects.Name);
 		}
 		/// <summary>
@@ -153,9 +153,9 @@ partial class JEnvironment
 		/// <param name="weakRef">A <see cref="JWeakRef"/> reference to unload.</param>
 		private void Unload(JWeakRef weakRef)
 		{
-			if (this._env.IsAttached && this.VirtualMachine.IsAlive)
+			if (this._env.IsAttached && this.Host.IsRunning)
 				this._env.DeleteWeakGlobalRef(weakRef);
-			JTrace.UnloadGlobal(this._env.IsAttached, this.VirtualMachine.IsAlive, weakRef);
+			JTrace.UnloadGlobal(this._env.IsAttached, this.Host.IsRunning, weakRef);
 		}
 		/// <summary>
 		/// Unloads <paramref name="globalRef"/>.
@@ -163,9 +163,9 @@ partial class JEnvironment
 		/// <param name="globalRef">A <see cref="JGlobalRef"/> reference to unload.</param>
 		private void Unload(JGlobalRef globalRef)
 		{
-			if (this._env.IsAttached && this.VirtualMachine.IsAlive)
+			if (this._env.IsAttached && this.Host.IsRunning)
 				this._env.DeleteGlobalRef(globalRef);
-			JTrace.UnloadGlobal(this._env.IsAttached, this.VirtualMachine.IsAlive, globalRef);
+			JTrace.UnloadGlobal(this._env.IsAttached, this.Host.IsRunning, globalRef);
 		}
 		/// <summary>
 		/// Creates a new local reference for <paramref name="result"/>.
