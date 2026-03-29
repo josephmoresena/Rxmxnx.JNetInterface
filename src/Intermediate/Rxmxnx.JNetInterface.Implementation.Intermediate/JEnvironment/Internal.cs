@@ -77,22 +77,6 @@ partial class JEnvironment
 	internal JClassObject GetReferenceTypeClass(JClassLocalRef classRef, Boolean keepReference = false)
 		=> this._cache.GetClass(classRef, keepReference, JTypeKind.Undefined);
 	/// <summary>
-	/// Retrieves the class object and instantiation metadata.
-	/// </summary>
-	/// <param name="localRef">Object instance to get class.</param>
-	/// <param name="typeMetadata">Output. Instantiation metadata.</param>
-	/// <returns>Object's class <see cref="JClassObject"/> instance</returns>
-	internal JClassObject GetObjectClass(JObjectLocalRef localRef, out JReferenceTypeMetadata typeMetadata)
-	{
-		using LocalFrame frame = new(this, IVirtualMachine.GetObjectClassCapacity);
-		JClassLocalRef classRef = this.GetObjectClass(localRef);
-		JClassObject jClass = this._cache.GetClass(classRef, true, JTypeKind.Class, true);
-		this._cache.LoadClass(frame, classRef, jClass); // Runtime class loading.
-		typeMetadata = this._cache.GetTypeMetadata(jClass);
-		return jClass;
-	}
-
-	/// <summary>
 	/// Loads in current cache given class.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
@@ -177,20 +161,6 @@ partial class JEnvironment
 
 		JTrace.UseTypeMetadata(jClass, MetadataHelper.ObjectMetadata);
 		return MetadataHelper.ObjectMetadata;
-	}
-	/// <summary>
-	/// Retrieves object class reference.
-	/// </summary>
-	/// <param name="localRef">Object instance to get class.</param>
-	/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
-	internal JClassLocalRef GetObjectClass(JObjectLocalRef localRef)
-	{
-		ref readonly NativeInterface nativeInterface =
-			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetObjectClassInfo);
-		JClassLocalRef classRef = nativeInterface.ObjectFunctions.GetObjectClass(this.Reference, localRef);
-		if (classRef == default) this._cache.CheckJniError();
-		JTrace.GetObjectClass(localRef, classRef);
-		return classRef;
 	}
 	/// <summary>
 	/// Deletes <paramref name="localRef"/>.
@@ -288,7 +258,45 @@ partial class JEnvironment
 		String message = resource.MainClassGlobalError(className);
 		throw new NotSupportedException(message);
 	}
+	/// <summary>
+	/// Retrieves object class reference.
+	/// </summary>
+	/// <param name="localRef">Object instance to get class.</param>
+	/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
+	internal JClassLocalRef GetObjectClass(JObjectLocalRef localRef)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetObjectClassInfo);
+		JClassLocalRef classRef = nativeInterface.ObjectFunctions.GetObjectClass(this.Reference, localRef);
+		if (classRef == default) this._cache.CheckJniError();
+		JTrace.GetObjectClass(localRef, classRef);
+		return classRef;
+	}
+	/// <summary>
+	/// Retrieves the class object and instantiation metadata.
+	/// </summary>
+	/// <param name="localRef">Object instance to get class.</param>
+	/// <param name="typeMetadata">Output. Instantiation metadata.</param>
+	/// <returns>Object's class <see cref="JClassObject"/> instance</returns>
+	internal JClassObject GetObjectClass(JObjectLocalRef localRef, out JReferenceTypeMetadata typeMetadata)
+	{
+		using LocalFrame frame = new(this, IVirtualMachine.GetObjectClassCapacity);
+		JClassLocalRef classRef = this.GetObjectClass(localRef);
+		JClassObject jClass = this._cache.GetClass(classRef, true, JTypeKind.Class, true);
+		this._cache.LoadClass(frame, classRef, jClass); // Runtime class loading.
+		typeMetadata = this._cache.GetTypeMetadata(jClass);
+		return jClass;
+	}
 
+	/// <inheritdoc cref="JEnvironment.GetObjectClass(JObjectLocalRef)"/>
+	internal static JClassObject GetObjectClass(JEnvironment env, JObjectLocalRef localRef)
+	{
+		using LocalFrame frame = new(env, IVirtualMachine.GetObjectClassCapacity);
+		JClassLocalRef classRef = env.GetObjectClass(localRef);
+		JClassObject jClass = env.GetReferenceTypeClass(classRef);
+		env._cache.LoadClass(frame, classRef, jClass); // Runtime class loading.
+		return jClass;
+	}
 	/// <summary>
 	/// Retrieves the <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.
 	/// </summary>
@@ -308,14 +316,5 @@ partial class JEnvironment
 	{
 		if (value is null) return ReadOnlySpan<Byte>.Empty;
 		return value.IsNullTerminated ? value.AsSpan() : (CString)value.Clone();
-	}
-	/// <inheritdoc cref="JEnvironment.GetObjectClass(JObjectLocalRef)"/>
-	internal static JClassObject GetObjectClass(JEnvironment env, JObjectLocalRef localRef)
-	{
-		using LocalFrame frame = new(env, IVirtualMachine.GetObjectClassCapacity);
-		JClassLocalRef classRef = env.GetObjectClass(localRef);
-		JClassObject jClass = env.GetReferenceTypeClass(classRef);
-		env._cache.LoadClass(frame, classRef, jClass); // Runtime class loading.
-		return jClass;
 	}
 }
