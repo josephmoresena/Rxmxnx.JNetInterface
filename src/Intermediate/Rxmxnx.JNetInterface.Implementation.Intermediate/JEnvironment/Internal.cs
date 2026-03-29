@@ -121,6 +121,173 @@ partial class JEnvironment
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal void CheckJniError() => this._cache.CheckJniError();
+	/// <summary>
+	/// Retrieves the <see cref="JArrayTypeMetadata"/> instance for given <paramref name="arraySignature"/>.
+	/// </summary>
+	/// <param name="arraySignature">JNI array signature.</param>
+	/// <param name="arrayHash">Array class hash.</param>
+	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
+	internal JArrayTypeMetadata GetArrayTypeMetadata(ReadOnlySpan<Byte> arraySignature, String arrayHash)
+	{
+		// Element signature is Array signature without [ prefix.
+		ReadOnlySpan<Byte> elementSignature = arraySignature[1..];
+
+		if (elementSignature.Length == 1)
+		{
+			JArrayTypeMetadata result = (JArrayTypeMetadata)MetadataHelper.GetExactMetadata(arrayHash)!;
+			JTrace.UseTypeMetadata(arraySignature, result);
+			return result;
+		}
+
+		ReadOnlySpan<Byte> elementClassName = elementSignature;
+		if (elementSignature[0] != CommonNames.ArraySignaturePrefixChar &&
+		    elementSignature[^1] == CommonNames.ObjectSignatureSuffixChar)
+			// Object class name is signature without L prefix and ; suffix.
+			elementClassName = elementSignature[1..^1];
+		TypeInfoSequence elementClassInformation = MetadataHelper.GetClassInformation(elementClassName, false);
+		String elementHash = elementClassInformation.ToString();
+		if (elementSignature[0] == CommonNames.ArraySignaturePrefixChar)
+			return this.GetArrayArrayTypeMetadata(arraySignature, arrayHash, elementSignature, elementHash);
+
+		JReferenceTypeMetadata? elementMetadata = MetadataHelper.GetMetadata(elementClassInformation.ToString());
+		if (elementMetadata is null) // Element is not well-known class.
+		{
+			JClassObject elementClass = this._cache.GetClass(elementClassName);
+			elementMetadata = this.GetSuperTypeMetadata(elementClass);
+		}
+
+		JArrayTypeMetadata arrayTypeMetadata =
+			MetadataHelper.GetExactArrayMetadata(elementMetadata) ?? MetadataHelper.ObjectArrayMetadata;
+		JTrace.UseTypeMetadata(arraySignature, arrayTypeMetadata);
+		if (arrayHash != arrayTypeMetadata.Hash)
+			MetadataHelper.RegisterSuperView(arrayHash, arrayTypeMetadata.Hash);
+		return arrayTypeMetadata;
+	}
+	/// <summary>
+	/// Retrieves <see cref="JReferenceTypeMetadata"/> from super type of <paramref name="jClass"/>.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
+	internal JReferenceTypeMetadata GetSuperTypeMetadata(JClassObject jClass)
+	{
+		if (!jClass.IsInterface)
+			return JEnvironment.GetSuperClassMetadata(this, jClass);
+		JReferenceTypeMetadata? result = this.GetSuperInterfaceMetadata(jClass);
+		if (result is not null) return result;
+
+		JTrace.UseTypeMetadata(jClass, MetadataHelper.ObjectMetadata);
+		return MetadataHelper.ObjectMetadata;
+	}
+	/// <summary>
+	/// Retrieves object class reference.
+	/// </summary>
+	/// <param name="localRef">Object instance to get class.</param>
+	/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
+	internal JClassLocalRef GetObjectClass(JObjectLocalRef localRef)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetObjectClassInfo);
+		JClassLocalRef classRef = nativeInterface.ObjectFunctions.GetObjectClass(this.Reference, localRef);
+		if (classRef == default) this._cache.CheckJniError();
+		JTrace.GetObjectClass(localRef, classRef);
+		return classRef;
+	}
+	/// <summary>
+	/// Deletes <paramref name="localRef"/>.
+	/// </summary>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference to remove.</param>
+	internal void DeleteLocalRef(JObjectLocalRef localRef)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.DeleteLocalRefInfo);
+		nativeInterface.ReferenceFunctions.DeleteLocalRef.DeleteRef(this.Reference, localRef);
+		JTrace.DeleteReference(localRef, JReferenceType.LocalRefType);
+	}
+	/// <summary>
+	/// Creates a new local reference for <paramref name="objectRef"/>.
+	/// </summary>
+	/// <typeparam name="TObjectRef">A <see cref="IWrapper{JObjectLocalRef}"/> type.</typeparam>
+	/// <param name="objectRef">A <see cref="IWrapper{JObjectLocalRef}"/> reference.</param>
+	internal JObjectLocalRef CreateLocalRef<TObjectRef>(TObjectRef objectRef)
+		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.NewLocalRefInfo);
+		JObjectLocalRef localRef =
+			nativeInterface.ReferenceFunctions.NewLocalRef.NewRef(this.Reference, objectRef.Value);
+		JTrace.CreateLocalRef(objectRef, localRef);
+		if (localRef == default) this._cache.CheckJniError();
+		return localRef;
+	}
+	/// <summary>
+	/// Tests whether two references point to the same object.
+	/// </summary>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+	/// <param name="otherRef">A <see cref="JObjectLocalRef"/> reference.</param>
+	/// <returns>
+	/// <see langword="true"/> if both references refer to the same object; otherwise,
+	/// <see langword="false"/>.
+	/// </returns>
+	internal Boolean IsSame(JObjectLocalRef localRef, JObjectLocalRef otherRef)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.IsSameObjectInfo);
+		JBoolean result = nativeInterface.ReferenceFunctions.IsSameObject(this._cache.Reference, localRef, otherRef);
+		this._cache.CheckJniError();
+		return result.Value;
+	}
+	/// <summary>
+	/// Retrieves static field identifier for <paramref name="definition"/> in <paramref name="classRef"/>.
+	/// </summary>
+	/// <param name="definition">A <see cref="JFieldDefinition"/> instance.</param>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <param name="withNoCheckError">Indicates whether <see cref="CheckJniError"/> should not be called.</param>
+	/// <returns>A <see cref="JFieldId"/> identifier.</returns>
+	internal unsafe JFieldId GetStaticFieldId(JFieldDefinition definition, JClassLocalRef classRef,
+		Boolean withNoCheckError = false)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetStaticFieldIdInfo);
+		JFieldId fieldId;
+		fixed (Byte* namePtr = &MemoryMarshal.GetReference(definition.Name.AsSpan()))
+		fixed (Byte* signaturePtr = &MemoryMarshal.GetReference(definition.Descriptor.AsSpan()))
+		{
+			fieldId = nativeInterface.StaticFieldFunctions.GetFieldId.GetId(
+				this.Reference, classRef, namePtr, signaturePtr);
+		}
+		JTrace.GetAccessibleId(classRef, definition, fieldId);
+		if (fieldId == default && !withNoCheckError) this._cache.CheckJniError();
+		return fieldId;
+	}
+	/// <summary>
+	/// Retrieves a global reference for given class reference.
+	/// </summary>
+	/// <param name="typeInformation">Type information.</param>
+	/// <param name="classRef">A local class reference.</param>
+	/// <param name="deleteLocalRef">Indicates whether local class reference should be deleted.</param>
+	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
+	internal JGlobalRef GetMainClassGlobalRef(ITypeInformation typeInformation, JClassLocalRef classRef,
+		Boolean deleteLocalRef = true)
+	{
+		try
+		{
+			JGlobalRef globalRef = this._cache.CreateGlobalRef(classRef.Value, true);
+			if (globalRef != default) return globalRef;
+		}
+		finally
+		{
+			if (deleteLocalRef)
+				this.DeleteLocalRef(classRef.Value);
+		}
+
+		this.DescribeException();
+		this._cache.ClearException(); // Clears JNI exception.
+
+		IMessageResource resource = IMessageResource.GetInstance();
+		String className = typeInformation.JavaClassName;
+		String message = resource.MainClassGlobalError(className);
+		throw new NotSupportedException(message);
+	}
 
 	/// <summary>
 	/// Retrieves the <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.
