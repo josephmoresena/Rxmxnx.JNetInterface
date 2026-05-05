@@ -6,7 +6,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal sealed partial class EnvironmentCache : IAccessFeature
+internal sealed partial class EnvironmentCore : IAccessFeature
 {
 	public void GetPrimitiveField(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
 		JFieldDefinition definition)
@@ -29,7 +29,7 @@ internal sealed partial class EnvironmentCache : IAccessFeature
 		AccessCache access = this.GetAccess(jniTransaction, jClass);
 		JFieldId fieldId = access.GetFieldId(definition, this._env);
 		JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
-		EnvironmentCache.TraceSetPrimitiveField(jLocal, jClass, definition, bytes);
+		EnvironmentCore.TraceSetPrimitiveField(jLocal, jClass, definition, bytes);
 		this.SetPrimitiveField(localRef, bytes, definition.Descriptor[^1], fieldId);
 	}
 	public void GetPrimitiveStaticField(Span<Byte> bytes, JClassObject jClass, JFieldDefinition definition)
@@ -47,7 +47,7 @@ internal sealed partial class EnvironmentCache : IAccessFeature
 		using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 		AccessCache access = this.GetAccess(jniTransaction, jClass);
 		JFieldId fieldId = access.GetStaticFieldId(definition, this._env);
-		EnvironmentCache.TraceSetPrimitiveField(default, jClass, definition, bytes);
+		EnvironmentCore.TraceSetPrimitiveField(default, jClass, definition, bytes);
 		this.SetPrimitiveStaticField(jClass.Reference, bytes, definition.Descriptor[^1], fieldId);
 	}
 	public void CallStaticPrimitiveFunction(Span<Byte> bytes, JClassObject jClass, JFunctionDefinition definition,
@@ -372,7 +372,7 @@ internal sealed partial class EnvironmentCache : IAccessFeature
 		Rented<NativeMethodValue> rented = default;
 		Span<NativeMethodValue> buffer = stackDisposable.UsingStack ?
 			stackalloc NativeMethodValue[calls.Count] :
-			EnvironmentCache.HeapAlloc(calls.Count, ref rented);
+			EnvironmentCore.HeapAlloc(calls.Count, ref rented);
 		for (Int32 i = 0; i < calls.Count; i++)
 			buffer[i] = NativeMethodValue.Create(calls[i], handles);
 		try

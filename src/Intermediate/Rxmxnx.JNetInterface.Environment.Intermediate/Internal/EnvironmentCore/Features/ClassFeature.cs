@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal sealed partial class EnvironmentCache : IClassFeature
+internal sealed partial class EnvironmentCore : IClassFeature
 {
 	public JClassObject AsClassObject(JClassLocalRef classRef) => this.AsClassObject(classRef, default);
 	public JClassObject AsClassObject(JReferenceObject jObject)
@@ -56,7 +56,7 @@ internal sealed partial class EnvironmentCache : IClassFeature
 			return this.GetModule(classRef);
 		}
 		if (AndroidFeature.ApiLevel is > 0 || this.Host.Value.Version < JRuntimeVersion.J9) return default;
-		return EnvironmentCache.GetModule(this, jClass);
+		return EnvironmentCore.GetModule(this, jClass);
 	}
 	public void ThrowNew(JClassObject jClass, String? message, Boolean throwException)
 	{
@@ -73,7 +73,7 @@ internal sealed partial class EnvironmentCache : IClassFeature
 		this.CheckClassCompatibility<JThrowableObject>(jClass, out _);
 
 		JReferenceTypeMetadata throwableMetadata = this.GetTypeMetadata(jClass);
-		ReadOnlySpan<Byte> utf8Message = EnvironmentCache.GetSafeSpan(message);
+		ReadOnlySpan<Byte> utf8Message = EnvironmentCore.GetSafeSpan(message);
 		this.ThrowNew(jClass, throwableMetadata, utf8Message, throwException, message?.ToString());
 	}
 #if !NET8_0_OR_GREATER
@@ -82,7 +82,7 @@ internal sealed partial class EnvironmentCache : IClassFeature
 	public void ThrowNew<TThrowable>(CString? message, Boolean throwException)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 	{
-		ReadOnlySpan<Byte> utf8Message = EnvironmentCache.GetSafeSpan(message);
+		ReadOnlySpan<Byte> utf8Message = EnvironmentCore.GetSafeSpan(message);
 		this.ThrowNew<TThrowable>(utf8Message, throwException, message?.ToString());
 	}
 #if !NET8_0_OR_GREATER
@@ -124,7 +124,7 @@ internal sealed partial class EnvironmentCache : IClassFeature
 		ImplementationValidationUtilities.ThrowIfProxy(jLocal);
 		using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 		JObjectLocalRef localRef = jniTransaction.Add(jLocal);
-		JClassLocalRef classRef = EnvironmentCache.GetObjectClass(this, localRef);
+		JClassLocalRef classRef = EnvironmentCore.GetObjectClass(this, localRef);
 		JTypeKind kind = jLocal is JArrayObject ? JTypeKind.Array : JTypeKind.Class;
 		JClassObject jClass = this.GetClass(classRef, true, kind, true);
 		return this.Register(jClass);

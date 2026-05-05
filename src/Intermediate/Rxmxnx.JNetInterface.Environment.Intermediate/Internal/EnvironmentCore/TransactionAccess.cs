@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal sealed partial class EnvironmentCache
+internal sealed partial class EnvironmentCore
 {
 	/// <summary>
 	/// Uses <paramref name="jObject"/> into <paramref name="jniTransaction"/>.

@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal sealed partial class EnvironmentCache
+internal sealed partial class EnvironmentCore
 {
 	/// <summary>
 	/// Sets a static object field to given <paramref name="classRef"/> reference.
@@ -135,7 +135,7 @@ internal sealed partial class EnvironmentCache
 		Span<JValue> buffer = this.CopyAsJValue(jniTransaction, args,
 		                                        stackDisposable.UsingStack ?
 			                                        stackalloc Byte[requiredBytes] :
-			                                        EnvironmentCache.HeapAlloc(requiredBytes, ref rented));
+			                                        EnvironmentCore.HeapAlloc(requiredBytes, ref rented));
 		JObjectLocalRef resultLocalRef;
 		fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
 		{
@@ -169,7 +169,7 @@ internal sealed partial class EnvironmentCache
 		Span<JValue> buffer = this.CopyAsJValue(jniTransaction, args,
 		                                        stackDisposable.UsingStack ?
 			                                        stackalloc Byte[requiredBytes] :
-			                                        EnvironmentCache.HeapAlloc(requiredBytes, ref rented));
+			                                        EnvironmentCore.HeapAlloc(requiredBytes, ref rented));
 		fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
 		{
 			if (classRef is null)
@@ -203,7 +203,7 @@ internal sealed partial class EnvironmentCache
 		Span<JValue> buffer = this.CopyAsJValue(jniTransaction, args,
 		                                        stackDisposable.UsingStack ?
 			                                        stackalloc Byte[requiredBytes] :
-			                                        EnvironmentCache.HeapAlloc(requiredBytes, ref rented));
+			                                        EnvironmentCore.HeapAlloc(requiredBytes, ref rented));
 		JObjectLocalRef localRef;
 		fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
 		{
@@ -235,7 +235,7 @@ internal sealed partial class EnvironmentCache
 		Span<JValue> buffer = this.CopyAsJValue(jniTransaction, args,
 		                                        stackDisposable.UsingStack ?
 			                                        stackalloc Byte[requiredBytes] :
-			                                        EnvironmentCache.HeapAlloc(requiredBytes, ref rented));
+			                                        EnvironmentCore.HeapAlloc(requiredBytes, ref rented));
 		fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
 		{
 			if (classRef is null)
@@ -267,7 +267,7 @@ internal sealed partial class EnvironmentCache
 		Span<JValue> buffer = this.CopyAsJValue(jniTransaction, args,
 		                                        stackDisposable.UsingStack ?
 			                                        stackalloc Byte[requiredBytes] :
-			                                        EnvironmentCache.HeapAlloc(requiredBytes, ref rented));
+			                                        EnvironmentCore.HeapAlloc(requiredBytes, ref rented));
 		fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
 			nativeInterface.StaticMethodFunctions.CallVoidMethod.Call(this.Reference, classRef, methodId, ptr);
 		rented.Free();
@@ -312,7 +312,7 @@ internal sealed partial class EnvironmentCache
 		Span<JValue> buffer = this.CopyAsJValue(jniTransaction, args,
 		                                        stackDisposable.UsingStack ?
 			                                        stackalloc Byte[requiredBytes] :
-			                                        EnvironmentCache.HeapAlloc(requiredBytes, ref rented));
+			                                        EnvironmentCore.HeapAlloc(requiredBytes, ref rented));
 		JObjectLocalRef localRef;
 		fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
 			localRef = nativeInterface.ObjectFunctions.NewObject.Call(this.Reference, classRef, methodId, ptr);

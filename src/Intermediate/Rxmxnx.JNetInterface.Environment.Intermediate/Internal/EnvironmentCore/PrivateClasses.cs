@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal sealed partial class EnvironmentCache
+internal sealed partial class EnvironmentCore
 {
 	/// <summary>
 	/// Load main classes.
@@ -354,7 +354,7 @@ internal sealed partial class EnvironmentCache
 		if (jGlobal.IsDefault)
 		{
 			// A global-reference is created only if the existing one is default.
-			jGlobal.SetValue(EnvironmentCache.GetMainClassGlobalRef(this, classMetadata, classRef, deleteLocalRef));
+			jGlobal.SetValue(EnvironmentCore.GetMainClassGlobalRef(this, classMetadata, classRef, deleteLocalRef));
 			this.Host.TypeManager.ReloadAccess(jClass.Hash);
 		}
 		else if (deleteLocalRef)
@@ -489,7 +489,7 @@ internal sealed partial class EnvironmentCache
 		if (currentMetadata.Modifier != JTypeModifier.Final)
 		{
 			// If the modifier is not final, we should try to obtain more approximate type metadata.
-			jClass = EnvironmentCache.GetObjectClass(this, localRef, out typeMetadata);
+			jClass = EnvironmentCore.GetObjectClass(this, localRef, out typeMetadata);
 		}
 		else
 		{

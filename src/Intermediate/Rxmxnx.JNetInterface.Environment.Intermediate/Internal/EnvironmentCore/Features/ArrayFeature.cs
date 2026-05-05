@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal sealed partial class EnvironmentCache : IArrayFeature
+internal sealed partial class EnvironmentCore : IArrayFeature
 {
 	public JArrayObject<TElement> CreateArray<TElement>(Int32 length) where TElement : IDataType<TElement>
 	{

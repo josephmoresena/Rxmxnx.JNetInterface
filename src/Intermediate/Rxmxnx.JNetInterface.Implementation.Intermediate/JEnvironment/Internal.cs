@@ -9,13 +9,13 @@ partial class JEnvironment
 	/// <summary>
 	/// Class cache.
 	/// </summary>
-	internal ClassCache ClassCache => this._cache.GetClassCache();
+	internal ClassCache ClassCache => this._core.GetClassCache();
 	/// <summary>
 	/// Local cache.
 	/// </summary>
-	internal LocalCache LocalCache => this._cache.GetLocalCache();
+	internal LocalCache LocalCache => this._core.GetLocalCache();
 	/// <inheritdoc cref="IClassFeature.ClassObject"/>
-	internal JClassObject ClassObject => this._cache.ClassObject;
+	internal JClassObject ClassObject => this._core.ClassObject;
 
 	/// <summary>
 	/// Constructor.
@@ -23,7 +23,7 @@ partial class JEnvironment
 	/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 	internal JEnvironment(IVirtualMachine vm, JEnvironmentRef envRef)
-		=> this._cache = new((JVirtualMachine)vm, this, envRef);
+		=> this._core = new((JVirtualMachine)vm, this, envRef);
 	/// <summary>
 	/// Sets current object cache.
 	/// </summary>
@@ -31,27 +31,27 @@ partial class JEnvironment
 	internal void SetObjectCache(LocalCache localCache)
 	{
 		JTrace.SetObjectCache(localCache.Id, localCache.Name);
-		this._cache.SetObjectCache(localCache);
+		this._core.SetObjectCache(localCache);
 	}
 	/// <summary>
 	/// Deletes <paramref name="globalRef"/>.
 	/// </summary>
 	/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal void DeleteGlobalRef(JGlobalRef globalRef) => this._cache.DeleteGlobalRef(globalRef);
+	internal void DeleteGlobalRef(JGlobalRef globalRef) => this._core.DeleteGlobalRef(globalRef);
 	/// <summary>
 	/// Deletes <paramref name="weakRef"/>.
 	/// </summary>
 	/// <param name="weakRef">A <see cref="JWeakRef"/> reference.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal void DeleteWeakGlobalRef(JWeakRef weakRef) => this._cache.DeleteWeakGlobalRef(weakRef);
+	internal void DeleteWeakGlobalRef(JWeakRef weakRef) => this._core.DeleteWeakGlobalRef(weakRef);
 	/// <summary>
 	/// Retrieves type of given reference.
 	/// </summary>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 	/// <returns>A <see cref="JReferenceType"/> value.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal JReferenceType GetReferenceType(JObjectLocalRef localRef) => this._cache.GetReferenceType(localRef);
+	internal JReferenceType GetReferenceType(JObjectLocalRef localRef) => this._core.GetReferenceType(localRef);
 	/// <summary>
 	/// Retrieves the <see cref="JClassObject"/> according to <paramref name="classRef"/>.
 	/// </summary>
@@ -59,31 +59,31 @@ partial class JEnvironment
 	/// <param name="keepReference">Indicates whether class reference should be assigned to created object.</param>
 	/// <returns>A <see cref="JClassObject"/> instance.</returns>
 	internal JClassObject GetReferenceTypeClass(JClassLocalRef classRef, Boolean keepReference = false)
-		=> this._cache.GetClass(classRef, keepReference, JTypeKind.Undefined);
+		=> this._core.GetClass(classRef, keepReference, JTypeKind.Undefined);
 	/// <summary>
 	/// Loads in current cache given class.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal void LoadClass(JClassObject jClass) => this._cache.LoadClass(jClass);
+	internal void LoadClass(JClassObject jClass) => this._core.LoadClass(jClass);
 	/// <summary>
 	/// Reloads current class object.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <returns>Current <see cref="JClassLocalRef"/> reference.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal void ReloadClass(JClassObject jClass) => this._cache.ReloadClass(jClass);
+	internal void ReloadClass(JClassObject jClass) => this._core.ReloadClass(jClass);
 	/// <summary>
 	/// Sends JNI fatal error signal to VM.
 	/// </summary>
 	/// <param name="errorMessage">Error message.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal void FatalError(ReadOnlySpan<Byte> errorMessage) => EnvironmentCache.FatalError(this._cache, errorMessage);
+	internal void FatalError(ReadOnlySpan<Byte> errorMessage) => EnvironmentCore.FatalError(this._core, errorMessage);
 	/// <summary>
 	/// Checks JNI occurred error.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal void CheckJniError() => this._cache.CheckJniError();
+	internal void CheckJniError() => this._core.CheckJniError();
 	/// <summary>
 	/// Retrieves the class object and instantiation metadata.
 	/// </summary>
@@ -92,7 +92,7 @@ partial class JEnvironment
 	/// <returns>Object's class <see cref="JClassObject"/> instance</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal JClassObject GetObjectClass(JObjectLocalRef localRef, out JReferenceTypeMetadata typeMetadata)
-		=> EnvironmentCache.GetObjectClass(this._cache, localRef, out typeMetadata);
+		=> EnvironmentCore.GetObjectClass(this._core, localRef, out typeMetadata);
 
 	/// <summary>
 	/// Retrieves object class reference.
@@ -103,9 +103,9 @@ partial class JEnvironment
 	internal static JClassObject GetObjectClass(JEnvironment env, JObjectLocalRef localRef)
 	{
 		using LocalFrame frame = new(env, IVirtualMachine.GetObjectClassCapacity);
-		JClassLocalRef classRef = EnvironmentCache.GetObjectClass(env._cache, localRef);
+		JClassLocalRef classRef = EnvironmentCore.GetObjectClass(env._core, localRef);
 		JClassObject jClass = env.GetReferenceTypeClass(classRef);
-		env._cache.LoadClass(frame, classRef, jClass); // Runtime class loading.
+		env._core.LoadClass(frame, classRef, jClass); // Runtime class loading.
 		return jClass;
 	}
 	/// <summary>
@@ -115,7 +115,7 @@ partial class JEnvironment
 	/// <returns>The <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.</returns>
 	internal static JEnvironment GetEnvironment(JEnvironmentRef reference)
 	{
-		JVirtualMachineRef vmRef = EnvironmentCache.GetVirtualMachineRef(reference);
+		JVirtualMachineRef vmRef = EnvironmentCore.GetVirtualMachineRef(reference);
 		JVirtualMachine vm = (JVirtualMachine)JVirtualMachine.GetVirtualMachine(vmRef);
 		return vm.GetEnvironment(reference);
 	}

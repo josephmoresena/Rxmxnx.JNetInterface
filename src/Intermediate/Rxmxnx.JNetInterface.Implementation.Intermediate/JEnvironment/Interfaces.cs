@@ -14,43 +14,42 @@ partial class JEnvironment : IEquatable<IEnvironment>, IEquatable<JEnvironment>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	Boolean IEquatable<JEnvironment>.Equals(JEnvironment? other)
-		=> other is not null && this._cache.Equals(other._cache);
+	Boolean IEquatable<JEnvironment>.Equals(JEnvironment? other) => other is not null && this._core.Equals(other._core);
 	Boolean IEnvironment.NoProxy => true;
 	Int32? IEnvironment.LocalCapacity
 	{
-		get => this._cache.Capacity;
-		set => this._cache.EnsureLocalCapacity(value.GetValueOrDefault());
+		get => this._core.Capacity;
+		set => this._core.EnsureLocalCapacity(value.GetValueOrDefault());
 	}
-	IAccessFeature IEnvironment.AccessFeature => this._cache;
-	IClassFeature IEnvironment.ClassFeature => this._cache;
-	IReferenceFeature IEnvironment.ReferenceFeature => this._cache;
-	IStringFeature IEnvironment.StringFeature => this._cache;
-	IArrayFeature IEnvironment.ArrayFeature => this._cache;
-	INioFeature IEnvironment.NioFeature => this._cache;
+	IAccessFeature IEnvironment.AccessFeature => this._core;
+	IClassFeature IEnvironment.ClassFeature => this._core;
+	IReferenceFeature IEnvironment.ReferenceFeature => this._core;
+	IStringFeature IEnvironment.StringFeature => this._core;
+	IArrayFeature IEnvironment.ArrayFeature => this._core;
+	INioFeature IEnvironment.NioFeature => this._core;
 	NativeFunctionSet IEnvironment.FunctionSet => NativeFunctionSetImpl.Instance;
 
 	Boolean IEnvironment.IsValidationAvoidable(JGlobalBase jGlobal)
-		=> JEnvironment.IsValidationAvoidable(this._cache, jGlobal);
+		=> JEnvironment.IsValidationAvoidable(this._core, jGlobal);
 	JReferenceType IEnvironment.GetReferenceType(JObject jObject)
 	{
 		if (jObject is not JReferenceObject jRefObj || jRefObj.IsDefault || jRefObj.IsProxy)
 			return JReferenceType.InvalidRefType;
-		using INativeTransaction jniTransaction = this._cache.Host.MemoryManager.CreateTransaction(1);
+		using INativeTransaction jniTransaction = this._core.Host.MemoryManager.CreateTransaction(1);
 		JObjectLocalRef localRef = jniTransaction.Add(jRefObj);
 		JReferenceType result = this.GetReferenceType(localRef);
 		if (result == JReferenceType.InvalidRefType)
 		{
-			if (jRefObj is JGlobalBase jGlobal) this._cache.Host.GlobalManager.Remove(jGlobal);
-			else this._cache.Remove(jRefObj as JLocalObject);
+			if (jRefObj is JGlobalBase jGlobal) this._core.Host.GlobalManager.Remove(jGlobal);
+			else this._core.Remove(jRefObj as JLocalObject);
 			jRefObj.ClearValue();
 		}
-		else if (this._cache.IsSame(jRefObj.As<JObjectLocalRef>(), default))
+		else if (this._core.IsSame(jRefObj.As<JObjectLocalRef>(), default))
 		{
 			if (jRefObj is JGlobalBase jGlobal)
-				this._cache.Unload(jGlobal);
+				this._core.Unload(jGlobal);
 			else
-				this._cache.Unload(jRefObj as JLocalObject ?? ILocalViewObject.GetObject(jRefObj as ILocalViewObject));
+				this._core.Unload(jRefObj as JLocalObject ?? ILocalViewObject.GetObject(jRefObj as ILocalViewObject));
 		}
 
 		return result;
@@ -67,10 +66,10 @@ partial class JEnvironment : IEquatable<IEnvironment>, IEquatable<JEnvironment>
 
 		ImplementationValidationUtilities.ThrowIfProxy(jRefObj);
 		ImplementationValidationUtilities.ThrowIfProxy(jRefOther);
-		using INativeTransaction jniTransaction = this._cache.Host.MemoryManager.CreateTransaction(2);
+		using INativeTransaction jniTransaction = this._core.Host.MemoryManager.CreateTransaction(2);
 		JObjectLocalRef localRef = jniTransaction.Add(jRefObj);
 		JObjectLocalRef otherLocalRef = jniTransaction.Add(jRefOther);
-		return this._cache.IsSame(localRef, otherLocalRef);
+		return this._core.IsSame(localRef, otherLocalRef);
 	}
 	TResult IEnvironment.WithFrame<TResult>(Int32 capacity, Func<TResult> func)
 	{

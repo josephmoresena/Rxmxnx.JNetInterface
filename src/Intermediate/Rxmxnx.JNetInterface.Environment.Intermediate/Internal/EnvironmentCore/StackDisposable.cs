@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal sealed partial class EnvironmentCache
+internal sealed partial class EnvironmentCore
 {
 	/// <summary>
 	/// Release used bytes from stack.
@@ -15,9 +15,9 @@ internal sealed partial class EnvironmentCache
 	private readonly struct StackDisposable : IDisposable
 	{
 		/// <summary>
-		/// A <see cref="EnvironmentCache"/> cache.
+		/// A <see cref="EnvironmentCore"/> cache.
 		/// </summary>
-		private readonly EnvironmentCache? _cache;
+		private readonly EnvironmentCore? _core;
 		/// <summary>
 		/// Amount of used bytes.
 		/// </summary>
@@ -26,21 +26,21 @@ internal sealed partial class EnvironmentCache
 		/// <summary>
 		/// Indicates whether current call is using stack memory.
 		/// </summary>
-		public Boolean UsingStack => this._cache is not null;
+		public Boolean UsingStack => this._core is not null;
 
 		public StackDisposable() { }
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		/// <param name="cache">A <see cref="EnvironmentCache"/> cache.</param>
+		/// <param name="core">A <see cref="EnvironmentCore"/> cache.</param>
 		/// <param name="usedBytes">Amount of used bytes.</param>
-		public StackDisposable(EnvironmentCache cache, Int32 usedBytes)
+		public StackDisposable(EnvironmentCore core, Int32 usedBytes)
 		{
 			this._usedBytes = usedBytes;
-			this._cache = cache;
+			this._core = core;
 		}
 
 		/// <inheritdoc/>
-		public void Dispose() => this._cache?.FreeStack(this._usedBytes);
+		public void Dispose() => this._core?.FreeStack(this._usedBytes);
 	}
 }

@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal sealed partial class EnvironmentCache
+internal sealed partial class EnvironmentCore
 {
 	/// <summary>
 	/// Class cache.
@@ -53,14 +53,14 @@ internal sealed partial class EnvironmentCache
 	{
 		JniMethodInfo info = primitiveSignature switch
 		{
-			CommonNames.BooleanSignatureChar => EnvironmentCache.GetBooleanArrayFunctionInfo(arrayFunction),
-			CommonNames.ByteSignatureChar => EnvironmentCache.GetByteArrayFunctionInfo(arrayFunction),
-			CommonNames.CharSignatureChar => EnvironmentCache.GetCharArrayFunctionInfo(arrayFunction),
-			CommonNames.DoubleSignatureChar => EnvironmentCache.GetDoubleArrayFunctionInfo(arrayFunction),
-			CommonNames.FloatSignatureChar => EnvironmentCache.GetFloatArrayFunctionInfo(arrayFunction),
-			CommonNames.IntSignatureChar => EnvironmentCache.GetIntArrayFunctionInfo(arrayFunction),
-			CommonNames.LongSignatureChar => EnvironmentCache.GetLongArrayFunctionInfo(arrayFunction),
-			CommonNames.ShortSignatureChar => EnvironmentCache.GetShortArrayFunctionInfo(arrayFunction),
+			CommonNames.BooleanSignatureChar => EnvironmentCore.GetBooleanArrayFunctionInfo(arrayFunction),
+			CommonNames.ByteSignatureChar => EnvironmentCore.GetByteArrayFunctionInfo(arrayFunction),
+			CommonNames.CharSignatureChar => EnvironmentCore.GetCharArrayFunctionInfo(arrayFunction),
+			CommonNames.DoubleSignatureChar => EnvironmentCore.GetDoubleArrayFunctionInfo(arrayFunction),
+			CommonNames.FloatSignatureChar => EnvironmentCore.GetFloatArrayFunctionInfo(arrayFunction),
+			CommonNames.IntSignatureChar => EnvironmentCore.GetIntArrayFunctionInfo(arrayFunction),
+			CommonNames.LongSignatureChar => EnvironmentCore.GetLongArrayFunctionInfo(arrayFunction),
+			CommonNames.ShortSignatureChar => EnvironmentCore.GetShortArrayFunctionInfo(arrayFunction),
 			_ => throw new ArgumentException(IMessageResource.GetInstance().InvalidPrimitiveTypeMessage),
 		};
 		return ref this.GetNativeInterface<NativeInterface>(info).ArrayFunctions;
@@ -76,16 +76,16 @@ internal sealed partial class EnvironmentCache
 	{
 		JniMethodInfo info = signatureChar switch
 		{
-			CommonNames.BooleanSignatureChar => EnvironmentCache.GetBooleanInstanceMethodInfo(nonVirtual),
-			CommonNames.ByteSignatureChar => EnvironmentCache.GetByteInstanceMethodInfo(nonVirtual),
-			CommonNames.CharSignatureChar => EnvironmentCache.GetCharInstanceMethodInfo(nonVirtual),
-			CommonNames.DoubleSignatureChar => EnvironmentCache.GetDoubleInstanceMethodInfo(nonVirtual),
-			CommonNames.FloatSignatureChar => EnvironmentCache.GetFloatInstanceMethodInfo(nonVirtual),
-			CommonNames.IntSignatureChar => EnvironmentCache.GetIntInstanceMethodInfo(nonVirtual),
-			CommonNames.LongSignatureChar => EnvironmentCache.GetLongInstanceMethodInfo(nonVirtual),
-			CommonNames.ShortSignatureChar => EnvironmentCache.GetShortInstanceMethodInfo(nonVirtual),
-			CommonNames.VoidSignatureChar => EnvironmentCache.GetVoidInstanceMethodInfo(nonVirtual),
-			CommonNames.ObjectSignaturePrefixChar => EnvironmentCache.GetObjectInstanceMethodInfo(nonVirtual),
+			CommonNames.BooleanSignatureChar => EnvironmentCore.GetBooleanInstanceMethodInfo(nonVirtual),
+			CommonNames.ByteSignatureChar => EnvironmentCore.GetByteInstanceMethodInfo(nonVirtual),
+			CommonNames.CharSignatureChar => EnvironmentCore.GetCharInstanceMethodInfo(nonVirtual),
+			CommonNames.DoubleSignatureChar => EnvironmentCore.GetDoubleInstanceMethodInfo(nonVirtual),
+			CommonNames.FloatSignatureChar => EnvironmentCore.GetFloatInstanceMethodInfo(nonVirtual),
+			CommonNames.IntSignatureChar => EnvironmentCore.GetIntInstanceMethodInfo(nonVirtual),
+			CommonNames.LongSignatureChar => EnvironmentCore.GetLongInstanceMethodInfo(nonVirtual),
+			CommonNames.ShortSignatureChar => EnvironmentCore.GetShortInstanceMethodInfo(nonVirtual),
+			CommonNames.VoidSignatureChar => EnvironmentCore.GetVoidInstanceMethodInfo(nonVirtual),
+			CommonNames.ObjectSignaturePrefixChar => EnvironmentCore.GetObjectInstanceMethodInfo(nonVirtual),
 			_ => throw new ArgumentException(IMessageResource.GetInstance().InvalidPrimitiveTypeMessage),
 		};
 		return ref this.GetNativeInterface<NativeInterface>(info).InstanceMethodFunctions;
@@ -125,14 +125,14 @@ internal sealed partial class EnvironmentCache
 	{
 		JniMethodInfo info = primitiveSignature switch
 		{
-			CommonNames.BooleanSignatureChar => EnvironmentCache.GetInstanceBooleanFieldFunctionInfo(getField),
-			CommonNames.ByteSignatureChar => EnvironmentCache.GetInstanceByteFieldFunctionInfo(getField),
-			CommonNames.CharSignatureChar => EnvironmentCache.GetInstanceCharFieldFunctionInfo(getField),
-			CommonNames.DoubleSignatureChar => EnvironmentCache.GetInstanceDoubleFieldFunctionInfo(getField),
-			CommonNames.FloatSignatureChar => EnvironmentCache.GetInstanceFloatFieldFunctionInfo(getField),
-			CommonNames.IntSignatureChar => EnvironmentCache.GetInstanceIntFieldFunctionInfo(getField),
-			CommonNames.LongSignatureChar => EnvironmentCache.GetInstanceLongFieldFunctionInfo(getField),
-			CommonNames.ShortSignatureChar => EnvironmentCache.GetInstanceShortFieldFunctionInfo(getField),
+			CommonNames.BooleanSignatureChar => EnvironmentCore.GetInstanceBooleanFieldFunctionInfo(getField),
+			CommonNames.ByteSignatureChar => EnvironmentCore.GetInstanceByteFieldFunctionInfo(getField),
+			CommonNames.CharSignatureChar => EnvironmentCore.GetInstanceCharFieldFunctionInfo(getField),
+			CommonNames.DoubleSignatureChar => EnvironmentCore.GetInstanceDoubleFieldFunctionInfo(getField),
+			CommonNames.FloatSignatureChar => EnvironmentCore.GetInstanceFloatFieldFunctionInfo(getField),
+			CommonNames.IntSignatureChar => EnvironmentCore.GetInstanceIntFieldFunctionInfo(getField),
+			CommonNames.LongSignatureChar => EnvironmentCore.GetInstanceLongFieldFunctionInfo(getField),
+			CommonNames.ShortSignatureChar => EnvironmentCore.GetInstanceShortFieldFunctionInfo(getField),
 			_ => throw new ArgumentException(IMessageResource.GetInstance().InvalidPrimitiveTypeMessage),
 		};
 		return ref this.GetNativeInterface<NativeInterface>(info).InstanceFieldFunctions;
@@ -149,14 +149,14 @@ internal sealed partial class EnvironmentCache
 	{
 		JniMethodInfo info = primitiveSignature switch
 		{
-			CommonNames.BooleanSignatureChar => EnvironmentCache.GetStaticBooleanFieldFunctionInfo(getField),
-			CommonNames.ByteSignatureChar => EnvironmentCache.GetStaticByteFieldFunctionInfo(getField),
-			CommonNames.CharSignatureChar => EnvironmentCache.GetStaticCharFieldFunctionInfo(getField),
-			CommonNames.DoubleSignatureChar => EnvironmentCache.GetStaticDoubleFieldFunctionInfo(getField),
-			CommonNames.FloatSignatureChar => EnvironmentCache.GetStaticFloatFieldFunctionInfo(getField),
-			CommonNames.IntSignatureChar => EnvironmentCache.GetStaticIntFieldFunctionInfo(getField),
-			CommonNames.LongSignatureChar => EnvironmentCache.GetStaticLongFieldFunctionInfo(getField),
-			CommonNames.ShortSignatureChar => EnvironmentCache.GetStaticShortFieldFunctionInfo(getField),
+			CommonNames.BooleanSignatureChar => EnvironmentCore.GetStaticBooleanFieldFunctionInfo(getField),
+			CommonNames.ByteSignatureChar => EnvironmentCore.GetStaticByteFieldFunctionInfo(getField),
+			CommonNames.CharSignatureChar => EnvironmentCore.GetStaticCharFieldFunctionInfo(getField),
+			CommonNames.DoubleSignatureChar => EnvironmentCore.GetStaticDoubleFieldFunctionInfo(getField),
+			CommonNames.FloatSignatureChar => EnvironmentCore.GetStaticFloatFieldFunctionInfo(getField),
+			CommonNames.IntSignatureChar => EnvironmentCore.GetStaticIntFieldFunctionInfo(getField),
+			CommonNames.LongSignatureChar => EnvironmentCore.GetStaticLongFieldFunctionInfo(getField),
+			CommonNames.ShortSignatureChar => EnvironmentCore.GetStaticShortFieldFunctionInfo(getField),
 			_ => throw new ArgumentException(IMessageResource.GetInstance().InvalidPrimitiveTypeMessage),
 		};
 		return ref this.GetNativeInterface<NativeInterface>(info).StaticFieldFunctions;
@@ -323,7 +323,7 @@ internal sealed partial class EnvironmentCache
 		{
 			// Unable to create throwable global object reference.
 			if (!this._buildingException) throw;
-			EnvironmentCache.DescribeException(this);
+			EnvironmentCore.DescribeException(this);
 			this.Throw(throwableRef); // Throws pending exception at JNI.
 			throw;
 		}

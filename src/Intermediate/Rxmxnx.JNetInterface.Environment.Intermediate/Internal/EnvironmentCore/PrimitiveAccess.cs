@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal sealed partial class EnvironmentCache
+internal sealed partial class EnvironmentCore
 {
 	/// <summary>
 	/// Sets a primitive static field.
@@ -264,7 +264,7 @@ internal sealed partial class EnvironmentCache
 		Span<JValue> buffer = this.CopyAsJValue(jniTransaction, args,
 		                                        stackDisposable.UsingStack ?
 			                                        stackalloc Byte[requiredBytes] :
-			                                        EnvironmentCache.HeapAlloc(requiredBytes, ref rented));
+			                                        EnvironmentCore.HeapAlloc(requiredBytes, ref rented));
 		fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
 		{
 			switch (signature)

@@ -13,7 +13,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal sealed partial class EnvironmentCache : INioFeature
+internal sealed partial class EnvironmentCore : INioFeature
 {
 	public JByteBufferBuffer NewDirectByteBuffer(IFixedMemory.IDisposable memory)
 	{
@@ -32,7 +32,7 @@ internal sealed partial class EnvironmentCache : INioFeature
 		Boolean useStackAlloc = this.UseStackAlloc(capacity);
 		using IFixedContext<Byte>.IDisposable memory = useStackAlloc ?
 			this.GetStackContext(stackalloc Byte[capacity]) :
-			EnvironmentCache.AllocHeapContext(capacity);
+			EnvironmentCore.AllocHeapContext(capacity);
 		using TBuffer buffer = (TBuffer)this.NewDirectByteBuffer(memory);
 		action(buffer);
 	}
@@ -45,7 +45,7 @@ internal sealed partial class EnvironmentCache : INioFeature
 		Boolean useStackAlloc = this.UseStackAlloc(capacity);
 		using IFixedContext<Byte>.IDisposable memory = useStackAlloc ?
 			this.GetStackContext(stackalloc Byte[capacity]) :
-			EnvironmentCache.AllocHeapContext(capacity);
+			EnvironmentCore.AllocHeapContext(capacity);
 		using TBuffer buffer = (TBuffer)this.NewDirectByteBuffer(memory);
 		action(buffer, state);
 	}
@@ -55,7 +55,7 @@ internal sealed partial class EnvironmentCache : INioFeature
 		Boolean useStackAlloc = this.UseStackAlloc(capacity);
 		using IFixedContext<Byte>.IDisposable memory = useStackAlloc ?
 			this.GetStackContext(stackalloc Byte[capacity]) :
-			EnvironmentCache.AllocHeapContext(capacity);
+			EnvironmentCore.AllocHeapContext(capacity);
 		using TBuffer buffer = (TBuffer)this.NewDirectByteBuffer(memory);
 		return func(buffer);
 	}
@@ -69,7 +69,7 @@ internal sealed partial class EnvironmentCache : INioFeature
 		Boolean useStackAlloc = this.UseStackAlloc(capacity);
 		using IFixedContext<Byte>.IDisposable memory = useStackAlloc ?
 			this.GetStackContext(stackalloc Byte[capacity]) :
-			EnvironmentCache.AllocHeapContext(capacity);
+			EnvironmentCore.AllocHeapContext(capacity);
 		using TBuffer buffer = (TBuffer)this.NewDirectByteBuffer(memory);
 		return func(buffer, state);
 	}

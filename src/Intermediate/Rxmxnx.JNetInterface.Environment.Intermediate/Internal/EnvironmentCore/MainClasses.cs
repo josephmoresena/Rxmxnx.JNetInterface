@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal sealed unsafe partial class EnvironmentCache
+internal sealed unsafe partial class EnvironmentCore
 {
 	JClassObject IClassFeature.ClassObject => this.GetLoadedClass(this.ClassObject);
 	JClassObject IClassFeature.ThrowableObject => this.GetLoadedClass(this.ThrowableObject);

@@ -19,11 +19,11 @@ public partial class JEnvironment : IEqualityOperators<JEnvironment, JEnvironmen
 	/// </summary>
 	public virtual Boolean IsDaemon => false;
 	/// <inheritdoc cref="IEnvironment.Version"/>
-	public Int32 Version => this._cache.Version;
+	public Int32 Version => this._core.Version;
 	/// <summary>
 	/// Indicates whether current thread is attached to a JVM.
 	/// </summary>
-	public virtual Boolean IsAttached => this._cache.Host.IsRunning;
+	public virtual Boolean IsAttached => this._core.Host.IsRunning;
 	/// <inheritdoc cref="IEnvironment.PendingException"/>
 	public ThrowableException? PendingException
 	{
@@ -32,16 +32,16 @@ public partial class JEnvironment : IEqualityOperators<JEnvironment, JEnvironmen
 	}
 
 	/// <inheritdoc/>
-	public JEnvironmentRef Reference => this._cache.Reference;
+	public JEnvironmentRef Reference => this._core.Reference;
 	/// <inheritdoc/>
-	public IVirtualMachine VirtualMachine => this._cache.Host.Value;
+	public IVirtualMachine VirtualMachine => this._core.Host.Value;
 	/// <inheritdoc/>
-	public Int32 UsedStackBytes => this._cache.UsedStackBytes;
+	public Int32 UsedStackBytes => this._core.UsedStackBytes;
 	/// <inheritdoc/>
 	public Int32 UsableStackBytes
 	{
-		get => this._cache.MaxStackBytes;
-		set => this._cache.SetUsableStackBytes(value);
+		get => this._core.MaxStackBytes;
+		set => this._core.SetUsableStackBytes(value);
 	}
 
 	Int32 IEnvironment.Version
@@ -57,13 +57,13 @@ public partial class JEnvironment : IEqualityOperators<JEnvironment, JEnvironmen
 	void IEnvironment.WithFrame(Int32 capacity, Action action)
 	{
 		using LocalFrame _ = new(this, capacity);
-		this._cache.CheckJniError();
+		this._core.CheckJniError();
 		action();
 	}
 	void IEnvironment.WithFrame<TState>(Int32 capacity, TState state, Action<TState> action)
 	{
 		using LocalFrame _ = new(this, capacity);
-		this._cache.CheckJniError();
+		this._core.CheckJniError();
 		action(state);
 	}
 	Boolean? IEnvironment.IsVirtual(JThreadObject jThread)
@@ -73,33 +73,33 @@ public partial class JEnvironment : IEqualityOperators<JEnvironment, JEnvironmen
 		if (this.Version >= NativeInterface19.RequiredVersion)
 		{
 			ref readonly NativeInterface19 nativeInterface =
-				ref this._cache.GetNativeInterface<NativeInterface19>(NativeInterface19.IsVirtualThreadInfo);
-			using INativeTransaction jniTransaction = this._cache.Host.MemoryManager.CreateTransaction(1);
+				ref this._core.GetNativeInterface<NativeInterface19>(NativeInterface19.IsVirtualThreadInfo);
+			using INativeTransaction jniTransaction = this._core.Host.MemoryManager.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(jThread);
 			return nativeInterface.IsVirtualThread(this.Reference, localRef).Value;
 		}
 		if (JVirtualMachine.AndroidApiLevel > 0 || this.VirtualMachine.Version < JRuntimeVersion.J21) return default;
-		return this._cache.IsVirtual(jThread);
+		return this._core.IsVirtual(jThread);
 	}
 
 	/// <inheritdoc/>
-	public Boolean JniSecure() => this._cache.JniSecure();
+	public Boolean JniSecure() => this._core.JniSecure();
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public void DescribeException() => EnvironmentCache.DescribeException(this._cache);
+	public void DescribeException() => EnvironmentCore.DescribeException(this._core);
 
 	/// <inheritdoc/>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
 	public sealed override Boolean Equals(Object? obj)
-		=> (obj is JEnvironment other && this._cache.Equals(other._cache)) ||
+		=> (obj is JEnvironment other && this._core.Equals(other._core)) ||
 			(obj is IEnvironment env && this.Reference == env.Reference);
 	/// <inheritdoc/>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public sealed override Int32 GetHashCode() => this._cache.GetHashCode();
+	public sealed override Int32 GetHashCode() => this._core.GetHashCode();
 
 	/// <summary>
 	/// Determines whether a specified <see cref="JEnvironment"/> and a <see cref="JEnvironment"/> instance

@@ -82,7 +82,7 @@ public partial class JVirtualMachine : IVirtualMachine
 	/// <inheritdoc/>
 	public void FatalError(CString? message)
 	{
-		ReadOnlySpan<Byte> utf8Message = EnvironmentCache.GetSafeSpan(message);
+		ReadOnlySpan<Byte> utf8Message = EnvironmentCore.GetSafeSpan(message);
 		using IThread thread = this.AttachThread(ThreadCreationArgs.Create(ThreadPurpose.FatalError));
 		JEnvironment env = this.GetEnvironment(thread.Reference);
 		env.FatalError(utf8Message);

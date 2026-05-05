@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal sealed partial class EnvironmentCache
+internal sealed partial class EnvironmentCore
 {
 	/// <summary>
 	/// Creates a <paramref name="initialElement"/> filled <see cref="JArrayObject{TElement}"/> instance.
@@ -410,7 +410,7 @@ internal sealed partial class EnvironmentCache
 		Rented<Byte> rented = default;
 		Span<Byte> buffer = stackDisposable.UsingStack ?
 			stackalloc Byte[requiredBytes] :
-			EnvironmentCache.HeapAlloc(requiredBytes, ref rented);
+			EnvironmentCore.HeapAlloc(requiredBytes, ref rented);
 		Int32 offset = 0;
 		while (offset < requiredBytes)
 			initialElement.CopyTo(buffer, ref offset);

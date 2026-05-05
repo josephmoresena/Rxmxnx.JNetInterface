@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal sealed partial class EnvironmentCache
+internal sealed partial class EnvironmentCore
 {
 	/// <summary>
 	/// Minimum number of bytes usable from stack.
@@ -32,7 +32,7 @@ internal sealed partial class EnvironmentCache
 	/// <param name="count">Number of allocated bytes.</param>
 	/// <returns>A <see cref="IFixedContext{Byte}.IDisposable"/> instance</returns>
 	private static IFixedContext<Byte>.IDisposable AllocHeapContext(Int32 count)
-		=> count == 0 ? EnvironmentCache.zeroByteContext : ArrayPool<Byte>.Shared.RentFixed(count, true);
+		=> count == 0 ? EnvironmentCore.zeroByteContext : ArrayPool<Byte>.Shared.RentFixed(count, true);
 	/// <summary>
 	/// Creates a <typeparamref name="T"/> span allocated in heap.
 	/// </summary>
@@ -92,21 +92,21 @@ internal sealed partial class EnvironmentCache
 	/// <summary>
 	/// Retrieves the <see cref="JModuleObject"/> from <paramref name="jClass"/>.
 	/// </summary>
-	/// <param name="cache">A <see cref="EnvironmentCache"/> instance.</param>
+	/// <param name="core">A <see cref="EnvironmentCore"/> instance.</param>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <returns>A <see cref="JModuleObject"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	private static JModuleObject? GetModule(EnvironmentCache cache, JClassObject jClass)
+	private static JModuleObject? GetModule(EnvironmentCore core, JClassObject jClass)
 	{
 		JClassObject jClassClass = jClass.Class;
 		JFunctionDefinition functionDefinition = NativeFunctionSetImpl.GetModuleDefinition;
-		using INativeTransaction jniTransaction = cache.GetInstanceTransaction(
+		using INativeTransaction jniTransaction = core.GetInstanceTransaction(
 			jClassClass, jClass, functionDefinition, out JObjectLocalRef localRef, out JMethodId methodId);
 		JTrace.CallMethod(jClass, jClassClass, functionDefinition, false);
-		return cache.CallObjectFunction<JModuleObject>(functionDefinition, localRef, default, default, jniTransaction,
-		                                               methodId);
+		return core.CallObjectFunction<JModuleObject>(functionDefinition, localRef, default, default, jniTransaction,
+		                                              methodId);
 	}
 	/// <summary>
 	/// Retrieves the <c>boolean</c> <see cref="JniMethodInfo"/> instance for <paramref name="arrayFunction"/>.

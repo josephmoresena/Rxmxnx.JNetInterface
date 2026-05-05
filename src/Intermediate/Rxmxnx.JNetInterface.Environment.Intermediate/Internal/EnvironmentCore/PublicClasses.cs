@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal sealed partial class EnvironmentCache
+internal sealed partial class EnvironmentCore
 {
 	/// <summary>
 	/// Class cache cache.
@@ -79,7 +79,7 @@ internal sealed partial class EnvironmentCache
 		}
 		if (classRef != default) return classRef;
 
-		EnvironmentCache.DescribeException(this);
+		EnvironmentCore.DescribeException(this);
 		this.ClearException();
 
 		IMessageResource resource = IMessageResource.GetInstance();
@@ -106,7 +106,7 @@ internal sealed partial class EnvironmentCache
 			{
 				if (findClass) classRef = this.FindClass(jClass);
 				ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
-				jGlobal.SetValue(EnvironmentCache.GetMainClassGlobalRef(this, classMetadata, classRef, findClass));
+				jGlobal.SetValue(EnvironmentCore.GetMainClassGlobalRef(this, classMetadata, classRef, findClass));
 				this.Host.TypeManager.ReloadAccess(jClass.Hash);
 			}
 			// Always use the global reference if it is a main class.

@@ -7,7 +7,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal sealed partial class EnvironmentCache : LocalMainClasses, IUnsafeMemoryManager
+internal sealed partial class EnvironmentCore : LocalMainClasses, IUnsafeMemoryManager
 {
 	/// <summary>
 	/// Virtual machine host.
@@ -23,7 +23,7 @@ internal sealed partial class EnvironmentCache : LocalMainClasses, IUnsafeMemory
 	/// <summary>
 	/// Maximum number of bytes usable from stack.
 	/// </summary>
-	public Int32 MaxStackBytes { get; private set; } = EnvironmentCache.MinStackBytes;
+	public Int32 MaxStackBytes { get; private set; } = EnvironmentCore.MinStackBytes;
 	/// <summary>
 	/// Amount of bytes used from stack.
 	/// </summary>
@@ -39,7 +39,7 @@ internal sealed partial class EnvironmentCache : LocalMainClasses, IUnsafeMemory
 	/// <param name="vm">A <see cref="IVirtualMachineHost"/> instance.</param>
 	/// <param name="env">A <see cref="INativeThread"/> instance.</param>
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
-	public EnvironmentCache(IVirtualMachineHost vm, INativeThread env, JEnvironmentRef envRef) : base(envRef, env)
+	public EnvironmentCore(IVirtualMachineHost vm, INativeThread env, JEnvironmentRef envRef) : base(envRef, env)
 	{
 		this.Reference = envRef;
 		this.Host = vm;
@@ -205,14 +205,14 @@ internal sealed partial class EnvironmentCache : LocalMainClasses, IUnsafeMemory
 
 		try
 		{
-			jClass = EnvironmentCache.GetObjectClass(this, throwableRef.Value, out throwableMetadata);
+			jClass = EnvironmentCore.GetObjectClass(this, throwableRef.Value, out throwableMetadata);
 		}
 		catch (CriticalException)
 		{
 			// Unable to retrieve throwable object class.
 			jClass = this.GetClass<JThrowableObject>(); // Retrieves java.lang.Throwable class.
 			if (!this._buildingException) throw;
-			EnvironmentCache.DescribeException(this);
+			EnvironmentCore.DescribeException(this);
 			this.Thrown = null;
 		}
 		try
@@ -223,7 +223,7 @@ internal sealed partial class EnvironmentCache : LocalMainClasses, IUnsafeMemory
 		{
 			// Unable to retrieve throwable object message.
 			if (!this._buildingException) throw;
-			EnvironmentCache.DescribeException(this);
+			EnvironmentCore.DescribeException(this);
 			this.Thrown = null;
 		}
 		return this.CreateThrowableException(jClass, throwableMetadata, message, throwableRef);
@@ -256,8 +256,8 @@ internal sealed partial class EnvironmentCache : LocalMainClasses, IUnsafeMemory
 	/// <param name="value">Value.</param>
 	public void SetUsableStackBytes(Int32 value)
 	{
-		Int32 min = EnvironmentCache.MinStackBytes > this.UsedStackBytes ?
-			EnvironmentCache.MinStackBytes :
+		Int32 min = EnvironmentCore.MinStackBytes > this.UsedStackBytes ?
+			EnvironmentCore.MinStackBytes :
 			this.UsedStackBytes;
 		if (value < min)
 			throw new ArgumentOutOfRangeException(nameof(value),

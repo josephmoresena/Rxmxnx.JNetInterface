@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal sealed partial class EnvironmentCache
+internal sealed partial class EnvironmentCore
 {
 	JClassObject IClassFeature.VoidObject => this.GetClass<JVoidObject>();
 	JClassObject IClassFeature.BooleanObject => this.GetClass<JBooleanObject>();
@@ -47,14 +47,14 @@ internal sealed partial class EnvironmentCache
 	public JClassLocalRef FindPrimitiveClass(JClassLocalRef wClassRef, String className)
 	{
 		JFieldId typeFieldId =
-			EnvironmentCache.GetStaticFieldId(this, NativeFunctionSetImpl.PrimitiveTypeDefinition, wClassRef, true);
+			EnvironmentCore.GetStaticFieldId(this, NativeFunctionSetImpl.PrimitiveTypeDefinition, wClassRef, true);
 		if (typeFieldId != default)
 		{
 			JObjectLocalRef localRef = this.GetStaticObjectField(wClassRef, typeFieldId, true);
 			if (localRef != default) return new(localRef);
 		}
 
-		EnvironmentCache.DescribeException(this);
+		EnvironmentCore.DescribeException(this);
 		this.ClearException();
 
 		IMessageResource resource = IMessageResource.GetInstance();

@@ -33,7 +33,7 @@ partial class JEnvironment
 		/// Constructor.
 		/// </summary>
 		/// <param name="env">Original env instance.</param>
-		public JThread(JEnvironment env) : base(env._cache)
+		public JThread(JEnvironment env) : base(env._core)
 		{
 			JThread? thread = env as JThread;
 			this.IsDisposable = false;
@@ -53,9 +53,9 @@ partial class JEnvironment
 			if (!this.IsDisposable || this._isDisposed.Value) return;
 			this._isDisposed.Value = true;
 
-			JVirtualMachine.RemoveEnvironment(this._cache.Host.Value.Reference, this.Reference);
-			this._cache.FreeReferences();
-			JVirtualMachine.DetachCurrentThread(this._cache.Host.Value.Reference, this.Reference, this._cache.Thread);
+			JVirtualMachine.RemoveEnvironment(this._core.Host.Value.Reference, this.Reference);
+			this._core.FreeReferences();
+			JVirtualMachine.DetachCurrentThread(this._core.Host.Value.Reference, this.Reference, this._core.Thread);
 		}
 	}
 }

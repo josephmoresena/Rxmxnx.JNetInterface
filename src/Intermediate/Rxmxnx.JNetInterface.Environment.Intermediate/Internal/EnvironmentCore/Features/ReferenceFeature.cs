@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal sealed partial class EnvironmentCache : IReferenceFeature
+internal sealed partial class EnvironmentCore : IReferenceFeature
 {
 	public IDisposable GetSynchronizer(JReferenceObject jObject)
 	{
@@ -157,7 +157,7 @@ internal sealed partial class EnvironmentCache : IReferenceFeature
 	{
 		ImplementationValidationUtilities.ThrowIfProxy(jGlobal);
 		Boolean keepReference = false;
-		if (EnvironmentCache.IsMainOrDefault(jGlobal)) return false;
+		if (EnvironmentCore.IsMainOrDefault(jGlobal)) return false;
 		try
 		{
 			if (jGlobal is JGlobal)
