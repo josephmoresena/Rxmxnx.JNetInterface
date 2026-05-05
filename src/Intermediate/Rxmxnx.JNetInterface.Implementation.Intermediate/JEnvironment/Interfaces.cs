@@ -6,6 +6,16 @@ namespace Rxmxnx.JNetInterface;
 #endif
 partial class JEnvironment : IEquatable<IEnvironment>, IEquatable<JEnvironment>
 {
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	Boolean IEquatable<IEnvironment>.Equals(IEnvironment? other)
+		=> other is not null && this.Reference == other.Reference && (this as IEnvironment).NoProxy == other.NoProxy;
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	Boolean IEquatable<JEnvironment>.Equals(JEnvironment? other)
+		=> other is not null && this._cache.Equals(other._cache);
 	Boolean IEnvironment.NoProxy => true;
 	Int32? IEnvironment.LocalCapacity
 	{
@@ -35,7 +45,7 @@ partial class JEnvironment : IEquatable<IEnvironment>, IEquatable<JEnvironment>
 			else this._cache.Remove(jRefObj as JLocalObject);
 			jRefObj.ClearValue();
 		}
-		else if (this.IsSame(jRefObj.As<JObjectLocalRef>(), default))
+		else if (this._cache.IsSame(jRefObj.As<JObjectLocalRef>(), default))
 		{
 			if (jRefObj is JGlobalBase jGlobal)
 				this._cache.Unload(jGlobal);
@@ -60,7 +70,7 @@ partial class JEnvironment : IEquatable<IEnvironment>, IEquatable<JEnvironment>
 		using INativeTransaction jniTransaction = this._cache.Host.MemoryManager.CreateTransaction(2);
 		JObjectLocalRef localRef = jniTransaction.Add(jRefObj);
 		JObjectLocalRef otherLocalRef = jniTransaction.Add(jRefOther);
-		return this.IsSame(localRef, otherLocalRef);
+		return this._cache.IsSame(localRef, otherLocalRef);
 	}
 	TResult IEnvironment.WithFrame<TResult>(Int32 capacity, Func<TResult> func)
 	{
@@ -76,14 +86,4 @@ partial class JEnvironment : IEquatable<IEnvironment>, IEquatable<JEnvironment>
 		localFrame.SetResult(result);
 		return result;
 	}
-#if !PACKAGE
-	[ExcludeFromCodeCoverage]
-#endif
-	Boolean IEquatable<IEnvironment>.Equals(IEnvironment? other)
-		=> other is not null && this.Reference == other.Reference && (this as IEnvironment).NoProxy == other.NoProxy;
-#if !PACKAGE
-	[ExcludeFromCodeCoverage]
-#endif
-	Boolean IEquatable<JEnvironment>.Equals(JEnvironment? other)
-		=> other is not null && this._cache.Equals(other._cache);
 }

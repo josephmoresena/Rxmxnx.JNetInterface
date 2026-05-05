@@ -39,7 +39,7 @@ internal sealed partial class EnvironmentCache
 		{
 			if (classRef != default)
 			{
-				this._env.DeleteLocalRef(classRef.Value);
+				this.DeleteLocalRef(classRef.Value);
 				JTrace.ClearClass(classRef, jClass);
 			}
 		}
@@ -98,7 +98,7 @@ internal sealed partial class EnvironmentCache
 				{
 					if (classRef != default)
 					{
-						this._env.DeleteLocalRef(classRef.Value);
+						this.DeleteLocalRef(classRef.Value);
 						JTrace.ClearClass(classRef, jClass);
 					}
 				}
@@ -141,7 +141,7 @@ internal sealed partial class EnvironmentCache
 	private void Unload(Boolean isRegistered, JObjectLocalRef localRef)
 	{
 		if (isRegistered && this._env.IsAttached && this.Host.IsRunning)
-			this._env.DeleteLocalRef(localRef);
+			this.DeleteLocalRef(localRef);
 		JTrace.Unload(isRegistered, this._env.IsAttached, this.Host.IsRunning, localRef, this._objects.Id,
 		              this._objects.Name);
 	}
@@ -152,7 +152,7 @@ internal sealed partial class EnvironmentCache
 	private void Unload(JWeakRef weakRef)
 	{
 		if (this._env.IsAttached && this.Host.IsRunning)
-			this._env.DeleteWeakGlobalRef(weakRef);
+			this.DeleteWeakGlobalRef(weakRef);
 		JTrace.UnloadGlobal(this._env.IsAttached, this.Host.IsRunning, weakRef);
 	}
 	/// <summary>
@@ -162,8 +162,24 @@ internal sealed partial class EnvironmentCache
 	private void Unload(JGlobalRef globalRef)
 	{
 		if (this._env.IsAttached && this.Host.IsRunning)
-			this._env.DeleteGlobalRef(globalRef);
+			this.DeleteGlobalRef(globalRef);
 		JTrace.UnloadGlobal(this._env.IsAttached, this.Host.IsRunning, globalRef);
+	}
+	/// <summary>
+	/// Creates a new local reference for <paramref name="objectRef"/>.
+	/// </summary>
+	/// <typeparam name="TObjectRef">A <see cref="IWrapper{JObjectLocalRef}"/> type.</typeparam>
+	/// <param name="objectRef">A <see cref="IWrapper{JObjectLocalRef}"/> reference.</param>
+	private JObjectLocalRef CreateLocalRef<TObjectRef>(TObjectRef objectRef)
+		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this.GetNativeInterface<NativeInterface>(NativeInterface.NewLocalRefInfo);
+		JObjectLocalRef localRef =
+			nativeInterface.ReferenceFunctions.NewLocalRef.NewRef(this.Reference, objectRef.Value);
+		JTrace.CreateLocalRef(objectRef, localRef);
+		if (localRef == default) this.CheckJniError();
+		return localRef;
 	}
 	/// <summary>
 	/// Creates a new local reference for <paramref name="result"/>.
@@ -175,7 +191,7 @@ internal sealed partial class EnvironmentCache
 		IEqualityOperators<TObjectRef, TObjectRef, Boolean>
 	{
 		if (globalRef == default || result is null) return;
-		JObjectLocalRef localRef = this._env.CreateLocalRef(globalRef);
+		JObjectLocalRef localRef = this.CreateLocalRef(globalRef);
 		if (localRef == default) this.CheckJniError();
 		result.SetValue(localRef);
 		this.Register(result);

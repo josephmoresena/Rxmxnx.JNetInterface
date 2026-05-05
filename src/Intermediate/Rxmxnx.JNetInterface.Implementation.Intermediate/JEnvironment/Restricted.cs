@@ -1,49 +1,20 @@
 namespace Rxmxnx.JNetInterface;
 
-partial class JEnvironment : ILocalCacheOwner, IAccessibleManager, IMainClassLoader
+partial class JEnvironment : INativeThread, IMainClassLoader
 {
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	JFieldId IAccessibleManager.GetFieldId(JFieldDefinition definition, JClassLocalRef classRef)
-		=> this.GetFieldId(definition, classRef);
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	JFieldId IAccessibleManager.GetStaticFieldId(JFieldDefinition definition, JClassLocalRef classRef)
-		=> this.GetStaticFieldId(definition, classRef);
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	JMethodId IAccessibleManager.GetMethodId(JCallDefinition definition, JClassLocalRef classRef)
-		=> this.GetMethodId(definition, classRef);
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	JMethodId IAccessibleManager.GetStaticMethodId(JCallDefinition definition, JClassLocalRef classRef)
-		=> this.GetStaticMethodId(definition, classRef);
-	LocalCache ILocalCacheOwner.LocalCache
-	{
-		get => this.LocalCache;
-		set => this.SetObjectCache(value);
-	}
-	void ILocalCacheOwner.CreateLocalFrame(Int32 capacity)
-	{
-		ref readonly NativeInterface nativeInterface =
-			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.PushLocalFrameInfo);
-		JResult result = nativeInterface.ReferenceFunctions.PushLocalFrame(this.Reference, capacity);
-		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
-		this._cache.CheckJniError();
-	}
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	void ILocalCacheOwner.DeleteLocalFrame(LocalFrame frame, JLocalObject? result)
-	{
-		this._cache.DeleteLocalFrame(result);
-		JTrace.DeleteObjectCache(frame.Id, result);
-	}
 	JVirtualMachineRef IMainClassLoader.VirtualMachineRef => this.VirtualMachine.Reference;
 	JEnvironmentRef IMainClassLoader.EnvironmentRef => this.Reference;
 	JGlobalRef IMainClassLoader.GetMainClassGlobalRef(ITypeInformation typeInformation)
 	{
 		JClassLocalRef classRef = this._cache.FindMainClass(typeInformation.ClassName, typeInformation.Signature);
-		return this.GetMainClassGlobalRef(typeInformation, classRef);
+		return EnvironmentCache.GetMainClassGlobalRef(this._cache, typeInformation, classRef);
 	}
 	JRuntimeVersion IMainClassLoader.GetVersion(JClassLocalRef systemClassRef, Boolean initializing)
 	{
 		if (!initializing) this.CheckJniError();
-		JMethodId getPropertyId = this.GetStaticMethodId(NativeFunctionSetImpl.GetPropertyDefinition, systemClassRef);
+		JMethodId getPropertyId =
+			EnvironmentCache.GetStaticMethodId(this._cache, NativeFunctionSetImpl.GetPropertyDefinition,
+			                                   systemClassRef);
 		using LocalFrame? _ = !initializing ? new(this, IVirtualMachine.GetVersionCapacity) : default;
 		if (getPropertyId != default)
 		{
@@ -72,6 +43,37 @@ partial class JEnvironment : ILocalCacheOwner, IAccessibleManager, IMainClassLoa
 		JClassLocalRef classRef = !JObject.IsNullOrDefault(wClassGlobal) ?
 			this._cache.FindPrimitiveClass(wClassGlobal.As<JClassLocalRef>(), className) :
 			this._cache.FindPrimitiveClass(signature);
-		return this.GetMainClassGlobalRef(classMetadata, classRef);
+		return EnvironmentCache.GetMainClassGlobalRef(this._cache, classMetadata, classRef);
+	}
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	JFieldId IAccessibleManager.GetFieldId(JFieldDefinition definition, JClassLocalRef classRef)
+		=> EnvironmentCache.GetFieldId(this._cache, definition, classRef);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	JFieldId IAccessibleManager.GetStaticFieldId(JFieldDefinition definition, JClassLocalRef classRef)
+		=> EnvironmentCache.GetStaticFieldId(this._cache, NativeFunctionSetImpl.PrimitiveTypeDefinition, classRef);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	JMethodId IAccessibleManager.GetMethodId(JCallDefinition definition, JClassLocalRef classRef)
+		=> EnvironmentCache.GetMethodId(this._cache, definition, classRef);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	JMethodId IAccessibleManager.GetStaticMethodId(JCallDefinition definition, JClassLocalRef classRef)
+		=> EnvironmentCache.GetStaticMethodId(this._cache, definition, classRef);
+	LocalCache ILocalCacheOwner.LocalCache
+	{
+		get => this.LocalCache;
+		set => this.SetObjectCache(value);
+	}
+	void ILocalCacheOwner.CreateLocalFrame(Int32 capacity)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.PushLocalFrameInfo);
+		JResult result = nativeInterface.ReferenceFunctions.PushLocalFrame(this.Reference, capacity);
+		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
+		this._cache.CheckJniError();
+	}
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void ILocalCacheOwner.DeleteLocalFrame(LocalFrame frame, JLocalObject? result)
+	{
+		this._cache.DeleteLocalFrame(result);
+		JTrace.DeleteObjectCache(frame.Id, result);
 	}
 }

@@ -30,7 +30,7 @@ internal sealed partial class EnvironmentCache
 			JClassObject jClass = isPrimitive ?
 				this.GetPrimitiveClass(utf8Text.Values) :
 				this.GetClass(utf8Text.Values, usableClassRef, runtimeInformation);
-			if (JVirtualMachine.IsMainClass(jClass.Hash))
+			if (this.Host.TypeManager.Contains(jClass.Hash))
 				this.LoadMainClass(jClass, classRef, deleteLocalRef);
 			return jClass;
 		}
@@ -39,14 +39,19 @@ internal sealed partial class EnvironmentCache
 			this.FreeUnregistered(jString);
 		}
 	}
-	/// <inheritdoc cref="JEnvironment.LoadClass(JClassObject?)"/>
+	/// <summary>
+	/// Loads in current cache given class.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	public void LoadClass(JClassObject? jClass)
 	{
 		if (jClass is null) return;
 		this._classes[jClass.Hash] = jClass;
 		this.Host.TypeManager.LoadGlobal(jClass);
 	}
-	/// <inheritdoc cref="JEnvironment.LoadClass(JClassObject?)"/>
+	/// <summary>
+	/// Loads in current cache given class.
+	/// </summary>
 	/// <param name="frame">A <see cref="LocalFrame"/> instance.</param>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
@@ -74,24 +79,13 @@ internal sealed partial class EnvironmentCache
 		}
 		if (classRef != default) return classRef;
 
-		this._env.DescribeException();
+		EnvironmentCache.DescribeException(this);
 		this.ClearException();
 
 		IMessageResource resource = IMessageResource.GetInstance();
 		String mainClassName = ClassNameHelper.GetClassName(signature);
 		String message = resource.MainClassUnavailable(mainClassName);
 		throw new NotSupportedException(message);
-	}
-	/// <summary>
-	/// Retrieves class element from interfaces class array.
-	/// </summary>
-	/// <param name="arrayRef">A <see cref="JArrayLocalRef"/> reference.</param>
-	/// <param name="index">Element index.</param>
-	/// <returns>A <see cref="JClassObject"/> instance.</returns>
-	public JClassObject GetInterfaceClass(JArrayLocalRef arrayRef, Int32 index)
-	{
-		JObjectLocalRef localRef = this.GetObjectArrayElement(new(arrayRef), index);
-		return this.AsClassObject(new(localRef), JTypeKind.Interface);
 	}
 	/// <summary>
 	/// Reloads current class object.
@@ -101,7 +95,7 @@ internal sealed partial class EnvironmentCache
 	public JClassLocalRef ReloadClass(JClassObject? jClass)
 	{
 		if (jClass is null) return default;
-		Boolean isMainClass = JVirtualMachine.IsMainClass(jClass.Hash);
+		Boolean isMainClass = this.Host.TypeManager.Contains(jClass.Hash);
 		JGlobal? jGlobal = isMainClass ? this.Host.TypeManager.LoadGlobal(jClass) : default;
 		JClassLocalRef classRef = jClass.As<JClassLocalRef>();
 		Boolean findClass = classRef == default;
@@ -112,7 +106,7 @@ internal sealed partial class EnvironmentCache
 			{
 				if (findClass) classRef = this.FindClass(jClass);
 				ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
-				jGlobal.SetValue(this._env.GetMainClassGlobalRef(classMetadata, classRef, findClass));
+				jGlobal.SetValue(EnvironmentCache.GetMainClassGlobalRef(this, classMetadata, classRef, findClass));
 				this.Host.TypeManager.ReloadAccess(jClass.Hash);
 			}
 			// Always use the global reference if it is a main class.

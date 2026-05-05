@@ -73,9 +73,9 @@ internal sealed partial class EnvironmentCache
 		for (Int32 i = 0; i < jArray.Length; i++)
 		{
 			JObjectLocalRef itemLocalRef = this.GetObjectArrayElement(objectArrayRef, i);
-			if (localRef == itemLocalRef || this._env.IsSame(localRef, itemLocalRef))
+			if (localRef == itemLocalRef || this.IsSame(localRef, itemLocalRef))
 				return i;
-			this._env.DeleteLocalRef(localRef);
+			this.DeleteLocalRef(localRef);
 		}
 		return -1;
 	}

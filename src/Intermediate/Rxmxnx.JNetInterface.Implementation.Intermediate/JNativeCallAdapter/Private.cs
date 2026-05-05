@@ -73,8 +73,13 @@ public readonly ref partial struct JNativeCallAdapter
 			String message = resource.NotTypeObject(objectClassName, className);
 			throw new ArgumentException(message);
 		}
-		/// <inheritdoc
-		///     cref="JEnvironment.GetObjectClass(Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,out Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata)"/>
+		/// <summary>
+		/// Retrieves the class object and instantiation metadata.
+		/// </summary>
+		/// <param name="localRef">Object instance to get class.</param>
+		/// <param name="typeMetadata">Output. Instantiation metadata.</param>
+		/// <param name="validateReference">Indicates whether <paramref name="localRef"/> should be checked as local.</param>
+		/// <returns>Object's class <see cref="JClassObject"/> instance</returns>
 		private JClassObject GetObjectClass(JObjectLocalRef localRef, out JReferenceTypeMetadata typeMetadata,
 			Boolean validateReference = false)
 		{

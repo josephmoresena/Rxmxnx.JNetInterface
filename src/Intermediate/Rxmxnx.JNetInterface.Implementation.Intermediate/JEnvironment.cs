@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface;
 /// This class implements the <see cref="IVirtualMachine"/> interface.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Advanced)]
-public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironment, JEnvironment, Boolean>
+public partial class JEnvironment : IEqualityOperators<JEnvironment, JEnvironment, Boolean>
 {
 	/// <summary>
 	/// Thread name.
@@ -18,6 +18,8 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	/// Indicates whether current thread is daemon.
 	/// </summary>
 	public virtual Boolean IsDaemon => false;
+	/// <inheritdoc cref="IEnvironment.Version"/>
+	public Int32 Version => this._cache.Version;
 	/// <summary>
 	/// Indicates whether current thread is attached to a JVM.
 	/// </summary>
@@ -83,14 +85,8 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	/// <inheritdoc/>
 	public Boolean JniSecure() => this._cache.JniSecure();
 	/// <inheritdoc/>
-	public void DescribeException()
-	{
-		ref readonly NativeInterface nativeInterface =
-			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionDescribeInfo);
-		nativeInterface.ErrorFunctions.ExceptionDescribe(this.Reference);
-	}
-	/// <inheritdoc cref="IEnvironment.Version"/>
-	public Int32 Version => this._cache.Version;
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public void DescribeException() => EnvironmentCache.DescribeException(this._cache);
 
 	/// <inheritdoc/>
 #if !PACKAGE

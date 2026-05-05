@@ -1,10 +1,10 @@
 using JBufferObject = Rxmxnx.JNetInterface.Nio.JBufferObject;
+using JDirectByteBufferObject = Rxmxnx.JNetInterface.Nio.JDirectByteBufferObject;
 #if !PACKAGE
 using JByteBufferBuffer = Rxmxnx.JNetInterface.Nio.JBufferObject;
 
 #else
 using JByteBufferBuffer = Rxmxnx.JNetInterface.Nio.JByteBufferObject;
-
 #endif
 
 namespace Rxmxnx.JNetInterface.Internal;
@@ -17,7 +17,7 @@ internal sealed partial class EnvironmentCache : INioFeature
 {
 	public JByteBufferBuffer NewDirectByteBuffer(IFixedMemory.IDisposable memory)
 	{
-		JClassObject jClass = JVirtualMachine.AndroidApiLevel.HasValue && JVirtualMachine.AndroidApiLevel.Value < 3 ?
+		JClassObject jClass = AndroidFeature.ApiLevel is < 3 ?
 			this.GetClass<JByteBufferBuffer>() :
 			this.GetClass<JDirectByteBufferObject>();
 		ref readonly NativeInterface4 nativeInterface =

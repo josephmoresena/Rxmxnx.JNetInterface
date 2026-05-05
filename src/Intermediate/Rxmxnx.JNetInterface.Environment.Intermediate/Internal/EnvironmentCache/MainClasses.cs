@@ -73,9 +73,9 @@ internal sealed unsafe partial class EnvironmentCache
 		finally
 		{
 			if (propNameRef != default)
-				this._env.DeleteLocalRef(propNameRef.Value);
+				this.DeleteLocalRef(propNameRef.Value);
 			if (propValueRef != default)
-				this._env.DeleteLocalRef(propValueRef.Value);
+				this.DeleteLocalRef(propValueRef.Value);
 		}
 		return Decimal.Zero;
 	}

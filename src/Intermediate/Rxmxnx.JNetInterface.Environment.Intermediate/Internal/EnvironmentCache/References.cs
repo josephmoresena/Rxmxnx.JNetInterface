@@ -26,7 +26,10 @@ internal sealed partial class EnvironmentCache
 		}
 		this._objects.Capacity = capacity;
 	}
-	/// <inheritdoc cref="JEnvironment.SetObjectCache(LocalCache?)"/>
+	/// <summary>
+	/// Sets current object cache.
+	/// </summary>
+	/// <param name="localCache">A <see cref="LocalCache"/> instance.</param>
 	public void SetObjectCache(LocalCache localCache) => this._objects = localCache;
 	/// <summary>
 	/// Retrieves local cache.

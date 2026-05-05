@@ -1,19 +1,19 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
-/// This class stores cache for a <see cref="JEnvironment"/> instance.
+/// This class stores cache for a <see cref="IEnvironment"/> instance.
 /// </summary>
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal sealed partial class EnvironmentCache : LocalMainClasses
+internal sealed partial class EnvironmentCache : LocalMainClasses, IUnsafeMemoryManager
 {
 	/// <summary>
 	/// Virtual machine host.
 	/// </summary>
 	public readonly IVirtualMachineHost Host;
-	/// <inheritdoc cref="JEnvironment.Reference"/>
+	/// <inheritdoc cref="IEnvironment.Reference"/>
 	public readonly JEnvironmentRef Reference;
 
 	/// <summary>
@@ -36,10 +36,10 @@ internal sealed partial class EnvironmentCache : LocalMainClasses
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="vm">A <see cref="JVirtualMachine"/> instance.</param>
-	/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
+	/// <param name="vm">A <see cref="IVirtualMachineHost"/> instance.</param>
+	/// <param name="env">A <see cref="INativeThread"/> instance.</param>
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
-	public EnvironmentCache(JVirtualMachine vm, JEnvironment env, JEnvironmentRef envRef) : base(envRef, env)
+	public EnvironmentCache(IVirtualMachineHost vm, INativeThread env, JEnvironmentRef envRef) : base(envRef, env)
 	{
 		this.Reference = envRef;
 		this.Host = vm;
@@ -48,6 +48,56 @@ internal sealed partial class EnvironmentCache : LocalMainClasses
 		this._objects = new(this._classes);
 		if (this.Version < NativeInterface.RequiredVersion) return; // Avoid class loading if unsupported version.
 		this.LoadMainClasses();
+	}
+	/// <inheritdoc/>
+	public void DeleteGlobalRef(JGlobalRef globalRef)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this.GetNativeInterface<NativeInterface>(NativeInterface.DeleteGlobalRefInfo);
+		nativeInterface.ReferenceFunctions.DeleteGlobalRef.DeleteRef(this.Reference, globalRef);
+		JTrace.DeleteReference(globalRef.Value, JReferenceType.GlobalRefType);
+	}
+	/// <inheritdoc/>
+	public void DeleteWeakGlobalRef(JWeakRef weakRef)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this.GetNativeInterface<NativeInterface>(NativeInterface.DeleteWeakGlobalRefInfo);
+		nativeInterface.WeakGlobalFunctions.DeleteWeakGlobalRef.DeleteRef(this.Reference, weakRef);
+		JTrace.DeleteReference(weakRef.Value, JReferenceType.WeakGlobalRefType);
+	}
+	/// <inheritdoc/>
+	public void DeleteLocalRef(JObjectLocalRef localRef)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this.GetNativeInterface<NativeInterface>(NativeInterface.DeleteLocalRefInfo);
+		nativeInterface.ReferenceFunctions.DeleteLocalRef.DeleteRef(this.Reference, localRef);
+		JTrace.DeleteReference(localRef, JReferenceType.LocalRefType);
+	}
+	/// <inheritdoc/>
+	public JReferenceType GetReferenceType(JObjectLocalRef localRef)
+	{
+		ref readonly NativeInterface6 nativeInterface =
+			ref this.GetNativeInterface<NativeInterface6>(NativeInterface6.GetObjectRefTypeInfo);
+		JReferenceType result = nativeInterface.GetObjectRefType(this.Reference, localRef);
+		this.CheckJniError();
+		return result;
+	}
+	/// <summary>
+	/// Tests whether two references point to the same object.
+	/// </summary>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+	/// <param name="otherRef">A <see cref="JObjectLocalRef"/> reference.</param>
+	/// <returns>
+	/// <see langword="true"/> if both references refer to the same object; otherwise,
+	/// <see langword="false"/>.
+	/// </returns>
+	public Boolean IsSame(JObjectLocalRef localRef, JObjectLocalRef otherRef)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this.GetNativeInterface<NativeInterface>(NativeInterface.IsSameObjectInfo);
+		JBoolean result = nativeInterface.ReferenceFunctions.IsSameObject(this.Reference, localRef, otherRef);
+		this.CheckJniError();
+		return result.Value;
 	}
 
 	/// <summary>
@@ -155,14 +205,14 @@ internal sealed partial class EnvironmentCache : LocalMainClasses
 
 		try
 		{
-			jClass = this._env.GetObjectClass(throwableRef.Value, out throwableMetadata);
+			jClass = EnvironmentCache.GetObjectClass(this, throwableRef.Value, out throwableMetadata);
 		}
 		catch (CriticalException)
 		{
 			// Unable to retrieve throwable object class.
 			jClass = this.GetClass<JThrowableObject>(); // Retrieves java.lang.Throwable class.
 			if (!this._buildingException) throw;
-			this._env.DescribeException();
+			EnvironmentCache.DescribeException(this);
 			this.Thrown = null;
 		}
 		try
@@ -173,7 +223,7 @@ internal sealed partial class EnvironmentCache : LocalMainClasses
 		{
 			// Unable to retrieve throwable object message.
 			if (!this._buildingException) throw;
-			this._env.DescribeException();
+			EnvironmentCache.DescribeException(this);
 			this.Thrown = null;
 		}
 		return this.CreateThrowableException(jClass, throwableMetadata, message, throwableRef);

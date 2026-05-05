@@ -11,9 +11,9 @@ internal sealed partial class EnvironmentCache
 	/// </summary>
 	private readonly ClassCache<JClassObject> _classes = new(JReferenceType.LocalRefType);
 	/// <summary>
-	/// Main <see cref="JEnvironment"/> instance.
+	/// Main <see cref="INativeThread"/> instance.
 	/// </summary>
-	private readonly JEnvironment _env;
+	private readonly INativeThread _env;
 	/// <summary>
 	/// Indicates whether current thread is building a JNI throwable exception.
 	/// </summary>
@@ -183,7 +183,7 @@ internal sealed partial class EnvironmentCache
 		JLocalObject jLocal = typeMetadata.CreateInstance(jClass, localRef, true);
 		TResult result = (TResult)(Object)metadata.ParseInstance(jLocal, true);
 		if (localRef != jLocal.LocalReference && register)
-			this._env.DeleteLocalRef(localRef);
+			this.DeleteLocalRef(localRef);
 		return register ? this.Register(result) : result;
 	}
 	/// <summary>
@@ -323,13 +323,13 @@ internal sealed partial class EnvironmentCache
 		{
 			// Unable to create throwable global object reference.
 			if (!this._buildingException) throw;
-			this._env.DescribeException();
+			EnvironmentCache.DescribeException(this);
 			this.Throw(throwableRef); // Throws pending exception at JNI.
 			throw;
 		}
 		finally
 		{
-			this._env.DeleteLocalRef(throwableRef.Value);
+			this.DeleteLocalRef(throwableRef.Value);
 		}
 	}
 	/// <summary>
@@ -403,7 +403,7 @@ internal sealed partial class EnvironmentCache
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	private void FreeUnregistered(JLocalObject jLocal)
 	{
-		this._env.DeleteLocalRef(jLocal.LocalReference);
+		this.DeleteLocalRef(jLocal.LocalReference);
 		jLocal.ClearValue();
 	}
 	/// <summary>

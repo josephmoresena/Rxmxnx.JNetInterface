@@ -35,7 +35,7 @@ internal sealed partial class EnvironmentCache
 		finally
 		{
 			// Deletes wrapper class local reference.
-			this._env.DeleteLocalRef(classRef.Value);
+			this.DeleteLocalRef(classRef.Value);
 		}
 	}
 	/// <summary>
@@ -47,14 +47,14 @@ internal sealed partial class EnvironmentCache
 	public JClassLocalRef FindPrimitiveClass(JClassLocalRef wClassRef, String className)
 	{
 		JFieldId typeFieldId =
-			this._env.GetStaticFieldId(NativeFunctionSetImpl.PrimitiveTypeDefinition, wClassRef, true);
+			EnvironmentCache.GetStaticFieldId(this, NativeFunctionSetImpl.PrimitiveTypeDefinition, wClassRef, true);
 		if (typeFieldId != default)
 		{
 			JObjectLocalRef localRef = this.GetStaticObjectField(wClassRef, typeFieldId, true);
 			if (localRef != default) return new(localRef);
 		}
 
-		this._env.DescribeException();
+		EnvironmentCache.DescribeException(this);
 		this.ClearException();
 
 		IMessageResource resource = IMessageResource.GetInstance();
