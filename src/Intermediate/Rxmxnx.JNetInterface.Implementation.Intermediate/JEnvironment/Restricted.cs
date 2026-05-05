@@ -50,7 +50,7 @@ partial class JEnvironment : INativeThread, IMainClassLoader
 		=> EnvironmentCache.GetFieldId(this._cache, definition, classRef);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	JFieldId IAccessibleManager.GetStaticFieldId(JFieldDefinition definition, JClassLocalRef classRef)
-		=> EnvironmentCache.GetStaticFieldId(this._cache, NativeFunctionSetImpl.PrimitiveTypeDefinition, classRef);
+		=> EnvironmentCache.GetStaticFieldId(this._cache, definition, classRef);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	JMethodId IAccessibleManager.GetMethodId(JCallDefinition definition, JClassLocalRef classRef)
 		=> EnvironmentCache.GetMethodId(this._cache, definition, classRef);
