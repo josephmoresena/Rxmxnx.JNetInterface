@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface;
 
-partial class JEnvironment : INativeThread, IMainClassLoader
+partial class JEnvironment : INativeThread<JEnvironment>, IMainClassLoader
 {
 	JVirtualMachineRef IMainClassLoader.VirtualMachineRef => this.VirtualMachine.Reference;
 	JEnvironmentRef IMainClassLoader.EnvironmentRef => this.Reference;
@@ -75,4 +75,11 @@ partial class JEnvironment : INativeThread, IMainClassLoader
 		this._core.DeleteLocalFrame(result);
 		JTrace.DeleteObjectCache(frame.Id, result);
 	}
+
+	static JEnvironment INativeThread<JEnvironment>.Create(IVirtualMachineHost host, JEnvironmentRef envRef)
+		=> new(host.Value, envRef);
+	static JEnvironment INativeThread<JEnvironment>.Create(IVirtualMachineHost host, JEnvironmentRef envRef,
+		ThreadCreationArgs args)
+		=> new JThread(host.Value, envRef, args);
+	static JEnvironment INativeThread<JEnvironment>.Create(JEnvironment nativeThread) => new JThread(nativeThread);
 }

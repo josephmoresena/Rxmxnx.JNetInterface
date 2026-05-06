@@ -15,12 +15,12 @@ partial class JEnvironment
 		/// Indicates whether the current instance is disposed.
 		/// </summary>
 		private readonly IMutableWrapper<Boolean> _isDisposed;
-
-		public override Boolean IsAttached => base.IsAttached && (!this.IsDisposable || !this._isDisposed.Value);
 		/// <inheritdoc/>
 		public override Boolean IsDaemon => this._args.IsDaemon;
 		/// <inheritdoc/>
 		public override Boolean IsDisposable { get; }
+
+		public override Boolean IsAttached => base.IsAttached && (!this.IsDisposable || !this._isDisposed.Value);
 
 		/// <inheritdoc/>
 		public JThread(IVirtualMachine vm, JEnvironmentRef envRef, ThreadCreationArgs args) : base(vm, envRef)

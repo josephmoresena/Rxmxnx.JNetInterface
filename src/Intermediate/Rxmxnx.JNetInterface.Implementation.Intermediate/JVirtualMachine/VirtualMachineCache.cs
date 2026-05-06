@@ -20,7 +20,7 @@ public partial class JVirtualMachine
 		/// <summary>
 		/// Thread cache.
 		/// </summary>
-		public readonly ThreadCache ThreadCache;
+		public readonly ThreadCache<JEnvironment> ThreadCache;
 		/// <summary>
 		/// Weak cache.
 		/// </summary>

@@ -24,6 +24,7 @@ public partial class JEnvironment : IEqualityOperators<JEnvironment, JEnvironmen
 	/// Indicates whether current thread is attached to a JVM.
 	/// </summary>
 	public virtual Boolean IsAttached => this._core.Host.IsRunning;
+
 	/// <inheritdoc cref="IEnvironment.PendingException"/>
 	public ThrowableException? PendingException
 	{
