@@ -23,7 +23,7 @@ public partial class JVirtualMachine : IVirtualMachine
 	public JVirtualMachineRef Reference => this._cache.Reference;
 
 	Boolean IVirtualMachine.NoProxy => true;
-	IEnvironment? IVirtualMachine.GetEnvironment() => this.GetEnvironment();
+	IEnvironment? IVirtualMachine.GetEnvironment() => this._cache.ThreadCache.GetAttachedThread();
 	JRuntimeVersion IVirtualMachine.Version
 	{
 		get

@@ -25,4 +25,20 @@ internal interface IVirtualMachineHost : IWrapper<IVirtualMachine>
 	/// Global main classes.
 	/// </summary>
 	GlobalMainClasses MainClasses { get; }
+
+	/// <summary>
+	/// Retrieves the <see cref="JEnvironmentRef"/> reference for current thread.
+	/// </summary>
+	/// <param name="envRef">Output. Current thread <see cref="JEnvironmentRef"/> reference.</param>
+	/// <param name="jniVersion">JNI version.</param>
+	/// <returns>JNI code result.</returns>
+	JResult GetEnv(out JEnvironmentRef envRef, Int32 jniVersion);
+	/// <summary>
+	/// Attach current thread to VM.
+	/// </summary>
+	/// <param name="isDaemon">Indicates current thread will be attached as daemon.</param>
+	/// <param name="arg">Attach argument.</param>
+	/// <param name="envRef">Output. Attached thread <see cref="JEnvironmentRef"/> reference.</param>
+	/// <returns>JNI code result.</returns>
+	JResult AttachThread(Boolean isDaemon, VirtualMachineArgumentValue arg, out JEnvironmentRef envRef);
 }

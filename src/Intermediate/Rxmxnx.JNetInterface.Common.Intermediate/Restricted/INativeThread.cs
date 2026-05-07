@@ -38,6 +38,6 @@ internal interface INativeThread<TThread> : INativeThread where TThread : class,
 	/// Creates a <typeparamref name="TThread"/> instance using <paramref name="nativeThread"/>.
 	/// </summary>
 	/// <param name="nativeThread">A <see cref="INativeThread"/> instance.</param>
-	/// <returns>A new <typeparamref name="TThread"/> instance.</returns>
-	protected internal static abstract TThread Create(TThread nativeThread);
+	/// <returns>A new <see cref="IThread"/> instance.</returns>
+	protected internal static abstract IThread Create(TThread nativeThread);
 }

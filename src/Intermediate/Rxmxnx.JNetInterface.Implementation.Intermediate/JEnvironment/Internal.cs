@@ -18,13 +18,6 @@ partial class JEnvironment
 	internal JClassObject ClassObject => this._core.ClassObject;
 
 	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
-	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
-	internal JEnvironment(IVirtualMachine vm, JEnvironmentRef envRef)
-		=> this._core = new((JVirtualMachine)vm, this, envRef);
-	/// <summary>
 	/// Sets current object cache.
 	/// </summary>
 	/// <param name="localCache">A <see cref="LocalCache"/> instance.</param>

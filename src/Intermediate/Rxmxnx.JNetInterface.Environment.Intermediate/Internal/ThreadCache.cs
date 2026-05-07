@@ -3,6 +3,11 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// <see cref="INativeThread"/> cache implementation.
 /// </summary>
+/// <typeparam name="TThread">A CLR <see cref="INativeThread{TThread}"/> type.</typeparam>
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal sealed class ThreadCache<TThread> : ReferenceHelperCache<TThread, JEnvironmentRef, ThreadCreationArgs?>
 	where TThread : class, INativeThread<TThread>
 {
@@ -24,6 +29,34 @@ internal sealed class ThreadCache<TThread> : ReferenceHelperCache<TThread, JEnvi
 		JTrace.EnvironmentLoad(reference, isNew);
 		return result;
 	}
+	/// <summary>
+	/// Retrieves the <typeparamref name="TThread"/> instance associated with current thread.
+	/// </summary>
+	/// <returns>The <typeparamref name="TThread"/> instance associated with current thread.</returns>
+	public TThread? GetAttachedThread()
+	{
+		JResult result = this._host.GetEnv(out JEnvironmentRef envRef, (Int32)JRuntimeVersion.SEd2);
+		return result is JResult.Ok ? this.Get(envRef, out _) : default;
+	}
+	/// <summary>
+	/// Attaches current thread to VM.
+	/// </summary>
+	/// <param name="args">A <see cref="ThreadCreationArgs"/> instance.</param>
+	/// <returns>A <see cref="IThread"/> instance.</returns>
+	public unsafe IThread AttachThread(ThreadCreationArgs args)
+	{
+		ImplementationValidationUtilities.ThrowIfProxy(args.ThreadGroup);
+		if (this.GetAttachedThread() is { } env) return TThread.Create(env);
+		using INativeTransaction jniTransaction = this._host.MemoryManager.CreateTransaction(1);
+		fixed (Byte* ptr = &MemoryMarshal.GetReference((ReadOnlySpan<Byte>)args.Name))
+		{
+			VirtualMachineArgumentValue arg = ThreadCache<TThread>.CreateAttachArgument(jniTransaction, ptr, args);
+			JResult result = this._host.AttachThread(args.IsDaemon, arg, out JEnvironmentRef envRef);
+			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
+			env = this.Get(envRef, out _, args);
+		}
+		return env as IThread ?? TThread.Create(env);
+	}
 
 	/// <inheritdoc/>
 	protected override TThread Create(JEnvironmentRef reference, ThreadCreationArgs? args)
@@ -33,5 +66,22 @@ internal sealed class ThreadCache<TThread> : ReferenceHelperCache<TThread, JEnvi
 	{
 		if (instance is IDisposable disposable)
 			disposable.Dispose();
+	}
+
+	/// <summary>
+	/// Creates a <see cref="VirtualMachineArgumentValue"/> value from <paramref name="namePtr"/> and
+	/// <paramref name="args"/>.
+	/// </summary>
+	/// <param name="jniTransaction">A <see cref="INativeTransaction"/> instance.</param>
+	/// <param name="namePtr">Pointer to thread name.</param>
+	/// <param name="args">A <see cref="ThreadCreationArgs"/> instance.</param>
+	/// <returns>A <see cref="VirtualMachineArgumentValue"/> value.</returns>
+	private static unsafe VirtualMachineArgumentValue CreateAttachArgument(INativeTransaction jniTransaction,
+		Byte* namePtr, ThreadCreationArgs args)
+	{
+		JGlobalRef threadGroupRef = jniTransaction.Add<JGlobalRef>(args.ThreadGroup);
+		Int32 version = args.Version < IVirtualMachine.MinimalVersion ? IVirtualMachine.MinimalVersion : args.Version;
+		VirtualMachineArgumentValue arg = new(version, namePtr, threadGroupRef);
+		return arg;
 	}
 }

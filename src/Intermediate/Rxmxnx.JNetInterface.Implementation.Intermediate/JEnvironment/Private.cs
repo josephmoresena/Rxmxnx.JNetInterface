@@ -14,6 +14,12 @@ partial class JEnvironment
 	/// <summary>
 	/// Constructor.
 	/// </summary>
+	/// <param name="vm">A <see cref="JVirtualMachine"/> instance.</param>
+	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
+	private JEnvironment(JVirtualMachine vm, JEnvironmentRef envRef) => this._core = new(vm, this, envRef);
+	/// <summary>
+	/// Constructor.
+	/// </summary>
 	/// <param name="core">A <see cref="JEnvironment"/> reference.</param>
 	private JEnvironment(EnvironmentCore core) => this._core = core;
 

@@ -23,7 +23,7 @@ partial class JEnvironment
 		public override Boolean IsAttached => base.IsAttached && (!this.IsDisposable || !this._isDisposed.Value);
 
 		/// <inheritdoc/>
-		public JThread(IVirtualMachine vm, JEnvironmentRef envRef, ThreadCreationArgs args) : base(vm, envRef)
+		public JThread(JVirtualMachine vm, JEnvironmentRef envRef, ThreadCreationArgs args) : base(vm, envRef)
 		{
 			this._args = args;
 			this._isDisposed = IMutableReference<Boolean>.Create();
