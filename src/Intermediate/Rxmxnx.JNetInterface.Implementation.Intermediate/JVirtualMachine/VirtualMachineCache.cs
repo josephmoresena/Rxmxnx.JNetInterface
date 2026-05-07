@@ -50,28 +50,28 @@ public partial class JVirtualMachine
 		/// </summary>
 		public void ClearCache()
 		{
-			JGlobalRef[] globalKeys = this._globalObjects.Keys.ToArray();
-			JWeakRef[] weakKeys = this._weakObjects.Keys.ToArray();
 			this.GlobalClassCache.Clear();
 			this.WeakClassCache.Clear();
-			if (globalKeys.Length == 0 && weakKeys.Length == 0) return;
+
 			using IThread thread = this._vm.CreateThread(ThreadPurpose.RemoveGlobalReference);
 			if (thread is not JEnvironment env) return;
-			foreach (JWeakRef key in weakKeys)
+
+#pragma warning disable CA1816
+			foreach (KeyValuePair<JWeakRef, WeakReference<JWeak>> kvp in this._weakObjects)
 			{
-				if (this._weakObjects.Remove(key, out WeakReference<JWeak>? weak) &&
-				    weak.TryGetTarget(out JWeak? jWeak) && !jWeak.IsDefault)
-					env.DeleteWeakGlobalRef(jWeak.Reference);
+				if (!this._weakObjects.TryRemove(kvp.Key, out WeakReference<JWeak>? weak)) continue;
+				if (!weak.TryGetTarget(out JWeak? jWeak) || jWeak.IsDefault) continue;
+				env.DeleteWeakGlobalRef(jWeak.Reference);
+				GC.SuppressFinalize(jWeak);
 			}
-			foreach (JGlobalRef key in globalKeys)
+			foreach (KeyValuePair<JGlobalRef, WeakReference<JGlobal>> kvp in this._globalObjects)
 			{
-				if (this._globalObjects.Remove(key, out WeakReference<JGlobal>? weak) &&
-				    weak.TryGetTarget(out JGlobal? jGlobal) && !jGlobal.IsDefault)
-					env.DeleteGlobalRef(jGlobal.Reference);
+				if (!this._globalObjects.TryRemove(kvp.Key, out WeakReference<JGlobal>? weak)) continue;
+				if (!weak.TryGetTarget(out JGlobal? jGlobal) || jGlobal.IsDefault) continue;
+				env.DeleteGlobalRef(jGlobal.Reference);
+				GC.SuppressFinalize(jGlobal);
 			}
+#pragma warning restore CA1816
 		}
-		/// <inheritdoc cref="INativeMemoryManager.CreateTransaction(Int32)"/>
-		public INativeTransaction CreateTransaction(Int32 capacity)
-			=> JniTransactionHandle.CreateTransaction(capacity, this._transactions);
 	}
 }

@@ -107,9 +107,21 @@ internal class LocalCache
 		if (this._objects.Remove(exclude)) // Removes excluded result and unloads its class cache.
 			this.ClassCache.Unload(new JClassLocalRef(exclude));
 
-		JObjectLocalRef[] keys = this._objects.Keys.ToArray();
-		foreach (JObjectLocalRef key in keys)
-			this.Remove(key); // Removes each reference in cache.
+		Int32 count = this._objects.Count;
+		if (count > 0)
+		{
+			JObjectLocalRef[] keys = ArrayPool<JObjectLocalRef>.Shared.Rent(count);
+			try
+			{
+				this._objects.Keys.CopyTo(keys, 0);
+				foreach (JObjectLocalRef key in keys.AsSpan(0, count))
+					this.Remove(key); // Removes each reference in cache.
+			}
+			finally
+			{
+				ArrayPool<JObjectLocalRef>.Shared.Return(keys);
+			}
+		}
 
 		if (this._previous is null)
 			return; // Current cache is initial.
