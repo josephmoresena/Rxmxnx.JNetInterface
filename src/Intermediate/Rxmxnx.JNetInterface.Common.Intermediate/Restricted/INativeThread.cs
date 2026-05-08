@@ -9,6 +9,16 @@ internal interface INativeThread : IEnvironment, IAccessibleManager, ILocalCache
 	/// Indicates whether the associated thread is attached to a JVM.
 	/// </summary>
 	Boolean IsAttached { get; }
+
+	/// <summary>
+	/// Unsafe Memory manager.
+	/// </summary>
+	IUnsafeMemoryManager MemoryManager { get; }
+
+	/// <summary>
+	/// Represents an owned JNI environment for a native thread.
+	/// </summary>
+	public interface IOwned : INativeThread, IThread;
 }
 
 /// <summary>
@@ -35,9 +45,9 @@ internal interface INativeThread<TThread> : INativeThread where TThread : class,
 	protected internal static abstract TThread Create(IVirtualMachineHost host, JEnvironmentRef envRef,
 		ThreadCreationArgs args);
 	/// <summary>
-	/// Creates a <typeparamref name="TThread"/> instance using <paramref name="nativeThread"/>.
+	/// Creates a <see cref="INativeThread.IOwned"/> instance using <paramref name="nativeThread"/>.
 	/// </summary>
 	/// <param name="nativeThread">A <see cref="INativeThread"/> instance.</param>
 	/// <returns>A new <see cref="IThread"/> instance.</returns>
-	protected internal static abstract IThread Create(TThread nativeThread);
+	protected internal static abstract IOwned Create(TThread nativeThread);
 }

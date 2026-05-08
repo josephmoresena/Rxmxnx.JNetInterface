@@ -49,6 +49,10 @@ public partial class JVirtualMachine
 		/// <see langword="true"/> if <paramref name="jniRef"/> is begin using by a transaction;
 		/// otherwise, <see langword="false"/>.
 		/// </returns>
+#if !PACKAGE
+		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3267,
+		                 Justification = CommonConstants.NonStandardLinqJustification)]
+#endif
 		private Boolean InTransaction(IntPtr jniRef)
 		{
 			// ReSharper disable once LoopCanBeConvertedToQuery

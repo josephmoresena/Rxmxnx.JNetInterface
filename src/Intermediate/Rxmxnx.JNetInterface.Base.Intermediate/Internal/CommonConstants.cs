@@ -39,6 +39,7 @@ internal static class CommonConstants
 	public const String CheckIdS2376 = "S2376:Write-only properties should not be used";
 	public const String CheckIdS2326 = "S2326:Unused type parameters should be removed";
 	public const String CheckIdS4487 = "S4487:Unread \"private\" fields should be removed";
+	public const String CheckIdS3971 = "S3971:\"GC.SuppressFinalize\" should not be called";
 	public const String BinaryStructJustification = "This struct is created only by binary operations.";
 	public const String AbstractProxyJustification = "This object is an abstract proxy.";
 	public const String JniThreadRequiredJustification = "Global object disposing requires a JNI thread.";

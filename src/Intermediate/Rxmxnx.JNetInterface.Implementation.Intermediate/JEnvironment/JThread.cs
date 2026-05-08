@@ -5,7 +5,7 @@ partial class JEnvironment
 	/// <summary>
 	/// This class implements <see cref="IThread"/> interface.
 	/// </summary>
-	internal sealed class JThread : JEnvironment, IThread
+	internal sealed class JThread : JEnvironment, INativeThread.IOwned
 	{
 		/// <summary>
 		/// Creation argument.
@@ -19,8 +19,10 @@ partial class JEnvironment
 		public override Boolean IsDaemon => this._args.IsDaemon;
 		/// <inheritdoc/>
 		public override Boolean IsDisposable { get; }
-
+		/// <inheritdoc/>
 		public override Boolean IsAttached => base.IsAttached && (!this.IsDisposable || !this._isDisposed.Value);
+		/// <inheritdoc cref="IThread.Name"/>
+		public override CString Name => this._args.Name ?? CString.Zero;
 
 		/// <inheritdoc/>
 		public JThread(JVirtualMachine vm, JEnvironmentRef envRef, ThreadCreationArgs args) : base(vm, envRef)
@@ -40,9 +42,6 @@ partial class JEnvironment
 			this._isDisposed = thread?._isDisposed ?? IMutableReference<Boolean>.Create();
 			this._args = thread?._args ?? new();
 		}
-
-		/// <inheritdoc cref="IThread.Name"/>
-		public override CString Name => this._args.Name ?? CString.Zero;
 
 		Boolean IThread.Attached => this.IsAttached;
 		Boolean IThread.Daemon => this.IsDaemon;

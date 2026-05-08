@@ -48,6 +48,10 @@ public partial class JVirtualMachine
 		/// <summary>
 		/// Clears cache.
 		/// </summary>
+#if !PACKAGE
+		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3971,
+		                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 		public void ClearCache()
 		{
 			this.GlobalClassCache.Clear();
@@ -62,6 +66,7 @@ public partial class JVirtualMachine
 				if (!this._weakObjects.TryRemove(kvp.Key, out WeakReference<JWeak>? weak)) continue;
 				if (!weak.TryGetTarget(out JWeak? jWeak) || jWeak.IsDefault) continue;
 				env.DeleteWeakGlobalRef(jWeak.Reference);
+				jWeak.ClearValue();
 				GC.SuppressFinalize(jWeak);
 			}
 			foreach (KeyValuePair<JGlobalRef, WeakReference<JGlobal>> kvp in this._globalObjects)
@@ -69,6 +74,7 @@ public partial class JVirtualMachine
 				if (!this._globalObjects.TryRemove(kvp.Key, out WeakReference<JGlobal>? weak)) continue;
 				if (!weak.TryGetTarget(out JGlobal? jGlobal) || jGlobal.IsDefault) continue;
 				env.DeleteGlobalRef(jGlobal.Reference);
+				jGlobal.ClearValue();
 				GC.SuppressFinalize(jGlobal);
 			}
 #pragma warning restore CA1816

@@ -44,6 +44,7 @@ partial class JEnvironment : INativeThread<JEnvironment>, IMainClassLoader
 			this._core.FindPrimitiveClass(signature);
 		return EnvironmentCore.GetMainClassGlobalRef(this._core, classMetadata, classRef);
 	}
+	IUnsafeMemoryManager INativeThread.MemoryManager => this._core;
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	JFieldId IAccessibleManager.GetFieldId(JFieldDefinition definition, JClassLocalRef classRef)
 		=> EnvironmentCore.GetFieldId(this._core, definition, classRef);
@@ -81,5 +82,6 @@ partial class JEnvironment : INativeThread<JEnvironment>, IMainClassLoader
 	static JEnvironment INativeThread<JEnvironment>.Create(IVirtualMachineHost host, JEnvironmentRef envRef,
 		ThreadCreationArgs args)
 		=> new JThread((JVirtualMachine)host, envRef, args);
-	static IThread INativeThread<JEnvironment>.Create(JEnvironment nativeThread) => new JThread(nativeThread);
+	static INativeThread.IOwned INativeThread<JEnvironment>.Create(JEnvironment nativeThread)
+		=> new JThread(nativeThread);
 }
