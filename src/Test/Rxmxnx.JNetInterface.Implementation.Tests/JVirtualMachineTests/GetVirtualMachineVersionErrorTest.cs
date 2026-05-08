@@ -35,7 +35,7 @@ public partial class JVirtualMachineTests
 			proxyEnv.VirtualMachine.Received(1).GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>());
 			proxyEnv.VirtualMachine.Received(0).AttachCurrentThread(Arg.Any<ValPtr<JEnvironmentRef>>(),
 			                                                        Arg.Any<ReadOnlyValPtr<
-				                                                        VirtualMachineArgumentValueWrapper>>());
+				                                                        VirtualMachineArgumentValue>>());
 			if (vm is null) return;
 			IEnvironment env = vm.GetEnvironment()!;
 			JWeakRef weakRef = JVirtualMachineTests.fixture.Create<JWeakRef>();

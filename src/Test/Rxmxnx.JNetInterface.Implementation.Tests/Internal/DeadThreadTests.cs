@@ -36,10 +36,10 @@ public class DeadThreadTests
 
 			proxyVm.GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>()).Returns(JResult.DetachedThreadError);
 			proxyVm.AttachCurrentThread(Arg.Any<ValPtr<JEnvironmentRef>>(),
-			                            Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>>())
+			                            Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValue>>())
 			       .Returns(JResult.DetachedThreadError);
 			proxyVm.AttachCurrentThreadAsDaemon(Arg.Any<ValPtr<JEnvironmentRef>>(),
-			                                    Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>>())
+			                                    Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValue>>())
 			       .Returns(JResult.DetachedThreadError);
 
 			proxyVm.ClearReceivedCalls();

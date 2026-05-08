@@ -502,9 +502,8 @@ internal unsafe partial class ReferenceHelper
 		=> ReferenceHelper.GetProxy(envRef).AllocObject(classRef);
 	[UnmanagedCallersOnly]
 	private static JObjectLocalRef NewObject(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId constructorId,
-		JValueWrapper* args)
-		=> ReferenceHelper.GetProxy(envRef)
-		                  .NewObject(classRef, constructorId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		JValue* args)
+		=> ReferenceHelper.GetProxy(envRef).NewObject(classRef, constructorId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static JClassLocalRef GetObjectClass(JEnvironmentRef envRef, JObjectLocalRef localRef)
 		=> ReferenceHelper.GetProxy(envRef).GetObjectClass(localRef);
@@ -522,114 +521,101 @@ internal unsafe partial class ReferenceHelper
 	}
 	[UnmanagedCallersOnly]
 	private static JObjectLocalRef CallObjectMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
-		JMethodId methodId, JValueWrapper* args)
-		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallObjectMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		JMethodId methodId, JValue* args)
+		=> ReferenceHelper.GetProxy(envRef).CallObjectMethod(localRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static JBoolean CallBooleanMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
-		JValueWrapper* args)
-		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallBooleanMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		JValue* args)
+		=> ReferenceHelper.GetProxy(envRef).CallBooleanMethod(localRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static JByte CallByteMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
-		JValueWrapper* args)
-		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallByteMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		JValue* args)
+		=> ReferenceHelper.GetProxy(envRef).CallByteMethod(localRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static JChar CallCharMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
-		JValueWrapper* args)
-		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallCharMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		JValue* args)
+		=> ReferenceHelper.GetProxy(envRef).CallCharMethod(localRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static JShort CallShortMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
-		JValueWrapper* args)
-		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallShortMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		JValue* args)
+		=> ReferenceHelper.GetProxy(envRef).CallShortMethod(localRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static JInt CallIntMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
-		JValueWrapper* args)
-		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallIntMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		JValue* args)
+		=> ReferenceHelper.GetProxy(envRef).CallIntMethod(localRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static JLong CallLongMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
-		JValueWrapper* args)
-		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallLongMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		JValue* args)
+		=> ReferenceHelper.GetProxy(envRef).CallLongMethod(localRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static Single CallFloatMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
-		JValueWrapper* args)
-		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallFloatMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args).Value;
+		JValue* args)
+		=> ReferenceHelper.GetProxy(envRef).CallFloatMethod(localRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args)
+		                  .Value;
 	[UnmanagedCallersOnly]
 	private static Double CallDoubleMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
-		JValueWrapper* args)
-		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallDoubleMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args).Value;
+		JValue* args)
+		=> ReferenceHelper.GetProxy(envRef).CallDoubleMethod(localRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args)
+		                  .Value;
 	[UnmanagedCallersOnly]
 	private static void CallVoidMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
-		JValueWrapper* args)
-		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallVoidMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		JValue* args)
+		=> ReferenceHelper.GetProxy(envRef).CallVoidMethod(localRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static JObjectLocalRef CallNonVirtualObjectMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
-		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
+		JClassLocalRef classRef, JMethodId methodId, JValue* args)
 		=> ReferenceHelper.GetProxy(envRef)
 		                  .CallNonVirtualObjectMethod(localRef, classRef, methodId,
-		                                              (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                                              (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static JBoolean CallNonVirtualBooleanMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
-		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
+		JClassLocalRef classRef, JMethodId methodId, JValue* args)
 		=> ReferenceHelper.GetProxy(envRef)
 		                  .CallNonVirtualBooleanMethod(localRef, classRef, methodId,
-		                                               (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                                               (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static JByte CallNonVirtualByteMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
-		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
+		JClassLocalRef classRef, JMethodId methodId, JValue* args)
 		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallNonVirtualByteMethod(localRef, classRef, methodId,
-		                                            (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                  .CallNonVirtualByteMethod(localRef, classRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static JChar CallNonVirtualCharMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
-		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
+		JClassLocalRef classRef, JMethodId methodId, JValue* args)
 		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallNonVirtualCharMethod(localRef, classRef, methodId,
-		                                            (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                  .CallNonVirtualCharMethod(localRef, classRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static JShort CallNonVirtualShortMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
-		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
+		JClassLocalRef classRef, JMethodId methodId, JValue* args)
 		=> ReferenceHelper.GetProxy(envRef)
 		                  .CallNonVirtualShortMethod(localRef, classRef, methodId,
-		                                             (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                                             (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static JInt CallNonVirtualIntMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
-		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
+		JClassLocalRef classRef, JMethodId methodId, JValue* args)
 		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallNonVirtualIntMethod(localRef, classRef, methodId,
-		                                           (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                  .CallNonVirtualIntMethod(localRef, classRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static JLong CallNonVirtualLongMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
-		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
+		JClassLocalRef classRef, JMethodId methodId, JValue* args)
 		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallNonVirtualLongMethod(localRef, classRef, methodId,
-		                                            (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                  .CallNonVirtualLongMethod(localRef, classRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static Single CallNonVirtualFloatMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
-		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
+		JClassLocalRef classRef, JMethodId methodId, JValue* args)
 		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallNonVirtualFloatMethod(localRef, classRef, methodId,
-		                                             (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args).Value;
+		                  .CallNonVirtualFloatMethod(localRef, classRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args)
+		                  .Value;
 	[UnmanagedCallersOnly]
 	private static Double CallNonVirtualDoubleMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
-		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
+		JClassLocalRef classRef, JMethodId methodId, JValue* args)
 		=> ReferenceHelper.GetProxy(envRef)
 		                  .CallNonVirtualDoubleMethod(localRef, classRef, methodId,
-		                                              (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args).Value;
+		                                              (ReadOnlyValPtr<JValue>)(IntPtr)args).Value;
 	[UnmanagedCallersOnly]
 	private static void CallNonVirtualVoidMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
-		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
+		JClassLocalRef classRef, JMethodId methodId, JValue* args)
 		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallNonVirtualVoidMethod(localRef, classRef, methodId,
-		                                            (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                  .CallNonVirtualVoidMethod(localRef, classRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 
 	[UnmanagedCallersOnly]
 	private static JFieldId GetFieldId(JEnvironmentRef envRef, JClassLocalRef classRef, Byte* fieldName,
@@ -704,55 +690,54 @@ internal unsafe partial class ReferenceHelper
 	}
 	[UnmanagedCallersOnly]
 	private static JObjectLocalRef CallStaticObjectMethod(JEnvironmentRef envRef, JClassLocalRef classRef,
-		JMethodId methodId, JValueWrapper* args)
+		JMethodId methodId, JValue* args)
 		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallStaticObjectMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                  .CallStaticObjectMethod(classRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static JBoolean CallStaticBooleanMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
-		JValueWrapper* args)
+		JValue* args)
 		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallStaticBooleanMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                  .CallStaticBooleanMethod(classRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static JByte CallStaticByteMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
-		JValueWrapper* args)
+		JValue* args)
 		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallStaticByteMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                  .CallStaticByteMethod(classRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static JChar CallStaticCharMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
-		JValueWrapper* args)
+		JValue* args)
 		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallStaticCharMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                  .CallStaticCharMethod(classRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static JShort CallStaticShortMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
-		JValueWrapper* args)
+		JValue* args)
 		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallStaticShortMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                  .CallStaticShortMethod(classRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static JInt CallStaticIntMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
-		JValueWrapper* args)
+		JValue* args)
 		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallStaticIntMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                  .CallStaticIntMethod(classRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static JLong CallStaticLongMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
-		JValueWrapper* args)
+		JValue* args)
 		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallStaticLongMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                  .CallStaticLongMethod(classRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static Single CallStaticFloatMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
-		JValueWrapper* args)
+		JValue* args)
 		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallStaticFloatMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args).Value;
+		                  .CallStaticFloatMethod(classRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args).Value;
 	[UnmanagedCallersOnly]
 	private static Double CallStaticDoubleMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
-		JValueWrapper* args)
+		JValue* args)
 		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallStaticDoubleMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args)
-		                  .Value;
+		                  .CallStaticDoubleMethod(classRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args).Value;
 	[UnmanagedCallersOnly]
 	private static void CallStaticVoidMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
-		JValueWrapper* args)
+		JValue* args)
 		=> ReferenceHelper.GetProxy(envRef)
-		                  .CallStaticVoidMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
+		                  .CallStaticVoidMethod(classRef, methodId, (ReadOnlyValPtr<JValue>)(IntPtr)args);
 
 	[UnmanagedCallersOnly]
 	private static JFieldId GetStaticFieldId(JEnvironmentRef envRef, JClassLocalRef classRef, Byte* fieldName,
@@ -1054,10 +1039,9 @@ internal unsafe partial class ReferenceHelper
 
 	[UnmanagedCallersOnly]
 	private static JResult RegisterNatives(JEnvironmentRef envRef, JClassLocalRef classRef,
-		NativeMethodValueWrapper* methodEntries, Int32 count)
+		NativeMethodValue* methodEntries, Int32 count)
 		=> ReferenceHelper.GetProxy(envRef)
-		                  .RegisterNatives(classRef, (ReadOnlyValPtr<NativeMethodValueWrapper>)(IntPtr)methodEntries,
-		                                   count);
+		                  .RegisterNatives(classRef, (ReadOnlyValPtr<NativeMethodValue>)(IntPtr)methodEntries, count);
 	[UnmanagedCallersOnly]
 	private static JResult UnregisterNatives(JEnvironmentRef envRef, JClassLocalRef classRef)
 		=> ReferenceHelper.GetProxy(envRef).UnregisterNatives(classRef);

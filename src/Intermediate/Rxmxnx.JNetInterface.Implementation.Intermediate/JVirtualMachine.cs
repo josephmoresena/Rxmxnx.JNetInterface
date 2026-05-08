@@ -18,16 +18,16 @@ public partial class JVirtualMachine : IVirtualMachine
 	/// </summary>
 	public virtual Boolean IsAlive => true;
 	/// <inheritdoc cref="IVirtualMachine.Version"/>
-	public JRuntimeVersion Version => this._cache.GetVersion(this);
+	public JRuntimeVersion Version => this._core.GetVersion(this);
 	/// <summary>
 	/// Indicates whether current instance is disposable.
 	/// </summary>
 	public virtual Boolean IsDisposable => false;
 	/// <inheritdoc/>
-	public JVirtualMachineRef Reference => this._cache.Reference;
+	public JVirtualMachineRef Reference => this._core.Reference;
 
 	Boolean IVirtualMachine.NoProxy => true;
-	IEnvironment? IVirtualMachine.GetEnvironment() => this._cache.ThreadCache.GetAttachedThread();
+	IEnvironment? IVirtualMachine.GetEnvironment() => this._core.ThreadCache.GetAttachedThread();
 	JRuntimeVersion IVirtualMachine.Version
 	{
 		get

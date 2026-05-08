@@ -22,24 +22,21 @@ public partial class JVirtualMachineTests
 		{
 			proxyEnv.VirtualMachine.When(v => v.AttachCurrentThread(Arg.Any<ValPtr<JEnvironmentRef>>(),
 			                                                        Arg.Any<ReadOnlyValPtr<
-				                                                        VirtualMachineArgumentValueWrapper>>())).Do(c =>
+				                                                        VirtualMachineArgumentValue>>())).Do(c =>
 			{
 				((ValPtr<JEnvironmentRef>)c[0]).Reference = proxyEnv.Reference;
-				VirtualMachineArgumentValueWrapper arg = ((ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>)c[1])
-					.Reference;
+				VirtualMachineArgumentValue arg = ((ReadOnlyValPtr<VirtualMachineArgumentValue>)c[1]).Reference;
 				Assert.Equal(threadName, arg.NamePtr.GetUnsafeCString(threadName.Length));
 				Assert.Equal(globalRef, arg.Group);
 				Assert.Equal(IVirtualMachine.MinimalVersion, arg.Version);
 			});
 			proxyEnv.VirtualMachine.When(v => v.AttachCurrentThreadAsDaemon(Arg.Any<ValPtr<JEnvironmentRef>>(),
 			                                                                Arg.Any<ReadOnlyValPtr<
-				                                                                VirtualMachineArgumentValueWrapper>>()))
+				                                                                VirtualMachineArgumentValue>>()))
 			        .Do(c =>
 			        {
 				        ((ValPtr<JEnvironmentRef>)c[0]).Reference = proxyEnv.Reference;
-				        VirtualMachineArgumentValueWrapper arg =
-					        ((ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>)c[1])
-					        .Reference;
+				        VirtualMachineArgumentValue arg = ((ReadOnlyValPtr<VirtualMachineArgumentValue>)c[1]).Reference;
 				        Assert.Equal(threadName, arg.NamePtr.GetUnsafeCString(threadName.Length));
 				        Assert.Equal(globalRef, arg.Group);
 				        Assert.Equal(IVirtualMachine.MinimalVersion, arg.Version);
@@ -77,9 +74,9 @@ public partial class JVirtualMachineTests
 			Assert.True((env as IEnvironment).NoProxy);
 			Assert.Equal(removeAttachedThread ? threadName : CString.Zero, env.Name);
 			proxyEnv.VirtualMachine.Received(!daemon ? 1 : 0).AttachCurrentThread(
-				Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>>());
+				Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValue>>());
 			proxyEnv.VirtualMachine.Received(daemon ? 1 : 0).AttachCurrentThreadAsDaemon(
-				Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>>());
+				Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValue>>());
 
 			proxyEnv.VirtualMachine.GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>()).Returns(JResult.Ok);
 			Assert.Equal(removeAttachedThread && daemon, env.IsDaemon);

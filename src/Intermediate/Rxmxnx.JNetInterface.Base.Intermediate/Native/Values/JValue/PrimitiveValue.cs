@@ -1,6 +1,10 @@
 namespace Rxmxnx.JNetInterface.Native.Values;
 
-internal partial struct JValue
+#if !PACKAGE
+public partial struct JValue
+#else
+internal unsafe partial struct JValue
+#endif
 {
 	/// <summary>
 	/// Primitive value struct.

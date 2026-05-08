@@ -75,7 +75,7 @@ public partial class JVirtualMachine
 	/// </returns>
 	public static Boolean RemoveVirtualMachine(JVirtualMachineRef reference)
 	{
-		ReferenceCache.Instance.Get(reference)?._cache.ClearCache();
+		ReferenceCache.Instance.Get(reference)?._core.ClearCache();
 		return ReferenceCache.Instance.Remove(reference);
 	}
 	/// <summary>

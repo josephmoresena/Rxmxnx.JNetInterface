@@ -137,12 +137,11 @@ public sealed class FloatCallTests
 		proxyEnv.Received(isStatic ? 1 : 0)
 		        .GetStaticMethodId(Arg.Any<JClassLocalRef>(), namePtr, Arg.Any<ReadOnlyValPtr<Byte>>());
 
-		proxyEnv.Received(isInstance ? 1 : 0)
-		        .CallFloatMethod(localRef, methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>());
+		proxyEnv.Received(isInstance ? 1 : 0).CallFloatMethod(localRef, methodId, Arg.Any<ReadOnlyValPtr<JValue>>());
 		proxyEnv.Received(isNonVirtual ? 1 : 0).CallNonVirtualFloatMethod(
-			localRef, Arg.Any<JClassLocalRef>(), methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>());
+			localRef, Arg.Any<JClassLocalRef>(), methodId, Arg.Any<ReadOnlyValPtr<JValue>>());
 		proxyEnv.Received(isStatic ? 1 : 0)
-		        .CallStaticFloatMethod(Arg.Any<JClassLocalRef>(), methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>());
+		        .CallStaticFloatMethod(Arg.Any<JClassLocalRef>(), methodId, Arg.Any<ReadOnlyValPtr<JValue>>());
 
 		foreach (IObject obj in args)
 			(obj as IDisposable)?.Dispose();

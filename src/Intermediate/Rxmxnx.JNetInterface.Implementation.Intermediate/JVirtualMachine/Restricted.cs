@@ -9,15 +9,15 @@ public partial class JVirtualMachine : IVirtualMachineHost, ITypeManager
 	[ExcludeFromCodeCoverage]
 #endif
 	AccessCache? ITypeManager.GetAccess(JClassLocalRef classRef)
-		=> this._cache.GlobalClassCache[classRef] ?? this._cache.WeakClassCache[classRef];
+		=> this._core.GlobalClassCache[classRef] ?? this._core.WeakClassCache[classRef];
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
 	void ITypeManager.ReloadAccess(String classHash)
 	{
-		if (!this._cache.GlobalClassCache.TryGetValue(classHash, out JGlobal? jGlobal) || jGlobal.IsDefault) return;
-		this._cache.GlobalClassCache.Load(jGlobal.As<JClassLocalRef>());
+		if (!this._core.GlobalClassCache.TryGetValue(classHash, out JGlobal? jGlobal) || jGlobal.IsDefault) return;
+		this._core.GlobalClassCache.Load(jGlobal.As<JClassLocalRef>());
 	}
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -25,7 +25,7 @@ public partial class JVirtualMachine : IVirtualMachineHost, ITypeManager
 	ClassObjectMetadata? ITypeManager.LoadMetadataGlobal(JGlobalBase jGlobal)
 	{
 		ClassObjectMetadata? result = jGlobal.ObjectMetadata as ClassObjectMetadata;
-		if (result is null || this._cache.GlobalClassCache.ContainsHash(result.Hash)) return result;
+		if (result is null || this._core.GlobalClassCache.ContainsHash(result.Hash)) return result;
 		JTrace.LoadClassMetadata(result);
 		this.CreateGlobalClass(result);
 		return result;
@@ -34,7 +34,7 @@ public partial class JVirtualMachine : IVirtualMachineHost, ITypeManager
 	{
 		ObjectLifetime lifetime = jClass.Lifetime;
 		Boolean found = true;
-		if (!this._cache.GlobalClassCache.TryGetValue(jClass.Hash, out JGlobal? jGlobal))
+		if (!this._core.GlobalClassCache.TryGetValue(jClass.Hash, out JGlobal? jGlobal))
 		{
 			WellKnownRuntimeTypeInformation typeMetadata = MetadataHelper.GetExactMetadata(jClass.Hash);
 			JTypeKind kind = jClass switch
@@ -46,7 +46,7 @@ public partial class JVirtualMachine : IVirtualMachineHost, ITypeManager
 			ClassObjectMetadata metadata = new(jClass, kind, typeMetadata.IsFinal);
 			jGlobal = new(this, metadata, default);
 			found = false;
-			this._cache.GlobalClassCache[jClass.Hash] = jGlobal;
+			this._core.GlobalClassCache[jClass.Hash] = jGlobal;
 		}
 		lifetime.SetGlobal(jGlobal);
 		JTrace.LoadGlobalClass(jClass, found, jGlobal.Reference);
@@ -55,33 +55,27 @@ public partial class JVirtualMachine : IVirtualMachineHost, ITypeManager
 	ITypeInformation? ITypeManager.GetTypeInformation(String classHash)
 	{
 		ITypeInformation? result = default;
-		if (this._cache.GlobalClassCache.TryGetValue(classHash, out JGlobal? jGlobal))
+		if (this._core.GlobalClassCache.TryGetValue(classHash, out JGlobal? jGlobal))
 			result = jGlobal.ObjectMetadata as ITypeInformation;
 		JTrace.GetTypeInformation(classHash, result);
 		return result;
 	}
 	void ITypeManager.RegisterNatives(String classHash, IReadOnlyList<JNativeCallEntry> calls)
-		=> this._cache.NativesCache[classHash] = calls;
-	void ITypeManager.UnregisterNatives(String classHash) => this._cache.NativesCache.Clear(classHash);
+		=> this._core.NativesCache[classHash] = calls;
+	void ITypeManager.UnregisterNatives(String classHash) => this._core.NativesCache.Clear(classHash);
 
 	IVirtualMachine IWrapper<IVirtualMachine>.Value => this;
 	Boolean IVirtualMachineHost.IsRunning => this.IsAlive;
-	IGlobalObjectManager IVirtualMachineHost.GlobalManager => this._cache;
-	INativeMemoryManager IVirtualMachineHost.MemoryManager => this._cache;
+	IGlobalObjectManager IVirtualMachineHost.GlobalManager => this._core;
+	INativeMemoryManager IVirtualMachineHost.MemoryManager => this._core;
 	ITypeManager IVirtualMachineHost.TypeManager => this;
-	GlobalMainClasses IVirtualMachineHost.MainClasses => this._cache;
+	GlobalMainClasses IVirtualMachineHost.MainClasses => this._core;
 
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	JResult IVirtualMachineHost.GetEnv(out JEnvironmentRef envRef, Int32 jniVersion)
-	{
-		ref readonly InvokeInterface invoke = ref this.GetInvokeInterface();
-		return invoke.GetEnv(this.Reference, out envRef, (Int32)JRuntimeVersion.SEd2);
-	}
+		=> this._core.GetEnv(out envRef, jniVersion);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	JResult IVirtualMachineHost.AttachThread(Boolean isDaemon, VirtualMachineArgumentValue arg,
 		out JEnvironmentRef envRef)
-	{
-		ref readonly InvokeInterface invoke = ref this.GetInvokeInterface();
-		return !isDaemon ?
-			invoke.AttachCurrentThread(this._cache.Reference, out envRef, in arg) :
-			invoke.AttachCurrentThreadAsDaemon(this._cache.Reference, out envRef, in arg);
-	}
+		=> this._core.AttachThread(isDaemon, arg, out envRef);
 }

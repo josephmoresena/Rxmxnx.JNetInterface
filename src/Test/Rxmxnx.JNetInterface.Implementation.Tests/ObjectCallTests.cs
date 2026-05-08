@@ -123,7 +123,7 @@ public sealed class ObjectCallTests
 
 		proxyEnv.GetObjectClass(result.Value).Returns(proxyEnv.ThrowableLocalRef);
 		proxyEnv.CallObjectMethod(proxyEnv.ThrowableLocalRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-		                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef.Value);
+		                          ReadOnlyValPtr<JValue>.Zero).Returns(strRef.Value);
 		proxyEnv.GetStringUtfLength(strRef).Returns(metadata.ClassName.Length);
 		proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>()).Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 		proxyEnv.GetMethodId(Arg.Any<JClassLocalRef>(), namePtr, Arg.Any<ReadOnlyValPtr<Byte>>()).Returns(methodId);
@@ -147,12 +147,11 @@ public sealed class ObjectCallTests
 		proxyEnv.Received(isStatic ? 1 : 0)
 		        .GetStaticMethodId(Arg.Any<JClassLocalRef>(), namePtr, Arg.Any<ReadOnlyValPtr<Byte>>());
 
-		proxyEnv.Received(isInstance ? 1 : 0)
-		        .CallObjectMethod(localRef, methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>());
+		proxyEnv.Received(isInstance ? 1 : 0).CallObjectMethod(localRef, methodId, Arg.Any<ReadOnlyValPtr<JValue>>());
 		proxyEnv.Received(isNonVirtual ? 1 : 0).CallNonVirtualObjectMethod(
-			localRef, Arg.Any<JClassLocalRef>(), methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>());
+			localRef, Arg.Any<JClassLocalRef>(), methodId, Arg.Any<ReadOnlyValPtr<JValue>>());
 		proxyEnv.Received(isStatic ? 1 : 0)
-		        .CallStaticObjectMethod(Arg.Any<JClassLocalRef>(), methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>());
+		        .CallStaticObjectMethod(Arg.Any<JClassLocalRef>(), methodId, Arg.Any<ReadOnlyValPtr<JValue>>());
 
 		foreach (IObject obj in args)
 			(obj as IDisposable)?.Dispose();

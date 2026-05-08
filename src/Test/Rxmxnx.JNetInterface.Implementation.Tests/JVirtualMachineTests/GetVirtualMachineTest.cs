@@ -22,7 +22,7 @@ public partial class JVirtualMachineTests
 				proxyVm.GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>())
 				       .Returns(JResult.DetachedThreadError);
 				proxyVm.When(v => v.AttachCurrentThread(Arg.Any<ValPtr<JEnvironmentRef>>(),
-				                                        Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>>()))
+				                                        Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValue>>()))
 				       .Do(c => ((ValPtr<JEnvironmentRef>)c[0]).Reference = proxyEnv.Reference);
 			}
 
@@ -59,7 +59,7 @@ public partial class JVirtualMachineTests
 			proxyVm.Received(1).GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>());
 			proxyVm.Received(attached ? 0 : 1).AttachCurrentThread(Arg.Any<ValPtr<JEnvironmentRef>>(),
 			                                                       Arg.Any<ReadOnlyValPtr<
-				                                                       VirtualMachineArgumentValueWrapper>>());
+				                                                       VirtualMachineArgumentValue>>());
 			proxyEnv.Received(1).GetVersion();
 			proxyEnv.Received(14).FindClass(Arg.Any<ReadOnlyValPtr<Byte>>());
 			proxyEnv.Received(9).GetStaticFieldId(Arg.Any<JClassLocalRef>(), Arg.Any<ReadOnlyValPtr<Byte>>(),

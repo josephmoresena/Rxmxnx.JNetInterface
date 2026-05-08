@@ -9,8 +9,10 @@
                  Justification = CommonConstants.BinaryStructJustification)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
-#endif
+public readonly unsafe struct NativeMethodValue
+#else
 internal readonly unsafe struct NativeMethodValue
+#endif
 {
 	/// <summary>
 	/// Size if <see cref="NativeMethodValue"/>

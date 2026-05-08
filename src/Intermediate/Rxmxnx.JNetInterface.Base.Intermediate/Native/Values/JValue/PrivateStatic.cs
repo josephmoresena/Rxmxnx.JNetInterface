@@ -3,8 +3,10 @@
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
-#endif
+public unsafe partial struct JValue
+#else
 internal unsafe partial struct JValue
+#endif
 {
 	/// <summary>
 	/// Delegate. Indicates whether <paramref name="value"/> has the <see langword="default"/> value.

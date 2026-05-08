@@ -33,18 +33,18 @@ internal static unsafe partial class ReferenceHelper
 	}
 	[UnmanagedCallersOnly]
 	private static JResult AttachCurrentThread(JVirtualMachineRef vmRef, JEnvironmentRef* envRefPtr,
-		VirtualMachineArgumentValueWrapper* argPtr)
+		VirtualMachineArgumentValue* argPtr)
 	{
 		ref JEnvironmentRef envRef = ref Unsafe.AsRef<JEnvironmentRef>(envRefPtr);
-		ref VirtualMachineArgumentValueWrapper argRef = ref Unsafe.AsRef<VirtualMachineArgumentValueWrapper>(argPtr);
+		ref VirtualMachineArgumentValue argRef = ref Unsafe.AsRef<VirtualMachineArgumentValue>(argPtr);
 		return ReferenceHelper.GetProxy(vmRef).AttachCurrentThread(envRef.GetUnsafeValPtr(), argRef.GetUnsafeValPtr());
 	}
 	[UnmanagedCallersOnly]
 	private static JResult AttachCurrentThreadAsDaemon(JVirtualMachineRef vmRef, JEnvironmentRef* envRefPtr,
-		VirtualMachineArgumentValueWrapper* argPtr)
+		VirtualMachineArgumentValue* argPtr)
 	{
 		ref JEnvironmentRef envRef = ref Unsafe.AsRef<JEnvironmentRef>(envRefPtr);
-		ref VirtualMachineArgumentValueWrapper argRef = ref Unsafe.AsRef<VirtualMachineArgumentValueWrapper>(argPtr);
+		ref VirtualMachineArgumentValue argRef = ref Unsafe.AsRef<VirtualMachineArgumentValue>(argPtr);
 		return ReferenceHelper.GetProxy(vmRef)
 		                      .AttachCurrentThreadAsDaemon(envRef.GetUnsafeValPtr(), argRef.GetUnsafeValPtr());
 	}

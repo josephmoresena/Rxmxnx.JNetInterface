@@ -1,5 +1,3 @@
-using Rxmxnx.JNetInterface.Restricted;
-
 namespace Rxmxnx.JNetInterface.Internal;
 
 #if !PACKAGE

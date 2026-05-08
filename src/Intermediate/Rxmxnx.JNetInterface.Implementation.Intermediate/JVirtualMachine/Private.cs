@@ -15,32 +15,25 @@ public partial class JVirtualMachine
 	/// <summary>
 	/// <see cref="JVirtualMachine"/> cache.
 	/// </summary>
-	private readonly VirtualMachineCore<JEnvironment> _cache;
+	private readonly VirtualMachineCore<JEnvironment> _core;
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="vmRef">A <see cref="JVirtualMachineRef"/> reference.</param>
-	private JVirtualMachine(JVirtualMachineRef vmRef) => this._cache = new(this, vmRef);
+	private JVirtualMachine(JVirtualMachineRef vmRef) => this._core = new(this, vmRef);
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="cache">A <see cref="VirtualMachineCore{JEnvironment}"/> reference.</param>
-	private JVirtualMachine(VirtualMachineCore<JEnvironment> cache) => this._cache = cache;
+	/// <param name="core">A <see cref="VirtualMachineCore{JEnvironment}"/> reference.</param>
+	private JVirtualMachine(VirtualMachineCore<JEnvironment> core) => this._core = core;
 
-	/// <summary>
-	/// Retrieves managed <see cref="InvokeInterface"/> reference from current instance.
-	/// </summary>
-	/// <returns>A managed <see cref="InvokeInterface"/> reference from current instance.</returns>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private unsafe ref readonly InvokeInterface GetInvokeInterface()
-		=> ref *(InvokeInterface*)this._cache.Reference.InterfacePointer;
 	/// <summary>
 	/// Attaches current thread to VM.
 	/// </summary>
 	/// <param name="args">A <see cref="ThreadCreationArgs"/> instance.</param>
 	/// <returns>A <see cref="IThread"/> instance.</returns>
-	private IThread AttachThread(ThreadCreationArgs args) => this._cache.ThreadCache.AttachThread(args);
+	private IThread AttachThread(ThreadCreationArgs args) => this._core.ThreadCache.AttachThread(args);
 	/// <summary>
 	/// Initialize main classes.
 	/// </summary>
@@ -48,7 +41,7 @@ public partial class JVirtualMachine
 	{
 		using IThread thread = this.AttachThread(ThreadCreationArgs.Create(ThreadPurpose.CreateGlobalReference));
 		JEnvironment env = this.GetEnvironment(thread.Reference);
-		this._cache.LoadMainClasses(env);
+		this._core.LoadMainClasses(env);
 	}
 	/// <summary>
 	/// Creates global instance for <paramref name="classMetadata"/>
@@ -57,6 +50,6 @@ public partial class JVirtualMachine
 	private void CreateGlobalClass(ClassObjectMetadata classMetadata)
 	{
 		JGlobal globalClass = new(this, classMetadata, default);
-		this._cache.GlobalClassCache[classMetadata.Hash] = globalClass;
+		this._core.GlobalClassCache[classMetadata.Hash] = globalClass;
 	}
 }

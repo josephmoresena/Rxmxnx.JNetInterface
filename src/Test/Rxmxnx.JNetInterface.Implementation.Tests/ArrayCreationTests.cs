@@ -109,8 +109,8 @@ public sealed class ArrayCreationTests
 			proxyEnv.GetObjectArrayElement(arrayRef, Arg.Any<Int32>())
 			        .Returns(c => 0.Equals(c[1]) ? proxyEnv.StackTraceElementLocalRef.Value : default);
 			proxyEnv.CallObjectMethod(proxyEnv.StackTraceElementLocalRef.Value,
-			                          proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          Arg.Any<ReadOnlyValPtr<JValueWrapper>>()).Returns(stringRef.Value);
+			                          proxyEnv.VirtualMachine.ClassGetNameMethodId, Arg.Any<ReadOnlyValPtr<JValue>>())
+			        .Returns(stringRef.Value);
 			proxyEnv.GetStringUtfLength(stringRef)
 			        .Returns(IDataType.GetMetadata<JStackTraceElementObject>().ClassName.Length);
 			proxyEnv.GetStringUtfChars(stringRef, Arg.Any<ValPtr<JBoolean>>())

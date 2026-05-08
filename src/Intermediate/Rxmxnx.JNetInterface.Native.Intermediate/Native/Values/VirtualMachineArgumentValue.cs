@@ -7,8 +7,10 @@
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
-#endif
+public readonly unsafe struct VirtualMachineArgumentValue(Int32 version, Byte* name, JGlobalRef group)
+#else
 internal readonly unsafe struct VirtualMachineArgumentValue(Int32 version, Byte* name, JGlobalRef group)
+#endif
 {
 	/// <summary>
 	/// JNI Version.
@@ -22,4 +24,11 @@ internal readonly unsafe struct VirtualMachineArgumentValue(Int32 version, Byte*
 	/// Global reference to thread group.
 	/// </summary>
 	public readonly JGlobalRef Group = group;
+
+#if !PACKAGE
+	/// <summary>
+	/// Safe name pointer for tests purposes.
+	/// </summary>
+	internal IntPtr NamePtr => (IntPtr)this.Name;
+#endif
 }

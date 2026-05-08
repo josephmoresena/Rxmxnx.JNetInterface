@@ -225,7 +225,7 @@ internal sealed partial class EnvironmentCore : IAccessFeature
 			this.CreateObject<TObject>(jClass, localRef);
 	}
 #if !NET8_0_OR_GREATER
-		[UnconditionalSuppressMessage("Trimming", "IL2091")]
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 #endif
 	public TObject CallConstructor<TObject>(JConstructorObject jConstructor, JConstructorDefinition definition,
 		ReadOnlySpan<IObject?> args) where TObject : JLocalObject, IClassType<TObject>

@@ -44,19 +44,19 @@ internal sealed unsafe partial class EnvironmentCore
 			{
 				Int32 versionLength =
 #if !NET8_0_OR_GREATER
-						nativeInterface.StringFunctions.Utf16.GetStringLength(this.Reference, propValueRef);
+					nativeInterface.StringFunctions.Utf16.GetStringLength(this.Reference, propValueRef);
 #else
 					nativeInterface.StringFunctions.Utf8.GetStringLength(this.Reference, propValueRef);
 #endif
 				if (versionLength > 0)
 				{
 #if !NET8_0_OR_GREATER
-						ReadOnlySpan<Char> chars = stackalloc Char[versionLength];
-						fixed (Char* charsPtr = &MemoryMarshal.GetReference(chars))
-						{
-							nativeInterface.StringRegionFunctions.Utf16.GetStringRegion(
-								this.Reference, propValueRef, 0, versionLength, charsPtr);
-						}
+					ReadOnlySpan<Char> chars = stackalloc Char[versionLength];
+					fixed (Char* charsPtr = &MemoryMarshal.GetReference(chars))
+					{
+						nativeInterface.StringRegionFunctions.Utf16.GetStringRegion(
+							this.Reference, propValueRef, 0, versionLength, charsPtr);
+					}
 #else
 					ReadOnlySpan<Byte> chars = stackalloc Byte[versionLength];
 					fixed (Byte* charsPtr = &MemoryMarshal.GetReference(chars))

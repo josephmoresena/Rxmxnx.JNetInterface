@@ -61,7 +61,7 @@ public partial class PrimitiveClassesTests
 			};
 
 			proxyEnv.CallObjectMethod(Arg.Any<JObjectLocalRef>(), proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(c =>
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(c =>
 			{
 				JClassLocalRef classRef = new((JObjectLocalRef)c[0]);
 				return primitiveClassNameRefs.GetValueOrDefault(classRef).Value;
@@ -78,7 +78,7 @@ public partial class PrimitiveClassesTests
 				return span.GetUnsafeValPtr();
 			});
 			proxyEnv.CallBooleanMethod(Arg.Any<JObjectLocalRef>(), proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                           ReadOnlyValPtr<JValueWrapper>.Zero).Returns(c =>
+			                           ReadOnlyValPtr<JValue>.Zero).Returns(c =>
 			{
 				JClassLocalRef classRef = new((JObjectLocalRef)c[0]);
 				return primitiveClassNameRefs.ContainsKey(classRef);

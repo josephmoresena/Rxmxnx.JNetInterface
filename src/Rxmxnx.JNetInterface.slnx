@@ -55,13 +55,14 @@
         <File Path="..\native-image\jni-config.json"/>
     </Folder>
     <Folder Name="/Intermediate/">
-        <Project
-                Path="Intermediate/Rxmxnx.JNetInterface.Environment.Intermediate/Rxmxnx.JNetInterface.Environment.Intermediate.csproj"/>
+        <File Path="Intermediate\README.md"/>
         <Project
                 Path="Intermediate\Rxmxnx.JNetInterface.Common.Intermediate\Rxmxnx.JNetInterface.Common.Intermediate.csproj"/>
         <Project
                 Path="Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
         <File Path="Intermediate\Intermediate.Library.props"/>
+        <Project
+                Path="Intermediate\Rxmxnx.JNetInterface.Interop.Intermediate\Rxmxnx.JNetInterface.Interop.Intermediate.csproj"/>
     </Folder>
     <Folder Name="/Intermediate/Core/">
         <Project

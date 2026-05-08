@@ -259,52 +259,44 @@ public abstract class NativeInterfaceProxy
 	public abstract JResult EnsureLocalCapacity(Int32 capacity);
 	public abstract JObjectLocalRef AllocObject(JClassLocalRef classRef);
 	public abstract JObjectLocalRef NewObject(JClassLocalRef classRef, JMethodId constructorId,
-		ReadOnlyValPtr<JValueWrapper> args);
+		ReadOnlyValPtr<JValue> args);
 	public abstract JClassLocalRef GetObjectClass(JObjectLocalRef localRef);
 	public abstract JBoolean IsInstanceOf(JObjectLocalRef localRef, JClassLocalRef classRef);
 
 	public abstract JMethodId GetMethodId(JClassLocalRef classRef, ReadOnlyValPtr<Byte> methodName,
 		ReadOnlyValPtr<Byte> methodDescriptor);
 	public abstract JObjectLocalRef CallObjectMethod(JObjectLocalRef localRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
+		ReadOnlyValPtr<JValue> args);
 	public abstract JBoolean CallBooleanMethod(JObjectLocalRef localRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
-	public abstract JByte CallByteMethod(JObjectLocalRef localRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
-	public abstract JChar CallCharMethod(JObjectLocalRef localRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
-	public abstract JShort CallShortMethod(JObjectLocalRef localRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
-	public abstract JInt CallIntMethod(JObjectLocalRef localRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
-	public abstract JLong CallLongMethod(JObjectLocalRef localRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
-	public abstract JFloat CallFloatMethod(JObjectLocalRef localRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
-	public abstract JDouble CallDoubleMethod(JObjectLocalRef localRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
-	public abstract void CallVoidMethod(JObjectLocalRef localRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
+		ReadOnlyValPtr<JValue> args);
+	public abstract JByte CallByteMethod(JObjectLocalRef localRef, JMethodId methodId, ReadOnlyValPtr<JValue> args);
+	public abstract JChar CallCharMethod(JObjectLocalRef localRef, JMethodId methodId, ReadOnlyValPtr<JValue> args);
+	public abstract JShort CallShortMethod(JObjectLocalRef localRef, JMethodId methodId, ReadOnlyValPtr<JValue> args);
+	public abstract JInt CallIntMethod(JObjectLocalRef localRef, JMethodId methodId, ReadOnlyValPtr<JValue> args);
+	public abstract JLong CallLongMethod(JObjectLocalRef localRef, JMethodId methodId, ReadOnlyValPtr<JValue> args);
+	public abstract JFloat CallFloatMethod(JObjectLocalRef localRef, JMethodId methodId, ReadOnlyValPtr<JValue> args);
+	public abstract JDouble CallDoubleMethod(JObjectLocalRef localRef, JMethodId methodId, ReadOnlyValPtr<JValue> args);
+	public abstract void CallVoidMethod(JObjectLocalRef localRef, JMethodId methodId, ReadOnlyValPtr<JValue> args);
 	public abstract JObjectLocalRef CallNonVirtualObjectMethod(JObjectLocalRef localRef, JClassLocalRef classRef,
-		JMethodId methodId, ReadOnlyValPtr<JValueWrapper> args);
+		JMethodId methodId, ReadOnlyValPtr<JValue> args);
 	public abstract JBoolean CallNonVirtualBooleanMethod(JObjectLocalRef localRef, JClassLocalRef classRef,
-		JMethodId methodId, ReadOnlyValPtr<JValueWrapper> args);
+		JMethodId methodId, ReadOnlyValPtr<JValue> args);
 	public abstract JByte CallNonVirtualByteMethod(JObjectLocalRef localRef, JClassLocalRef classRef,
-		JMethodId methodId, ReadOnlyValPtr<JValueWrapper> args);
+		JMethodId methodId, ReadOnlyValPtr<JValue> args);
 	public abstract JChar CallNonVirtualCharMethod(JObjectLocalRef localRef, JClassLocalRef classRef,
-		JMethodId methodId, ReadOnlyValPtr<JValueWrapper> args);
+		JMethodId methodId, ReadOnlyValPtr<JValue> args);
 	public abstract JShort CallNonVirtualShortMethod(JObjectLocalRef localRef, JClassLocalRef classRef,
-		JMethodId methodId, ReadOnlyValPtr<JValueWrapper> args);
+		JMethodId methodId, ReadOnlyValPtr<JValue> args);
 	public abstract JInt CallNonVirtualIntMethod(JObjectLocalRef localRef, JClassLocalRef classRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
+		ReadOnlyValPtr<JValue> args);
 	public abstract JLong CallNonVirtualLongMethod(JObjectLocalRef localRef, JClassLocalRef classRef,
-		JMethodId methodId, ReadOnlyValPtr<JValueWrapper> args);
+		JMethodId methodId, ReadOnlyValPtr<JValue> args);
 	public abstract JFloat CallNonVirtualFloatMethod(JObjectLocalRef localRef, JClassLocalRef classRef,
-		JMethodId methodId, ReadOnlyValPtr<JValueWrapper> args);
+		JMethodId methodId, ReadOnlyValPtr<JValue> args);
 	public abstract JDouble CallNonVirtualDoubleMethod(JObjectLocalRef localRef, JClassLocalRef classRef,
-		JMethodId methodId, ReadOnlyValPtr<JValueWrapper> args);
+		JMethodId methodId, ReadOnlyValPtr<JValue> args);
 	public abstract void CallNonVirtualVoidMethod(JObjectLocalRef localRef, JClassLocalRef classRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
+		ReadOnlyValPtr<JValue> args);
 
 	public abstract JFieldId GetFieldId(JClassLocalRef classRef, ReadOnlyValPtr<Byte> fieldName,
 		ReadOnlyValPtr<Byte> fieldDescriptor);
@@ -330,25 +322,23 @@ public abstract class NativeInterfaceProxy
 	public abstract JMethodId GetStaticMethodId(JClassLocalRef classRef, ReadOnlyValPtr<Byte> methodName,
 		ReadOnlyValPtr<Byte> methodDescriptor);
 	public abstract JObjectLocalRef CallStaticObjectMethod(JClassLocalRef classRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
+		ReadOnlyValPtr<JValue> args);
 	public abstract JBoolean CallStaticBooleanMethod(JClassLocalRef classRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
+		ReadOnlyValPtr<JValue> args);
 	public abstract JByte CallStaticByteMethod(JClassLocalRef classRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
+		ReadOnlyValPtr<JValue> args);
 	public abstract JChar CallStaticCharMethod(JClassLocalRef classRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
+		ReadOnlyValPtr<JValue> args);
 	public abstract JShort CallStaticShortMethod(JClassLocalRef classRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
-	public abstract JInt CallStaticIntMethod(JClassLocalRef classRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
+		ReadOnlyValPtr<JValue> args);
+	public abstract JInt CallStaticIntMethod(JClassLocalRef classRef, JMethodId methodId, ReadOnlyValPtr<JValue> args);
 	public abstract JLong CallStaticLongMethod(JClassLocalRef classRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
+		ReadOnlyValPtr<JValue> args);
 	public abstract JFloat CallStaticFloatMethod(JClassLocalRef classRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
+		ReadOnlyValPtr<JValue> args);
 	public abstract JDouble CallStaticDoubleMethod(JClassLocalRef classRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
-	public abstract void CallStaticVoidMethod(JClassLocalRef classRef, JMethodId methodId,
-		ReadOnlyValPtr<JValueWrapper> args);
+		ReadOnlyValPtr<JValue> args);
+	public abstract void CallStaticVoidMethod(JClassLocalRef classRef, JMethodId methodId, ReadOnlyValPtr<JValue> args);
 
 	public abstract JFieldId GetStaticFieldId(JClassLocalRef classRef, ReadOnlyValPtr<Byte> fieldName,
 		ReadOnlyValPtr<Byte> fieldDescriptor);
@@ -456,8 +446,8 @@ public abstract class NativeInterfaceProxy
 	public abstract void SetDoubleArrayRegion(JDoubleArrayLocalRef arrayRef, Int32 start, Int32 count,
 		ReadOnlyValPtr<JDouble> buffer);
 
-	public abstract JResult RegisterNatives(JClassLocalRef classRef,
-		ReadOnlyValPtr<NativeMethodValueWrapper> methodEntries, Int32 count);
+	public abstract JResult RegisterNatives(JClassLocalRef classRef, ReadOnlyValPtr<NativeMethodValue> methodEntries,
+		Int32 count);
 	public abstract JResult UnregisterNatives(JClassLocalRef classRef);
 
 	public abstract JResult MonitorEnter(JObjectLocalRef localRef);

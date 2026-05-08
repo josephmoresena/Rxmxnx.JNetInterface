@@ -57,7 +57,7 @@ internal static partial class ReferenceHelper
 			proxy.ClearReceivedCalls();
 			proxy.GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>()).Returns(JResult.DetachedThreadError);
 			proxy.AttachCurrentThread(Arg.Any<ValPtr<JEnvironmentRef>>(),
-			                          Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>>())
+			                          Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValue>>())
 			     .Returns(JResult.DetachedThreadError);
 			ProxyFactory.Instance.InvokeMemory.Free(proxy.Reference);
 		}

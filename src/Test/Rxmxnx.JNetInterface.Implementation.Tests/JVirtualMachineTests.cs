@@ -35,7 +35,7 @@ public sealed partial class JVirtualMachineTests
 		{
 			proxyEnv.VirtualMachine.GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>()).Returns(result);
 			proxyEnv.VirtualMachine.AttachCurrentThread(Arg.Any<ValPtr<JEnvironmentRef>>(),
-			                                            Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>>())
+			                                            Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValue>>())
 			        .Returns(result);
 			JniException ex =
 				Assert.Throws<JniException>(() => JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference));
@@ -45,7 +45,7 @@ public sealed partial class JVirtualMachineTests
 			proxyEnv.VirtualMachine.Received(1).GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>());
 			proxyEnv.VirtualMachine.Received(1).AttachCurrentThread(Arg.Any<ValPtr<JEnvironmentRef>>(),
 			                                                        Arg.Any<ReadOnlyValPtr<
-				                                                        VirtualMachineArgumentValueWrapper>>());
+				                                                        VirtualMachineArgumentValue>>());
 		}
 		finally
 		{
@@ -126,7 +126,7 @@ public sealed partial class JVirtualMachineTests
 			proxyEnv.NewWeakGlobalRef(globalRef.Value).Returns(weakRef);
 			proxyEnv.NewGlobalRef(proxyEnv.VoidObjectLocalRef.Value).Returns(globalRef);
 			proxyEnv.NewGlobalRef(weakRef.Value).Returns(globalRef);
-			proxyEnv.NewObject(proxyEnv.VoidObjectLocalRef, Arg.Any<JMethodId>(), ReadOnlyValPtr<JValueWrapper>.Zero)
+			proxyEnv.NewObject(proxyEnv.VoidObjectLocalRef, Arg.Any<JMethodId>(), ReadOnlyValPtr<JValue>.Zero)
 			        .Returns(JVirtualMachineTests.fixture.Create<JObjectLocalRef>());
 
 			Assert.True((invoked as JVirtualMachine)!.IsAlive);

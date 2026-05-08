@@ -144,7 +144,7 @@ internal static class TestUtilities
 		proxyEnv.FindClass((ReadOnlyValPtr<Byte>)ctx2.Pointer).Returns(classRef);
 		proxyEnv.GetMethodId(classRef, (ReadOnlyValPtr<Byte>)ctx.Pointer, Arg.Any<ReadOnlyValPtr<Byte>>())
 		        .Returns(methodId);
-		proxyEnv.NewObject(classRef, methodId, ReadOnlyValPtr<JValueWrapper>.Zero).Returns(localRef);
+		proxyEnv.NewObject(classRef, methodId, ReadOnlyValPtr<JValue>.Zero).Returns(localRef);
 
 		JLocalObject jLocal = constructor.New<JLocalObject>(env);
 		try
@@ -153,7 +153,7 @@ internal static class TestUtilities
 			proxyEnv.Received(1).FindClass((ReadOnlyValPtr<Byte>)ctx2.Pointer);
 			proxyEnv.Received(1)
 			        .GetMethodId(classRef, (ReadOnlyValPtr<Byte>)ctx.Pointer, Arg.Any<ReadOnlyValPtr<Byte>>());
-			proxyEnv.Received(1).NewObject(classRef, methodId, ReadOnlyValPtr<JValueWrapper>.Zero);
+			proxyEnv.Received(1).NewObject(classRef, methodId, ReadOnlyValPtr<JValue>.Zero);
 			return jLocal;
 		}
 		finally
@@ -177,15 +177,15 @@ internal static class TestUtilities
 		proxyEnv.FindClass((ReadOnlyValPtr<Byte>)ctx2.Pointer).Returns(classRef);
 		proxyEnv.GetMethodId(classRef, (ReadOnlyValPtr<Byte>)ctx.Pointer, Arg.Any<ReadOnlyValPtr<Byte>>())
 		        .Returns(methodId);
-		proxyEnv.NewObject(classRef, methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>()).Returns(throwableRef.Value);
+		proxyEnv.NewObject(classRef, methodId, Arg.Any<ReadOnlyValPtr<JValue>>()).Returns(throwableRef.Value);
 
 		using JStringObject jString = TestUtilities.CreateString(proxyEnv, "Error message");
 		JStringLocalRef stringRef = jString.Reference;
 
-		proxyEnv.When(e => e.NewObject(classRef, methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>())).Do(c =>
+		proxyEnv.When(e => e.NewObject(classRef, methodId, Arg.Any<ReadOnlyValPtr<JValue>>())).Do(c =>
 		{
 			JObjectLocalRef localRef = stringRef.Value;
-			ReadOnlyValPtr<JValueWrapper> args = (ReadOnlyValPtr<JValueWrapper>)c[2];
+			ReadOnlyValPtr<JValue> args = (ReadOnlyValPtr<JValue>)c[2];
 			Assert.True(NativeUtilities.AsBytes(in args.Reference)[..IntPtr.Size]
 			                           .SequenceEqual(NativeUtilities.AsBytes(in localRef)));
 		});
@@ -198,7 +198,7 @@ internal static class TestUtilities
 			proxyEnv.Received(1).FindClass((ReadOnlyValPtr<Byte>)ctx2.Pointer);
 			proxyEnv.Received(1)
 			        .GetMethodId(classRef, (ReadOnlyValPtr<Byte>)ctx.Pointer, Arg.Any<ReadOnlyValPtr<Byte>>());
-			proxyEnv.Received(1).NewObject(classRef, methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>());
+			proxyEnv.Received(1).NewObject(classRef, methodId, Arg.Any<ReadOnlyValPtr<JValue>>());
 			return jThrowable;
 		}
 		finally
@@ -234,8 +234,7 @@ internal static class TestUtilities
 
 		proxyEnv.GetMethodId(Arg.Any<JClassLocalRef>(), Arg.Any<ReadOnlyValPtr<Byte>>(),
 		                     Arg.Any<ReadOnlyValPtr<Byte>>()).Returns(methodId);
-		proxyEnv.NewObject(Arg.Any<JClassLocalRef>(), methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>())
-		        .Returns(localRef);
+		proxyEnv.NewObject(Arg.Any<JClassLocalRef>(), methodId, Arg.Any<ReadOnlyValPtr<JValue>>()).Returns(localRef);
 
 		JLocalObject? result = ClassNameHelper.GetClassName(primitiveMetadata.ClassName) switch
 		{
@@ -339,11 +338,11 @@ internal static class TestUtilities
 			],
 			_ => [],
 		};
-	public static Expression<Predicate<ReadOnlyValPtr<JValueWrapper>>> GetArgsPtr(IObject[] args)
+	public static Expression<Predicate<ReadOnlyValPtr<JValue>>> GetArgsPtr(IObject[] args)
 	{
-		Func<ReadOnlyValPtr<JValueWrapper>, Boolean> f = ptr =>
+		Func<ReadOnlyValPtr<JValue>, Boolean> f = ptr =>
 		{
-			using IReadOnlyFixedContext<JValueWrapper>.IDisposable ctx = ptr.GetUnsafeFixedContext(args.Length);
+			using IReadOnlyFixedContext<JValue>.IDisposable ctx = ptr.GetUnsafeFixedContext(args.Length);
 			Span<Byte> byteSpan = stackalloc Byte[JValue.Size];
 			for (Int32 i = 0; i < args.Length; i++)
 			{
@@ -354,9 +353,9 @@ internal static class TestUtilities
 			}
 			return true;
 		};
-		ParameterExpression parameter = Expression.Parameter(typeof(ReadOnlyValPtr<JValueWrapper>), "ptr");
+		ParameterExpression parameter = Expression.Parameter(typeof(ReadOnlyValPtr<JValue>), "ptr");
 		Expression body = Expression.Invoke(Expression.Constant(f), parameter);
-		return Expression.Lambda<Predicate<ReadOnlyValPtr<JValueWrapper>>>(body, parameter);
+		return Expression.Lambda<Predicate<ReadOnlyValPtr<JValue>>>(body, parameter);
 	}
 	private static JArrayObject<TElement> CreateArray<TElement>(IEnvironment env, Int32 length, Boolean withInitial,
 		TElement? initial) where TElement : IDataType<TElement>

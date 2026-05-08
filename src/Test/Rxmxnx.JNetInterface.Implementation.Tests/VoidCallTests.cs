@@ -125,12 +125,11 @@ public sealed class VoidCallTests
 		proxyEnv.Received(isStatic ? 1 : 0)
 		        .GetStaticMethodId(Arg.Any<JClassLocalRef>(), namePtr, Arg.Any<ReadOnlyValPtr<Byte>>());
 
-		proxyEnv.Received(isInstance ? 1 : 0)
-		        .CallVoidMethod(localRef, methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>());
+		proxyEnv.Received(isInstance ? 1 : 0).CallVoidMethod(localRef, methodId, Arg.Any<ReadOnlyValPtr<JValue>>());
 		proxyEnv.Received(isNonVirtual ? 1 : 0).CallNonVirtualVoidMethod(
-			localRef, Arg.Any<JClassLocalRef>(), methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>());
+			localRef, Arg.Any<JClassLocalRef>(), methodId, Arg.Any<ReadOnlyValPtr<JValue>>());
 		proxyEnv.Received(isStatic ? 1 : 0)
-		        .CallStaticVoidMethod(Arg.Any<JClassLocalRef>(), methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>());
+		        .CallStaticVoidMethod(Arg.Any<JClassLocalRef>(), methodId, Arg.Any<ReadOnlyValPtr<JValue>>());
 
 		foreach (IObject obj in args)
 			(obj as IDisposable)?.Dispose();

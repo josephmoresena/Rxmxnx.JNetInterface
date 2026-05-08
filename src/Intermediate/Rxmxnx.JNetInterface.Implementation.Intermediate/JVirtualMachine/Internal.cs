@@ -1,9 +1,5 @@
 namespace Rxmxnx.JNetInterface;
 
-#if !PACKAGE
-[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
-                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
-#endif
 public partial class JVirtualMachine
 {
 	/// <summary>
@@ -32,7 +28,7 @@ public partial class JVirtualMachine
 	/// <returns>
 	/// The <see cref="IEnvironment"/> instance referenced by <paramref name="envRef"/>.
 	/// </returns>
-	internal JEnvironment GetEnvironment(JEnvironmentRef envRef) => this._cache.ThreadCache.Get(envRef, out _);
+	internal JEnvironment GetEnvironment(JEnvironmentRef envRef) => this._core.ThreadCache.Get(envRef, out _);
 
 	/// <summary>
 	/// Retrieves the <see cref="IInvokedVirtualMachine"/> instance referenced by <paramref name="reference"/>.
@@ -45,7 +41,7 @@ public partial class JVirtualMachine
 		out IEnvironment env)
 	{
 		JVirtualMachine vm = ReferenceCache.Instance.Get(reference, out _, true);
-		env = vm._cache.ThreadCache.Get(envRef, out _);
+		env = vm._core.ThreadCache.Get(envRef, out _);
 		if (vm is IInvokedVirtualMachine invoked) return invoked;
 		return new Invoked(vm);
 	}
@@ -55,14 +51,9 @@ public partial class JVirtualMachine
 	/// <param name="vmRef">A <see cref="JVirtualMachineRef"/> reference.</param>
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 	/// <param name="thread">A <see cref="Thread"/> instance.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal static void DetachCurrentThread(JVirtualMachineRef vmRef, JEnvironmentRef envRef, Thread thread)
-	{
-		ImplementationValidationUtilities.ThrowIfDifferentThread(envRef, thread);
-		JVirtualMachine? vm = ReferenceCache.Instance.Get(vmRef);
-		JResult result = vm?.GetInvokeInterface().DetachCurrentThread(vm._cache.Reference) ??
-			JResult.DetachedThreadError;
-		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
-	}
+		=> VirtualMachineCore.DetachCurrentThread(ReferenceCache.Instance.Get(vmRef)?._core, envRef, thread);
 	/// <summary>
 	/// Removes the <see cref="IEnvironment"/> instance referenced by <paramref name="envRef"/>
 	/// into the <see cref="IVirtualMachine"/> referenced by <paramref name="vmRef"/>.
@@ -72,7 +63,7 @@ public partial class JVirtualMachine
 	internal static void RemoveEnvironment(JVirtualMachineRef vmRef, JEnvironmentRef envRef)
 	{
 		JVirtualMachine? vm = ReferenceCache.Instance.Get(vmRef);
-		vm?._cache.ThreadCache.Remove(envRef);
+		vm?._core.ThreadCache.Remove(envRef);
 	}
 	/// <summary>
 	/// Indicates whether the class for <paramref name="hash"/> is a main class.

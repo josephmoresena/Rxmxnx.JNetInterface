@@ -6,6 +6,8 @@ namespace Rxmxnx.JNetInterface.Internal;
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
                  Justification = CommonConstants.NoMethodOverloadingJustification)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
 internal abstract partial class VirtualMachineCore : GlobalMainClasses
 {
@@ -29,6 +31,42 @@ internal abstract partial class VirtualMachineCore : GlobalMainClasses
 	{
 		this.VirtualMachine = host.Value;
 		this.Reference = vmRef;
+	}
+
+	/// <summary>
+	/// Retrieves managed <see cref="InvokeInterface"/> reference from current instance.
+	/// </summary>
+	/// <returns>A managed <see cref="InvokeInterface"/> reference from current instance.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public unsafe ref readonly InvokeInterface GetInvokeInterface()
+		=> ref *(InvokeInterface*)this.Reference.InterfacePointer;
+
+	/// <inheritdoc cref="IVirtualMachineHost.GetEnv(out JEnvironmentRef, Int32)"/>
+	public JResult GetEnv(out JEnvironmentRef envRef, Int32 jniVersion)
+	{
+		ref readonly InvokeInterface invoke = ref this.GetInvokeInterface();
+		return invoke.GetEnv(this.Reference, out envRef, (Int32)JRuntimeVersion.SEd2);
+	}
+	/// <inheritdoc cref="IVirtualMachineHost.AttachThread(Boolean, VirtualMachineArgumentValue, out JEnvironmentRef)"/>
+	public JResult AttachThread(Boolean isDaemon, VirtualMachineArgumentValue arg, out JEnvironmentRef envRef)
+	{
+		ref readonly InvokeInterface invoke = ref this.GetInvokeInterface();
+		return !isDaemon ?
+			invoke.AttachCurrentThread(this.Reference, out envRef, in arg) :
+			invoke.AttachCurrentThreadAsDaemon(this.Reference, out envRef, in arg);
+	}
+
+	/// <summary>
+	/// Detaches current thread from <see cref="IVirtualMachine"/> referenced by <paramref name="core"/>.
+	/// </summary>
+	/// <param name="core">A <see cref="VirtualMachineCore"/> reference.</param>
+	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
+	/// <param name="thread">A <see cref="Thread"/> instance.</param>
+	public static void DetachCurrentThread(VirtualMachineCore? core, JEnvironmentRef envRef, Thread thread)
+	{
+		ImplementationValidationUtilities.ThrowIfDifferentThread(envRef, thread);
+		JResult result = core?.GetInvokeInterface().DetachCurrentThread(core.Reference) ?? JResult.DetachedThreadError;
+		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 	}
 }
 

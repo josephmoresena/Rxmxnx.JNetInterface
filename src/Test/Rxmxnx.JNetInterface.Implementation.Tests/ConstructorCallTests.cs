@@ -42,7 +42,7 @@ public sealed class ConstructorCallTests
 			proxyEnv.Received(1).GetMethodId(classRef, namePtr, Arg.Any<ReadOnlyValPtr<Byte>>());
 			proxyEnv.Received(0).GetStaticMethodId(classRef, namePtr, Arg.Any<ReadOnlyValPtr<Byte>>());
 
-			proxyEnv.Received(1).NewObject(classRef, methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>());
+			proxyEnv.Received(1).NewObject(classRef, methodId, Arg.Any<ReadOnlyValPtr<JValue>>());
 
 			proxyEnv.ClearReceivedCalls();
 			proxyEnv.VirtualMachine.ClearReceivedCalls();
@@ -55,7 +55,7 @@ public sealed class ConstructorCallTests
 			proxyEnv.Received(0).GetMethodId(classRef, namePtr, Arg.Any<ReadOnlyValPtr<Byte>>());
 			proxyEnv.Received(0).GetStaticMethodId(classRef, namePtr, Arg.Any<ReadOnlyValPtr<Byte>>());
 
-			proxyEnv.Received(1).NewObject(classRef, methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>());
+			proxyEnv.Received(1).NewObject(classRef, methodId, Arg.Any<ReadOnlyValPtr<JValue>>());
 
 			foreach (IObject obj in args)
 				(obj as IDisposable)?.Dispose();
