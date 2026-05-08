@@ -27,6 +27,21 @@ internal abstract partial class MainClasses
 	/// Set main class.
 	/// </summary>
 	/// <param name="mainClasses">Main classes dictionary.</param>
+	/// <param name="typeMetadata">A <see cref="JDataTypeMetadata"/> instance.</param>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	private static void AppendMainClass(IDictionary<String, JDataTypeMetadata> mainClasses,
+		JDataTypeMetadata typeMetadata)
+	{
+		if (mainClasses.ContainsKey(typeMetadata.Hash)) return;
+		mainClasses.TryAdd(typeMetadata.Hash, typeMetadata);
+		MainClasses.AppendMainClass(mainClasses, typeMetadata as JReferenceTypeMetadata);
+	}
+	/// <summary>
+	/// Set main class.
+	/// </summary>
+	/// <param name="mainClasses">Main classes dictionary.</param>
 	/// <param name="typeMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]

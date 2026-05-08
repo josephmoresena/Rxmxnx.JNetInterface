@@ -343,14 +343,18 @@ internal static partial class MetadataHelper
 #endif
 	public static Boolean IsCompileCompliant<TDataType>() where TDataType : IDataType
 	{
+#if !ANDROID
 		if (JavaStandardFeature.IsFixedRuntimeVersion && TDataType.Since is JRuntimeVersion.Undefined)
 			return false; // Datatype is not compatible with Java Standard Edition.
+#endif
 		if (AndroidFeature.IsFixedAndroid && TDataType.AndroidApiLevel == -1)
 			return false; // Datatype is not compatible with Android Runtime.
 		if (AndroidFeature.ApiLevel is { } apiLevel)
 			return apiLevel >= TDataType.AndroidApiLevel;
+#if !ANDROID
 		if (JavaStandardFeature.GetRuntimeVersion() is { } jreVersion)
 			return jreVersion >= TDataType.Since;
+#endif
 		return true;
 	}
 }

@@ -106,11 +106,13 @@ internal abstract class LocalMainClasses : MainClasses<JClassObject>
 			if (this.Version != (Int32)JRuntimeVersion.J6)
 				throw new InvalidOperationException(resource.AndroidRuntimeRequired);
 		}
+#if !ANDROID
 		else if (JavaStandardFeature.GetInterfaceVersion() is { } jniVersion && jniVersion > this.Version)
 		{
 			// If fixed runtime version, JNI version should be compatible with the fixed JNI version.
 			throw new InvalidOperationException(resource.InvalidInterfaceVersion(this.Version, jniVersion));
 		}
+#endif
 		return this.Version >= NativeInterface.RequiredVersion; // Avoid instantiation if unsupported version.
 	}
 

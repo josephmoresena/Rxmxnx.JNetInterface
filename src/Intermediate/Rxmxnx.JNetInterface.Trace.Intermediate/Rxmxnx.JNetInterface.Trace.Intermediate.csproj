@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <Import Project="..\Intermediate.Library.props"/>
+    <Import Project="..\..\Mobile.Library.props"/>
 
     <ItemGroup>
         <Using Include="System.Diagnostics"/>

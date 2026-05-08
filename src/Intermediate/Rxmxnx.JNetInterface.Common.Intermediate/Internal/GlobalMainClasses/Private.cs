@@ -121,9 +121,11 @@ internal partial class GlobalMainClasses
 			return apiLevel >= 0 && AndroidHelper.ApiLevel >= apiLevel;
 		// If no running on Android, avoid to load classes with undefined version.
 		if (sinceVersion is JRuntimeVersion.Undefined) return false;
+#if !ANDROID
 		// If fixed JRE version, avoid to check the JRE version.
 		if (JavaStandardFeature.GetRuntimeVersion() is { } jreVersion && jreVersion >= sinceVersion)
 			return true;
+#endif
 		// Check java.specification.version property.
 		this._version ??= loader.GetVersion(this.SystemObject.As<JClassLocalRef>(), true);
 		return sinceVersion < this._version;

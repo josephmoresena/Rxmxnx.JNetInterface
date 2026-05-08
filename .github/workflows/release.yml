@@ -18,6 +18,11 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.x
+      - name: Install WebAssembly and Android Workload
+        shell: bash
+        run: |
+          dotnet workload install wasm-tools wasm-tools-net9 wasm-tools-net8 wasm-tools-net7 android
+          dotnet workload update
       - name: Setup Tree
         run: sudo apt-get install tree unzip --assume-yes
       - name: Extract public key

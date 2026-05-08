@@ -88,17 +88,7 @@ public partial class JVirtualMachine
 #if !NET8_0_OR_GREATER
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 #endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void SetMainClass<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
-	{
-		if (JavaStandardFeature.IsFixedRuntimeVersion && TReference.Since is JRuntimeVersion.Undefined)
-			return; // Datatype is not compatible with Java Standard Edition.
-		if (AndroidFeature.IsFixedAndroid && TReference.AndroidApiLevel == -1)
-			return; // Datatype is not compatible with Android Runtime.
-		if (AndroidFeature.ApiLevel is { } apiLevel && apiLevel < TReference.AndroidApiLevel)
-			return; // Fixed Android API level doesn't support the type. 
-		if (JavaStandardFeature.GetRuntimeVersion() is { } jreVersion && jreVersion < TReference.Since)
-			return; // Fixed Java runtime version doesn't support the type.
-		JDataTypeMetadata typeMetadata = MetadataHelper.GetExactMetadata<TReference>();
-		MainClasses.AppendMainClass(JVirtualMachine.userMainClasses, typeMetadata);
-	}
+		=> MainClasses.SetMainClass<TReference>(JVirtualMachine.userMainClasses);
 }

@@ -13,7 +13,11 @@ internal static class AndroidFeature
 	/// <summary>
 	/// Indicates whether the current execution is fixed to Android runtime.
 	/// </summary>
+#if !ANDROID
 	public static Boolean IsFixedAndroid => false;
+#else
+	public static Boolean IsFixedAndroid => true;
+#endif
 	/// <summary>
 	/// Retrieves the fixed API level.
 	/// </summary>

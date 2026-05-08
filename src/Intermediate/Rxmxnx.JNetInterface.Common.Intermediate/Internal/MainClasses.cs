@@ -103,19 +103,33 @@ internal abstract partial class MainClasses
 		return mainClasses;
 	}
 	/// <summary>
-	/// Set main class.
+	/// Sets <typeparamref name="TReference"/> as main class.
 	/// </summary>
+	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
 	/// <param name="mainClasses">Main classes dictionary.</param>
-	/// <param name="typeMetadata">A <see cref="JDataTypeMetadata"/> instance.</param>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public static void AppendMainClass(IDictionary<String, JDataTypeMetadata> mainClasses,
-		JDataTypeMetadata typeMetadata)
+#if !NET8_0_OR_GREATER
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
+	public static void SetMainClass<TReference>(IDictionary<String, JDataTypeMetadata> mainClasses)
+		where TReference : JReferenceObject, IReferenceType<TReference>
 	{
-		if (mainClasses.ContainsKey(typeMetadata.Hash)) return;
-		mainClasses.TryAdd(typeMetadata.Hash, typeMetadata);
-		MainClasses.AppendMainClass(mainClasses, typeMetadata as JReferenceTypeMetadata);
+#if !ANDROID
+		if (JavaStandardFeature.IsFixedRuntimeVersion && TReference.Since is JRuntimeVersion.Undefined)
+			return; // Datatype is not compatible with Java Standard Edition.
+#endif
+		if (AndroidFeature.IsFixedAndroid && TReference.AndroidApiLevel == -1)
+			return; // Datatype is not compatible with Android Runtime.
+		if (AndroidFeature.ApiLevel is { } apiLevel && apiLevel < TReference.AndroidApiLevel)
+			return; // Fixed Android API level doesn't support the type. 
+#if !ANDROID
+		if (JavaStandardFeature.GetRuntimeVersion() is { } jreVersion && jreVersion < TReference.Since)
+			return; // Fixed Java runtime version doesn't support the type.
+#endif
+		JDataTypeMetadata typeMetadata = MetadataHelper.GetExactMetadata<TReference>();
+		MainClasses.AppendMainClass(mainClasses, typeMetadata);
 	}
 }
 

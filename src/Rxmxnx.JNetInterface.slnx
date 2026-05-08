@@ -36,6 +36,7 @@
         <File Path="..\README.md"/>
         <File Path="..\ZipAndClean.ps1"/>
         <File Path="Library.props"/>
+        <File Path="Mobile.Library.props"/>
         <File Path="PInvoke.Reference.props"/>
     </Folder>
     <Folder Name="/Global/Documentation/">

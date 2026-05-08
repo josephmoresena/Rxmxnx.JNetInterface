@@ -148,10 +148,13 @@ jobs:
           winget install Microsoft.DotNet.SDK.7 --architecture x64 --silent --force --disable-interactivity --accept-source-agreements
           winget install Microsoft.DotNet.SDK.8 --architecture x64 --silent --force --disable-interactivity --accept-source-agreements
           winget install Microsoft.DotNet.SDK.9 --architecture x64 --silent --force --disable-interactivity --accept-source-agreements
-          winget install Microsoft.DotNet.SDK.9 --architecture x64 --silent --force --disable-interactivity --accept-source-agreements
           winget install Microsoft.DotNet.SDK.10 --architecture x64 --silent --force --disable-interactivity --accept-source-agreements
-
+      - name: Install WebAssembly and Android Workload
+        shell: bash
+        run: |
+          dotnet workload install wasm-tools wasm-tools-net9 wasm-tools-net8 wasm-tools-net7 android
           dotnet workload update
+
       - name: Remove ApplicationTest
         if: inputs.run_tests == true
         shell: pwsh
