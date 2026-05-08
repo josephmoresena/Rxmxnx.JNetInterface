@@ -28,6 +28,7 @@ jobs:
       JNETINTERFACE_ONLY_NATIVE_TEST: ${{ inputs.package_version != '' }}
       JNETINTERFACE_JNI_CHECK: false
       PackageVersion: ${{ inputs.package_version }}
+      NoAndroid: "True"
     steps:
       - uses: actions/checkout@v5
         with:
@@ -165,15 +166,15 @@ jobs:
         run: |
           dotnet restore src --ignore-failed-sources
           dotnet restore src/Test/Proxies/Native/JvmProxy.NativeProxy.slnx
-          dotnet build src /p:MultipleFrameworkTest=true /p:NoAndroid=true --no-restore --configuration Release --disable-build-servers /nr:false /maxcpucount:1
+          dotnet build src /p:MultipleFrameworkTest=true --no-restore --configuration Release --disable-build-servers /nr:false /maxcpucount:1
       - name: Run x86 tests
         if: inputs.run_tests == true && runner.os == 'Windows'
         run: |
-          dotnet test src /p:MultipleFrameworkTest=true /p:NoAndroid=true --no-build --no-restore --configuration Release  --logger "console;verbosity=detailed" --settings src\Test\x86.runsettings
+          dotnet test src /p:MultipleFrameworkTest=true --no-build --no-restore --configuration Release  --logger "console;verbosity=detailed" --settings src\Test\x86.runsettings
       - name: Run tests
         if: inputs.run_tests == true
         run: |
-          dotnet test src /p:MultipleFrameworkTest=true /p:NoAndroid=true --no-build --no-restore --configuration Release  --logger "console;verbosity=detailed"
+          dotnet test src /p:MultipleFrameworkTest=true --no-build --no-restore --configuration Release  --logger "console;verbosity=detailed"
 
       - name: Publish launcher
         working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest
