@@ -14,4 +14,10 @@
         <CheckEolWorkloads>false</CheckEolWorkloads>
     </PropertyGroup>
 
+    <ItemGroup>
+        <Using Remove="Android.App"/>
+        <Using Remove="Android.Widget"/>
+        <Using Remove="Android.OS.Bundle" Alias="Bundle"/>
+    </ItemGroup>
+
 </Project>

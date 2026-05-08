@@ -100,12 +100,14 @@ internal abstract class LocalMainClasses : MainClasses<JClassObject>
 	private Boolean InstantiationCheck()
 	{
 		IMessageResource resource = IMessageResource.GetInstance();
+#pragma warning disable S1066
 		if (AndroidFeature.IsFixedAndroid)
 		{
 			// If fixed on Android, JNI should be 0x00010006
 			if (this.Version != (Int32)JRuntimeVersion.J6)
 				throw new InvalidOperationException(resource.AndroidRuntimeRequired);
 		}
+#pragma warning restore S1066
 #if !ANDROID
 		else if (JavaStandardFeature.GetInterfaceVersion() is { } jniVersion && jniVersion > this.Version)
 		{
