@@ -73,13 +73,13 @@ public partial class JVirtualMachine : IVirtualMachineHost, ITypeManager
 
 	JResult IVirtualMachineHost.GetEnv(out JEnvironmentRef envRef, Int32 jniVersion)
 	{
-		ref readonly InvokeInterface invoke = ref this._cache.GetInvokeInterface();
+		ref readonly InvokeInterface invoke = ref this.GetInvokeInterface();
 		return invoke.GetEnv(this.Reference, out envRef, (Int32)JRuntimeVersion.SEd2);
 	}
 	JResult IVirtualMachineHost.AttachThread(Boolean isDaemon, VirtualMachineArgumentValue arg,
 		out JEnvironmentRef envRef)
 	{
-		ref readonly InvokeInterface invoke = ref this._cache.GetInvokeInterface();
+		ref readonly InvokeInterface invoke = ref this.GetInvokeInterface();
 		return !isDaemon ?
 			invoke.AttachCurrentThread(this._cache.Reference, out envRef, in arg) :
 			invoke.AttachCurrentThreadAsDaemon(this._cache.Reference, out envRef, in arg);

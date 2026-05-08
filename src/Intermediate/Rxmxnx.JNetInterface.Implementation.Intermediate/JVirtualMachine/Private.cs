@@ -15,11 +15,7 @@ public partial class JVirtualMachine
 	/// <summary>
 	/// <see cref="JVirtualMachine"/> cache.
 	/// </summary>
-	private readonly VirtualMachineCache _cache;
-	/// <summary>
-	/// Indicates whether current instance is disposable.
-	/// </summary>
-	public virtual Boolean IsDisposable => false;
+	private readonly VirtualMachineCore<JEnvironment> _cache;
 
 	/// <summary>
 	/// Constructor.
@@ -29,9 +25,16 @@ public partial class JVirtualMachine
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="cache">A <see cref="VirtualMachineCache"/> reference.</param>
-	private JVirtualMachine(VirtualMachineCache cache) => this._cache = cache;
+	/// <param name="cache">A <see cref="VirtualMachineCore{JEnvironment}"/> reference.</param>
+	private JVirtualMachine(VirtualMachineCore<JEnvironment> cache) => this._cache = cache;
 
+	/// <summary>
+	/// Retrieves managed <see cref="InvokeInterface"/> reference from current instance.
+	/// </summary>
+	/// <returns>A managed <see cref="InvokeInterface"/> reference from current instance.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private unsafe ref readonly InvokeInterface GetInvokeInterface()
+		=> ref *(InvokeInterface*)this._cache.Reference.InterfacePointer;
 	/// <summary>
 	/// Attaches current thread to VM.
 	/// </summary>

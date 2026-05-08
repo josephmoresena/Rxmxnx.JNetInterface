@@ -59,7 +59,7 @@ public partial class JVirtualMachine
 	{
 		ImplementationValidationUtilities.ThrowIfDifferentThread(envRef, thread);
 		JVirtualMachine? vm = ReferenceCache.Instance.Get(vmRef);
-		JResult result = vm?._cache.GetInvokeInterface().DetachCurrentThread(vm._cache.Reference) ??
+		JResult result = vm?.GetInvokeInterface().DetachCurrentThread(vm._cache.Reference) ??
 			JResult.DetachedThreadError;
 		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 	}

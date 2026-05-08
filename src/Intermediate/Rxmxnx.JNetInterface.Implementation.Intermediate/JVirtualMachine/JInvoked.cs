@@ -45,7 +45,7 @@ public partial class JVirtualMachine
 			this._isDisposed.Value = true;
 			this._cache.ClearCache();
 
-			JResult result = this._cache.GetInvokeInterface().DestroyVirtualMachine(this._cache.Reference);
+			JResult result = this.GetInvokeInterface().DestroyVirtualMachine(this._cache.Reference);
 			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 			JVirtualMachine.RemoveVirtualMachine(this._cache.Reference);
 		}

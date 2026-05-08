@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
-/// This class stores cache for a <see cref="IEnvironment"/> instance.
+/// Core object for a <see cref="IEnvironment"/> instance.
 /// </summary>
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,

@@ -5,7 +5,7 @@ partial class JEnvironment
 	/// <summary>
 	/// This class implements <see cref="IThread"/> interface.
 	/// </summary>
-	internal sealed class JThread : JEnvironment, INativeThread.IOwned
+	internal sealed class JThread : JEnvironment, IThread
 	{
 		/// <summary>
 		/// Creation argument.
