@@ -1,3 +1,5 @@
+// ReSharper disable ConvertIfStatementToReturnStatement
+
 namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 
 /// <summary>
@@ -72,9 +74,13 @@ internal readonly unsafe partial struct ReferenceFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JBoolean IsSameObject(JEnvironmentRef envRef, JObjectLocalRef localRef0, JObjectLocalRef localRef1)
-		=> SystemInfo.IsWindows ?
-			this._isSameObject.Windows(envRef, localRef0, localRef1) :
-			this._isSameObject.Unix(envRef, localRef0, localRef1);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._isSameObject.Windows(envRef, localRef0, localRef1);
+#endif
+		return this._isSameObject.Unix(envRef, localRef0, localRef1);
+	}
 	/// <summary>
 	/// <c>EnsureLocalCapacity</c>.
 	/// </summary>
@@ -83,7 +89,11 @@ internal readonly unsafe partial struct ReferenceFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult EnsureLocalCapacity(JEnvironmentRef envRef, Int32 capacity)
-		=> SystemInfo.IsWindows ?
-			this._ensureLocalCapacity.Windows(envRef, capacity) :
-			this._ensureLocalCapacity.Unix(envRef, capacity);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._ensureLocalCapacity.Windows(envRef, capacity);
+#endif
+		return this._ensureLocalCapacity.Unix(envRef, capacity);
+	}
 }

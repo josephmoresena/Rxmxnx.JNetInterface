@@ -1,3 +1,5 @@
+// ReSharper disable ConvertIfStatementToReturnStatement
+
 namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 
 /// <summary>
@@ -66,9 +68,13 @@ internal readonly unsafe partial struct ClassFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JClassLocalRef DefineClass(JEnvironmentRef envRef, Byte* className, JObjectLocalRef localRef, Byte* buffPtr,
 		Int32 buffSize)
-		=> SystemInfo.IsWindows ?
-			this._defineClass.Windows(envRef, className, localRef, buffPtr, buffSize) :
-			this._defineClass.Unix(envRef, className, localRef, buffPtr, buffSize);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._defineClass.Windows(envRef, className, localRef, buffPtr, buffSize);
+#endif
+		return this._defineClass.Unix(envRef, className, localRef, buffPtr, buffSize);
+	}
 	/// <summary>
 	/// <c>FindClass</c>.
 	/// </summary>
@@ -77,7 +83,13 @@ internal readonly unsafe partial struct ClassFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JClassLocalRef FindClass(JEnvironmentRef envRef, Byte* className)
-		=> SystemInfo.IsWindows ? this._findClass.Windows(envRef, className) : this._findClass.Unix(envRef, className);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._findClass.Windows(envRef, className);
+#endif
+		return this._findClass.Unix(envRef, className);
+	}
 	/// <summary>
 	/// <c>GetSuperClass</c>.
 	/// </summary>
@@ -86,9 +98,13 @@ internal readonly unsafe partial struct ClassFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JClassLocalRef GetSuperclass(JEnvironmentRef envRef, JClassLocalRef classRef)
-		=> SystemInfo.IsWindows ?
-			this._getSuperclass.Windows(envRef, classRef) :
-			this._getSuperclass.Unix(envRef, classRef);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._getSuperclass.Windows(envRef, classRef);
+#endif
+		return this._getSuperclass.Unix(envRef, classRef);
+	}
 	/// <summary>
 	/// <c>GetSuperClass</c>.
 	/// </summary>
@@ -97,7 +113,11 @@ internal readonly unsafe partial struct ClassFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JBoolean IsAssignableFrom(JEnvironmentRef envRef, JClassLocalRef classRef0, JClassLocalRef classRef1)
-		=> SystemInfo.IsWindows ?
-			this._isAssignableFrom.Windows(envRef, classRef0, classRef1) :
-			this._isAssignableFrom.Unix(envRef, classRef0, classRef1);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._isAssignableFrom.Windows(envRef, classRef0, classRef1);
+#endif
+		return this._isAssignableFrom.Unix(envRef, classRef0, classRef1);
+	}
 }

@@ -1,3 +1,5 @@
+// ReSharper disable ConvertIfStatementToReturnStatement
+
 namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 
 /// <summary>
@@ -10,11 +12,13 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 #endif
 internal readonly unsafe struct MonitorFunctionSet
 {
+#if !ANDROID
 	/// <summary>
 	/// Function set for Windows Operating System.
 	/// </summary>
 	[FieldOffset(0)]
 	private readonly Windows _windows;
+#endif
 	/// <summary>
 	/// Function set for Unix-like Operating System.
 	/// </summary>
@@ -29,9 +33,13 @@ internal readonly unsafe struct MonitorFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult MonitorEnter(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> SystemInfo.IsWindows ?
-			this._windows.MonitorEnter(envRef, localRef) :
-			this._unix.MonitorEnter(envRef, localRef);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._windows.MonitorEnter(envRef, localRef);
+#endif
+		return this._unix.MonitorEnter(envRef, localRef);
+	}
 	/// <summary>
 	/// <c>MonitorExit</c>.
 	/// </summary>
@@ -40,10 +48,15 @@ internal readonly unsafe struct MonitorFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult MonitorExit(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> SystemInfo.IsWindows ?
-			this._windows.MonitorExit(envRef, localRef) :
-			this._unix.MonitorExit(envRef, localRef);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._windows.MonitorExit(envRef, localRef);
+#endif
+		return this._unix.MonitorExit(envRef, localRef);
+	}
 
+#if !ANDROID
 	/// <summary>
 	/// Windows function set.
 	/// </summary>
@@ -61,6 +74,7 @@ internal readonly unsafe struct MonitorFunctionSet
 		/// </summary>
 		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JObjectLocalRef, JResult> MonitorExit;
 	}
+#endif
 
 	/// <summary>
 	/// Unix function set.

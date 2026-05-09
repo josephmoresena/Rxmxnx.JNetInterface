@@ -12,12 +12,14 @@ internal readonly partial struct ObjectFunctionSet
 #endif
 	private readonly unsafe struct IsInstanceOfPtr
 	{
+#if !ANDROID
 		/// <summary>
 		/// Function pointer for Windows Operating System.
 		/// </summary>
 		[FieldOffset(0)]
 		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JBoolean>
 			Windows;
+#endif
 		/// <summary>
 		/// Function pointer for Unix-like Operating System.
 		/// </summary>

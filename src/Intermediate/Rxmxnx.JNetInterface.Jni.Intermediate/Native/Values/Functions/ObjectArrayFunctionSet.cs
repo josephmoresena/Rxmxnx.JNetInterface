@@ -1,3 +1,5 @@
+// ReSharper disable ConvertIfStatementToReturnStatement
+
 namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 
 /// <summary>
@@ -10,11 +12,13 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 #endif
 internal readonly unsafe struct ObjectArrayFunctionSet
 {
+#if !ANDROID
 	/// <summary>
 	/// Function set for Windows Operating System.
 	/// </summary>
 	[FieldOffset(0)]
 	private readonly Windows _windows;
+#endif
 	/// <summary>
 	/// Function set for Unix-like Operating System.
 	/// </summary>
@@ -30,9 +34,13 @@ internal readonly unsafe struct ObjectArrayFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JObjectArrayLocalRef NewObjectArray(JEnvironmentRef envRef, Int32 length, JClassLocalRef classRef,
 		JObjectLocalRef localRef)
-		=> SystemInfo.IsWindows ?
-			this._windows.NewObjectArray(envRef, length, classRef, localRef) :
-			this._unix.NewObjectArray(envRef, length, classRef, localRef);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._windows.NewObjectArray(envRef, length, classRef, localRef);
+#endif
+		return this._unix.NewObjectArray(envRef, length, classRef, localRef);
+	}
 	/// <summary>
 	/// <c>GetObjectArrayElement</c>.
 	/// </summary>
@@ -41,9 +49,13 @@ internal readonly unsafe struct ObjectArrayFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JObjectLocalRef GetObjectArrayElement(JEnvironmentRef envRef, JObjectArrayLocalRef arrayRef, Int32 index)
-		=> SystemInfo.IsWindows ?
-			this._windows.GetObjectArrayElement(envRef, arrayRef, index) :
-			this._unix.GetObjectArrayElement(envRef, arrayRef, index);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._windows.GetObjectArrayElement(envRef, arrayRef, index);
+#endif
+		return this._unix.GetObjectArrayElement(envRef, arrayRef, index);
+	}
 	/// <summary>
 	/// <c>SetObjectArrayElement</c>.
 	/// </summary>
@@ -54,12 +66,17 @@ internal readonly unsafe struct ObjectArrayFunctionSet
 	public void SetObjectArrayElement(JEnvironmentRef envRef, JObjectArrayLocalRef arrayRef, Int32 index,
 		JObjectLocalRef localRef)
 	{
+#if !ANDROID
 		if (SystemInfo.IsWindows)
+		{
 			this._windows.SetObjectArrayElement(envRef, arrayRef, index, localRef);
-		else
-			this._unix.SetObjectArrayElement(envRef, arrayRef, index, localRef);
+			return;
+		}
+#endif
+		this._unix.SetObjectArrayElement(envRef, arrayRef, index, localRef);
 	}
 
+#if !ANDROID
 	/// <summary>
 	/// Windows function set.
 	/// </summary>
@@ -85,6 +102,7 @@ internal readonly unsafe struct ObjectArrayFunctionSet
 		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JObjectArrayLocalRef, Int32, JObjectLocalRef, void
 			> SetObjectArrayElement;
 	}
+#endif
 
 	/// <summary>
 	/// Unix function set.

@@ -1,3 +1,5 @@
+// ReSharper disable ConvertIfStatementToReturnStatement
+
 namespace Rxmxnx.JNetInterface.Native.Values;
 
 /// <summary>
@@ -113,7 +115,13 @@ internal readonly unsafe partial struct NativeInterface : INativeInterface<Nativ
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Int32 GetVersion(JEnvironmentRef envRef)
-		=> SystemInfo.IsWindows ? this._getVersion.Windows(envRef) : this._getVersion.Unix(envRef);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._getVersion.Windows(envRef);
+#endif
+		return this._getVersion.Unix(envRef);
+	}
 	/// <summary>
 	/// <c>ExceptionCheck</c>.
 	/// </summary>
@@ -122,7 +130,13 @@ internal readonly unsafe partial struct NativeInterface : INativeInterface<Nativ
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JBoolean ExceptionCheck(JEnvironmentRef envRef)
-		=> SystemInfo.IsWindows ? this._exceptionCheck.Windows(envRef) : this._exceptionCheck.Unix(envRef);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._exceptionCheck.Windows(envRef);
+#endif
+		return this._exceptionCheck.Unix(envRef);
+	}
 	/// <summary>
 	/// <c>GetVirtualMachine</c>.
 	/// </summary>
@@ -134,9 +148,11 @@ internal readonly unsafe partial struct NativeInterface : INativeInterface<Nativ
 	{
 		fixed (JVirtualMachineRef* vmRefPtr = &vmRef)
 		{
-			return SystemInfo.IsWindows ?
-				this._getVirtualMachine.Windows(envRef, vmRefPtr) :
-				this._getVirtualMachine.Unix(envRef, vmRefPtr);
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+				return this._getVirtualMachine.Windows(envRef, vmRefPtr);
+#endif
+			return this._getVirtualMachine.Unix(envRef, vmRefPtr);
 		}
 	}
 }

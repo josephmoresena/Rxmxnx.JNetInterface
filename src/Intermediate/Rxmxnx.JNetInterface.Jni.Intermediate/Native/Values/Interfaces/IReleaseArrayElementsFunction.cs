@@ -15,12 +15,14 @@ internal interface IReleaseArrayElementsFunction
 #endif
 	protected readonly unsafe struct ReleaseArrayElementsFunction
 	{
+#if !ANDROID
 		/// <summary>
 		/// Function pointer for Windows Operating System.
 		/// </summary>
 		[FieldOffset(0)]
 		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JArrayLocalRef, void*, JReleaseMode, void>
 			Windows;
+#endif
 		/// <summary>
 		/// Function pointer for Unix-like Operating System.
 		/// </summary>

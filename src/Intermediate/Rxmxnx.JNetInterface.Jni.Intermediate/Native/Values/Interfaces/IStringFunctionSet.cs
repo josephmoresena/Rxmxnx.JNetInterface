@@ -19,11 +19,13 @@ internal unsafe interface IStringFunctionSet
 #endif
 	protected readonly struct StringFunctionSet
 	{
+#if !ANDROID
 		/// <summary>
 		/// Function pointer set for Windows Operating System.
 		/// </summary>
 		[FieldOffset(0)]
 		public readonly Windows Windows;
+#endif
 		/// <summary>
 		/// Function pointer set for Unix-like Operating System.
 		/// </summary>
@@ -31,6 +33,7 @@ internal unsafe interface IStringFunctionSet
 		public readonly Unix Unix;
 	}
 
+#if !ANDROID
 	/// <summary>
 	/// Windows function set.
 	/// </summary>
@@ -54,6 +57,7 @@ internal unsafe interface IStringFunctionSet
 		/// </summary>
 		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JStringLocalRef, void*, void> ReleaseChars;
 	}
+#endif
 
 	/// <summary>
 	/// Unix function set.

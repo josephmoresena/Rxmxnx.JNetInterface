@@ -1,3 +1,5 @@
+// ReSharper disable ConvertIfStatementToReturnStatement
+
 namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 
 /// <summary>
@@ -32,9 +34,11 @@ internal readonly unsafe struct
 	{
 		fixed (JBoolean* isCopyPtr = &isCopy)
 		{
-			return (ValPtr<TPrimitiveType>)(SystemInfo.IsWindows ?
-				this._function.Windows(envRef, arrayRef.ArrayValue, isCopyPtr) :
-				this._function.Unix(envRef, arrayRef.ArrayValue, isCopyPtr));
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+				return (ValPtr<TPrimitiveType>)this._function.Windows(envRef, arrayRef.ArrayValue, isCopyPtr);
+#endif
+			return (ValPtr<TPrimitiveType>)this._function.Unix(envRef, arrayRef.ArrayValue, isCopyPtr);
 		}
 	}
 }

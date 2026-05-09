@@ -1,3 +1,5 @@
+// ReSharper disable ConvertIfStatementToReturnStatement
+
 namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 
 internal readonly partial struct ReferenceFunctionSet
@@ -12,11 +14,13 @@ internal readonly partial struct ReferenceFunctionSet
 #endif
 	private readonly unsafe struct FrameFunctionSet
 	{
+#if !ANDROID
 		/// <summary>
 		/// Function set for Windows Operating System.
 		/// </summary>
 		[FieldOffset(0)]
 		private readonly Windows _windows;
+#endif
 		/// <summary>
 		/// Function set for Unix-like Operating System.
 		/// </summary>
@@ -31,9 +35,13 @@ internal readonly partial struct ReferenceFunctionSet
 #endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public JResult PushLocalFrame(JEnvironmentRef envRef, Int32 capacity)
-			=> SystemInfo.IsWindows ?
-				this._windows.PushLocalFrame(envRef, capacity) :
-				this._unix.PushLocalFrame(envRef, capacity);
+		{
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+				return this._windows.PushLocalFrame(envRef, capacity);
+#endif
+			return this._unix.PushLocalFrame(envRef, capacity);
+		}
 		/// <summary>
 		/// <c>PopLocalFrame</c>.
 		/// </summary>
@@ -42,10 +50,15 @@ internal readonly partial struct ReferenceFunctionSet
 #endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public JObjectLocalRef PopLocalFrame(JEnvironmentRef envRef, JObjectLocalRef localRef)
-			=> SystemInfo.IsWindows ?
-				this._windows.PopLocalFrame(envRef, localRef) :
-				this._unix.PopLocalFrame(envRef, localRef);
+		{
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+				return this._windows.PopLocalFrame(envRef, localRef);
+#endif
+			return this._unix.PopLocalFrame(envRef, localRef);
+		}
 
+#if !ANDROID
 		/// <summary>
 		/// Windows function set.
 		/// </summary>
@@ -68,6 +81,7 @@ internal readonly partial struct ReferenceFunctionSet
 			public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JObjectLocalRef, JObjectLocalRef>
 				PopLocalFrame;
 		}
+#endif
 
 		/// <summary>
 		/// Unix function set.

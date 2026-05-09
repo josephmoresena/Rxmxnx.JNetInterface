@@ -1,3 +1,5 @@
+// ReSharper disable ConvertIfStatementToReturnStatement
+
 namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 
 /// <summary>
@@ -27,9 +29,15 @@ internal readonly unsafe struct NewPrimitiveArrayFunction<TArrayRef> : INewPrimi
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TArrayRef NewArray(JEnvironmentRef envRef, Int32 length)
 	{
-		JArrayLocalRef result = SystemInfo.IsWindows ?
-			this._function.Windows(envRef, length) :
-			this._function.Unix(envRef, length);
+		JArrayLocalRef result;
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+		{
+			result = this._function.Windows(envRef, length);
+			return Unsafe.As<JArrayLocalRef, TArrayRef>(ref result);
+		}
+#endif
+		result = this._function.Unix(envRef, length);
 		return Unsafe.As<JArrayLocalRef, TArrayRef>(ref result);
 	}
 }

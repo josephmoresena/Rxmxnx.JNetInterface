@@ -15,11 +15,13 @@ internal interface IGetAccessibleIdFunction
 #endif
 	protected readonly unsafe struct GetAccessibleIdFunction
 	{
+#if !ANDROID
 		/// <summary>
 		/// Function pointer for Windows Operating System.
 		/// </summary>
 		[FieldOffset(0)]
 		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JClassLocalRef, Byte*, Byte*, IntPtr> Windows;
+#endif
 		/// <summary>
 		/// Function pointer for Unix-like Operating System.
 		/// </summary>

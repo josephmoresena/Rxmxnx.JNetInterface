@@ -1,3 +1,5 @@
+// ReSharper disable ConvertIfStatementToReturnStatement
+
 namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 
 /// <summary>
@@ -39,9 +41,13 @@ internal readonly unsafe partial struct StringFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JStringLocalRef NewString(JEnvironmentRef envRef, Char* textPtr, Int32 textLength)
-		=> SystemInfo.IsWindows ?
-			this._newString.Windows(envRef, textPtr, textLength) :
-			this._newString.Unix(envRef, textPtr, textLength);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._newString.Windows(envRef, textPtr, textLength);
+#endif
+		return this._newString.Unix(envRef, textPtr, textLength);
+	}
 	/// <summary>
 	/// <c>NewString</c>.
 	/// </summary>
@@ -50,9 +56,13 @@ internal readonly unsafe partial struct StringFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JStringLocalRef NewStringUtf(JEnvironmentRef envRef, Byte* textPtr)
-		=> SystemInfo.IsWindows ?
-			this._newStringUtf.Windows(envRef, textPtr) :
-			this._newStringUtf.Unix(envRef, textPtr);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._newStringUtf.Windows(envRef, textPtr);
+#endif
+		return this._newStringUtf.Unix(envRef, textPtr);
+	}
 }
 
 /// <summary>
@@ -80,9 +90,13 @@ internal readonly unsafe struct StringFunctionSet<TChar> : IStringFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Int32 GetStringLength(JEnvironmentRef envRef, JStringLocalRef stringRef)
-		=> SystemInfo.IsWindows ?
-			this._functions.Windows.GetLength(envRef, stringRef) :
-			this._functions.Unix.GetLength(envRef, stringRef);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._functions.Windows.GetLength(envRef, stringRef);
+#endif
+		return this._functions.Unix.GetLength(envRef, stringRef);
+	}
 	/// <summary>
 	/// <c>GetStringChars</c>.
 	/// </summary>
@@ -94,9 +108,11 @@ internal readonly unsafe struct StringFunctionSet<TChar> : IStringFunctionSet
 	{
 		fixed (JBoolean* isCopyPtr = &isCopy)
 		{
-			return (ReadOnlyValPtr<TChar>)(SystemInfo.IsWindows ?
-				this._functions.Windows.GetChars(envRef, stringRef, isCopyPtr) :
-				this._functions.Unix.GetChars(envRef, stringRef, isCopyPtr));
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+				return (ReadOnlyValPtr<TChar>)this._functions.Windows.GetChars(envRef, stringRef, isCopyPtr);
+#endif
+			return (ReadOnlyValPtr<TChar>)this._functions.Unix.GetChars(envRef, stringRef, isCopyPtr);
 		}
 	}
 	/// <summary>
@@ -108,9 +124,13 @@ internal readonly unsafe struct StringFunctionSet<TChar> : IStringFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void ReleaseStringChars(JEnvironmentRef envRef, JStringLocalRef stringRef, ReadOnlyValPtr<TChar> chars)
 	{
+#if !ANDROID
 		if (SystemInfo.IsWindows)
+		{
 			this._functions.Windows.ReleaseChars(envRef, stringRef, chars);
-		else
-			this._functions.Unix.ReleaseChars(envRef, stringRef, chars);
+			return;
+		}
+#endif
+		this._functions.Unix.ReleaseChars(envRef, stringRef, chars);
 	}
 }

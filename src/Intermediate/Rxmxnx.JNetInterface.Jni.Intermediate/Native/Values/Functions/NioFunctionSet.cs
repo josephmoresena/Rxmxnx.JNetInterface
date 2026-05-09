@@ -1,3 +1,5 @@
+// ReSharper disable ConvertIfStatementToReturnStatement
+
 namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 
 /// <summary>
@@ -10,11 +12,13 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 #endif
 internal readonly unsafe struct NioFunctionSet
 {
+#if !ANDROID
 	/// <summary>
 	/// Function set for Windows Operating System.
 	/// </summary>
 	[FieldOffset(0)]
 	private readonly Windows _windows;
+#endif
 	/// <summary>
 	/// Function set for Unix-like Operating System.
 	/// </summary>
@@ -29,9 +33,13 @@ internal readonly unsafe struct NioFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JObjectLocalRef NewDirectByteBuffer(JEnvironmentRef envRef, IntPtr buffPtr, Int64 buffSize)
-		=> SystemInfo.IsWindows ?
-			this._windows.NewDirectByteBuffer(envRef, buffPtr, buffSize) :
-			this._unix.NewDirectByteBuffer(envRef, buffPtr, buffSize);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._windows.NewDirectByteBuffer(envRef, buffPtr, buffSize);
+#endif
+		return this._unix.NewDirectByteBuffer(envRef, buffPtr, buffSize);
+	}
 	/// <summary>
 	/// <c>GetDirectBufferAddress</c>.
 	/// </summary>
@@ -40,9 +48,13 @@ internal readonly unsafe struct NioFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public IntPtr GetDirectBufferAddress(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> SystemInfo.IsWindows ?
-			this._windows.GetDirectBufferAddress(envRef, localRef) :
-			this._unix.GetDirectBufferAddress(envRef, localRef);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._windows.GetDirectBufferAddress(envRef, localRef);
+#endif
+		return this._unix.GetDirectBufferAddress(envRef, localRef);
+	}
 	/// <summary>
 	/// <c>GetDirectBufferCapacity</c>.
 	/// </summary>
@@ -51,10 +63,15 @@ internal readonly unsafe struct NioFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Int64 GetDirectBufferCapacity(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> SystemInfo.IsWindows ?
-			this._windows.GetDirectBufferCapacity(envRef, localRef) :
-			this._unix.GetDirectBufferCapacity(envRef, localRef);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._windows.GetDirectBufferCapacity(envRef, localRef);
+#endif
+		return this._unix.GetDirectBufferCapacity(envRef, localRef);
+	}
 
+#if !ANDROID
 	/// <summary>
 	/// Windows function set.
 	/// </summary>
@@ -79,6 +96,7 @@ internal readonly unsafe struct NioFunctionSet
 		/// <remarks>The capacity is the number of elements that the memory region contains.</remarks>
 		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JObjectLocalRef, Int64> GetDirectBufferCapacity;
 	}
+#endif
 
 	/// <summary>
 	/// Unix function set.

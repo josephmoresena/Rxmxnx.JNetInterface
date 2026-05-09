@@ -1,3 +1,5 @@
+// ReSharper disable ConvertIfStatementToReturnStatement
+
 namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 
 /// <summary>
@@ -28,7 +30,11 @@ internal readonly unsafe struct ToReflectedFunction<TAccessible> : IToReflectedF
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JObjectLocalRef ToReflected(JEnvironmentRef envRef, JClassLocalRef classRef, TAccessible accessibleId,
 		JBoolean isStatic)
-		=> SystemInfo.IsWindows ?
-			this._function.Windows(envRef, classRef, accessibleId.Pointer, isStatic) :
-			this._function.Unix(envRef, classRef, accessibleId.Pointer, isStatic);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._function.Windows(envRef, classRef, accessibleId.Pointer, isStatic);
+#endif
+		return this._function.Unix(envRef, classRef, accessibleId.Pointer, isStatic);
+	}
 }

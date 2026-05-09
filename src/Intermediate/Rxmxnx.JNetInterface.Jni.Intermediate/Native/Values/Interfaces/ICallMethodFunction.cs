@@ -11,11 +11,13 @@ internal interface ICallMethodFunction
 	[StructLayout(LayoutKind.Explicit)]
 	protected readonly struct CallMethodFunction
 	{
+#if !ANDROID
 		/// <summary>
 		/// Function pointers for Windows Operating System.
 		/// </summary>
 		[FieldOffset(0)]
 		public readonly Windows Windows;
+#endif
 		/// <summary>
 		/// Function pointers for Unix-like Operating System.
 		/// </summary>
@@ -23,6 +25,7 @@ internal interface ICallMethodFunction
 		public readonly Unix Unix;
 	}
 
+#if !ANDROID
 	/// <summary>
 	/// Windows function set.
 	/// </summary>
@@ -85,6 +88,7 @@ internal interface ICallMethodFunction
 		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, IntPtr, JMethodId, JValue*, JObjectLocalRef>
 			Object;
 	}
+#endif
 
 	/// <summary>
 	/// Unix function set.

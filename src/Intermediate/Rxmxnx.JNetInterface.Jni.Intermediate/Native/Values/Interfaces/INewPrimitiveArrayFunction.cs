@@ -15,11 +15,13 @@ internal interface INewPrimitiveArrayFunction
 #endif
 	protected readonly unsafe struct NewPrimitiveArrayFunction
 	{
+#if !ANDROID
 		/// <summary>
 		/// Function pointer for Windows Operating System.
 		/// </summary>
 		[FieldOffset(0)]
 		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, Int32, JArrayLocalRef> Windows;
+#endif
 		/// <summary>
 		/// Function pointer for Unix-like Operating System.
 		/// </summary>

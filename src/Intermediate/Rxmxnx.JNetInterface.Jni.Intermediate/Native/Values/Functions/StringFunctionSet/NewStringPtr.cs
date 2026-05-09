@@ -12,11 +12,13 @@ internal readonly partial struct StringFunctionSet
 #endif
 	private readonly unsafe struct NewStringPtr
 	{
+#if !ANDROID
 		/// <summary>
 		/// Function pointer for Windows Operating System.
 		/// </summary>
 		[FieldOffset(0)]
 		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, Char*, Int32, JStringLocalRef> Windows;
+#endif
 		/// <summary>
 		/// Function pointer for Unix-like Operating System.
 		/// </summary>

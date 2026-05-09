@@ -1,3 +1,5 @@
+// ReSharper disable ConvertIfStatementToReturnStatement
+
 namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 
 /// <summary>
@@ -67,7 +69,11 @@ internal readonly unsafe partial struct ArrayFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Int32 GetArrayLength(JEnvironmentRef envRef, JArrayLocalRef arrayRef)
-		=> SystemInfo.IsWindows ?
-			this._getArrayLength.Windows(envRef, arrayRef) :
-			this._getArrayLength.Unix(envRef, arrayRef);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._getArrayLength.Windows(envRef, arrayRef);
+#endif
+		return this._getArrayLength.Unix(envRef, arrayRef);
+	}
 }

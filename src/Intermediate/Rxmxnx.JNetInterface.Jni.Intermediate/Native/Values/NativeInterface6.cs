@@ -1,3 +1,5 @@
+// ReSharper disable ConvertIfStatementToReturnStatement
+
 namespace Rxmxnx.JNetInterface.Native.Values;
 
 /// <summary>
@@ -16,11 +18,13 @@ internal readonly unsafe struct NativeInterface6 : INativeInterface<NativeInterf
 	/// <inheritdoc/>
 	public static Int32 RequiredVersion => (Int32)JRuntimeVersion.J6;
 
+#if !ANDROID
 	/// <summary>
 	/// Function set for Windows Operating System.
 	/// </summary>
 	[FieldOffset(0)]
 	private readonly Windows _windows;
+#endif
 	/// <summary>
 	/// Function set for Unix-like Operating System.
 	/// </summary>
@@ -35,9 +39,13 @@ internal readonly unsafe struct NativeInterface6 : INativeInterface<NativeInterf
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JReferenceType GetObjectRefType(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> SystemInfo.IsWindows ?
-			this._windows.GetObjectRefType(envRef, localRef) :
-			this._unix.GetObjectRefType(envRef, localRef);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._windows.GetObjectRefType(envRef, localRef);
+#endif
+		return this._unix.GetObjectRefType(envRef, localRef);
+	}
 
 	/// <summary>
 	/// Information of <see cref="NativeInterface6.GetObjectRefType"/>
@@ -47,6 +55,7 @@ internal readonly unsafe struct NativeInterface6 : INativeInterface<NativeInterf
 		Name = nameof(NativeInterface6.GetObjectRefType), Level = JniSafetyLevels.CriticalSafe,
 	};
 
+#if !ANDROID
 	/// <summary>
 	/// Windows function set.
 	/// </summary>
@@ -66,6 +75,7 @@ internal readonly unsafe struct NativeInterface6 : INativeInterface<NativeInterf
 		/// </summary>
 		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JObjectLocalRef, JReferenceType> GetObjectRefType;
 	}
+#endif
 
 	/// <summary>
 	/// Unix function set.

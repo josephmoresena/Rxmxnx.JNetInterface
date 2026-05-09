@@ -12,11 +12,13 @@ internal readonly partial struct ClassFunctionSet
 #endif
 	private readonly unsafe struct FindClassPtr
 	{
+#if !ANDROID
 		/// <summary>
 		/// Function pointer for Windows Operating System.
 		/// </summary>
 		[FieldOffset(0)]
 		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, Byte*, JClassLocalRef> Windows;
+#endif
 		/// <summary>
 		/// Function pointer for Unix-like Operating System.
 		/// </summary>

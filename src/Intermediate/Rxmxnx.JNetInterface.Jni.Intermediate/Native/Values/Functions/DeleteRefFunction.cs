@@ -27,9 +27,13 @@ internal readonly unsafe struct DeleteRefFunction<TReference> : IDeleteRefFuncti
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void DeleteRef(JEnvironmentRef envRef, TReference objRef)
 	{
+#if !ANDROID
 		if (SystemInfo.IsWindows)
+		{
 			this._function.Windows(envRef, objRef.Pointer);
-		else
-			this._function.Unix(envRef, objRef.Pointer);
+			return;
+		}
+#endif
+		this._function.Unix(envRef, objRef.Pointer);
 	}
 }

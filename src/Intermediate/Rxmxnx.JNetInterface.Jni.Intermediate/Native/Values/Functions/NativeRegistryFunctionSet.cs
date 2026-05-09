@@ -1,3 +1,5 @@
+// ReSharper disable ConvertIfStatementToReturnStatement
+
 namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 
 /// <summary>
@@ -10,11 +12,13 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 #endif
 internal readonly unsafe struct NativeRegistryFunctionSet
 {
+#if !ANDROID
 	/// <summary>
 	/// Function set for Windows Operating System.
 	/// </summary>
 	[FieldOffset(0)]
 	private readonly Windows _windows;
+#endif
 	/// <summary>
 	/// Function set for Unix-like Operating System.
 	/// </summary>
@@ -30,9 +34,13 @@ internal readonly unsafe struct NativeRegistryFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult RegisterNatives(JEnvironmentRef envRef, JClassLocalRef classRef, NativeMethodValue* methodsPtr,
 		Int32 methodsCount)
-		=> SystemInfo.IsWindows ?
-			this._windows.RegisterNatives(envRef, classRef, methodsPtr, methodsCount) :
-			this._unix.RegisterNatives(envRef, classRef, methodsPtr, methodsCount);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._windows.RegisterNatives(envRef, classRef, methodsPtr, methodsCount);
+#endif
+		return this._unix.RegisterNatives(envRef, classRef, methodsPtr, methodsCount);
+	}
 	/// <summary>
 	/// <c>UnregisterNatives</c>.
 	/// </summary>
@@ -41,10 +49,15 @@ internal readonly unsafe struct NativeRegistryFunctionSet
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult UnregisterNatives(JEnvironmentRef envRef, JClassLocalRef classRef)
-		=> SystemInfo.IsWindows ?
-			this._windows.UnregisterNatives(envRef, classRef) :
-			this._unix.UnregisterNatives(envRef, classRef);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._windows.UnregisterNatives(envRef, classRef);
+#endif
+		return this._unix.UnregisterNatives(envRef, classRef);
+	}
 
+#if !ANDROID
 	/// <summary>
 	/// Windows function set.
 	/// </summary>
@@ -63,6 +76,7 @@ internal readonly unsafe struct NativeRegistryFunctionSet
 		/// </summary>
 		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JClassLocalRef, JResult> UnregisterNatives;
 	}
+#endif
 
 	/// <summary>
 	/// Unix function set.

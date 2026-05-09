@@ -1,3 +1,5 @@
+// ReSharper disable ConvertIfStatementToReturnStatement
+
 namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 
 /// <summary>
@@ -10,11 +12,13 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 #endif
 internal readonly unsafe struct PrimitiveArrayCriticalFunctionSet
 {
+#if !ANDROID
 	/// <summary>
 	/// Function set for Windows Operating System.
 	/// </summary>
 	[FieldOffset(0)]
 	private readonly Windows _windows;
+#endif
 	/// <summary>
 	/// Function set for Unix-like Operating System.
 	/// </summary>
@@ -32,9 +36,11 @@ internal readonly unsafe struct PrimitiveArrayCriticalFunctionSet
 	{
 		fixed (JBoolean* isCopyPtr = &isCopy)
 		{
-			return SystemInfo.IsWindows ?
-				this._windows.GetPrimitiveArrayCritical(envRef, arrayRef, isCopyPtr) :
-				this._unix.GetPrimitiveArrayCritical(envRef, arrayRef, isCopyPtr);
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+				return this._windows.GetPrimitiveArrayCritical(envRef, arrayRef, isCopyPtr);
+#endif
+			return this._unix.GetPrimitiveArrayCritical(envRef, arrayRef, isCopyPtr);
 		}
 	}
 	/// <summary>
@@ -47,12 +53,17 @@ internal readonly unsafe struct PrimitiveArrayCriticalFunctionSet
 	public void ReleasePrimitiveArrayCritical(JEnvironmentRef envRef, JArrayLocalRef arrayRef, IntPtr dataPtr,
 		JReleaseMode mode)
 	{
+#if !ANDROID
 		if (SystemInfo.IsWindows)
+		{
 			this._windows.ReleasePrimitiveArrayCritical(envRef, arrayRef, dataPtr, mode);
-		else
-			this._unix.ReleasePrimitiveArrayCritical(envRef, arrayRef, dataPtr, mode);
+			return;
+		}
+#endif
+		this._unix.ReleasePrimitiveArrayCritical(envRef, arrayRef, dataPtr, mode);
 	}
 
+#if !ANDROID
 	/// <summary>
 	/// Windows function set.
 	/// </summary>
@@ -72,6 +83,7 @@ internal readonly unsafe struct PrimitiveArrayCriticalFunctionSet
 		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JArrayLocalRef, IntPtr, JReleaseMode, void>
 			ReleasePrimitiveArrayCritical;
 	}
+#endif
 
 	/// <summary>
 	/// Unix function set.

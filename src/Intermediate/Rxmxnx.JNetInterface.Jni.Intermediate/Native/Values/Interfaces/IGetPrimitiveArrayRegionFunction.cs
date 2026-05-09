@@ -15,12 +15,14 @@ internal interface IGetPrimitiveArrayRegionFunction
 #endif
 	protected readonly unsafe struct GetPrimitiveArrayRegionFunction
 	{
+#if !ANDROID
 		/// <summary>
 		/// Function pointer for Windows Operating System.
 		/// </summary>
 		[FieldOffset(0)]
 		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JArrayLocalRef, Int32, Int32, void*, void>
 			Windows;
+#endif
 		/// <summary>
 		/// Function pointer for Unix-like Operating System.
 		/// </summary>

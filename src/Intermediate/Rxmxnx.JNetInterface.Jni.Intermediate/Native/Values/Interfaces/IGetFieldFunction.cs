@@ -11,11 +11,13 @@ internal interface IGetFieldFunction
 	[StructLayout(LayoutKind.Explicit)]
 	protected readonly struct GetFieldFunction
 	{
+#if !ANDROID
 		/// <summary>
 		/// Function pointers for Windows Operating System.
 		/// </summary>
 		[FieldOffset(0)]
 		public readonly Windows Windows;
+#endif
 		/// <summary>
 		/// Function pointers for Unix-like Operating System.
 		/// </summary>
@@ -23,6 +25,7 @@ internal interface IGetFieldFunction
 		public readonly Unix Unix;
 	}
 
+#if !ANDROID
 	/// <summary>
 	/// Windows function set.
 	/// </summary>
@@ -79,6 +82,7 @@ internal interface IGetFieldFunction
 		[FieldOffset(0)]
 		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, IntPtr, JFieldId, JObjectLocalRef> Object;
 	}
+#endif
 
 	/// <summary>
 	/// Unix function set.

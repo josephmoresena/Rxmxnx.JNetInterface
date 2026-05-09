@@ -1,3 +1,5 @@
+// ReSharper disable ConvertIfStatementToReturnStatement
+
 namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 
 /// <summary>
@@ -10,11 +12,13 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 #endif
 internal readonly unsafe struct StringCriticalFunctionSet
 {
+#if !ANDROID
 	/// <summary>
 	/// Function set for Windows Operating System.
 	/// </summary>
 	[FieldOffset(0)]
 	private readonly Windows _windows;
+#endif
 	/// <summary>
 	/// Function set for Unix-like Operating System.
 	/// </summary>
@@ -33,9 +37,11 @@ internal readonly unsafe struct StringCriticalFunctionSet
 	{
 		fixed (JBoolean* isCopyPtr = &isCopy)
 		{
-			return SystemInfo.IsWindows ?
-				this._windows.GetStringCritical(envRef, stringRef, isCopyPtr) :
-				this._unix.GetStringCritical(envRef, stringRef, isCopyPtr);
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+				return this._windows.GetStringCritical(envRef, stringRef, isCopyPtr);
+#endif
+			return this._unix.GetStringCritical(envRef, stringRef, isCopyPtr);
 		}
 	}
 	/// <summary>
@@ -47,12 +53,17 @@ internal readonly unsafe struct StringCriticalFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void ReleaseStringCritical(JEnvironmentRef envRef, JStringLocalRef stringRef, ReadOnlyValPtr<Char> chars)
 	{
+#if !ANDROID
 		if (SystemInfo.IsWindows)
+		{
 			this._windows.ReleaseStringCritical(envRef, stringRef, chars);
-		else
-			this._unix.ReleaseStringCritical(envRef, stringRef, chars);
+			return;
+		}
+#endif
+		this._unix.ReleaseStringCritical(envRef, stringRef, chars);
 	}
 
+#if !ANDROID
 	/// <summary>
 	/// Windows function set.
 	/// </summary>
@@ -72,6 +83,7 @@ internal readonly unsafe struct StringCriticalFunctionSet
 		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JStringLocalRef, Char*, void>
 			ReleaseStringCritical;
 	}
+#endif
 
 	/// <summary>
 	/// Unix function set.

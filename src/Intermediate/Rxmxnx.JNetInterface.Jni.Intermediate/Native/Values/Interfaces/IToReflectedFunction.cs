@@ -15,12 +15,14 @@ internal interface IToReflectedFunction
 #endif
 	protected readonly unsafe struct ToReflectedFunction
 	{
+#if !ANDROID
 		/// <summary>
 		/// Function pointer for Windows Operating System.
 		/// </summary>
 		[FieldOffset(0)]
 		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JClassLocalRef, IntPtr, JBoolean, JObjectLocalRef>
 			Windows;
+#endif
 		/// <summary>
 		/// Function pointer for Unix-like Operating System.
 		/// </summary>

@@ -28,9 +28,13 @@ internal readonly unsafe struct GetStringRegionFunction<TChar> : IGetStringRegio
 	public void GetStringRegion(JEnvironmentRef envRef, JStringLocalRef stringRef, Int32 start, Int32 length,
 		ValPtr<TChar> buffer)
 	{
+#if !ANDROID
 		if (SystemInfo.IsWindows)
+		{
 			this._function.Windows(envRef, stringRef, start, length, buffer);
-		else
-			this._function.Unix(envRef, stringRef, start, length, buffer);
+			return;
+		}
+#endif
+		this._function.Unix(envRef, stringRef, start, length, buffer);
 	}
 }

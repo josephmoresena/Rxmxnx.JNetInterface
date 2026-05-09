@@ -1,3 +1,5 @@
+// ReSharper disable ConvertIfStatementToReturnStatement
+
 namespace Rxmxnx.JNetInterface.Native.Values;
 
 /// <summary>
@@ -12,11 +14,13 @@ namespace Rxmxnx.JNetInterface.Native.Values;
 #endif
 internal readonly unsafe struct InvokeInterface
 {
+#if !ANDROID
 	/// <summary>
 	/// Function set for Windows Operating System.
 	/// </summary>
 	[FieldOffset(0)]
 	private readonly Windows _windows;
+#endif
 	/// <summary>
 	/// Function set for Unix-like Operating System.
 	/// </summary>
@@ -31,7 +35,13 @@ internal readonly unsafe struct InvokeInterface
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult DestroyVirtualMachine(JVirtualMachineRef vmRef)
-		=> SystemInfo.IsWindows ? this._windows.DestroyVirtualMachine(vmRef) : this._unix.DestroyVirtualMachine(vmRef);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._windows.DestroyVirtualMachine(vmRef);
+#endif
+		return this._unix.DestroyVirtualMachine(vmRef);
+	}
 	/// <summary>
 	/// Pointer to <c>AttachCurrentThread</c> function. Attaches the current thread to a JVM.
 	/// </summary>
@@ -45,9 +55,11 @@ internal readonly unsafe struct InvokeInterface
 		fixed (JEnvironmentRef* envRefPtr = &envRef)
 		fixed (VirtualMachineArgumentValue* vmArgPtr = &vmArg)
 		{
-			return SystemInfo.IsWindows ?
-				this._windows.AttachCurrentThread(vmRef, envRefPtr, vmArgPtr) :
-				this._unix.AttachCurrentThread(vmRef, envRefPtr, vmArgPtr);
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+				return this._windows.AttachCurrentThread(vmRef, envRefPtr, vmArgPtr);
+#endif
+			return this._unix.AttachCurrentThread(vmRef, envRefPtr, vmArgPtr);
 		}
 	}
 	/// <summary>
@@ -58,7 +70,13 @@ internal readonly unsafe struct InvokeInterface
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult DetachCurrentThread(JVirtualMachineRef vmRef)
-		=> SystemInfo.IsWindows ? this._windows.DetachCurrentThread(vmRef) : this._unix.DetachCurrentThread(vmRef);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._windows.DetachCurrentThread(vmRef);
+#endif
+		return this._unix.DetachCurrentThread(vmRef);
+	}
 	/// <summary>
 	/// Pointer to <c>GetEnv</c> function. Retrieves the <c>JNIEnv</c> pointer for the current thread.
 	/// </summary>
@@ -70,9 +88,11 @@ internal readonly unsafe struct InvokeInterface
 	{
 		fixed (JEnvironmentRef* envRefPtr = &envRef)
 		{
-			return SystemInfo.IsWindows ?
-				this._windows.GetEnv(vmRef, envRefPtr, jniVersion) :
-				this._unix.GetEnv(vmRef, envRefPtr, jniVersion);
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+				return this._windows.GetEnv(vmRef, envRefPtr, jniVersion);
+#endif
+			return this._unix.GetEnv(vmRef, envRefPtr, jniVersion);
 		}
 	}
 	/// <summary>
@@ -89,12 +109,15 @@ internal readonly unsafe struct InvokeInterface
 		fixed (JEnvironmentRef* envRefPtr = &envRef)
 		fixed (VirtualMachineArgumentValue* vmArgPtr = &vmArg)
 		{
-			return SystemInfo.IsWindows ?
-				this._windows.AttachCurrentThreadAsDaemon(vmRef, envRefPtr, vmArgPtr) :
-				this._unix.AttachCurrentThreadAsDaemon(vmRef, envRefPtr, vmArgPtr);
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+				return this._windows.AttachCurrentThreadAsDaemon(vmRef, envRefPtr, vmArgPtr);
+#endif
+			return this._unix.AttachCurrentThreadAsDaemon(vmRef, envRefPtr, vmArgPtr);
 		}
 	}
 
+#if !ANDROID
 	/// <summary>
 	/// Windows function set.
 	/// </summary>
@@ -121,6 +144,7 @@ internal readonly unsafe struct InvokeInterface
 		public readonly delegate* unmanaged[Stdcall]<JVirtualMachineRef, JEnvironmentRef*, VirtualMachineArgumentValue*,
 			JResult> AttachCurrentThreadAsDaemon;
 	}
+#endif
 
 	/// <summary>
 	/// Unix function set.

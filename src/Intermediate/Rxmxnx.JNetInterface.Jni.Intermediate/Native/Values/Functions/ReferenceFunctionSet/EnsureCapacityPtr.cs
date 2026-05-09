@@ -12,11 +12,13 @@ internal readonly partial struct ReferenceFunctionSet
 #endif
 	private readonly unsafe struct EnsureLocalCapacityPtr
 	{
+#if !ANDROID
 		/// <summary>
 		/// Function pointer for Windows Operating System.
 		/// </summary>
 		[FieldOffset(0)]
 		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, Int32, JResult> Windows;
+#endif
 		/// <summary>
 		/// Function pointer for Unix-like Operating System.
 		/// </summary>

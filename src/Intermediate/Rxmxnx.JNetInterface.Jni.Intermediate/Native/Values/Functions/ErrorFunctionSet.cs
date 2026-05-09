@@ -1,3 +1,5 @@
+// ReSharper disable ConvertIfStatementToReturnStatement
+
 namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 
 /// <summary>
@@ -10,11 +12,13 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 #endif
 internal readonly unsafe struct ErrorFunctionSet
 {
+#if !ANDROID
 	/// <summary>
 	/// Function set for Windows Operating System.
 	/// </summary>
 	[FieldOffset(0)]
 	private readonly Windows _windows;
+#endif
 	/// <summary>
 	/// Function set for Unix-like Operating System.
 	/// </summary>
@@ -26,31 +30,51 @@ internal readonly unsafe struct ErrorFunctionSet
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult Throw(JEnvironmentRef envRef, JThrowableLocalRef throwableRef)
-		=> SystemInfo.IsWindows ? this._windows.Throw(envRef, throwableRef) : this._unix.Throw(envRef, throwableRef);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._windows.Throw(envRef, throwableRef);
+#endif
+		return this._unix.Throw(envRef, throwableRef);
+	}
 	/// <summary>
 	/// <c>ThrowNew</c>.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult ThrowNew(JEnvironmentRef envRef, JClassLocalRef classRef, Byte* messagePtr)
-		=> SystemInfo.IsWindows ?
-			this._windows.ThrowNew(envRef, classRef, messagePtr) :
-			this._unix.ThrowNew(envRef, classRef, messagePtr);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._windows.ThrowNew(envRef, classRef, messagePtr);
+#endif
+		return this._unix.ThrowNew(envRef, classRef, messagePtr);
+	}
 	/// <summary>
 	/// <c>ExceptionOccurred</c>.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JThrowableLocalRef ExceptionOccurred(JEnvironmentRef envRef)
-		=> SystemInfo.IsWindows ? this._windows.ExceptionOccurred(envRef) : this._unix.ExceptionOccurred(envRef);
+	{
+#if !ANDROID
+		if (SystemInfo.IsWindows)
+			return this._windows.ExceptionOccurred(envRef);
+#endif
+		return this._unix.ExceptionOccurred(envRef);
+	}
 	/// <summary>
 	/// <c>ExceptionDescribe</c>.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void ExceptionDescribe(JEnvironmentRef envRef)
 	{
+#if !ANDROID
 		if (SystemInfo.IsWindows)
+		{
 			this._windows.ExceptionDescribe(envRef);
-		else
-			this._unix.ExceptionDescribe(envRef);
+			return;
+		}
+#endif
+		this._unix.ExceptionDescribe(envRef);
 	}
 	/// <summary>
 	/// <c>ExceptionClear</c>.
@@ -58,10 +82,14 @@ internal readonly unsafe struct ErrorFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void ExceptionClear(JEnvironmentRef envRef)
 	{
+#if !ANDROID
 		if (SystemInfo.IsWindows)
+		{
 			this._windows.ExceptionClear(envRef);
-		else
-			this._unix.ExceptionClear(envRef);
+			return;
+		}
+#endif
+		this._unix.ExceptionClear(envRef);
 	}
 	/// <summary>
 	/// <c>FatalError</c>.
@@ -69,12 +97,17 @@ internal readonly unsafe struct ErrorFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void FatalError(JEnvironmentRef envRef, Byte* messagePtr)
 	{
+#if !ANDROID
 		if (SystemInfo.IsWindows)
+		{
 			this._windows.FatalError(envRef, messagePtr);
-		else
-			this._unix.FatalError(envRef, messagePtr);
+			return;
+		}
+#endif
+		this._unix.FatalError(envRef, messagePtr);
 	}
 
+#if !ANDROID
 	/// <summary>
 	/// Windows function set.
 	/// </summary>
@@ -115,6 +148,7 @@ internal readonly unsafe struct ErrorFunctionSet
 		/// </summary>
 		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, Byte*, void> FatalError;
 	}
+#endif
 
 	/// <summary>
 	/// Windows function set.
