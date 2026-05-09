@@ -19,7 +19,7 @@ permissions:
   contents: write
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     env:
       SHOW_DIAGNOSTICS: ${{ inputs.run_tests }}
       JNETINTERFACE_ONLY_NATIVE_TEST: ${{ inputs.package_version != '' }}
