@@ -20,9 +20,7 @@ public static partial class TestCompiler
 			nativeImageDir.Create();
 
 			await TestCompiler.CompileJavaClass(classDir.FullName, jdk);
-
 			await File.WriteAllTextAsync(jniConfigPath, TestCompiler.JniConfig, ConsoleNotifier.CancellationToken);
-
 			await TestCompiler.CreateJar(directory.FullName, jdk, outputJavaDirectory.FullName);
 
 			File.Move(classFilePath, Path.Combine(outputDirectory.FullName, "HelloDotnet.class"), true);

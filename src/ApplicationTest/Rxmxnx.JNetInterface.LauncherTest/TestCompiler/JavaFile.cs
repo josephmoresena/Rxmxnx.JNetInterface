@@ -255,8 +255,9 @@ public class HelloDotnet {
         return libraryName;
     }
 }";
-	private const String JarManifest = @"Main-Class: com.rxmxnx.dotnet.test.HelloDotnet
-";
+	private const String JarManifest = @"Manifest-Version: 1.0
+Main-Class: com.rxmxnx.dotnet.test.HelloDotnet
+Enable-Native-Access: ALL-UNNAMED";
 	private const String JniConfig = @"[
   {
     ""name"": ""java.lang.Void"",

@@ -10,9 +10,11 @@
         <SigningKeyFile>..\Rxmxnx.JNetInterface.snk</SigningKeyFile>
         <IntermediateSourceBasePath>..\..\src\Intermediate</IntermediateSourceBasePath>
         <DefineConstants Condition="'$(IsTempPackage)' == 'true'">$(DefineConstants);TEMP_PACKAGE</DefineConstants>
+        <IsMobileLibrary Condition="$(AssemblyName.EndsWith('.Mobile'))">True</IsMobileLibrary>
     </PropertyGroup>
 
     <Import Project="..\src\Library.props"/>
+    <Import Condition="'$(IsMobileLibrary)' == 'True'" Project="..\src\Mobile.Library.props"/>
 
     <!-- Validations -->
     <PropertyGroup>

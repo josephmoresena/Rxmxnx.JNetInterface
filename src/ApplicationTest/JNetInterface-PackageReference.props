@@ -3,15 +3,15 @@
         <PackageVersion Condition="'$(PackageVersion)' == ''">9999.99.99.99-tmp</PackageVersion>
         <DefineConstants Condition="'$(PackageVersion)' != '9999.99.99.99-tmp'">$(DefineConstants);RELEASE_PACKAGE</DefineConstants>
     </PropertyGroup>
+
     <ItemGroup Condition="'$(UsePackage)' != 'true'">
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj"/>
         <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
+    </ItemGroup>
+    <ItemGroup Condition="'$(UsePackage)' != 'true' And '$(TargetPlatformIdentifier)' != 'android'">
         <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj"/>
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj"/>
     </ItemGroup>
 
-    <ItemGroup Condition="'$(UsePackage)' == 'true'">
+    <ItemGroup Condition="'$(UsePackage)' == 'true' And '$(TargetPlatformIdentifier)' != 'android'">
         <PackageReference Include="Rxmxnx.JNetInterface" Version="$(PackageVersion)"/>
     </ItemGroup>
 </Project>
