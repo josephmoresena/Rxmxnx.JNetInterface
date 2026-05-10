@@ -19,7 +19,7 @@ permissions:
   contents: write
 jobs:
   build:
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-latest
     env:
       SHOW_DIAGNOSTICS: ${{ inputs.run_tests }}
       JNETINTERFACE_ONLY_NATIVE_TEST: ${{ inputs.package_version != '' }}

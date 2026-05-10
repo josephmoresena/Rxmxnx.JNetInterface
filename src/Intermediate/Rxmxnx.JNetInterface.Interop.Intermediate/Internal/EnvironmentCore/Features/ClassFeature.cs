@@ -49,12 +49,14 @@ internal sealed partial class EnvironmentCore : IClassFeature
 	public JModuleObject? GetModule(JClassObject jClass)
 	{
 		ImplementationValidationUtilities.ThrowIfProxy(jClass);
+#if !ANDROID
 		if (this.Version >= NativeInterface9.RequiredVersion)
 		{
 			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			return this.GetModule(classRef);
 		}
+#endif
 		if (AndroidFeature.ApiLevel is > 0 || this.Host.Value.Version < JRuntimeVersion.J9) return default;
 		return EnvironmentCore.GetModule(this, jClass);
 	}

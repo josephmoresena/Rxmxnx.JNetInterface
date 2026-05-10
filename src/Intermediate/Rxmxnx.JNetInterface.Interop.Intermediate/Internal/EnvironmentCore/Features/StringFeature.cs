@@ -46,6 +46,7 @@ internal sealed partial class EnvironmentCore : IStringFeature
 	{
 		ImplementationValidationUtilities.ThrowIfProxy(jObject);
 		ImplementationValidationUtilities.ThrowIfDefault(jObject);
+#if !ANDROID
 		if (this.Version < NativeInterface24.RequiredVersion) return default;
 
 		ref readonly NativeInterface24 nativeInterface =
@@ -55,6 +56,9 @@ internal sealed partial class EnvironmentCore : IStringFeature
 		Int64 result = nativeInterface.GetStringUtfLengthAsLong(this.Reference, stringRef);
 		if (result <= 0) this.CheckJniError();
 		return result;
+#else
+		return default;
+#endif
 	}
 	public INativeMemoryAdapter GetSequence(JStringObject jString, JMemoryReferenceKind referenceKind)
 	{
