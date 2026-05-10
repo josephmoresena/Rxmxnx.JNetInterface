@@ -20,4 +20,21 @@
         <Using Remove="Android.OS.Bundle" Alias="Bundle"/>
     </ItemGroup>
 
+    <ItemGroup Condition="'$(IsMobileLibrary)' == 'True'">
+        <PackageReference Condition="'$(TargetFramework)' == 'net7.0-android33.0'" Include="Microsoft.Android.Ref.33" GeneratePathProperty="true">
+            <Version>33.0.95</Version>
+            <PrivateAssets>all</PrivateAssets>
+            <ExcludeAssets>all</ExcludeAssets>
+        </PackageReference>
+        <PackageReference Condition="'$(TargetFramework)' == 'net8.0-android34.0'" Include="Microsoft.Android.Ref.34" GeneratePathProperty="true">
+            <Version>34.0.154</Version>
+            <PrivateAssets>all</PrivateAssets>
+            <ExcludeAssets>all</ExcludeAssets>
+        </PackageReference>
+        <Reference Include="Java.Interop" Condition="'$(PkgMicrosoft_Android_Ref_33)' != '' Or '$(PkgMicrosoft_Android_Ref_34)' != ''">
+            <HintPath Condition="'$(PkgMicrosoft_Android_Ref_33)' != ''">$(PkgMicrosoft_Android_Ref_33)/ref/net7.0/Java.Interop.dll</HintPath>
+            <HintPath Condition="'$(PkgMicrosoft_Android_Ref_34)' != ''">$(PkgMicrosoft_Android_Ref_34)/ref/net8.0/Java.Interop.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
 </Project>
