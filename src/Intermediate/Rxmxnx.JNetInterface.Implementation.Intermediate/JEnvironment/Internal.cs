@@ -9,13 +9,13 @@ partial class JEnvironment
 	/// <summary>
 	/// Class cache.
 	/// </summary>
-	internal ClassCache ClassCache => this._core.GetClassCache();
+	internal ClassCache ClassCache => this._m.Core.GetClassCache();
 	/// <summary>
 	/// Local cache.
 	/// </summary>
-	internal LocalCache LocalCache => this._core.GetLocalCache();
+	internal LocalCache LocalCache => this._m.LocalCache;
 	/// <inheritdoc cref="IClassFeature.ClassObject"/>
-	internal JClassObject ClassObject => this._core.ClassObject;
+	internal JClassObject ClassObject => this._m.Core.ClassObject;
 
 	/// <summary>
 	/// Sets current object cache.
@@ -24,27 +24,27 @@ partial class JEnvironment
 	internal void SetObjectCache(LocalCache localCache)
 	{
 		JTrace.SetObjectCache(localCache.Id, localCache.Name);
-		this._core.SetObjectCache(localCache);
+		this._m.Core.SetObjectCache(localCache);
 	}
 	/// <summary>
 	/// Deletes <paramref name="globalRef"/>.
 	/// </summary>
 	/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal void DeleteGlobalRef(JGlobalRef globalRef) => this._core.DeleteGlobalRef(globalRef);
+	internal void DeleteGlobalRef(JGlobalRef globalRef) => this._m.Core.DeleteGlobalRef(globalRef);
 	/// <summary>
 	/// Deletes <paramref name="weakRef"/>.
 	/// </summary>
 	/// <param name="weakRef">A <see cref="JWeakRef"/> reference.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal void DeleteWeakGlobalRef(JWeakRef weakRef) => this._core.DeleteWeakGlobalRef(weakRef);
+	internal void DeleteWeakGlobalRef(JWeakRef weakRef) => this._m.Core.DeleteWeakGlobalRef(weakRef);
 	/// <summary>
 	/// Retrieves type of given reference.
 	/// </summary>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 	/// <returns>A <see cref="JReferenceType"/> value.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal JReferenceType GetReferenceType(JObjectLocalRef localRef) => this._core.GetReferenceType(localRef);
+	internal JReferenceType GetReferenceType(JObjectLocalRef localRef) => this._m.Core.GetReferenceType(localRef);
 	/// <summary>
 	/// Retrieves the <see cref="JClassObject"/> according to <paramref name="classRef"/>.
 	/// </summary>
@@ -52,31 +52,31 @@ partial class JEnvironment
 	/// <param name="keepReference">Indicates whether class reference should be assigned to created object.</param>
 	/// <returns>A <see cref="JClassObject"/> instance.</returns>
 	internal JClassObject GetReferenceTypeClass(JClassLocalRef classRef, Boolean keepReference = false)
-		=> this._core.GetClass(classRef, keepReference, JTypeKind.Undefined);
+		=> this._m.Core.GetClass(classRef, keepReference, JTypeKind.Undefined);
 	/// <summary>
 	/// Loads in current cache given class.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal void LoadClass(JClassObject jClass) => this._core.LoadClass(jClass);
+	internal void LoadClass(JClassObject jClass) => this._m.Core.LoadClass(jClass);
 	/// <summary>
 	/// Reloads current class object.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <returns>Current <see cref="JClassLocalRef"/> reference.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal void ReloadClass(JClassObject jClass) => this._core.ReloadClass(jClass);
+	internal void ReloadClass(JClassObject jClass) => this._m.Core.ReloadClass(jClass);
 	/// <summary>
 	/// Sends JNI fatal error signal to VM.
 	/// </summary>
 	/// <param name="errorMessage">Error message.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal void FatalError(ReadOnlySpan<Byte> errorMessage) => EnvironmentCore.FatalError(this._core, errorMessage);
+	internal void FatalError(ReadOnlySpan<Byte> errorMessage) => EnvironmentCore.FatalError(this._m.Core, errorMessage);
 	/// <summary>
 	/// Checks JNI occurred error.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal void CheckJniError() => this._core.CheckJniError();
+	internal void CheckJniError() => this._m.Core.CheckJniError();
 	/// <summary>
 	/// Retrieves the class object and instantiation metadata.
 	/// </summary>
@@ -85,7 +85,7 @@ partial class JEnvironment
 	/// <returns>Object's class <see cref="JClassObject"/> instance</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal JClassObject GetObjectClass(JObjectLocalRef localRef, out JReferenceTypeMetadata typeMetadata)
-		=> EnvironmentCore.GetObjectClass(this._core, localRef, out typeMetadata);
+		=> EnvironmentCore.GetObjectClass(this._m.Core, localRef, out typeMetadata);
 
 	/// <summary>
 	/// Retrieves object class reference.
@@ -96,9 +96,9 @@ partial class JEnvironment
 	internal static JClassObject GetObjectClass(JEnvironment env, JObjectLocalRef localRef)
 	{
 		using LocalFrame frame = new(env, IVirtualMachine.GetObjectClassCapacity);
-		JClassLocalRef classRef = EnvironmentCore.GetObjectClass(env._core, localRef);
+		JClassLocalRef classRef = EnvironmentCore.GetObjectClass(env._m.Core, localRef);
 		JClassObject jClass = env.GetReferenceTypeClass(classRef);
-		env._core.LoadClass(frame, classRef, jClass); // Runtime class loading.
+		env._m.Core.LoadClass(frame, classRef, jClass); // Runtime class loading.
 		return jClass;
 	}
 	/// <summary>

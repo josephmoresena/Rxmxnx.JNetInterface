@@ -46,26 +46,6 @@ public partial class JVirtualMachine
 		return new Invoked(vm);
 	}
 	/// <summary>
-	/// Detaches current thread from <see cref="IVirtualMachine"/> referenced by <paramref name="vmRef"/>.
-	/// </summary>
-	/// <param name="vmRef">A <see cref="JVirtualMachineRef"/> reference.</param>
-	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
-	/// <param name="thread">A <see cref="Thread"/> instance.</param>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal static void DetachCurrentThread(JVirtualMachineRef vmRef, JEnvironmentRef envRef, Thread thread)
-		=> VirtualMachineCore.DetachCurrentThread(ReferenceCache.Instance.Get(vmRef)?._core, envRef, thread);
-	/// <summary>
-	/// Removes the <see cref="IEnvironment"/> instance referenced by <paramref name="envRef"/>
-	/// into the <see cref="IVirtualMachine"/> referenced by <paramref name="vmRef"/>.
-	/// </summary>
-	/// <param name="vmRef">A <see cref="JVirtualMachineRef"/> reference.</param>
-	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
-	internal static void RemoveEnvironment(JVirtualMachineRef vmRef, JEnvironmentRef envRef)
-	{
-		JVirtualMachine? vm = ReferenceCache.Instance.Get(vmRef);
-		vm?._core.ThreadCache.Remove(envRef);
-	}
-	/// <summary>
 	/// Indicates whether the class for <paramref name="hash"/> is a main class.
 	/// </summary>
 	/// <param name="hash">A class hash instance.</param>
@@ -74,4 +54,18 @@ public partial class JVirtualMachine
 	/// <see langword="false"/>.
 	/// </returns>
 	internal static Boolean IsMainClass(String hash) => JVirtualMachine.userMainClasses.ContainsKey(hash);
+#if !PACKAGE
+	/// <summary>
+	/// Removes the <see cref="IEnvironment"/> instance referenced by <paramref name="envRef"/>
+	/// into the <see cref="IVirtualMachine"/> referenced by <paramref name="vmRef"/>.
+	/// </summary>
+	/// <param name="vmRef">A <see cref="JVirtualMachineRef"/> reference.</param>
+	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
+	/// <remarks>This method is only for testing purposes.</remarks>
+	internal static void RemoveEnvironment(JVirtualMachineRef vmRef, JEnvironmentRef envRef)
+	{
+		JVirtualMachine? vm = ReferenceCache.Instance.Get(vmRef);
+		vm?._core.ThreadCache.Remove(envRef);
+	}
+#endif
 }

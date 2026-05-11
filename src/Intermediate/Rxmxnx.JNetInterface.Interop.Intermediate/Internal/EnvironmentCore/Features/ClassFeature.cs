@@ -56,9 +56,11 @@ internal sealed partial class EnvironmentCore : IClassFeature
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			return this.GetModule(classRef);
 		}
-#endif
 		if (AndroidFeature.ApiLevel is > 0 || this.Host.Value.Version < JRuntimeVersion.J9) return default;
 		return EnvironmentCore.GetModule(this, jClass);
+#else
+		return default;
+#endif
 	}
 	public void ThrowNew(JClassObject jClass, String? message, Boolean throwException)
 	{

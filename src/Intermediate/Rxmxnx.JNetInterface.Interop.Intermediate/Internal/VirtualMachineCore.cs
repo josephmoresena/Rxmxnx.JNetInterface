@@ -127,4 +127,62 @@ internal sealed class VirtualMachineCore<TThread> : VirtualMachineCore where TTh
 		}
 #pragma warning restore CA1816
 	}
+	/// <summary>
+	/// Initialize main classes.
+	/// </summary>
+	public void InitializeClasses()
+	{
+		using IThread thread = this.ThreadCache.AttachThread(ThreadPurpose.CreateGlobalReference);
+		if (thread is IMainClassLoader mainClassLoader)
+			this.LoadMainClasses(mainClassLoader);
+	}
+	/// <summary>
+	/// Creates global instance for <paramref name="classMetadata"/>
+	/// </summary>
+	/// <param name="classMetadata">A <see cref="ClassObjectMetadata"/> instance.</param>
+	public void CreateGlobalClass(ClassObjectMetadata classMetadata)
+	{
+		JGlobal globalClass = new(this.VirtualMachine, classMetadata, default);
+		this.GlobalClassCache[classMetadata.Hash] = globalClass;
+	}
+	/// <summary>
+	/// Attaches current thread to VM.
+	/// </summary>
+	/// <param name="args">A <see cref="ThreadCreationArgs"/> instance.</param>
+	/// <returns>A <see cref="IThread"/> instance.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public IThread AttachThread(ThreadCreationArgs args) => this.ThreadCache.AttachThread(args);
+	/// <summary>
+	/// Attaches the current thread to the virtual machine for <paramref name="purpose"/>.
+	/// </summary>
+	/// <param name="isAlive">Indicates whether the current virtual machine is alive.</param>
+	/// <param name="purpose">The purpose of requested thread.</param>
+	/// <returns>A <see cref="IThread"/> instance for given purpose.</returns>
+	public IThread CreateThread(Boolean isAlive, ThreadPurpose purpose)
+	{
+		if (!isAlive) return new DeadThread(this.VirtualMachine);
+		ThreadCreationArgs args = ThreadCreationArgs.Create(purpose);
+		try
+		{
+			return this.AttachThread(args);
+		}
+		catch (Exception)
+		{
+			switch (purpose)
+			{
+				case ThreadPurpose.ReleaseSequence:
+				case ThreadPurpose.RemoveGlobalReference:
+				case ThreadPurpose.CheckGlobalReference:
+				case ThreadPurpose.CheckAssignability:
+				case ThreadPurpose.SynchronizeGlobalReference:
+					return new DeadThread(this.VirtualMachine);
+				case ThreadPurpose.ExceptionExecution:
+				case ThreadPurpose.CreateGlobalReference:
+				case ThreadPurpose.FatalError:
+				case ThreadPurpose.GetRuntimeVersion:
+				default:
+					throw;
+			}
+		}
+	}
 }

@@ -27,7 +27,7 @@ public partial class JVirtualMachine : IVirtualMachineHost, ITypeManager
 		ClassObjectMetadata? result = jGlobal.ObjectMetadata as ClassObjectMetadata;
 		if (result is null || this._core.GlobalClassCache.ContainsHash(result.Hash)) return result;
 		JTrace.LoadClassMetadata(result);
-		this.CreateGlobalClass(result);
+		this._core.CreateGlobalClass(result);
 		return result;
 	}
 	JGlobal ITypeManager.LoadGlobal(JClassObject jClass)
@@ -78,4 +78,10 @@ public partial class JVirtualMachine : IVirtualMachineHost, ITypeManager
 	JResult IVirtualMachineHost.AttachThread(Boolean isDaemon, VirtualMachineArgumentValue arg,
 		out JEnvironmentRef envRef)
 		=> this._core.AttachThread(isDaemon, arg, out envRef);
+	void IVirtualMachineHost.FinalizeThread(JEnvironmentRef envRef, ILocalCacheOwner owner, Thread thread)
+	{
+		this._core.ThreadCache.Remove(envRef);
+		owner.FreeReferences();
+		VirtualMachineCore.DetachCurrentThread(this._core, envRef, thread);
+	}
 }

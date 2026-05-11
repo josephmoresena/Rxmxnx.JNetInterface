@@ -27,29 +27,4 @@ public partial class JVirtualMachine
 	/// </summary>
 	/// <param name="core">A <see cref="VirtualMachineCore{JEnvironment}"/> reference.</param>
 	private JVirtualMachine(VirtualMachineCore<JEnvironment> core) => this._core = core;
-
-	/// <summary>
-	/// Attaches current thread to VM.
-	/// </summary>
-	/// <param name="args">A <see cref="ThreadCreationArgs"/> instance.</param>
-	/// <returns>A <see cref="IThread"/> instance.</returns>
-	private IThread AttachThread(ThreadCreationArgs args) => this._core.ThreadCache.AttachThread(args);
-	/// <summary>
-	/// Initialize main classes.
-	/// </summary>
-	private void InitializeClasses()
-	{
-		using IThread thread = this.AttachThread(ThreadCreationArgs.Create(ThreadPurpose.CreateGlobalReference));
-		JEnvironment env = this.GetEnvironment(thread.Reference);
-		this._core.LoadMainClasses(env);
-	}
-	/// <summary>
-	/// Creates global instance for <paramref name="classMetadata"/>
-	/// </summary>
-	/// <param name="classMetadata">A <see cref="ClassObjectMetadata"/> instance.</param>
-	private void CreateGlobalClass(ClassObjectMetadata classMetadata)
-	{
-		JGlobal globalClass = new(this, classMetadata, default);
-		this._core.GlobalClassCache[classMetadata.Hash] = globalClass;
-	}
 }

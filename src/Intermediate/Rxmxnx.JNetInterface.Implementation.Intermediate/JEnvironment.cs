@@ -19,30 +19,30 @@ public partial class JEnvironment : IEqualityOperators<JEnvironment, JEnvironmen
 	/// </summary>
 	public virtual Boolean IsDaemon => false;
 	/// <inheritdoc cref="IEnvironment.Version"/>
-	public Int32 Version => this._core.Version;
+	public Int32 Version => this._m.Core.Version;
 	/// <summary>
 	/// Indicates whether current thread is attached to a JVM.
 	/// </summary>
-	public virtual Boolean IsAttached => this._core.Host.IsRunning;
+	public virtual Boolean IsAttached => this._m.Core.Host.IsRunning;
 
 	/// <inheritdoc cref="IEnvironment.PendingException"/>
 	public ThrowableException? PendingException
 	{
-		get => this.GetThrown();
-		set => this.SetThrown(value);
+		get => this._m.PendingException;
+		set => this._m.PendingException = value;
 	}
 
 	/// <inheritdoc/>
-	public JEnvironmentRef Reference => this._core.Reference;
+	public JEnvironmentRef Reference => this._m.Core.Reference;
 	/// <inheritdoc/>
-	public IVirtualMachine VirtualMachine => this._core.Host.Value;
+	public IVirtualMachine VirtualMachine => this._m.Core.Host.Value;
 	/// <inheritdoc/>
-	public Int32 UsedStackBytes => this._core.UsedStackBytes;
+	public Int32 UsedStackBytes => this._m.Core.UsedStackBytes;
 	/// <inheritdoc/>
 	public Int32 UsableStackBytes
 	{
-		get => this._core.MaxStackBytes;
-		set => this._core.SetUsableStackBytes(value);
+		get => this._m.UsableStackBytes;
+		set => this._m.UsableStackBytes = value;
 	}
 
 	Int32 IEnvironment.Version
@@ -55,18 +55,10 @@ public partial class JEnvironment : IEqualityOperators<JEnvironment, JEnvironmen
 		}
 	}
 
-	void IEnvironment.WithFrame(Int32 capacity, Action action)
-	{
-		using LocalFrame _ = new(this, capacity);
-		this._core.CheckJniError();
-		action();
-	}
+	void IEnvironment.WithFrame(Int32 capacity, Action action) => this._m.WithFrame(this, capacity, action);
 	void IEnvironment.WithFrame<TState>(Int32 capacity, TState state, Action<TState> action)
-	{
-		using LocalFrame _ = new(this, capacity);
-		this._core.CheckJniError();
-		action(state);
-	}
+		=> this._m.WithFrame(this, capacity, state, action);
+
 	Boolean? IEnvironment.IsVirtual(JThreadObject jThread)
 	{
 		ImplementationValidationUtilities.ThrowIfProxy(jThread);
@@ -74,33 +66,33 @@ public partial class JEnvironment : IEqualityOperators<JEnvironment, JEnvironmen
 		if (this.Version >= NativeInterface19.RequiredVersion)
 		{
 			ref readonly NativeInterface19 nativeInterface =
-				ref this._core.GetNativeInterface<NativeInterface19>(NativeInterface19.IsVirtualThreadInfo);
-			using INativeTransaction jniTransaction = this._core.Host.MemoryManager.CreateTransaction(1);
+				ref this._m.Core.GetNativeInterface<NativeInterface19>(NativeInterface19.IsVirtualThreadInfo);
+			using INativeTransaction jniTransaction = this._m.Core.Host.MemoryManager.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(jThread);
 			return nativeInterface.IsVirtualThread(this.Reference, localRef).Value;
 		}
 		if (JVirtualMachine.AndroidApiLevel > 0 || this.VirtualMachine.Version < JRuntimeVersion.J21) return default;
-		return this._core.IsVirtual(jThread);
+		return this._m.Core.IsVirtual(jThread);
 	}
 
 	/// <inheritdoc/>
-	public Boolean JniSecure() => this._core.JniSecure();
+	public Boolean JniSecure() => this._m.JniSecure();
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public void DescribeException() => EnvironmentCore.DescribeException(this._core);
+	public void DescribeException() => EnvironmentCore.DescribeException(this._m.Core);
 
 	/// <inheritdoc/>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
 	public sealed override Boolean Equals(Object? obj)
-		=> (obj is JEnvironment other && this._core.Equals(other._core)) ||
+		=> (obj is JEnvironment other && this._m.Core.Equals(other._m)) ||
 			(obj is IEnvironment env && this.Reference == env.Reference);
 	/// <inheritdoc/>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public sealed override Int32 GetHashCode() => this._core.GetHashCode();
+	public sealed override Int32 GetHashCode() => this._m.Core.GetHashCode();
 
 	/// <summary>
 	/// Determines whether a specified <see cref="JEnvironment"/> and a <see cref="JEnvironment"/> instance

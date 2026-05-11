@@ -128,7 +128,9 @@ internal static partial class MetadataHelper
 		// Classes
 		MetadataHelper.InitialRegister<JClassLoaderObject>(result);
 		MetadataHelper.InitialRegister<JThreadObject>(result);
+#if !ANDROID
 		MetadataHelper.InitialRegister<JModuleObject>(result);
+#endif
 		MetadataHelper.InitialRegister<JModifierObject>(result);
 		MetadataHelper.InitialRegister<JAccessibleObject>(result);
 		MetadataHelper.InitialRegister<JExecutableObject>(result);

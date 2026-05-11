@@ -46,39 +46,16 @@ public partial class JVirtualMachine : IVirtualMachine
 		}
 	}
 
-	IThread IVirtualMachine.CreateThread(ThreadPurpose purpose)
-	{
-		if (!this.IsAlive) return new DeadThread(this);
-		ThreadCreationArgs args = ThreadCreationArgs.Create(purpose);
-		try
-		{
-			return this.AttachThread(args);
-		}
-		catch (Exception)
-		{
-			switch (purpose)
-			{
-				case ThreadPurpose.ReleaseSequence:
-				case ThreadPurpose.RemoveGlobalReference:
-				case ThreadPurpose.CheckGlobalReference:
-				case ThreadPurpose.CheckAssignability:
-				case ThreadPurpose.SynchronizeGlobalReference:
-					return new DeadThread(this);
-				case ThreadPurpose.ExceptionExecution:
-				case ThreadPurpose.CreateGlobalReference:
-				case ThreadPurpose.FatalError:
-				case ThreadPurpose.GetRuntimeVersion:
-				default:
-					throw;
-			}
-		}
-	}
+	IThread IVirtualMachine.CreateThread(ThreadPurpose purpose) => this._core.CreateThread(this.IsAlive, purpose);
 	IThread IVirtualMachine.InitializeThread(CString? threadName, JGlobalBase? threadGroup, Int32 version)
-		=> this.AttachThread(new() { Name = threadName, ThreadGroup = threadGroup, Version = version, });
+		=> this._core.AttachThread(new() { Name = threadName, ThreadGroup = threadGroup, Version = version, });
 	IThread IVirtualMachine.InitializeDaemon(CString? threadName, JGlobalBase? threadGroup, Int32 version)
-		=> this.AttachThread(new()
+		=> this._core.AttachThread(new()
 		{
-			Name = threadName, ThreadGroup = threadGroup, Version = version, IsDaemon = true,
+			Name = threadName,
+			ThreadGroup = threadGroup,
+			Version = version,
+			IsDaemon = true,
 		});
 
 	/// <inheritdoc/>
@@ -87,7 +64,7 @@ public partial class JVirtualMachine : IVirtualMachine
 	public void FatalError(CString? message)
 	{
 		ReadOnlySpan<Byte> utf8Message = EnvironmentCore.GetSafeSpan(message);
-		using IThread thread = this.AttachThread(ThreadCreationArgs.Create(ThreadPurpose.FatalError));
+		using IThread thread = this._core.AttachThread(ThreadCreationArgs.Create(ThreadPurpose.FatalError));
 		JEnvironment env = this.GetEnvironment(thread.Reference);
 		env.FatalError(utf8Message);
 	}

@@ -157,6 +157,7 @@ internal sealed partial class EnvironmentCore
 		String message = resource.MainClassGlobalError(className);
 		throw new NotSupportedException(message);
 	}
+#if !ANDROID
 	/// <summary>
 	/// Sends JNI fatal error signal to VM.
 	/// </summary>
@@ -169,6 +170,7 @@ internal sealed partial class EnvironmentCore
 		fixed (Byte* ptr = &MemoryMarshal.GetReference(errorMessage))
 			nativeInterface.ErrorFunctions.FatalError(core.Reference, ptr);
 	}
+#endif
 	/// <summary>
 	/// Retrieves object class reference.
 	/// </summary>
@@ -201,4 +203,45 @@ internal sealed partial class EnvironmentCore
 		typeMetadata = core.GetTypeMetadata(jClass);
 		return jClass;
 	}
+	/// <summary>
+	/// Parses <paramref name="throwableRef"/> to a <see cref="ThrowableException"/> instance.
+	/// </summary>
+	/// <param name="core">A <see cref="EnvironmentCore"/> instance.</param>
+	/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
+	/// <returns>A <see cref="ThrowableException"/> instance.</returns>
+	public static ThrowableException? ParseException(EnvironmentCore core, JThrowableLocalRef throwableRef)
+	{
+		if (throwableRef == default) return default;
+		ThrowableException jniException = core.CreateThrowableException(throwableRef);
+		core.ThrowJniException(jniException, false);
+		return jniException;
+	}
+	/// <summary>
+	/// Indicates whether validation of <paramref name="jGlobal"/> can be avoided.
+	/// </summary>
+	/// <param name="core">A <see cref="EnvironmentCore"/> instance.</param>
+	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jGlobal"/> validation can be avoided;
+	/// otherwise, <see langword="false"/>;
+	/// </returns>
+	public static Boolean IsValidationAvoidable(EnvironmentCore? core, JGlobalBase jGlobal)
+	{
+		if (core is null || !core.Host.MemoryManager.SecureRemove(jGlobal.As<JObjectLocalRef>())) return true;
+		Boolean isWeak = jGlobal is JWeak;
+		if (!isWeak && LocalMainClasses.IsMainGlobal(jGlobal as JGlobal))
+			return true;
+		return Random.Shared.Next(0, 10) > (!isWeak ? 5 : 2);
+	}
+	/// <inheritdoc cref="IEquatable{TEquatable}.Equals(TEquatable)"/>
+#pragma warning disable CA1859
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	public static Boolean? EqualEquatable<TEquatable>(IEquatable<TEquatable>? obj, TEquatable? other)
+	{
+		if (obj is null || other is null) return default;
+		return obj.Equals(other);
+	}
+#pragma warning restore CA1859
 }

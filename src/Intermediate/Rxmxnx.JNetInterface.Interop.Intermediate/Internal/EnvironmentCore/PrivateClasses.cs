@@ -405,6 +405,7 @@ internal sealed partial class EnvironmentCore
 		JTrace.AsClassObject(result.Name, jObject);
 		return result;
 	}
+#if !ANDROID
 	/// <summary>
 	/// Retrieves the <see cref="JModuleObject"/> instance from <paramref name="classRef"/>.
 	/// </summary>
@@ -418,6 +419,7 @@ internal sealed partial class EnvironmentCore
 		if (localRef == default) this.CheckJniError();
 		return new(this.GetClass<JModuleObject>(), localRef);
 	}
+#endif
 	/// <summary>
 	/// Determines whether an object of <paramref name="jClass"/> can be safely cast to
 	/// <paramref name="otherClass"/>.

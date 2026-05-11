@@ -89,6 +89,7 @@ internal sealed partial class EnvironmentCore
 				break;
 		}
 	}
+#if !ANDROID
 	/// <summary>
 	/// Retrieves the <see cref="JModuleObject"/> from <paramref name="jClass"/>.
 	/// </summary>
@@ -108,6 +109,7 @@ internal sealed partial class EnvironmentCore
 		return core.CallObjectFunction<JModuleObject>(functionDefinition, localRef, default, default, jniTransaction,
 		                                              methodId);
 	}
+#endif
 	/// <summary>
 	/// Retrieves the <c>boolean</c> <see cref="JniMethodInfo"/> instance for <paramref name="arrayFunction"/>.
 	/// </summary>

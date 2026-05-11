@@ -106,6 +106,7 @@ internal abstract partial class GlobalMainClasses : MainClasses<JGlobal>
 		JTrace.MainClassesLoaded(env.VirtualMachineRef, env.EnvironmentRef);
 		this.GlobalClassCache.RefreshAccess();
 	}
+#if !ANDROID
 	/// <summary>
 	/// Retrieves the current JRE version.
 	/// </summary>
@@ -120,4 +121,5 @@ internal abstract partial class GlobalMainClasses : MainClasses<JGlobal>
 			loader.GetVersion(this.SystemObject.As<JClassLocalRef>(), false);
 		return this._version.Value;
 	}
+#endif
 }

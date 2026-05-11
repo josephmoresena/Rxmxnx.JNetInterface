@@ -21,4 +21,8 @@ internal interface ILocalCacheOwner
 	/// <param name="frame">A <see cref="LocalFrame"/> instance.</param>
 	/// <param name="result">Current result.</param>
 	void DeleteLocalFrame(LocalFrame frame, JLocalObject? result);
+	/// <summary>
+	/// Release all references.
+	/// </summary>
+	void FreeReferences();
 }

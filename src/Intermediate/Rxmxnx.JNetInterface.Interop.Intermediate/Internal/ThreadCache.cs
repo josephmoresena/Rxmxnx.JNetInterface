@@ -57,6 +57,12 @@ internal sealed class ThreadCache<TThread> : ReferenceHelperCache<TThread, JEnvi
 		}
 		return env as IThread ?? TThread.Create(env);
 	}
+	/// <summary>
+	/// Attaches current thread to VM.
+	/// </summary>
+	/// <param name="purpose">A <see cref="ThreadCreationArgs"/> instance.</param>
+	/// <returns>A <see cref="IThread"/> instance.</returns>
+	public IThread AttachThread(ThreadPurpose purpose) => this.AttachThread(ThreadCreationArgs.Create(purpose));
 
 	/// <inheritdoc/>
 	protected override TThread Create(JEnvironmentRef reference, ThreadCreationArgs? args)

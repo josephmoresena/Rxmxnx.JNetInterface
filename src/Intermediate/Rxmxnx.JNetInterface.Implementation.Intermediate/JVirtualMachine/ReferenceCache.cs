@@ -33,7 +33,7 @@ public partial class JVirtualMachine
 			try
 			{
 				if (isNew)
-					result.InitializeClasses();
+					result._core.InitializeClasses();
 			}
 			catch (Exception)
 			{

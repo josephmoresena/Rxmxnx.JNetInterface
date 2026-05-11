@@ -101,6 +101,7 @@ internal abstract class LocalMainClasses : MainClasses<JClassObject>
 	{
 		IMessageResource resource = IMessageResource.GetInstance();
 #pragma warning disable S1066
+		// ReSharper disable once InvertIf
 		if (AndroidFeature.IsFixedAndroid)
 		{
 			// If fixed on Android, JNI should be 0x00010006

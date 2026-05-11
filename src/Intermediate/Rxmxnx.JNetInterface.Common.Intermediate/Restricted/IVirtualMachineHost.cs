@@ -41,4 +41,12 @@ internal interface IVirtualMachineHost : IWrapper<IVirtualMachine>
 	/// <param name="envRef">Output. Attached thread <see cref="JEnvironmentRef"/> reference.</param>
 	/// <returns>JNI code result.</returns>
 	JResult AttachThread(Boolean isDaemon, VirtualMachineArgumentValue arg, out JEnvironmentRef envRef);
+	/// <summary>
+	/// Removes the <see cref="IEnvironment"/> instance referenced by <paramref name="envRef"/>
+	/// into the current host.
+	/// </summary>
+	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
+	/// <param name="owner">A <see cref="ILocalCacheOwner"/> instance.</param>
+	/// <param name="thread">A <see cref="Thread"/> instance.</param>
+	void FinalizeThread(JEnvironmentRef envRef, ILocalCacheOwner owner, Thread thread);
 }

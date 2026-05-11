@@ -5,19 +5,17 @@ partial class JEnvironment : INativeThread<JEnvironment>, IMainClassLoader
 	JVirtualMachineRef IMainClassLoader.VirtualMachineRef => this.VirtualMachine.Reference;
 	JEnvironmentRef IMainClassLoader.EnvironmentRef => this.Reference;
 	JGlobalRef IMainClassLoader.GetMainClassGlobalRef(ITypeInformation typeInformation)
-	{
-		JClassLocalRef classRef = this._core.FindMainClass(typeInformation.ClassName, typeInformation.Signature);
-		return EnvironmentCore.GetMainClassGlobalRef(this._core, typeInformation, classRef);
-	}
+		=> this._m.GetMainClassGlobalRef(typeInformation);
 	JRuntimeVersion IMainClassLoader.GetVersion(JClassLocalRef systemClassRef, Boolean initializing)
 	{
-		if (!initializing) this.CheckJniError();
+		if (!initializing) this._m.Core.CheckJniError();
 		JMethodId getPropertyId =
-			EnvironmentCore.GetStaticMethodId(this._core, NativeFunctionSetImpl.GetPropertyDefinition, systemClassRef);
+			EnvironmentCore.GetStaticMethodId(this._m.Core, NativeFunctionSetImpl.GetPropertyDefinition,
+			                                  systemClassRef);
 		using LocalFrame? _ = !initializing ? new(this, IVirtualMachine.GetVersionCapacity) : default;
 		if (getPropertyId != default)
 		{
-			Decimal jreVersion = this._core.GetRuntimeVersion(systemClassRef, getPropertyId);
+			Decimal jreVersion = this._m.Core.GetRuntimeVersion(systemClassRef, getPropertyId);
 			switch (jreVersion)
 			{
 				case < 1:
@@ -28,7 +26,7 @@ partial class JEnvironment : INativeThread<JEnvironment>, IMainClassLoader
 					return (JRuntimeVersion)((Int32)JRuntimeVersion.SEd0 * jreVersion);
 			}
 		}
-		this._core.ClearException();
+		this._m.Core.ClearException();
 		// If it was not possible to determine the JRE version, the JNI version is assumed.
 		if (JavaStandardFeature.GetRuntimeVersion() is { } jre) return jre;
 		if (AndroidFeature.IsFixedAndroid) return JRuntimeVersion.J6; // Android runtime is based on JRE 1.6.
@@ -36,46 +34,32 @@ partial class JEnvironment : INativeThread<JEnvironment>, IMainClassLoader
 	}
 	JGlobalRef IMainClassLoader.GetPrimitiveMainClassGlobalRef(ClassObjectMetadata classMetadata,
 		JGlobalBase? wClassGlobal)
-	{
-		Byte signature = classMetadata.ClassSignature[0];
-		String className = ClassNameHelper.GetPrimitiveClassName(signature);
-		JClassLocalRef classRef = !JObject.IsNullOrDefault(wClassGlobal) ?
-			this._core.FindPrimitiveClass(wClassGlobal.As<JClassLocalRef>(), className) :
-			this._core.FindPrimitiveClass(signature);
-		return EnvironmentCore.GetMainClassGlobalRef(this._core, classMetadata, classRef);
-	}
-	IUnsafeMemoryManager INativeThread.MemoryManager => this._core;
+		=> this._m.GetPrimitiveMainClassGlobalRef(classMetadata, wClassGlobal);
+	IUnsafeMemoryManager INativeThread.MemoryManager => this._m.Core;
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	JFieldId IAccessibleManager.GetFieldId(JFieldDefinition definition, JClassLocalRef classRef)
-		=> EnvironmentCore.GetFieldId(this._core, definition, classRef);
+		=> EnvironmentCore.GetFieldId(this._m.Core, definition, classRef);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	JFieldId IAccessibleManager.GetStaticFieldId(JFieldDefinition definition, JClassLocalRef classRef)
-		=> EnvironmentCore.GetStaticFieldId(this._core, definition, classRef);
+		=> EnvironmentCore.GetStaticFieldId(this._m.Core, definition, classRef);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	JMethodId IAccessibleManager.GetMethodId(JCallDefinition definition, JClassLocalRef classRef)
-		=> EnvironmentCore.GetMethodId(this._core, definition, classRef);
+		=> EnvironmentCore.GetMethodId(this._m.Core, definition, classRef);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	JMethodId IAccessibleManager.GetStaticMethodId(JCallDefinition definition, JClassLocalRef classRef)
-		=> EnvironmentCore.GetStaticMethodId(this._core, definition, classRef);
+		=> EnvironmentCore.GetStaticMethodId(this._m.Core, definition, classRef);
 	LocalCache ILocalCacheOwner.LocalCache
 	{
-		get => this.LocalCache;
-		set => this.SetObjectCache(value);
-	}
-	void ILocalCacheOwner.CreateLocalFrame(Int32 capacity)
-	{
-		ref readonly NativeInterface nativeInterface =
-			ref this._core.GetNativeInterface<NativeInterface>(NativeInterface.PushLocalFrameInfo);
-		JResult result = nativeInterface.ReferenceFunctions.PushLocalFrame(this.Reference, capacity);
-		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
-		this._core.CheckJniError();
+		get => this._m.LocalCache;
+		set => this._m.LocalCache = value;
 	}
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void ILocalCacheOwner.CreateLocalFrame(Int32 capacity) => this._m.CreateLocalFrame(capacity);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void ILocalCacheOwner.DeleteLocalFrame(LocalFrame frame, JLocalObject? result)
-	{
-		this._core.DeleteLocalFrame(result);
-		JTrace.DeleteObjectCache(frame.Id, result);
-	}
+		=> this._m.DeleteLocalFrame(frame, result);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void ILocalCacheOwner.FreeReferences() => this._m.Core.FreeReferences();
 
 	static JEnvironment INativeThread<JEnvironment>.Create(IVirtualMachineHost host, JEnvironmentRef envRef)
 		=> new((JVirtualMachine)host, envRef);

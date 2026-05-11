@@ -14,75 +14,27 @@ partial class JEnvironment : IEquatable<IEnvironment>, IEquatable<JEnvironment>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	Boolean IEquatable<JEnvironment>.Equals(JEnvironment? other) => other is not null && this._core.Equals(other._core);
+	Boolean IEquatable<JEnvironment>.Equals(JEnvironment? other) => other is not null && this._m.Core.Equals(other._m);
 	Boolean IEnvironment.NoProxy => true;
 	Int32? IEnvironment.LocalCapacity
 	{
-		get => this._core.Capacity;
-		set => this._core.EnsureLocalCapacity(value.GetValueOrDefault());
+		get => this._m.LocalCapacity;
+		set => this._m.LocalCapacity = value;
 	}
-	IAccessFeature IEnvironment.AccessFeature => this._core;
-	IClassFeature IEnvironment.ClassFeature => this._core;
-	IReferenceFeature IEnvironment.ReferenceFeature => this._core;
-	IStringFeature IEnvironment.StringFeature => this._core;
-	IArrayFeature IEnvironment.ArrayFeature => this._core;
-	INioFeature IEnvironment.NioFeature => this._core;
+	IAccessFeature IEnvironment.AccessFeature => this._m.Core;
+	IClassFeature IEnvironment.ClassFeature => this._m.Core;
+	IReferenceFeature IEnvironment.ReferenceFeature => this._m.Core;
+	IStringFeature IEnvironment.StringFeature => this._m.Core;
+	IArrayFeature IEnvironment.ArrayFeature => this._m.Core;
+	INioFeature IEnvironment.NioFeature => this._m.Core;
 	NativeFunctionSet IEnvironment.FunctionSet => NativeFunctionSetImpl.Instance;
 
 	Boolean IEnvironment.IsValidationAvoidable(JGlobalBase jGlobal)
-		=> JEnvironment.IsValidationAvoidable(this._core, jGlobal);
-	JReferenceType IEnvironment.GetReferenceType(JObject jObject)
-	{
-		if (jObject is not JReferenceObject jRefObj || jRefObj.IsDefault || jRefObj.IsProxy)
-			return JReferenceType.InvalidRefType;
-		using INativeTransaction jniTransaction = this._core.Host.MemoryManager.CreateTransaction(1);
-		JObjectLocalRef localRef = jniTransaction.Add(jRefObj);
-		JReferenceType result = this.GetReferenceType(localRef);
-		if (result == JReferenceType.InvalidRefType)
-		{
-			if (jRefObj is JGlobalBase jGlobal) this._core.Host.GlobalManager.Remove(jGlobal);
-			else this._core.Remove(jRefObj as JLocalObject);
-			jRefObj.ClearValue();
-		}
-		else if (this._core.IsSame(jRefObj.As<JObjectLocalRef>(), default))
-		{
-			if (jRefObj is JGlobalBase jGlobal)
-				this._core.Unload(jGlobal);
-			else
-				this._core.Unload(jRefObj as JLocalObject ?? ILocalViewObject.GetObject(jRefObj as ILocalViewObject));
-		}
-
-		return result;
-	}
-	Boolean IEnvironment.IsSameObject(JObject jObject, JObject? jOther)
-	{
-		if (Object.ReferenceEquals(jObject, jOther)) return true;
-		if (jObject is not JReferenceObject jRefObj || jOther is not JReferenceObject jRefOther)
-			return JEnvironment.EqualEquatable(jObject as IEquatable<IPrimitiveType>, jOther as IPrimitiveType) ??
-				JEnvironment.EqualEquatable(jOther as IEquatable<IPrimitiveType>, jObject as IPrimitiveType) ??
-				JEnvironment.EqualEquatable(jObject as IEquatable<JPrimitiveObject>, jOther as JPrimitiveObject) ??
-				JEnvironment.EqualEquatable(jOther as IEquatable<JPrimitiveObject>, jObject as JPrimitiveObject) ??
-				false;
-
-		ImplementationValidationUtilities.ThrowIfProxy(jRefObj);
-		ImplementationValidationUtilities.ThrowIfProxy(jRefOther);
-		using INativeTransaction jniTransaction = this._core.Host.MemoryManager.CreateTransaction(2);
-		JObjectLocalRef localRef = jniTransaction.Add(jRefObj);
-		JObjectLocalRef otherLocalRef = jniTransaction.Add(jRefOther);
-		return this._core.IsSame(localRef, otherLocalRef);
-	}
+		=> EnvironmentCore.IsValidationAvoidable(this._m.Core, jGlobal);
+	JReferenceType IEnvironment.GetReferenceType(JObject jObject) => this._m.GetReferenceType(jObject);
+	Boolean IEnvironment.IsSameObject(JObject jObject, JObject? jOther) => this._m.IsSameObject(jObject, jOther);
 	TResult IEnvironment.WithFrame<TResult>(Int32 capacity, Func<TResult> func)
-	{
-		using LocalFrame localFrame = new(this, capacity);
-		TResult result = func();
-		localFrame.SetResult(result);
-		return result;
-	}
+		=> EnvironmentValue.WithFrame(this, capacity, func);
 	TResult IEnvironment.WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func)
-	{
-		using LocalFrame localFrame = new(this, capacity);
-		TResult result = func(state);
-		localFrame.SetResult(result);
-		return result;
-	}
+		=> EnvironmentValue.WithFrame(this, capacity, state, func);
 }

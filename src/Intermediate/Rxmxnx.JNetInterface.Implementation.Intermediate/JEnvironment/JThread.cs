@@ -8,53 +8,32 @@ partial class JEnvironment
 	internal sealed class JThread : JEnvironment, IThread
 	{
 		/// <summary>
-		/// Creation argument.
+		/// <see cref="ThreadValue"/> instance.
 		/// </summary>
-		private readonly ThreadCreationArgs _args;
-		/// <summary>
-		/// Indicates whether the current instance is disposed.
-		/// </summary>
-		private readonly IMutableWrapper<Boolean> _isDisposed;
+		private readonly ThreadValue _value;
+
 		/// <inheritdoc/>
-		public override Boolean IsDaemon => this._args.IsDaemon;
+		public override Boolean IsDaemon => this._value.IsDaemon;
 		/// <inheritdoc/>
-		public override Boolean IsDisposable { get; }
+		public override Boolean IsDisposable => this._value.IsDisposable;
 		/// <inheritdoc/>
-		public override Boolean IsAttached => base.IsAttached && (!this.IsDisposable || !this._isDisposed.Value);
-		/// <inheritdoc cref="IThread.Name"/>
-		public override CString Name => this._args.Name ?? CString.Zero;
+		public override Boolean IsAttached => this._value.IsAttached(this._m.Core);
 
 		/// <inheritdoc/>
 		public JThread(JVirtualMachine vm, JEnvironmentRef envRef, ThreadCreationArgs args) : base(vm, envRef)
-		{
-			this._args = args;
-			this._isDisposed = IMutableReference<Boolean>.Create();
-			this.IsDisposable = true;
-		}
+			=> this._value = new(args);
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="env">Original env instance.</param>
-		public JThread(JEnvironment env) : base(env._core)
-		{
-			JThread? thread = env as JThread;
-			this.IsDisposable = false;
-			this._isDisposed = thread?._isDisposed ?? IMutableReference<Boolean>.Create();
-			this._args = thread?._args ?? new();
-		}
+		public JThread(JEnvironment env) : base(env._m.Core) => this._value = new((env as JThread)?._value);
+		/// <inheritdoc cref="IThread.Name"/>
+		public override CString Name => this._value.Name;
 
 		Boolean IThread.Attached => this.IsAttached;
 		Boolean IThread.Daemon => this.IsDaemon;
 
 		/// <inheritdoc/>
-		public void Dispose()
-		{
-			if (!this.IsDisposable || this._isDisposed.Value) return;
-			this._isDisposed.Value = true;
-
-			JVirtualMachine.RemoveEnvironment(this._core.Host.Value.Reference, this.Reference);
-			this._core.FreeReferences();
-			JVirtualMachine.DetachCurrentThread(this._core.Host.Value.Reference, this.Reference, this._core.Thread);
-		}
+		public void Dispose() => this._value.FinalizeThread(this._m.Core, this);
 	}
 }
