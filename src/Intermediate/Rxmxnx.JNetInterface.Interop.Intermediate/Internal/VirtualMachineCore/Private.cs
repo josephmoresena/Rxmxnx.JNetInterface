@@ -6,6 +6,7 @@ internal abstract partial class VirtualMachineCore
 	/// JNI transaction dictionary.
 	/// </summary>
 	private readonly ConcurrentDictionary<Guid, INativeTransaction> _transactions = new();
+
 	/// <summary>
 	/// Global object dictionary.
 	/// </summary>
@@ -14,6 +15,10 @@ internal abstract partial class VirtualMachineCore
 	/// Main <see cref="IVirtualMachine"/> instance.
 	/// </summary>
 	private protected readonly IVirtualMachine VirtualMachine;
+	/// <summary>
+	/// Weak cache.
+	/// </summary>
+	private protected readonly ClassCache WeakClassCache = new(JReferenceType.WeakGlobalRefType);
 	/// <summary>
 	/// Weak global object dictionary.
 	/// </summary>
@@ -64,4 +69,27 @@ internal abstract partial class VirtualMachineCore
 	/// <inheritdoc cref="INativeMemoryManager.CreateTransaction(Int32)"/>
 	private INativeTransaction CreateTransaction(Int32 capacity)
 		=> JniTransactionHandle.CreateTransaction(capacity, this._transactions);
+
+	/// <summary>
+	/// Creates global instance for <paramref name="classMetadata"/>
+	/// </summary>
+	/// <param name="classMetadata">A <see cref="ClassObjectMetadata"/> instance.</param>
+	private void CreateGlobalClass(ClassObjectMetadata classMetadata)
+	{
+		JGlobal globalClass = new(this.VirtualMachine, classMetadata, default);
+		this.GlobalClassCache[classMetadata.Hash] = globalClass;
+	}
+
+	/// <summary>
+	/// Detaches current thread from <see cref="IVirtualMachine"/> referenced by <paramref name="core"/>.
+	/// </summary>
+	/// <param name="core">A <see cref="VirtualMachineCore"/> reference.</param>
+	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
+	/// <param name="thread">A <see cref="Thread"/> instance.</param>
+	private protected static void DetachCurrentThread(VirtualMachineCore? core, JEnvironmentRef envRef, Thread thread)
+	{
+		ImplementationValidationUtilities.ThrowIfDifferentThread(envRef, thread);
+		JResult result = core?.GetInvokeInterface().DetachCurrentThread(core.Reference) ?? JResult.DetachedThreadError;
+		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
+	}
 }

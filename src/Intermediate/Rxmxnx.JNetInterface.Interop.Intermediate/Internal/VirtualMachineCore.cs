@@ -17,10 +17,6 @@ internal abstract partial class VirtualMachineCore : GlobalMainClasses
 	public readonly NativeCache NativesCache = new();
 	/// <inheritdoc cref="IVirtualMachine.Reference"/>
 	public readonly JVirtualMachineRef Reference;
-	/// <summary>
-	/// Weak cache.
-	/// </summary>
-	public readonly ClassCache WeakClassCache = new(JReferenceType.WeakGlobalRefType);
 
 	/// <summary>
 	/// Constructor.
@@ -55,18 +51,67 @@ internal abstract partial class VirtualMachineCore : GlobalMainClasses
 			invoke.AttachCurrentThread(this.Reference, out envRef, in arg) :
 			invoke.AttachCurrentThreadAsDaemon(this.Reference, out envRef, in arg);
 	}
-
-	/// <summary>
-	/// Detaches current thread from <see cref="IVirtualMachine"/> referenced by <paramref name="core"/>.
-	/// </summary>
-	/// <param name="core">A <see cref="VirtualMachineCore"/> reference.</param>
-	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
-	/// <param name="thread">A <see cref="Thread"/> instance.</param>
-	public static void DetachCurrentThread(VirtualMachineCore? core, JEnvironmentRef envRef, Thread thread)
+	/// <inheritdoc cref="ITypeManager.ReloadAccess(String)"/>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	public void ReloadAccess(String classHash)
 	{
-		ImplementationValidationUtilities.ThrowIfDifferentThread(envRef, thread);
-		JResult result = core?.GetInvokeInterface().DetachCurrentThread(core.Reference) ?? JResult.DetachedThreadError;
-		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
+		if (!this.GlobalClassCache.TryGetValue(classHash, out JGlobal? jGlobal) || jGlobal.IsDefault) return;
+		this.GlobalClassCache.Load(jGlobal.As<JClassLocalRef>());
+	}
+	/// <inheritdoc cref="ITypeManager.GetAccess(JClassLocalRef)"/>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	public AccessCache? GetAccess(JClassLocalRef classRef)
+		=> this.GlobalClassCache[classRef] ?? this.WeakClassCache[classRef];
+	/// <inheritdoc cref="ITypeManager.LoadMetadataGlobal(JGlobalBase)"/>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	public ClassObjectMetadata? LoadMetadataGlobal(JGlobalBase jGlobal)
+	{
+		ClassObjectMetadata? result = jGlobal.ObjectMetadata as ClassObjectMetadata;
+		if (result is null || this.GlobalClassCache.ContainsHash(result.Hash)) return result;
+		JTrace.LoadClassMetadata(result);
+		this.CreateGlobalClass(result);
+		return result;
+	}
+	/// <inheritdoc cref="ITypeManager.LoadGlobal(JClassObject)"/>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	public JGlobal LoadGlobal(JClassObject jClass)
+	{
+		ObjectLifetime lifetime = jClass.Lifetime;
+		Boolean found = true;
+		if (!this.GlobalClassCache.TryGetValue(jClass.Hash, out JGlobal? jGlobal))
+		{
+			WellKnownRuntimeTypeInformation typeMetadata = MetadataHelper.GetExactMetadata(jClass.Hash);
+			JTypeKind kind = jClass switch
+			{
+				{ IsPrimitive: true, } => JTypeKind.Primitive,
+				{ ArrayDimension: > 0, } => JTypeKind.Array,
+				_ => typeMetadata.Kind ?? JTypeKind.Undefined,
+			};
+			ClassObjectMetadata metadata = new(jClass, kind, typeMetadata.IsFinal);
+			jGlobal = new(this.VirtualMachine, metadata, default);
+			found = false;
+			this.GlobalClassCache[jClass.Hash] = jGlobal;
+		}
+		lifetime.SetGlobal(jGlobal);
+		JTrace.LoadGlobalClass(jClass, found, jGlobal.Reference);
+		return jGlobal;
+	}
+	/// <inheritdoc cref="ITypeManager.GetTypeInformation(String)"/>
+	public ITypeInformation? GetTypeInformation(String classHash)
+	{
+		ITypeInformation? result = default;
+		if (this.GlobalClassCache.TryGetValue(classHash, out JGlobal? jGlobal))
+			result = jGlobal.ObjectMetadata as ITypeInformation;
+		JTrace.GetTypeInformation(classHash, result);
+		return result;
 	}
 }
 
@@ -137,15 +182,6 @@ internal sealed class VirtualMachineCore<TThread> : VirtualMachineCore where TTh
 			this.LoadMainClasses(mainClassLoader);
 	}
 	/// <summary>
-	/// Creates global instance for <paramref name="classMetadata"/>
-	/// </summary>
-	/// <param name="classMetadata">A <see cref="ClassObjectMetadata"/> instance.</param>
-	public void CreateGlobalClass(ClassObjectMetadata classMetadata)
-	{
-		JGlobal globalClass = new(this.VirtualMachine, classMetadata, default);
-		this.GlobalClassCache[classMetadata.Hash] = globalClass;
-	}
-	/// <summary>
 	/// Attaches current thread to VM.
 	/// </summary>
 	/// <param name="args">A <see cref="ThreadCreationArgs"/> instance.</param>
@@ -184,5 +220,13 @@ internal sealed class VirtualMachineCore<TThread> : VirtualMachineCore where TTh
 					throw;
 			}
 		}
+	}
+	/// <inheritdoc cref="IVirtualMachineHost.FinalizeThread(JEnvironmentRef, ILocalCacheOwner, Thread)"/>
+	public void FinalizeThread(JEnvironmentRef envRef, ILocalCacheOwner owner, Thread? thread)
+	{
+		this.ThreadCache.Remove(envRef);
+		owner.FreeReferences();
+		if (thread is not null)
+			VirtualMachineCore.DetachCurrentThread(this, envRef, thread);
 	}
 }
