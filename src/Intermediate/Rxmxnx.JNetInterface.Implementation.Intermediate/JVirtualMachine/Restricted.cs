@@ -79,10 +79,11 @@ public partial class JVirtualMachine : IVirtualMachineHost, ITypeManager
 	JResult IVirtualMachineHost.AttachThread(Boolean isDaemon, VirtualMachineArgumentValue arg,
 		out JEnvironmentRef envRef)
 		=> this._core.AttachThread(isDaemon, arg, out envRef);
-	void IVirtualMachineHost.FinalizeThread(JEnvironmentRef envRef, ILocalCacheOwner owner, Thread thread)
+	void IVirtualMachineHost.FinalizeThread(JEnvironmentRef envRef, ILocalCacheOwner owner, Thread? thread)
 	{
 		this._core.ThreadCache.Remove(envRef);
 		owner.FreeReferences();
-		VirtualMachineCore.DetachCurrentThread(this._core, envRef, thread);
+		if (thread is not null)
+			VirtualMachineCore.DetachCurrentThread(this._core, envRef, thread);
 	}
 }

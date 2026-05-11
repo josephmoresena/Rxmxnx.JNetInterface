@@ -34,6 +34,6 @@ partial class JEnvironment
 		Boolean IThread.Daemon => this.IsDaemon;
 
 		/// <inheritdoc/>
-		public void Dispose() => this._value.FinalizeThread(this._m.Core, this);
+		public void Dispose() => this._value.FinalizeThread(this._m.Core, this, true);
 	}
 }

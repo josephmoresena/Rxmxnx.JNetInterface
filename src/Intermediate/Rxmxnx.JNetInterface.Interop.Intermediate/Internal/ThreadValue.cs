@@ -55,13 +55,14 @@ internal readonly struct ThreadValue
 	/// <summary>
 	/// Removes the current thread into the current host.
 	/// </summary>
+	/// <param name="detach">Indicates the current thread should be detached from the JVM.</param>
 	/// <param name="core">A <see cref="EnvironmentCore"/> reference.</param>
 	/// <param name="owner">A <see cref="ILocalCacheOwner"/> instance.</param>
-	public void FinalizeThread(EnvironmentCore core, ILocalCacheOwner owner)
+	public void FinalizeThread(EnvironmentCore core, ILocalCacheOwner owner, Boolean detach)
 	{
 		if (!this.IsDisposable || this._isDisposed.Value) return;
 
 		this._isDisposed.Value = true;
-		core.Host.FinalizeThread(core.Reference, owner, core.Thread);
+		core.Host.FinalizeThread(core.Reference, owner, detach ? core.Thread : default);
 	}
 }
