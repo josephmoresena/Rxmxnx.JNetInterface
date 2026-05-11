@@ -49,8 +49,9 @@ internal class LocalCache
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	public LocalCache(ClassCache classCache)
+	public LocalCache(ClassCache classCache, LocalCache? previous = default)
 	{
+		this._previous = previous;
 		this._objects = new();
 		this.Id = Guid.NewGuid();
 		this.ClassCache = classCache;

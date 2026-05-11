@@ -17,6 +17,10 @@ internal sealed partial class EnvironmentCore : LocalMainClasses, IUnsafeMemoryM
 	public readonly JEnvironmentRef Reference;
 
 	/// <summary>
+	/// Initial local cache.
+	/// </summary>
+	public LocalCache? InitialCache { get; }
+	/// <summary>
 	/// Current thrown exception.
 	/// </summary>
 	public JniException? Thrown { get; private set; }
@@ -36,16 +40,17 @@ internal sealed partial class EnvironmentCore : LocalMainClasses, IUnsafeMemoryM
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="vm">A <see cref="IVirtualMachineHost"/> instance.</param>
+	/// <param name="host">A <see cref="IVirtualMachineHost"/> instance.</param>
 	/// <param name="env">A <see cref="INativeThread"/> instance.</param>
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
-	public EnvironmentCore(IVirtualMachineHost vm, INativeThread env, JEnvironmentRef envRef) : base(envRef, env)
+	public EnvironmentCore(IVirtualMachineHost host, INativeThread env, JEnvironmentRef envRef) : base(envRef, env)
 	{
 		this.Reference = envRef;
-		this.Host = vm;
+		this.Host = host;
+		this.InitialCache = this.Host.GetInitialCache();
 
 		this._env = env;
-		this._objects = new(this._classes);
+		this._objects = new(this._classes, this.InitialCache);
 		if (this.Version < NativeInterface.RequiredVersion) return; // Avoid class loading if unsupported version.
 		this.LoadMainClasses();
 	}

@@ -49,4 +49,9 @@ internal interface IVirtualMachineHost : IWrapper<IVirtualMachine>
 	/// <param name="owner">A <see cref="ILocalCacheOwner"/> instance.</param>
 	/// <param name="thread">A <see cref="Thread"/> instance.</param>
 	void FinalizeThread(JEnvironmentRef envRef, ILocalCacheOwner owner, Thread thread);
+	/// <summary>
+	/// Retrieves the initial cache for the current thread.
+	/// </summary>
+	/// <returns>The initial <see cref="LocalCache"/> instance.</returns>
+	LocalCache? GetInitialCache();
 }

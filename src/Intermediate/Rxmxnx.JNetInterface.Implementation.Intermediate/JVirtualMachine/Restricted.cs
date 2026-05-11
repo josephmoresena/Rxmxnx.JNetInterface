@@ -63,6 +63,7 @@ public partial class JVirtualMachine : IVirtualMachineHost, ITypeManager
 	void ITypeManager.RegisterNatives(String classHash, IReadOnlyList<JNativeCallEntry> calls)
 		=> this._core.NativesCache[classHash] = calls;
 	void ITypeManager.UnregisterNatives(String classHash) => this._core.NativesCache.Clear(classHash);
+	LocalCache? IVirtualMachineHost.GetInitialCache() => default; // Any JNIEnv* is owned by JNetInterface
 
 	IVirtualMachine IWrapper<IVirtualMachine>.Value => this;
 	Boolean IVirtualMachineHost.IsRunning => this.IsAlive;

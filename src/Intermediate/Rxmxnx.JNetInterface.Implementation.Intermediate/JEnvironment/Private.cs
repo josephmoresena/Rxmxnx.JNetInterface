@@ -20,6 +20,6 @@ partial class JEnvironment
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="core">A <see cref="JEnvironment"/> reference.</param>
+	/// <param name="core">A <see cref="EnvironmentCore"/> instance.</param>
 	private JEnvironment(EnvironmentCore core) => this._m = core;
 }
