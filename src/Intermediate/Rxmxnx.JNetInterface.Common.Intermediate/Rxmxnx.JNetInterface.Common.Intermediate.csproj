@@ -49,13 +49,18 @@
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
             <_Parameter1>Rxmxnx.JNetInterface.Implementation.Tests</_Parameter1>
         </AssemblyAttribute>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>Rxmxnx.JNetInterface.Mobile.Intermediate</_Parameter1>
+        </AssemblyAttribute>
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
         <ProjectReference Include="..\Rxmxnx.JNetInterface.Trace.Intermediate\Rxmxnx.JNetInterface.Trace.Intermediate.csproj"/>
-        <ProjectReference Include="..\Rxmxnx.JNetInterface.Java.Intermediate\Rxmxnx.JNetInterface.Java.Intermediate.csproj"/>
         <ProjectReference Include="..\Rxmxnx.JNetInterface.Android.Intermediate\Rxmxnx.JNetInterface.Android.Intermediate.csproj"/>
+    </ItemGroup>
+    <ItemGroup Condition="'$(TargetPlatformIdentifier)' != 'android'">
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.Java.Intermediate\Rxmxnx.JNetInterface.Java.Intermediate.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
