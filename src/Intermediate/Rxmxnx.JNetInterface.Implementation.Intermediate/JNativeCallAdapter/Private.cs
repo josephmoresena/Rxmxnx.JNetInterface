@@ -132,7 +132,7 @@ public readonly ref partial struct JNativeCallAdapter
 				JLocalObject jLocal = classMetadata.CreateInstance(jClass, localRef, true);
 				Boolean disposeParse = typeMetadata.Modifier != JTypeModifier.Final && classMetadata != typeMetadata;
 				JReferenceObject result = typeMetadata.ParseInstance(jLocal, disposeParse);
-				this._callAdapter._cache.RegisterParameter(localRef, result as ILocalObject ?? jLocal);
+				this._callAdapter._cache.RegisterAlien(localRef, result as ILocalObject ?? jLocal);
 				return result;
 			}
 			finally

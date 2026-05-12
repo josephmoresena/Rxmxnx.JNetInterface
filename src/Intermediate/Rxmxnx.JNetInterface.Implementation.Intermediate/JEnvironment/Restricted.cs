@@ -36,6 +36,11 @@ partial class JEnvironment : INativeThread<JEnvironment>, IMainClassLoader
 		JGlobalBase? wClassGlobal)
 		=> this._m.GetPrimitiveMainClassGlobalRef(classMetadata, wClassGlobal);
 	IUnsafeMemoryManager INativeThread.MemoryManager => this._m.Core;
+	ClassCache INativeThread.ClassCache => this.ClassCache;
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void INativeThread.LoadClass(JClassObject jClass) => this.LoadClass(jClass);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void INativeThread.CheckJniError() => this.CheckJniError();
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	JFieldId IAccessibleManager.GetFieldId(JFieldDefinition definition, JClassLocalRef classRef)
 		=> EnvironmentCore.GetFieldId(this._m.Core, definition, classRef);

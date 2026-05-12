@@ -22,7 +22,11 @@ internal readonly struct EnvironmentValue
 	public LocalCache LocalCache
 	{
 		get => this.Core.GetLocalCache();
-		set => this.Core.SetObjectCache(value);
+		set
+		{
+			JTrace.SetObjectCache(value.Id, value.Name);
+			this.Core.SetObjectCache(value);
+		}
 	}
 	/// <inheritdoc cref="IEnvironment.UsableStackBytes"/>
 	public Int32 UsableStackBytes

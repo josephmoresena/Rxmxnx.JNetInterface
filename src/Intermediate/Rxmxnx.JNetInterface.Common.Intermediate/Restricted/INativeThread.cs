@@ -14,6 +14,21 @@ internal interface INativeThread : IEnvironment, IAccessibleManager, ILocalCache
 	/// Unsafe Memory manager.
 	/// </summary>
 	IUnsafeMemoryManager MemoryManager { get; }
+	/// <summary>
+	/// Class cache.
+	/// </summary>
+	ClassCache ClassCache { get; }
+
+	/// <summary>
+	/// Loads in current cache given class.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	void LoadClass(JClassObject jClass);
+	/// <summary>
+	/// Checks JNI occurred error.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void CheckJniError();
 }
 
 /// <summary>

@@ -47,7 +47,7 @@ internal sealed partial class EnvironmentCore : LocalMainClasses, IUnsafeMemoryM
 	{
 		this.Reference = envRef;
 		this.Host = host;
-		this.InitialCache = this.Host.GetInitialCache();
+		this.InitialCache = this.Host.GetInitialCache(env, this._classes);
 
 		this._env = env;
 		this._objects = new(this._classes, this.InitialCache);

@@ -21,11 +21,7 @@ partial class JEnvironment
 	/// Sets current object cache.
 	/// </summary>
 	/// <param name="localCache">A <see cref="LocalCache"/> instance.</param>
-	internal void SetObjectCache(LocalCache localCache)
-	{
-		JTrace.SetObjectCache(localCache.Id, localCache.Name);
-		this._m.Core.SetObjectCache(localCache);
-	}
+	internal void SetObjectCache(LocalCache localCache) => this._m.LocalCache = localCache;
 	/// <summary>
 	/// Deletes <paramref name="globalRef"/>.
 	/// </summary>
