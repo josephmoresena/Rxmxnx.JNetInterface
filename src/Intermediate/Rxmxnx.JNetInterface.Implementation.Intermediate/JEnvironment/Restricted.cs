@@ -62,9 +62,9 @@ partial class JEnvironment : INativeThread<JEnvironment>, IMainClassLoader
 	void ILocalCacheOwner.FreeReferences() => this._m.Core.FreeReferences();
 
 	static JEnvironment INativeThread<JEnvironment>.Create(IVirtualMachineHost host, JEnvironmentRef envRef)
-		=> new((JVirtualMachine)host, envRef);
+		=> new(host, envRef);
 	static JEnvironment INativeThread<JEnvironment>.Create(IVirtualMachineHost host, JEnvironmentRef envRef,
 		ThreadCreationArgs args)
-		=> new JThread((JVirtualMachine)host, envRef, args);
+		=> new JThread(host, envRef, args);
 	static IThread INativeThread<JEnvironment>.Create(JEnvironment nativeThread) => new JThread(nativeThread);
 }

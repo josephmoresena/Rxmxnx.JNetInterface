@@ -14,9 +14,10 @@ partial class JEnvironment
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="vm">A <see cref="JVirtualMachine"/> instance.</param>
+	/// <param name="host">A <see cref="IVirtualMachineHost"/> instance.</param>
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
-	private JEnvironment(JVirtualMachine vm, JEnvironmentRef envRef) => this._m = new EnvironmentCore(vm, this, envRef);
+	private JEnvironment(IVirtualMachineHost host, JEnvironmentRef envRef)
+		=> this._m = new EnvironmentCore(host, this, envRef);
 	/// <summary>
 	/// Constructor.
 	/// </summary>

@@ -20,7 +20,7 @@ partial class JEnvironment
 		public override Boolean IsAttached => this._value.IsAttached(this._m.Core);
 
 		/// <inheritdoc/>
-		public JThread(JVirtualMachine vm, JEnvironmentRef envRef, ThreadCreationArgs args) : base(vm, envRef)
+		public JThread(IVirtualMachineHost host, JEnvironmentRef envRef, ThreadCreationArgs args) : base(host, envRef)
 			=> this._value = new(args);
 		/// <summary>
 		/// Constructor.
