@@ -33,16 +33,12 @@ internal abstract class AlienLocalCache : LocalCache, IDisposable
 		this.Environment = env;
 		env.CheckJniError();
 	}
-
 	/// <inheritdoc/>
 	public void Dispose()
 	{
-		this.Clear();
-		this.ClearCache(this.Environment, false);
+		this.Dispose(true);
 		GC.SuppressFinalize(this);
 	}
-
-	~AlienLocalCache() { this.Clear(); }
 
 	/// <summary>
 	/// Registers an object in current alien local object frame.
@@ -88,13 +84,25 @@ internal abstract class AlienLocalCache : LocalCache, IDisposable
 	public override ObjectLifetime? GetLifetime(JObjectLocalRef localRef)
 		=> this._aliens.TryGetValue(localRef, out ILocalObject? jLocal) ? jLocal.Lifetime : base.GetLifetime(localRef);
 
+	/// <inheritdoc cref="IDisposable.Dispose()"/>
+	/// <param name="disposing">
+	/// Indicates whether current calls is performed by <see cref="IDisposable.Dispose()"/>.
+	/// </param>
+	protected virtual void Dispose(Boolean disposing)
+	{
+		this.Clear();
+		if (disposing)
+			this.ClearCache(this.Environment, false);
+	}
 	/// <summary>
 	/// Clears current instance.
 	/// </summary>
-	private void Clear()
+	protected void Clear()
 	{
 		this.Environment.ClassCache.Unload(this._classes);
 		this._aliens.Clear();
 		this._classes.Clear();
 	}
+
+	~AlienLocalCache() { this.Dispose(false); }
 }
