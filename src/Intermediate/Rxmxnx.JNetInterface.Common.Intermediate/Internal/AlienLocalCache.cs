@@ -21,9 +21,9 @@ internal abstract class AlienLocalCache : LocalCache, IDisposable
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="classCache">A <see cref="ClassCache"/> instance.</param>
+	/// <param name="classes">A <see cref="ClassCache"/> instance.</param>
 	/// <param name="env">A <see cref="INativeThread"/> instance.</param>
-	protected AlienLocalCache(ClassCache classCache, INativeThread env) : base(classCache) => this.Environment = env;
+	protected AlienLocalCache(ClassCache classes, INativeThread env) : base(classes) => this.Environment = env;
 	/// <summary>
 	/// Constructor.
 	/// </summary>

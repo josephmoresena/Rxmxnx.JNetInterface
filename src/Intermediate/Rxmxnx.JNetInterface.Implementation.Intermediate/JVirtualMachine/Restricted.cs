@@ -28,7 +28,7 @@ public partial class JVirtualMachine : IVirtualMachineHost, ITypeManager
 		=> this._core.NativesCache[classHash] = calls;
 	void ITypeManager.UnregisterNatives(String classHash) => this._core.NativesCache.Clear(classHash);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	LocalCache? IVirtualMachineHost.GetInitialCache(INativeThread _, ClassCache __) => default;
+	LocalCache? IVirtualMachineHost.GetInitialCache(INativeThread env, ClassCache classes) => default;
 
 	IVirtualMachine IWrapper<IVirtualMachine>.Value => this;
 	Boolean IVirtualMachineHost.IsRunning => this.IsAlive;
