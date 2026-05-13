@@ -19,9 +19,9 @@ internal interface INativeThread : IEnvironment, IAccessibleManager, ILocalCache
 	/// </summary>
 	ClassCache ClassCache { get; }
 	/// <summary>
-	/// Initial cache.
+	/// Indicates whether the current thread is owned by the current host instance.
 	/// </summary>
-	LocalCache? InitialCache { get; }
+	Boolean IsOwned { get; }
 
 	/// <summary>
 	/// Loads in current cache given class.

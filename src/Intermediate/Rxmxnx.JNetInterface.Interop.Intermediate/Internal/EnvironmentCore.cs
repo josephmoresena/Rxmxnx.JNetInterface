@@ -17,9 +17,9 @@ internal sealed partial class EnvironmentCore : LocalMainClasses, IUnsafeMemoryM
 	public readonly JEnvironmentRef Reference;
 
 	/// <summary>
-	/// Initial local cache.
+	/// Indicates whether the current thread is owned by the current host instance.
 	/// </summary>
-	public LocalCache? InitialCache { get; }
+	public Boolean IsOwned { get; }
 	/// <summary>
 	/// Current thrown exception.
 	/// </summary>
@@ -47,10 +47,10 @@ internal sealed partial class EnvironmentCore : LocalMainClasses, IUnsafeMemoryM
 	{
 		this.Reference = envRef;
 		this.Host = host;
-		this.InitialCache = this.Host.GetInitialCache(env, this._classes);
+		this.IsOwned = this.Host.IsOwned();
 
 		this._env = env;
-		this._objects = new(this._classes, this.InitialCache);
+		this._objects = new(this._classes);
 		if (this.Version < NativeInterface.RequiredVersion) return; // Avoid class loading if unsupported version.
 		this.LoadMainClasses();
 	}

@@ -37,7 +37,7 @@ partial class JEnvironment : INativeThread<JEnvironment>, IMainClassLoader
 		=> this._m.GetPrimitiveMainClassGlobalRef(classMetadata, wClassGlobal);
 	IUnsafeMemoryManager INativeThread.MemoryManager => this._m.Core;
 	ClassCache INativeThread.ClassCache => this.ClassCache;
-	LocalCache? INativeThread.InitialCache => this._m.Core.InitialCache;
+	Boolean INativeThread.IsOwned => this._m.Core.IsOwned;
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void INativeThread.LoadClass(JClassObject jClass) => this.LoadClass(jClass);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

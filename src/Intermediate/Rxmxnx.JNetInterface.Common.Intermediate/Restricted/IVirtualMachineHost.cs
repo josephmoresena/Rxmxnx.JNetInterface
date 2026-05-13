@@ -50,10 +50,18 @@ internal interface IVirtualMachineHost : IWrapper<IVirtualMachine>
 	/// <param name="thread">A <see cref="Thread"/> instance.</param>
 	void FinalizeThread(JEnvironmentRef envRef, ILocalCacheOwner owner, Thread? thread = default);
 	/// <summary>
+	/// Indicates whether the current thread is owned by the current host instance.
+	/// </summary>
+	/// <returns>
+	/// <see langword="true"/> if the current thread is owned byt the current host instance; otherwise,
+	/// <see langword="false"/>.
+	/// </returns>
+	Boolean IsOwned();
+	/// <summary>
 	/// Retrieves the initial cache for the current thread.
 	/// </summary>
 	/// <param name="env">A <see cref="INativeThread"/> instance.</param>
 	/// <param name="classes">Current class cache.</param>
 	/// <returns>The initial <see cref="LocalCache"/> instance.</returns>
-	LocalCache? GetInitialCache(INativeThread env, ClassCache classes);
+	LocalCache? GetInitialCache(INativeThread env, ClassCache classes) => default;
 }
