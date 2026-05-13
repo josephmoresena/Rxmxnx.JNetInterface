@@ -13,7 +13,7 @@ internal unsafe partial class TypeInfoSequence
 	/// <param name="escape">Indicates whether <paramref name="className"/> sould be escaped.</param>
 	/// <param name="isArray">Output. Indicates whether <paramref name="className"/> is for array class.</param>
 	/// <returns>Type hash.</returns>
-	private static String CreateHash(ReadOnlySpan<Byte> className, Boolean escape, out Boolean isArray)
+	public static String CreateHash(ReadOnlySpan<Byte> className, Boolean escape, out Boolean isArray)
 	{
 		// To create TypeInfoSequence instance we use JNI class name.
 		ReadOnlySpan<Byte> jniClassName = escape ?
@@ -32,6 +32,7 @@ internal unsafe partial class TypeInfoSequence
 			return String.Create(stringLength, state, TypeInfoSequence.CreateInfoSequence);
 		}
 	}
+
 	/// <summary>
 	/// Retrieves escaped JNI class name.
 	/// </summary>

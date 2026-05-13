@@ -41,6 +41,21 @@ public partial record ClassObjectMetadata
 			_ => isFinal,
 		};
 	}
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="classHash">Class hash.</param>
+	/// <param name="classNameLength">JNI class name length.</param>
+	/// <param name="signatureLength">JNI signature length.</param>
+	/// <param name="isArray">Indicates whether the class hash is for an array class.</param>
+	internal ClassObjectMetadata(String classHash, Int32 classNameLength, Int32 signatureLength, Boolean isArray) :
+		base(IClassType.GetMetadata<JClassObject>(), false)
+	{
+		this.Name = InfoSequenceBase.GetClassName(classHash, classNameLength);
+		this.ClassSignature = InfoSequenceBase.GetClassSignature(classHash, classNameLength, signatureLength);
+		this.ArrayDimension = isArray ? 0 : JClassObject.GetArrayDimension(this.ClassSignature);
+		this.Hash = classHash;
+	}
 
 	/// <summary>
 	/// Retrieves <see cref="JTypeKind"/> value from <paramref name="classMetadata"/>.

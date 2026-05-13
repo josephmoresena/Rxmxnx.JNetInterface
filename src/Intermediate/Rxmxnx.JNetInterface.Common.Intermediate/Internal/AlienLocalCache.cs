@@ -94,10 +94,23 @@ internal abstract class AlienLocalCache : LocalCache, IDisposable
 		if (disposing)
 			this.ClearCache(this.Environment, false);
 	}
+#if ANDROID
+	/// <summary>
+	/// Removes a registered alien.
+	/// </summary>
+	/// <param name="localRef">A <see cref="localRef"/> instance.</param>
+	protected void RemoveAlien(JObjectLocalRef localRef)
+	{
+		if (localRef == default) return;
+		if (this._aliens.Remove(localRef, out ILocalObject? jLocal) && jLocal is IWrapper<JClassObject> wrapper)
+			this._classes.Remove(wrapper.Value.Hash); // Removes class from aliases.
+	}
+#endif
+
 	/// <summary>
 	/// Clears current instance.
 	/// </summary>
-	protected void Clear()
+	private void Clear()
 	{
 		this.Environment.ClassCache.Unload(this._classes);
 		this._aliens.Clear();

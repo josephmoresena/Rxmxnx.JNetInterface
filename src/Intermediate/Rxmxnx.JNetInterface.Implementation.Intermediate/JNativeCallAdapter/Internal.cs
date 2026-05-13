@@ -71,16 +71,11 @@ public readonly ref partial struct JNativeCallAdapter
 			if (validateReference) this.ThrowIfNotClassObject(classRef.Value);
 			JClassObject result = env.GetReferenceTypeClass(classRef, true);
 			if (classRef.Value == result.LocalReference)
-			{
-				// Class is owned by this class.
+				// Class is owned by this call.
 				this._callAdapter._cache.RegisterAlien(classRef, result);
-			}
 			else
-			{
-				// Class is not owned by this class. A ClassView is registered instead.
-				CallClassView callClassView = new(classRef, result);
-				this._callAdapter._cache.RegisterAlien(classRef, callClassView);
-			}
+				// Class is not owned by this call. A ClassView is registered instead.
+				this._callAdapter._cache.RegisterAlien(classRef, new ClassView(classRef, result));
 			return result;
 		}
 	}
