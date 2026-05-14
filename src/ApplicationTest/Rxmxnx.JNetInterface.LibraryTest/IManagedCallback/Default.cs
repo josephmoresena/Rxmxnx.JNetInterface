@@ -1,3 +1,6 @@
+#if RELEASE_PACKAGE
+using System.Runtime.InteropServices;
+#endif
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
@@ -17,7 +20,13 @@ public partial interface IManagedCallback
 		JStringObject IManagedCallback.GetHelloString(JLocalObject jLocal)
 		{
 			IEnvironment env = jLocal.Environment;
+#if !RELEASE_PACKAGE
 			return JStringObject.Create(env, $"Hello from {JObject.CompilationFramework}, {Environment.MachineName}");
+#else
+			String frameworkInformation =
+				!AotInfo.IsReflectionDisabled ? $"{RuntimeInformation.FrameworkDescription}, " : "";
+			return JStringObject.Create(env, $"Hello from {frameworkInformation}{Environment.MachineName}");
+#endif
 		}
 		JInt IManagedCallback.GetThreadId(JLocalObject jLocal)
 		{

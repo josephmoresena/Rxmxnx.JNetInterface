@@ -77,12 +77,7 @@ static void InitGui(JVirtualMachineLibrary jvmLib)
 		frame.SetCloseOperation(JFrameObjectSwing.CloseOperation.Exit);
 
 		Show(frame);
-		if (countDownLatch is not null)
-			countDownLatch.Await();
-		else
-			do
-				Task.Delay(200).Wait();
-			while (frame.IsVisible());
+		KeepAliveThread(frame, countDownLatch);
 	}
 	catch (Exception ex)
 	{
@@ -189,4 +184,15 @@ static JLabelObject CreateFrameLabel(IEnvironment env)
 		jLabel.SetLayout(jLayout);
 
 	return jLabel;
+}
+static void KeepAliveThread(JFrameObjectSwing frame, JCountDownLatchObject? countDownLatch)
+{
+	if (countDownLatch is not null)
+	{
+		countDownLatch.Await();
+		return;
+	}
+	do
+		Task.Delay(200).Wait();
+	while (frame.IsVisible());
 }

@@ -1,5 +1,6 @@
 using Rxmxnx.JNetInterface.Awt;
 using Rxmxnx.JNetInterface.Lang;
+using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
 using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
@@ -34,6 +35,21 @@ public class JDialogObjectSwing : JDialogObject, IClassType<JDialogObjectSwing>,
 	protected JDialogObjectSwing(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JDialogObjectSwing(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	protected JDialogObjectSwing(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
+
+	public new void Add(JComponentObject component, JLocalObject constraints)
+	{
+		if (this.Environment.VirtualMachine.Version >= JRuntimeVersion.J5)
+		{
+			// For JDK 1.5 and later, use the add method directly.
+			base.Add(component, constraints);
+			return;
+		}
+
+		// Cast the javax.swing.JDialog instance to javax.swing.RootPaneContainer
+		JRootPaneContainerObject rootPane = this.CastTo<JRootPaneContainerObject>();
+		using JContainerObject? contentContainer = rootPane.GetContentPane();
+		contentContainer?.Add(component, constraints);
+	}
 
 	public static JDialogObjectSwing Create(JFrameObjectAwt frame, String title, Boolean modal)
 	{

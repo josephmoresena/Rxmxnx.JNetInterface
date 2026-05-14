@@ -6,6 +6,9 @@ using Rxmxnx.JNetInterface.Awt.Event;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Swing;
+#if RELEASE_PACKAGE
+using Rxmxnx.PInvoke;
+#endif
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
@@ -50,19 +53,7 @@ internal sealed class ShowDialogState(JFrameObjectAwt owner) : ActionListenerSta
 				using JDialogObjectSwing dialog = JDialogObjectSwing.Create(frame, "System Info", true);
 				using (JLabelObject jLabel = JLabelObject.Create(env, ShowDialogState.GetRuntimeInformation()))
 				using (JStringObject jString = JStringObject.Create(env, "Center"u8))
-				{
-					if (env.VirtualMachine.Version < JRuntimeVersion.J5)
-					{
-						// Cast the javax.swing.JDialog instance to javax.swing.RootPaneContainer
-						JRootPaneContainerObject rootPane = dialog.CastTo<JRootPaneContainerObject>();
-						using JContainerObject? contentContainer = rootPane.GetContentPane();
-						contentContainer?.Add(jLabel, jString);
-					}
-					else // For JDK 1.5 and later, use the add method directly.
-					{
-						dialog.Add(jLabel, jString);
-					}
-				}
+					dialog.Add(jLabel, jString);
 
 				dialog.Pack();
 				dialog.SetRelativeTo(frame);
@@ -93,6 +84,12 @@ internal sealed class ShowDialogState(JFrameObjectAwt owner) : ActionListenerSta
 			$"Runtime Path: {HttpUtility.HtmlEncode(RuntimeEnvironment.GetRuntimeDirectory())}" +
 			ShowDialogState.breakLineHtml +
 			$"Runtime Version: {HttpUtility.HtmlEncode(RuntimeEnvironment.GetSystemVersion())}" +
+#if !RELEASE_PACKAGE
 			ShowDialogState.breakLineHtml + $"Package: {HttpUtility.HtmlEncode(JObject.CompilationFramework)}" +
+#else
+			(!AotInfo.IsReflectionDisabled ?
+				$"{ShowDialogState.breakLineHtml}Package: {HttpUtility.HtmlEncode(RuntimeInformation.FrameworkDescription)}" :
+				String.Empty) +
+#endif
 			ShowDialogState.closeHtml;
 }
