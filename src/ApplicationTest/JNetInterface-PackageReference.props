@@ -10,6 +10,9 @@
     <ItemGroup Condition="'$(UsePackage)' != 'true' And '$(TargetPlatformIdentifier)' != 'android'">
         <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
     </ItemGroup>
+    <ItemGroup Condition="'$(UsePackage)' != 'true' And '$(TargetPlatformIdentifier)' == 'android'">
+        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Mobile.Intermediate\Rxmxnx.JNetInterface.Mobile.Intermediate.csproj"/>
+    </ItemGroup>
 
     <ItemGroup Condition="'$(UsePackage)' == 'true' And '$(TargetPlatformIdentifier)' != 'android'">
         <PackageReference Include="Rxmxnx.JNetInterface" Version="$(PackageVersion)"/>
