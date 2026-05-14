@@ -26,7 +26,9 @@ partial class JEnvironment
 		/// Constructor.
 		/// </summary>
 		/// <param name="env">Original env instance.</param>
-		public JThread(JEnvironment env) : base(env._m.Core) => this._value = new((env as JThread)?._value);
+		/// <param name="newThread">Indicates whether the created thread is new.</param>
+		public JThread(JEnvironment env, Boolean newThread) : base(env._m.Core)
+			=> this._value = new((env as JThread)?._value, newThread);
 		/// <inheritdoc cref="IThread.Name"/>
 		public override CString Name => this._value.Name;
 

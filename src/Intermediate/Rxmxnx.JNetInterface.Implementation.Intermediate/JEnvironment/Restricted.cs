@@ -75,5 +75,6 @@ partial class JEnvironment : INativeThread<JEnvironment>, IMainClassLoader
 	static JEnvironment INativeThread<JEnvironment>.Create(IVirtualMachineHost host, JEnvironmentRef envRef,
 		ThreadCreationArgs args)
 		=> new JThread(host, envRef, args);
-	static IThread INativeThread<JEnvironment>.Create(JEnvironment nativeThread) => new JThread(nativeThread);
+	static IThread INativeThread<JEnvironment>.Create(JEnvironment nativeThread, Boolean newThread)
+		=> new JThread(nativeThread, newThread);
 }

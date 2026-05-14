@@ -69,6 +69,7 @@ internal interface INativeThread<TThread> : INativeThread where TThread : class,
 	/// Creates a <see cref="IThread"/> instance using <paramref name="nativeThread"/>.
 	/// </summary>
 	/// <param name="nativeThread">A <see cref="INativeThread"/> instance.</param>
+	/// <param name="newThread">Indicates whether the created thread is new.</param>
 	/// <returns>A new <see cref="IThread"/> instance.</returns>
-	protected internal static abstract IThread Create(TThread nativeThread);
+	protected internal static abstract IThread Create(TThread nativeThread, Boolean newThread = false);
 }

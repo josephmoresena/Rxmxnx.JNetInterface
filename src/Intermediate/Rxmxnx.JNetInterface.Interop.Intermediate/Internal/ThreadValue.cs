@@ -38,11 +38,12 @@ internal readonly struct ThreadValue
 	/// Constructor.
 	/// </summary>
 	/// <param name="value">A <see cref="ThreadValue"/> value.</param>
-	public ThreadValue(ThreadValue? value)
+	/// <param name="isDisposable">Indicates whether the current instance is disposable.</param>
+	public ThreadValue(ThreadValue? value, Boolean isDisposable)
 	{
 		this._args = value?._args ?? new();
 		this._isDisposed = value?._isDisposed ?? IMutableReference<Boolean>.Create();
-		this.IsDisposable = false;
+		this.IsDisposable = isDisposable;
 	}
 
 	/// <inheritdoc cref="IThread.Attached"/>

@@ -67,7 +67,9 @@ public partial class JVirtualMachineTests
 
 			Assert.Null((env as IEnvironment).LocalCapacity);
 			Assert.Null((env as IEnvironment).PendingException);
-			Assert.Equal(removeAttachedThread, env.IsDisposable);
+			// Now thread is disposable when IVirtualMachineHost.AttachThread is called.
+			// Assert.Equal(removeAttachedThread, env.IsDisposable);
+			Assert.True(env.IsDisposable);
 			Assert.True(env.IsAttached);
 			Assert.Equal(IVirtualMachine.MinimalVersion, env.Version);
 			Assert.Equal(removeAttachedThread && daemon, thread.Daemon);
@@ -99,8 +101,11 @@ public partial class JVirtualMachineTests
 			if (useThreadGroup)
 				proxyEnv.Received(1).DeleteGlobalRef(globalRef);
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
-			Assert.Equal(!removeAttachedThread, env?.IsAttached);
-			Assert.Equal(!removeAttachedThread, (env as IThread)?.Attached);
+			// Now thread is disposable when IVirtualMachineHost.AttachThread is called.
+			// Assert.Equal(!removeAttachedThread, env?.IsAttached);
+			// Assert.Equal(!removeAttachedThread, (env as IThread)?.Attached);
+			Assert.False(env?.IsAttached);
+			Assert.False((env as IThread)?.Attached);
 			if (env is not null && removeAttachedThread)
 				Assert.Throws<RunningStateException>(() => env.ClassObject.GetClassName(out _));
 			Boolean removeResult = JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);

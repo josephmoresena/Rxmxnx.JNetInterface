@@ -55,7 +55,7 @@ internal sealed class ThreadCache<TThread> : ReferenceHelperCache<TThread, JEnvi
 			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 			env = this.Get(envRef, out _, args);
 		}
-		return env as IThread ?? TThread.Create(env);
+		return env as IThread ?? TThread.Create(env, true);
 	}
 	/// <summary>
 	/// Attaches current thread to VM.
