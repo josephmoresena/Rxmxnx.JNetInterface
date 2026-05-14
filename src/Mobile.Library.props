@@ -13,6 +13,8 @@
         <AndroidApplication>false</AndroidApplication>
         <CheckEolWorkloads>false</CheckEolWorkloads>
         <AndroidGenerateResourceDesigner>false</AndroidGenerateResourceDesigner>
+        <AndroidUseManagedDesignTimeResourceGenerator>false</AndroidUseManagedDesignTimeResourceGenerator>
+        <AndroidIncludeDebugSymbols>false</AndroidIncludeDebugSymbols>
     </PropertyGroup>
 
     <ItemGroup>

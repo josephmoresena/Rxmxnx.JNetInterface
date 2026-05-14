@@ -14,6 +14,8 @@
         <RuntimeHostConfigurationOption Include="JNetInterface.DisableReflectionAutoRegistration" Value="true" Trim="true"/>
         <RuntimeHostConfigurationOption Include="JNetInterface.DisableNioAutoRegistration" Value="true" Trim="true"/>
         <RuntimeHostConfigurationOption Include="JNetInterface.EnableFinalUserTypeRuntime" Value="true" Trim="true"/>
+    </ItemGroup>
+    <ItemGroup Condition="'$(TargetPlatformIdentifier)' != 'android'">
         <RuntimeHostConfigurationOption Include="JNetInterface.CheckRefTypeNativeCallEnabled" Value="true" Trim="true"/>
         <RuntimeHostConfigurationOption Include="JNetInterface.DisableCheckClassRefNativeCall" Value="true" Trim="true"/>
         <RuntimeHostConfigurationOption Include="JNetInterface.FixedRuntime.Standard" Value="true" Trim="true"/>
