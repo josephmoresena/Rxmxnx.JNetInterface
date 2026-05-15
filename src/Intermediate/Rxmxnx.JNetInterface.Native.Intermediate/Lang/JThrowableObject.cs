@@ -116,9 +116,7 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	/// <param name="message">The message used to construct the <c>java.lang.Throwable</c> instance.</param>
 	/// <param name="throwException">Indicates whether exception should be thrown in managed code.</param>
-#if !NET8_0_OR_GREATER
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 	public static void ThrowNew<TThrowable>(IEnvironment env, CString message, Boolean throwException = false)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		=> env.ClassFeature.ThrowNew<TThrowable>(message, throwException);
@@ -129,9 +127,7 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	/// <param name="message">The message used to construct the <c>java.lang.Throwable</c> instance.</param>
 	/// <param name="throwException">Indicates whether exception should be thrown in managed code.</param>
-#if !NET8_0_OR_GREATER
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 	public static void ThrowNew<TThrowable>(IEnvironment env, String message, Boolean throwException = false)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		=> env.ClassFeature.ThrowNew<TThrowable>(message, throwException);

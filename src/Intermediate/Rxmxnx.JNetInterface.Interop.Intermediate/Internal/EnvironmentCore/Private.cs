@@ -233,7 +233,7 @@ internal sealed partial class EnvironmentCore
 	/// <param name="message">
 	/// The message used to construct the <see cref="ThrowableException"/> instance.
 	/// </param>
-#if !NET8_0_OR_GREATER
+#if !NET8_0_OR_GREATER || ANDROID
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 #endif
 	private void ThrowNew<TThrowable>(ReadOnlySpan<Byte> utf8Message, Boolean throwException, String? message)

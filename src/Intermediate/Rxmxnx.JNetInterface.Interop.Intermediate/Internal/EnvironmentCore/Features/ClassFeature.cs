@@ -80,7 +80,7 @@ internal sealed partial class EnvironmentCore : IClassFeature
 		ReadOnlySpan<Byte> utf8Message = EnvironmentCore.GetSafeSpan(message);
 		this.ThrowNew(jClass, throwableMetadata, utf8Message, throwException, message?.ToString());
 	}
-#if !NET8_0_OR_GREATER
+#if !NET8_0_OR_GREATER || ANDROID
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 #endif
 	public void ThrowNew<TThrowable>(CString? message, Boolean throwException)
@@ -89,7 +89,7 @@ internal sealed partial class EnvironmentCore : IClassFeature
 		ReadOnlySpan<Byte> utf8Message = EnvironmentCore.GetSafeSpan(message);
 		this.ThrowNew<TThrowable>(utf8Message, throwException, message?.ToString());
 	}
-#if !NET8_0_OR_GREATER
+#if !NET8_0_OR_GREATER || ANDROID
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 #endif
 	public void ThrowNew<TThrowable>(String? message, Boolean throwException)

@@ -24,9 +24,7 @@ internal static partial class IndeterminateHelper
 	/// <typeparam name="TObject">A <see cref="IClassType{TObject}"/> type.</typeparam>
 	/// <param name="jConstructor">Reflected constructor instance.</param>
 	/// <param name="args">Method arguments.</param>
-#if !NET8_0_OR_GREATER
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 	public static TObject ReflectedNewCall<TObject>(JConstructorObject jConstructor,
 #if NET9_0_OR_GREATER
 		params ReadOnlySpan<IObject?> args

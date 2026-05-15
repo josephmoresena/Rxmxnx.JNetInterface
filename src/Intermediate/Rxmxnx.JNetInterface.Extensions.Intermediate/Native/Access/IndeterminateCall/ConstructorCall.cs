@@ -25,9 +25,7 @@ public abstract partial class IndeterminateCall
 	/// <typeparam name="TObject">A <see cref="IClassType{TObject}"/> type.</typeparam>
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	/// <param name="args">Method arguments.</param>
-#if !NET8_0_OR_GREATER
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 	public TObject NewCall<TObject>(IEnvironment env,
 #if NET9_0_OR_GREATER
 		params ReadOnlySpan<IObject?> args

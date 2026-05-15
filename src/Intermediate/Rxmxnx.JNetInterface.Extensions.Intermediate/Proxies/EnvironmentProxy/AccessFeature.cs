@@ -58,9 +58,7 @@ public abstract partial class EnvironmentProxy
 		IObject?[] args) where TObject : JLocalObject, IDataType<TObject>;
 	/// <inheritdoc
 	///     cref="IAccessFeature.CallConstructor{TObject}(JConstructorObject, JConstructorDefinition, ReadOnlySpan{IObject})"/>
-#if !NET8_0_OR_GREATER
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 	public abstract TObject CallConstructor<TObject>(JConstructorObject jConstructor, JConstructorDefinition definition,
 		IObject?[] args) where TObject : JLocalObject, IClassType<TObject>;
 	/// <inheritdoc cref="IAccessFeature.CallConstructor{TObject}(JClassObject, JConstructorDefinition, ReadOnlySpan{IObject})"/>

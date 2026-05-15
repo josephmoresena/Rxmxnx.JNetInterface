@@ -7,12 +7,14 @@
         <DefaultFramework>net10.0</DefaultFramework>
         <DefaultFrameworks>net10.0;net9.0</DefaultFrameworks>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
+    <PropertyGroup Condition="'$(TargetPlatformIdentifier)' != 'android'">
         <TargetFramework Condition="'$(RequiredFramework)' != ''">$(RequiredFramework)</TargetFramework>
+        <IsTrimmable Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))">true</IsTrimmable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <IsPackable>false</IsPackable>
-        <IsTrimmable Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))">true</IsTrimmable>
         <TrimMode>full</TrimMode>
         <RootNamespace>Rxmxnx.JNetInterface.ApplicationTest</RootNamespace>
         <NoWarn>$(NoWarn);NU1801</NoWarn>

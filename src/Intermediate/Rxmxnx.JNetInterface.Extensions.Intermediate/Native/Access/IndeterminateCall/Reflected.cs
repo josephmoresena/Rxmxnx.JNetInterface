@@ -78,9 +78,7 @@ public abstract partial class IndeterminateCall
 		=> IndeterminateHelper.ReflectedNewCall(jConstructor, args);
 	/// <inheritdoc cref="IndeterminateHelper.ReflectedNewCall{TObject}(JConstructorObject, ReadOnlySpan{IObject})"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#if !NET8_0_OR_GREATER
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 	public static TObject ReflectedNewCall<TObject>(JConstructorObject jConstructor,
 #if NET9_0_OR_GREATER
 		params ReadOnlySpan<IObject?> args

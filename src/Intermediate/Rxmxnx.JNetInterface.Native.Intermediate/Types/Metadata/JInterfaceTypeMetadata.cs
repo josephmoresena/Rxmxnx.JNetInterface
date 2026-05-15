@@ -50,9 +50,7 @@ public abstract class JInterfaceTypeMetadata : JReferenceTypeMetadata
 /// <typeparam name="TInterface">Type of java interface type.</typeparam>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-#if !NET8_0_OR_GREATER
 [UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 public abstract class JInterfaceTypeMetadata<TInterface> : JInterfaceTypeMetadata
 	where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 {

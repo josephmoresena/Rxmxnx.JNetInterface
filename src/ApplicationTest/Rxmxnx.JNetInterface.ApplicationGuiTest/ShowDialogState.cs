@@ -80,12 +80,13 @@ internal sealed class ShowDialogState(JFrameObjectAwt owner) : ActionListenerSta
 			$"Process Arch: {RuntimeInformation.ProcessArchitecture}" + ShowDialogState.breakLineHtml +
 			$"Process ID: {Environment.CurrentManagedThreadId}" + ShowDialogState.breakLineHtml +
 			$"Framework Version: {HttpUtility.HtmlEncode(Environment.Version)}" + ShowDialogState.breakLineHtml +
-			$"Runtime Name: {RuntimeInformation.FrameworkDescription}" + ShowDialogState.breakLineHtml +
+			$"Runtime Name: {HttpUtility.HtmlEncode(RuntimeInformation.FrameworkDescription)}" +
+			ShowDialogState.breakLineHtml +
 			$"Runtime Path: {HttpUtility.HtmlEncode(RuntimeEnvironment.GetRuntimeDirectory())}" +
 			ShowDialogState.breakLineHtml +
 			$"Runtime Version: {HttpUtility.HtmlEncode(RuntimeEnvironment.GetSystemVersion())}" +
 #if !RELEASE_PACKAGE
-			ShowDialogState.breakLineHtml + $"Package: {HttpUtility.HtmlEncode(JObject.CompilationFramework)}" +
+			$"{ShowDialogState.breakLineHtml}Package: {HttpUtility.HtmlEncode(JObject.CompilationFramework)}" +
 #else
 			(!AotInfo.IsReflectionDisabled ?
 				$"{ShowDialogState.breakLineHtml}Package: {HttpUtility.HtmlEncode(RuntimeInformation.FrameworkDescription)}" :

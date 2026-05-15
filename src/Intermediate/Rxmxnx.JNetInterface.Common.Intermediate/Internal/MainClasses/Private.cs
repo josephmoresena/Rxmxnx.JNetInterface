@@ -8,7 +8,7 @@ internal abstract partial class MainClasses
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
 	/// <param name="isMainClass">Indicates whether <typeparamref name="TReference"/> is main class.</param>
 	/// <param name="mainClasses">Main classes dictionary.</param>
-#if !NET8_0_OR_GREATER
+#if !NET8_0_OR_GREATER || ANDROID
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 #endif
 #pragma warning disable CA1859

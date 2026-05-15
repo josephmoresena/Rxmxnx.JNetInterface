@@ -30,9 +30,7 @@ public partial class JConstructorDefinition
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-#if !NET8_0_OR_GREATER
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	protected TObject New<TObject>(IEnvironment env,
 #if !NET9_0_OR_GREATER
@@ -59,9 +57,7 @@ public partial class JConstructorDefinition
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-#if !NET8_0_OR_GREATER
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	protected TObject NewReflected<TObject>(JConstructorObject jConstructor,
 #if !NET9_0_OR_GREATER

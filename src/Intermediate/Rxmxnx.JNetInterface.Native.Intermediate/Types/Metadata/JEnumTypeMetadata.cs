@@ -35,9 +35,7 @@ public abstract class JEnumTypeMetadata : JClassTypeMetadata
 /// <typeparam name="TEnum">Type of java enum type.</typeparam>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-#if !NET8_0_OR_GREATER
 [UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 public abstract class JEnumTypeMetadata<TEnum> : JEnumTypeMetadata where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>
 {
 	/// <inheritdoc/>

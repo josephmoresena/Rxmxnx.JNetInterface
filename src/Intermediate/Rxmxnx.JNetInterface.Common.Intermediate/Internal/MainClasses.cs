@@ -110,7 +110,7 @@ internal abstract partial class MainClasses
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-#if !NET8_0_OR_GREATER
+#if !NET8_0_OR_GREATER || ANDROID
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 #endif
 	public static void SetMainClass<TReference>(IDictionary<String, JDataTypeMetadata> mainClasses)

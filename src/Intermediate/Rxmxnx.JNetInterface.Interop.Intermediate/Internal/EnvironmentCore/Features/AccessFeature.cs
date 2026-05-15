@@ -224,7 +224,7 @@ internal sealed partial class EnvironmentCore : IAccessFeature
 			this.CreateObject<TObject>(localRef, true, true)! :
 			this.CreateObject<TObject>(jClass, localRef);
 	}
-#if !NET8_0_OR_GREATER
+#if !NET8_0_OR_GREATER || ANDROID
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 #endif
 	public TObject CallConstructor<TObject>(JConstructorObject jConstructor, JConstructorDefinition definition,

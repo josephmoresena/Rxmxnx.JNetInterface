@@ -29,9 +29,7 @@ public partial class JConstructorDefinition : JCallDefinition
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns>A new <typeparamref name="TObject"/>.</returns>
-#if !NET8_0_OR_GREATER
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 	private TObject New<TObject>(JClassObject jClass, ReadOnlySpan<IObject?> args)
 		where TObject : JLocalObject, IClassType<TObject>
 	{
@@ -50,9 +48,7 @@ public partial class JConstructorDefinition : JCallDefinition
 	/// <param name="definition">A <see cref="JConstructorDefinition"/> definition.</param>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
-#if !NET8_0_OR_GREATER
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 	internal static TObject New<TObject>(JConstructorDefinition definition, JClassObject jClass,
 		ReadOnlySpan<IObject?> args = default) where TObject : JLocalObject, IClassType<TObject>
 		=> definition.New<TObject>(jClass, args);
