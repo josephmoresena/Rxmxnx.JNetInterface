@@ -32,6 +32,10 @@ internal static partial class MetadataHelper
 	public static Boolean FinalUserTypeRuntimeEnabled
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#if !ANDROID || PACKAGE
 		get => AppContext.TryGetSwitch("JNetInterface.EnableFinalUserTypeRuntime", out Boolean enable) && enable;
+#else
+		get => false;
+#endif
 	}
 }

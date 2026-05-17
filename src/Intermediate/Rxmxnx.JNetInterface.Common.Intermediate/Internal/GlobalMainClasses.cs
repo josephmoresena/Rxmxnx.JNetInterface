@@ -88,24 +88,6 @@ internal abstract partial class GlobalMainClasses : MainClasses<JGlobal>
 			// User main classes
 			_ => this._typeManager.Contains(classHash),
 		} && Object.ReferenceEquals(jGlobal, this.GlobalClassCache[classHash]);
-	/// <summary>
-	/// Loads global classes.
-	/// </summary>
-	/// <param name="env">A <see cref="IMainClassLoader"/> instance.</param>
-	public void LoadMainClasses(IMainClassLoader env)
-	{
-		JTrace.MainClassesLoading(env.VirtualMachineRef, env.EnvironmentRef);
-		GlobalMainClasses.LoadMainClass(env, this.ClassObject, this._classMetadata);
-		GlobalMainClasses.LoadMainClass(env, this.ThrowableObject, this._throwableMetadata);
-		GlobalMainClasses.LoadMainClass(env, this.SystemObject, this._systemMetadata);
-		if (env.Version >= (Int32)JRuntimeVersion.SEd4)
-			GlobalMainClasses.LoadMainClass(env, this.StackTraceElementObject, this._stackTraceElementMetadata);
-		this.LoadUserMainClasses(env);
-		if (MainClasses.PrimitiveMainClassesEnabled)
-			this.LoadPrimitiveMainClasses(env);
-		JTrace.MainClassesLoaded(env.VirtualMachineRef, env.EnvironmentRef);
-		this.GlobalClassCache.RefreshAccess();
-	}
 #if !ANDROID
 	/// <summary>
 	/// Retrieves the current JRE version.
@@ -122,4 +104,23 @@ internal abstract partial class GlobalMainClasses : MainClasses<JGlobal>
 		return this._version.Value;
 	}
 #endif
+
+	/// <summary>
+	/// Loads global classes.
+	/// </summary>
+	/// <param name="env">A <see cref="IMainClassLoader"/> instance.</param>
+	protected void LoadMainClasses(IMainClassLoader env)
+	{
+		JTrace.MainClassesLoading(env.VirtualMachineRef, env.EnvironmentRef);
+		GlobalMainClasses.LoadMainClass(env, this.ClassObject, this._classMetadata);
+		GlobalMainClasses.LoadMainClass(env, this.ThrowableObject, this._throwableMetadata);
+		GlobalMainClasses.LoadMainClass(env, this.SystemObject, this._systemMetadata);
+		if (env.Version >= (Int32)JRuntimeVersion.SEd4)
+			GlobalMainClasses.LoadMainClass(env, this.StackTraceElementObject, this._stackTraceElementMetadata);
+		this.LoadUserMainClasses(env);
+		if (MainClasses.PrimitiveMainClassesEnabled)
+			this.LoadPrimitiveMainClasses(env);
+		JTrace.MainClassesLoaded(env.VirtualMachineRef, env.EnvironmentRef);
+		this.GlobalClassCache.RefreshAccess();
+	}
 }

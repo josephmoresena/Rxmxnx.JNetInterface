@@ -19,7 +19,11 @@ internal static partial class JTrace
 	public static Boolean TraceEnabled
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#if !ANDROID || PACKAGE
 		get => AppContext.TryGetSwitch("JNetInterface.EnableTrace", out Boolean enable) && enable;
+#else
+		get => true;
+#endif
 	}
 
 	/// <summary>

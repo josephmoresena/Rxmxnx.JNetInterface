@@ -36,6 +36,7 @@ internal static unsafe class AndroidHelper
 	static AndroidHelper()
 	{
 		AndroidHelper.ApiLevel = default;
+#if !ANDROID
 		AndroidHelper.IsZygote = false;
 		if (!SystemInfo.IsLinux || NativeUtilities.LoadNativeLib("libc") is not { } libcH) return;
 
@@ -47,6 +48,16 @@ internal static unsafe class AndroidHelper
 		if (!AndroidHelper.ApiLevel.HasValue ||
 		    !NativeLibrary.TryGetExport(libcH, "readlink", out IntPtr readLinkAddr)) return;
 		AndroidHelper.IsZygote = AndroidHelper.IsForkedFromZygote(readLinkAddr);
+#else
+		AndroidHelper.IsZygote = true;
+		Span<Byte> propertyValue = stackalloc Byte[AndroidHelper.propValueMaxLength];
+		Int32 propertyLength;
+		fixed (Byte* namePtr = &MemoryMarshal.GetReference(AndroidHelper.SdkVersionPropName))
+		fixed (Byte* valuePtr = &MemoryMarshal.GetReference(propertyValue))
+			propertyLength = AndroidHelper.GetSystemProperty(namePtr, valuePtr);
+		if (propertyLength <= 0) return;
+		AndroidHelper.SetApiLevelValue(propertyValue[..propertyLength]);
+#endif
 	}
 
 	/// <summary>
@@ -65,6 +76,7 @@ internal static unsafe class AndroidHelper
 #endif
 		Unsafe.AsRef(in AndroidHelper.ApiLevel) = apiLevel;
 	}
+#if !ANDROID
 	/// <summary>
 	/// Uses <c>__system_property_get</c> function to initialize <see cref="AndroidHelper.ApiLevel"/>.
 	/// </summary>
@@ -124,4 +136,16 @@ internal static unsafe class AndroidHelper
 			exeLinkContentLength = (Int32)readlink(exeLinkPathPtr, exeLinkContentPtr, (UIntPtr)exeLinkContent.Length);
 		return exeLinkContentLength > 0 && exeLinkContent.IndexOf("/system/bin/app_process"u8) == 0;
 	}
+#else
+	/// <summary>
+	/// Android <c>__system_property_get</c> call.
+	/// </summary>
+	/// <param name="name">Property name pointer.</param>
+	/// <param name="value">Property value pointer.</param>
+	/// <returns>Length of property value.</returns>
+	[DllImport("libc", EntryPoint = "__system_property_get")]
+#pragma warning disable SYSLIB1054
+	private static extern Int32 GetSystemProperty(Byte* name, Byte* value);
+#pragma warning restore SYSLIB1054
+#endif
 }
