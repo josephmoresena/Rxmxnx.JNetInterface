@@ -7,7 +7,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal sealed partial class EnvironmentCore
 {
 	/// <summary>
-	/// Class cache cache.
+	/// Class cache.
 	/// </summary>
 	public ClassCache<JClassObject> GetClassCache() => this._classes;
 	/// <summary>

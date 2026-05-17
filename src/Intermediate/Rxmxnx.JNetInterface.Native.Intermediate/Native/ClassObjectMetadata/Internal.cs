@@ -28,15 +28,28 @@ public partial record ClassObjectMetadata
 		this.ClassSignature = jClass.ClassSignature;
 		this.Hash = jClass.Hash;
 		this.ArrayDimension = jClass.ArrayDimension;
-		this.IsInterface = kind != JTypeKind.Undefined ?
-			kind is JTypeKind.Interface or JTypeKind.Annotation :
-			jClass.IsInterface;
-		this.IsEnum = kind != JTypeKind.Undefined ? kind is JTypeKind.Enum : jClass.IsEnum;
-		this.IsAnnotation = kind != JTypeKind.Undefined ? kind is JTypeKind.Annotation : jClass.IsAnnotation;
+		this.IsInterface = kind switch
+		{
+			JTypeKind.Undefined => jClass.IsInterface,
+			JTypeKind.Interface or JTypeKind.Annotation => true,
+			_ => false,
+		};
+		this.IsEnum = kind switch
+		{
+			JTypeKind.Undefined => jClass.IsEnum,
+			JTypeKind.Enum => true,
+			_ => false,
+		};
+		this.IsAnnotation = kind switch
+		{
+			JTypeKind.Undefined => jClass.IsAnnotation,
+			JTypeKind.Annotation => true,
+			_ => false,
+		};
 		this.IsFinal = isFinal switch
 		{
-			null when kind is JTypeKind.Primitive or JTypeKind.Enum => true,
-			null when kind is JTypeKind.Interface or JTypeKind.Annotation => false,
+			null when this.IsEnum.Value => true,
+			null when this.IsInterface.Value => false,
 			null => jClass.IsFinal,
 			_ => isFinal,
 		};
@@ -47,14 +60,23 @@ public partial record ClassObjectMetadata
 	/// <param name="classHash">Class hash.</param>
 	/// <param name="classNameLength">JNI class name length.</param>
 	/// <param name="signatureLength">JNI signature length.</param>
-	/// <param name="isArray">Indicates whether the class hash is for an array class.</param>
-	internal ClassObjectMetadata(String classHash, Int32 classNameLength, Int32 signatureLength, Boolean isArray) :
-		base(IClassType.GetMetadata<JClassObject>(), false)
+	/// <param name="kind">Class kind.</param>
+	internal ClassObjectMetadata(String classHash, Int32 classNameLength, Int32 signatureLength, JTypeKind kind) : base(
+		IClassType.GetMetadata<JClassObject>(), false)
 	{
 		this.Name = InfoSequenceBase.GetClassName(classHash, classNameLength);
 		this.ClassSignature = InfoSequenceBase.GetClassSignature(classHash, classNameLength, signatureLength);
-		this.ArrayDimension = isArray ? 0 : JClassObject.GetArrayDimension(this.ClassSignature);
+		this.ArrayDimension = kind is JTypeKind.Array ? JClassObject.GetArrayDimension(this.ClassSignature) : 0;
 		this.Hash = classHash;
+		this.IsInterface = kind is JTypeKind.Interface or JTypeKind.Annotation;
+		this.IsEnum = kind is not JTypeKind.Class ? kind is JTypeKind.Enum : null;
+		this.IsAnnotation = kind is not JTypeKind.Interface ? kind is JTypeKind.Annotation : null;
+		this.IsFinal = kind switch
+		{
+			JTypeKind.Class or JTypeKind.Array => null,
+			JTypeKind.Interface or JTypeKind.Annotation => false,
+			_ => true,
+		};
 	}
 
 	/// <summary>

@@ -203,6 +203,26 @@ internal sealed partial class EnvironmentCore
 		typeMetadata = core.GetTypeMetadata(jClass);
 		return jClass;
 	}
+#if ANDROID
+	/// <summary>
+	/// Retrieves the class object and instantiation metadata.
+	/// </summary>
+	/// <param name="core">A <see cref="EnvironmentCore"/> instance.</param>
+	/// <param name="typeInformation">A <see cref="ITypeInformation"/> instance.</param>
+	/// <param name="localRef">Object instance to get class.</param>
+	/// <param name="typeMetadata">Output. Instantiation metadata.</param>
+	/// <returns>Object's class <see cref="JClassObject"/> instance</returns>
+	public static JClassObject GetObjectClass(EnvironmentCore core, ITypeInformation typeInformation,
+		JObjectLocalRef localRef, out JReferenceTypeMetadata typeMetadata)
+	{
+		using LocalFrame frame = new(core._env, IVirtualMachine.GetObjectClassCapacity);
+		JClassLocalRef classRef = EnvironmentCore.GetObjectClass(core, localRef);
+		JClassObject jClass = core.GetClass(typeInformation, classRef);
+		core.LoadClass(frame, classRef, jClass); // Runtime class loading.
+		typeMetadata = core.GetTypeMetadata(jClass);
+		return jClass;
+	}
+#endif
 	/// <summary>
 	/// Parses <paramref name="throwableRef"/> to a <see cref="ThrowableException"/> instance.
 	/// </summary>

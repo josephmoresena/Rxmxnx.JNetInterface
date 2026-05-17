@@ -39,9 +39,9 @@ partial class JEnvironment : INativeThread<JEnvironment>, IMainClassLoader
 	ClassCache INativeThread.ClassCache => this.ClassCache;
 	Boolean INativeThread.IsOwned => this._m.Core.IsOwned;
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	void INativeThread.LoadClass(JClassObject jClass) => this.LoadClass(jClass);
+	void INativeThread.LoadClass(JClassObject jClass) => this._m.Core.LoadClass(jClass);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	void INativeThread.CheckJniError() => this.CheckJniError();
+	void INativeThread.CheckJniError() => this._m.Core.CheckJniError();
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	JClassObject INativeThread.GetReferenceTypeClass(JClassLocalRef classRef, Boolean keepReference)
 		=> this.GetReferenceTypeClass(classRef, keepReference);

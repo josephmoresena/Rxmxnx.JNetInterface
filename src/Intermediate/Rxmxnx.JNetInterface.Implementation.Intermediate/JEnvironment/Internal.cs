@@ -50,12 +50,6 @@ partial class JEnvironment
 	internal JClassObject GetReferenceTypeClass(JClassLocalRef classRef, Boolean keepReference = false)
 		=> this._m.Core.GetClass(classRef, keepReference, JTypeKind.Undefined);
 	/// <summary>
-	/// Loads in current cache given class.
-	/// </summary>
-	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal void LoadClass(JClassObject jClass) => this._m.Core.LoadClass(jClass);
-	/// <summary>
 	/// Reloads current class object.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassLocalRef"/> reference.</param>
@@ -68,11 +62,6 @@ partial class JEnvironment
 	/// <param name="errorMessage">Error message.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal void FatalError(ReadOnlySpan<Byte> errorMessage) => EnvironmentCore.FatalError(this._m.Core, errorMessage);
-	/// <summary>
-	/// Checks JNI occurred error.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal void CheckJniError() => this._m.Core.CheckJniError();
 	/// <summary>
 	/// Retrieves the class object and instantiation metadata.
 	/// </summary>
