@@ -1,3 +1,4 @@
+#if !ANDROID
 namespace Rxmxnx.JNetInterface.Internal;
 
 #if !PACKAGE
@@ -34,3 +35,4 @@ internal static partial class JTrace
 			$"thread: {Environment.CurrentManagedThreadId} library handle: {handle:x8} symbol: {name} {addressText}.");
 	}
 }
+#endif

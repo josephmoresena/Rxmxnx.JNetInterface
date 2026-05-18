@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal sealed unsafe partial class EnvironmentCore
+internal sealed partial class EnvironmentCore
 {
 	JClassObject IClassFeature.ClassObject => this.GetLoadedClass(this.ClassObject);
 	JClassObject IClassFeature.ThrowableObject => this.GetLoadedClass(this.ThrowableObject);
@@ -21,13 +21,14 @@ internal sealed unsafe partial class EnvironmentCore
 	JClassObject IClassFeature.LongPrimitive => this.GetLoadedClass(this.LongPrimitive);
 	JClassObject IClassFeature.ShortPrimitive => this.GetLoadedClass(this.ShortPrimitive);
 
+#if !ANDROID
 	/// <summary>
 	/// Retrieves JRE Version <c>java.specification.version</c> property.
 	/// </summary>
 	/// <param name="systemClassRef"><c>java.lang.System</c> class reference.</param>
 	/// <param name="getPropertyMethodId"><c>String java.lang.System.getProperty(String)</c> method ID.</param>
 	/// <returns>JRE Version.</returns>
-	public Decimal GetRuntimeVersion(JClassLocalRef systemClassRef, JMethodId getPropertyMethodId)
+	public unsafe Decimal GetRuntimeVersion(JClassLocalRef systemClassRef, JMethodId getPropertyMethodId)
 	{
 		JStringLocalRef propNameRef = this.CreateUtf8String("java.specification.version"u8);
 		JStringLocalRef propValueRef = default;
@@ -79,4 +80,5 @@ internal sealed unsafe partial class EnvironmentCore
 		}
 		return Decimal.Zero;
 	}
+#endif
 }

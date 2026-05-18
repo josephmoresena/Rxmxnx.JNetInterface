@@ -62,6 +62,18 @@ internal static partial class JTrace
 		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {className}", callerMethod);
 	}
+#if ANDROID
+	/// <summary>
+	/// Writes a category name and retrieving class reference using class name to the trace listeners.
+	/// </summary>
+	/// <param name="className">Class name.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void FindClass(String className, [CallerMemberName] String callerMethod = "")
+	{
+		if (!JTrace.TraceEnabled) return;
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {className}", callerMethod);
+	}
+#endif
 	/// <summary>
 	/// Writes a category name and retrieving type metadata for <paramref name="jClass"/> using
 	/// super <see cref="JClassObject"/> instance.
@@ -284,6 +296,7 @@ internal static partial class JTrace
 		if (!JTrace.TraceEnabled) return;
 		JTrace.CreateNonGenericGlobalRef(localRef, globalRef != default ? $"{globalRef}" : String.Empty, callerMethod);
 	}
+#if !ANDROID
 	/// <summary>
 	/// Writes a category name and finalization call to the trace listeners.
 	/// </summary>
@@ -294,6 +307,21 @@ internal static partial class JTrace
 		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {result.ToTraceText()}", callerMethod);
 	}
+#else
+	/// <summary>
+	/// Writes a category name and the interop objects register to the trace listeners.
+	/// </summary>
+	/// <param name="environment">A <see cref="IEnvironment"/> instance.</param>
+	/// <param name="count">Number of interop objects to register.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void RegisterInterop(IEnvironment environment, Int32 count,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!JTrace.TraceEnabled) return;
+		Trace.WriteLine(
+			$"thread: {Environment.CurrentManagedThreadId} {count} java.interop object{(count != 1 ? "s" : "")} will be registered.");
+	}
+#endif
 	/// <summary>
 	/// Writes a category name and using type metadata for <paramref name="jClass"/>
 	/// to the trace listeners.
@@ -329,12 +357,13 @@ internal static partial class JTrace
 	/// to the trace listeners.
 	/// </summary>
 	/// <param name="thread">A <see cref="IThread"/> instance.</param>
+	/// <param name="isNew"></param>
 	/// <param name="callerMethod">Caller member name.</param>
-	public static void InvokeAt(IThread thread, [CallerMemberName] String callerMethod = "")
+	public static void InvokeAt(IThread thread, Boolean isNew, [CallerMemberName] String callerMethod = "")
 	{
 		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine(
-			$"thread: {Environment.CurrentManagedThreadId} {thread.Reference} name: {thread.Name} daemon: {thread.Daemon}",
+			$"thread: {Environment.CurrentManagedThreadId} {thread.Reference} name: {thread.Name} daemon: {thread.Daemon} new: {isNew}",
 			callerMethod);
 	}
 	/// <summary>
@@ -476,4 +505,18 @@ internal static partial class JTrace
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {jniReference} {referenceType} deleted.",
 		                callerMethod);
 	}
+#if ANDROID
+	/// <summary>
+	/// Writes a category name and thrown unhandled exception to the trace listeners.
+	/// </summary>
+	/// <param name="ex">Thrown exception.</param>
+	/// <param name="isAsync">Indicates whether the current exception has been thrown on an async thread.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void UnhandledException(Exception ex, Boolean isAsync, [CallerMemberName] String callerMethod = "")
+	{
+		if (!JTrace.TraceEnabled) return;
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {(isAsync ? "async" : "")} error: {ex}.",
+		                callerMethod);
+	}
+#endif
 }

@@ -110,6 +110,7 @@ internal static partial class JTrace
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {envRef} loaded, new: {firstTime}.",
 		                callerMethod);
 	}
+#if !ANDROID
 	/// <summary>
 	/// Writes a category name and the retrieving java.specification.version property value.
 	/// </summary>
@@ -126,6 +127,7 @@ internal static partial class JTrace
 			$"thread: {Environment.CurrentManagedThreadId} {envRef} (0x{jniVersion:x8}) java.specification.version: {jVersion}.",
 			callerMethod);
 	}
+#endif
 #if NET8_0_OR_GREATER
 	/// <summary>
 	/// Writes a category name and the retrieving java.specification.version property value.
