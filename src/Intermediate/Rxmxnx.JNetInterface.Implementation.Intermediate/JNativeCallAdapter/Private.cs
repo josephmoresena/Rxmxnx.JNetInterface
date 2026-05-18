@@ -3,9 +3,9 @@ namespace Rxmxnx.JNetInterface;
 public readonly ref partial struct JNativeCallAdapter
 {
 	/// <summary>
-	/// Current <see cref="IEnvironment"/> instance.
+	/// Current <see cref="INativeThread"/> instance.
 	/// </summary>
-	private readonly JEnvironment _env;
+	private readonly INativeThread _env;
 	/// <summary>
 	/// Current <see cref="CallFrame"/> instance.
 	/// </summary>
@@ -17,7 +17,7 @@ public readonly ref partial struct JNativeCallAdapter
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 	private JNativeCallAdapter(JEnvironmentRef envRef)
 	{
-		this._env = JEnvironment.GetEnvironment(envRef);
+		this._env = JEnvironment.GetEnvironment(envRef); // Internal dependency.
 		this._cache = new(this._env);
 	}
 	/// <summary>
@@ -60,16 +60,16 @@ public readonly ref partial struct JNativeCallAdapter
 		/// </exception>
 		private void ThrowIfNotClassObject(JObjectLocalRef localRef)
 		{
-			JEnvironment env = this._callAdapter._env;
+			INativeThread env = this._callAdapter._env;
 			Builder.ThrowIfNotLocalReference(env, localRef);
 			JClassObject jClass = JVirtualMachine.CheckClassRefNativeCallEnabled ?
-				JEnvironment.GetObjectClass(env, localRef) :
-				env.ClassObject;
+				env.GetObjectClass(localRef) :
+				env.ClassFeature.ClassObject;
 
-			if (jClass.Name.AsSpan().SequenceEqual(env.ClassObject.Name)) return;
+			if (jClass.Name.AsSpan().SequenceEqual(env.ClassFeature.ClassObject.Name)) return;
 			IMessageResource resource = IMessageResource.GetInstance();
 			String objectClassName = ClassNameHelper.GetClassName(jClass.ClassSignature);
-			String className = ClassNameHelper.GetClassName(env.ClassObject.ClassSignature);
+			String className = ClassNameHelper.GetClassName(env.ClassFeature.ClassObject.ClassSignature);
 			String message = resource.NotTypeObject(objectClassName, className);
 			throw new ArgumentException(message);
 		}
@@ -83,10 +83,10 @@ public readonly ref partial struct JNativeCallAdapter
 		private JClassObject GetObjectClass(JObjectLocalRef localRef, out JReferenceTypeMetadata typeMetadata,
 			Boolean validateReference = false)
 		{
-			JEnvironment env = this._callAdapter._env;
+			INativeThread env = this._callAdapter._env;
 			if (env.LocalCache.GetLifetime(localRef)?.Class is { } jClass)
 			{
-				typeMetadata = (env as IEnvironment).ClassFeature.GetTypeMetadata(jClass);
+				typeMetadata = env.ClassFeature.GetTypeMetadata(jClass);
 				return jClass;
 			}
 			if (validateReference) Builder.ThrowIfNotLocalReference(env, localRef);
@@ -104,7 +104,7 @@ public readonly ref partial struct JNativeCallAdapter
 		private TObject CreateFinalObject<TObject>(JObjectLocalRef localRef)
 			where TObject : JReferenceObject, IReferenceType<TObject>
 		{
-			JEnvironment env = this._callAdapter._env;
+			INativeThread env = this._callAdapter._env;
 			JReferenceTypeMetadata typeMetadata = (JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TObject>();
 			JClassObject jClass = typeMetadata.GetClass(env);
 			Builder.ThrowIfNotLocalReference(env, localRef);
@@ -125,7 +125,7 @@ public readonly ref partial struct JNativeCallAdapter
 		private JReferenceObject CreateObject(JClassObject jClass, JObjectLocalRef localRef,
 			JReferenceTypeMetadata classMetadata, JReferenceTypeMetadata typeMetadata)
 		{
-			JEnvironment env = this._callAdapter._env;
+			INativeThread env = this._callAdapter._env;
 			this._callAdapter._cache.Activate(out LocalCache previous);
 			try
 			{
@@ -137,7 +137,7 @@ public readonly ref partial struct JNativeCallAdapter
 			}
 			finally
 			{
-				env.SetObjectCache(previous);
+				env.LocalCache = previous;
 			}
 		}
 	}

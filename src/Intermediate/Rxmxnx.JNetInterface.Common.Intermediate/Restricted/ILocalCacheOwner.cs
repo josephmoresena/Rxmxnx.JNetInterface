@@ -25,4 +25,10 @@ internal interface ILocalCacheOwner
 	/// Release all references.
 	/// </summary>
 	void FreeReferences();
+	/// <summary>
+	/// Reloads current class object.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <returns>Current <see cref="JClassLocalRef"/> reference.</returns>
+	void ReloadClass(JClassObject jClass);
 }

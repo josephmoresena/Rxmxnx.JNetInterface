@@ -36,15 +36,30 @@ partial class JEnvironment : INativeThread<JEnvironment>, IMainClassLoader
 		JGlobalBase? wClassGlobal)
 		=> this._m.GetPrimitiveMainClassGlobalRef(classMetadata, wClassGlobal);
 	IUnsafeMemoryManager INativeThread.MemoryManager => this._m.Core;
-	ClassCache INativeThread.ClassCache => this.ClassCache;
+	ClassCache INativeThread.ClassCache => this._m.Core.GetClassCache();
 	Boolean INativeThread.IsOwned => this._m.Core.IsOwned;
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void INativeThread.LoadClass(JClassObject jClass) => this._m.Core.LoadClass(jClass);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void INativeThread.CheckJniError() => this._m.Core.CheckJniError();
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	JClassObject INativeThread.GetReferenceTypeClass(JClassLocalRef classRef, Boolean keepReference)
-		=> this.GetReferenceTypeClass(classRef, keepReference);
+	JClassObject IAlienObjectManager.GetReferenceTypeClass(JClassLocalRef classRef, Boolean keepReference)
+		=> this._m.Core.GetClass(classRef, keepReference, JTypeKind.Undefined);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	JClassObject IAlienObjectManager.GetObjectClass(JObjectLocalRef localRef)
+	{
+		using LocalFrame frame = new(this, IVirtualMachine.GetObjectClassCapacity);
+		JClassLocalRef classRef = EnvironmentCore.GetObjectClass(this._m.Core, localRef);
+		JClassObject jClass = this._m.Core.GetClass(classRef, false, JTypeKind.Undefined);
+		this._m.Core.LoadClass(frame, classRef, jClass); // Runtime class loading.
+		return jClass;
+	}
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	JClassObject IAlienObjectManager.GetObjectClass(JObjectLocalRef localRef, out JReferenceTypeMetadata typeMetadata)
+		=> EnvironmentCore.GetObjectClass(this._m.Core, localRef, out typeMetadata);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	JReferenceType IAlienObjectManager.GetReferenceType(JObjectLocalRef localRef)
+		=> this._m.Core.GetReferenceType(localRef);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	JFieldId IAccessibleManager.GetFieldId(JFieldDefinition definition, JClassLocalRef classRef)
 		=> EnvironmentCore.GetFieldId(this._m.Core, definition, classRef);
@@ -69,6 +84,8 @@ partial class JEnvironment : INativeThread<JEnvironment>, IMainClassLoader
 		=> this._m.DeleteLocalFrame(frame, result);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void ILocalCacheOwner.FreeReferences() => this._m.Core.FreeReferences();
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void ILocalCacheOwner.ReloadClass(JClassObject jClass) => this._m.Core.ReloadClass(jClass);
 
 	static JEnvironment INativeThread<JEnvironment>.Create(IVirtualMachineHost host, JEnvironmentRef envRef)
 		=> new(host, envRef);

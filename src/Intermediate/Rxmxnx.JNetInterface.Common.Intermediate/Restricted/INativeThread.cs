@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Restricted;
 /// <summary>
 /// Represents a JNI environment for a native thread.
 /// </summary>
-internal interface INativeThread : IEnvironment, IAccessibleManager, ILocalCacheOwner
+internal interface INativeThread : IEnvironment, IAccessibleManager, ILocalCacheOwner, IAlienObjectManager
 {
 	/// <summary>
 	/// Indicates whether the associated thread is attached to a JVM.
@@ -33,13 +33,6 @@ internal interface INativeThread : IEnvironment, IAccessibleManager, ILocalCache
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void CheckJniError();
-	/// <summary>
-	/// Retrieves the <see cref="JClassObject"/> according to <paramref name="classRef"/>.
-	/// </summary>
-	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
-	/// <param name="keepReference">Indicates whether class reference should be assigned to created object.</param>
-	/// <returns>A <see cref="JClassObject"/> instance.</returns>
-	JClassObject GetReferenceTypeClass(JClassLocalRef classRef, Boolean keepReference = false);
 }
 
 /// <summary>
