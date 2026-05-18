@@ -25,7 +25,18 @@ internal sealed class ThreadCache<TThread> : ReferenceHelperCache<TThread, JEnvi
 	/// <inheritdoc/>
 	public override TThread Get(JEnvironmentRef reference, out Boolean isNew, ThreadCreationArgs? arg = default)
 	{
-		TThread result = base.Get(reference, out isNew, arg);
+		TThread result = this.GetInstance(reference, true, out isNew, arg);
+		JTrace.EnvironmentLoad(reference, isNew);
+		return result;
+	}
+	/// <summary>
+	/// Retrieves an unsafe <typeparamref name="TThread"/> instance from <paramref name="reference"/>.
+	/// </summary>
+	/// <param name="reference">A reference pointer to <typeparamref name="TThread"/> instance.</param>
+	/// <returns>A <typeparamref name="TThread"/> instance.</returns>
+	public TThread GetUnsafe(JEnvironmentRef reference)
+	{
+		TThread result = this.GetInstance(reference, false, out Boolean isNew, default);
 		JTrace.EnvironmentLoad(reference, isNew);
 		return result;
 	}
@@ -78,6 +89,28 @@ internal sealed class ThreadCache<TThread> : ReferenceHelperCache<TThread, JEnvi
 			disposable.Dispose();
 	}
 
+	/// <summary>
+	/// Retrieves a <typeparamref name="TThread"/> instance from <paramref name="reference"/>.
+	/// </summary>
+	/// <param name="reference">A reference pointer to <typeparamref name="TThread"/> instance.</param>
+	/// <param name="safeRequest">Indicates whether the current request is from a safe JNI call.</param>
+	/// <param name="arg">Creation argument.</param>
+	/// <param name="isNew">Indicates whether current object is new in cache.</param>
+	/// <returns>A <typeparamref name="TThread"/> instance.</returns>
+	private TThread GetInstance(JEnvironmentRef reference, Boolean safeRequest, out Boolean isNew,
+		ThreadCreationArgs? arg)
+	{
+		TThread result = base.Get(reference, out isNew, arg);
+		if (safeRequest && !isNew && (!result.IsAttached || !result.Thread.IsAlive))
+		{
+			// The JVM has been recycled the JNIEnv* pointer.
+			JTrace.EnvironmentInvalidLoad(reference, result.Thread.ManagedThreadId);
+			this.Remove(result.Reference);
+			result = base.Get(reference, out isNew, arg);
+		}
+		JTrace.EnvironmentLoad(reference, isNew);
+		return result;
+	}
 	/// <summary>
 	/// Initializes a new <see cref="IThread"/> instance for current thread.
 	/// </summary>

@@ -226,7 +226,7 @@ internal sealed class VirtualMachineCore<TThread> : VirtualMachineCore where TTh
 	{
 		this.ThreadCache.Remove(envRef);
 		owner.FreeReferences();
-		if (thread is not null)
+		if (thread is not null && thread.IsAlive)
 			VirtualMachineCore.DetachCurrentThread(this, envRef, thread);
 	}
 }

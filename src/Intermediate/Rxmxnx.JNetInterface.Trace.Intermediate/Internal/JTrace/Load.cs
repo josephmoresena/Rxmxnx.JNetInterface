@@ -110,6 +110,20 @@ internal static partial class JTrace
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {envRef} loaded, new: {firstTime}.",
 		                callerMethod);
 	}
+	/// <summary>
+	/// Writes a category name and the invalid environment load.
+	/// </summary>
+	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
+	/// <param name="oldThreadId">Old thread identifier.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void EnvironmentInvalidLoad(JEnvironmentRef envRef, Int32 oldThreadId,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!JTrace.TraceEnabled) return;
+		Trace.WriteLine(
+			$"thread: {Environment.CurrentManagedThreadId} {envRef} loaded but was attached to dead {oldThreadId} thread. A new instance will created.",
+			callerMethod);
+	}
 #if !ANDROID
 	/// <summary>
 	/// Writes a category name and the retrieving java.specification.version property value.
@@ -127,7 +141,6 @@ internal static partial class JTrace
 			$"thread: {Environment.CurrentManagedThreadId} {envRef} (0x{jniVersion:x8}) java.specification.version: {jVersion}.",
 			callerMethod);
 	}
-#endif
 #if NET8_0_OR_GREATER
 	/// <summary>
 	/// Writes a category name and the retrieving java.specification.version property value.
@@ -145,6 +158,7 @@ internal static partial class JTrace
 			$"thread: {Environment.CurrentManagedThreadId} {envRef} (0x{jniVersion:x8}) java.specification.version: {jVersion}.",
 			callerMethod);
 	}
+	#endif
 #endif
 
 	/// <summary>

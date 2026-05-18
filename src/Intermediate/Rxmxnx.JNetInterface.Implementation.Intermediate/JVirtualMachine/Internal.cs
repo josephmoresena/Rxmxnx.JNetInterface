@@ -28,7 +28,7 @@ public partial class JVirtualMachine
 	/// <returns>
 	/// The <see cref="IEnvironment"/> instance referenced by <paramref name="envRef"/>.
 	/// </returns>
-	internal JEnvironment GetEnvironment(JEnvironmentRef envRef) => this._core.ThreadCache.Get(envRef, out _);
+	internal JEnvironment GetEnvironment(JEnvironmentRef envRef) => this._core.ThreadCache.GetUnsafe(envRef);
 
 	/// <summary>
 	/// Retrieves the <see cref="IInvokedVirtualMachine"/> instance referenced by <paramref name="reference"/>.

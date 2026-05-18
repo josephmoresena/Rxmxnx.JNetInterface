@@ -42,6 +42,11 @@ internal interface INativeThread : IEnvironment, IAccessibleManager, ILocalCache
 internal interface INativeThread<TThread> : INativeThread where TThread : class, INativeThread<TThread>
 {
 	/// <summary>
+	/// Managed thread.
+	/// </summary>
+	Thread Thread { get; }
+
+	/// <summary>
 	/// Creates a <typeparamref name="TThread"/> instance using <paramref name="host"/> and <paramref name="envRef"/>.
 	/// </summary>
 	/// <param name="host">A <see cref="IVirtualMachineHost"/> instance.</param>

@@ -35,6 +35,7 @@ partial class JEnvironment : INativeThread<JEnvironment>, IMainClassLoader
 	JGlobalRef IMainClassLoader.GetPrimitiveMainClassGlobalRef(ClassObjectMetadata classMetadata,
 		JGlobalBase? wClassGlobal)
 		=> this._m.GetPrimitiveMainClassGlobalRef(classMetadata, wClassGlobal);
+	Thread INativeThread<JEnvironment>.Thread => this._m.Core.Thread;
 	IUnsafeMemoryManager INativeThread.MemoryManager => this._m.Core;
 	ClassCache INativeThread.ClassCache => this._m.Core.GetClassCache();
 	Boolean INativeThread.IsOwned => this._m.Core.IsOwned;
