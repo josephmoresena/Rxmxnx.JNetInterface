@@ -86,11 +86,7 @@ internal sealed class ShowDialogState(JFrameObjectAwt owner) : ActionListenerSta
 			ShowDialogState.breakLineHtml +
 			$"Runtime Version: {HttpUtility.HtmlEncode(RuntimeEnvironment.GetSystemVersion())}" +
 #if !RELEASE_PACKAGE
-			$"{ShowDialogState.breakLineHtml}Package: {HttpUtility.HtmlEncode(JObject.CompilationFramework)}" +
-#else
-			(!AotInfo.IsReflectionDisabled ?
-				$"{ShowDialogState.breakLineHtml}Package: {HttpUtility.HtmlEncode(RuntimeInformation.FrameworkDescription)}" :
-				String.Empty) +
+			ShowDialogState.breakLineHtml + $"Package: {HttpUtility.HtmlEncode(JObject.CompilationFramework)}" +
 #endif
 			ShowDialogState.closeHtml;
 }

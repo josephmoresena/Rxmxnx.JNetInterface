@@ -60,23 +60,14 @@ public partial record ClassObjectMetadata
 	/// <param name="classHash">Class hash.</param>
 	/// <param name="classNameLength">JNI class name length.</param>
 	/// <param name="signatureLength">JNI signature length.</param>
-	/// <param name="kind">Class kind.</param>
-	internal ClassObjectMetadata(String classHash, Int32 classNameLength, Int32 signatureLength, JTypeKind kind) : base(
-		IClassType.GetMetadata<JClassObject>(), false)
+	/// <param name="isArray">Indicates whether className is for array class.</param>
+	internal ClassObjectMetadata(String classHash, Int32 classNameLength, Int32 signatureLength, Boolean isArray) :
+		base(IClassType.GetMetadata<JClassObject>(), false)
 	{
 		this.Name = InfoSequenceBase.GetClassName(classHash, classNameLength);
 		this.ClassSignature = InfoSequenceBase.GetClassSignature(classHash, classNameLength, signatureLength);
-		this.ArrayDimension = kind is JTypeKind.Array ? JClassObject.GetArrayDimension(this.ClassSignature) : 0;
+		this.ArrayDimension = isArray ? JClassObject.GetArrayDimension(this.ClassSignature) : 0;
 		this.Hash = classHash;
-		this.IsInterface = kind is JTypeKind.Interface or JTypeKind.Annotation;
-		this.IsEnum = kind is not JTypeKind.Class ? kind is JTypeKind.Enum : null;
-		this.IsAnnotation = kind is not JTypeKind.Interface ? kind is JTypeKind.Annotation : null;
-		this.IsFinal = kind switch
-		{
-			JTypeKind.Class or JTypeKind.Array => null,
-			JTypeKind.Interface or JTypeKind.Annotation => false,
-			_ => true,
-		};
 	}
 
 	/// <summary>

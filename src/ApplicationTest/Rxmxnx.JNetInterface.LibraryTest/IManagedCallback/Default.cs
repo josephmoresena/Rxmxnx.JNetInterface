@@ -21,11 +21,9 @@ public partial interface IManagedCallback
 		{
 			IEnvironment env = jLocal.Environment;
 #if !RELEASE_PACKAGE
-			return JStringObject.Create(env, $"Hello from {JObject.CompilationFramework}, {Environment.MachineName}");
+			return JStringObject.Create(env, $"Hello from {Environment.MachineName} ({JObject.CompilationFramework})");
 #else
-			String frameworkInformation =
-				!AotInfo.IsReflectionDisabled ? $"{RuntimeInformation.FrameworkDescription}, " : "";
-			return JStringObject.Create(env, $"Hello from {frameworkInformation}{Environment.MachineName}");
+			return JStringObject.Create(env, $"Hello from {Environment.MachineName}");
 #endif
 		}
 		JInt IManagedCallback.GetThreadId(JLocalObject jLocal)

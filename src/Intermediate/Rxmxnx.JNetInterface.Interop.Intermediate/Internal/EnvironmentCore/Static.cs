@@ -215,11 +215,21 @@ internal sealed partial class EnvironmentCore
 	public static JClassObject GetObjectClass(EnvironmentCore core, ITypeInformation typeInformation,
 		JObjectLocalRef localRef, out JReferenceTypeMetadata typeMetadata)
 	{
-		using LocalFrame frame = new(core._env, IVirtualMachine.GetObjectClassCapacity);
-		JClassLocalRef classRef = EnvironmentCore.GetObjectClass(core, localRef);
-		JClassObject jClass = core.GetClass(typeInformation, classRef);
-		core.LoadClass(frame, classRef, jClass); // Runtime class loading.
-		typeMetadata = core.GetTypeMetadata(jClass);
+		JClassObject jClass;
+		if (core._classes.TryGetValue(typeInformation.Hash, out JClassObject? result))
+		{
+			JTrace.ClassFound(result);
+			jClass = core.GetLoadedClass(result);
+			typeMetadata = core.GetTypeMetadata(jClass);
+		}
+		else
+		{
+			using LocalFrame frame = new(core._env, IVirtualMachine.GetObjectClassCapacity);
+			JClassLocalRef classRef = EnvironmentCore.GetObjectClass(core, localRef);
+			jClass = core.GetClass(typeInformation, classRef);
+			core.LoadClass(frame, classRef, jClass); // Runtime class loading.
+			typeMetadata = core.GetTypeMetadata(jClass);
+		}
 		return jClass;
 	}
 #endif
