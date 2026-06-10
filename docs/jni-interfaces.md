@@ -14,6 +14,7 @@ The `IVirtualMachine` interface represents a `JavaVM` instance managed by `Rxmxn
 ## Instance Properties & Methods
 
 - **`Version`**: Java runtime version. The type of this property is `JRuntimeVersion` enum.
+- **`AndroidApiLevel`**: Android API leve. The Android API level supported on the current platform.
 - **`Reference`**: The `JVirtualMachineRef` reference managed by this instance.
 - **`GetEnvironment()`**: Retrieves the JNI environment (`JNIEnv`), equivalent to the JNI `GetEnv` call.
 - **`InitializeThread(CString?, JGlobalBase?, Int32)`**: Attaches the current thread to the JVM (`AttachCurrentThread`).
