@@ -30,7 +30,7 @@
                     body="stub"/>
             <method signature="System.Void UseTypeMetadata(Rxmxnx.JNetInterface.Lang.JClassObject,Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata,System.String)"
                     body="stub"/>
-            <method signature="System.Void InvokeAt(Rxmxnx.JNetInterface.IThread,System.String)" body="stub"/>
+            <method signature="System.Void InvokeAt(Rxmxnx.JNetInterface.IThread,System.Boolean,System.String)" body="stub"/>
             <method signature="System.Void SetObjectCache(System.Guid,System.String,System.String)" body="stub"/>
             <method signature="System.Void DeleteObjectCache(System.Guid,Rxmxnx.JNetInterface.Native.JLocalObject,System.String)"
                     body="stub"/>
