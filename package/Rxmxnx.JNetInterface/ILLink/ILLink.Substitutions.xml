@@ -27,7 +27,7 @@
             <method signature="System.Void GetAccessibleId`1(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,Rxmxnx.JNetInterface.Native.Access.JAccessibleObjectDefinition,,System.String)"
                     body="stub"/>
             <!-- Load -->
-            <method signature="System.Void GetRuntimeVersion`1(Rxmxnx.JNetInterface.Native.References.JEnvironmentRef,System.Int32,System.ReadOnlySpan`1,System.String)"
+            <method signature="System.Void GetRuntimeVersion`1(Rxmxnx.JNetInterface.Native.References.JEnvironmentRef,System.Int32,System.ReadOnlySpan`1&lt;&gt;,System.String)"
                     body="stub"/>
             <!-- Library -->
             <method signature="System.Void LoadLibrary(System.String,System.Nullable`1&lt;System.IntPtr&gt;)"
