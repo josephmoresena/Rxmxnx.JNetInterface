@@ -15,12 +15,37 @@ foreach ($pat in $Patterns)
     }
 }
 $filesToZip = $filesToZip | Select-Object -Unique
-if ($filesToZip.Count -gt 1)
+if ($filesToZip.Count -gt 0)
 {
-    Compress-Archive -Path $filesToZip.FullName -DestinationPath $ZipName -Update -CompressionLevel Optimal -Verbose
+    Add-Type -AssemblyName System.IO.Compression
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
 
     if (Test-Path $ZipName)
     {
-        $filesToZip | Remove-Item -Force -Verbose
+        Remove-Item -LiteralPath $ZipName -Force
+    }
+
+    $zip = [System.IO.Compression.ZipFile]::Open(
+            $ZipName,
+            [System.IO.Compression.ZipArchiveMode]::Create
+    )
+
+    try
+    {
+        foreach ($file in $filesToZip)
+        {
+            [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile(
+                    $zip,
+                    $file.FullName,
+                    $file.Name,
+                    [System.IO.Compression.CompressionLevel]::Optimal
+            ) | Out-Null
+
+            Remove-Item -LiteralPath $file.FullName -Force -Verbose
+        }
+    }
+    finally
+    {
+        $zip.Dispose()
     }
 }

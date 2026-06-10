@@ -128,37 +128,25 @@ internal static partial class JTrace
 	/// <summary>
 	/// Writes a category name and the retrieving java.specification.version property value.
 	/// </summary>
+	/// <typeparam name="TChar">Type of char.</typeparam>
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 	/// <param name="jniVersion">JNI version.</param>
 	/// <param name="specificationVersion">java.specification.version property value.</param>
 	/// <param name="callerMethod">Caller member name.</param>
-	public static void GetRuntimeVersion(JEnvironmentRef envRef, Int32 jniVersion,
-		ReadOnlySpan<Char> specificationVersion, [CallerMemberName] String callerMethod = "")
+	public static void GetRuntimeVersion<TChar>(JEnvironmentRef envRef, Int32 jniVersion,
+		ReadOnlySpan<TChar> specificationVersion, [CallerMemberName] String callerMethod = "")
+		where TChar : unmanaged, IUnsignedNumber<TChar>
 	{
 		if (!JTrace.TraceEnabled) return;
-		String jVersion = new(specificationVersion);
+#if !NET8_0_OR_GREATER
+		String jVersion = new(MemoryMarshal.Cast<TChar, Char>(specificationVersion));
+#else
+		String jVersion = Encoding.UTF8.GetString(MemoryMarshal.Cast<TChar, Byte>(specificationVersion));
+#endif
 		Trace.WriteLine(
 			$"thread: {Environment.CurrentManagedThreadId} {envRef} (0x{jniVersion:x8}) java.specification.version: {jVersion}.",
 			callerMethod);
 	}
-#if NET8_0_OR_GREATER
-	/// <summary>
-	/// Writes a category name and the retrieving java.specification.version property value.
-	/// </summary>
-	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
-	/// <param name="jniVersion">JNI version.</param>
-	/// <param name="specificationVersion">java.specification.version property value.</param>
-	/// <param name="callerMethod">Caller member name.</param>
-	public static void GetRuntimeVersion(JEnvironmentRef envRef, Int32 jniVersion,
-		ReadOnlySpan<Byte> specificationVersion, [CallerMemberName] String callerMethod = "")
-	{
-		if (!JTrace.TraceEnabled) return;
-		String jVersion = Encoding.UTF8.GetString(specificationVersion);
-		Trace.WriteLine(
-			$"thread: {Environment.CurrentManagedThreadId} {envRef} (0x{jniVersion:x8}) java.specification.version: {jVersion}.",
-			callerMethod);
-	}
-	#endif
 #endif
 
 	/// <summary>

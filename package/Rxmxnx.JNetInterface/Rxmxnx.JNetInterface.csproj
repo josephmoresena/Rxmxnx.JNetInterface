@@ -6,6 +6,7 @@
   </PropertyGroup>
   
   <Import Project="..\JNetInterface.Package.props" />
+  <Import Project="..\ProcessLocalILLinkSubstitutions.targets"/>
   <Import Project="..\Intermediate-to-Package.targets"/>
 
   <!-- Validations -->
@@ -45,7 +46,7 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <Title>Rxmxnx.JNetInterface</Title>
     <PackageId>Rxmxnx.JNetInterface</PackageId>
-    <PackageTags>PInvoke;Binary;Unmanaged;Memory;NativeAOT;JNI;JNA;Java;JVM;JDK;JRE;NDK;Android;Bionic;FFI;;JNICALL;JNIEXPORT;JNI_OnLoad;JNI_CreateJavaVM;JObject;JClass;JString;JThrowable;JArray;JBoolean;JByte;JChar;JDouble;JFloat;JInt;JLong;JShort</PackageTags>
+    <PackageTags>PInvoke;Binary;Unmanaged;Memory;NativeAOT;JNI;JNA;Java;JVM;JDK;JRE;NDK;Bionic;FFI;;JNICALL;JNIEXPORT;JNI_OnLoad;JNI_CreateJavaVM;JObject;JClass;JString;JThrowable;JArray;JBoolean;JByte;JChar;JDouble;JFloat;JInt;JLong;JShort</PackageTags>
     <PackageReadmeFile>PACKAGE.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>

@@ -9,6 +9,7 @@
         <Using Include="System.Numerics"/>
         <Using Include="System.Runtime.CompilerServices"/>
         <Using Include="System.Runtime.InteropServices"/>
+        <Using Include="System.Runtime.Versioning"/>
         <Using Include="Rxmxnx.PInvoke"/>
         <Using Include="Rxmxnx.JNetInterface.Internal"/>
         <Using Include="Rxmxnx.JNetInterface.Internal.Localization"/>

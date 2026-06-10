@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<linker>
+    <!-- Trace Feature -->
+    <assembly fullname="Rxmxnx.JNetInterface">
+        <type fullname="Rxmxnx.JNetInterface.Internal.JTrace" feature="JNetInterface.EnableTrace" featurevalue="false"
+              featuredefault="true">
+            <method signature="System.Void FinalizeCall(Rxmxnx.JNetInterface.Native.JReferenceObject,System.String)"
+                    body="stub"/>
+            <method signature="System.Void UnloadGlobal`1(System.Boolean,System.Boolean,,System.String)"
+                    body="stub"/>
+            <method signature="System.Void ReleaseMemory`1(System.Boolean,System.Boolean,System.Boolean,System.Boolean,,System.IntPtr,System.String)"
+                    body="stub"/>
+            <method signature="System.Void CreateLocalRef`1(,Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,System.String)"
+                    body="stub"/>
+            <method signature="System.Void CreateGlobalRef`1(Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,,System.String)"
+                    body="stub"/>
+            <method signature="System.Void UseTypeMetadata(System.ReadOnlySpan`1&lt;System.Byte&gt;,Rxmxnx.JNetInterface.Types.Metadata.JArrayTypeMetadata,System.String)"
+                    body="stub"/>
+            <method signature="System.Void SetField`1(Rxmxnx.JNetInterface.Native.JLocalObject,Rxmxnx.JNetInterface.Lang.JClassObject,Rxmxnx.JNetInterface.Native.Access.JFieldDefinition,,System.String)"
+                    body="stub"/>
+            <method signature="System.Void SetPrimitiveField`1(Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Byte,Rxmxnx.JNetInterface.Native.Identifiers.JFieldId,,System.String)"
+                    body="stub"/>
+            <method signature="System.Void GetPrimitiveField`1(Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Byte,Rxmxnx.JNetInterface.Native.Identifiers.JFieldId,,System.String)"
+                    body="stub"/>
+            <method signature="System.Void CallPrimitiveFunction`1(Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Byte,Rxmxnx.JNetInterface.Native.Identifiers.JMethodId,,System.String)"
+                    body="stub"/>
+            <method signature="System.Void GetAccessibleId`1(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,Rxmxnx.JNetInterface.Native.Access.JAccessibleObjectDefinition,,System.String)"
+                    body="stub"/>
+            <!-- Load -->
+            <method signature="System.Void GetRuntimeVersion`1(Rxmxnx.JNetInterface.Native.References.JEnvironmentRef,System.Int32,System.ReadOnlySpan`1,System.String)"
+                    body="stub"/>
+            <!-- Library -->
+            <method signature="System.Void LoadLibrary(System.String,System.Nullable`1&lt;System.IntPtr&gt;)"
+                    body="stub"/>
+            <method signature="System.Void GetJniExport(System.IntPtr,System.String,System.Boolean,System.IntPtr)"
+                    body="stub"/>
+        </type>
+    </assembly>
+</linker>

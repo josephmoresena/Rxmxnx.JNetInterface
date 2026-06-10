@@ -1,3 +1,5 @@
+[assembly: UnsupportedOSPlatform("android")]
+
 namespace Rxmxnx.JNetInterface;
 
 /// <summary>

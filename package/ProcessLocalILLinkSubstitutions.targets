@@ -1,0 +1,8 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Target Name="ProcessLocalILLinkSubstitutions" BeforeTargets="ProcessILLinkSubstitutions">
+        <ItemGroup>
+            <ILLinkSubstitutionsLines Include="$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)\ILLink\ILLink.Substitutions.xml'))"
+                              Condition="Exists('$(MSBuildProjectDirectory)\ILLink\ILLink.Substitutions.xml')" />
+        </ItemGroup>
+    </Target>
+</Project>
