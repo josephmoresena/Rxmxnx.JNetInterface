@@ -1,4 +1,4 @@
-//[assembly: SupportedOSPlatform("android")]
+[assembly: SupportedOSPlatform("android")]
 
 namespace Rxmxnx.JNetInterface;
 

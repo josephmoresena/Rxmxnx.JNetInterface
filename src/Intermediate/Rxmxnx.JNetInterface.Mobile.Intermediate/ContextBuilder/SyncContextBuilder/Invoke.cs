@@ -1,3 +1,5 @@
+// ReSharper disable MemberCanBePrivate.Global
+
 namespace Rxmxnx.JNetInterface.ContextBuilder;
 
 public ref partial struct SyncContextBuilder
@@ -51,6 +53,9 @@ public ref partial struct SyncContextBuilder
 		{
 			SyncContextBuilder.FinalizeJniInvocation(throwable, interopCache);
 		}
+		if (!JniEnvironment.Exceptions.ExceptionCheck()) return;
+		JniObjectReference throwableRef = JniEnvironment.Exceptions.ExceptionOccurred();
+		throw new JavaException(ref throwableRef, JniObjectReferenceOptions.CopyAndDispose);
 	}
 	/// <summary>
 	/// Creates a new JNI context and invokes <paramref name="action"/>.
@@ -106,12 +111,16 @@ public ref partial struct SyncContextBuilder
 		{
 			SyncContextBuilder.FinalizeJniInvocation(throwable, interopCache);
 		}
+		if (!JniEnvironment.Exceptions.ExceptionCheck()) return;
+		JniObjectReference throwableRef = JniEnvironment.Exceptions.ExceptionOccurred();
+		throw new JavaException(ref throwableRef, JniObjectReferenceOptions.CopyAndDispose);
 	}
 	/// <summary>
 	/// Creates a new JNI context, invokes <paramref name="func"/> and returns its result.
 	/// </summary>
 	/// <typeparam name="TResult">Type of result object</typeparam>
 	/// <param name="func">A <see cref="AndroidJniFunc{TResult}"/> delegate.</param>
+	/// <returns>A <typeparamref name="TResult"/> function result.</returns>
 	public TResult Invoke<TResult>(AndroidJniFunc<TResult> func)
 	{
 		IVirtualMachineHost host = AndroidJniHost.GetAndroidHost();
@@ -157,13 +166,16 @@ public ref partial struct SyncContextBuilder
 		{
 			SyncContextBuilder.FinalizeJniInvocation(throwable, interopCache);
 		}
-		return default!;
+		if (!JniEnvironment.Exceptions.ExceptionCheck()) return default!;
+		JniObjectReference throwableRef = JniEnvironment.Exceptions.ExceptionOccurred();
+		throw new JavaException(ref throwableRef, JniObjectReferenceOptions.CopyAndDispose);
 	}
 	/// <summary>
 	/// Creates a new JNI context, invokes <paramref name="func"/> and returns its result.
 	/// </summary>
 	/// <typeparam name="TResult">Type of result object</typeparam>
 	/// <param name="func">A <see cref="AndroidJniFunc{TResult}"/> delegate.</param>
+	/// <returns>A <typeparamref name="TResult"/> function result.</returns>
 	public TResult Invoke<[DynamicallyAccessedMembers(AndroidJniExtensions.JavaObjectMembers)] TResult>(
 		AndroidJniFunc<JReferenceObject?> func) where TResult : class, IJavaPeerable
 	{
@@ -211,7 +223,9 @@ public ref partial struct SyncContextBuilder
 		{
 			SyncContextBuilder.FinalizeJniInvocation(throwable, interopCache);
 		}
-		return default!;
+		if (!JniEnvironment.Exceptions.ExceptionCheck()) return default!;
+		JniObjectReference throwableRef = JniEnvironment.Exceptions.ExceptionOccurred();
+		throw new JavaException(ref throwableRef, JniObjectReferenceOptions.CopyAndDispose);
 	}
 	/// <summary>
 	/// Creates a new JNI context, invokes <paramref name="func"/> and returns its result.
@@ -220,6 +234,7 @@ public ref partial struct SyncContextBuilder
 	/// <typeparam name="TResult">Type of result object</typeparam>
 	/// <param name="state">A state instance object.</param>
 	/// <param name="func">A <see cref="AndroidJniFunc{TResult}"/> delegate.</param>
+	/// <returns>A <typeparamref name="TResult"/> function result.</returns>
 	public TResult Invoke<TState, TResult>(TState state, AndroidJniFunc<TState, TResult> func)
 #if NET9_0_OR_GREATER
 		where TState : allows ref struct
@@ -268,7 +283,9 @@ public ref partial struct SyncContextBuilder
 		{
 			SyncContextBuilder.FinalizeJniInvocation(throwable, interopCache);
 		}
-		return default!;
+		if (!JniEnvironment.Exceptions.ExceptionCheck()) return default!;
+		JniObjectReference throwableRef = JniEnvironment.Exceptions.ExceptionOccurred();
+		throw new JavaException(ref throwableRef, JniObjectReferenceOptions.CopyAndDispose);
 	}
 	/// <summary>
 	/// Creates a new JNI context, invokes <paramref name="func"/> and returns its result.
@@ -277,6 +294,7 @@ public ref partial struct SyncContextBuilder
 	/// <typeparam name="TResult">Type of result object</typeparam>
 	/// <param name="state">A state instance object.</param>
 	/// <param name="func">A <see cref="AndroidJniFunc{TResult}"/> delegate.</param>
+	/// <returns>A <typeparamref name="TResult"/> function result.</returns>
 	public TResult Invoke<TState, [DynamicallyAccessedMembers(AndroidJniExtensions.JavaObjectMembers)] TResult>(
 		TState state, AndroidJniFunc<TState, JReferenceObject?> func) where TResult : class, IJavaPeerable
 #if NET9_0_OR_GREATER
@@ -327,6 +345,8 @@ public ref partial struct SyncContextBuilder
 		{
 			SyncContextBuilder.FinalizeJniInvocation(throwable, interopCache);
 		}
-		return default!;
+		if (!JniEnvironment.Exceptions.ExceptionCheck()) return default!;
+		JniObjectReference throwableRef = JniEnvironment.Exceptions.ExceptionOccurred();
+		throw new JavaException(ref throwableRef, JniObjectReferenceOptions.CopyAndDispose);
 	}
 }

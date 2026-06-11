@@ -258,6 +258,7 @@ public partial struct AsyncContextBuilder()
 	/// Creates a new JNI async context and invokes <paramref name="action"/>.
 	/// </summary>
 	/// <param name="action">A <see cref="AndroidJniAction"/> delegate.</param>
+	/// <returns>Asynchronous <paramref name="action"/> invocation operation.</returns>
 	public Task InvokeAsync(AndroidJniAction action)
 	{
 		TaskState taskState = new(AndroidJniHost.GetAndroidHost(), this, action);
@@ -269,6 +270,7 @@ public partial struct AsyncContextBuilder()
 	/// <typeparam name="TState">Type of state object</typeparam>
 	/// <param name="state">A state instance object.</param>
 	/// <param name="action">A <see cref="AndroidJniAction{TState}"/> delegate.</param>
+	/// <returns>Asynchronous <paramref name="action"/> invocation operation.</returns>
 	public Task InvokeAsync<TState>(TState state, AndroidJniAction<TState> action)
 	{
 		TaskState<TState> taskState = new(AndroidJniHost.GetAndroidHost(), this, action, state);
@@ -279,6 +281,7 @@ public partial struct AsyncContextBuilder()
 	/// </summary>
 	/// <typeparam name="TResult">Type of result object</typeparam>
 	/// <param name="func">A <see cref="AndroidJniFunc{TResult}"/> delegate.</param>
+	/// <returns>Asynchronous <paramref name="func"/> invocation operation.</returns>
 	public Task<TResult> InvokeAsync<TResult>(AndroidJniFunc<TResult> func)
 	{
 		TaskState taskState = new(AndroidJniHost.GetAndroidHost(), this, func);
@@ -289,6 +292,7 @@ public partial struct AsyncContextBuilder()
 	/// </summary>
 	/// <typeparam name="TResult">Type of result object</typeparam>
 	/// <param name="func">A <see cref="AndroidJniFunc{TResult}"/> delegate.</param>
+	/// <returns>Asynchronous <paramref name="func"/> invocation operation.</returns>
 	public Task<TResult> InvokeAsync<[DynamicallyAccessedMembers(AndroidJniExtensions.JavaObjectMembers)] TResult>(
 		AndroidJniFunc<JReferenceObject?> func) where TResult : class, IJavaPeerable
 	{
@@ -302,6 +306,7 @@ public partial struct AsyncContextBuilder()
 	/// <typeparam name="TResult">Type of result object</typeparam>
 	/// <param name="state">A state instance object.</param>
 	/// <param name="func">A <see cref="AndroidJniFunc{TResult}"/> delegate.</param>
+	/// <returns>Asynchronous <paramref name="func"/> invocation operation.</returns>
 	public Task<TResult> InvokeAsync<TState, TResult>(TState state, AndroidJniFunc<TState, TResult> func)
 	{
 		TaskState<TState> taskState = new(AndroidJniHost.GetAndroidHost(), this, func, state);
@@ -314,6 +319,7 @@ public partial struct AsyncContextBuilder()
 	/// <typeparam name="TResult">Type of result object</typeparam>
 	/// <param name="state">A state instance object.</param>
 	/// <param name="func">A <see cref="AndroidJniFunc{TResult}"/> delegate.</param>
+	/// <returns>Asynchronous <paramref name="func"/> invocation operation.</returns>
 	public Task<TResult> InvokeAsync<TState,
 		[DynamicallyAccessedMembers(AndroidJniExtensions.JavaObjectMembers)] TResult>(TState state,
 		AndroidJniFunc<TState, JReferenceObject?> func) where TResult : class, IJavaPeerable
@@ -325,7 +331,7 @@ public partial struct AsyncContextBuilder()
 	/// Creates a new JNI async context and runs <paramref name="action"/>.
 	/// </summary>
 	/// <param name="action">A <see cref="AndroidJniAction"/> delegate.</param>
-	/// <param name="task">Output. Task representing thread run.</param>
+	/// <param name="task">Output. <paramref name="action"/> invocation operation task.</param>
 	public void Run(AndroidJniAction action, out Task task)
 	{
 		TaskState taskState = new(AndroidJniHost.GetAndroidHost(), this, action, true);
@@ -337,7 +343,7 @@ public partial struct AsyncContextBuilder()
 	/// <typeparam name="TState">Type of state object</typeparam>
 	/// <param name="state">A state instance object.</param>
 	/// <param name="action">A <see cref="AndroidJniAction{TState}"/> delegate.</param>
-	/// <param name="task">Output. Task representing thread run.</param>
+	/// <param name="task">Output. <paramref name="action"/> invocation operation task.</param>
 	public void Run<TState>(TState state, AndroidJniAction<TState> action, out Task task)
 	{
 		TaskState<TState> taskState = new(AndroidJniHost.GetAndroidHost(), this, action, state, true);

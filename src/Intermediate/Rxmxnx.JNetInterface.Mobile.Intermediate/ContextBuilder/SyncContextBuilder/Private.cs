@@ -20,6 +20,10 @@ public ref partial struct SyncContextBuilder
 	private ReadOnlySpan<JShort> _shorts = [];
 	/// <inheritdoc cref="AndroidJniContext.Objects"/>
 	private ReadOnlySpan<IJavaPeerable?> _objects = [];
+	/// <summary>
+	/// Current thread id.
+	/// </summary>
+	private Int32 _threadId = Environment.CurrentManagedThreadId;
 
 	/// <summary>
 	/// Finalize JNI context.

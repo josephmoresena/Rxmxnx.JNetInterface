@@ -43,6 +43,7 @@ public partial struct AsyncContextBuilder
 		/// <summary>
 		/// Function invocation.
 		/// </summary>
+		/// <returns>A <typeparamref name="TResult"/> function result.</returns>
 		protected TResult Invoke<TState, TResult>(in TState state)
 		{
 			using IThread __ = this.CreateThread(out INativeThread env);
@@ -79,6 +80,7 @@ public partial struct AsyncContextBuilder
 		/// <summary>
 		/// JNI funcion invocation.
 		/// </summary>
+		/// <returns>A <typeparamref name="TResult"/> function result.</returns>
 		protected TResult InvokeJni<TState,
 			[DynamicallyAccessedMembers(AndroidJniExtensions.JavaObjectMembers)] TResult>(in TState state)
 			where TResult : class, IJavaPeerable
@@ -155,6 +157,7 @@ public partial struct AsyncContextBuilder
 		/// <summary>
 		/// Function invocation.
 		/// </summary>
+		/// <returns>A <typeparamref name="TResult"/> function result.</returns>
 		private TResult Invoke<TResult>()
 		{
 			using IThread __ = this.CreateThread(out INativeThread env);
@@ -191,6 +194,7 @@ public partial struct AsyncContextBuilder
 		/// <summary>
 		/// JNI funcion invocation.
 		/// </summary>
+		/// <returns>A <typeparamref name="TResult"/> function result.</returns>
 		private TResult InvokeJni<[DynamicallyAccessedMembers(AndroidJniExtensions.JavaObjectMembers)] TResult>()
 			where TResult : class, IJavaPeerable
 		{
@@ -240,12 +244,14 @@ public partial struct AsyncContextBuilder
 		/// Function delegate for <see cref="TaskFactory.StartNew{TResult}(Func{Object, TResult}, Object)"/>.
 		/// </summary>
 		/// <param name="state">Function state object.</param>
+		/// <returns>A <typeparamref name="TResult"/> function result.</returns>
 		public static TResult Invoke<TResult>(Object? state)
 			=> state is not TaskState taskState ? default! : taskState.Invoke<TResult>();
 		/// <summary>
 		/// Function delegate for <see cref="TaskFactory.StartNew{TResult}(Func{Object, TResult}, Object)"/>.
 		/// </summary>
 		/// <param name="state">Function state object.</param>
+		/// <returns>A <typeparamref name="TResult"/> function result.</returns>
 		public static TResult
 			InvokeJni<[DynamicallyAccessedMembers(AndroidJniExtensions.JavaObjectMembers)] TResult>(Object? state)
 			where TResult : class, IJavaPeerable
@@ -267,6 +273,7 @@ public partial struct AsyncContextBuilder
 		/// Function delegate for <see cref="TaskFactory.StartNew{TResult}(Func{Object, TResult}, Object)"/>.
 		/// </summary>
 		/// <param name="state">Function state object.</param>
+		/// <returns>A <typeparamref name="TResult"/> function result.</returns>
 		public new static TResult Invoke<TResult>(Object? state)
 			=> state is not TaskState<TState> taskState ?
 				default! :
@@ -275,6 +282,7 @@ public partial struct AsyncContextBuilder
 		/// Function delegate for <see cref="TaskFactory.StartNew{TResult}(Func{Object, TResult}, Object)"/>.
 		/// </summary>
 		/// <param name="state">Function state object.</param>
+		/// <returns>A <typeparamref name="TResult"/> function result.</returns>
 		public new static TResult
 			InvokeJni<[DynamicallyAccessedMembers(AndroidJniExtensions.JavaObjectMembers)] TResult>(Object? state)
 			where TResult : class, IJavaPeerable
