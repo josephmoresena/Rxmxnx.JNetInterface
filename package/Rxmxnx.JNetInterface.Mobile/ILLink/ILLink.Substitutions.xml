@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<linker>
+    <!-- Trace Feature -->
+    <assembly fullname="Rxmxnx.JNetInterface.Mobile">
+        <type fullname="Rxmxnx.JNetInterface.Internal.JTrace" feature="JNetInterface.EnableTrace" featurevalue="false"
+              featuredefault="true">
+            <method signature="System.Void FindClass(System.String,System.String)" body="stub"/>
+            <method signature="System.Void RegisterInterop(Rxmxnx.JNetInterface.IEnvironment,System.Int32,System.String)" body="stub"/>
+            <method signature="System.Void UnhandledException(System.Exception,System.Boolean,System.String)" body="stub"/>
+        </type>
+    </assembly>
+</linker>

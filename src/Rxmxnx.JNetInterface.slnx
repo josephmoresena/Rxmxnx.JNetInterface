@@ -1,5 +1,8 @@
 ﻿<Solution>
     <Folder Name="/ApplicationTest/">
+        <Project Path="ApplicationTest/Rxmxnx.JNetInterface.MobileTest/Rxmxnx.JNetInterface.MobileTest.csproj">
+            <Deploy/>
+        </Project>
         <Project
                 Path="ApplicationTest\Rxmxnx.JNetInterface.ApplicationGuiTest\Rxmxnx.JNetInterface.ApplicationGuiTest.csproj"/>
         <Project
@@ -58,6 +61,8 @@
     <Folder Name="/Intermediate/">
         <File Path="Intermediate\README.md"/>
         <Project
+                Path="Intermediate/Rxmxnx.JNetInterface.Mobile.Intermediate/Rxmxnx.JNetInterface.Mobile.Intermediate.csproj"/>
+        <Project
                 Path="Intermediate\Rxmxnx.JNetInterface.Common.Intermediate\Rxmxnx.JNetInterface.Common.Intermediate.csproj"/>
         <Project
                 Path="Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
@@ -91,6 +96,7 @@
     </Folder>
     <Folder Name="/Package/">
         <File Path="..\package\Rxmxnx.JNetInterface\CompatibilitySuppressions.xml"/>
+        <File Path="..\package\Rxmxnx.JNetInterface\ILLink\ILLink.Substitutions.xml"/>
         <File Path="..\package\Rxmxnx.JNetInterface\PACKAGE.md"/>
         <File Path="..\package\Intermediate-to-Package.targets"/>
         <File Path="..\package\JNetInterface.Package.props"/>
@@ -98,6 +104,11 @@
     <Folder Name="/Package/CorePackage/">
         <File Path="..\package\Rxmxnx.JNetInterface.Core\CompatibilitySuppressions.xml"/>
         <File Path="..\package\Rxmxnx.JNetInterface.Core\PACKAGE.md"/>
+    </Folder>
+    <Folder Name="/Package/MobilePackage/">
+        <File Path="..\package\Rxmxnx.JNetInterface.Mobile\CompatibilitySuppressions.xml"/>
+        <File Path="..\package\Rxmxnx.JNetInterface.Mobile\ILLink\ILLink.Substitutions.xml"/>
+        <File Path="..\package\Rxmxnx.JNetInterface.Mobile\PACKAGE.md"/>
     </Folder>
     <Folder Name="/SourceGenerator/">
         <Project

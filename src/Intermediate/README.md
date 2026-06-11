@@ -22,3 +22,5 @@ the final assemblies.
   invocation and native interfaces.
 * `Implementation`: Provides the standard native implementation of the `JNetInterface` APIs built on top of `Interop`,
   including support for Java’s Invocation APIs.
+* `Mobile`: Provides the standard native implementation of the `JNetInterface` APIs built on top of `Java.Interop`,
+  used on .NET for Android.

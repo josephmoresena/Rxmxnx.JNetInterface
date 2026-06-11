@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <CoreVersion Condition="'$(CoreVersion)' == '' And '$(Version)' != ''">$(Version)</CoreVersion>
+    <CoreVersion Condition="'$(CoreVersion)' == '' And '$(Version)' == ''">*</CoreVersion>
+  </PropertyGroup>
+  
+  <Import Project="..\JNetInterface.Package.props" />
+  <Import Project="..\ProcessLocalILLinkSubstitutions.targets"/>
+  <Import Project="..\Intermediate-to-Package.targets"/>
+
+  <!-- Validations -->
+  <PropertyGroup>
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <ApiCompatPreserveUnnecessarySuppressions>true</ApiCompatPreserveUnnecessarySuppressions>
+    <ApiCompatRespectInternals>true</ApiCompatRespectInternals>
+  </PropertyGroup>
+
+  <!-- Include intermediate assemblies -->
+  <ItemGroup>
+    <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Android.Intermediate"/>
+    <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Trace.Intermediate"/>
+    <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Common.Intermediate"/>
+    <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Jni.Intermediate"/>
+    <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Interop.Intermediate"/>
+    <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Mobile.Intermediate"/>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="PACKAGE.md" Pack="true" PackagePath="/" />
+    <None Include="..\..\LICENSE.md" Pack="true" PackagePath="/"/>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Rxmxnx.JNetInterface.Core" Version="$(CoreVersion)"/>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <Authors>Joseph Moreno</Authors>
+    <Product>Rxmxnx.JNetInterface</Product>
+    <Description>Rxmxnx.JNetInterface.Moble provides an implementation of the Java Native Interface API for use within the .NET Android.</Description>
+    <Copyright>Copyright © Joseph Moreno 2026</Copyright>
+    <Summary>Rxmxnx.JNetInterface.Moble provides an implementation of the Java Native Interface API for use within the .NET Android.</Summary>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <Title>Rxmxnx.JNetInterface.Mobile</Title>
+    <PackageId>Rxmxnx.JNetInterface.Mobile</PackageId>
+    <PackageTags>PInvoke;Binary;Unmanaged;Memory;NativeAOT;JNI;Android;JObject;JClass;JString;JThrowable;JArray;JBoolean;JByte;JChar;JDouble;JFloat;JInt;JLong;JShort;Xamarin;Java.Interop</PackageTags>
+    <PackageReadmeFile>PACKAGE.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+</Project>

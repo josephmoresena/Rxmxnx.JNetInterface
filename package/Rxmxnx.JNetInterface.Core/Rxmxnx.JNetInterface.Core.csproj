@@ -22,9 +22,14 @@
     <ProjectReference Include="..\..\src\SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netstandard2.0"/>
   </ItemGroup>
 
-  <ItemGroup>
-    <InternalsVisibleTo Condition="'$(PUBLIC_KEY)' != ''" Include="Rxmxnx.JNetInterface, PublicKey=$(PUBLIC_KEY)"/>
-    <InternalsVisibleTo Condition="'$(PUBLIC_KEY)' == ''" Include="Rxmxnx.JNetInterface"/>
+  <ItemGroup Condition="'$(PUBLIC_KEY)' != ''" >
+    <InternalsVisibleTo Include="Rxmxnx.JNetInterface, PublicKey=$(PUBLIC_KEY)"/>
+    <InternalsVisibleTo Include="Rxmxnx.JNetInterface.Mobile, PublicKey=$(PUBLIC_KEY)"/>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(PUBLIC_KEY)' == ''" >
+    <InternalsVisibleTo Include="Rxmxnx.JNetInterface"/>
+    <InternalsVisibleTo Include="Rxmxnx.JNetInterface.Mobile"/>
   </ItemGroup>
 
   <ItemGroup>

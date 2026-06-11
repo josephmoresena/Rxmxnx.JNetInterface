@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0-android</TargetFramework>
+        <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
+
+        <RuntimeIdentifiers Condition="'$(PublishAot)' != 'True'">android-arm;android-arm64</RuntimeIdentifiers>
+        <RuntimeIdentifiers Condition="'$(PublishAot)' == 'True'">android-arm64</RuntimeIdentifiers>
+        <OutputType>Exe</OutputType>
+        <ApplicationId>com.Rxmxnx.JNetInterface.MobileTest</ApplicationId>
+        <ApplicationVersion>1</ApplicationVersion>
+        <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+        <!--
+          Enables trim analyzers and full trimming during Release mode.
+          To learn more, see: https://learn.microsoft.com/dotnet/core/deploying/trimming/trimming-options#trimming-granularity
+        -->
+        <TrimMode>full</TrimMode>
+        <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Release' And '$(PublishAot)' != 'True'">
+        <RunAOTCompilation>true</RunAOTCompilation>
+        <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Release' And '$(PublishAot)' == 'True'">
+        <PublishAot>true</PublishAot>
+        <PublishAotUsingRuntimePack>true</PublishAotUsingRuntimePack>
+    </PropertyGroup>
+    <Import Project="..\JNetInterface-PackageReference.props"/>
+    <Import Project="..\JNetInterface-Config.props"/>
+    <ItemGroup>
+        <RuntimeHostConfigurationOption Include="JNetInterface.EnableTrace" Value="true" Trim="true"/>
+    </ItemGroup>
+</Project>

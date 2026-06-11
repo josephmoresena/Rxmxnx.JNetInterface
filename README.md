@@ -4,14 +4,14 @@
 
 #### Package Information
 
-| **Core Assembly**                                                                                                                                                                                                                         | **Main Assembly**                                                                                                                                                                                                    |
-|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [![NuGet(Core)](https://img.shields.io/nuget/v/Rxmxnx.JNetInterface.Core)![Downloads](https://img.shields.io/nuget/dt/Rxmxnx.JNetInterface.Core?style=flat-square&color=blue)](https://www.nuget.org/packages/Rxmxnx.JNetInterface.Core/) | [![NuGet](https://img.shields.io/nuget/v/Rxmxnx.JNetInterface)![Downloads](https://img.shields.io/nuget/dt/Rxmxnx.JNetInterface?style=flat-square&color=blue)](https://www.nuget.org/packages/Rxmxnx.JNetInterface/) |
+| **Core Assembly**                                                                                                                                                                                                                         | **Main Assembly**                                                                                                                                                                                                    | **Mobile Assembly**                                                                                                                                                                                                                       |
+|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [![NuGet(Core)](https://img.shields.io/nuget/v/Rxmxnx.JNetInterface.Core)![Downloads](https://img.shields.io/nuget/dt/Rxmxnx.JNetInterface.Core?style=flat-square&color=blue)](https://www.nuget.org/packages/Rxmxnx.JNetInterface.Core/) | [![NuGet](https://img.shields.io/nuget/v/Rxmxnx.JNetInterface)![Downloads](https://img.shields.io/nuget/dt/Rxmxnx.JNetInterface?style=flat-square&color=blue)](https://www.nuget.org/packages/Rxmxnx.JNetInterface/) | [![NuGet](https://img.shields.io/nuget/v/Rxmxnx.JNetInterface.Mobile)![Downloads](https://img.shields.io/nuget/dt/Rxmxnx.JNetInterface.Mobile?style=flat-square&color=blue)](https://www.nuget.org/packages/Rxmxnx.JNetInterface.Mobile/) |
 
 # Description
 
 `Rxmxnx.JNetInterface` provides an implementation of the Java Native Interface (JNI) and the Invocation API for .NET
-applications.
+applications. For .NET for Android (formerly Xamarin Android) projects use `Rxmxnx.JNetInterface.Mobile`.
 
 ## Core Features
 
@@ -29,10 +29,16 @@ require additional configuration in [F#](https://github.com/dotnet/fsharp/issues
 
 ## Installation
 
-Install via NuGet:
+Install via NuGet for standard projects
 
 ```cmd
 dotnet add package Rxmxnx.JNetInterface
+```
+
+or install via NuGet for mobile projects
+
+```cmd
+dotnet add package Rxmxnx.JNetInterface.Mobile
 ```
 
 If you only need the core functionality without linking to a JVM, install:
@@ -41,8 +47,11 @@ If you only need the core functionality without linking to a JVM, install:
 dotnet add package Rxmxnx.JNetInterface.Core
 ```
 
-**Supported Frameworks:**  
-This package supports **.NET 7.0 and later**. Ensure your project targets a compatible framework.
+**Supported Frameworks:**
+
+- This package supports **.NET 7.0 and later**. Ensure your project targets a compatible framework.
+- On .NET for Android, `Rxmxnx.JNetInterface` only packages references to `Rxmxnx.JNetInterface.Mobile`
+  due standard version of `Rxmxnx.JNetInterface` is incompatible with Java.Interop.
 
 ---  
 
@@ -84,7 +93,8 @@ The table below shows how common JNI types map to `Rxmxnx.JNetInterface`.
 | N/A                      | jfieldID      | JFieldDefinition <sup>3</sup> | JFieldId              |
 
 1. When initialized via the Invocation API, `IInvokedVirtualMachine` is used. When a thread is attached to the JVM,
-   `IThread` is used.
+   `IThread` is used. On .NET for Android, in order to work alongside with Java.Interop, `Rxmxnx.JNetInterface.Mobile`
+   does not have access to invocation API.
 2. `JClassObject` and `JGlobal` references to classes may not have active JNI references and are loaded as needed.
 3. Definitions serve as keys for JNI access calls.
 
