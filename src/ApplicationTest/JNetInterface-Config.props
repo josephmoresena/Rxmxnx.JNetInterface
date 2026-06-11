@@ -3,13 +3,14 @@
     <PropertyGroup Condition="'$(JNI_LIBRARY)' == 'true' Or '$(JNI_APP)' == 'true'">
         <!-- Assembly name must specify which version of .NET it was compiled with -->
         <AssemblyName>$(AssemblyName).$(TargetFramework)</AssemblyName>
+        <USE_JTRACE Condition="'$(USE_JTRACE)' == ''">false</USE_JTRACE>
     </PropertyGroup>
 
     <ItemGroup>
         <!--<RuntimeHostConfigurationOption Include="JNetInterface.DisableTypeMetadataToString" Value="true" Trim="true"/>-->
         <RuntimeHostConfigurationOption Include="JNetInterface.DisableMetadataValidation" Value="true" Trim="true"/>
         <!--<RuntimeHostConfigurationOption Include="JNetInterface.DisableJaggedArrayAutoGeneration" Value="true" Trim="true"/>-->
-        <RuntimeHostConfigurationOption Condition="'$(USE_JTRACE)' == 'true'" Include="JNetInterface.EnableTrace" Value="true" Trim="true"/>
+        <RuntimeHostConfigurationOption Include="JNetInterface.EnableTrace" Value="$(USE_JTRACE)" Trim="true"/>
         <RuntimeHostConfigurationOption Include="JNetInterface.DisableBuiltInThrowableAutoRegistration" Value="true" Trim="true"/>
         <RuntimeHostConfigurationOption Include="JNetInterface.DisableReflectionAutoRegistration" Value="true" Trim="true"/>
         <RuntimeHostConfigurationOption Include="JNetInterface.DisableNioAutoRegistration" Value="true" Trim="true"/>
