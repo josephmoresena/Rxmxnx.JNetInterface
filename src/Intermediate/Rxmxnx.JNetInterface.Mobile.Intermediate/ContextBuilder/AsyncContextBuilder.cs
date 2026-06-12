@@ -274,7 +274,7 @@ public partial struct AsyncContextBuilder()
 	public Task InvokeAsync<TState>(TState state, AndroidJniAction<TState> action)
 	{
 		TaskState<TState> taskState = new(AndroidJniHost.GetAndroidHost(), this, action, state);
-		return Task.Factory.StartNew(TaskState<TState>.Invoke, taskState);
+		return Task.Factory.StartNew(TaskState.Invoke, taskState);
 	}
 	/// <summary>
 	/// Creates a new JNI async context, invokes <paramref name="func"/> and returns its result.
@@ -310,7 +310,7 @@ public partial struct AsyncContextBuilder()
 	public Task<TResult> InvokeAsync<TState, TResult>(TState state, AndroidJniFunc<TState, TResult> func)
 	{
 		TaskState<TState> taskState = new(AndroidJniHost.GetAndroidHost(), this, func, state);
-		return Task.Factory.StartNew(TaskState<TState>.Invoke<TResult>, taskState);
+		return Task.Factory.StartNew(TaskState.Invoke<TResult>, taskState);
 	}
 	/// <summary>
 	/// Creates a new JNI context, invokes <paramref name="func"/> and returns its result.
@@ -325,7 +325,7 @@ public partial struct AsyncContextBuilder()
 		AndroidJniFunc<TState, JReferenceObject?> func) where TResult : class, IJavaPeerable
 	{
 		TaskState<TState> taskState = new(AndroidJniHost.GetAndroidHost(), this, func, state);
-		return Task.Factory.StartNew(TaskState<TState>.InvokeJni<TResult>, taskState);
+		return Task.Factory.StartNew(TaskState.InvokeJni<TResult>, taskState);
 	}
 	/// <summary>
 	/// Creates a new JNI async context and runs <paramref name="action"/>.
@@ -347,6 +347,6 @@ public partial struct AsyncContextBuilder()
 	public void Run<TState>(TState state, AndroidJniAction<TState> action, out Task task)
 	{
 		TaskState<TState> taskState = new(AndroidJniHost.GetAndroidHost(), this, action, state, true);
-		task = Task.Factory.StartNew(TaskState<TState>.Invoke, taskState);
+		task = Task.Factory.StartNew(TaskState.Invoke, taskState);
 	}
 }
