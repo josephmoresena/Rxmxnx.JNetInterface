@@ -132,6 +132,7 @@ public unsafe ref partial struct SyncContextBuilder
 	/// </summary>
 	/// <typeparam name="TState">Type of state object</typeparam>
 	/// <typeparam name="TResult">Type of result object</typeparam>
+	/// <param name="context">A <see cref="SynchronizationContext"/> instance.</param>
 	/// <param name="state">A state instance object.</param>
 	/// <param name="func">A <see cref="AndroidJniFunc{TResult}"/> delegate.</param>
 	/// <returns>A <typeparamref name="TResult"/> function result.</returns>
@@ -171,6 +172,7 @@ public unsafe ref partial struct SyncContextBuilder
 	/// </summary>
 	/// <typeparam name="TState">Type of state object</typeparam>
 	/// <typeparam name="TResult">Type of result object</typeparam>
+	/// <param name="context">A <see cref="SynchronizationContext"/> instance.</param>
 	/// <param name="state">A state instance object.</param>
 	/// <param name="func">A <see cref="AndroidJniFunc{TResult}"/> delegate.</param>
 	/// <returns>A <typeparamref name="TResult"/> function result.</returns>
