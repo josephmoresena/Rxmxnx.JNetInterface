@@ -15,7 +15,6 @@ internal static class ExportedMethods
 	[ModuleInitializer]
 	internal static void Initializer()
 	{
-		AndroidJniHost.Register<AndroidLooper>();
 		AndroidJniHost.Register<AndroidToast>();
 		AndroidJniHost.Register<AndroidContext>();
 	}

@@ -20,10 +20,10 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 public class MainActivity : Activity, View.IOnClickListener
 {
 	private static readonly DateTime load = DateTime.Now;
-	private readonly JGlobal? _looperClass;
-	private readonly JGlobal? _toastClass;
 
 	private Task _backgroundThread = Task.CompletedTask;
+	private readonly JGlobal? _androidContext;
+	private readonly JGlobal? _toastClass;
 	private Int32 _count;
 	private Boolean _disposed;
 
@@ -31,12 +31,10 @@ public class MainActivity : Activity, View.IOnClickListener
 	{
 		Trace.WriteLine(
 			$"Main classes: {String.Join('|', AndroidJniHost.MainClassesInformation.Select(i => i.ClassName))}");
-		(this._looperClass, this._toastClass) = AndroidJniHost.CreateSyncContext().Invoke(jctx =>
+		(this._androidContext, this._toastClass) = AndroidJniHost.CreateSyncContext().With(this).Invoke(jctx =>
 		{
-			using JClassObject
-				androidLooperClass = JClassObject.GetClass<AndroidLooper>(jctx.Environment); // Loads android.os.Looper
 			using JClassObject androidToastClass = JClassObject.GetClass<AndroidToast>(jctx.Environment);
-			return (androidLooperClass.Global, androidToastClass.Global);
+			return (jctx.Objects[0]!.Global, androidToastClass.Global);
 		});
 	}
 
@@ -57,9 +55,8 @@ public class MainActivity : Activity, View.IOnClickListener
 #else
 		text.Text = ExportedMethods.GetRuntimeInformation(DateTime.Now, MainActivity.load, this._count);
 #endif
-		if (this._backgroundThread.IsCompleted)
-			this._backgroundThread = AndroidJniHost.CreateAsyncContext(new(() => "ToastBackground"u8)).With(this)
-			                                       .InvokeAsync(this._count, MainActivity.ToastBackground);
+		if (!this._backgroundThread.IsCompleted) return;
+		this._backgroundThread = this.ToastBackground();
 	}
 
 	protected override void OnCreate(Bundle? savedInstanceState)
@@ -86,25 +83,31 @@ public class MainActivity : Activity, View.IOnClickListener
 		if (this._disposed) return;
 		this._disposed = true;
 		this._toastClass?.Dispose(); // Removes global class instance.
-		this._looperClass?.Dispose(); // Removes global class instance.
+		this._androidContext?.Dispose();
+	}
+	private async Task ToastBackground()
+	{
+		Int32 i = 0;
+		while (this._count - i > 0)
+		{
+			String textToToast = $"Random {i}: {Random.Shared.Next()}";
+			await AndroidJniHost.CreateAsyncContext().Post(Application.SynchronizationContext,
+			                                               (this._androidContext, textToToast),
+			                                               MainActivity.ToastBackground);
+			await Task.Delay(1000);
+			i++;
+		}
 	}
 
-	private static void ToastBackground(AndroidJniContext jctx, Int32 count)
+	private static void ToastBackground(AndroidJniContext jctx, (JGlobal? globalContext, String text) args)
 	{
-		Trace.WriteLine($"Enabled logs: {AndroidJniHost.TraceEnabled}");
-		if (jctx.Objects[0]?.CastTo<AndroidContext>(true) is not { } context) return;
+		if (args.globalContext is null) return;
 		try
 		{
-			Int32 i = 0;
-			AndroidLooper.Prepare(jctx.Environment); // Prepares current thread to show Toast.
-			while (count - i > 0)
-			{
-				using AndroidToast toast = // Invokes Toast.makeText
-					AndroidToast.MakeText(context, $"Random {i}: {Random.Shared.Next()}", AndroidToast.Length.Short);
-				toast.Show(); // Invokes Toast.show
-				Thread.Sleep(1000);
-				i++;
-			}
+			using AndroidContext context = args.globalContext.AsLocal<AndroidContext>(jctx.Environment);
+			using AndroidToast toast = // Invokes Toast.makeText
+				AndroidToast.MakeText(context, args.text, AndroidToast.Length.Short);
+			toast.Show(); // Invokes Toast.show
 		}
 		catch (Exception e)
 		{
