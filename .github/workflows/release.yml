@@ -54,6 +54,19 @@ jobs:
           rm -rf "$TEMP_DIR"
           done
           echo "-----------------------------------"
+      - name: Create Mobile NuGet Package
+        working-directory: ./package/Rxmxnx.JNetInterface.Mobile
+        run:
+          dotnet pack -c Release -o ../Nuget /p:Version=${{ github.event.release.tag_name }} /p:PackageReleaseNotes="See https://github.com/josephmoresena/Rxmxnx.JNetInterface/releases/tag/${{ github.event.release.tag_name }}"
+          for package in ../Nuget/Rxmxnx.JNetInterface.Mobile.${{ github.event.release.tag_name }}.*nupkg; do
+          echo "-----------------------------------"
+          TEMP_DIR=$(mktemp -d)
+          unzip -q "$package" -d "$TEMP_DIR"
+          ls -sh "$package"
+          tree "$TEMP_DIR" -h --noreport | tail -n +2 | sed "s|$TEMP_DIR/||"
+          rm -rf "$TEMP_DIR"
+          done
+          echo "-----------------------------------"
       - name: Cache NuGet Package
         uses: actions/cache/save@v5
         with:

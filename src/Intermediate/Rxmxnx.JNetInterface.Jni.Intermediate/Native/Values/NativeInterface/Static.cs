@@ -1,3 +1,7 @@
+#if ANDROID
+using JniMethodInfo = Rxmxnx.JNetInterface.Internal.JniMethodInfo;
+#endif
+
 namespace Rxmxnx.JNetInterface.Native.Values;
 
 internal partial struct NativeInterface

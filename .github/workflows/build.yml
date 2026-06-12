@@ -108,6 +108,20 @@ jobs:
           done
           echo "-----------------------------------"
           mv bin/Release/*.*nupkg ../Nuget
+      - name: Pack mobile assembly
+        working-directory: ./package/Rxmxnx.JNetInterface.Mobile
+        run: |
+          dotnet pack -c Release /p:Version=9999.99.99.99-tmp /p:NoIntermediateBuild=true
+          for package in bin/Release/Rxmxnx.JNetInterface.Mobile*.*nupkg; do
+            echo "-----------------------------------"
+            TEMP_DIR=$(mktemp -d)
+            unzip -q "$package" -d "$TEMP_DIR"
+            ls -sh "$package"
+            tree "$TEMP_DIR" -h --noreport | tail -n +2 | sed "s|$TEMP_DIR/||"
+            rm -rf "$TEMP_DIR"
+          done
+          echo "-----------------------------------"
+          mv bin/Release/*.*nupkg ../Nuget
 
       - name: Cache NuGet Packages
         uses: actions/cache/save@v5

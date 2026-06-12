@@ -4,43 +4,43 @@
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
     <Target>T:Microsoft.CodeAnalysis.EmbeddedAttribute</Target>
-    <Left>lib/net7.0/Rxmxnx.JNetInterface.dll</Left>
-    <Right>lib/net8.0/Rxmxnx.JNetInterface.dll</Right>
+    <Left>lib/net7.0-android21.0/Rxmxnx.JNetInterface.Mobile.dll</Left>
+    <Right>lib/net8.0-android21.0/Rxmxnx.JNetInterface.Mobile.dll</Right>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
     <Target>T:System.Runtime.CompilerServices.IsUnmanagedAttribute</Target>
-    <Left>lib/net7.0/Rxmxnx.JNetInterface.dll</Left>
-    <Right>lib/net8.0/Rxmxnx.JNetInterface.dll</Right>
+    <Left>lib/net7.0-android21.0/Rxmxnx.JNetInterface.Mobile.dll</Left>
+    <Right>lib/net8.0-android21.0/Rxmxnx.JNetInterface.Mobile.dll</Right>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
     <Target>T:System.Runtime.CompilerServices.NullableAttribute</Target>
-    <Left>lib/net7.0/Rxmxnx.JNetInterface.dll</Left>
-    <Right>lib/net8.0/Rxmxnx.JNetInterface.dll</Right>
+    <Left>lib/net7.0-android21.0/Rxmxnx.JNetInterface.Mobile.dll</Left>
+    <Right>lib/net8.0-android21.0/Rxmxnx.JNetInterface.Mobile.dll</Right>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
     <Target>T:System.Runtime.CompilerServices.NullableContextAttribute</Target>
-    <Left>lib/net7.0/Rxmxnx.JNetInterface.dll</Left>
-    <Right>lib/net8.0/Rxmxnx.JNetInterface.dll</Right>
+    <Left>lib/net7.0-android21.0/Rxmxnx.JNetInterface.Mobile.dll</Left>
+    <Right>lib/net8.0-android21.0/Rxmxnx.JNetInterface.Mobile.dll</Right>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
     <Target>T:System.Runtime.CompilerServices.RefSafetyRulesAttribute</Target>
-    <Left>lib/net7.0/Rxmxnx.JNetInterface.dll</Left>
-    <Right>lib/net8.0/Rxmxnx.JNetInterface.dll</Right>
+    <Left>lib/net7.0-android21.0/Rxmxnx.JNetInterface.Mobile.dll</Left>
+    <Right>lib/net8.0-android21.0/Rxmxnx.JNetInterface.Mobile.dll</Right>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
     <Target>T:System.Runtime.CompilerServices.RequiresLocationAttribute</Target>
-    <Left>lib/net7.0/Rxmxnx.JNetInterface.dll</Left>
-    <Right>lib/net8.0/Rxmxnx.JNetInterface.dll</Right>
+    <Left>lib/net7.0-android21.0/Rxmxnx.JNetInterface.Mobile.dll</Left>
+    <Right>lib/net8.0-android21.0/Rxmxnx.JNetInterface.Mobile.dll</Right>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
     <Target>T:System.Runtime.CompilerServices.ScopedRefAttribute</Target>
-    <Left>lib/net7.0/Rxmxnx.JNetInterface.dll</Left>
-    <Right>lib/net8.0/Rxmxnx.JNetInterface.dll</Right>
+    <Left>lib/net7.0-android21.0/Rxmxnx.JNetInterface.Mobile.dll</Left>
+    <Right>lib/net8.0-android21.0/Rxmxnx.JNetInterface.Mobile.dll</Right>
   </Suppression>
 </Suppressions>
