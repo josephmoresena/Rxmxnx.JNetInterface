@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <Import Project="..\Intermediate.Library.props"/>
+    <Import Project="..\..\Mobile.Library.props" Condition="'$(Version)' != ''"/>
 
     <ItemGroup>
         <ProjectReference Include="..\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj"/>

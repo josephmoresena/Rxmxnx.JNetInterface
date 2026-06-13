@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <Import Project="..\Intermediate.Library.props"/>
+    <Import Project="..\..\Mobile.Library.props" Condition="'$(Version)' != ''"/>
 
     <ItemGroup>
         <Using Include="System.Collections.Immutable"/>

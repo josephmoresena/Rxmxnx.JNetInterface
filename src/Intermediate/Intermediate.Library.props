@@ -6,6 +6,8 @@
         <Deterministic>true</Deterministic>
         <IsTrimmable>true</IsTrimmable>
         <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Version)' == ''">
         <DocumentationFile>./$(AssemblyName).xml</DocumentationFile>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <ExcludeXmlAssemblyFiles>false</ExcludeXmlAssemblyFiles>

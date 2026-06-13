@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <IsMobileLibrary>True</IsMobileLibrary>
+        <DefineConstants Condition="'$(Version)' != ''">DEFINE_JAVA_INTEROP</DefineConstants>
     </PropertyGroup>
 
     <Import Project="..\Intermediate.Library.props"/>

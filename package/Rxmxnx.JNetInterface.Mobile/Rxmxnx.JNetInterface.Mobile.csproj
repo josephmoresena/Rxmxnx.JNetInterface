@@ -38,9 +38,9 @@
   <PropertyGroup>
     <Authors>Joseph Moreno</Authors>
     <Product>Rxmxnx.JNetInterface</Product>
-    <Description>Rxmxnx.JNetInterface.Moble provides an implementation of the Java Native Interface API for use within the .NET Android.</Description>
+    <Description>Rxmxnx.JNetInterface.Mobile provides an implementation of the Java Native Interface API for use within the .NET Android.</Description>
     <Copyright>Copyright © Joseph Moreno 2026</Copyright>
-    <Summary>Rxmxnx.JNetInterface.Moble provides an implementation of the Java Native Interface API for use within the .NET Android.</Summary>
+    <Summary>Rxmxnx.JNetInterface.Mobile provides an implementation of the Java Native Interface API for use within the .NET Android.</Summary>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Title>Rxmxnx.JNetInterface.Mobile</Title>
     <PackageId>Rxmxnx.JNetInterface.Mobile</PackageId>
