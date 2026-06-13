@@ -3,6 +3,9 @@ namespace Rxmxnx.JNetInterface.ContextBuilder;
 /// <summary>
 /// Builder type for initialize a sync JNI context.
 /// </summary>
+#if !PACKAGE
+[ExcludeFromCodeCoverage]
+#endif
 public ref partial struct SyncContextBuilder()
 {
 	/// <summary>

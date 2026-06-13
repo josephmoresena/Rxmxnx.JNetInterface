@@ -3,6 +3,9 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Standard Runtime Feature flags
 /// </summary>
+#if !PACKAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal static class JavaStandardFeature
 {
 	/// <summary>

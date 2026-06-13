@@ -3,6 +3,9 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Internal implementation of <see cref="IEnvironment"/>.
 /// </summary>
+#if !PACKAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal partial class AndroidEnvironment : INativeThread<AndroidEnvironment>
 {
 	/// <summary>

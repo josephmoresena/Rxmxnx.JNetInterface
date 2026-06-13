@@ -3,6 +3,9 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// This class exposes the JNI hosted by Android-OS
 /// </summary>
+#if !PACKAGE
+[ExcludeFromCodeCoverage]
+#endif
 public sealed partial class AndroidJniHost
 {
 	/// <summary>

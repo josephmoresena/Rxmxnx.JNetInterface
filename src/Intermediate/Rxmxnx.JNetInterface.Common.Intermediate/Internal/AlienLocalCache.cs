@@ -99,6 +99,9 @@ internal abstract class AlienLocalCache : LocalCache, IDisposable
 	/// Removes a registered alien.
 	/// </summary>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> instance.</param>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	protected void RemoveAlien(JObjectLocalRef localRef)
 	{
 		if (localRef == default) return;

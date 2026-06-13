@@ -3,6 +3,9 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// Android JNI extensions.
 /// </summary>
+#if !PACKAGE
+[ExcludeFromCodeCoverage]
+#endif
 public static class AndroidJniExtensions
 {
 	/// <summary>

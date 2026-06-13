@@ -153,14 +153,33 @@ jobs:
           
           dotnet workload update
 
+      - name: Remove Mobile
+        if: inputs.run_tests == true
+        shell: pwsh
+        run: |
+          $emptyProject = '<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" />'
+          Get-ChildItem -Path . -Recurse -Filter "*.Mobile.*proj" |
+            ForEach-Object {
+              Write-Host "Removing project from solution: $($_.FullName)"
+              dotnet sln src remove $_.FullName
+          
+              Write-Host "Removing directory: $($_.Directory.FullName)"
+              Remove-Item $_.Directory.FullName -Recurse -Force
+            }
+          Get-ChildItem -Path . -Recurse -Filter "*.Mobile.*.props" |
+            ForEach-Object {
+              Write-Host "Neutralizing $($_.FullName)"
+              Set-Content $_.FullName $emptyProject -Encoding UTF8
+            }
       - name: Remove ApplicationTest
         if: inputs.run_tests == true
         shell: pwsh
         run: |
           Get-ChildItem -Path "src/ApplicationTest" -Recurse -Include "*.*proj" |
-          ForEach-Object {
-            dotnet sln src remove $_.FullName
-          }
+            ForEach-Object {
+              Write-Host "Removing project $($_.FullName)"
+              dotnet sln src remove $_.FullName
+            }
       - name: Build tests
         if: inputs.run_tests == true
         run: |

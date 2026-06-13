@@ -3,6 +3,9 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Inline local cache.
 /// </summary>
+#if !PACKAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal sealed class InlineCache : LocalCache, IDisposable
 {
 	/// <summary>

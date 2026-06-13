@@ -3,6 +3,9 @@ namespace Rxmxnx.JNetInterface.ContextBuilder;
 /// <summary>
 /// Builder type for initialize an async JNI context.
 /// </summary>
+#if !PACKAGE
+[ExcludeFromCodeCoverage]
+#endif
 public partial struct AsyncContextBuilder()
 {
 	/// <summary>

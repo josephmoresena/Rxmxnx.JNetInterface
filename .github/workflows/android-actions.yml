@@ -41,13 +41,13 @@ jobs:
           key: internal-nuget-${{ github.run_id }}
           fail-on-cache-miss: true
           enableCrossOsArchive: true
-      
+
       - name: Generate keystore
         env:
           APK_KEYSTORE_BASE64: ${{ secrets.APK_KEYSTORE }}
         shell: bash
         run: echo "${APK_KEYSTORE_BASE64}" | base64 -d > ./jnetinterface-apk.keystore
-        
+
       - name: Build Mobile Test
         env:
           APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
@@ -55,20 +55,20 @@ jobs:
         shell: bash
         working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.MobileTest
         run: |
-          dotnet publish -c Release -o ./../../../../ -p:AndroidPackageFormats=apk -p:AndroidKeyStore=true \
-            -p:UsePackage=true -p:AndroidSigningKeyStore=./../../../../jnetinterface-apk.keystore \
+          dotnet publish -c Release -o ./../../../ -p:AndroidPackageFormats=apk -p:AndroidKeyStore=true \
+            -p:UsePackage=true -p:AndroidSigningKeyStore=./../../../jnetinterface-apk.keystore \
             -p:AndroidSigningKeyAlias=$APK_KEY_ALIAS -p:AndroidSigningKeyPass=$APK_KEY_PASS \
             -p:AndroidSigningStorePass=$APK_KEY_PASS -p:NativeAOT=false
           
           mv ./com.Rxmxnx.JNetInterface.MobileTest-Signed.apk ./com.Rxmxnx.JNetInterface.MobileTest-MonoAot.apk
           
-          dotnet publish -c Release -o ./../../../../ -p:AndroidPackageFormats=apk -p:AndroidKeyStore=true \
-            -p:UsePackage=true -p:AndroidSigningKeyStore=./../../../../jnetinterface-apk.keystore \
+          dotnet publish -c Release -o ./../../../ -p:AndroidPackageFormats=apk -p:AndroidKeyStore=true \
+            -p:UsePackage=true -p:AndroidSigningKeyStore=./../../../jnetinterface-apk.keystore \
             -p:AndroidSigningKeyAlias=$APK_KEY_ALIAS -p:AndroidSigningKeyPass=$APK_KEY_PASS \
             -p:AndroidSigningStorePass=$APK_KEY_PASS -p:NativeAOT=true -r android-arm64
           
           mv ./com.Rxmxnx.JNetInterface.MobileTest-Signed.apk ./com.Rxmxnx.JNetInterface.MobileTest-NativeAot.apk
-          
+
       - name: Clone NativeAOT-AndroidHelloJniLib
         run: |
           git config --global url.https://github.com/.insteadOf git://github.com/
@@ -150,8 +150,6 @@ jobs:
             -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0-RFM/x86_64
 
       - name: Create Android project structure
-        env:
-          APK_KEYSTORE_BASE64: ${{ secrets.APK_KEYSTORE }}
         run: |
           mkdir ./hello-jni_apk 
           mkdir ./hello-jni_apk/main

@@ -5,6 +5,9 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// </summary>
 /// <param name="reference">A JNI reference.</param>
 /// <param name="jniClassName">The JNI object class name.</param>
+#if !PACKAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal struct JniObjectInfo(JniObjectReference reference, String? jniClassName)
 {
 	public JniObjectReference Reference = reference;

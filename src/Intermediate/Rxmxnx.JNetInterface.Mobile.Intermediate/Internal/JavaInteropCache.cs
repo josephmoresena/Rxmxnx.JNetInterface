@@ -1,5 +1,8 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
+#if !PACKAGE
+[ExcludeFromCodeCoverage]
+#endif
 internal sealed class JavaInteropCache : AlienLocalCache
 {
 	/// <summary>

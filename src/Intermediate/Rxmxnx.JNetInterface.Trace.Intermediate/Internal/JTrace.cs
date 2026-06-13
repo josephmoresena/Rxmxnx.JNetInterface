@@ -68,6 +68,9 @@ internal static partial class JTrace
 	/// </summary>
 	/// <param name="className">Class name.</param>
 	/// <param name="callerMethod">Caller member name.</param>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	public static void FindClass(String className, [CallerMemberName] String callerMethod = "")
 	{
 		if (!JTrace.TraceEnabled) return;
@@ -512,6 +515,9 @@ internal static partial class JTrace
 	/// <param name="ex">Thrown exception.</param>
 	/// <param name="isAsync">Indicates whether the current exception has been thrown on an async thread.</param>
 	/// <param name="callerMethod">Caller member name.</param>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	public static void UnhandledException(Exception ex, Boolean isAsync, [CallerMemberName] String callerMethod = "")
 	{
 		if (!JTrace.TraceEnabled) return;

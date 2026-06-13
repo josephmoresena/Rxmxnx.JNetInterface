@@ -3,6 +3,9 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// This struct represents a JNI context hosted by Android OS.
 /// </summary>
+#if !PACKAGE
+[ExcludeFromCodeCoverage]
+#endif
 public readonly ref struct AndroidJniContext
 {
 	/// <summary>

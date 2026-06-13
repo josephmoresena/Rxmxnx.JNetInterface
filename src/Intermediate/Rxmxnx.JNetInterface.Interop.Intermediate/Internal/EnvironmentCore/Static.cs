@@ -212,6 +212,9 @@ internal sealed partial class EnvironmentCore
 	/// <param name="localRef">Object instance to get class.</param>
 	/// <param name="typeMetadata">Output. Instantiation metadata.</param>
 	/// <returns>Object's class <see cref="JClassObject"/> instance</returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	public static JClassObject GetObjectClass(EnvironmentCore core, ITypeInformation typeInformation,
 		JObjectLocalRef localRef, out JReferenceTypeMetadata typeMetadata)
 	{
