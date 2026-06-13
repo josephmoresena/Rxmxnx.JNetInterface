@@ -55,6 +55,9 @@ internal sealed class DefaultMessageResource : IMessageResource
 	String IMessageResource.AotRequired => "This operation requires a Native AOT runtime.";
 	String IMessageResource.AndroidRuntimeRequired
 		=> "The current process must be executed exclusively on the Android operating system.";
+	String IMessageResource.MissingSetEnvironmentPointerMethod
+		=> "Unable to locate the static method SetEnvironmentPointer(IntPtr) in the JniEnvironment type.";
+	String IMessageResource.MissingJniRuntime => "There is no active JniRuntime instance in the current process.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} is not an instantiable type.";
 	String IMessageResource.InvalidCastTo(Type type) => $"Invalid cast to {type}.";

@@ -146,6 +146,14 @@ internal partial interface IMessageResource
 	/// Message for Android runtime required.
 	/// </summary>
 	String AndroidRuntimeRequired { get; }
+	/// <summary>
+	/// Message for invalid SetEnvironmentPointer(IntPtr) method.
+	/// </summary>
+	String MissingSetEnvironmentPointerMethod { get; }
+	/// <summary>
+	/// Message for invalid JniRuntime state.
+	/// </summary>
+	String MissingJniRuntime { get; }
 
 	/// <summary>
 	/// Message for instantiation exception.

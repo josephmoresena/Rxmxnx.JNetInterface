@@ -55,6 +55,9 @@ internal sealed class RussianMessageResource : IMessageResource
 	String IMessageResource.AotRequired => "Для этой операции требуется среда выполнения Native AOT.";
 	String IMessageResource.AndroidRuntimeRequired
 		=> "Текущий процесс должен выполняться исключительно в операционной системе Android.";
+	String IMessageResource.MissingSetEnvironmentPointerMethod
+		=> "Не удалось найти статический метод SetEnvironmentPointer(IntPtr) в типе JniEnvironment.";
+	String IMessageResource.MissingJniRuntime => "В текущем процессе отсутствует активный экземпляр JniRuntime.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} не является создаваемым типом.";
 	String IMessageResource.InvalidCastTo(Type type) => $"Недопустимое приведение к {type}.";

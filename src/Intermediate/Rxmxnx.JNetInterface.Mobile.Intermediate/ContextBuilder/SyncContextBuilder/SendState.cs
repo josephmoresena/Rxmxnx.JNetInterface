@@ -6,7 +6,7 @@ public ref partial struct SyncContextBuilder
 	/// <summary>
 	/// Object state for <see cref="SynchronizationContext.Send(SendOrPostCallback, Object)"/>
 	/// </summary>
-	private unsafe class SendState
+	private sealed unsafe class SendState
 	{
 		/// <summary>
 		/// A <see cref="SyncContextBuilder"/> unmanaged pointer.
@@ -95,24 +95,6 @@ public ref partial struct SyncContextBuilder
 		/// <summary>
 		/// Creates a new JNI context, invokes <paramref name="func"/> and returns its result.
 		/// </summary>
-		/// <typeparam name="TResult">Type of result object</typeparam>
-		/// <param name="func">A <see cref="AndroidJniFunc{TResult}"/> delegate.</param>
-		public void InvokeJni<[DynamicallyAccessedMembers(AndroidJniExtensions.JavaObjectMembers)] TResult>(
-			AndroidJniFunc<JReferenceObject> func) where TResult : class, IJavaPeerable
-		{
-			// Execution is now in the UI thread.
-			try
-			{
-				this.GetResult<TResult>() = this.GetBuilder().Invoke<TResult>(func);
-			}
-			catch (Exception ex)
-			{
-				this.GetException() = ex;
-			}
-		}
-		/// <summary>
-		/// Creates a new JNI context, invokes <paramref name="func"/> and returns its result.
-		/// </summary>
 		/// <typeparam name="TState">Type of state object</typeparam>
 		/// <typeparam name="TResult">Type of result object</typeparam>
 		/// <param name="func">A <see cref="AndroidJniFunc{TResult}"/> delegate.</param>
@@ -125,6 +107,24 @@ public ref partial struct SyncContextBuilder
 			try
 			{
 				this.GetResult<TResult>() = this.GetBuilder().Invoke(this.GetState<TState>(), func);
+			}
+			catch (Exception ex)
+			{
+				this.GetException() = ex;
+			}
+		}
+		/// <summary>
+		/// Creates a new JNI context, invokes <paramref name="func"/> and returns its result.
+		/// </summary>
+		/// <typeparam name="TResult">Type of result object</typeparam>
+		/// <param name="func">A <see cref="AndroidJniFunc{TResult}"/> delegate.</param>
+		public void InvokeJni<[DynamicallyAccessedMembers(AndroidJniExtensions.JavaObjectMembers)] TResult>(
+			AndroidJniFunc<JReferenceObject> func) where TResult : class, IJavaPeerable
+		{
+			// Execution is now in the UI thread.
+			try
+			{
+				this.GetResult<TResult>() = this.GetBuilder().Invoke<TResult>(func);
 			}
 			catch (Exception ex)
 			{

@@ -6,12 +6,14 @@ public sealed partial class AndroidJniHost
 	/// Retrieves the current <see cref="AndroidJniContext"/> instance.
 	/// </summary>
 	/// <returns>The active <see cref="AndroidJniHost"/> instance.</returns>
-	/// <exception cref="InvalidOperationException"></exception>
 	internal static IVirtualMachineHost GetAndroidHost()
 	{
 		if (AndroidJniHost.instance is not null) return AndroidJniHost.instance;
 		if (JniRuntime.CurrentRuntime.InvocationPointer == IntPtr.Zero)
-			throw new InvalidOperationException(); //TODO: MESSAGE
+		{
+			IMessageResource resource = IMessageResource.GetInstance();
+			throw new RunningStateException(resource.MissingJniRuntime);
+		}
 		JVirtualMachineRef vmRef = default;
 		Unsafe.As<JVirtualMachineRef, IntPtr>(ref vmRef) = JniRuntime.CurrentRuntime.InvocationPointer;
 		return AndroidJniHost.instance = new(vmRef);

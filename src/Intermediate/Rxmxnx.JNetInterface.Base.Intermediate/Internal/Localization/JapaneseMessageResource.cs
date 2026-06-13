@@ -52,6 +52,9 @@ internal sealed class JapaneseMessageResource : IMessageResource
 	String IMessageResource.UnmanagedMemoryContext => "メモリブロックはアンマネージドです。";
 	String IMessageResource.AotRequired => "この操作には Native AOT ランタイムが必要です。";
 	String IMessageResource.AndroidRuntimeRequired => "現在のプロセスは Android OS 上でのみ実行される必要があります。";
+	String IMessageResource.MissingSetEnvironmentPointerMethod
+		=> "型 JniEnvironment に静的メソッド SetEnvironmentPointer(IntPtr) が見つかりません。";
+	String IMessageResource.MissingJniRuntime => "現在のプロセスにはアクティブな JniRuntime インスタンスが存在しません。";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} はインスタンス化できない型です。";
 	String IMessageResource.InvalidCastTo(Type type) => $"{type} へのキャストが無効です。";

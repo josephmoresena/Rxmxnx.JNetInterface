@@ -9,6 +9,10 @@ internal partial class AndroidEnvironment
 	/// <summary>
 	/// Internal implementation of <see cref="IThread"/>.
 	/// </summary>
+#if !PACKAGE
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3011,
+	                 Justification = CommonConstants.ReflectionPrivateUseJustification)]
+#endif
 	public sealed class AndroidThread : AndroidEnvironment, IThread
 	{
 #if !NET8_0_OR_GREATER
@@ -76,7 +80,10 @@ internal partial class AndroidEnvironment
 #if !NET8_0_OR_GREATER
 		{
 			if (AndroidThread.setEnvironmentPointerMethod is null)
-				throw new InvalidOperationException(); //TODO: MESSAGE
+			{
+				IMessageResource resource = IMessageResource.GetInstance();
+				throw new InvalidOperationException(resource.MissingSetEnvironmentPointerMethod);
+			}
 			AndroidThread.setEnvironmentPointerMethod.Invoke(null, AndroidThread.setEnvironmentPointerArgs);
 		}
 #else

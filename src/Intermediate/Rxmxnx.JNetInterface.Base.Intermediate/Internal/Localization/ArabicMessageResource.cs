@@ -53,6 +53,9 @@ internal sealed class ArabicMessageResource : IMessageResource
 	String IMessageResource.IncompatibleLibrary => "مكتبة JVM غير متوافقة.";
 	String IMessageResource.UnmanagedMemoryContext => "كتلة الذاكرة غير مدارة.";
 	String IMessageResource.AndroidRuntimeRequired => "يجب تنفيذ العملية الحالية حصريًا على نظام التشغيل Android.";
+	String IMessageResource.MissingSetEnvironmentPointerMethod
+		=> "تعذّر العثور على الأسلوب الثابت SetEnvironmentPointer(IntPtr) في النوع JniEnvironment.";
+	String IMessageResource.MissingJniRuntime => "لا توجد أي مثيل نشط لـ JniRuntime في العملية الحالية.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} ليس نوعًا قابلاً للإنشاء.";
 	String IMessageResource.InvalidCastTo(Type type) => $"تحويل غير صالح إلى {type}.";

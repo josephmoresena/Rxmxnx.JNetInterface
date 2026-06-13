@@ -7,8 +7,10 @@ public partial struct AsyncContextBuilder
 		/// <summary>
 		/// Action invocation.
 		/// </summary>
+		/// <typeparam name="TState">Type of state object</typeparam>
+		/// <param name="state">A state instance object.</param>
 		/// <param name="env">A <see cref="INativeThread"/> instance.</param>
-		public virtual void Invoke(INativeThread env)
+		protected void Invoke<TState>(INativeThread env, in TState state)
 		{
 			JLocalObject?[] objects =
 				this._objectCount > 0 ? ArrayPool<JLocalObject?>.Shared.Rent(this._objectCount) : [];
@@ -28,7 +30,7 @@ public partial struct AsyncContextBuilder
 					Objects = interopCache is not null ? interopCache.RegisterContext(objects, this._objects) : [],
 				};
 				using InlineCache _ = new(env);
-				((AndroidJniAction)this._call)(context);
+				((AndroidJniAction<TState>)this._call)(context, state);
 			}
 			catch (Exception e)
 			{
@@ -43,10 +45,12 @@ public partial struct AsyncContextBuilder
 		/// <summary>
 		/// Function invocation.
 		/// </summary>
+		/// <typeparam name="TState">Type of state object</typeparam>
 		/// <typeparam name="TResult">Type of result object</typeparam>
 		/// <param name="env">A <see cref="INativeThread"/> instance.</param>
+		/// <param name="state">A state instance object.</param>
 		/// <returns>A <typeparamref name="TResult"/> function result.</returns>
-		public virtual TResult Invoke<TResult>(INativeThread env)
+		protected TResult Invoke<TState, TResult>(INativeThread env, in TState state)
 		{
 			JLocalObject?[] objects =
 				this._objectCount > 0 ? ArrayPool<JLocalObject?>.Shared.Rent(this._objectCount) : [];
@@ -66,7 +70,7 @@ public partial struct AsyncContextBuilder
 					Objects = interopCache is not null ? interopCache.RegisterContext(objects, this._objects) : [],
 				};
 				using InlineCache _ = new(env);
-				return ((AndroidJniFunc<TResult>)this._call)(context);
+				return ((AndroidJniFunc<TState, TResult>)this._call)(context, state);
 			}
 			catch (Exception e)
 			{
@@ -81,12 +85,14 @@ public partial struct AsyncContextBuilder
 		/// <summary>
 		/// JNI function invocation.
 		/// </summary>
+		/// <typeparam name="TState">Type of state object</typeparam>
 		/// <typeparam name="TResult">Type of result object</typeparam>
 		/// <param name="env">A <see cref="INativeThread"/> instance.</param>
+		/// <param name="state">A state instance object.</param>
 		/// <returns>A <typeparamref name="TResult"/> function result.</returns>
-		public virtual TResult
-			InvokeJni<[DynamicallyAccessedMembers(AndroidJniExtensions.JavaObjectMembers)] TResult>(INativeThread env)
-			where TResult : class, IJavaPeerable
+		protected TResult InvokeJni<TState,
+			[DynamicallyAccessedMembers(AndroidJniExtensions.JavaObjectMembers)] TResult>(INativeThread env,
+			in TState state) where TResult : class, IJavaPeerable
 		{
 			JLocalObject?[] objects =
 				this._objectCount > 0 ? ArrayPool<JLocalObject?>.Shared.Rent(this._objectCount) : [];
@@ -106,7 +112,7 @@ public partial struct AsyncContextBuilder
 					Objects = interopCache is not null ? interopCache.RegisterContext(objects, this._objects) : [],
 				};
 				using InlineCache _ = new(env);
-				JReferenceObject? jObject = ((AndroidJniFunc<JReferenceObject?>)this._call)(context);
+				JReferenceObject? jObject = ((AndroidJniFunc<TState, JReferenceObject?>)this._call)(context, state);
 				return jObject is JGlobal jGlobal ? jGlobal.ToJniObject<TResult>()! : jObject.ToJniObject<TResult>()!;
 			}
 			catch (Exception e)
@@ -119,17 +125,5 @@ public partial struct AsyncContextBuilder
 				interopCache?.Dispose();
 			}
 		}
-	}
-
-	private sealed partial class TaskState<TState>
-	{
-		/// <inheritdoc cref="TaskState.Invoke(INativeThread)"/>
-		public override void Invoke(INativeThread env) => base.Invoke(env, this._state);
-		/// <inheritdoc cref="TaskState.Invoke{TResult}(INativeThread)"/>
-		public override TResult Invoke<TResult>(INativeThread env) => base.Invoke<TState, TResult>(env, this._state);
-		/// <inheritdoc cref="TaskState.InvokeJni{TResult}(INativeThread)"/>
-		public override TResult
-			InvokeJni<[DynamicallyAccessedMembers(AndroidJniExtensions.JavaObjectMembers)] TResult>(INativeThread env)
-			=> base.InvokeJni<TState, TResult>(env, this._state);
 	}
 }

@@ -65,5 +65,9 @@ public static class AndroidJniExtensions
 	/// <param name="host">A <see cref="IVirtualMachineHost"/> instance.</param>
 	/// <returns>A <see cref="INativeThread"/> instance.</returns>
 	internal static INativeThread GetNativeThread(this IVirtualMachineHost host)
-		=> host.Value.GetEnvironment() as INativeThread ?? throw new InvalidOperationException(); //TODO: Message
+	{
+		if (host.Value.GetEnvironment() is INativeThread env) return env;
+		IMessageResource resource = IMessageResource.GetInstance();
+		throw new RunningStateException(resource.NotAttachedThread);
+	}
 }

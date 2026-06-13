@@ -55,6 +55,9 @@ internal sealed class PortugueseMessageResource : IMessageResource
 	String IMessageResource.AotRequired => "Esta operação requer um runtime Native AOT.";
 	String IMessageResource.AndroidRuntimeRequired
 		=> "O processo atual deve ser executado exclusivamente no sistema operacional Android.";
+	String IMessageResource.MissingSetEnvironmentPointerMethod
+		=> "Não foi possível localizar o método estático SetEnvironmentPointer(IntPtr) no tipo JniEnvironment.";
+	String IMessageResource.MissingJniRuntime => "Não há nenhuma instância ativa de JniRuntime no processo atual.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} não é um tipo instanciável.";
 	String IMessageResource.InvalidCastTo(Type type) => $"Conversão inválida para {type}.";
