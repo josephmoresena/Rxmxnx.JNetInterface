@@ -5,6 +5,9 @@
         <AssemblyName>$(AssemblyName).$(TargetFramework)</AssemblyName>
         <USE_JTRACE Condition="'$(USE_JTRACE)' == ''">false</USE_JTRACE>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(TargetPlatformIdentifier)' != 'android'">
+        <USE_JTRACE Condition="'$(USE_JTRACE)' == ''">false</USE_JTRACE>
+    </PropertyGroup>
 
     <ItemGroup>
         <!--<RuntimeHostConfigurationOption Include="JNetInterface.DisableTypeMetadataToString" Value="true" Trim="true"/>-->

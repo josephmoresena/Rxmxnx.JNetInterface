@@ -1,33 +1,33 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net10.0-android</TargetFramework>
-        <TargetFrameworks>net10.0-android;net9.0-android;net8.0-android;net7.0-android</TargetFrameworks>
+        <TargetFramework>$(DefaultFramework)-android</TargetFramework>
         <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
         <RuntimeIdentifiers>android-x64;android-arm64</RuntimeIdentifiers>
         <OutputType>Exe</OutputType>
         <ApplicationId>com.Rxmxnx.JNetInterface.MobileTest</ApplicationId>
         <ApplicationVersion>1</ApplicationVersion>
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-        <PublishAot>false</PublishAot>
         <TrimMode>full</TrimMode>
-        <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
         <CheckEolTargetFramework>false</CheckEolTargetFramework>
         <CheckEolWorkloads>false</CheckEolWorkloads>
+        <GenerateAotLog>true</GenerateAotLog>
     </PropertyGroup>
-    <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net9.0'))">
+    <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net9.0')) And '$(NativeAOT)' != 'True'">
         <RuntimeIdentifiers>$(RuntimeIdentifiers);android-arm</RuntimeIdentifiers>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)' == 'Release' And '$(PublishAot)' != 'True'">
+    <PropertyGroup Condition="'$(Configuration)' == 'Release' And '$(NativeAOT)' != 'True'">
+        <PublishAot>false</PublishAot>
         <RunAOTCompilation>true</RunAOTCompilation>
         <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)' == 'Release' And '$(PublishAot)' == 'True'">
+    <PropertyGroup Condition="'$(Configuration)' == 'Release' And '$(NativeAOT)' == 'True'">
         <PublishAot>true</PublishAot>
         <PublishAotUsingRuntimePack>true</PublishAotUsingRuntimePack>
+        <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
+        <IlcGenerateMstatFile>true</IlcGenerateMstatFile>
+        <IlcGenerateDgmlFile>true</IlcGenerateDgmlFile>
     </PropertyGroup>
+    
     <Import Project="..\JNetInterface-PackageReference.props"/>
     <Import Project="..\JNetInterface-Config.props"/>
-    <ItemGroup>
-        <RuntimeHostConfigurationOption Include="JNetInterface.EnableTrace" Value="true" Trim="true"/>
-    </ItemGroup>
 </Project>
