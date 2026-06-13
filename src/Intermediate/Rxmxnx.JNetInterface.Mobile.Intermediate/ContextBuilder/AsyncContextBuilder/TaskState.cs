@@ -9,6 +9,10 @@ public partial struct AsyncContextBuilder
 	/// <param name="builder">A <see cref="AsyncContextBuilder"/> instance.</param>
 	/// <param name="call">A <see cref="Delegate"/> instance.</param>
 	/// <param name="isDaemon">Indicates whether the current thread is a daemon.</param>
+#if !PACKAGE
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3881,
+	                 Justification = CommonConstants.InternalInheritanceJustification)]
+#endif
 	private partial class TaskState(
 		IVirtualMachineHost host,
 		AsyncContextBuilder builder,
