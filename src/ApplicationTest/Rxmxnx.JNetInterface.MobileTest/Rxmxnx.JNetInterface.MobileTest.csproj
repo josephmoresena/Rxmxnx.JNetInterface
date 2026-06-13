@@ -1,19 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net10.0-android</TargetFramework>
+        <TargetFrameworks>net10.0-android;net9.0-android;net8.0-android;net7.0-android</TargetFrameworks>
         <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
-        <RuntimeIdentifiers Condition="'$(PublishAot)' != 'True'">android-arm;android-arm64</RuntimeIdentifiers>
-        <RuntimeIdentifiers Condition="'$(PublishAot)' == 'True'">android-arm64</RuntimeIdentifiers>
+        <RuntimeIdentifiers>android-x64;android-arm64</RuntimeIdentifiers>
         <OutputType>Exe</OutputType>
         <ApplicationId>com.Rxmxnx.JNetInterface.MobileTest</ApplicationId>
         <ApplicationVersion>1</ApplicationVersion>
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-        <!--
-          Enables trim analyzers and full trimming during Release mode.
-          To learn more, see: https://learn.microsoft.com/dotnet/core/deploying/trimming/trimming-options#trimming-granularity
-        -->
+        <PublishAot>false</PublishAot>
         <TrimMode>full</TrimMode>
         <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
+        <CheckEolTargetFramework>false</CheckEolTargetFramework>
+        <CheckEolWorkloads>false</CheckEolWorkloads>
+    </PropertyGroup>
+    <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net9.0'))">
+        <RuntimeIdentifiers>$(RuntimeIdentifiers);android-arm</RuntimeIdentifiers>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Release' And '$(PublishAot)' != 'True'">
         <RunAOTCompilation>true</RunAOTCompilation>
