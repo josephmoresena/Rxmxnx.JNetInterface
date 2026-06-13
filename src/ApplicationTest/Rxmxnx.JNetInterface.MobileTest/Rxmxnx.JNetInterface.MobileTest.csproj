@@ -2,7 +2,6 @@
     <PropertyGroup>
         <TargetFramework>net10.0-android</TargetFramework>
         <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
-
         <RuntimeIdentifiers Condition="'$(PublishAot)' != 'True'">android-arm;android-arm64</RuntimeIdentifiers>
         <RuntimeIdentifiers Condition="'$(PublishAot)' == 'True'">android-arm64</RuntimeIdentifiers>
         <OutputType>Exe</OutputType>

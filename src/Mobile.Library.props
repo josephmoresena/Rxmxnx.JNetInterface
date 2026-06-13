@@ -21,7 +21,10 @@
         <CheckEolWorkloads>false</CheckEolWorkloads>
         <AndroidGenerateResourceDesigner>false</AndroidGenerateResourceDesigner>
         <AndroidUseManagedDesignTimeResourceGenerator>false</AndroidUseManagedDesignTimeResourceGenerator>
+        <AndroidGenerateLayoutBindings>false</AndroidGenerateLayoutBindings>
+        <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
         <AndroidIncludeDebugSymbols>false</AndroidIncludeDebugSymbols>
+        <AndroidUseDesignerAssembly>false</AndroidUseDesignerAssembly>
         <UseAndroidReferencePack Condition="'$(IsMobileLibrary)' == 'True' And '$(Version)' == ''">True</UseAndroidReferencePack>
         <UseAndroidReferencePack Condition="!$(AssemblyName.EndsWith('.Intermediate'))">True</UseAndroidReferencePack>
     </PropertyGroup>
