@@ -23,8 +23,7 @@ public unsafe ref partial struct SyncContextBuilder
 		{
 			context.Send(static s =>
 			{
-				if (s is not SendState ss) return;
-				if (ss.CallDelegate is not AndroidJniAction a) return;
+				if (s is not SendState { CallDelegate: AndroidJniAction a, } ss) return;
 				ss.Invoke(a);
 			}, new SendState(builderPtr, exPtr) { CallDelegate = action, });
 			Thread.MemoryBarrier();
@@ -52,9 +51,8 @@ public unsafe ref partial struct SyncContextBuilder
 		{
 			context.Send(static s =>
 			{
-				if (s is not SendState ss) return;
-				if (ss.CallDelegate is not AndroidJniAction<TState> a) return;
-				if (ss.StatePointer != default) return;
+				if (s is not SendState { CallDelegate: AndroidJniAction<TState> a, } ss) return;
+				if (ss.StatePointer == default) return;
 				ss.Invoke(a);
 			}, new SendState(builderPtr, exPtr) { StatePointer = sPtr, CallDelegate = action, });
 			Thread.MemoryBarrier();
@@ -83,9 +81,8 @@ public unsafe ref partial struct SyncContextBuilder
 		{
 			context.Send(static s =>
 			{
-				if (s is not SendState ss) return;
-				if (ss.CallDelegate is not AndroidJniFunc<TResult> f) return;
-				if (ss.StatePointer != default) return;
+				if (s is not SendState { CallDelegate: AndroidJniFunc<TResult> f, } ss) return;
+				if (ss.ResultPointer == default) return;
 				ss.Invoke(f);
 			}, new SendState(builderPtr, exPtr) { ResultPointer = rPtr, CallDelegate = func, });
 			Thread.MemoryBarrier();
@@ -116,9 +113,8 @@ public unsafe ref partial struct SyncContextBuilder
 		{
 			context.Send(static s =>
 			{
-				if (s is not SendState ss) return;
-				if (ss.CallDelegate is not AndroidJniFunc<JReferenceObject> f) return;
-				if (ss.StatePointer != default) return;
+				if (s is not SendState { CallDelegate: AndroidJniFunc<JReferenceObject> f, } ss) return;
+				if (ss.ResultPointer == default) return;
 				ss.InvokeJni<TResult>(f);
 			}, new SendState(builderPtr, exPtr) { ResultPointer = rPtr, CallDelegate = func, });
 			Thread.MemoryBarrier();
@@ -156,9 +152,8 @@ public unsafe ref partial struct SyncContextBuilder
 		{
 			context.Send(static s =>
 			{
-				if (s is not SendState ss) return;
-				if (ss.CallDelegate is not AndroidJniFunc<TState, TResult> f) return;
-				if (ss.StatePointer != default) return;
+				if (s is not SendState { CallDelegate: AndroidJniFunc<TState, TResult> f, } ss) return;
+				if (ss.StatePointer == default || ss.ResultPointer == default) return;
 				ss.Invoke(f);
 			}, new SendState(builderPtr, exPtr) { StatePointer = sPtr, ResultPointer = rPtr, CallDelegate = func, });
 			Thread.MemoryBarrier();
@@ -197,9 +192,8 @@ public unsafe ref partial struct SyncContextBuilder
 		{
 			context.Send(static s =>
 			{
-				if (s is not SendState ss) return;
-				if (ss.CallDelegate is not AndroidJniFunc<TState, JReferenceObject?> f) return;
-				if (ss.StatePointer != default) return;
+				if (s is not SendState { CallDelegate: AndroidJniFunc<TState, JReferenceObject> f, } ss) return;
+				if (ss.StatePointer == default || ss.ResultPointer == default) return;
 				ss.InvokeJni<TState, TResult>(f);
 			}, new SendState(builderPtr, exPtr) { StatePointer = sPtr, ResultPointer = rPtr, CallDelegate = func, });
 			Thread.MemoryBarrier();

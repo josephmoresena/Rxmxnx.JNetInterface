@@ -58,6 +58,7 @@ public partial struct AsyncContextBuilder
 		private readonly Array? _shorts = builder._shorts;
 
 		/// <inheritdoc/>
+		/// <remarks>This method may attach the current thread using <see cref="JniRuntime"/>.</remarks>
 		public void Dispose()
 		{
 			for (Int32 index = 0; index < this._objectCount; index++)

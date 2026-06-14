@@ -5,15 +5,12 @@
         <AssemblyName>$(AssemblyName).$(TargetFramework)</AssemblyName>
         <USE_JTRACE Condition="'$(USE_JTRACE)' == ''">false</USE_JTRACE>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(TargetPlatformIdentifier)' == 'android'">
-        <USE_JTRACE Condition="'$(USE_JTRACE)' == ''">false</USE_JTRACE>
-    </PropertyGroup>
 
     <ItemGroup>
         <!--<RuntimeHostConfigurationOption Include="JNetInterface.DisableTypeMetadataToString" Value="true" Trim="true"/>-->
         <RuntimeHostConfigurationOption Include="JNetInterface.DisableMetadataValidation" Value="true" Trim="true"/>
         <!--<RuntimeHostConfigurationOption Include="JNetInterface.DisableJaggedArrayAutoGeneration" Value="true" Trim="true"/>-->
-        <RuntimeHostConfigurationOption Include="JNetInterface.EnableTrace" Value="$(USE_JTRACE)" Trim="true"/>
+        <RuntimeHostConfigurationOption Include="JNetInterface.EnableTrace" Value="$([MSBuild]::ValueOrDefault('$(USE_JTRACE)', 'false'))" Trim="true"/>
         <RuntimeHostConfigurationOption Include="JNetInterface.DisableBuiltInThrowableAutoRegistration" Value="true" Trim="true"/>
         <RuntimeHostConfigurationOption Include="JNetInterface.DisableReflectionAutoRegistration" Value="true" Trim="true"/>
         <RuntimeHostConfigurationOption Include="JNetInterface.DisableNioAutoRegistration" Value="true" Trim="true"/>

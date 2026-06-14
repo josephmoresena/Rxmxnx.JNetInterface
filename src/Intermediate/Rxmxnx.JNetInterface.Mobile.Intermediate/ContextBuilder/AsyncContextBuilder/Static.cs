@@ -11,8 +11,15 @@ public partial struct AsyncContextBuilder
 		public static void Invoke(Object? state)
 		{
 			if (state is not TaskState taskState) return;
-			using IThread __ = taskState.CreateThread(out INativeThread env);
-			taskState.Invoke(env);
+			try
+			{
+				using IThread __ = taskState.CreateThread(out INativeThread env);
+				taskState.Invoke(env);
+			}
+			finally
+			{
+				taskState.Dispose();
+			}
 		}
 		/// <summary>
 		/// Function delegate for <see cref="TaskFactory.StartNew{TResult}(Func{Object, TResult}, Object)"/>.
@@ -22,8 +29,15 @@ public partial struct AsyncContextBuilder
 		public static TResult Invoke<TResult>(Object? state)
 		{
 			if (state is not TaskState taskState) return default!;
-			using IThread __ = taskState.CreateThread(out INativeThread env);
-			return taskState.Invoke<TResult>(env);
+			try
+			{
+				using IThread __ = taskState.CreateThread(out INativeThread env);
+				return taskState.Invoke<TResult>(env);
+			}
+			finally
+			{
+				taskState.Dispose();
+			}
 		}
 		/// <summary>
 		/// Function delegate for <see cref="TaskFactory.StartNew{TResult}(Func{Object, TResult}, Object)"/>.
@@ -35,8 +49,15 @@ public partial struct AsyncContextBuilder
 			where TResult : class, IJavaPeerable
 		{
 			if (state is not TaskState taskState) return default!;
-			using IThread __ = taskState.CreateThread(out INativeThread env);
-			return taskState.InvokeJni<TResult>(env);
+			try
+			{
+				using IThread __ = taskState.CreateThread(out INativeThread env);
+				return taskState.InvokeJni<TResult>(env);
+			}
+			finally
+			{
+				taskState.Dispose();
+			}
 		}
 	}
 }

@@ -151,12 +151,7 @@ jobs:
 
       - name: Create Android project structure
         run: |
-          mkdir ./hello-jni_apk 
-          mkdir ./hello-jni_apk/main
-          mkdir ./hello-jni_apk/main/java
-          mkdir ./hello-jni_apk/main/java/com
-          mkdir ./hello-jni_apk/main/java/com/example
-          mkdir ./hello-jni_apk/main/java/com/example/hellojni
+          mkdir -p ./hello-jni_apk/main/java/com/example/hellojni
           mkdir ./hello-jni_apk/class
           mkdir ./hello-jni_apk/dex
           mkdir ./hello-jni_apk/lib
@@ -199,14 +194,7 @@ jobs:
                 1f
               );
               textView.setLayoutParams(params);
-
-              textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                  textView.setText(stringFromJNI());
-                }
-              });
-
+              textView.setOnClickListener(v -> textView.setText(stringFromJNI()));
               rootLayout.addView(textView);
               setContentView(rootLayout);
             }
@@ -221,9 +209,9 @@ jobs:
           echo '<?xml version="1.0" encoding="utf-8"?>
           <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.hellojni" android:theme="@android:style/Theme.DeviceDefault">
             <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-            <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30"/>
+            <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="37"/>
             <application android:label="JNetInterfaceTestApp">
-              <activity android:name=".HelloJni" android:label="JNetInterfaceTestApp">
+              <activity android:name=".HelloJni" android:label="JNetInterfaceTestApp" android:exported="true">
               <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -236,111 +224,45 @@ jobs:
         working-directory: ./hello-jni_apk
         shell: bash
         run: |
-          shopt -s globstar 
-          $JAVA_HOME_8_X64/**/javac -d ./class -sourcepath ./main/java \
-            -bootclasspath $ANDROID_HOME/platforms/android-35/android.jar \
-            ./main/java/**/*.java 
-
-          $ANDROID_HOME/build-tools/35.0.0/d8 --lib $ANDROID_HOME/platforms/android-35/android.jar \
+          shopt -s globstar
+          
+          $JAVA_HOME_21_X64/bin/javac -target 17 -source 17 \
+            -d ./class -sourcepath ./main/java \
+            -bootclasspath $ANDROID_HOME/platforms/android-37.0/android.jar \
+            ./main/java/**/*.java
+          
+          $ANDROID_HOME/build-tools/37.0.0/d8 \
+            --lib $ANDROID_HOME/platforms/android-37.0/android.jar \
             --output ./dex \
-            class/**/*.class 
-      - name: Build Android Apk (.NET 10.0)
+            class/**/*.class
+
+      - name: Build and Sign All Android Apks (.NET 10.0 / 9.0 / 8.0)
         env:
           APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
           APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
         working-directory: ./hello-jni_apk
         shell: bash
         run: |
-          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
-            -I $ANDROID_HOME/platforms/android-35/android.jar \
-            -F jnetinterface-apptest-net10.0.apk ./dex 
-
-          mv ../lib-net10.0/* lib/
-          zip -ur jnetinterface-apptest-net10.0.apk lib/
-          rm -rf lib/*
-
-          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
-            --ks ./../jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
-            --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
-            --out ./../jnetinterface-apptest-net10.0.apk jnetinterface-apptest-net10.0.apk 
-
-      - name: Build Android Apk (.NET 9.0)
-        env:
-          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
-        working-directory: ./hello-jni_apk
-        shell: bash
-        run: |
-          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
-            -I $ANDROID_HOME/platforms/android-35/android.jar \
-            -F jnetinterface-apptest-net9.0.apk ./dex 
-
-          mv ../lib-net9.0/* lib/
-          zip -ur jnetinterface-apptest-net9.0.apk lib/
-          rm -rf lib/*
-
-          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
-            --ks ./../jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
-            --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
-            --out ./../jnetinterface-apptest-net9.0.apk jnetinterface-apptest-net9.0.apk 
-      - name: Build Android Apk (.NET 9.0 - RFM)
-        env:
-          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
-        working-directory: ./hello-jni_apk
-        shell: bash
-        run: |
-          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
-          -I $ANDROID_HOME/platforms/android-35/android.jar \
-          -F jnetinterface-apptest-net9.0-RFM.apk ./dex 
-
-          mv ../lib-net9.0-RFM/* lib/
-          zip -ur jnetinterface-apptest-net9.0-RFM.apk lib/ 
-          rm -rf lib/*
-
-          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
-          --ks ./../jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
-          --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
-          --out ./../jnetinterface-apptest-net9.0-RFM.apk jnetinterface-apptest-net9.0-RFM.apk 
-      - name: Build Android Apk (.NET 8.0)
-        env:
-          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
-        working-directory: ./hello-jni_apk
-        shell: bash
-        run: |
-          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
-            -I $ANDROID_HOME/platforms/android-35/android.jar \
-            -F jnetinterface-apptest-net8.0.apk ./dex 
-
-          mv ../lib-net8.0/* lib/
-          zip -ur jnetinterface-apptest-net8.0.apk lib/ 
-          rm -rf lib/*
-
-          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
-            --ks ./../jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
-            --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
-            --out ./../jnetinterface-apptest-net8.0.apk jnetinterface-apptest-net8.0.apk 
-      - name: Build Android Apk (.NET 8.0 - RFM)
-        env:
-          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
-        working-directory: ./hello-jni_apk
-        shell: bash
-        run: |
-          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
-          -I $ANDROID_HOME/platforms/android-35/android.jar \
-          -F jnetinterface-apptest-net8.0-RFM.apk ./dex 
-
-          mv ../lib-net8.0-RFM/* lib/
-          zip -ur jnetinterface-apptest-net8.0-RFM.apk lib/ 
-          rm -rf lib/*
-
-          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
-          --ks ./../jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
-          --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
-          --out ./../jnetinterface-apptest-net8.0-RFM.apk jnetinterface-apptest-net8.0-RFM.apk
-
+          variants=("net10.0" "net9.0" "net9.0-RFM" "net8.0" "net8.0-RFM")
+          for variant in "${variants[@]}"; do
+            echo "=== Packing APK for $variant ==="
+          
+            $ANDROID_HOME/build-tools/37.0.0/aapt package -f -M main/AndroidManifest.xml \
+              -I $ANDROID_HOME/platforms/android-37.0/android.jar \
+              -F "jnetinterface-apptest-${variant}.apk" ./dex
+          
+            mv "../lib-${variant}"/* lib/          
+            zip -ur "jnetinterface-apptest-${variant}.apk" lib/
+            rm -rf lib/*
+          
+            $ANDROID_HOME/build-tools/37.0.0/apksigner sign \
+              --ks ./../jnetinterface-apk.keystore \
+              --ks-key-alias "$APK_KEY_ALIAS" \
+              --ks-pass "pass:$APK_KEY_PASS" \
+              --key-pass "pass:$APK_KEY_PASS" \
+              --min-sdk-version 21 \
+              --out "./../jnetinterface-apptest-${variant}.apk" "jnetinterface-apptest-${variant}.apk"
+          done
 
       - name: Create Native Artifact
         if: inputs.package_version == ''
