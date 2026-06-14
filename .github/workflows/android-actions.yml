@@ -260,7 +260,7 @@ jobs:
           rm -rf lib/*
 
           $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
-            --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
+            --ks ./../jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
             --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
             --out ./../jnetinterface-apptest-net10.0.apk jnetinterface-apptest-net10.0.apk 
 
