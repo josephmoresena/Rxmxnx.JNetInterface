@@ -3,7 +3,7 @@ using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native.Access;
 using Rxmxnx.JNetInterface.Primitives;
 
-namespace HelloJniLib;
+namespace AndroidInterface;
 
 public partial class AndroidToast
 {

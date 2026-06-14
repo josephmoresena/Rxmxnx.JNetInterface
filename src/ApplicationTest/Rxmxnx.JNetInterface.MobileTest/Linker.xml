@@ -1,0 +1,5 @@
+<linker>
+    <assembly fullname="Rxmxnx.JNetInterface.MobileTest">
+        <type fullname="Rxmxnx.JNetInterface.ApplicationTest.MainActivity" preserve="all"/>
+    </assembly>
+</linker>

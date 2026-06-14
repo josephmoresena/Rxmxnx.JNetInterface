@@ -3,7 +3,7 @@ using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
 
-namespace HelloJniLib;
+namespace AndroidInterface;
 
 public class AndroidContext : JLocalObject, IClassType<AndroidContext>
 {

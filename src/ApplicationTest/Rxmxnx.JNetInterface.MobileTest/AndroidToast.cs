@@ -4,7 +4,7 @@ using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
 
-namespace HelloJniLib;
+namespace AndroidInterface;
 
 public partial class AndroidToast : JLocalObject, IClassType<AndroidToast>
 {
