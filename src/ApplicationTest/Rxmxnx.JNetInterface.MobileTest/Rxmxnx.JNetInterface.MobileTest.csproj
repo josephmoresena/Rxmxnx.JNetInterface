@@ -27,12 +27,6 @@
         <IlcGenerateMstatFile>true</IlcGenerateMstatFile>
         <IlcGenerateDgmlFile>true</IlcGenerateDgmlFile>
     </PropertyGroup>
-    <ItemGroup>
-        <TrimmerRootAssembly Include="Rxmxnx.JNetInterface.MobileTest"/>
-        <TrimmerRootAssembly Condition="'$(UsePackage)' == 'true'" Include="Rxmxnx.JNetInterface.Mobile"/>
-        <TrimmerRootAssembly Condition="'$(UsePackage)' == 'true'" Include="Rxmxnx.JNetInterface.Core"/>
-        <TrimmerRootAssembly Condition="'$(UsePackage)' == 'true'" Include="Rxmxnx.PInvoke.Extensions"/>
-    </ItemGroup>
 
     <Import Project="..\JNetInterface-PackageReference.props"/>
     <Import Project="..\JNetInterface-Config.props"/>

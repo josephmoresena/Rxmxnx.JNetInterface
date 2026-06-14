@@ -18,6 +18,9 @@ using Trace = System.Diagnostics.Trace;
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 [Register("com/rxmxnx/jnetinterface/mobiletest/MainActivity")]
+#pragma warning disable CS0618
+[Preserve(AllMembers = true)]
+#pragma warning restore CS0618
 [Activity(Name = "com.rxmxnx.jnetinterface.mobiletest.MainActivity", Label = "@string/app_name", MainLauncher = true,
           Exported = true)]
 public class MainActivity : Activity, View.IOnClickListener
