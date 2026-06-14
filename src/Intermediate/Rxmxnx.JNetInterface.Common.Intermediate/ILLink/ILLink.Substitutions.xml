@@ -13,7 +13,7 @@
         <type fullname="Rxmxnx.JNetInterface.Internal.MetadataHelper"
               feature="JNetInterface.DisableReflectionAutoRegistration" featurevalue="true">
             <method signature="System.Boolean get_ReflectionAutoRegistered()" body="stub" value="false"/>
-            <method signature="System.Void BuiltInThrowableRegistration(System.Collections.Generic.IDictionary`2&lt;System.String,Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata&gt;)"
+            <method signature="System.Void ReflectionRegistration(System.Collections.Generic.IDictionary`2&lt;System.String,Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata&gt;)"
                     body="stub"/>
         </type>
         <!-- Native IO classes Auto-registration -->
@@ -31,11 +31,11 @@
             <method signature="System.Boolean get_VoidObjectMainClassEnabled()" body="stub" value="false"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.Internal.MainClasses" feature="JNetInterface.DisableBooleanObjectMainClass"
-              featurevalue="false">
+              featurevalue="true">
             <method signature="System.Boolean get_BooleanObjectMainClassEnabled()" body="stub" value="false"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.Internal.MainClasses" feature="JNetInterface.DisableByteObjectMainClass"
-              featurevalue="false">
+              featurevalue="true">
             <method signature="System.Boolean get_ByteObjectMainClassEnabled()" body="stub" value="false"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.Internal.MainClasses"
@@ -43,27 +43,27 @@
             <method signature="System.Boolean get_CharacterObjectMainClassEnabled()" body="stub" value="false"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.Internal.MainClasses" feature="JNetInterface.DisableDoubleObjectMainClass"
-              featurevalue="false">
+              featurevalue="true">
             <method signature="System.Boolean get_DoubleObjectMainClassEnabled()" body="stub" value="false"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.Internal.MainClasses" feature="JNetInterface.DisableFloatObjectMainClass"
-              featurevalue="false">
+              featurevalue="true">
             <method signature="System.Boolean get_FloatObjectMainClassEnabled()" body="stub" value="false"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.Internal.MainClasses" feature="JNetInterface.DisableIntegerObjectMainClass"
-              featurevalue="false">
+              featurevalue="true">
             <method signature="System.Boolean get_IntegerObjectMainClassEnabled()" body="stub" value="false"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.Internal.MainClasses" feature="JNetInterface.DisableLongObjectMainClass"
-              featurevalue="false">
+              featurevalue="true">
             <method signature="System.Boolean get_LongObjectMainClassEnabled()" body="stub" value="false"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.Internal.MainClasses" feature="JNetInterface.DisableShortObjectMainClass"
-              featurevalue="false">
+              featurevalue="true">
             <method signature="System.Boolean get_ShortObjectMainClassEnabled()" body="stub" value="false"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.Internal.MainClasses" feature="JNetInterface.DisablePrimitiveMainClasses"
-              featurevalue="false">
+              featurevalue="true">
             <method signature="System.Boolean get_PrimitiveMainClassesEnabled()" body="stub" value="false"/>
         </type>
     </assembly>
