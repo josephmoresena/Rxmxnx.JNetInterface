@@ -32,17 +32,13 @@ public ref partial struct SyncContextBuilder
 			};
 			using InlineCache _ = new(env);
 			action(context);
+			return;
 		}
 		catch (ThrowableException e)
 		{
 			JTrace.UnhandledException(e, false);
 			if (!JniEnvironment.Exceptions.ExceptionCheck()) throw; // JNI exception is not captured by Java.Interop.
 			throwable = e.GlobalThrowable;
-		}
-		catch (JniException e)
-		{
-			JTrace.UnhandledException(e, false);
-			if (!JniEnvironment.Exceptions.ExceptionCheck()) throw; // JNI exception is not captured by Java.Interop.
 		}
 		catch (Exception e)
 		{
@@ -51,9 +47,9 @@ public ref partial struct SyncContextBuilder
 		}
 		finally
 		{
+			ArrayPool<JLocalObject?>.Shared.Return(objects, true);
 			SyncContextBuilder.FinalizeJniInvocation(throwable, interopCache);
 		}
-		if (!JniEnvironment.Exceptions.ExceptionCheck()) return;
 		JniObjectReference throwableRef = JniEnvironment.Exceptions.ExceptionOccurred();
 		throw new JavaException(ref throwableRef, JniObjectReferenceOptions.CopyAndDispose);
 	}
@@ -90,17 +86,13 @@ public ref partial struct SyncContextBuilder
 			};
 			using InlineCache _ = new(env);
 			action(context, state);
+			return;
 		}
 		catch (ThrowableException e)
 		{
 			JTrace.UnhandledException(e, false);
 			if (!JniEnvironment.Exceptions.ExceptionCheck()) throw; // JNI exception is not captured by Java.Interop.
 			throwable = e.GlobalThrowable;
-		}
-		catch (JniException e)
-		{
-			JTrace.UnhandledException(e, false);
-			if (!JniEnvironment.Exceptions.ExceptionCheck()) throw; // JNI exception is not captured by Java.Interop.
 		}
 		catch (Exception e)
 		{
@@ -109,9 +101,9 @@ public ref partial struct SyncContextBuilder
 		}
 		finally
 		{
+			ArrayPool<JLocalObject?>.Shared.Return(objects, true);
 			SyncContextBuilder.FinalizeJniInvocation(throwable, interopCache);
 		}
-		if (!JniEnvironment.Exceptions.ExceptionCheck()) return;
 		JniObjectReference throwableRef = JniEnvironment.Exceptions.ExceptionOccurred();
 		throw new JavaException(ref throwableRef, JniObjectReferenceOptions.CopyAndDispose);
 	}
@@ -152,11 +144,6 @@ public ref partial struct SyncContextBuilder
 			if (!JniEnvironment.Exceptions.ExceptionCheck()) throw; // JNI exception is not captured by Java.Interop.
 			throwable = e.GlobalThrowable;
 		}
-		catch (JniException e)
-		{
-			JTrace.UnhandledException(e, false);
-			if (!JniEnvironment.Exceptions.ExceptionCheck()) throw; // JNI exception is not captured by Java.Interop.
-		}
 		catch (Exception e)
 		{
 			JTrace.UnhandledException(e, false);
@@ -164,9 +151,9 @@ public ref partial struct SyncContextBuilder
 		}
 		finally
 		{
+			ArrayPool<JLocalObject?>.Shared.Return(objects, true);
 			SyncContextBuilder.FinalizeJniInvocation(throwable, interopCache);
 		}
-		if (!JniEnvironment.Exceptions.ExceptionCheck()) return default!;
 		JniObjectReference throwableRef = JniEnvironment.Exceptions.ExceptionOccurred();
 		throw new JavaException(ref throwableRef, JniObjectReferenceOptions.CopyAndDispose);
 	}
@@ -209,11 +196,6 @@ public ref partial struct SyncContextBuilder
 			if (!JniEnvironment.Exceptions.ExceptionCheck()) throw; // JNI exception is not captured by Java.Interop.
 			throwable = e.GlobalThrowable;
 		}
-		catch (JniException e)
-		{
-			JTrace.UnhandledException(e, false);
-			if (!JniEnvironment.Exceptions.ExceptionCheck()) throw; // JNI exception is not captured by Java.Interop.
-		}
 		catch (Exception e)
 		{
 			JTrace.UnhandledException(e, false);
@@ -221,9 +203,9 @@ public ref partial struct SyncContextBuilder
 		}
 		finally
 		{
+			ArrayPool<JLocalObject?>.Shared.Return(objects, true);
 			SyncContextBuilder.FinalizeJniInvocation(throwable, interopCache);
 		}
-		if (!JniEnvironment.Exceptions.ExceptionCheck()) return default!;
 		JniObjectReference throwableRef = JniEnvironment.Exceptions.ExceptionOccurred();
 		throw new JavaException(ref throwableRef, JniObjectReferenceOptions.CopyAndDispose);
 	}
@@ -269,11 +251,6 @@ public ref partial struct SyncContextBuilder
 			if (!JniEnvironment.Exceptions.ExceptionCheck()) throw; // JNI exception is not captured by Java.Interop.
 			throwable = e.GlobalThrowable;
 		}
-		catch (JniException e)
-		{
-			JTrace.UnhandledException(e, false);
-			if (!JniEnvironment.Exceptions.ExceptionCheck()) throw; // JNI exception is not captured by Java.Interop.
-		}
 		catch (Exception e)
 		{
 			JTrace.UnhandledException(e, false);
@@ -281,9 +258,9 @@ public ref partial struct SyncContextBuilder
 		}
 		finally
 		{
+			ArrayPool<JLocalObject?>.Shared.Return(objects, true);
 			SyncContextBuilder.FinalizeJniInvocation(throwable, interopCache);
 		}
-		if (!JniEnvironment.Exceptions.ExceptionCheck()) return default!;
 		JniObjectReference throwableRef = JniEnvironment.Exceptions.ExceptionOccurred();
 		throw new JavaException(ref throwableRef, JniObjectReferenceOptions.CopyAndDispose);
 	}
@@ -331,11 +308,6 @@ public ref partial struct SyncContextBuilder
 			if (!JniEnvironment.Exceptions.ExceptionCheck()) throw; // JNI exception is not captured by Java.Interop.
 			throwable = e.GlobalThrowable;
 		}
-		catch (JniException e)
-		{
-			JTrace.UnhandledException(e, false);
-			if (!JniEnvironment.Exceptions.ExceptionCheck()) throw; // JNI exception is not captured by Java.Interop.
-		}
 		catch (Exception e)
 		{
 			JTrace.UnhandledException(e, false);
@@ -343,9 +315,9 @@ public ref partial struct SyncContextBuilder
 		}
 		finally
 		{
+			ArrayPool<JLocalObject?>.Shared.Return(objects, true);
 			SyncContextBuilder.FinalizeJniInvocation(throwable, interopCache);
 		}
-		if (!JniEnvironment.Exceptions.ExceptionCheck()) return default!;
 		JniObjectReference throwableRef = JniEnvironment.Exceptions.ExceptionOccurred();
 		throw new JavaException(ref throwableRef, JniObjectReferenceOptions.CopyAndDispose);
 	}

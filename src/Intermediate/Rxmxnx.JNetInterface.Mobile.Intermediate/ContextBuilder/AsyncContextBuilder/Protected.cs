@@ -41,6 +41,7 @@ public partial struct AsyncContextBuilder
 			}
 			finally
 			{
+				ArrayPool<JLocalObject?>.Shared.Return(objects, true);
 				interopCache?.Dispose();
 			}
 		}
@@ -83,6 +84,7 @@ public partial struct AsyncContextBuilder
 			}
 			finally
 			{
+				ArrayPool<JLocalObject?>.Shared.Return(objects, true);
 				interopCache?.Dispose();
 			}
 		}
@@ -128,6 +130,7 @@ public partial struct AsyncContextBuilder
 			}
 			finally
 			{
+				ArrayPool<JLocalObject?>.Shared.Return(objects, true);
 				interopCache?.Dispose();
 			}
 		}
