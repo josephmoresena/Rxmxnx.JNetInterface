@@ -33,8 +33,11 @@ public partial struct AsyncContextBuilder
 			}
 			catch (Exception e)
 			{
-				postState._state.Dispose();
 				postState._source.SetException(e);
+			}
+			finally
+			{
+				postState._state.Dispose();
 			}
 		}
 	}
@@ -70,8 +73,11 @@ public partial struct AsyncContextBuilder
 			}
 			catch (Exception e)
 			{
-				postState._state.Dispose();
 				postState._source.SetException(e);
+			}
+			finally
+			{
+				postState._state.Dispose();
 			}
 		}
 	}
@@ -109,8 +115,11 @@ public partial struct AsyncContextBuilder
 			}
 			catch (Exception e)
 			{
-				postState._state.Dispose();
 				postState._source.SetException(e);
+			}
+			finally
+			{
+				postState._state.Dispose();
 			}
 		}
 	}

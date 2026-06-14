@@ -25,14 +25,6 @@
         <IlcGenerateMstatFile>true</IlcGenerateMstatFile>
         <IlcGenerateDgmlFile>true</IlcGenerateDgmlFile>
     </PropertyGroup>
-    <ItemGroup Condition="'$(Configuration)' == 'Release'">
-        <Compile Include="MainActivity.cs"/>
-        <Compile Include="MobileMethods.cs"/>
-        <Compile Include="AndroidContext.cs"/>
-        <Compile Include="AndroidToast.cs"/>
-        <Compile Include="AndroidToast\MakeTextMethod.cs"/>
-        <Compile Include="AndroidToast\ShowMethod.cs"/>
-    </ItemGroup>
     <Import Project="..\JNetInterface-PackageReference.props"/>
     <Import Project="..\JNetInterface-Config.props"/>
     <Import Project="..\..\PInvoke.Reference.props"/>
