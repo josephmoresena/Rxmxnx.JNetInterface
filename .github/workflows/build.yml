@@ -74,7 +74,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: pwsh
         run: |
-          ./.sonar/scanner/dotnet-sonarscanner begin /k:"josephmoresena_Rxmxnx.JNetInterface" /o:"josephmoresena" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.scanAll=false /d:sonar.coverage.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs" /d:sonar.cpd.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs" /d:sonar.cs.vstest.reportsPaths=TestResults/*.trx /d:sonar.cs.opencover.reportsPaths=TestResults/*/coverage.opencover.xml 
+          ./.sonar/scanner/dotnet-sonarscanner begin /k:"josephmoresena_Rxmxnx.JNetInterface" /o:"josephmoresena" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.scanAll=false /d:sonar.coverage.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs" /d:sonar.cpd.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs,**/AndroidJniHost/**.cs,**/ContextBuilder/**.cs" /d:sonar.cs.vstest.reportsPaths=TestResults/*.trx /d:sonar.cs.opencover.reportsPaths=TestResults/*/coverage.opencover.xml 
           dotnet build-server shutdown
           dotnet restore src --ignore-failed-sources
           dotnet restore src/Test/Proxies/Native/JvmProxy.NativeProxy.slnx

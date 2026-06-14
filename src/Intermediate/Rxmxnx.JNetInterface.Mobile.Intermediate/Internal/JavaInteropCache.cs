@@ -44,7 +44,13 @@ internal sealed class JavaInteropCache : AlienLocalCache
 		}
 		return array.AsSpan()[..objects.Length];
 	}
-	public ReadOnlySpan<JLocalObject?> RegisterContext(JLocalObject?[] array, JniObjectInfo[] objects)
+	/// <summary>
+	/// Registers all references to the current instance from the current context.
+	/// </summary>
+	/// <param name="array">Array to store local objects.</param>
+	/// <param name="objects">A read-only span of objects.</param>
+	/// <returns>A read-only span of <see cref="JLocalObject"/> instances.</returns>
+	public ReadOnlySpan<JLocalObject?> RegisterContext(JLocalObject?[] array, ReadOnlySpan<JniObjectInfo> objects)
 	{
 		JTrace.RegisterInterop(this.Environment, objects.Length);
 		for (Int32 index = 0; index < objects.Length; index++)

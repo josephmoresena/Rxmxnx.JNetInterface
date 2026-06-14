@@ -25,7 +25,9 @@ public partial struct AsyncContextBuilder
 					Ints = TaskState.GetPrimitiveSpan<JInt>(this._ints),
 					Longs = TaskState.GetPrimitiveSpan<JLong>(this._longs),
 					Shorts = TaskState.GetPrimitiveSpan<JShort>(this._shorts),
-					Objects = interopCache is not null ? interopCache.RegisterContext(objects, this._objects) : [],
+					Objects = interopCache is not null ?
+						interopCache.RegisterContext(objects, this._objects.AsSpan()[..this._objectCount]) :
+						[],
 				};
 				using InlineCache _ = new(env);
 				((AndroidJniAction)this._call)(context);
@@ -63,7 +65,9 @@ public partial struct AsyncContextBuilder
 					Ints = TaskState.GetPrimitiveSpan<JInt>(this._ints),
 					Longs = TaskState.GetPrimitiveSpan<JLong>(this._longs),
 					Shorts = TaskState.GetPrimitiveSpan<JShort>(this._shorts),
-					Objects = interopCache is not null ? interopCache.RegisterContext(objects, this._objects) : [],
+					Objects = interopCache is not null ?
+						interopCache.RegisterContext(objects, this._objects.AsSpan()[..this._objectCount]) :
+						[],
 				};
 				using InlineCache _ = new(env);
 				return ((AndroidJniFunc<TResult>)this._call)(context);
@@ -103,7 +107,9 @@ public partial struct AsyncContextBuilder
 					Ints = TaskState.GetPrimitiveSpan<JInt>(this._ints),
 					Longs = TaskState.GetPrimitiveSpan<JLong>(this._longs),
 					Shorts = TaskState.GetPrimitiveSpan<JShort>(this._shorts),
-					Objects = interopCache is not null ? interopCache.RegisterContext(objects, this._objects) : [],
+					Objects = interopCache is not null ?
+						interopCache.RegisterContext(objects, this._objects.AsSpan()[..this._objectCount]) :
+						[],
 				};
 				using InlineCache _ = new(env);
 				JReferenceObject? jObject = ((AndroidJniFunc<JReferenceObject?>)this._call)(context);
