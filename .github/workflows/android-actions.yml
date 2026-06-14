@@ -232,11 +232,11 @@ jobs:
           
           $JAVA_HOME_21_X64/bin/javac -target 17 -source 17 \
             -d ./class -sourcepath ./main/java \
-            -bootclasspath $ANDROID_HOME/platforms/android-37.0/android.jar \
+            -classpath "$ANDROID_HOME/platforms/android-37.0/android.jar" \
             ./main/java/**/*.java
           
           $ANDROID_HOME/build-tools/37.0.0/d8 \
-            --lib $ANDROID_HOME/platforms/android-37.0/android.jar \
+            --lib "$ANDROID_HOME/platforms/android-37.0/android.jar" \
             --output ./dex \
             class/**/*.class
 
