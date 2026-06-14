@@ -158,7 +158,7 @@ jobs:
         shell: pwsh
         run: |
           $emptyProject = '<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" />'
-          Get-ChildItem -Path . -Recurse -Filter "*.Mobile.*proj" |
+          Get-ChildItem -Path "src" -Recurse -Filter "*.Mobile.*proj" |
             ForEach-Object {
               Write-Host "Removing project from solution: $($_.FullName)"
               dotnet sln src remove $_.FullName
@@ -166,7 +166,7 @@ jobs:
               Write-Host "Removing directory: $($_.Directory.FullName)"
               Remove-Item $_.Directory.FullName -Recurse -Force
             }
-          Get-ChildItem -Path . -Recurse -Filter "*.Mobile.*.props" |
+          Get-ChildItem -Path "src" -Recurse -Filter "*.Mobile.*.props" |
             ForEach-Object {
               Write-Host "Neutralizing $($_.FullName)"
               Set-Content $_.FullName $emptyProject -Encoding UTF8

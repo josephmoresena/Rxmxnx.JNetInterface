@@ -60,14 +60,14 @@ jobs:
             -p:AndroidSigningKeyAlias=$APK_KEY_ALIAS -p:AndroidSigningKeyPass=$APK_KEY_PASS \
             -p:AndroidSigningStorePass=$APK_KEY_PASS -p:NativeAOT=false
           
-          mv ./com.Rxmxnx.JNetInterface.MobileTest-Signed.apk ./com.Rxmxnx.JNetInterface.MobileTest-MonoAot.apk
+          mv ./../../../com.Rxmxnx.JNetInterface.MobileTest-Signed.apk ./../../../com.Rxmxnx.JNetInterface.MobileTest-MonoAot.apk
           
           dotnet publish -c Release -o ./../../../ -p:AndroidPackageFormats=apk -p:AndroidKeyStore=true \
             -p:UsePackage=true -p:AndroidSigningKeyStore=./../../../jnetinterface-apk.keystore \
             -p:AndroidSigningKeyAlias=$APK_KEY_ALIAS -p:AndroidSigningKeyPass=$APK_KEY_PASS \
             -p:AndroidSigningStorePass=$APK_KEY_PASS -p:NativeAOT=true -r android-arm64
           
-          mv ./com.Rxmxnx.JNetInterface.MobileTest-Signed.apk ./com.Rxmxnx.JNetInterface.MobileTest-NativeAot.apk
+          mv ./../../../com.Rxmxnx.JNetInterface.MobileTest-Signed.apk ./../../../com.Rxmxnx.JNetInterface.MobileTest-NativeAot.apk
 
       - name: Clone NativeAOT-AndroidHelloJniLib
         run: |
