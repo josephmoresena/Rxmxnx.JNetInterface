@@ -3,6 +3,7 @@ using _Microsoft.Android.Resource.Designer;
 using Android;
 using Android.Content.PM;
 using Android.OS;
+using Android.Runtime;
 using Android.Views;
 
 using HelloJniLib;
@@ -16,14 +17,16 @@ using Trace = System.Diagnostics.Trace;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-[Activity(Label = "@string/app_name", MainLauncher = true)]
+[Register("com/rxmxnx/jnetinterface/mobiletest/MainActivity")]
+[Activity(Name = "com.rxmxnx.jnetinterface.mobiletest.MainActivity", Label = "@string/app_name", MainLauncher = true,
+          Exported = true)]
 public class MainActivity : Activity, View.IOnClickListener
 {
 	private static readonly DateTime load = DateTime.Now;
-
-	private Task _backgroundThread = Task.CompletedTask;
 	private readonly JGlobal? _androidContext;
 	private readonly JGlobal? _toastClass;
+
+	private Task _backgroundThread = Task.CompletedTask;
 	private Int32 _count;
 	private Boolean _disposed;
 

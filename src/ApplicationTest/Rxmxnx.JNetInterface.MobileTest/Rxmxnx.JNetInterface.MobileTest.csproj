@@ -4,7 +4,7 @@
         <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
         <RuntimeIdentifiers>android-x64;android-arm64</RuntimeIdentifiers>
         <OutputType>Exe</OutputType>
-        <ApplicationId>com.Rxmxnx.JNetInterface.MobileTest</ApplicationId>
+        <ApplicationId>com.rxmxnx.jnetinterface.mobiletest</ApplicationId>
         <ApplicationVersion>1</ApplicationVersion>
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
         <TrimMode>full</TrimMode>
@@ -27,7 +27,13 @@
         <IlcGenerateMstatFile>true</IlcGenerateMstatFile>
         <IlcGenerateDgmlFile>true</IlcGenerateDgmlFile>
     </PropertyGroup>
-    
+    <ItemGroup>
+        <TrimmerRootAssembly Include="Rxmxnx.JNetInterface.MobileTest"/>
+        <TrimmerRootAssembly Condition="'$(UsePackage)' == 'true'" Include="Rxmxnx.JNetInterface.Mobile"/>
+        <TrimmerRootAssembly Condition="'$(UsePackage)' == 'true'" Include="Rxmxnx.JNetInterface.Core"/>
+        <TrimmerRootAssembly Condition="'$(UsePackage)' == 'true'" Include="Rxmxnx.PInvoke.Extensions"/>
+    </ItemGroup>
+
     <Import Project="..\JNetInterface-PackageReference.props"/>
     <Import Project="..\JNetInterface-Config.props"/>
 </Project>
