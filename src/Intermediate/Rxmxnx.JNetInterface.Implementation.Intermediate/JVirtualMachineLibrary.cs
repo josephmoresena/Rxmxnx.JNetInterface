@@ -16,6 +16,11 @@ public abstract unsafe partial class JVirtualMachineLibrary
 	public IntPtr Handle { get; private init; }
 
 	/// <summary>
+	/// Indicates whether the current library supports <c>JNI_GetCreatedJavaVMs</c>.
+	/// </summary>
+	private protected abstract Boolean HasCreatedVirtualMachines { get; }
+
+	/// <summary>
 	/// Private constructor.
 	/// </summary>
 	/// <param name="handle">Library handle.</param>
@@ -113,6 +118,8 @@ public abstract unsafe partial class JVirtualMachineLibrary
 	/// <returns>An array of <see cref="JVirtualMachineRef"/> references.</returns>
 	private JVirtualMachineRef[] GetCreatedVirtualMachines(Int32 vmCount, out JResult result)
 	{
+		if (!this.HasCreatedVirtualMachines)
+			ImplementationValidationUtilities.ThrowIfInvalidResult(JResult.VersionError);
 		JVirtualMachineRef[] arr = new JVirtualMachineRef[vmCount];
 		fixed (JVirtualMachineRef* ptr = arr)
 			result = this.GetCreatedVirtualMachines(ptr, arr.Length, out vmCount);
@@ -188,10 +195,11 @@ public abstract unsafe partial class JVirtualMachineLibrary
 			    out functions[0])) goto Release;
 		if (!JVirtualMachineLibrary.TryGetJniExport(handle, IVirtualMachineLibraryType.CreateVirtualMachineSymbol,
 		                                            out functions[1])) goto Release;
-		if (!JVirtualMachineLibrary.TryGetJniExport(handle, IVirtualMachineLibraryType.GetCreatedVirtualMachinesSymbol,
-		                                            out functions[2])) goto Release;
+		Boolean hasCreatedVm =
+			JVirtualMachineLibrary.TryGetJniExport(handle, IVirtualMachineLibraryType.GetCreatedVirtualMachinesSymbol,
+			                                       out functions[2]);
 		ref InvocationFunctionSet functionSet = ref Unsafe.As<IntPtr, InvocationFunctionSet>(ref functions[0]);
-		return new(handle, functionSet);
+		return new(handle, functionSet, hasCreatedVm);
 		Release:
 		if (ownHandle)
 			NativeLibrary.Free(handle);

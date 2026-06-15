@@ -17,12 +17,22 @@ public partial class JVirtualMachineLibrary
 		/// </summary>
 		private readonly TFunctionSet _functions;
 
+		/// <inheritdoc/>
+		private protected override Boolean HasCreatedVirtualMachines { get; }
+
 		/// <summary>
 		/// Private constructor.
 		/// </summary>
 		/// <param name="handle">Library handle.</param>
 		/// <param name="functions">A <see cref="InvocationFunctionSet"/> value.</param>
-		public Impl(IntPtr handle, TFunctionSet functions) : base(handle) => this._functions = functions;
+		/// <param name="hasCreatedVm">
+		/// Indicates whether the function <c>JNI_GetCreatedJavaVMs</c> is available on the current library.
+		/// </param>
+		public Impl(IntPtr handle, TFunctionSet functions, Boolean hasCreatedVm = true) : base(handle)
+		{
+			this._functions = functions;
+			this.HasCreatedVirtualMachines = hasCreatedVm;
+		}
 
 		/// <inheritdoc/>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
