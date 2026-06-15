@@ -8,11 +8,11 @@ on:
         type: string
     secrets:
       APK_KEY_PASS:
-        required: true
+        required: false
       APK_KEY_ALIAS:
-        required: true
+        required: false
       APK_KEYSTORE:
-        required: true
+        required: false
 
 permissions:
   contents: write
@@ -21,6 +21,12 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PackageVersion: ${{ inputs.package_version }}
+      BIONIC_ANDROID_SCENARIOS: |
+        net10.0|net10.0|false|linux-bionic-arm64:arm64-v8a linux-bionic-arm:armeabi-v7a linux-bionic-x64:x86_64
+        net9.0|net9.0|false|linux-bionic-arm64:arm64-v8a linux-bionic-arm:armeabi-v7a linux-bionic-x64:x86_64
+        net9.0-RFM|net9.0|true|linux-bionic-arm64:arm64-v8a linux-bionic-arm:armeabi-v7a linux-bionic-x64:x86_64
+        net8.0|net8.0|false|linux-bionic-arm64:arm64-v8a linux-bionic-x64:x86_64
+        net8.0-RFM|net8.0|true|linux-bionic-arm64:arm64-v8a linux-bionic-x64:x86_64
     steps:
       - uses: actions/checkout@v5
         with:
@@ -42,16 +48,46 @@ jobs:
           fail-on-cache-miss: true
           enableCrossOsArchive: true
 
-      - name: Generate keystore
+      - name: Prepare Android signing keystore
         env:
           APK_KEYSTORE_BASE64: ${{ secrets.APK_KEYSTORE }}
+          APK_KEY_ALIAS_SECRET: ${{ secrets.APK_KEY_ALIAS }}
+          APK_KEY_PASS_SECRET: ${{ secrets.APK_KEY_PASS }}
         shell: bash
-        run: echo "${APK_KEYSTORE_BASE64}" | base64 -d > ./jnetinterface-apk.keystore
+        run: |
+          set -euo pipefail
+
+          if [ -n "${APK_KEYSTORE_BASE64}" ] && [ -n "${APK_KEY_ALIAS_SECRET}" ] && [ -n "${APK_KEY_PASS_SECRET}" ]; then
+            echo "Using repository Android signing keystore."
+            echo "${APK_KEYSTORE_BASE64}" | base64 -d > ./jnetinterface-apk.keystore
+            {
+              echo "APK_KEY_ALIAS=${APK_KEY_ALIAS_SECRET}"
+              echo "APK_KEY_PASS=${APK_KEY_PASS_SECRET}"
+            } >> "$GITHUB_ENV"
+          else
+            echo "Repository Android signing secrets are unavailable. Generating a temporary CI keystore."
+            TEMP_ALIAS="ci-temp-key"
+            TEMP_PASS="$(openssl rand -base64 24 | tr -d '=+/[:space:]' | cut -c1-24)"
+
+            keytool -genkeypair \
+              -v \
+              -storetype PKCS12 \
+              -keystore ./jnetinterface-apk.keystore \
+              -alias "$TEMP_ALIAS" \
+              -keyalg RSA \
+              -keysize 2048 \
+              -validity 1 \
+              -storepass "$TEMP_PASS" \
+              -keypass "$TEMP_PASS" \
+              -dname "CN=Temporary CI Android Signing Key, OU=CI, O=GitHub Actions, L=CI, S=CI, C=US"
+
+            {
+              echo "APK_KEY_ALIAS=${TEMP_ALIAS}"
+              echo "APK_KEY_PASS=${TEMP_PASS}"
+            } >> "$GITHUB_ENV"
+          fi
 
       - name: Build Mobile Test
-        env:
-          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
         shell: bash
         working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.MobileTest
         run: |
@@ -79,9 +115,11 @@ jobs:
           git clone --single-branch --branch jnetinterface \
             https://github.com/josephmoresena/NativeAOT-AndroidHelloJniLib.git
 
+          target_frameworks="$(printf '%s\n' "$BIONIC_ANDROID_SCENARIOS" | awk -F'|' 'NF >= 2 && !seen[$2]++ { print $2 }' | paste -sd ';' -)"
+
           echo '<Project>' > Directory.Build.props
           echo '  <PropertyGroup>' >> Directory.Build.props
-          echo '    <TargetFrameworks>net10.0;net9.0;net8.0</TargetFrameworks>' >> Directory.Build.props
+          echo "    <TargetFrameworks>${target_frameworks}</TargetFrameworks>" >> Directory.Build.props
           echo '    <LangVersion>latest</LangVersion>' >> Directory.Build.props
           echo '  </PropertyGroup>' >> Directory.Build.props
           echo '  <ItemGroup>' >> Directory.Build.props
@@ -96,62 +134,6 @@ jobs:
           dotnet nuget add source "../package/Nuget/" -n TmpSource
           export PackageVersion=${PackageVersion:="9999.99.99.99-tmp"}
           dotnet add package Rxmxnx.JNetInterface --version $PackageVersion
-
-      - name: Build bionic-libs (.NET 10.0)
-        working-directory: ./NativeAOT-AndroidHelloJniLib
-        run: |
-          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net10.0 \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net10.0/arm64-v8a
-          dotnet publish -r linux-bionic-arm -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net10.0 \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net10.0/armeabi-v7a
-          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net10.0 \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net10.0/x86_64
-
-      - name: Build bionic-libs (.NET 9.0)
-        working-directory: ./NativeAOT-AndroidHelloJniLib
-        run: |
-          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net9.0 \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0/arm64-v8a
-          dotnet publish -r linux-bionic-arm -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net9.0 \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0/armeabi-v7a
-          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net9.0 \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0/x86_64
-      - name: Build bionic-libs (.NET 9.0 - RFM)
-        working-directory: ./NativeAOT-AndroidHelloJniLib
-        run: |
-          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net9.0 -p:IlcDisableReflection=true \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0-RFM/arm64-v8a
-          dotnet publish -r linux-bionic-arm -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net9.0 -p:IlcDisableReflection=true \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0-RFM/armeabi-v7a
-          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net9.0 -p:IlcDisableReflection=true \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0-RFM/x86_64
-      - name: Build bionic-libs (.NET 8.0)
-        working-directory: ./NativeAOT-AndroidHelloJniLib
-        run: |
-          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net8.0 \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0/arm64-v8a
-          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net8.0 \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0/x86_64
-      - name: Build bionic-libs (.NET 8.0 - RFM)
-        working-directory: ./NativeAOT-AndroidHelloJniLib
-        run: |
-          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net8.0 -p:IlcDisableReflection=true \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0-RFM/arm64-v8a
-          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net8.0 -p:IlcDisableReflection=true \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0-RFM/x86_64
 
       - name: Create Android project structure
         run: |
@@ -239,34 +221,63 @@ jobs:
             --lib "$ANDROID_HOME/platforms/android-37.0/android.jar" \
             --output ./dex \
             class/**/*.class
-
-      - name: Build and Sign All Android Apks (.NET 10.0 / 9.0 / 8.0)
-        env:
-          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
-        working-directory: ./hello-jni_apk
+      - name: Build bionic JNI libs and package Android APKs
         shell: bash
         run: |
-          variants=("net10.0" "net9.0" "net9.0-RFM" "net8.0" "net8.0-RFM")
-          for variant in "${variants[@]}"; do
-            echo "=== Packing APK for $variant ==="
-          
-            $ANDROID_HOME/build-tools/37.0.0/aapt package -f -M main/AndroidManifest.xml \
-              -I $ANDROID_HOME/platforms/android-37.0/android.jar \
-              -F "jnetinterface-apptest-${variant}.apk" ./dex
-          
-            mv "../lib-${variant}"/* lib/          
-            zip -ur "jnetinterface-apptest-${variant}.apk" lib/
-            rm -rf lib/*
-          
-            $ANDROID_HOME/build-tools/37.0.0/apksigner sign \
-              --ks ./../jnetinterface-apk.keystore \
+          set -euo pipefail
+
+          while IFS='|' read -r variant tfm reflection_free rid_abi_pairs; do
+            [ -z "${variant}" ] && continue
+
+            echo "=== Building bionic JNI libraries for ${variant} ==="
+            rm -rf "lib-${variant}"
+
+            for rid_abi in ${rid_abi_pairs}; do
+              runtime="${rid_abi%%:*}"
+              abi="${rid_abi##*:}"
+              publish_dir="./lib-${variant}/${abi}"
+
+              args=(
+                ./NativeAOT-AndroidHelloJniLib/AndroidHelloJniLib.csproj
+                -r "${runtime}"
+                -p:DisableUnsupportedError=true
+                -p:PublishAotUsingRuntimePack=true
+                -p:TargetFramework="${tfm}"
+                -p:AssemblyName=libhello-jni
+                -p:CopyOutputSymbolsToPublishDirectory=false
+                -p:PublishDir="${publish_dir}"
+              )
+
+              if [ "${reflection_free}" = "true" ]; then
+                args+=(-p:IlcDisableReflection=true)
+              fi
+
+              dotnet publish "${args[@]}"
+            done
+
+            echo "=== Packing APK for ${variant} ==="
+
+            rm -rf ./hello-jni_apk/lib
+            mkdir -p ./hello-jni_apk/lib
+
+            "$ANDROID_HOME/build-tools/37.0.0/aapt" package -f \
+              -M ./hello-jni_apk/main/AndroidManifest.xml \
+              -I "$ANDROID_HOME/platforms/android-37.0/android.jar" \
+              -F "./hello-jni_apk/jnetinterface-apptest-${variant}.apk" \
+              ./hello-jni_apk/dex
+
+            cp -R "./lib-${variant}/." ./hello-jni_apk/lib/
+            zip -ur "./hello-jni_apk/jnetinterface-apptest-${variant}.apk" ./hello-jni_apk/lib/
+
+            "$ANDROID_HOME/build-tools/37.0.0/apksigner" sign \
+              --ks ./jnetinterface-apk.keystore \
               --ks-key-alias "$APK_KEY_ALIAS" \
               --ks-pass "pass:$APK_KEY_PASS" \
               --key-pass "pass:$APK_KEY_PASS" \
               --min-sdk-version 21 \
-              --out "./../jnetinterface-apptest-${variant}.apk" "jnetinterface-apptest-${variant}.apk"
-          done
+              --out "./jnetinterface-apptest-${variant}.apk" \
+              "./hello-jni_apk/jnetinterface-apptest-${variant}.apk"
+          done <<< "$BIONIC_ANDROID_SCENARIOS"
 
       - name: Create Native Artifact
         if: inputs.package_version == ''
