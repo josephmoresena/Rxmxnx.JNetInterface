@@ -121,7 +121,7 @@ public partial struct AsyncContextBuilder
 				};
 				using InlineCache _ = new(env);
 				JReferenceObject? jObject = ((AndroidJniFunc<TState, JReferenceObject?>)this._call)(context, state);
-				return jObject is JGlobal jGlobal ? jGlobal.ToJniObject<TResult>()! : jObject.ToJniObject<TResult>()!;
+				return jObject is JGlobalBase jGlobal ? jGlobal.ToJniObject<TResult>()! : jObject.ToJniObject<TResult>()!;
 			}
 			catch (Exception e)
 			{
