@@ -222,6 +222,7 @@ jobs:
             --output ./dex \
             class/**/*.class
       - name: Build bionic JNI libs and package Android APKs
+        working-directory: ./hello-jni_apk
         shell: bash
         run: |
           set -euo pipefail
@@ -238,7 +239,7 @@ jobs:
               publish_dir="./../lib-${variant}/${abi}"
 
               args=(
-                ./NativeAOT-AndroidHelloJniLib/AndroidHelloJniLib.csproj
+                ./../NativeAOT-AndroidHelloJniLib/AndroidHelloJniLib.csproj
                 -r "${runtime}"
                 -p:DisableUnsupportedError=true
                 -p:PublishAotUsingRuntimePack=true
@@ -257,26 +258,21 @@ jobs:
 
             echo "=== Packing APK for ${variant} ==="
 
-            rm -rf ./hello-jni_apk/lib
-            mkdir -p ./hello-jni_apk/lib
+            $ANDROID_HOME/build-tools/37.0.0/aapt package -f -M main/AndroidManifest.xml \
+              -I $ANDROID_HOME/platforms/android-37.0/android.jar \
+              -F "jnetinterface-apptest-${variant}.apk" ./dex
 
-            "$ANDROID_HOME/build-tools/37.0.0/aapt" package -f \
-              -M ./hello-jni_apk/main/AndroidManifest.xml \
-              -I "$ANDROID_HOME/platforms/android-37.0/android.jar" \
-              -F "./hello-jni_apk/jnetinterface-apptest-${variant}.apk" \
-              ./hello-jni_apk/dex
+            mv "../lib-${variant}"/* lib/          
+            zip -ur "jnetinterface-apptest-${variant}.apk" lib/
+            rm -rf lib/*
 
-            cp -R "./lib-${variant}/." ./hello-jni_apk/lib/
-            zip -ur "./hello-jni_apk/jnetinterface-apptest-${variant}.apk" ./hello-jni_apk/lib/
-
-            "$ANDROID_HOME/build-tools/37.0.0/apksigner" sign \
-              --ks ./jnetinterface-apk.keystore \
+             $ANDROID_HOME/build-tools/37.0.0/apksigner sign \
+              --ks ./../jnetinterface-apk.keystore \
               --ks-key-alias "$APK_KEY_ALIAS" \
               --ks-pass "pass:$APK_KEY_PASS" \
               --key-pass "pass:$APK_KEY_PASS" \
               --min-sdk-version 21 \
-              --out "./jnetinterface-apptest-${variant}.apk" \
-              "./hello-jni_apk/jnetinterface-apptest-${variant}.apk"
+              --out "./../jnetinterface-apptest-${variant}.apk" "jnetinterface-apptest-${variant}.apk"
           done <<< "$BIONIC_ANDROID_SCENARIOS"
 
       - name: Create Native Artifact
