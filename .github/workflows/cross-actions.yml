@@ -274,7 +274,7 @@ jobs:
           }
 
       - name: Remove Jar File
-        if: inputs.build_artifacts == true && runner.os != 'Windows'
+        if: inputs.build_artifacts == true
         run: rm ./artifacts-java/*.jar
       - name: Cache Java Libraries
         if: inputs.build_artifacts == true

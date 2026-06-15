@@ -211,8 +211,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: Java-Artifact
-          path: |
-            ./artifacts-java/*
+          path: ./artifacts-java/*
       - name: Delete Internal Cache
         if: always()
         env:

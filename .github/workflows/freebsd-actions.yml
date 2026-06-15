@@ -112,17 +112,18 @@ jobs:
           cd $GITHUB_WORKSPACE;
           ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "run";
 
-      - name: Remove Jar File
+      - name: Remove Log Files
         if: inputs.build_artifacts == true
         run: |
           cd $GITHUB_WORKSPACE;
-          rm ./artifacts-java/*.jar;
           rm -rf ./artifacts-java/native
       - name: Cache Java FreeBSD Libraries
         if: inputs.build_artifacts == true
         uses: actions/cache/save@v5
         with:
-          path: ./artifacts-java
+          path: |
+            ./artifacts-java
+            ./ZipAndClean.ps1
           key: internal-freebsd-${{ github.run_id }}
           enableCrossOsArchive: true
       - name: Remove Java Libraries File

@@ -121,15 +121,17 @@ jobs:
           enableCrossOsArchive: true
       - name: Java FreeBSD Libraries
         uses: actions/cache/restore@v5
-        if: needs.freebsd-actions.result == 'success' && needs.cross-actions.result == 'success'
+        if: needs.freebsd-actions.result == 'success'
         with:
-          path: ./artifacts-java
+          path: |
+            ./artifacts-java
+            ./ZipAndClean.ps1
           key: internal-freebsd-${{ github.run_id }}
           fail-on-cache-miss: true
           enableCrossOsArchive: true
       - name: Java FreeBSD arm64 Libraries
         uses: actions/cache/restore@v5
-        if: needs.freebsd-arm64-actions.result == 'success' && needs.cross-actions.result == 'success'
+        if: needs.freebsd-arm64-actions.result == 'success' && needs.freebsd-actions.result == 'success'
         with:
           path: ./artifacts-java
           key: internal-freebsd-arm64-${{ github.run_id }}
@@ -137,7 +139,7 @@ jobs:
           enableCrossOsArchive: true
       - name: Java MacOS Libraries
         uses: actions/cache/restore@v5
-        if: needs.freebsd-actions.result == 'success' && needs.cross-actions.result == 'success'
+        if: needs.cross-actions.result == 'success' && needs.freebsd-actions.result == 'success'
         with:
           path: ./artifacts-java
           key: internal-macOS-${{ github.run_id }}
@@ -145,7 +147,7 @@ jobs:
           enableCrossOsArchive: true
       - name: Java Linux Libraries
         uses: actions/cache/restore@v5
-        if: needs.freebsd-actions.result == 'success' && needs.cross-actions.result == 'success'
+        if: needs.cross-actions.result == 'success' && needs.freebsd-actions.result == 'success'
         with:
           path: ./artifacts-java
           key: internal-Linux-${{ github.run_id }}
@@ -153,14 +155,14 @@ jobs:
           enableCrossOsArchive: true
       - name: Java Windows Libraries
         uses: actions/cache/restore@v5
-        if: needs.freebsd-actions.result == 'success' && needs.cross-actions.result == 'success'
+        if: needs.cross-actions.result == 'success' && needs.freebsd-actions.result == 'success'
         with:
           path: ./artifacts-java
           key: internal-Windows-${{ github.run_id }}
           fail-on-cache-miss: true
           enableCrossOsArchive: true
       - name: Create Release Assets
-        if: needs.freebsd-actions.result == 'success' && needs.cross-actions.result == 'success'
+        if: needs.freebsd-actions.result == 'success'
         shell: pwsh
         run: |
           $binPatterns = @(
@@ -168,7 +170,7 @@ jobs:
           )
           ./ZipAndClean.ps1 -ZipName "Java-Assets.zip" -Patterns $binPatterns
       - name: Upload Release Assets
-        if: needs.freebsd-actions.result == 'success' && needs.cross-actions.result == 'success'
+        if: needs.freebsd-actions.result == 'success' && needs.freebsd-arm64-actions.result == 'success' && needs.cross-actions.result == 'success'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
