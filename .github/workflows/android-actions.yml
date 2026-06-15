@@ -261,12 +261,12 @@ jobs:
             $ANDROID_HOME/build-tools/37.0.0/aapt package -f -M main/AndroidManifest.xml \
               -I $ANDROID_HOME/platforms/android-37.0/android.jar \
               -F "jnetinterface-apptest-${variant}.apk" ./dex
-
+          
             mv "../lib-${variant}"/* lib/          
             zip -ur "jnetinterface-apptest-${variant}.apk" lib/
             rm -rf lib/*
-
-             $ANDROID_HOME/build-tools/37.0.0/apksigner sign \
+          
+            $ANDROID_HOME/build-tools/37.0.0/apksigner sign \
               --ks ./../jnetinterface-apk.keystore \
               --ks-key-alias "$APK_KEY_ALIAS" \
               --ks-pass "pass:$APK_KEY_PASS" \
