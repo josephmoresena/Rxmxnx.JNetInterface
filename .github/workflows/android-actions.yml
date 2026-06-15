@@ -235,7 +235,7 @@ jobs:
             for rid_abi in ${rid_abi_pairs}; do
               runtime="${rid_abi%%:*}"
               abi="${rid_abi##*:}"
-              publish_dir="./lib-${variant}/${abi}"
+              publish_dir="./../lib-${variant}/${abi}"
 
               args=(
                 ./NativeAOT-AndroidHelloJniLib/AndroidHelloJniLib.csproj
