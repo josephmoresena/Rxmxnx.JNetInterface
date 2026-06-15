@@ -1,3 +1,5 @@
+// ReSharper disable MemberCanBePrivate.Global
+
 namespace Rxmxnx.JNetInterface;
 
 /// <summary>
@@ -32,7 +34,15 @@ public sealed partial class AndroidJniHost
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public static Int32 ApiLevel => AndroidHelper.ApiLevel.GetValueOrDefault();
+	public static Int32 ApiLevel
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get
+		{
+			Debug.Assert(AndroidHelper.ApiLevel.HasValue);
+			return AndroidHelper.ApiLevel.Value;
+		}
+	}
 
 	/// <summary>
 	/// Registers <typeparamref name="TReference"/> as valid datatype for the current process.

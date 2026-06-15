@@ -9,43 +9,41 @@ Please note that you must add the specific types, fields, methods, and construct
 requires access to through `Rxmxnx.JNetInterface`.
 
 **Note**: These requirements are not limited to consumers compiled with `native-image` but apply to any JVM
-instantiation in `Rxmxnx.JNetInterface`, whether created through
-`JVirtualMachineLibrary.CreateVirtualMachine(JVirtualMachineInitArg, out IEnvironment)` or injected via
-`JVirtualMachine.GetVirtualMachine()`.
+instantiation in `Rxmxnx.JNetInterface` or `Rxmxnx.JNetInterface.Mobile`.
 
 ## Essential Classes
 
 Essential classes are those special non-optional classes. These must be loaded for the JVM instantiated in
-`Rxmxnx.JNetInterface`, and their reference is always global and non-disposable.
+`Rxmxnx.JNetInterface` or `Rxmxnx.JNetInterface.Mobile`, and their reference is always global and non-disposable.
 
 ### java.lang.Class
 
-This type is required for various uses within `Rxmxnx.JNetInterface` by accessing the methods `getName()`,
-`isPrimitive()`,
-`getModifiers()`, and `getInterfaces()`.
+This type is required for various uses within `Rxmxnx.JNetInterface` implementation by accessing the methods
+`getName()`, `isPrimitive()`, `getModifiers()`, and `getInterfaces()`.
 
 ### java.lang.Throwable
 
-This type is required for handling Java errors and exceptions within `Rxmxnx.JNetInterface` by accessing the methods
-`getMessage()` and `getStackTrace()`.
+This type is required for handling Java errors and exceptions within `Rxmxnx.JNetInterface` implementation by accessing
+the methods `getMessage()` and `getStackTrace()`.
 
 ### java.lang.System
 
 This type is required to obtain the value of the `java.specification.version` property in order to initialize the main
-classes compatible with the specification version of the current environment.
+classes compatible with the specification version of the current environment. This class is not required when using
+`Rxmxnx.JNetInterface.Mobile`.
 
 ### java.lang.StackTraceElement
 
-This type is required for handling Java errors and exceptions within `Rxmxnx.JNetInterface` by accessing the methods
-`getClassName()`, `getLineNumber()`, `getFileName()`, `getMethodName()`, and `isNativeMethod()`.
+This type is required for handling Java errors and exceptions within `Rxmxnx.JNetInterface` implementation by accessing
+the methods `getClassName()`, `getLineNumber()`, `getFileName()`, `getMethodName()`, and `isNativeMethod()`.
 
-This type is only initialized on Java 1.4 and later.
+This type is only initialized on Java 1.4 and later when using `Rxmxnx.JNetInterface`.
 
 ## Primitive and Primitive Wrapper Classes
 
 Primitive classes are considered main classes by design. This means they, like essential classes, must be loaded for the
-JVM instantiated in `Rxmxnx.JNetInterface`, and their reference is always global. This is useful for locating object
-definitions accessible through JNI.
+JVM instantiated in `Rxmxnx.JNetInterface` or `Rxmxnx.JNetInterface.Mobile`, and their reference is always global. This
+is useful for locating object definitions accessible through JNI.
 Since references to primitive classes can only be found through the wrapper classes that encapsulate the primitive types
 they represent, these wrapper classes share the same behavior. This is useful, for example, for caching constructors of
 these object types.
@@ -59,43 +57,43 @@ This type is accessed in order to find the static field `TYPE` which contains th
 
 This type is accessed to find the static field `TYPE` which contains the reference to the primitive class `boolean`.
 Additionally, access to the method `booleanValue()` is required if there is a need to access its value, and also to the
-constructor `(boolean)` to create instances using `Rxmxnx.JNetInterface`.
+constructor `(boolean)` to create instances using a `Rxmxnx.JNetInterface` implementation.
 
 ### java.lang.Byte
 
 This type is accessed in order to find the static field `TYPE` which contains the reference to the primitive class
-`byte`, and also to the constructor `(byte)` to create instances using `Rxmxnx.JNetInterface`.
+`byte`, and also to the constructor `(byte)` to create instances using a `Rxmxnx.JNetInterface` implementation.
 
 ### java.lang.Character
 
 This type is accessed in order to find the static field `TYPE` which contains the reference to the primitive class
 `char`. In addition, access to the method `charValue()` is required if there is a need to access its value, and also to
-the constructor `(char)` to create instances using `Rxmxnx.JNetInterface`.
+the constructor `(char)` to create instances using a `Rxmxnx.JNetInterface` implementation.
 
 ### java.lang.Double
 
 This type is accessed in order to find the static field `TYPE` which contains the reference to the primitive class
-`double`, and also to the constructor `(double)` to create instances using `Rxmxnx.JNetInterface`.
+`double`, and also to the constructor `(double)` to create instances using a `Rxmxnx.JNetInterface` implementation.
 
 ### java.lang.Float
 
 This type is accessed in order to find the static field `TYPE` which contains the reference to the primitive class
-`float`, and also to the constructor `(float)` to create instances using `Rxmxnx.JNetInterface`.
+`float`, and also to the constructor `(float)` to create instances using a `Rxmxnx.JNetInterface` implementation.
 
 ### java.lang.Integer
 
 This type is accessed in order to find the static field `TYPE` which contains the reference to the primitive class
-`int`, and also to the constructor `(int)` to create instances using `Rxmxnx.JNetInterface`.
+`int`, and also to the constructor `(int)` to create instances using a `Rxmxnx.JNetInterface` implementation.
 
 ### java.lang.Long
 
 This type is accessed in order to find the static field `TYPE` which contains the reference to the primitive class
-`long`, and also to the constructor `(long)` to create instances using `Rxmxnx.JNetInterface`.
+`long`, and also to the constructor `(long)` to create instances using a `Rxmxnx.JNetInterface` implementation.
 
 ### java.lang.Short
 
 This type is accessed in order to find the static field `TYPE` which contains the reference to the primitive class
-`short`, and also to the constructor `(short)` to create instances using `Rxmxnx.JNetInterface`.
+`short`, and also to the constructor `(short)` to create instances using a `Rxmxnx.JNetInterface` implementation.
 
 ### java.lang.Number
 
@@ -130,47 +128,47 @@ the primitive class must be loaded at that time), the following feature switches
 
 * The `java.lang.Void` class is a non-main class by default. Thus, while it is loaded when the JVM is instantiated, a
   permanent global reference is not created unless the `JNetInterface.EnableVoidObjectMainClass` feature switch is used.
-* The classes of primitive arrays are used for creating primitive arrays using `Rxmxnx.JNetInterface`.
+* The classes of primitive arrays are used for creating primitive arrays using a `Rxmxnx.JNetInterface` implementation.
 * If any wrapper class that is a subclass of `java.lang.Number` is set as a main class, `java.lang.Number` is also set
   as a main class.
 
 ## Optional features classes
 
-These classes support some of the features built into `Rxmxnx.JNetInterface` to simplify the handling of certain types.
-By
-default, these classes are not considered main classes, but they can be manually set as such using the static method
-`JVirtualMachine.SetMainClass<>()`.
+These classes support some of the features built into `Rxmxnx.JNetInterface` and `Rxmxnx.JNetInterface.Mobile` to
+simplify the handling of certain types.
+By default, these classes are not considered main classes, but they can be manually set as such using the static method
+`JVirtualMachine.SetMainClass<>()` or `AndroidJniHost.SetMainClass<>()` on mobile platforms.
 
 ### java.lang.Enum
 
-This type is required for handling enum type instances within `Rxmxnx.JNetInterface` by accessing the methods `name()`
-and
-`ordinal()`.
+This type is required for handling enum type instances within `Rxmxnx.JNetInterface` implementation by accessing the
+methods `name()` and `ordinal()`.
 
 ### java.nio.Buffer
 
-This type is required for handling buffer type instances within `Rxmxnx.JNetInterface` by accessing the methods
-`isDirect()`
-and `capacity()`.
+This type is required for handling buffer type instances within `Rxmxnx.JNetInterface` implementation by accessing the
+methods `isDirect()` and `capacity()`.
 
 ### java.lang.reflect.Member
 
-This type is required for reflection support within `Rxmxnx.JNetInterface` by accessing the method
+This type is required for reflection support within `Rxmxnx.JNetInterface` implementation by accessing the method
 `getDeclaringClass()`.
 
 ### java.lang.reflect.Executable
 
-This type is required for reflection support within `Rxmxnx.JNetInterface` by accessing the method
+This type is required for reflection support within `Rxmxnx.JNetInterface` implementation by accessing the method
 `getParameterTypes()`.
 
 ### java.lang.reflect.Method
 
-This type is required for reflection support within `Rxmxnx.JNetInterface` by accessing the method `getReturnType()`.
+This type is required for reflection support within `Rxmxnx.JNetInterface` implementation by accessing the method
+`getReturnType()`.
 
 ### java.lang.reflect.Field
 
-This type is required for reflection support within `Rxmxnx.JNetInterface` by accessing the method `getType()`.
+This type is required for reflection support within `Rxmxnx.JNetInterface` implementation by accessing the method
+`getType()`.
 
-**Note**: Keep in mind that if the method `JVirtualMachine.SetMainClass<>()` is called before the JVM is instantiated,
-it will behave like any other main class. However, if it is called afterward, its main class characteristics will only
-activate the first time a reference to that class is loaded.
+**Note**: Keep in mind that if the method `SetMainClass<>()` is called before the JVM is instantiated, it will behave
+like any other main class. However, if it is called afterward, its main class characteristics will only activate the
+first time a reference to that class is loaded.

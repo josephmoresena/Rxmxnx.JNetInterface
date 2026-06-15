@@ -52,6 +52,7 @@
         <File Path="..\docs\jni-classes.md"/>
         <File Path="..\docs\jni-interfaces.md"/>
         <File Path="..\docs\jni-references.md"/>
+        <File Path="..\docs\mobile-runtime.md"/>
         <File Path="..\docs\native-objects.md"/>
     </Folder>
     <Folder Name="/Global/NativeImage/">

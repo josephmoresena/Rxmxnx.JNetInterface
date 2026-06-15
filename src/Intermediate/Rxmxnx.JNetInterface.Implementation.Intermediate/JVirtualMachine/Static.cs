@@ -3,6 +3,13 @@ namespace Rxmxnx.JNetInterface;
 public partial class JVirtualMachine
 {
 	/// <summary>
+	/// Android API level.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	public static Int32? AndroidApiLevel => AndroidHelper.IsZygote ? AndroidHelper.ApiLevel : default;
+	/// <summary>
 	/// Indicates whether trace output is enabled.
 	/// </summary>
 #if !PACKAGE
@@ -64,7 +71,6 @@ public partial class JVirtualMachine
 	/// <returns>The <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.</returns>
 	public static IVirtualMachine GetVirtualMachine(JVirtualMachineRef reference)
 		=> ReferenceCache.Instance.Get(reference, out _);
-
 	/// <summary>
 	/// Removes the <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.
 	/// </summary>

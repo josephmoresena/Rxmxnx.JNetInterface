@@ -2,8 +2,8 @@
 
 Handling `java.lang.Class<?>` instances is essential in JNI.
 
-In `Rxmxnx.JNetInterface`, class definition availability takes priority over maintaining a persistent JNI reference. As
-a result, `JClassObject` instances can exist symbolically without requiring an active JNI reference.
+In `Rxmxnx.JNetInterface.Core`, class definition availability takes priority over maintaining a persistent JNI
+reference. As a result, `JClassObject` instances can exist symbolically without requiring an active JNI reference.
 
 ## Class Handling with `JClassObject`
 
@@ -52,10 +52,10 @@ These operations require JNI calls:
 - **`GetClassName(out Boolean)`**: Retrieves the class name using Java’s `getName()` and checks if it is a primitive
   type via `isPrimitive()`.
 - **`GetInterfaces()`**: Obtains the list of implemented interfaces using the Java `getInterfaces()` function.
-- **`GetInformation()`**: Returns the registered type information in `Rxmxnx.JNetInterface`. If the class is a mapped
-  type, the retrieved information should match the type metadata.
-- **`GetRuntimeTypeMetadata()`**: Returns the type metadata used by `Rxmxnx.JNetInterface` to map the type of the
-  current class.
+- **`GetInformation()`**: Returns the registered type information in a `Rxmxnx.JNetInterface` implementation. If the
+  class is a mapped type, the retrieved information should match the type metadata.
+- **`GetRuntimeTypeMetadata()`**: Returns the type metadata used by the `Rxmxnx.JNetInterface` implementation to map the
+  type of the current class.
 
 ## Additional JNI-Based Operations
 

@@ -188,7 +188,7 @@ public ref partial struct SyncContextBuilder
 			};
 			using InlineCache _ = new(env);
 			JReferenceObject? jObject = func(context);
-			return jObject is JGlobalBase jGlobal ? jGlobal.ToJniObject<TResult>()! : jObject.ToJniObject<TResult>()!;
+			return jObject.ToJniObject<TResult>()!;
 		}
 		catch (ThrowableException e)
 		{
@@ -300,7 +300,7 @@ public ref partial struct SyncContextBuilder
 			};
 			using InlineCache _ = new(env);
 			JReferenceObject? jObject = func(context, state);
-			return jObject is JGlobalBase jGlobal ? jGlobal.ToJniObject<TResult>()! : jObject.ToJniObject<TResult>()!;
+			return jObject.ToJniObject<TResult>()!;
 		}
 		catch (ThrowableException e)
 		{

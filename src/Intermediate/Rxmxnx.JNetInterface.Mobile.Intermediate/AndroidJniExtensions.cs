@@ -32,7 +32,7 @@ public static class AndroidJniExtensions
 		return jGlobal.IsValid(env);
 	}
 	/// <summary>
-	/// Creates a JNI (java.interop) object from a <see langword="JReferenceObject"/> object.
+	/// Creates a JNI (java.interop) object from a <see langword="JGlobalBase"/> object.
 	/// </summary>
 	/// <typeparam name="TResult">A <see cref="IJavaPeerable"/> type.</typeparam>
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
@@ -49,17 +49,30 @@ public static class AndroidJniExtensions
 		return JniRuntime.CurrentRuntime.ValueManager.GetValue<TResult>(
 			ref jniReference, JniObjectReferenceOptions.Copy);
 	}
+
 	/// <summary>
 	/// Creates a JNI (java.interop) object from a <see langword="JReferenceObject"/> object.
 	/// </summary>
-	/// <param name="jObject"></param>
-	/// <typeparam name="TResult"></typeparam>
-	/// <returns></returns>
+	/// <typeparam name="TResult">A <see cref="IJavaPeerable"/> type.</typeparam>
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+	/// <returns>A <see cref="IJavaPeerable"/> instance.</returns>
+	/// <remarks>
+	/// If <paramref name="jObject"/> is a <see cref="JGlobalBase"/>, its JNI reference is released after the conversion.
+	/// </remarks>
 	internal static TResult?
 		ToJniObject<[DynamicallyAccessedMembers(AndroidJniExtensions.JavaObjectMembers)] TResult>(
 			this JReferenceObject? jObject) where TResult : class, IJavaPeerable
 	{
 		if (JObject.IsNullOrDefault(jObject)) return default;
+		if (jObject is JGlobalBase jGlobal)
+			try
+			{
+				return jGlobal.ToJniObject<TResult>();
+			}
+			finally
+			{
+				jGlobal.Dispose();
+			}
 		JniObjectReference jniReference = new(jObject.As<JObjectLocalRef>().Pointer, JniObjectReferenceType.Local);
 		return JniRuntime.CurrentRuntime.ValueManager.GetValue<TResult>(
 			ref jniReference, JniObjectReferenceOptions.Copy);

@@ -9,7 +9,6 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal abstract class VirtualMachineStaticLibrary : IVirtualMachineLibraryType
 {
 	static Boolean IVirtualMachineLibraryType.IsStatic => true;
-	static Boolean IVirtualMachineLibraryType.HasCreatedVmMethod => true;
 
 #pragma warning disable SYSLIB1054
 	/// <inheritdoc/>

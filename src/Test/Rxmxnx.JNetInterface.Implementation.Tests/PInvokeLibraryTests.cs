@@ -6,7 +6,6 @@ public sealed partial class PInvokeLibraryTests : LibraryBaseTests, IVirtualMach
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 
 	static Boolean IVirtualMachineLibraryType.IsStatic => PInvokeLibraryTests.isStatic;
-	static Boolean IVirtualMachineLibraryType.HasCreatedVmMethod => !PInvokeLibraryTests.missingCreatedVmMethod;
 
 	[SkippableFact]
 	internal void StaticTest()
@@ -23,32 +22,6 @@ public sealed partial class PInvokeLibraryTests : LibraryBaseTests, IVirtualMach
 		finally
 		{
 			PInvokeLibraryTests.CleanUp();
-		}
-	}
-	[Fact]
-	internal void MissingCreatedVms()
-	{
-		Boolean enter = false;
-		try
-		{
-			PInvokeLibraryTests.missingCreatedVmMethod = true;
-			PInvokeLibraryTests.getCreatedVirtualMachines = Call;
-
-			JVirtualMachineLibrary library = JVirtualMachineLibrary.Create<PInvokeLibraryTests>();
-
-			Assert.Equal(JResult.VersionError, Assert.Throws<JniException>(library.GetCreatedVirtualMachines).Result);
-			Assert.False(enter);
-		}
-		finally
-		{
-			PInvokeLibraryTests.CleanUp();
-		}
-		return;
-		JResult Call(ValPtr<JVirtualMachineRef> arr, Int32 arrSize, out Int32 count)
-		{
-			count = Random.Shared.Next();
-			enter = true;
-			return JResult.Ok;
 		}
 	}
 	[Fact]
@@ -275,7 +248,6 @@ public sealed partial class PInvokeLibraryTests : LibraryBaseTests, IVirtualMach
 	private static void CleanUp()
 	{
 		LibraryBaseTests.NativeException = default;
-		PInvokeLibraryTests.missingCreatedVmMethod = false;
 		PInvokeLibraryTests.isStatic = false;
 		PInvokeLibraryTests.getDefaultVirtualMachineInitArgs = default;
 		PInvokeLibraryTests.createVirtualMachine = default;

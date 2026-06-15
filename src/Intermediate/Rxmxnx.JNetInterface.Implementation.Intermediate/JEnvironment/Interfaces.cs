@@ -14,7 +14,8 @@ partial class JEnvironment : IEquatable<IEnvironment>, IEquatable<JEnvironment>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	Boolean IEquatable<JEnvironment>.Equals(JEnvironment? other) => other is not null && this._m.Core.Equals(other._m);
+	Boolean IEquatable<JEnvironment>.Equals(JEnvironment? other)
+		=> other is not null && this._m.Core.Equals(other._m.Core);
 	Boolean IEnvironment.NoProxy => true;
 	Int32? IEnvironment.LocalCapacity
 	{

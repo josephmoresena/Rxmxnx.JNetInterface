@@ -22,11 +22,7 @@ public partial class JVirtualMachineLibrary
 		/// </summary>
 		/// <param name="handle">Library handle.</param>
 		/// <param name="functions">A <see cref="InvocationFunctionSet"/> value.</param>
-		/// <param name="hasCreatedVm">
-		/// Indicates whether the function <c>JNI_GetCreatedJavaVMs</c> is available on the current library.
-		/// </param>
-		public Impl(IntPtr handle, TFunctionSet functions, Boolean hasCreatedVm) : base(handle, hasCreatedVm)
-			=> this._functions = functions;
+		public Impl(IntPtr handle, TFunctionSet functions) : base(handle) => this._functions = functions;
 
 		/// <inheritdoc/>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

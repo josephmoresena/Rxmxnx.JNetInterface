@@ -118,6 +118,7 @@ types when declaring methods, function pointers, or delegates.
 - [Direct Buffer Handling](docs/direct-buffers.md)
 - [Java Error Handling](docs/error-handling.md)
 - [Invocation API, JVirtualMachine and JEnvironment classes](docs/jni-classes.md)
+- [.NET Android interop](docs/mobile-runtime.md)
 
 ## Disclaimer:
 

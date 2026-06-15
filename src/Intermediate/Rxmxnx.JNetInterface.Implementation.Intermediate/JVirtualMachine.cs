@@ -8,14 +8,6 @@ namespace Rxmxnx.JNetInterface;
 public partial class JVirtualMachine : IVirtualMachine
 {
 	/// <summary>
-	/// Android API level.
-	/// </summary>
-#if !PACKAGE
-	[ExcludeFromCodeCoverage]
-#endif
-	public static Int32? AndroidApiLevel => AndroidHelper.IsZygote ? AndroidHelper.ApiLevel : default;
-
-	/// <summary>
 	/// Indicates whether the current virtual machine remains alive.
 	/// </summary>
 	public virtual Boolean IsAlive => true;

@@ -226,4 +226,4 @@ jobs:
           gh cache delete "internal-Windows-${{ github.run_id }}" || true
           gh cache delete "internal-Linux-${{ github.run_id }}" || true
           gh cache delete "internal-macOS-${{ github.run_id }}" || true
-          gh cache delete "internal-bin-tests-${{ github.run_id }}" || true
+          gh cache delete "internal-tests-bin-${{ github.run_id }}" || true

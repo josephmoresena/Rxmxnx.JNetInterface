@@ -10,11 +10,6 @@ namespace Rxmxnx.JNetInterface;
 public abstract unsafe partial class JVirtualMachineLibrary
 {
 	/// <summary>
-	/// Indicates whether the function <c>JNI_GetCreatedJavaVMs</c> is available on the current library.
-	/// </summary>
-	private readonly Boolean _hasCreatedVm;
-
-	/// <summary>
 	/// Library handle.
 	/// </summary>
 	public IntPtr Handle { get; private init; }
@@ -23,14 +18,7 @@ public abstract unsafe partial class JVirtualMachineLibrary
 	/// Private constructor.
 	/// </summary>
 	/// <param name="handle">Library handle.</param>
-	/// <param name="hasCreatedVm">
-	/// Indicates whether the function <c>JNI_GetCreatedJavaVMs</c> is available on the current library.
-	/// </param>
-	private JVirtualMachineLibrary(IntPtr handle, Boolean hasCreatedVm)
-	{
-		this.Handle = handle;
-		this._hasCreatedVm = hasCreatedVm;
-	}
+	private JVirtualMachineLibrary(IntPtr handle) => this.Handle = handle;
 
 	/// <summary>
 	/// Retrieves the latest JNI version supported by the current library.
@@ -109,8 +97,6 @@ public abstract unsafe partial class JVirtualMachineLibrary
 	/// <exception cref="JniException">If JNI call ends with an error.</exception>
 	public IVirtualMachine[] GetCreatedVirtualMachines()
 	{
-		if (!this._hasCreatedVm)
-			ImplementationValidationUtilities.ThrowIfInvalidResult(JResult.VersionError);
 		_ = this.GetCreatedVirtualMachines(default, 0, out Int32 vmCount);
 		if (vmCount <= 0) return [];
 		JVirtualMachineRef[] arr = this.GetCreatedVirtualMachines(vmCount, out JResult result);
@@ -169,8 +155,7 @@ public abstract unsafe partial class JVirtualMachineLibrary
 	{
 		if (!AotInfo.IsNativeAot && TLibrary.IsStatic)
 			throw new InvalidOperationException(IMessageResource.GetInstance().AotRequired);
-		return new Impl<PInvokeInvocation>(default, PInvokeInvocation.GetInvocationSet<TLibrary>(),
-		                                   TLibrary.HasCreatedVmMethod);
+		return new Impl<PInvokeInvocation>(default, PInvokeInvocation.GetInvocationSet<TLibrary>());
 	}
 	/// <summary>
 	/// Creates a virtual machine library using loaded JVM library.
@@ -205,7 +190,7 @@ public abstract unsafe partial class JVirtualMachineLibrary
 			Boolean hasCreatedVm =
 				JVirtualMachineLibrary.TryGetJniExport(
 					handle, IVirtualMachineLibraryType.GetCreatedVirtualMachinesSymbol, out functions[2]);
-			return new(handle, Unsafe.As<IntPtr, InvocationFunctionSet>(ref functions[0]), hasCreatedVm);
+			return new(handle, Unsafe.As<IntPtr, InvocationFunctionSet>(ref functions[0]));
 		}
 		if (ownHandle)
 			NativeLibrary.Free(handle);
