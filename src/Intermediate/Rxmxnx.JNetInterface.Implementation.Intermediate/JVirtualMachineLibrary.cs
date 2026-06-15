@@ -6,6 +6,7 @@ namespace Rxmxnx.JNetInterface;
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS907)]
 #endif
 public abstract unsafe partial class JVirtualMachineLibrary
 {
@@ -182,16 +183,16 @@ public abstract unsafe partial class JVirtualMachineLibrary
 	private static Impl<InvocationFunctionSet>? Create(IntPtr handle, Boolean ownHandle)
 	{
 		Span<IntPtr> functions = stackalloc IntPtr[4];
-		if (JVirtualMachineLibrary.TryGetJniExport(
-			    handle, IVirtualMachineLibraryType.GetDefaultVirtualMachineInitArgsSymbol, out functions[0]) &&
-		    JVirtualMachineLibrary.TryGetJniExport(handle, IVirtualMachineLibraryType.CreateVirtualMachineSymbol,
-		                                           out functions[1]))
-		{
-			Boolean hasCreatedVm =
-				JVirtualMachineLibrary.TryGetJniExport(
-					handle, IVirtualMachineLibraryType.GetCreatedVirtualMachinesSymbol, out functions[2]);
-			return new(handle, Unsafe.As<IntPtr, InvocationFunctionSet>(ref functions[0]));
-		}
+		if (!JVirtualMachineLibrary.TryGetJniExport(
+			    handle, IVirtualMachineLibraryType.GetDefaultVirtualMachineInitArgsSymbol,
+			    out functions[0])) goto Release;
+		if (!JVirtualMachineLibrary.TryGetJniExport(handle, IVirtualMachineLibraryType.CreateVirtualMachineSymbol,
+		                                            out functions[1])) goto Release;
+		if (!JVirtualMachineLibrary.TryGetJniExport(handle, IVirtualMachineLibraryType.GetCreatedVirtualMachinesSymbol,
+		                                            out functions[2])) goto Release;
+		ref InvocationFunctionSet functionSet = ref Unsafe.As<IntPtr, InvocationFunctionSet>(ref functions[0]);
+		return new(handle, functionSet);
+		Release:
 		if (ownHandle)
 			NativeLibrary.Free(handle);
 		return default;
