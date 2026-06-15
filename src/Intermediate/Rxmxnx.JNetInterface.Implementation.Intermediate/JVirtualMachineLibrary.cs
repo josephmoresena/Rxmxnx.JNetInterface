@@ -103,6 +103,8 @@ public abstract unsafe partial class JVirtualMachineLibrary
 	/// <exception cref="JniException">If JNI call ends with an error.</exception>
 	public IVirtualMachine[] GetCreatedVirtualMachines()
 	{
+		if (!this.HasCreatedVirtualMachines)
+			ImplementationValidationUtilities.ThrowIfInvalidResult(JResult.VersionError);
 		_ = this.GetCreatedVirtualMachines(default, 0, out Int32 vmCount);
 		if (vmCount <= 0) return [];
 		JVirtualMachineRef[] arr = this.GetCreatedVirtualMachines(vmCount, out JResult result);
@@ -118,8 +120,6 @@ public abstract unsafe partial class JVirtualMachineLibrary
 	/// <returns>An array of <see cref="JVirtualMachineRef"/> references.</returns>
 	private JVirtualMachineRef[] GetCreatedVirtualMachines(Int32 vmCount, out JResult result)
 	{
-		if (!this.HasCreatedVirtualMachines)
-			ImplementationValidationUtilities.ThrowIfInvalidResult(JResult.VersionError);
 		JVirtualMachineRef[] arr = new JVirtualMachineRef[vmCount];
 		fixed (JVirtualMachineRef* ptr = arr)
 			result = this.GetCreatedVirtualMachines(ptr, arr.Length, out vmCount);

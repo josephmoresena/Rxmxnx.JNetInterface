@@ -49,7 +49,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests : LibraryBaseTest
 			}
 
 			Assert.NotNull(library);
-			Assert.Throws<JniException>(() => library.GetCreatedVirtualMachines());
+			Assert.Throws<JniException>(library.GetCreatedVirtualMachines);
 		}
 	}
 
@@ -332,7 +332,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests : LibraryBaseTest
 			if (JVirtualMachineLibraryTests.result != JResult.Ok && createdVms > 0)
 			{
 				Assert.Equal(JVirtualMachineLibraryTests.result,
-				             Assert.Throws<JniException>(() => library.GetCreatedVirtualMachines()).Result);
+				             Assert.Throws<JniException>(library.GetCreatedVirtualMachines).Result);
 				if (LibraryBaseTests.NativeException is not null)
 					throw new AggregateException(LibraryBaseTests.NativeException);
 				return;
