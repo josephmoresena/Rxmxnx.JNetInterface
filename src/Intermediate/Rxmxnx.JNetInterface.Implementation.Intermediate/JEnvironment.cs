@@ -86,7 +86,7 @@ public partial class JEnvironment : IEqualityOperators<JEnvironment, JEnvironmen
 	[ExcludeFromCodeCoverage]
 #endif
 	public sealed override Boolean Equals(Object? obj)
-		=> (obj is JEnvironment other && this._m.Core.Equals(other._m)) ||
+		=> (obj is JEnvironment other && this._m.Core.Equals(other._m.Core)) ||
 			(obj is IEnvironment env && this.Reference == env.Reference);
 	/// <inheritdoc/>
 #if !PACKAGE

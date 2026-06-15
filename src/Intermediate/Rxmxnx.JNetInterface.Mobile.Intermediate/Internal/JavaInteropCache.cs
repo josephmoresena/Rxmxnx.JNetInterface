@@ -127,7 +127,7 @@ internal sealed class JavaInteropCache : AlienLocalCache
 		String classHash = TypeInfoSequence.CreateHash(className, false, out Boolean isArray);
 		ClassObjectMetadata classObjectMetadata =
 			this._host.TypeManager.GetTypeInformation(classHash) as ClassObjectMetadata ??
-			new ClassObjectMetadata(classHash, classNameLength, classNameLength + 2, isArray);
+			new ClassObjectMetadata(classHash, classNameLength, classNameLength + (isArray ? 0 : 2), isArray);
 		return this.Environment.GetObjectClass(classObjectMetadata, localRef, out typeMetadata);
 	}
 
