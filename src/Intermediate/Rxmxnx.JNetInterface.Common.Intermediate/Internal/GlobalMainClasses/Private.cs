@@ -114,11 +114,11 @@ internal partial class GlobalMainClasses
 #endif
 	private Boolean IsMainLoadable(IMainClassLoader loader, JRuntimeVersion sinceVersion, Int32 apiLevel)
 	{
-		// The JNI version is checked to avoid check the JRE version.
-		if ((Int32)sinceVersion < loader.Version) return true;
 		// If running on Android, checks the API level.
 		if (AndroidHelper.IsZygote)
 			return apiLevel >= 0 && AndroidHelper.ApiLevel >= apiLevel;
+		// The JNI version is checked to avoid check the JRE version.
+		if ((Int32)sinceVersion < loader.Version) return true;
 		// If no running on Android, avoid to load classes with undefined version.
 		if (sinceVersion is JRuntimeVersion.Undefined) return false;
 #if !ANDROID

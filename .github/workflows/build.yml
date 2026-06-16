@@ -172,7 +172,7 @@ jobs:
         with:
           path: ./artifacts-java
           key: internal-freebsd-${{ github.run_id }}
-          fail-on-cache-miss: true
+          fail-on-cache-miss: false
           enableCrossOsArchive: true
       - name: Java FreeBSD arm64 Libraries
         uses: actions/cache/restore@v5
@@ -180,7 +180,7 @@ jobs:
         with:
           path: ./artifacts-java
           key: internal-freebsd-arm64-${{ github.run_id }}
-          fail-on-cache-miss: true
+          fail-on-cache-miss: false
           enableCrossOsArchive: true
       - name: Java MacOS Libraries
         uses: actions/cache/restore@v5
@@ -188,7 +188,7 @@ jobs:
         with:
           path: ./artifacts-java
           key: internal-macOS-${{ github.run_id }}
-          fail-on-cache-miss: true
+          fail-on-cache-miss: false
           enableCrossOsArchive: true
       - name: Java Linux Libraries
         uses: actions/cache/restore@v5
@@ -196,7 +196,7 @@ jobs:
         with:
           path: ./artifacts-java
           key: internal-Linux-${{ github.run_id }}
-          fail-on-cache-miss: true
+          fail-on-cache-miss: false
           enableCrossOsArchive: true
       - name: Java Windows Libraries
         uses: actions/cache/restore@v5
@@ -204,7 +204,7 @@ jobs:
         with:
           path: ./artifacts-java
           key: internal-Windows-${{ github.run_id }}
-          fail-on-cache-miss: true
+          fail-on-cache-miss: false
           enableCrossOsArchive: true
       - name: Create Java Artifact
         if: needs.freebsd-actions.result == 'success' || needs.freebsd-arm64-actions.result == 'success' || needs.cross-actions.result == 'success'

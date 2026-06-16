@@ -181,15 +181,6 @@ public partial class TestCompiler
 			Notifier = ConsoleNotifier.Notifier,
 		};
 		await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
-
-		state = new()
-		{
-			ExecutablePath = "dotnet",
-			ArgState = args,
-			AppendArgs = RestoreNetArgs.AppendList,
-			Notifier = ConsoleNotifier.Notifier,
-		};
-		await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
 	}
 	private static Boolean ArchSupported(Architecture arch)
 	{

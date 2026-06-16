@@ -265,7 +265,7 @@ public partial struct AsyncContextBuilder()
 	public Task InvokeAsync(AndroidJniAction action)
 	{
 		TaskState taskState = new(AndroidJniHost.GetAndroidHost(), this, action);
-		return Task.Factory.StartNew(TaskState.Invoke, taskState);
+		return Task.Factory.StartNew(TaskState.Invoke, taskState, TaskCreationOptions.LongRunning);
 	}
 	/// <summary>
 	/// Creates a new JNI async context and invokes <paramref name="action"/>.
@@ -277,7 +277,7 @@ public partial struct AsyncContextBuilder()
 	public Task InvokeAsync<TState>(TState state, AndroidJniAction<TState> action)
 	{
 		TaskState<TState> taskState = new(AndroidJniHost.GetAndroidHost(), this, action, state);
-		return Task.Factory.StartNew(TaskState.Invoke, taskState);
+		return Task.Factory.StartNew(TaskState.Invoke, taskState, TaskCreationOptions.LongRunning);
 	}
 	/// <summary>
 	/// Creates a new JNI async context, invokes <paramref name="func"/> and returns its result.
@@ -288,7 +288,7 @@ public partial struct AsyncContextBuilder()
 	public Task<TResult> InvokeAsync<TResult>(AndroidJniFunc<TResult> func)
 	{
 		TaskState taskState = new(AndroidJniHost.GetAndroidHost(), this, func);
-		return Task.Factory.StartNew(TaskState.Invoke<TResult>, taskState);
+		return Task.Factory.StartNew(TaskState.Invoke<TResult>, taskState, TaskCreationOptions.LongRunning);
 	}
 	/// <summary>
 	/// Creates a new JNI async context, invokes <paramref name="func"/> and returns its result.
@@ -300,7 +300,7 @@ public partial struct AsyncContextBuilder()
 		AndroidJniFunc<JReferenceObject?> func) where TResult : class, IJavaPeerable
 	{
 		TaskState taskState = new(AndroidJniHost.GetAndroidHost(), this, func);
-		return Task.Factory.StartNew(TaskState.InvokeJni<TResult>, taskState);
+		return Task.Factory.StartNew(TaskState.InvokeJni<TResult>, taskState, TaskCreationOptions.LongRunning);
 	}
 	/// <summary>
 	/// Creates a new JNI async context, invokes <paramref name="func"/> and returns its result.
@@ -313,7 +313,7 @@ public partial struct AsyncContextBuilder()
 	public Task<TResult> InvokeAsync<TState, TResult>(TState state, AndroidJniFunc<TState, TResult> func)
 	{
 		TaskState<TState> taskState = new(AndroidJniHost.GetAndroidHost(), this, func, state);
-		return Task.Factory.StartNew(TaskState.Invoke<TResult>, taskState);
+		return Task.Factory.StartNew(TaskState.Invoke<TResult>, taskState, TaskCreationOptions.LongRunning);
 	}
 	/// <summary>
 	/// Creates a new JNI context, invokes <paramref name="func"/> and returns its result.
@@ -328,7 +328,7 @@ public partial struct AsyncContextBuilder()
 		AndroidJniFunc<TState, JReferenceObject?> func) where TResult : class, IJavaPeerable
 	{
 		TaskState<TState> taskState = new(AndroidJniHost.GetAndroidHost(), this, func, state);
-		return Task.Factory.StartNew(TaskState.InvokeJni<TResult>, taskState);
+		return Task.Factory.StartNew(TaskState.InvokeJni<TResult>, taskState, TaskCreationOptions.LongRunning);
 	}
 	/// <summary>
 	/// Creates a new JNI async context and runs <paramref name="action"/>.
@@ -338,7 +338,7 @@ public partial struct AsyncContextBuilder()
 	public void Run(AndroidJniAction action, out Task task)
 	{
 		TaskState taskState = new(AndroidJniHost.GetAndroidHost(), this, action, true);
-		task = Task.Factory.StartNew(TaskState.Invoke, taskState);
+		task = Task.Factory.StartNew(TaskState.Invoke, taskState, TaskCreationOptions.LongRunning);
 	}
 	/// <summary>
 	/// Creates a new JNI async context and runs <paramref name="action"/>.
@@ -350,7 +350,7 @@ public partial struct AsyncContextBuilder()
 	public void Run<TState>(TState state, AndroidJniAction<TState> action, out Task task)
 	{
 		TaskState<TState> taskState = new(AndroidJniHost.GetAndroidHost(), this, action, state, true);
-		task = Task.Factory.StartNew(TaskState.Invoke, taskState);
+		task = Task.Factory.StartNew(TaskState.Invoke, taskState, TaskCreationOptions.LongRunning);
 	}
 	/// <summary>
 	/// Creates a new JNI async context and invokes <paramref name="action"/>.

@@ -233,6 +233,15 @@ jobs:
           Remove-Item -Recurse -Force "src/Intermediate"
           Remove-Item -Recurse -Force "src/SourceGenerator"
           if ($IsWindows) {
+            Remove-Item -Recurse -Force "C:\Android" -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force "C:\vcpkg" -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force "C:\Miniconda" -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force "C:\SeleniumWebDrivers" -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force "$env:WINDIR\Temp\*" -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force "$env:TEMP\*" -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force "$env:TMP\*" -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Temp\*" -ErrorAction SilentlyContinue
+          
             ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "compile"
 
             Remove-Item -Recurse -Force "$env:WINDIR\SoftwareDistribution\Download" -ErrorAction SilentlyContinue
