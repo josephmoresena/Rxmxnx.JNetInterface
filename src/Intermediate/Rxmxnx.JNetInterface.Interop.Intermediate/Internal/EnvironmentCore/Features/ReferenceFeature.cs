@@ -142,13 +142,14 @@ internal sealed partial class EnvironmentCore : IReferenceFeature
 		if (JLocalObject.FinalizerExecution && isRegistered && objects.IsFromLocalFrame(localRef))
 			// Required to avoid finalizer calls JNI when object is at local frame.
 			return false;
+		// Only registered references are unloaded and removed.
 		try
 		{
 			this.Unload(isRegistered, localRef);
 		}
 		finally
 		{
-			this.Remove(jLocal);
+			this.Remove(isRegistered, jLocal);
 			jLocal.ClearValue();
 		}
 		return !isClass;

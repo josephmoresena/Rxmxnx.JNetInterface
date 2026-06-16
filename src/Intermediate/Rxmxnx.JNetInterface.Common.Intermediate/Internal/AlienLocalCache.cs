@@ -92,6 +92,7 @@ internal abstract class AlienLocalCache : LocalCache, IDisposable
 	{
 		this.Clear();
 		if (disposing)
+			// Deletes non-alien local JNI references.
 			this.ClearCache(this.Environment, false);
 	}
 #if ANDROID
@@ -118,6 +119,7 @@ internal abstract class AlienLocalCache : LocalCache, IDisposable
 		this.Environment.ClassCache.Unload(this._classes);
 		this._aliens.Clear();
 		this._classes.Clear();
+		// At this point, any alien object becomes to an unregistered reference.
 	}
 
 	~AlienLocalCache() { this.Dispose(false); }

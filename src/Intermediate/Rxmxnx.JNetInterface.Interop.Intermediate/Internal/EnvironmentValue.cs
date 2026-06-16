@@ -64,8 +64,10 @@ internal readonly struct EnvironmentValue
 		JReferenceType result = this.Core.GetReferenceType(localRef);
 		if (result == JReferenceType.InvalidRefType)
 		{
-			if (jRefObj is JGlobalBase jGlobal) this.Core.Host.GlobalManager.Remove(jGlobal);
-			else this.Core.Remove(jRefObj as JLocalObject);
+			if (jRefObj is JGlobalBase jGlobal)
+				this.Core.Host.GlobalManager.Remove(jGlobal);
+			else
+				this.Core.Remove(jRefObj as JLocalObject);
 			jRefObj.ClearValue();
 		}
 		else if (this.Core.IsSame(jRefObj.As<JObjectLocalRef>(), default))
