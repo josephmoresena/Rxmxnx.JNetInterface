@@ -8,6 +8,7 @@ public partial struct AsyncContextBuilder
 	/// <param name="host">A <see cref="IVirtualMachineHost"/> instance.</param>
 	/// <param name="builder">A <see cref="AsyncContextBuilder"/> instance.</param>
 	/// <param name="call">A <see cref="Delegate"/> instance.</param>
+	/// <param name="useWeakGlobal">Indicates whether the async call should use weak-global JNI references.</param>
 	/// <param name="isDaemon">Indicates whether the current thread is a daemon.</param>
 #if !PACKAGE
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3881,
@@ -17,6 +18,7 @@ public partial struct AsyncContextBuilder
 		IVirtualMachineHost host,
 		AsyncContextBuilder builder,
 		Delegate call,
+		Boolean useWeakGlobal,
 		Boolean isDaemon = false) : IDisposable
 	{
 		/// <summary>
@@ -53,7 +55,7 @@ public partial struct AsyncContextBuilder
 		/// </summary>
 		private readonly Int32 _objectCount = builder._objects.Length;
 		/// <inheritdoc cref="AndroidJniContext.Objects"/>
-		private readonly JniObjectInfo[] _objects = TaskState.CreateObject(builder._objects);
+		private readonly JniObjectInfo[] _objects = TaskState.CreateObject(builder._objects, useWeakGlobal);
 		/// <inheritdoc cref="AndroidJniContext.Shorts"/>
 		private readonly Array? _shorts = builder._shorts;
 
@@ -87,8 +89,9 @@ public partial struct AsyncContextBuilder
 		/// Creates an array of <see cref="JniObjectReference"/> values.
 		/// </summary>
 		/// <param name="objects">A read-only span of <see cref="IJavaPeerable"/> objects.</param>
+		/// <param name="useWeakGlobal">Indicates whether the async call should use weak-global JNI references.</param>
 		/// <returns>An array of <see cref="JniObjectReference"/> values.</returns>
-		private static JniObjectInfo[] CreateObject(ReadOnlySpan<IJavaPeerable?> objects)
+		private static JniObjectInfo[] CreateObject(ReadOnlySpan<IJavaPeerable?> objects, Boolean useWeakGlobal)
 		{
 			if (objects.Length == 0) return [];
 			JniObjectInfo[] result = ArrayPool<JniObjectInfo>.Shared.Rent(objects.Length);
@@ -100,7 +103,9 @@ public partial struct AsyncContextBuilder
 					result[index] = default;
 					continue;
 				}
-				result[index] = new(obj.PeerReference.NewWeakGlobalRef(), obj.GetJniTypeName());
+				result[index] =
+					new(useWeakGlobal ? obj.PeerReference.NewWeakGlobalRef() : obj.PeerReference.NewGlobalRef(),
+					    obj.GetJniTypeName());
 			}
 			return result;
 		}
@@ -128,13 +133,15 @@ public partial struct AsyncContextBuilder
 	/// <param name="builder">A <see cref="AsyncContextBuilder"/> instance.</param>
 	/// <param name="call">A <see cref="Delegate"/> instance.</param>
 	/// <param name="state">A state instance object.</param>
+	/// <param name="useWeakGlobal">Indicates whether the async call should use weak-global JNI references.</param>
 	/// <param name="isDaemon">Indicates whether the current thread is a daemon.</param>
 	private sealed partial class TaskState<TState>(
 		IVirtualMachineHost host,
 		AsyncContextBuilder builder,
 		Delegate call,
 		TState state,
-		Boolean isDaemon = false) : TaskState(host, builder, call, isDaemon)
+		Boolean useWeakGlobal,
+		Boolean isDaemon = false) : TaskState(host, builder, call, useWeakGlobal, isDaemon)
 	{
 		/// <summary>
 		/// Object state.

@@ -146,18 +146,6 @@ internal sealed partial class EnvironmentCore
 		              this._objects.Name);
 	}
 	/// <summary>
-	/// Removes <paramref name="jLocal"/>.
-	/// </summary>
-	/// <param name="isRegistered">
-	/// Indicates whether <paramref name="jLocal"/> is registered in current thread.
-	/// </param>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	private void Remove(Boolean isRegistered, JLocalObject? jLocal)
-	{
-		if (!isRegistered) return;
-		this.Remove(jLocal);
-	}
-	/// <summary>
 	/// Unloads <paramref name="weakRef"/>.
 	/// </summary>
 	/// <param name="weakRef">A <see cref="JWeakRef"/> reference to unload.</param>
@@ -176,6 +164,18 @@ internal sealed partial class EnvironmentCore
 		if (this._env.IsAttached && this.Host.IsRunning)
 			this.DeleteGlobalRef(globalRef);
 		JTrace.UnloadGlobal(this._env.IsAttached, this.Host.IsRunning, globalRef);
+	}
+	/// <summary>
+	/// Removes <paramref name="jLocal"/>.
+	/// </summary>
+	/// <param name="isRegistered">
+	/// Indicates whether <paramref name="jLocal"/> is registered in current thread.
+	/// </param>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	private void Remove(Boolean isRegistered, JLocalObject? jLocal)
+	{
+		if (!isRegistered) return;
+		this.Remove(jLocal);
 	}
 	/// <summary>
 	/// Creates a new local reference for <paramref name="objectRef"/>.
