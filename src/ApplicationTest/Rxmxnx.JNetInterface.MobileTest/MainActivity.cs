@@ -45,7 +45,7 @@ public class MainActivity : Activity, View.IOnClickListener
 		if (v is not TextView text) return;
 		this._count++;
 #if !RELEASE_PACKAGE
-		text.Text = $"{Environment.NewLine}Package: {JObject.CompilationFramework}" +
+		text.Text = $"Package: {JObject.CompilationFramework}{Environment.NewLine}" +
 			MobileMethods.GetRuntimeInformation(DateTime.Now, MainActivity.load, this._count);
 #else
 		text.Text = ExportedMethods.GetRuntimeInformation(DateTime.Now, MainActivity.load, this._count);

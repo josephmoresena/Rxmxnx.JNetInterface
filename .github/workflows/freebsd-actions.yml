@@ -113,10 +113,11 @@ jobs:
           cd $GITHUB_WORKSPACE;
           ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "run";
 
-      - name: Remove Log Files
+      - name: Remove Jar File
         if: inputs.build_artifacts == true
         run: |
           cd $GITHUB_WORKSPACE;
+          rm ./artifacts-java/*.jar;
           rm -rf ./artifacts-java/native
       - name: Cache Java FreeBSD Libraries
         if: inputs.build_artifacts == true
