@@ -151,5 +151,11 @@
             <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
             <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="1638400"/>
         </type>
+        <!-- Runtime Feature J26 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J26"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="1703936"/>
+        </type>
     </assembly>
 </linker>

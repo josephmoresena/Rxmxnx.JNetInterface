@@ -23,6 +23,69 @@ applications. For .NET for Android (formerly Xamarin Android) projects use `Rxmx
 **Note:** Some features may not be available in [Visual Basic .NET](https://github.com/dotnet/vblang/issues/625) and may
 require additional configuration in [F#](https://github.com/dotnet/fsharp/issues/17605).
 
+## Use Case Roadmap
+
+The `Rxmxnx.JNetInterface` ecosystem is built around a shared abstraction layer (`Rxmxnx.JNetInterface.Core`) with
+multiple runtime-specific implementations. Choose the package that best matches your application model and target
+platform.
+
+| Scenario                                                                                              | Package                                       | Typical use                                                                                                                                                                                                                                                                                               |
+|-------------------------------------------------------------------------------------------------------|-----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Build against high-level Java and JNI abstractions without depending on a specific JVM implementation | `Rxmxnx.JNetInterface.Core`                   | Develop runtime-independent libraries, shared components, source generators, analyzers, or tooling using the common object model, metadata system, and JNI abstractions.                                                                                                                                  |
+| Unit-test code that depends on JNI abstractions without requiring a JVM                               | `Rxmxnx.JNetInterface.Core`                   | Use `EnvironmentProxy`, `ThreadProxy`, and `VirtualMachineProxy` to mock `IEnvironment`, `IThread`, and `IVirtualMachine` during unit testing.                                                                                                                                                            |
+| Locate, load, create, or control Java Virtual Machines                                                | `Rxmxnx.JNetInterface`                        | Manage the JVM runtime library and interact with Java Virtual Machines through the JNI Invocation API and the JNI Native Interface.                                                                                                                                                                       |
+| Build desktop applications, services, NativeAOT executables, or JNI native libraries                  | `Rxmxnx.JNetInterface`                        | Embed a JVM, invoke Java code, or implement Java native methods using a direct JNI implementation.                                                                                                                                                                                                        |
+| Build JNI native libraries for Android                                                                | `Rxmxnx.JNetInterface`                        | Produce NativeAOT `linux-bionic` shared libraries (`.so`) implementing Java native methods for Android applications.                                                                                                                                                                                      |
+| Develop applications or managed libraries for .NET for Android                                        | `Rxmxnx.JNetInterface.Mobile`                 | Integrate with the Android runtime through `java.interop` while preserving the programming model defined by `Rxmxnx.JNetInterface.Core`.                                                                                                                                                                  |
+| Share code across desktop JVM hosts and Android                                                       | `Rxmxnx.JNetInterface.Core` + runtime package | Reference `Rxmxnx.JNetInterface.Core` from shared projects and select either `Rxmxnx.JNetInterface` or `Rxmxnx.JNetInterface.Mobile` as the runtime implementation.                                                                                                                                       |
+| Minimize runtime reflection                                                                           | All packages                                  | `Rxmxnx.JNetInterface.Core` only uses reflection for optional jagged-array metadata generation. `Rxmxnx.JNetInterface` does not use reflection. `Rxmxnx.JNetInterface.Mobile` does not use reflection on .NET 8.0 or later. The .NET 7.0 package requires reflection to interoperate with `java.interop`. |
+
+### Package relationship
+
+```text
+                            Your application
+                                   │
+                                   ▼
+                 Rxmxnx.JNetInterface.Core
+      (high-level API, object model, and JNI abstractions)
+                       /                         \
+                      /                           \
+                     ▼                             ▼
+        Rxmxnx.JNetInterface         Rxmxnx.JNetInterface.Mobile
+    (direct JNI implementation)        (java.interop implementation)
+```
+
+`Rxmxnx.JNetInterface.Core` defines the common object model, metadata system, and runtime abstractions used throughout
+the ecosystem. It also provides proxy implementations for `IEnvironment`, `IThread`, and `IVirtualMachine`, enabling
+unit testing without a real JNI environment.
+
+Both `Rxmxnx.JNetInterface` and `Rxmxnx.JNetInterface.Mobile` build upon these abstractions by providing
+platform-specific runtime implementations.
+
+### Runtime implementations
+
+| Capability                                      | `Rxmxnx.JNetInterface`       | `Rxmxnx.JNetInterface.Mobile`                                 |
+|-------------------------------------------------|------------------------------|---------------------------------------------------------------|
+| **JNI implementation**                          | Direct JNI                   | Direct JNI with `java.interop` interoperability               |
+| **JVM runtime library management**              | ✔                            | ✘                                                             |
+| **JNI Invocation API**                          | ✔                            | ✘                                                             |
+| **JNI Native Interface**                        | ✔                            | ✔                                                             |
+| **Desktop JVM support**                         | ✔                            | ✘                                                             |
+| **Android native components**                   | ✔ (`linux-bionic` NativeAOT) | ✘                                                             |
+| **.NET for Android applications and libraries** | ✘                            | ✔                                                             |
+| **Supported .NET runtimes**                     | CoreCLR, NativeAOT           | Mono, MonoAOT, NativeAOT, and other .NET for Android runtimes |
+
+A simple decision rule:
+
+* **Use `Rxmxnx.JNetInterface.Core`** if you need the high-level API, Java object model, metadata system, or mockable
+  JNI abstractions without requiring a concrete JNI runtime.
+* **Use `Rxmxnx.JNetInterface`** if your application needs to locate or load the JVM runtime library, create or control
+  Java Virtual Machines, invoke Java code through JNI, implement JNI native libraries, or produce NativeAOT executables.
+  This is also the recommended package for building Android JNI native libraries (`linux-bionic`).
+* **Use `Rxmxnx.JNetInterface.Mobile`** if your application or managed library targets .NET for Android and should
+  integrate with the Android runtime through `java.interop`. Use `Rxmxnx.JNetInterface` instead when producing native
+  JNI libraries for Android.
+
 ---
 
 # Getting Started
@@ -119,6 +182,7 @@ types when declaring methods, function pointers, or delegates.
 - [Java Error Handling](docs/error-handling.md)
 - [Invocation API, JVirtualMachine and JEnvironment classes](docs/jni-classes.md)
 - [.NET Android interop](docs/mobile-runtime.md)
+- [Feature Switches](docs/feature-switches.md)
 
 ## Disclaimer:
 

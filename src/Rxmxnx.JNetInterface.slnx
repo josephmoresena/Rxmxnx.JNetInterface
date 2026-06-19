@@ -48,6 +48,7 @@
         <File Path="..\docs\data-types-metadata.md"/>
         <File Path="..\docs\direct-buffers.md"/>
         <File Path="..\docs\error-handling.md"/>
+        <File Path="..\docs\feature-switches.md"/>
         <File Path="..\docs\jni-accessing.md"/>
         <File Path="..\docs\jni-classes.md"/>
         <File Path="..\docs\jni-interfaces.md"/>

@@ -225,5 +225,11 @@
             <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
             <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="36"/>
         </type>
+        <!-- Runtime Feature Android17 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Android17"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="37"/>
+        </type>
     </assembly>
 </linker>
