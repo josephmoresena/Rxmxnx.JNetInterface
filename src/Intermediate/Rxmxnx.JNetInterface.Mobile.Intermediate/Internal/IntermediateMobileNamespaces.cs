@@ -39,6 +39,7 @@ namespace Java.Interop
         public IntPtr Handle => IntPtr.Zero;
         public Boolean IsValid => false;
         public JniObjectReference NewWeakGlobalRef() => default;
+        public JniObjectReference NewGlobalRef() => default;
         public JniObjectReference(IntPtr handle, JniObjectReferenceType type = JniObjectReferenceType.Invalid) { }
         public override Boolean Equals(Object? o) => false;
         public override Int32 GetHashCode() => this.Handle.GetHashCode();
