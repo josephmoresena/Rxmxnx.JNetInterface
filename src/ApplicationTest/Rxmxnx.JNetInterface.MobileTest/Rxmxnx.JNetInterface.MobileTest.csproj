@@ -19,6 +19,7 @@
         <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Release' And '$(NativeAOT)' == 'True'">
+        <EnablePreviewFeatures>true</EnablePreviewFeatures>
         <PublishAot>true</PublishAot>
         <PublishAotUsingRuntimePack>true</PublishAotUsingRuntimePack>
         <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
