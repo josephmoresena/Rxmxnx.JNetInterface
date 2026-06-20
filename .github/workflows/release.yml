@@ -8,9 +8,7 @@ permissions:
   contents: write
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    
     env:
       SNK_BASE64: ${{ secrets.SN_KEY }}
       PUBLIC_KEY: ${{ secrets.SN_PK }}
@@ -114,6 +112,7 @@ jobs:
     runs-on: ubuntu-latest
     if: always()
     steps:
+      - uses: actions/checkout@v5
       - name: Restore NuGet Package
         uses: actions/cache/restore@v5
         with:
@@ -127,13 +126,12 @@ jobs:
         with:
           path: |
             ./artifacts-java
-            ./ZipAndClean.ps1
           key: internal-freebsd-${{ github.run_id }}
           fail-on-cache-miss: true
           enableCrossOsArchive: true
       - name: Java FreeBSD arm64 Libraries
         uses: actions/cache/restore@v5
-        if: needs.freebsd-arm64-actions.result == 'success' && needs.freebsd-actions.result == 'success'
+        if: needs.freebsd-arm64-actions.result == 'success'
         with:
           path: ./artifacts-java
           key: internal-freebsd-arm64-${{ github.run_id }}
@@ -141,7 +139,7 @@ jobs:
           enableCrossOsArchive: true
       - name: Java MacOS Libraries
         uses: actions/cache/restore@v5
-        if: needs.cross-actions.result == 'success' && needs.freebsd-actions.result == 'success'
+        if: needs.cross-actions.result == 'success'
         with:
           path: ./artifacts-java
           key: internal-macOS-${{ github.run_id }}
@@ -149,7 +147,7 @@ jobs:
           enableCrossOsArchive: true
       - name: Java Linux Libraries
         uses: actions/cache/restore@v5
-        if: needs.cross-actions.result == 'success' && needs.freebsd-actions.result == 'success'
+        if: needs.cross-actions.result == 'success'
         with:
           path: ./artifacts-java
           key: internal-Linux-${{ github.run_id }}
@@ -157,7 +155,7 @@ jobs:
           enableCrossOsArchive: true
       - name: Java Windows Libraries
         uses: actions/cache/restore@v5
-        if: needs.cross-actions.result == 'success' && needs.freebsd-actions.result == 'success'
+        if: needs.cross-actions.result == 'success'
         with:
           path: ./artifacts-java
           key: internal-Windows-${{ github.run_id }}
