@@ -48,7 +48,7 @@ public class MainActivity : Activity, View.IOnClickListener
 		text.Text = $"Package: {JObject.CompilationFramework}{Environment.NewLine}" +
 			MobileMethods.GetRuntimeInformation(DateTime.Now, MainActivity.load, this._count);
 #else
-		text.Text = ExportedMethods.GetRuntimeInformation(DateTime.Now, MainActivity.load, this._count);
+		text.Text = MobileMethods.GetRuntimeInformation(DateTime.Now, MainActivity.load, this._count);
 #endif
 		if (!this._backgroundThread.IsCompleted) return;
 		this._backgroundThread = this.ToastBackground();
