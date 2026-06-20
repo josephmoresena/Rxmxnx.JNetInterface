@@ -1,0 +1,445 @@
+name: Cross Actions
+on:
+  workflow_call:
+    inputs:
+      run_tests:
+        required: false
+        default: false
+        type: boolean
+      build_artifacts:
+        required: false
+        default: false
+        type: boolean
+      package_version:
+        required: false
+        default: ''
+        type: string
+
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ windows-latest, ubuntu-latest, macos-latest ]
+    env:
+      SHOW_DIAGNOSTICS: ${{ inputs.run_tests }}
+      JNETINTERFACE_ONLY_NATIVE_TEST: ${{ inputs.package_version != '' }}
+      JNETINTERFACE_JNI_CHECK: false
+      PackageVersion: ${{ inputs.package_version }}
+      NoAndroid: "True"
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 1
+      - name: Restore Internal NuGet Package
+        uses: actions/cache/restore@v5
+        if: inputs.build_artifacts == true
+        with:
+          path: ./package/Nuget
+          key: internal-nuget-${{ github.run_id }}
+          fail-on-cache-miss: true
+          enableCrossOsArchive: true
+      - name: APT deb822 sources
+        if: runner.os == 'Linux'
+        run: |
+          if [[ $ImageOS == "ubuntu24" ]]; then
+           sudo bash -c 'cat > /etc/apt/sources.list.d/ubuntu.sources <<EOF
+          Types: deb
+          URIs: https://archive.ubuntu.com/ubuntu/
+          Suites: noble
+          Components: main restricted universe
+          Architectures: amd64
+          
+          Types: deb
+          URIs: https://security.ubuntu.com/ubuntu/
+          Suites: noble-security
+          Components: main restricted universe
+          Architectures: amd64
+          
+          Types: deb
+          URIs: https://archive.ubuntu.com/ubuntu/
+          Suites: noble-updates
+          Components: main restricted universe
+          Architectures: amd64
+          
+          Types: deb
+          URIs: https://azure.ports.ubuntu.com/ubuntu-ports/
+          Suites: noble
+          Components: main restricted multiverse universe
+          Architectures: arm64
+          
+          Types: deb
+          URIs: https://azure.ports.ubuntu.com/ubuntu-ports/
+          Suites: noble-updates
+          Components: main restricted multiverse universe
+          Architectures: arm64
+          
+          Types: deb
+          URIs: https://azure.ports.ubuntu.com/ubuntu-ports/
+          Suites: noble-updates
+          Components: main restricted multiverse universe
+          Architectures: armhf
+          EOF'
+          fi
+      - name: Setup NativeAOT pre-requisites (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo dpkg --add-architecture arm64
+          sudo dpkg --add-architecture armhf
+          
+          sudo bash -c 'cat > /etc/apt/sources.list.d/arm64.list <<EOF
+          deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports/ noble main restricted
+          deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted
+          deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports noble-security main restricted universe multiverse
+          deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports/ noble-backports main restricted universe multiverse
+          EOF'
+          
+          sudo bash -c 'cat > /etc/apt/sources.list.d/armhf.list <<EOF
+          deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports/ noble main restricted
+          deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted
+          deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports noble-security main restricted universe multiverse
+          deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports/ noble-backports main restricted universe multiverse
+          EOF'
+          
+          sudo sed -i -e 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
+          sudo sed -i -e 's/deb mirror/deb [arch=amd64] mirror/g' /etc/apt/sources.list
+          
+          sudo apt update 
+          sudo apt-get install coreutils clang llvm zlib1g-dev libkrb5-dev libssl-dev \
+            qemu-user qemu-user-static binfmt-support libicu74:arm64 libicu74:armhf \
+            libstdc++-14-dev:arm64 libstdc++-14-dev:arm64 \
+            binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu zlib1g-dev:arm64 libssl-dev:arm64 \
+            binutils-arm-linux-gnueabihf gcc-arm-linux-gnueabihf zlib1g-dev:armhf libssl-dev:armhf \
+            --assume-yes
+
+          sudo mkdir -p /usr/share/dotnet
+          sudo chown -R $(whoami):$(whoami) /usr/share/dotnet
+
+          sudo apt-get clean
+          sudo apt-get autoclean
+          sudo apt-get autoremove -y
+          sudo rm -rf /tmp/*
+          sudo rm -rf /var/tmp/*
+          
+          sudo rm -rf /usr/local/lib/android/sdk
+          
+          df -h
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        if: runner.os != 'Windows' || inputs.run_tests != true
+        with:
+          dotnet-version: |
+            7.0.x
+            8.0.x
+            9.0.x
+            10.0.x
+      - name: Setup .NET (Windows)
+        if: runner.os == 'Windows' && inputs.run_tests == true
+        shell: pwsh
+        run: |
+          $versions = 7..10
+          $archs = @("x86", "x64")
+          foreach ($v in $versions) {
+            foreach ($a in $archs) {
+              winget install "Microsoft.DotNet.SDK.$v" `
+              --architecture $a `
+              --silent `
+              --force `
+              --disable-interactivity `
+              --accept-source-agreements `
+              --accept-package-agreements
+            }
+          }
+          dotnet workload update
+
+      - name: Remove Mobile
+        if: inputs.run_tests == true
+        shell: pwsh
+        run: |
+          $emptyProject = '<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" />'
+          $projects = Get-ChildItem -Path "src" -Recurse -Filter "*.Mobile.*proj"
+          foreach ($project in $projects)
+          {
+            Write-Host "Removing project from solution: $($project.FullName)"
+            dotnet sln src remove $project.FullName
+          
+            Write-Host "Removing directory: $($project.Directory.FullName)"
+            Remove-Item $project.Directory.FullName -Recurse -Force
+          }
+          Get-ChildItem -Path "src" -Recurse -Filter "*.Mobile.*.props" |
+            ForEach-Object {
+              Write-Host "Neutralizing $($_.FullName)"
+              Set-Content $_.FullName $emptyProject -Encoding UTF8
+            }
+      - name: Remove ApplicationTest
+        if: inputs.run_tests == true
+        shell: pwsh
+        run: |
+          Get-ChildItem -Path "src/ApplicationTest" -Recurse -Include "*.*proj" |
+            ForEach-Object {
+              Write-Host "Removing project $($_.FullName)"
+              dotnet sln src remove $_.FullName
+            }
+      - name: Build tests
+        if: inputs.run_tests == true
+        run: |
+          dotnet restore src --ignore-failed-sources
+          dotnet restore src/Test/Proxies/Native/JvmProxy.NativeProxy.slnx
+          dotnet build src /p:MultipleFrameworkTest=true --no-restore --configuration Release --disable-build-servers /nr:false /maxcpucount:1
+      - name: Run x86 tests
+        if: inputs.run_tests == true && runner.os == 'Windows'
+        run: |
+          dotnet test src /p:MultipleFrameworkTest=true --no-build --no-restore --configuration Release  --logger "console;verbosity=detailed" --settings src\Test\x86.runsettings
+      - name: Run tests
+        if: inputs.run_tests == true
+        run: |
+          dotnet test src /p:MultipleFrameworkTest=true --no-build --no-restore --configuration Release  --logger "console;verbosity=detailed"
+      - name: Remove old .NET Versions
+        if: inputs.run_tests == true && runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $versions = 7..10
+          $latestVersion = ($versions | Measure-Object -Maximum).Maximum
+          foreach ($v in $versions) {
+            if ($v -eq $latestVersion) {
+                continue
+            }
+            winget uninstall "Microsoft.DotNet.SDK.$v" `
+                --force `
+                --purge `
+                --silent `
+                --all-versions `
+                --disable-interactivity
+          }
+      - name: Publish launcher
+        working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest
+        run: dotnet publish
+      - name: Clean Up Extra
+        if: inputs.build_artifacts == true && runner.os != 'Windows'
+        shell: bash
+        run: |
+          sudo rm -rf /tmp/*
+          sudo rm -rf /var/tmp/*
+          sudo rm -rf ~/.nuget/packages
+          
+          df -h
+      - name: Run launcher (compile)
+        if: inputs.build_artifacts == true
+        shell: pwsh
+        run: |
+          Remove-Item -Recurse -Force "src/Test"
+          Remove-Item -Recurse -Force "src/Intermediate"
+          Remove-Item -Recurse -Force "src/SourceGenerator"
+          if ($IsWindows) {
+            Remove-Item -Recurse -Force "C:\Android" -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force "C:\vcpkg" -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force "C:\Miniconda" -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force "C:\SeleniumWebDrivers" -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force "$env:WINDIR\Temp\*" -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force "$env:TEMP\*" -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force "$env:TMP\*" -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Temp\*" -ErrorAction SilentlyContinue
+          
+            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "compile"
+
+            Remove-Item -Recurse -Force "$env:WINDIR\SoftwareDistribution\Download" -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force "$env:WINDIR\Prefetch" -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force "C:\Android\android-sdk" -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force "$env:WINDIR\Temp\*" -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force "$env:TEMP\*" -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force "$env:TMP\*" -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Temp\*" -ErrorAction SilentlyContinue
+
+          } else {
+            chmod +x Rxmxnx.JNetInterface.LauncherTest
+            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "compile"
+          }
+      - name: Clean Up
+        if: inputs.build_artifacts == true
+        shell: pwsh
+        run: |
+          Get-ChildItem -Recurse -Include *.csproj,*.fsproj,*.vbproj | ForEach-Object {
+            $projDir = Split-Path $_.FullName
+            "bin","obj" | ForEach-Object {
+              $path = Join-Path $projDir $_
+              if (Test-Path $path) {
+                try {
+                  Remove-Item -Recurse -Force $path -ErrorAction Stop
+                } catch {
+                  Write-Host "$($_.Exception.Message)"
+                }
+              }
+            }
+          }
+
+      - name: Create Native Artifact Logs
+        if: inputs.build_artifacts == true && inputs.package_version == ''
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ runner.os }}-Artifact-Logs
+          path: |
+            ./artifacts/native/*
+            ./artifacts-java/native/*
+      - name: Create Release Logs Assets
+        if: inputs.build_artifacts == true && inputs.package_version != ''
+        shell: pwsh
+        run: |
+          $logPatterns = @(
+            "./artifacts/native/*"
+            "./artifacts-java/native/*"
+          )
+          ./ZipAndClean.ps1 -ZipName "${{ runner.os }}-Assets-Logs.zip" -Patterns $logPatterns
+      - name: Remove Native Logs
+        if: inputs.build_artifacts == true
+        shell: pwsh
+        run: |
+          if (Test-Path ./artifacts/native) {
+              Remove-Item -Recurse -Force ./artifacts/native/* -ErrorAction SilentlyContinue
+          }
+          if (Test-Path ./artifacts-java/native) {
+              Remove-Item -Recurse -Force ./artifacts-java/native/* -ErrorAction SilentlyContinue
+          }
+
+      - name: Run launcher (run - Java Archive)
+        shell: pwsh
+        run: |
+          if ($IsWindows) {
+            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "jar"
+          } else {
+            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "jar"
+          }
+
+      - name: Remove Jar File
+        if: inputs.build_artifacts == true && runner.os != 'Windows'
+        run: rm ./artifacts-java/*.jar
+      - name: Cache Java Libraries
+        if: inputs.build_artifacts == true
+        uses: actions/cache/save@v5
+        with:
+          path: ./artifacts-java
+          key: internal-${{ runner.os }}-${{ github.run_id }}
+          enableCrossOsArchive: true
+      - name: Remove Java Libraries File
+        if: inputs.build_artifacts == true
+        shell: pwsh
+        run: Remove-Item -Recurse -Force artifacts-java -ErrorAction SilentlyContinue
+
+      - name: Run launcher (run - Native AOT)
+        if: inputs.build_artifacts == true
+        shell: pwsh
+        run: |
+          if ($IsWindows) {
+            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "naot"
+          } else {
+            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "naot"
+          }
+      - name: Run launcher (run - Reflection Free Mode)
+        if: inputs.build_artifacts == true
+        shell: pwsh
+        run: |
+          if ($IsWindows) {
+            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "rfm"
+          } else {
+            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "rfm"
+          }
+      - name: Run launcher (run - Ready-To-Run)
+        if: inputs.build_artifacts == true
+        shell: pwsh
+        run: |
+          if ($IsWindows) {
+            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "r2r"
+          } else {
+            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "r2r"
+          }
+      - name: Run launcher (run - Full Framework)
+        if: inputs.build_artifacts == true
+        shell: pwsh
+        run: |
+          if ($IsWindows) {
+            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "net"
+          } else {
+            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "net"
+          }
+
+      - name: Clean up
+        if: inputs.build_artifacts == true
+        shell: pwsh
+        run: |
+          Get-ChildItem -Recurse -Include *.csproj,*.fsproj,*.vbproj | ForEach-Object {
+              $projDir = Split-Path $_.FullName
+              "bin","obj" | ForEach-Object {
+              $path = Join-Path $projDir $_
+              if (Test-Path $path) {
+                try {
+                  Remove-Item -Recurse -Force $path -ErrorAction Stop
+                } catch {
+                  Write-Host "$($_.Exception.Message)"
+                }
+              }
+            }
+          }
+      - name: Clean Up Extra - Windows
+        if: inputs.build_artifacts == true && runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Remove-Item -Recurse -Force "$env:WINDIR\Temp\*" -ErrorAction SilentlyContinue
+          Remove-Item -Recurse -Force "$env:TEMP\*" -ErrorAction SilentlyContinue
+          Remove-Item -Recurse -Force "$env:TMP\*" -ErrorAction SilentlyContinue
+          Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Temp\*" -ErrorAction SilentlyContinue
+          Remove-Item -Recurse -Force "$env:USERPROFILE\.nuget\packages" -ErrorAction SilentlyContinue
+      - name: Clean Up Extra
+        if: inputs.build_artifacts == true && runner.os != 'Windows'
+        shell: bash
+        run: |
+          sudo rm -rf /tmp/*
+          sudo rm -rf /var/tmp/*
+          sudo rm -rf ~/.nuget/packages
+
+          df -h
+
+      - name: Create Native Artifact
+        if: inputs.build_artifacts == true && inputs.package_version == ''
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ runner.os }}-Artifact
+          path: |
+            ./artifacts/*.class
+            ./artifacts/*NAOT*
+            ./artifacts/*RFM*
+      - name: Create Release Assets
+        if: inputs.build_artifacts == true && inputs.package_version != ''
+        shell: pwsh
+        run: |
+          $binPatterns = @(
+            "./artifacts/*.class",
+            "./artifacts/*x64*NAOT*",
+            "./artifacts/*x64*RFM*"
+          )
+          ./ZipAndClean.ps1 -ZipName "${{ runner.os }}-x64-Assets.zip" -Patterns $binPatterns
+          $binPatterns = @(
+            "./artifacts/*.class",
+            "./artifacts/*arm64*NAOT*",
+            "./artifacts/*arm64*RFM*"
+          )
+          ./ZipAndClean.ps1 -ZipName "${{ runner.os }}-arm64-Assets.zip" -Patterns $binPatterns
+          $binPatterns = @(
+            "./artifacts/*.class",
+            "./artifacts/*x86*NAOT*",
+            "./artifacts/*x86*RFM*"
+          )
+          ./ZipAndClean.ps1 -ZipName "${{ runner.os }}-x86-Assets.zip" -Patterns $binPatterns
+          $binPatterns = @(
+            "./artifacts/*.class",
+            "./artifacts/*arm*NAOT*",
+            "./artifacts/*arm*RFM*"
+          )
+          ./ZipAndClean.ps1 -ZipName "${{ runner.os }}-arm-Assets.zip" -Patterns $binPatterns
+      - name: Upload Release Assets
+        if: inputs.build_artifacts == true && inputs.package_version != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          gh release upload ${{ github.ref_name }} ./*-Assets*.zip --clobber

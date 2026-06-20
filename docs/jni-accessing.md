@@ -1,22 +1,22 @@
 # Java Member Handling
 
 JNI provides access to Java class members, including methods and fields (both instance and static).  
-`Rxmxnx.JNetInterface` simplifies this interaction through `JAccessibleObjectDefinition` instances.
+`Rxmxnx.JNetInterface.Core` simplifies this interaction through `JAccessibleObjectDefinition` instances.
 
 Accessible definitions are identified by their name and descriptor. The hash of a definition is derived from the UTF-16
 buffer storing the UTF-8 sequence containing these two elements.
 
 ## Accessing Java Fields
 
-JNI allows reading (`get`) and writing (`set`) Java fields. `Rxmxnx.JNetInterface` provides this functionality through
-`JFieldDefinition` instances.
+JNI allows reading (`get`) and writing (`set`) Java fields. `Rxmxnx.JNetInterface.Core` provides this functionality
+through `JFieldDefinition` instances.
 
 ![FieldDefinitionHierarchy](https://github.com/user-attachments/assets/691a60f9-091a-4752-8813-b2c84576bc0f)
 
 ##### Notes
 
 - `JFieldDefinition<..>` defines a Java field for a generic `IDataType<..>`, while `JNonTypedFieldDefinition` defines
-  fields for object types not mapped in `Rxmxnx.JNetInterface`.
+  fields for object types not mapped in the runtime `Rxmxnx.JNetInterface` implementation.
 - `JNonTypedFieldDefinition` cannot be used for primitive fields. Instead, `JFieldDefinition<..>` must be used.
 - The API of `JNonTypedFieldDefinition` is identical to that of `JFieldDefinition<JLocalObject>`.
 
@@ -42,7 +42,7 @@ frame.
 ## Accessing Java Calls
 
 JNI allows access to both instance and static methods in Java. Functions return a value, while constructors initialize
-new instances. `Rxmxnx.JNetInterface` provides this functionality through `JCallDefinition` instances.
+new instances. `Rxmxnx.JNetInterface.Core` provides this functionality through `JCallDefinition` instances.
 
 ![CallDefinitionHierarchy](https://github.com/user-attachments/assets/835e54d4-f2c3-4d8e-a9df-cb1aeed00d49)
 
@@ -208,6 +208,10 @@ require [JNI naming](jni-classes.md#naming-conventions).
 - Delegates persist in memory until the native implementation is replaced or removed.
 - Delegates
   use [marshalling](https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.marshal.getfunctionpointerfordelegate).
+- Although this API can be used through `Rxmxnx.JNetInterface.Mobile`, it is important to note that `AndroidJniContext`
+  instances can only be created from threads managed by java.interop.
+- When using `Rxmxnx.JNetInterface.Mobile`, a cached `IVirtualMachine` can be used to obtain an `IEnvironment`
+  without an `AndroidJniContext`, but JNI references must first be registered with `Java.Interop`.
 
 ### `JNativeCallEntry` Properties
 

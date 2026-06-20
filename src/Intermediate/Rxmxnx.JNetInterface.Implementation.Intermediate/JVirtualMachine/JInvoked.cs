@@ -31,7 +31,7 @@ public partial class JVirtualMachine
 		/// Constructor.
 		/// </summary>
 		/// <param name="vm">Original vm instance.</param>
-		public Invoked(JVirtualMachine vm) : base(vm._cache)
+		public Invoked(JVirtualMachine vm) : base(vm._core)
 		{
 			Invoked? invoked = vm as Invoked;
 			this.IsDisposable = invoked is not null;
@@ -43,11 +43,11 @@ public partial class JVirtualMachine
 		{
 			if (!this.IsDisposable || this._isDisposed.Value) return;
 			this._isDisposed.Value = true;
-			this._cache.ClearCache();
+			this._core.ClearCache();
 
-			JResult result = this._cache.GetInvokeInterface().DestroyVirtualMachine(this._cache.Reference);
+			JResult result = this._core.GetInvokeInterface().DestroyVirtualMachine(this._core.Reference);
 			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
-			JVirtualMachine.RemoveVirtualMachine(this._cache.Reference);
+			JVirtualMachine.RemoveVirtualMachine(this._core.Reference);
 		}
 	}
 }

@@ -49,7 +49,7 @@ public sealed class DefineClassTests
 				return methodId.GetValueOrDefault();
 			});
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(_ =>
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(_ =>
 			{
 				exceptionOccurred.Value = default;
 				return classNameRef.Value;
@@ -65,7 +65,7 @@ public sealed class DefineClassTests
 				return namePtr;
 			});
 			proxyEnv.CallObjectMethod(throwableRef.Value, proxyEnv.VirtualMachine.ThrowableGetMessageMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(_ =>
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(_ =>
 			{
 				exceptionOccurred.Value = default;
 				return messageRef.Value;

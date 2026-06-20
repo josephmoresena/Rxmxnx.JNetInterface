@@ -20,7 +20,7 @@ public class JniException : Exception
 		=> this.Result = result;
 
 	/// <summary>
-	/// Defines an explicit conversion of a given <see cref="JResult"/> to
+	/// Defines an implicit conversion of a given <see cref="JResult"/> to
 	/// <see cref="JniException"/>.
 	/// </summary>
 	/// <param name="result">A <see cref="JniException"/> to implicitly convert.</param>

@@ -338,6 +338,7 @@ public sealed class PrimitiveBufferTests
 		Assert.Equal(PrimitiveBufferTests.classSignatures[typeof(TBuffer)], typeMetadata.Signature);
 		Assert.Equal(PrimitiveBufferTests.arraySignatures[typeof(TBuffer)], typeMetadata.ArraySignature);
 		Assert.Equal(PrimitiveBufferTests.hashes[typeof(TBuffer)].ToString(), typeMetadata.Hash);
+		Assert.Equal(typeof(TBuffer) != typeof(JDirectByteBufferObject) ? 0 : 3, typeMetadata.AndroidApiLevel);
 		Assert.IsType<JFunctionDefinition<TBuffer>.Parameterless>(
 			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFunctionDefinition<TBuffer>>(

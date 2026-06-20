@@ -39,6 +39,10 @@ public class JWindowObject : JContainerObject, IClassType<JWindowObject>
 		TypeMetadataBuilder<JContainerObject>.Create<JWindowObject>("java/awt/Window"u8).Build();
 
 	static JClassTypeMetadata<JWindowObject> IClassType<JWindowObject>.Metadata => JWindowObject.typeMetadata;
+#if !NET8_0_OR_GREATER
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static Int32 IDataType.AndroidApiLevel => -1;
+#endif
 
 	protected JWindowObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JWindowObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

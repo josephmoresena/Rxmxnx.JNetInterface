@@ -7,8 +7,6 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 	[ThreadStatic]
 	private static Int32 jniVersion;
 	[ThreadStatic]
-	private static Exception? nativeException;
-	[ThreadStatic]
 	private static JVirtualMachineInitArg? args;
 	[ThreadStatic]
 	private static JResult result;
@@ -56,7 +54,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 		}
 		catch (Exception ex)
 		{
-			JVirtualMachineLibraryTests.nativeException = ex;
+			LibraryBaseTests.NativeException = ex;
 			return JResult.Ok;
 		}
 	}
@@ -119,7 +117,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 		}
 		catch (Exception ex)
 		{
-			JVirtualMachineLibraryTests.nativeException = ex;
+			LibraryBaseTests.NativeException = ex;
 			vmRef = default;
 			envRef = default;
 			return JVirtualMachineLibraryTests.result;
@@ -161,7 +159,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 		}
 		catch (Exception ex)
 		{
-			JVirtualMachineLibraryTests.nativeException = ex;
+			LibraryBaseTests.NativeException = ex;
 			return JVirtualMachineLibraryTests.result;
 		}
 	}
@@ -192,16 +190,16 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 		}
 		catch (Exception ex)
 		{
-			JVirtualMachineLibraryTests.nativeException = ex;
+			LibraryBaseTests.NativeException = ex;
 			nVMs = -1;
 			return JVirtualMachineLibraryTests.result;
 		}
 	}
 	private static void CleanUp()
 	{
+		LibraryBaseTests.NativeException = default;
 		JVirtualMachineLibraryTests.count = default;
 		JVirtualMachineLibraryTests.jniVersion = default;
-		JVirtualMachineLibraryTests.nativeException = default;
 		JVirtualMachineLibraryTests.result = default;
 		JVirtualMachineLibraryTests.proxyEnv = default;
 		JVirtualMachineLibraryTests.optionsPtr = default;

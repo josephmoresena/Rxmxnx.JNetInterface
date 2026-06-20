@@ -51,6 +51,13 @@ public class JExecutableObjectTests
 				                             ClassInformation = jClass.GetInformation(),
 			                             } :
 			                             new ObjectMetadata(jExecutableClass));
+		env.WithFrame(Arg.Any<Int32>(), Arg.Any<JExecutableObject>(),
+		              Arg.Any<Func<JExecutableObject, JCallDefinition>>()).Returns(c =>
+		{
+			JExecutableObject instance = (JExecutableObject)c[1];
+			Func<JExecutableObject, JCallDefinition> func = (Func<JExecutableObject, JCallDefinition>)c[2];
+			return func(instance);
+		});
 
 		ExecutableObjectMetadata objectMetadata =
 			Assert.IsType<ExecutableObjectMetadata>(ILocalObject.CreateMetadata(jExecutable));
@@ -126,6 +133,8 @@ public class JExecutableObjectTests
 		Assert.Equal(JExecutableObjectTests.classSignature, typeMetadata.Signature);
 		Assert.Equal(JExecutableObjectTests.arraySignature, typeMetadata.ArraySignature);
 		Assert.Equal(JExecutableObjectTests.hash.ToString(), typeMetadata.Hash);
+		Assert.Equal(JRuntimeVersion.J8, typeMetadata.Since);
+		Assert.Equal(26, typeMetadata.AndroidApiLevel);
 		Assert.Equal(JExecutableObjectTests.hash.ToString(), IDataType.GetHash<JExecutableObject>());
 		Assert.Equal(IDataType.GetMetadata<JAccessibleObject>(), typeMetadata.BaseMetadata);
 		Assert.IsType<JFunctionDefinition<JExecutableObject>.Parameterless>(

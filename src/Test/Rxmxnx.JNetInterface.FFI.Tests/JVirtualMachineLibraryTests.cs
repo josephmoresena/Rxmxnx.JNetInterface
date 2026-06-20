@@ -6,7 +6,7 @@ namespace Rxmxnx.JNetInterface.Tests;
 /// Test class for <see cref="JVirtualMachineLibrary"/>.
 /// </summary>
 [ExcludeFromCodeCoverage]
-public sealed unsafe partial class JVirtualMachineLibraryTests
+public sealed unsafe partial class JVirtualMachineLibraryTests : LibraryBaseTests
 {
 	[SkippableFact]
 	internal void SuccessTest()
@@ -49,7 +49,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 			}
 
 			Assert.NotNull(library);
-			Assert.Throws<JniException>(() => library.GetCreatedVirtualMachines());
+			Assert.Throws<JniException>(library.GetCreatedVirtualMachines);
 		}
 	}
 
@@ -75,7 +75,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 	[InlineData((Int32)JRuntimeVersion.J24)]
 	internal void GetLatestSupportedVersionTest(Int32 jniVersionTest)
 	{
-		JVirtualMachineLibraryTests.nativeException = default;
+		LibraryBaseTests.NativeException = default;
 		JVirtualMachineLibrary? library =
 			JVirtualMachineLibrary.LoadLibrary(JVirtualMachineLibraryTests.GetProxyPath(JvmProxyType.Complete));
 
@@ -100,8 +100,8 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 			else
 				Assert.Equal(JVirtualMachineLibraryTests.jniVersion, library.GetLatestSupportedVersion());
 
-			if (JVirtualMachineLibraryTests.nativeException is not null)
-				throw new AggregateException(JVirtualMachineLibraryTests.nativeException);
+			if (LibraryBaseTests.NativeException is not null)
+				throw new AggregateException(LibraryBaseTests.NativeException);
 			Assert.Equal(JVirtualMachineLibraryTests.jniVersion switch
 			{
 				(Int32)JRuntimeVersion.SEd2 => 2,
@@ -132,7 +132,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 	[InlineData(JResult.VersionError)]
 	internal void CreateVirtualMachineTest(JResult resultTest)
 	{
-		JVirtualMachineLibraryTests.nativeException = default;
+		LibraryBaseTests.NativeException = default;
 		JVirtualMachineLibrary? library =
 			JVirtualMachineLibrary.LoadLibrary(JVirtualMachineLibraryTests.GetProxyPath(JvmProxyType.Complete));
 
@@ -163,16 +163,16 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 				             Assert.Throws<JniException>(() => library.CreateVirtualMachine(
 					                                         JVirtualMachineLibraryTests.args, out IEnvironment __))
 				                   .Result);
-				if (JVirtualMachineLibraryTests.nativeException is not null)
-					throw new AggregateException(JVirtualMachineLibraryTests.nativeException);
+				if (LibraryBaseTests.NativeException is not null)
+					throw new AggregateException(LibraryBaseTests.NativeException);
 				return;
 			}
 
 			using IInvokedVirtualMachine invoked =
 				library.CreateVirtualMachine(JVirtualMachineLibraryTests.args, out IEnvironment env);
 
-			if (JVirtualMachineLibraryTests.nativeException is not null)
-				throw new AggregateException(JVirtualMachineLibraryTests.nativeException);
+			if (LibraryBaseTests.NativeException is not null)
+				throw new AggregateException(LibraryBaseTests.NativeException);
 			Assert.Equal(JVirtualMachineLibraryTests.proxyEnv.Reference, env.Reference);
 			Assert.Equal(JVirtualMachineLibraryTests.proxyEnv.VirtualMachine.Reference, invoked.Reference);
 		}
@@ -233,7 +233,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 	internal void GetDefaultArgumentTest(Int32 jniVersionTest, JResult resultTest = JResult.Ok,
 		Boolean useOptions = false)
 	{
-		JVirtualMachineLibraryTests.nativeException = default;
+		LibraryBaseTests.NativeException = default;
 		JVirtualMachineLibrary? library =
 			JVirtualMachineLibrary.LoadLibrary(JVirtualMachineLibraryTests.GetProxyPath(JvmProxyType.Complete));
 
@@ -266,15 +266,15 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 			if (JVirtualMachineLibraryTests.result != JResult.Ok)
 			{
 				Assert.Throws<JniException>(() => library.GetDefaultArgument(JVirtualMachineLibraryTests.jniVersion));
-				if (JVirtualMachineLibraryTests.nativeException is not null)
-					throw new AggregateException(JVirtualMachineLibraryTests.nativeException);
+				if (LibraryBaseTests.NativeException is not null)
+					throw new AggregateException(LibraryBaseTests.NativeException);
 				return;
 			}
 
 			JVirtualMachineInitArg defaultValue = library.GetDefaultArgument(JVirtualMachineLibraryTests.jniVersion);
 
-			if (JVirtualMachineLibraryTests.nativeException is not null)
-				throw new AggregateException(JVirtualMachineLibraryTests.nativeException);
+			if (LibraryBaseTests.NativeException is not null)
+				throw new AggregateException(LibraryBaseTests.NativeException);
 
 			Assert.Equal(
 				JVirtualMachineLibraryTests.jniVersion < (Int32)JRuntimeVersion.SEd2 ?
@@ -306,7 +306,7 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 	[InlineData(JResult.Error, -1)]
 	internal void GetCreatedJavaVMsTest(JResult resultTest, Int32 createdVms = 0)
 	{
-		JVirtualMachineLibraryTests.nativeException = default;
+		LibraryBaseTests.NativeException = default;
 		JVirtualMachineLibrary? library =
 			JVirtualMachineLibrary.LoadLibrary(JVirtualMachineLibraryTests.GetProxyPath(JvmProxyType.Complete));
 
@@ -332,16 +332,16 @@ public sealed unsafe partial class JVirtualMachineLibraryTests
 			if (JVirtualMachineLibraryTests.result != JResult.Ok && createdVms > 0)
 			{
 				Assert.Equal(JVirtualMachineLibraryTests.result,
-				             Assert.Throws<JniException>(() => library.GetCreatedVirtualMachines()).Result);
-				if (JVirtualMachineLibraryTests.nativeException is not null)
-					throw new AggregateException(JVirtualMachineLibraryTests.nativeException);
+				             Assert.Throws<JniException>(library.GetCreatedVirtualMachines).Result);
+				if (LibraryBaseTests.NativeException is not null)
+					throw new AggregateException(LibraryBaseTests.NativeException);
 				return;
 			}
 
 			IVirtualMachine[] vms = library.GetCreatedVirtualMachines();
 
-			if (JVirtualMachineLibraryTests.nativeException is not null)
-				throw new AggregateException(JVirtualMachineLibraryTests.nativeException);
+			if (LibraryBaseTests.NativeException is not null)
+				throw new AggregateException(LibraryBaseTests.NativeException);
 			Assert.Equal(JVirtualMachineLibraryTests.proxies.Length, vms.Length);
 			Assert.Equal(JVirtualMachineLibraryTests.proxies.Select(p => p.VirtualMachine.Reference),
 			             vms.Select(v => v.Reference));

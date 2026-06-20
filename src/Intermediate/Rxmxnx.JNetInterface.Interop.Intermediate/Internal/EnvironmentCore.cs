@@ -1,0 +1,290 @@
+#if ANDROID
+using JniMethodInfo = Rxmxnx.JNetInterface.Internal.JniMethodInfo;
+#endif
+
+namespace Rxmxnx.JNetInterface.Internal;
+
+/// <summary>
+/// Core object for a <see cref="IEnvironment"/> instance.
+/// </summary>
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
+internal sealed partial class EnvironmentCore : LocalMainClasses, IUnsafeMemoryManager
+{
+	/// <summary>
+	/// Virtual machine host.
+	/// </summary>
+	public readonly IVirtualMachineHost Host;
+	/// <inheritdoc cref="IEnvironment.Reference"/>
+	public readonly JEnvironmentRef Reference;
+
+	/// <summary>
+	/// Indicates whether the current thread is owned by the current host instance.
+	/// </summary>
+	public Boolean IsOwned { get; }
+	/// <summary>
+	/// Current thrown exception.
+	/// </summary>
+	public JniException? Thrown { get; private set; }
+	/// <summary>
+	/// Maximum number of bytes usable from stack.
+	/// </summary>
+	public Int32 MaxStackBytes { get; private set; } = EnvironmentCore.MinStackBytes;
+	/// <summary>
+	/// Amount of bytes used from stack.
+	/// </summary>
+	public Int32 UsedStackBytes { get; private set; }
+	/// <summary>
+	/// Ensured capacity.
+	/// </summary>
+	public Int32? Capacity => this._objects.Capacity;
+
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="host">A <see cref="IVirtualMachineHost"/> instance.</param>
+	/// <param name="env">A <see cref="INativeThread"/> instance.</param>
+	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
+	public EnvironmentCore(IVirtualMachineHost host, INativeThread env, JEnvironmentRef envRef) : base(envRef, env)
+	{
+		this.Reference = envRef;
+		this.Host = host;
+		this.IsOwned = this.Host.IsOwned();
+
+		this._env = env;
+		this._objects = new(this._classes);
+		if (this.Version < NativeInterface.RequiredVersion) return; // Avoid class loading if unsupported version.
+		this.LoadMainClasses();
+	}
+	/// <inheritdoc/>
+	public void DeleteGlobalRef(JGlobalRef globalRef)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this.GetNativeInterface<NativeInterface>(NativeInterface.DeleteGlobalRefInfo);
+		nativeInterface.ReferenceFunctions.DeleteGlobalRef.DeleteRef(this.Reference, globalRef);
+		JTrace.DeleteReference(globalRef.Value, JReferenceType.GlobalRefType);
+	}
+	/// <inheritdoc/>
+	public void DeleteWeakGlobalRef(JWeakRef weakRef)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this.GetNativeInterface<NativeInterface>(NativeInterface.DeleteWeakGlobalRefInfo);
+		nativeInterface.WeakGlobalFunctions.DeleteWeakGlobalRef.DeleteRef(this.Reference, weakRef);
+		JTrace.DeleteReference(weakRef.Value, JReferenceType.WeakGlobalRefType);
+	}
+	/// <inheritdoc/>
+	public void DeleteLocalRef(JObjectLocalRef localRef)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this.GetNativeInterface<NativeInterface>(NativeInterface.DeleteLocalRefInfo);
+		nativeInterface.ReferenceFunctions.DeleteLocalRef.DeleteRef(this.Reference, localRef);
+		JTrace.DeleteReference(localRef, JReferenceType.LocalRefType);
+	}
+	/// <inheritdoc/>
+	public JReferenceType GetReferenceType(JObjectLocalRef localRef)
+	{
+		ref readonly NativeInterface6 nativeInterface =
+			ref this.GetNativeInterface<NativeInterface6>(NativeInterface6.GetObjectRefTypeInfo);
+		JReferenceType result = nativeInterface.GetObjectRefType(this.Reference, localRef);
+		this.CheckJniError();
+		return result;
+	}
+	/// <summary>
+	/// Tests whether two references point to the same object.
+	/// </summary>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+	/// <param name="otherRef">A <see cref="JObjectLocalRef"/> reference.</param>
+	/// <returns>
+	/// <see langword="true"/> if both references refer to the same object; otherwise,
+	/// <see langword="false"/>.
+	/// </returns>
+	public Boolean IsSame(JObjectLocalRef localRef, JObjectLocalRef otherRef)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this.GetNativeInterface<NativeInterface>(NativeInterface.IsSameObjectInfo);
+		JBoolean result = nativeInterface.ReferenceFunctions.IsSameObject(this.Reference, localRef, otherRef);
+		this.CheckJniError();
+		return result.Value;
+	}
+
+	/// <summary>
+	/// Retrieves managed <see cref="NativeInterface"/> reference from current instance.
+	/// </summary>
+	/// <param name="info">A <see cref="JniMethodInfo"/> instance.</param>
+	/// <returns>A managed <see cref="NativeInterface"/> reference from current instance.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public unsafe ref readonly TNativeInterface GetNativeInterface<TNativeInterface>(JniMethodInfo info)
+		where TNativeInterface : unmanaged, INativeInterface<TNativeInterface>
+	{
+		ImplementationValidationUtilities.ThrowIfDifferentThread(this.Reference, this.Thread);
+		ImplementationValidationUtilities.ThrowIfInvalidVirtualMachine(this.Host.IsRunning);
+		ImplementationValidationUtilities.ThrowIfNotAttached(this._env.IsAttached);
+		ImplementationValidationUtilities.ThrowIfUnsafe(info.Name, this.JniSecure(info.Level));
+		ImplementationValidationUtilities.ThrowIfInvalidVersion(info.Name, TNativeInterface.RequiredVersion,
+		                                                        this.Version);
+		return ref *(TNativeInterface*)this.Reference.InterfacePointer;
+	}
+	/// <summary>
+	/// Checks JNI occurred error.
+	/// </summary>
+	public void CheckJniError()
+	{
+		if (this._criticalCount > 0 || this._buildingException)
+			this.ExceptionCheck();
+		else if (this.HasPendingException()) // Calls to ExceptionCheck.
+			this.ExceptionOccurred();
+		this.Thrown = default; // Clears current exception.
+	}
+	/// <inheritdoc cref="IEnvironment.JniSecure"/>
+	/// <param name="level">JNI call level.</param>
+	public Boolean JniSecure(JniSafetyLevels level = JniSafetyLevels.None)
+		=> this.Thread.ManagedThreadId == Environment.CurrentManagedThreadId &&
+			(level.HasFlag(JniSafetyLevels.CriticalSafe) || this._criticalCount == 0) &&
+			(level.HasFlag(JniSafetyLevels.ErrorSafe) || this.Thrown is null);
+	/// <summary>
+	/// Sets <paramref name="throwableException"/> as pending exception and throws it.
+	/// </summary>
+	/// <param name="throwableException">A <see cref="ThrowableException"/> instance.</param>
+	/// <param name="throwException">
+	/// Indicates whether exception should be thrown in managed code.
+	/// </param>
+	/// <exception cref="ThrowableException">
+	/// Throws if <paramref name="throwableException"/> is not null.
+	/// </exception>
+	public void ThrowJniException(ThrowableException? throwableException, Boolean throwException)
+	{
+		if (this.Thrown == throwableException)
+		{
+			if (this.Thrown is not null && throwException)
+				throw this.Thrown; // Rethrows pending exception.
+			return;
+		}
+		if (throwableException is null)
+		{
+			this.Thrown = default; // Clears pending exception.
+			this.ClearException();
+			return;
+		}
+
+		try
+		{
+			ImplementationValidationUtilities.ThrowIfProxy(throwableException.GlobalThrowable);
+			ImplementationValidationUtilities.ThrowIfDefault(throwableException.GlobalThrowable);
+			this.SetPendingException(throwableException, throwException);
+		}
+		finally
+		{
+			// Throws current exception in JNI
+			this.Throw(throwableException.ThrowableRef);
+		}
+	}
+	/// <summary>
+	/// Retrieves exception occured reference.
+	/// </summary>
+	/// <returns>Pending exception <see cref="JThrowableLocalRef"/> reference.</returns>
+	public JThrowableLocalRef GetPendingException()
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionOccurredInfo);
+		return nativeInterface.ErrorFunctions.ExceptionOccurred(this.Reference);
+	}
+	/// <summary>
+	/// Checks if there is a pending JNI exception.
+	/// </summary>
+	/// <returns><see langword="true"/> if there is pending JNI exception; otherwise, <see langword="false"/>.</returns>
+	public Boolean HasPendingException()
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionCheckInfo);
+		return nativeInterface.ExceptionCheck(this.Reference).Value;
+	}
+	/// <summary>
+	/// Creates JNI exception from <paramref name="throwableRef"/>.
+	/// </summary>
+	/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
+	/// <returns>A <see cref="ThrowableException"/> exception.</returns>
+	public ThrowableException CreateThrowableException(JThrowableLocalRef throwableRef)
+	{
+		this.ClearException();
+		JReferenceTypeMetadata? throwableMetadata = default;
+		String? message = default;
+		JClassObject jClass;
+
+		try
+		{
+			jClass = EnvironmentCore.GetObjectClass(this, throwableRef.Value, out throwableMetadata);
+		}
+		catch (CriticalException)
+		{
+			// Unable to retrieve throwable object class.
+			jClass = this.GetClass<JThrowableObject>(); // Retrieves java.lang.Throwable class.
+			if (!this._buildingException) throw;
+			EnvironmentCore.DescribeException(this);
+			this.Thrown = null;
+		}
+		try
+		{
+			message = this.GetThrowableMessage(throwableRef);
+		}
+		catch (CriticalException)
+		{
+			// Unable to retrieve throwable object message.
+			if (!this._buildingException) throw;
+			EnvironmentCore.DescribeException(this);
+			this.Thrown = null;
+		}
+		return this.CreateThrowableException(jClass, throwableMetadata, message, throwableRef);
+	}
+	/// <summary>
+	/// Deletes the current local reference frame.
+	/// </summary>
+	/// <param name="result">Current result.</param>
+	public void DeleteLocalFrame(JLocalObject? result)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this.GetNativeInterface<NativeInterface>(NativeInterface.PopLocalFrameInfo);
+		JObjectLocalRef localRef = result?.LocalReference ?? default;
+		localRef = nativeInterface.ReferenceFunctions.PopLocalFrame(this.Reference, localRef);
+		result?.SetValue(localRef);
+		this.Register(result);
+	}
+	/// <summary>
+	/// Clears pending JNI exception.
+	/// </summary>
+	public void ClearException()
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionClearInfo);
+		nativeInterface.ErrorFunctions.ExceptionClear(this.Reference);
+	}
+	/// <summary>
+	/// Sets number of bytes usable by JNI calls from stack.
+	/// </summary>
+	/// <param name="value">Value.</param>
+	public void SetUsableStackBytes(Int32 value)
+	{
+		Int32 min = EnvironmentCore.MinStackBytes > this.UsedStackBytes ?
+			EnvironmentCore.MinStackBytes :
+			this.UsedStackBytes;
+		if (value < min)
+			throw new ArgumentOutOfRangeException(nameof(value),
+			                                      $"Usable stack bytes should be greater or equal to {min}.");
+		this.MaxStackBytes = value;
+	}
+	/// <inheritdoc cref="IEnvironment.IsVirtual(JThreadObject)"/>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	public Boolean IsVirtual(JThreadObject jThread)
+	{
+		Span<JBoolean> result = stackalloc JBoolean[1];
+		Span<Byte> bytes = MemoryMarshal.AsBytes(result);
+		JFunctionDefinition functionDefinition = NativeFunctionSetImpl.IsVirtualDefinition;
+		using INativeTransaction jniTransaction = this.GetInstanceTransaction(
+			jThread.Class, jThread, functionDefinition, out JObjectLocalRef localRef, out JMethodId methodId);
+		this.CallPrimitiveFunction(bytes, functionDefinition, localRef, default, [], jniTransaction, methodId);
+		return result[0].Value;
+	}
+}

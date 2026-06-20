@@ -7,6 +7,8 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 
+// ReSharper disable UseRawString
+
 namespace Rxmxnx.JNetInterface.SourceGenerator;
 
 internal static partial class GenerationExtensions

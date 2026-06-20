@@ -21,13 +21,6 @@ public partial class TestCompiler
 			args.Add($"/p:RequiredFramework={restoreArgs.Version.GetTargetFramework()}");
 			args.Add($"/p:TargetFramework={restoreArgs.Version.GetTargetFramework()}");
 		}
-		public static void AppendList(RestoreNetArgs restoreArgs, Collection<String> args)
-		{
-			args.Add("list");
-			args.Add(restoreArgs.ProjectFile);
-			args.Add("package");
-			args.Add("--include-transitive");
-		}
 		public static void AppendTest(RestoreNetArgs restoreArgs, Collection<String> args)
 		{
 			args.Add("test");

@@ -1,7 +1,7 @@
 # Java String Handling
 
-JNI provides special handling for `java.lang.String` instances. `Rxmxnx.JNetInterface` exposes these functionalities
-through the `JStringObject` class.
+JNI provides special handling for `java.lang.String` instances. `Rxmxnx.JNetInterface.Core` exposes these
+functionalities through the `JStringObject` class.
 
 ##### Topics
 
@@ -13,7 +13,7 @@ through the `JStringObject` class.
 
 ## String Creation
 
-`Rxmxnx.JNetInterface` exposes the following static methods for creating Java `String` instances:
+`Rxmxnx.JNetInterface.Core` exposes the following static methods for creating Java `String` instances:
 
 - **`Create(IEnvironment, String?)`**:
     - Creates a Java `String` from a .NET `String` instance.
@@ -60,7 +60,7 @@ through the `JStringObject` class.
 
 ## Native Characters
 
-JNI allows direct access to Java string characters. `Rxmxnx.JNetInterface` provides the following methods:
+JNI allows direct access to Java string characters. `Rxmxnx.JNetInterface.Core` provides the following methods:
 
 - **Native Character Access**
     - `GetNativeChars(JMemoryReferenceKind)`: Equivalent to `GetStringChars`.
@@ -85,8 +85,8 @@ JNI allows direct access to Java string characters. `Rxmxnx.JNetInterface` provi
 
 ### Native Memory
 
-Native memory in `Rxmxnx.JNetInterface` is represented using a **memory adapter** in `JNativeMemory<T>`. This memory is
-**read-only**.
+Native memory in `Rxmxnx.JNetInterface.Core` is represented using a **memory adapter** in `JNativeMemory<T>`. This
+memory is **read-only**.
 
 ### Properties
 
@@ -104,7 +104,7 @@ reference.
 
 # Java Array Handling
 
-JNI allows direct manipulation of Java arrays. `Rxmxnx.JNetInterface` provides this functionality through the
+JNI allows direct manipulation of Java arrays. `Rxmxnx.JNetInterface.Core` provides this functionality through the
 `JArrayObject<>` class.
 
 ##### Topics
@@ -152,8 +152,8 @@ Java arrays are **view types** and can be treated as multiple array types. For e
     - `java.lang.Object[][]`
     - `java.io.Serializable[][]`
 
-Despite this polymorphism, arrays **are instances of specific types**. In `Rxmxnx.JNetInterface`, **non-generic arrays**
-are represented by `JArrayObject`.
+Despite this polymorphism, arrays **are instances of specific types**. In `Rxmxnx.JNetInterface.Core`, **non-generic
+arrays** are represented by `JArrayObject`.
 
 ### Properties
 

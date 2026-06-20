@@ -82,7 +82,7 @@ public partial class ExceptionHandlingTests
 				return default;
 			});
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(_ =>
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(_ =>
 			{
 				if (!error.HasFlag(ExceptionOccurredError.GetClassNameString))
 				{
@@ -113,7 +113,7 @@ public partial class ExceptionHandlingTests
 				return default;
 			});
 			proxyEnv.CallObjectMethod(throwableRef.Value, proxyEnv.VirtualMachine.ThrowableGetMessageMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(_ =>
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(_ =>
 			{
 				if (!error.HasFlag(ExceptionOccurredError.GetThrowableMessageString))
 				{
@@ -184,13 +184,13 @@ public partial class ExceptionHandlingTests
 			proxyEnv.Received(1).GetObjectClass(throwableRef.Value);
 			proxyEnv.Received(getClassNameCount).CallObjectMethod(classRef.Value,
 			                                                      proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                                                      ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                                      ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(classNameUtfLengthCount).GetStringUtfLength(classNameRef);
 			proxyEnv.Received(classNameUtfChars).GetStringUtfChars(classNameRef, Arg.Any<ValPtr<JBoolean>>());
 
 			proxyEnv.Received(getMessageCount).CallObjectMethod(throwableRef.Value,
 			                                                    proxyEnv.VirtualMachine.ThrowableGetMessageMethodId,
-			                                                    ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                                    ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(getMessageLengthCount).GetStringLength(messageRef);
 			proxyEnv.Received(getMessageRegionCount)
 			        .GetStringRegion(messageRef, 0, message.Length, Arg.Any<ValPtr<Char>>());

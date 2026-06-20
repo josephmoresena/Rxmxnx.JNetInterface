@@ -19,21 +19,6 @@ public partial interface IVirtualMachine
 		get => !AppContext.TryGetSwitch("JNetInterface.DisableMetadataValidation", out Boolean disable) || !disable;
 	}
 	/// <summary>
-	/// Indicates whether metadata for jagged arrays is auto-generated.
-	/// </summary>
-	/// <remarks>In reflection-free mode this feature is unavailable.</remarks>
-#if !PACKAGE
-	[ExcludeFromCodeCoverage]
-#endif
-	public static Boolean JaggedArrayAutoGenerationEnabled
-	{
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get
-			=> !AotInfo.IsReflectionDisabled &&
-				(!AppContext.TryGetSwitch("JNetInterface.DisableJaggedArrayAutoGeneration", out Boolean disable) ||
-					!disable);
-	}
-	/// <summary>
 	/// Indicates whether detailed a ToString() is available for type metadata instances.
 	/// </summary>
 #if !PACKAGE
@@ -44,4 +29,12 @@ public partial interface IVirtualMachine
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		get => !AppContext.TryGetSwitch("JNetInterface.DisableTypeMetadataToString", out Boolean disable) || !disable;
 	}
+	/// <summary>
+	/// Indicates whether metadata for jagged arrays is auto-generated.
+	/// </summary>
+	/// <remarks>In reflection-free mode this feature is unavailable.</remarks>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	public static Boolean JaggedArrayAutoGenerationEnabled => true;
 }

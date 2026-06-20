@@ -39,6 +39,8 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 	static TypeMetadata IClassType<JDirectByteBufferObject>.Metadata => JDirectByteBufferObject.typeMetadata;
 	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
 	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd4;
+	// In Android, this type doesn't exist, but is used as backend type for NIO direct buffers.
+	static Int32 IDataType.AndroidApiLevel => 3;
 
 	/// <summary>
 	/// Internal memory.
@@ -71,8 +73,8 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 	JBufferObject IDirectBufferObject.InternalBuffer => this;
 	IFixedContext<JByte> IDirectBufferObject<JByte>.GetFixedContext()
 		=> this._memory as IFixedContext<JByte> ??
-			(this._memory?.AsBinaryContext().Transformation<JByte>(out IFixedMemory _) ??
-				((ValPtr<JByte>)this.Address).GetUnsafeFixedContext((Int32)this.Capacity));
+			this._memory?.AsBinaryContext().Transformation<JByte>(out IFixedMemory _) ??
+			((ValPtr<JByte>)this.Address).GetUnsafeFixedContext((Int32)this.Capacity);
 
 	/// <inheritdoc/>
 	protected override void Dispose(Boolean disposing)

@@ -15,9 +15,14 @@ public interface IDataType : IObject
 	internal static abstract Type? FamilyType { get; }
 
 	/// <summary>
-	/// Specifies the minimun Java runtime version required for the current type.
+	/// Specifies the minimum Java runtime version required for the current type.
 	/// </summary>
 	static abstract JRuntimeVersion Since { get; }
+
+	/// <summary>
+	/// Specifies the minimum Android API level required for the current type.
+	/// </summary>
+	static virtual Int32 AndroidApiLevel => 0;
 
 	/// <summary>
 	/// Retrieves the metadata for given type.

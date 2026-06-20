@@ -38,6 +38,10 @@ public partial interface IVirtualMachine
 	/// Capacity System.getProperty("java.specification.version")
 	/// </summary>
 	internal const Int32 GetVersionCapacity = 3;
+	/// <summary>
+	/// Capacity Member.getName(), Executable.getParameterTypes(), Method.getReturnType().
+	/// </summary>
+	internal const Int32 GetCallDefinitionCapacity = 6;
 
 	/// <summary>
 	/// Indicates whether the current instance is not a proxy.

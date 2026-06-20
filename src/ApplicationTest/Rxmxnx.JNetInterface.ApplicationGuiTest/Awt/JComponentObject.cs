@@ -31,6 +31,7 @@ public class JComponentObject : JLocalObject, IClassType<JComponentObject>
 		.Create("java/awt/Component"u8, JTypeModifier.Abstract).Build();
 
 	static JClassTypeMetadata<JComponentObject> IClassType<JComponentObject>.Metadata => JComponentObject.typeMetadata;
+	static Int32 IDataType.AndroidApiLevel => -1;
 
 	public Int32 Height
 	{

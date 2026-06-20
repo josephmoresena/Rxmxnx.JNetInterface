@@ -25,9 +25,9 @@ _ = Boolean.TryParse(Environment.GetEnvironmentVariable("JNETINTERFACE_ONLY_NATI
 
 if (compile)
 {
-	await TestCompiler.CompileClass(minJdk, launcher.OutputDirectory);
+	await TestCompiler.CompileClass(minJdk, launcher.OutputDirectory, launcher.OutputJavaDirectory);
 	await TestCompiler.CompileNet(projectDirectory, launcher.RuntimeIdentifierPrefix, outputDirectory.FullName,
-	                              launcher.NetVersions, onlyNativeAot);
+	                              launcher.OutputJavaDirectory.FullName, launcher.NetVersions, onlyNativeAot);
 }
 
 if (run || jar)

@@ -100,7 +100,7 @@ public partial class Launcher
 				ExecutablePath = jdk.JavaExecutable,
 				ArgState = jarArgs,
 				AppendArgs = JarArgs.Append,
-				WorkingDirectory = this.OutputDirectory.FullName,
+				WorkingDirectory = this.OutputJavaDirectory.FullName,
 				Notifier = ConsoleNotifier.Notifier,
 			};
 			return await Utilities.QemuExecute(state, cancellationToken);

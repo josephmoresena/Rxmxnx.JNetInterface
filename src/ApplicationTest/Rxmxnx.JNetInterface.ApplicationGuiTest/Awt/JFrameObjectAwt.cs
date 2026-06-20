@@ -9,6 +9,10 @@ public class JFrameObjectAwt : JWindowObject, IClassType<JFrameObjectAwt>
 		TypeMetadataBuilder<JWindowObject>.Create<JFrameObjectAwt>("java/awt/Frame"u8).Build();
 
 	static JClassTypeMetadata<JFrameObjectAwt> IClassType<JFrameObjectAwt>.Metadata => JFrameObjectAwt.typeMetadata;
+#if !NET8_0_OR_GREATER
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static Int32 IDataType.AndroidApiLevel => -1;
+#endif
 
 	protected JFrameObjectAwt(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JFrameObjectAwt(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

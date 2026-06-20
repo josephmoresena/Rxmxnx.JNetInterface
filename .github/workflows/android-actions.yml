@@ -1,0 +1,302 @@
+name: FreeBSD Actions
+on:
+  workflow_call:
+    inputs:
+      package_version:
+        required: false
+        default: ''
+        type: string
+    secrets:
+      APK_KEY_PASS:
+        required: false
+      APK_KEY_ALIAS:
+        required: false
+      APK_KEYSTORE:
+        required: false
+
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PackageVersion: ${{ inputs.package_version }}
+      BIONIC_ANDROID_SCENARIOS: |
+        net10.0|net10.0|false|linux-bionic-arm64:arm64-v8a linux-bionic-arm:armeabi-v7a linux-bionic-x64:x86_64
+        net9.0|net9.0|false|linux-bionic-arm64:arm64-v8a linux-bionic-arm:armeabi-v7a linux-bionic-x64:x86_64
+        net9.0-RFM|net9.0|true|linux-bionic-arm64:arm64-v8a linux-bionic-arm:armeabi-v7a linux-bionic-x64:x86_64
+        net8.0|net8.0|false|linux-bionic-arm64:arm64-v8a linux-bionic-x64:x86_64
+        net8.0-RFM|net8.0|true|linux-bionic-arm64:arm64-v8a linux-bionic-x64:x86_64
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 1
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+      - name: Install WebAssembly and Android Workload
+        shell: bash
+        run: |
+          dotnet workload install wasm-tools wasm-tools-net9 wasm-tools-net8 wasm-tools-net7 android
+          dotnet workload update
+      - name: Restore Internal NuGet Package
+        uses: actions/cache/restore@v5
+        with:
+          path: ./package/Nuget
+          key: internal-nuget-${{ github.run_id }}
+          fail-on-cache-miss: true
+          enableCrossOsArchive: true
+
+      - name: Prepare Android signing keystore
+        env:
+          APK_KEYSTORE_BASE64: ${{ secrets.APK_KEYSTORE }}
+          APK_KEY_ALIAS_SECRET: ${{ secrets.APK_KEY_ALIAS }}
+          APK_KEY_PASS_SECRET: ${{ secrets.APK_KEY_PASS }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ -n "${APK_KEYSTORE_BASE64}" ] && [ -n "${APK_KEY_ALIAS_SECRET}" ] && [ -n "${APK_KEY_PASS_SECRET}" ]; then
+            echo "Using repository Android signing keystore."
+            echo "${APK_KEYSTORE_BASE64}" | base64 -d > ./jnetinterface-apk.keystore
+            {
+              echo "APK_KEY_ALIAS=${APK_KEY_ALIAS_SECRET}"
+              echo "APK_KEY_PASS=${APK_KEY_PASS_SECRET}"
+            } >> "$GITHUB_ENV"
+          else
+            echo "Repository Android signing secrets are unavailable. Generating a temporary CI keystore."
+            TEMP_ALIAS="ci-temp-key"
+            TEMP_PASS="$(openssl rand -base64 24 | tr -d '=+/[:space:]' | cut -c1-24)"
+
+            keytool -genkeypair \
+              -v \
+              -storetype PKCS12 \
+              -keystore ./jnetinterface-apk.keystore \
+              -alias "$TEMP_ALIAS" \
+              -keyalg RSA \
+              -keysize 2048 \
+              -validity 1 \
+              -storepass "$TEMP_PASS" \
+              -keypass "$TEMP_PASS" \
+              -dname "CN=Temporary CI Android Signing Key, OU=CI, O=GitHub Actions, L=CI, S=CI, C=US"
+
+            {
+              echo "APK_KEY_ALIAS=${TEMP_ALIAS}"
+              echo "APK_KEY_PASS=${TEMP_PASS}"
+            } >> "$GITHUB_ENV"
+          fi
+
+      - name: Build Mobile Test
+        shell: bash
+        working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.MobileTest
+        run: |
+          shopt -s globstar
+          
+          dotnet publish -c Release -p:AndroidPackageFormats=apk -p:AndroidKeyStore=true \
+            -p:UsePackage=true -p:AndroidSigningKeyStore=./../../../jnetinterface-apk.keystore \
+            -p:AndroidSigningKeyAlias=$APK_KEY_ALIAS -p:AndroidSigningKeyPass=$APK_KEY_PASS \
+            -p:AndroidSigningStorePass=$APK_KEY_PASS -p:NativeAOT=false
+          
+          mv ./bin/Release/**/publish/com.rxmxnx.jnetinterface.mobiletest-Signed.apk \
+            ./../../../com.rxmxnx.jnetinterface.mobiletest-MonoAot.apk
+          
+          dotnet publish -c Release -p:AndroidPackageFormats=apk -p:AndroidKeyStore=true \
+            -p:UsePackage=true -p:AndroidSigningKeyStore=./../../../jnetinterface-apk.keystore \
+            -p:AndroidSigningKeyAlias=$APK_KEY_ALIAS -p:AndroidSigningKeyPass=$APK_KEY_PASS \
+            -p:AndroidSigningStorePass=$APK_KEY_PASS -p:NativeAOT=true -r android-arm64
+          
+          mv ./bin/Release/**/publish/com.rxmxnx.jnetinterface.mobiletest-Signed.apk \
+            ./../../../com.rxmxnx.jnetinterface.mobiletest-NativeAot.apk
+
+      - name: Clone NativeAOT-AndroidHelloJniLib
+        run: |
+          git config --global url.https://github.com/.insteadOf git://github.com/
+          git clone --single-branch --branch jnetinterface \
+            https://github.com/josephmoresena/NativeAOT-AndroidHelloJniLib.git
+
+          target_frameworks="$(printf '%s\n' "$BIONIC_ANDROID_SCENARIOS" | awk -F'|' 'NF >= 2 && !seen[$2]++ { print $2 }' | paste -sd ';' -)"
+
+          echo '<Project>' > Directory.Build.props
+          echo '  <PropertyGroup>' >> Directory.Build.props
+          echo "    <TargetFrameworks>${target_frameworks}</TargetFrameworks>" >> Directory.Build.props
+          echo '    <LangVersion>latest</LangVersion>' >> Directory.Build.props
+          echo '  </PropertyGroup>' >> Directory.Build.props
+          echo '  <ItemGroup>' >> Directory.Build.props
+          echo '    <RuntimeHostConfigurationOption Include="JNetInterface.FixedRuntime.Android" Value="true" Trim="true"/>' >> Directory.Build.props
+          echo '  </ItemGroup>' >> Directory.Build.props
+          echo '</Project>' >> Directory.Build.props  
+
+      - name: Create nuget.config for bionic-libs
+        working-directory: ./NativeAOT-AndroidHelloJniLib
+        run: |
+          dotnet new nugetconfig
+          dotnet nuget add source "../package/Nuget/" -n TmpSource
+          export PackageVersion=${PackageVersion:="9999.99.99.99-tmp"}
+          dotnet add package Rxmxnx.JNetInterface --version $PackageVersion
+
+      - name: Create Android project structure
+        run: |
+          mkdir -p ./hello-jni_apk/main/java/com/example/hellojni
+          mkdir ./hello-jni_apk/class
+          mkdir ./hello-jni_apk/dex
+          mkdir ./hello-jni_apk/lib
+      - name: Create Android java file
+        working-directory: ./hello-jni_apk/main/java/com/example/hellojni
+        run: |
+          echo 'package com.example.hellojni;
+
+          import android.app.Activity;
+          import android.os.Bundle;
+          import android.view.Gravity;
+          import android.view.View;
+          import android.widget.LinearLayout;
+          import android.widget.TextView;
+
+          public class HelloJni extends Activity {
+            static {
+              System.loadLibrary("hello-jni");
+            }
+
+            @Override
+            protected void onCreate(Bundle savedInstanceState) {
+              super.onCreate(savedInstanceState);
+
+              LinearLayout rootLayout = new LinearLayout(this);
+              rootLayout.setOrientation(LinearLayout.VERTICAL);
+              rootLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+              ));
+              rootLayout.setGravity(Gravity.CENTER);
+
+              TextView textView = new TextView(this);
+              textView.setText(stringFromJNI());
+              textView.setTextSize(12);
+
+              LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1f
+              );
+              textView.setLayoutParams(params);
+              textView.setOnClickListener(v -> textView.setText(stringFromJNI()));
+              rootLayout.addView(textView);
+              setContentView(rootLayout);
+            }
+
+            private native String stringFromJNI();
+          }
+          ' > HelloJni.java 
+
+      - name: Create Android manifest file
+        working-directory: ./hello-jni_apk/main
+        run: |
+          echo '<?xml version="1.0" encoding="utf-8"?>
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.hellojni" android:theme="@android:style/Theme.DeviceDefault">
+            <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+            <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="37"/>
+            <application android:label="JNetInterfaceTestApp">
+              <activity android:name=".HelloJni" android:label="JNetInterfaceTestApp" android:exported="true">
+              <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+              </intent-filter>
+              </activity>
+            </application>
+          </manifest>' > AndroidManifest.xml
+
+      - name: Compile Android App
+        working-directory: ./hello-jni_apk
+        shell: bash
+        run: |
+          shopt -s globstar
+          
+          $JAVA_HOME_21_X64/bin/javac -target 17 -source 17 \
+            -d ./class -sourcepath ./main/java \
+            -classpath "$ANDROID_HOME/platforms/android-37.0/android.jar" \
+            ./main/java/**/*.java
+          
+          $ANDROID_HOME/build-tools/37.0.0/d8 \
+            --lib "$ANDROID_HOME/platforms/android-37.0/android.jar" \
+            --output ./dex \
+            class/**/*.class
+      - name: Build bionic JNI libs and package Android APKs
+        working-directory: ./hello-jni_apk
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          while IFS='|' read -r variant tfm reflection_free rid_abi_pairs; do
+            [ -z "${variant}" ] && continue
+
+            echo "=== Building bionic JNI libraries for ${variant} ==="
+            rm -rf "lib-${variant}"
+
+            for rid_abi in ${rid_abi_pairs}; do
+              runtime="${rid_abi%%:*}"
+              abi="${rid_abi##*:}"
+              publish_dir="./../lib-${variant}/${abi}"
+
+              args=(
+                ./../NativeAOT-AndroidHelloJniLib/AndroidHelloJniLib.csproj
+                -r "${runtime}"
+                -p:DisableUnsupportedError=true
+                -p:PublishAotUsingRuntimePack=true
+                -p:TargetFramework="${tfm}"
+                -p:AssemblyName=libhello-jni
+                -p:CopyOutputSymbolsToPublishDirectory=false
+                -p:PublishDir="${publish_dir}"
+              )
+
+              if [ "${reflection_free}" = "true" ]; then
+                args+=(-p:IlcDisableReflection=true)
+              fi
+
+              dotnet publish "${args[@]}"
+            done
+
+            echo "=== Packing APK for ${variant} ==="
+
+            $ANDROID_HOME/build-tools/37.0.0/aapt package -f -M main/AndroidManifest.xml \
+              -I $ANDROID_HOME/platforms/android-37.0/android.jar \
+              -F "jnetinterface-apptest-${variant}.apk" ./dex
+          
+            mv "../lib-${variant}"/* lib/          
+            zip -ur "jnetinterface-apptest-${variant}.apk" lib/
+            rm -rf lib/*
+          
+            $ANDROID_HOME/build-tools/37.0.0/apksigner sign \
+              --ks ./../jnetinterface-apk.keystore \
+              --ks-key-alias "$APK_KEY_ALIAS" \
+              --ks-pass "pass:$APK_KEY_PASS" \
+              --key-pass "pass:$APK_KEY_PASS" \
+              --min-sdk-version 21 \
+              --out "./../jnetinterface-apptest-${variant}.apk" "jnetinterface-apptest-${variant}.apk"
+          done <<< "$BIONIC_ANDROID_SCENARIOS"
+
+      - name: Create Native Artifact
+        if: inputs.package_version == ''
+        uses: actions/upload-artifact@v6
+        with:
+          name: Android-Artifact
+          path: |
+            jnetinterface-apptest-*.apk
+            com.rxmxnx.jnetinterface.mobiletest-*.apk
+      - name: Create Release Assets
+        if: inputs.package_version != ''
+        shell: pwsh
+        run: |
+          $binPatterns = @(
+            "jnetinterface-apptest-*.apk",
+            "com.rxmxnx.jnetinterface.mobiletest-*.apk"
+          )
+          ./ZipAndClean.ps1 -ZipName "Android-Assets.zip" -Patterns $binPatterns
+
+      - name: Upload Release Assets
+        if: inputs.package_version != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          gh release upload ${{ github.ref_name }} ./*-Assets*.zip --clobber

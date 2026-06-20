@@ -1,7 +1,7 @@
 # Java Error Handling
 
-JNI allows handling errors and exceptions within native code. `Rxmxnx.JNetInterface` follows this principle but in a
-more .NET-friendly manner.
+JNI allows handling errors and exceptions within native code. `Rxmxnx.JNetInterface` implementations follows this
+principle but in a more .NET-friendly manner.
 
 The `java.lang.Throwable` class hierarchy in Java is as follows:
 
@@ -9,7 +9,7 @@ The `java.lang.Throwable` class hierarchy in Java is as follows:
 
 ## Additional Throwable Types
 
-The following Java throwable types are mapped in `Rxmxnx.JNetInterface`:
+The following Java throwable types are mapped in `Rxmxnx.JNetInterface.Core`:
 
 - **Errors**
     - `java.lang.LinkageError` → `JLinkageErrorObject`
@@ -50,11 +50,13 @@ The following Java throwable types are mapped in `Rxmxnx.JNetInterface`:
 
 However, using them may introduce additional memory and performance costs. To optimize performance, automatic
 registration of these types can be disabled with the feature switch
-`JNetInterface.DisableBuiltInThrowableAutoRegistration`.
+`JNetInterface.DisableBuiltInThrowableAutoRegistration` on both `Rxmxnx.JNetInterface` and
+`Rxmxnx.JNetInterface.Mobile`.
 
 ## JNI Error Handling
 
-JNI can generate errors during execution, and `Rxmxnx.JNetInterface` maps these errors to managed CLR exceptions.
+JNI can generate errors during execution, and `Rxmxnx.JNetInterface` implementation maps these errors to managed CLR
+exceptions.
 
 The managed exception hierarchy is as follows:
 
@@ -82,8 +84,8 @@ A `ThrowableException` represents a pending throwable instance raised in the JVM
 `IThrowableException`. If the thrown type is mapped and registered (or if one of its superclasses is registered), the
 `ThrowableException` instance will be of covariant type `IThrowableException<>`.
 
-Unlike `JniException`, `ThrowableException` requires special handling. Similar to JNI, `Rxmxnx.JNetInterface` restricts
-API usage when an exception is pending.
+Unlike `JniException`, `ThrowableException` requires special handling. Similar to JNI, `Rxmxnx.JNetInterface`
+implementation restricts API usage when an exception is pending.
 
 #### Properties
 
@@ -98,8 +100,8 @@ API usage when an exception is pending.
 When a `ThrowableException` is pending, only a limited set of JNI functions can be executed. Any attempt to use
 restricted JNI functions will result in an `InvalidOperationException` in the CLR.
 
-If the environment is in a critical state, `Rxmxnx.JNetInterface` throws a `CriticalException` in the CLR. Once the
-critical state ends, the `ThrowableException` can be properly handled.
+If the environment is in a critical state, `Rxmxnx.JNetInterface` implementation throws a `CriticalException` in the
+CLR. Once the critical state ends, the `ThrowableException` can be properly handled.
 
 To retrieve or rethrow a pending exception in the JVM, use the `PendingException` property of the `IEnvironment`
 interface:

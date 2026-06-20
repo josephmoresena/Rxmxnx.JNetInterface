@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public static partial class TestCompiler
 {
-	public static async Task CompileClass(Jdk jdk, DirectoryInfo outputDirectory)
+	public static async Task CompileClass(Jdk jdk, DirectoryInfo outputDirectory, DirectoryInfo outputJavaDirectory)
 	{
 		DirectoryInfo directory = outputDirectory.CreateSubdirectory("jar");
 		try
@@ -20,10 +20,8 @@ public static partial class TestCompiler
 			nativeImageDir.Create();
 
 			await TestCompiler.CompileJavaClass(classDir.FullName, jdk);
-
 			await File.WriteAllTextAsync(jniConfigPath, TestCompiler.JniConfig, ConsoleNotifier.CancellationToken);
-
-			await TestCompiler.CreateJar(directory.FullName, jdk, outputDirectory.FullName);
+			await TestCompiler.CreateJar(directory.FullName, jdk, outputJavaDirectory.FullName);
 
 			File.Move(classFilePath, Path.Combine(outputDirectory.FullName, "HelloDotnet.class"), true);
 		}
@@ -33,7 +31,7 @@ public static partial class TestCompiler
 		}
 	}
 	public static async Task CompileNet(DirectoryInfo projectDirectory, String os, String outputPath,
-		NetVersion[] netVersions, Boolean onlyNativeAot)
+		String outputLibPath, NetVersion[] netVersions, Boolean onlyNativeAot)
 	{
 		Architecture[] architectures = SystemInfo.IsWindows ?
 			[Architecture.X86, Architecture.X64, Architecture.Arm64,] :
@@ -65,7 +63,7 @@ public static partial class TestCompiler
 						                                     ProjectFile = libProjectFile,
 						                                     RuntimeIdentifier = rid,
 						                                     Version = netVersion,
-					                                     }, arch, outputPath);
+					                                     }, arch, outputLibPath);
 				if (!String.IsNullOrEmpty(appGuiProjectFile))
 					await TestCompiler.CompileNetGuiApp(onlyNativeAot,
 					                                    new()

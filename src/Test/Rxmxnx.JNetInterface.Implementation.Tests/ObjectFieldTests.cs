@@ -97,7 +97,7 @@ public sealed class ObjectFieldTests
 
 		proxyEnv.GetObjectClass(result.Value).Returns(proxyEnv.ThrowableLocalRef);
 		proxyEnv.CallObjectMethod(proxyEnv.ThrowableLocalRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-		                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef.Value);
+		                          ReadOnlyValPtr<JValue>.Zero).Returns(strRef.Value);
 		proxyEnv.GetStringUtfLength(strRef).Returns(metadata.ClassName.Length);
 		proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>()).Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 		proxyEnv.GetFieldId(Arg.Any<JClassLocalRef>(), namePtr, Arg.Any<ReadOnlyValPtr<Byte>>()).Returns(fieldId);

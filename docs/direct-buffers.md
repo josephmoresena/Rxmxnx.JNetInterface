@@ -3,7 +3,7 @@
 Since JNI 1.4, native handling of Java NIO (New Input/Output) buffers and the creation of direct buffers have been
 supported.
 
-The NIO object hierarchy may vary depending on the JVM implementation, but in `Rxmxnx.JNetInterface`, the following
+The NIO object hierarchy may vary depending on the JVM implementation, but in `Rxmxnx.JNetInterface.Core`, the following
 hierarchy is established:
 
 ![BufferHierarchy](https://github.com/user-attachments/assets/c9fc3743-da67-47ea-aa00-a4c4bf633d92)
@@ -19,12 +19,13 @@ The `JBufferObject` class exposes the following properties:
 ##### Note
 
 If this feature is not needed, it is recommended to disable the automatic registration of NIO types to improve
-performance. This can be done using the feature switch `JNetInterface.DisableNioAutoRegistration`.
+performance. This can be done using the feature switch `JNetInterface.DisableNioAutoRegistration` with both
+`Rxmxnx.JNetInterface` and `Rxmxnx.JNetInterface.Mobile`.
 
 ## Direct Buffer Creation
 
-Direct buffer creation is supported in `Rxmxnx.JNetInterface` through the following static methods of the `JByteBuffer`
-class:
+Direct buffer creation is supported within any `Rxmxnx.JNetInterface` implementation through the following static
+methods of the `JByteBuffer` class:
 
 - **`CreateDirectBuffer<T>(IEnvironment, Memory<T>)`**
     - Creates a direct byte buffer using a `System.Memory<T>` instance, which remains pinned until the created instance

@@ -98,9 +98,7 @@ internal partial interface IAccessFeature
 	/// <param name="definition"><see cref="JConstructorDefinition"/> definition.</param>
 	/// <param name="args">The <see cref="IObject"/> list with call arguments.</param>
 	/// <returns>The new <typeparamref name="TObject"/> instance.</returns>
-#if !NET8_0_OR_GREATER
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 	TObject CallConstructor<TObject>(JConstructorObject jConstructor, JConstructorDefinition definition,
 		ReadOnlySpan<IObject?> args) where TObject : JLocalObject, IClassType<TObject>;
 	/// <summary>

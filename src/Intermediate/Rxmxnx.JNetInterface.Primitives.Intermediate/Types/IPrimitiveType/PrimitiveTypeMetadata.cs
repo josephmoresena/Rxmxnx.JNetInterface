@@ -24,6 +24,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 		}
 
 		/// <inheritdoc/>
+		// ReSharper disable once HeapView.BoxingAllocation
 		public override IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes) => bytes.ToValue<TPrimitive>();
 #if PACKAGE
 		/// <inheritdoc/>

@@ -14,6 +14,7 @@ public sealed class JAwtEventListenerObject : JInterfaceObject<JAwtEventListener
 	static JInterfaceTypeMetadata<JAwtEventListenerObject> IInterfaceType<JAwtEventListenerObject>.Metadata
 		=> JAwtEventListenerObject.typeMetadata;
 	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd2;
+	static Int32 IDataType.AndroidApiLevel => -1;
 
 	private JAwtEventListenerObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 	static JAwtEventListenerObject IInterfaceType<JAwtEventListenerObject>.Create(

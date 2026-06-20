@@ -15,7 +15,7 @@ internal sealed record NativeTypeHelper
 	/// <summary>
 	/// FixedPointer.Pointer property name.
 	/// </summary>
-	private const String internalValueName = "Pointer";
+	private const String InternalValueName = "Pointer";
 
 	/// <summary>
 	/// Indicates whether the native type is an array reference.
@@ -136,11 +136,11 @@ internal sealed record NativeTypeHelper
 			"JValue" => String.Empty,
 			"JInvokeInterface" => String.Empty,
 			"JNativeInterface" => String.Empty,
-			"JObjectLocalRef" => NativeTypeHelper.internalValueName,
-			"JFieldId" => NativeTypeHelper.internalValueName,
-			"JMethodId" => NativeTypeHelper.internalValueName,
-			"JEnvironmentRef" => NativeTypeHelper.internalValueName,
-			"JVirtualMachineRef" => NativeTypeHelper.internalValueName,
+			"JObjectLocalRef" => NativeTypeHelper.InternalValueName,
+			"JFieldId" => NativeTypeHelper.InternalValueName,
+			"JMethodId" => NativeTypeHelper.InternalValueName,
+			"JEnvironmentRef" => NativeTypeHelper.InternalValueName,
+			"JVirtualMachineRef" => NativeTypeHelper.InternalValueName,
 			_ => "_value",
 		};
 }

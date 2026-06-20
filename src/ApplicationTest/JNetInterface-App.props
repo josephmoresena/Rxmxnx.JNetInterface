@@ -1,0 +1,32 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+        <TargetFramework Condition="'$(RequiredFramework)' == '' And '$(OutputType)' != 'WinExe'">$(DefaultFramework)</TargetFramework>
+    </PropertyGroup>
+
+    <Import Project="JNetInterface-Frameworks.props"/>
+    <Import Project="JNetInterface-Artifact.targets"/>
+
+    <PropertyGroup>
+        <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <JNI_APP Condition="'$(RuntimeIdentifier)' != ''">true</JNI_APP>
+        <!-- Assembly name must specify which platform it was compiled for -->
+        <AssemblyName Condition="'$(JNI_APP)' == 'true'">$(AssemblyName).$(RuntimeIdentifier)</AssemblyName>
+    </PropertyGroup>
+
+    <Import Condition="'$(NativeAOT)' != 'true'" Project="JNetInterface-Config.props"/>
+    <Import Condition="'$(NativeAOT)' == 'true'" Project="JNetInterface-NativeAot.props"/>
+
+    <PropertyGroup Condition="$(JNI_APP) == 'true' And '$(NativeAOT)' != 'true'">
+        <DebugSymbols>false</DebugSymbols>
+        <DebugType>None</DebugType>
+        <PublishSingleFile>true</PublishSingleFile>
+        <SelfContained>true</SelfContained>
+        <!-- Assembly name must specify that it was compiled with ReadyToRun -->
+        <AssemblyName Condition="$(PublishReadyToRun) == 'true'">$(AssemblyName).R2R</AssemblyName>
+    </PropertyGroup>
+
+</Project>

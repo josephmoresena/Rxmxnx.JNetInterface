@@ -30,6 +30,7 @@ public class JAwtEventObject : JEventObject, IClassType<JAwtEventObject>
 		                                                                           JTypeModifier.Abstract).Build();
 	static JClassTypeMetadata<JAwtEventObject> IClassType<JAwtEventObject>.Metadata => JAwtEventObject.typeMetadata;
 	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd1;
+	static Int32 IDataType.AndroidApiLevel => -1;
 
 	protected JAwtEventObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JAwtEventObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

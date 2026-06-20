@@ -8,7 +8,7 @@ internal abstract partial class InfoSequenceBase(String hash, Int32 nameLength)
 	/// <summary>
 	/// Information name.
 	/// </summary>
-	public CString Name { get; } = CString.Create<ItemState>(new(hash, nameLength));
+	public CString Name { get; } = InfoSequenceBase.GetClassName(hash, nameLength);
 	/// <summary>
 	/// Information hash.
 	/// </summary>
@@ -36,6 +36,25 @@ internal abstract partial class InfoSequenceBase(String hash, Int32 nameLength)
 		lastChar = hashSpan[^1] == default ? @"\0" : $"{hashSpan[^1]}";
 		return hashSpan[..^1];
 	}
+	/// <summary>
+	/// Retrieves the <see cref="CString"/> JNI class name.
+	/// </summary>
+	/// <param name="classHash">Class hash.</param>
+	/// <param name="classNameLength">JNI class name length.</param>
+	/// <returns>The <see cref="CString"/> JNI class name.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static CString GetClassName(String classHash, Int32 classNameLength)
+		=> CString.Create<ItemState>(new(classHash, classNameLength));
+	/// <summary>
+	/// Retrieves the <see cref="CString"/> JNI signature.
+	/// </summary>
+	/// <param name="classHash">Class hash.</param>
+	/// <param name="classNameLength">JNI class name length.</param>
+	/// <param name="signatureLength">JNI signature length.</param>
+	/// <returns>The <see cref="CString"/> JNI signature.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static CString GetClassSignature(String classHash, Int32 classNameLength, Int32 signatureLength)
+		=> CString.Create<ItemState>(new(classHash, signatureLength, classNameLength + 1));
 
 	/// <summary>
 	/// State for retrieve functional <see cref="CString"/>.

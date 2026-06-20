@@ -10,10 +10,6 @@ public class JActionEventObject : JAwtEventObject, IClassType<JActionEventObject
 
 	static JClassTypeMetadata<JActionEventObject> IClassType<JActionEventObject>.Metadata
 		=> JActionEventObject.typeMetadata;
-#if !NET8_0_OR_GREATER
-	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
-	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd1;
-#endif
 
 	protected JActionEventObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JActionEventObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
@@ -24,4 +20,9 @@ public class JActionEventObject : JAwtEventObject, IClassType<JActionEventObject
 		=> new(initializer);
 	static JActionEventObject IClassType<JActionEventObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
+#if !NET8_0_OR_GREATER
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd1;
+	static Int32 IDataType.AndroidApiLevel => -1;
+#endif
 }

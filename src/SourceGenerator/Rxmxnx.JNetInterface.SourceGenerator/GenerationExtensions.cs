@@ -44,6 +44,7 @@ internal static partial class GenerationExtensions
 		IncrementalValueProvider<ImmutableArray<INamedTypeSymbol?>> incArray =
 			source.Where(s => s is not null).Collect();
 		IncrementalValueProvider<IEnumerable<INamedTypeSymbol>> incEnumerable =
+			// ReSharper disable once HeapView.BoxingAllocation
 			incArray.Select((arr, _) => arr.Distinct(SymbolEqualityComparer.Default).Cast<INamedTypeSymbol>());
 		return incEnumerable.SelectMany((e, _) => e);
 	}

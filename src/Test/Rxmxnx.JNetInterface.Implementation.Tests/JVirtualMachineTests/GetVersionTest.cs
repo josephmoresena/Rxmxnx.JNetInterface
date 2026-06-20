@@ -89,8 +89,8 @@ public partial class JVirtualMachineTests
 			resultUtf8.AsSpan().CopyTo(utf8Chars);
 		});
 		proxyEnv.CallStaticObjectMethod(systemClassRef, proxyEnv.VirtualMachine.SystemGetPropertyMethodId,
-		                                Arg.Is<ReadOnlyValPtr<JValueWrapper>>(a => Marshal.ReadIntPtr(a.Pointer) ==
-			                                                                      stringRef.Pointer))
+		                                Arg.Is<ReadOnlyValPtr<JValue>>(a => Marshal.ReadIntPtr(a.Pointer) ==
+			                                                               stringRef.Pointer))
 		        .Returns(stringRef1.Value);
 		proxyEnv.NewStringUtf(Arg.Any<ReadOnlyValPtr<Byte>>()).Returns(stringRef);
 		try
@@ -104,7 +104,7 @@ public partial class JVirtualMachineTests
 			proxyEnv.Received(1).PushLocalFrame(IVirtualMachine.GetVersionCapacity);
 			proxyEnv.Received(1).CallStaticObjectMethod(systemClassRef,
 			                                            proxyEnv.VirtualMachine.SystemGetPropertyMethodId,
-			                                            Arg.Any<ReadOnlyValPtr<JValueWrapper>>());
+			                                            Arg.Any<ReadOnlyValPtr<JValue>>());
 			proxyEnv.Received(invalidResult ? 1 : 0).ExceptionClear();
 			proxyEnv.Received(1).PopLocalFrame(default);
 

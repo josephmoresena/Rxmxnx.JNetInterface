@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<linker>
+    <!-- Fixed Android Version Feature -->
+    <assembly fullname="Rxmxnx.JNetInterface.Android.Intermediate">
+        <!-- Runtime Feature Android -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Android"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+        </type>
+        <!-- Runtime Feature Dalvik -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Dalvik"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="1"/>
+        </type>
+        <!-- Runtime Feature PetitFour -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.PetitFour"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="2"/>
+        </type>
+        <!-- Runtime Feature Cupcake -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Cupcake"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="3"/>
+        </type>
+        <!-- Runtime Feature Donut -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Donut"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="4"/>
+        </type>
+        <!-- Runtime Feature Eclair -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Eclair"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="5"/>
+        </type>
+        <!-- Runtime Feature Eclair (API level 6) -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Eclair6"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="6"/>
+        </type>
+        <!-- Runtime Feature Eclair (API level 7) -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Eclair7"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="7"/>
+        </type>
+        <!-- Runtime Feature Froyo -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Froyo"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="8"/>
+        </type>
+        <!-- Runtime Feature Gingerbread -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Gingerbread"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="9"/>
+        </type>
+        <!-- Runtime Feature Gingerbread (API level 10) -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Gingerbread10"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="10"/>
+        </type>
+        <!-- Runtime Feature Honeycomb -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Honeycomb"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="11"/>
+        </type>
+        <!-- Runtime Feature Honeycomb (API level 12) -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Honeycomb12"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="12"/>
+        </type>
+        <!-- Runtime Feature Honeycomb (API level 13) -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Honeycomb13"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="13"/>
+        </type>
+        <!-- Runtime Feature IceCreamSandwich -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature"
+              feature="JNetInterface.FixedRuntime.IceCreamSandwich"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="14"/>
+        </type>
+        <!-- Runtime Feature IceCreamSandwich (API level 15) -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature"
+              feature="JNetInterface.FixedRuntime.IceCreamSandwich15"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="15"/>
+        </type>
+        <!-- Runtime Feature JellyBean -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.JellyBean"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="16"/>
+        </type>
+        <!-- Runtime Feature JellyBean (API level 17) -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.JellyBean17"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="17"/>
+        </type>
+        <!-- Runtime Feature JellyBean (API level 18) -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.JellyBean18"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="18"/>
+        </type>
+        <!-- Runtime Feature KitKat -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.KitKat"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="19"/>
+        </type>
+        <!-- Runtime Feature KitKat (API level 20) -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.KitKat20"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="20"/>
+        </type>
+        <!-- Runtime Feature Lollipop -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Lollipop"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="21"/>
+        </type>
+        <!-- Runtime Feature Lollipop (API level 22) -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Lollipop22"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="22"/>
+        </type>
+        <!-- Runtime Feature Marshmallow -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Marshmallow"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="23"/>
+        </type>
+        <!-- Runtime Feature Nougat -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Nougat"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="24"/>
+        </type>
+        <!-- Runtime Feature Nougat (API level 25) -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Nougat25"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="25"/>
+        </type>
+        <!-- Runtime Feature Oreo -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Oreo"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="26"/>
+        </type>
+        <!-- Runtime Feature Oreo (API level 27) -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Oreo27"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="27"/>
+        </type>
+        <!-- Runtime Feature Pie -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Pie"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="28"/>
+        </type>
+        <!-- Runtime Feature Android10 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Android10"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="29"/>
+        </type>
+        <!-- Runtime Feature Android11 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Android11"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="30"/>
+        </type>
+        <!-- Runtime Feature Android12 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Android12"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="31"/>
+        </type>
+        <!-- Runtime Feature Android12L -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Android12L"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="32"/>
+        </type>
+        <!-- Runtime Feature Android13 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Android13"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="33"/>
+        </type>
+        <!-- Runtime Feature Android14 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Android14"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="34"/>
+        </type>
+        <!-- Runtime Feature Android15 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Android15"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="35"/>
+        </type>
+        <!-- Runtime Feature Android16 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Android16"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="36"/>
+        </type>
+        <!-- Runtime Feature Android17 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.AndroidFeature" feature="JNetInterface.FixedRuntime.Android17"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedAndroid()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxAndroidApiLevel()" body="stub" value="37"/>
+        </type>
+    </assembly>
+</linker>

@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <IsMobileLibrary>True</IsMobileLibrary>
+        <DefineConstants Condition="'$(Version)' != ''">DEFINE_JAVA_INTEROP</DefineConstants>
+    </PropertyGroup>
+
+    <Import Project="..\Intermediate.Library.props"/>
+    <Import Project="..\..\Mobile.Library.props"/>
+
+    <ItemGroup>
+        <Using Include="System.Buffers"/>
+        <Using Include="System.Collections.Concurrent"/>
+        <Using Include="System.Diagnostics"/>
+        <Using Include="System.Diagnostics.CodeAnalysis"/>
+        <Using Include="System.Runtime.CompilerServices"/>
+        <Using Include="System.Runtime.InteropServices"/>
+        <Using Include="System.Runtime.Versioning"/>
+        <Using Include="System.Text"/>
+        <Using Include="Java.Interop"/>
+        <Using Include="Rxmxnx.PInvoke"/>
+        <Using Include="Rxmxnx.JNetInterface.ContextBuilder"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal.Localization"/>
+        <Using Include="Rxmxnx.JNetInterface.Lang"/>
+        <Using Include="Rxmxnx.JNetInterface.Native"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.Access"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.Identifiers"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.References"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.Values"/>
+        <Using Include="Rxmxnx.JNetInterface.Primitives"/>
+        <Using Include="Rxmxnx.JNetInterface.Restricted"/>
+        <Using Include="Rxmxnx.JNetInterface.Types"/>
+        <Using Include="Rxmxnx.JNetInterface.Types.Metadata"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.Interop.Intermediate\Rxmxnx.JNetInterface.Interop.Intermediate.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage"/>
+    </ItemGroup>
+</Project>

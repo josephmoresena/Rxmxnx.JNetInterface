@@ -23,7 +23,7 @@ public sealed partial class ExceptionHandlingTests
 			proxyEnv.ClearReceivedCalls();
 			proxyEnv.VirtualMachine.ClearReceivedCalls();
 			proxyEnv.CallObjectMethod(throwableRef.Value, proxyEnv.VirtualMachine.ThrowableGetMessageMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(messageRef.Value);
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(messageRef.Value);
 			proxyEnv.NewGlobalRef(throwableRef.Value).Returns(globalRef);
 			proxyEnv.GetObjectRefType(globalRef.Value).Returns(JReferenceType.GlobalRefType);
 			proxyEnv.GetStringLength(messageRef).Returns(message.Length);
@@ -48,7 +48,7 @@ public sealed partial class ExceptionHandlingTests
 
 			proxyEnv.Received(1).CallObjectMethod(throwableRef.Value,
 			                                      proxyEnv.VirtualMachine.ThrowableGetMessageMethodId,
-			                                      ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                      ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(1).NewGlobalRef(throwableRef.Value);
 			proxyEnv.Received(1).GetStringLength(messageRef);
 			proxyEnv.Received(1).GetStringRegion(messageRef, 0, message.Length, Arg.Any<ValPtr<Char>>());
@@ -76,7 +76,7 @@ public sealed partial class ExceptionHandlingTests
 
 			proxyEnv.Received(0).CallObjectMethod(throwableRef.Value,
 			                                      proxyEnv.VirtualMachine.ThrowableGetMessageMethodId,
-			                                      ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                      ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(1).NewGlobalRef(throwableRef.Value);
 			proxyEnv.Received(0).GetStringLength(messageRef);
 			proxyEnv.Received(0).GetStringRegion(messageRef, 0, message.Length, Arg.Any<ValPtr<Char>>());

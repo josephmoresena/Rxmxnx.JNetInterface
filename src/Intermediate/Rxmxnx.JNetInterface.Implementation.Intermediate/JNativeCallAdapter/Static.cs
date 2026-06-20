@@ -151,12 +151,12 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <summary>
 		/// Throws an exception if <paramref name="localRef"/> is not a local reference.
 		/// </summary>
-		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
+		/// <param name="env">A <see cref="INativeThread"/> instance.</param>
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 		/// <exception cref="ArgumentException">
 		/// Throws an exception if <paramref name="localRef"/> is not a local reference.
 		/// </exception>
-		private static void ThrowIfNotLocalReference(JEnvironment env, JObjectLocalRef localRef)
+		private static void ThrowIfNotLocalReference(INativeThread env, JObjectLocalRef localRef)
 		{
 			if (env.Version < IVirtualMachine.MinimalVersion || !JVirtualMachine.CheckRefTypeNativeCallEnabled) return;
 			if (env.GetReferenceType(localRef) == JReferenceType.LocalRefType) return;

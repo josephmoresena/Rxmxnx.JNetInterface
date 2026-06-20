@@ -180,9 +180,9 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	public override JArrayObject<JClassObject> GetParameterTypes(JExecutableObject jExecutable)
 	{
 		IEnvironment env = jExecutable.Environment;
-		JClassObject executableClass = env.ClassFeature.GetClass<JExecutableObject>();
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetParameterTypesDefinition, jExecutable,
-		                                  executableClass)!;
+		Boolean useExecutableClass = IReferenceType.GetMetadata<JExecutableObject>().IsCompatibleWith(env);
+		JClassObject jClass = useExecutableClass ? env.ClassFeature.GetClass<JExecutableObject>() : jExecutable.Class;
+		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetParameterTypesDefinition, jExecutable, jClass)!;
 	}
 	/// <inheritdoc/>
 	public override JClassObject? GetReturnType(JExecutableObject jMethod)

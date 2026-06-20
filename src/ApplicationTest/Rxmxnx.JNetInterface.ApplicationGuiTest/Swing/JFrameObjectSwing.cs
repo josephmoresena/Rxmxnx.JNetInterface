@@ -46,6 +46,10 @@ public class JFrameObjectSwing : JFrameObjectAwt, IClassType<JFrameObjectSwing>,
 	static JClassTypeMetadata<JFrameObjectSwing> IClassType<JFrameObjectSwing>.Metadata
 		=> JFrameObjectSwing.typeMetadata;
 	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd2;
+#if !NET8_0_OR_GREATER
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static Int32 IDataType.AndroidApiLevel => -1;
+#endif
 
 	protected JFrameObjectSwing(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JFrameObjectSwing(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

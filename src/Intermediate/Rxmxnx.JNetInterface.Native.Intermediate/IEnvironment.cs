@@ -63,6 +63,18 @@ public partial interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// <see langword="true"/> if is secure execute JNI calls; otherwise, <see langword="false"/>.
 	/// </returns>
 	Boolean JniSecure();
+	/// <summary>
+	/// Indicates whether <paramref name="jThread"/> is virtual.
+	/// </summary>
+	/// <param name="jThread"></param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jThread"/> is virtual; otherwise, <seealso langword="false"/>.
+	/// </returns>
+	Boolean? IsVirtual(JThreadObject jThread);
+	/// <summary>
+	/// JNI pending exception describe.
+	/// </summary>
+	void DescribeException();
 
 	/// <summary>
 	/// Creates a new local reference frame and invokes <paramref name="action"/> inside of it.
@@ -100,18 +112,4 @@ public partial interface IEnvironment : IWrapper<JEnvironmentRef>
 #else
 		;
 #endif
-
-	/// <summary>
-	/// JNI pending exception describe.
-	/// </summary>
-	void DescribeException();
-
-	/// <summary>
-	/// Indicates whether <paramref name="jThread"/> is virtual.
-	/// </summary>
-	/// <param name="jThread"></param>
-	/// <returns>
-	/// <see langword="true"/> if <paramref name="jThread"/> is virtual; otherwise, <seealso langword="false"/>.
-	/// </returns>
-	Boolean? IsVirtual(JThreadObject jThread);
 }

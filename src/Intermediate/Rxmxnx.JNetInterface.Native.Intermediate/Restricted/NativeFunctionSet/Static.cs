@@ -192,4 +192,14 @@ public abstract partial class NativeFunctionSet
 	/// </summary>
 	private protected static readonly AccessibleInfoSequence SetPropertyMethodInfo =
 		new(JAccessibleObjectDefinition.SetPropertyMethodHash, 11, 39);
+	/// <summary>
+	/// Information for <c>boolean isVirtual()</c>.
+	/// </summary>
+	private protected static readonly AccessibleInfoSequence IsVirtualMethodInfo =
+		new(JAccessibleObjectDefinition.IsVirtualMethodHash, 9, 3);
+	/// <summary>
+	/// Information for <c>java.lang.Module getModule()</c>.
+	/// </summary>
+	private protected static readonly AccessibleInfoSequence GetModuleMethodInfo =
+		new(JAccessibleObjectDefinition.GetModuleMethodHash, 9, 20);
 }

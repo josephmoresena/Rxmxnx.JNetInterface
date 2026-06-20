@@ -1,3 +1,5 @@
+// ReSharper disable MemberCanBePrivate.Global
+
 namespace Rxmxnx.JNetInterface.Internal;
 
 internal partial class NativeFunctionSetImpl
@@ -203,6 +205,17 @@ internal partial class NativeFunctionSetImpl
 	/// </summary>
 	public static readonly JFieldDefinition<JClassObject> PrimitiveTypeDefinition =
 		new(NativeFunctionSet.PrimitiveTypeFieldInfo);
+
+	/// <summary>
+	/// <c>Thread.isVirtual()</c> definition.
+	/// </summary>
+	public static readonly JFunctionDefinition<JBoolean>.Parameterless IsVirtualDefinition =
+		new(NativeFunctionSet.IsVirtualMethodInfo);
+	/// <summary>
+	/// <c>Class.getModule()</c> definition.
+	/// </summary>
+	public static readonly JFunctionDefinition<JModuleObject>.Parameterless GetModuleDefinition =
+		new(NativeFunctionSet.GetModuleMethodInfo);
 
 	/// <summary>
 	/// Indicates whether an array class is final.

@@ -35,7 +35,7 @@ public partial class JVirtualMachineTests
 			proxyEnv.VirtualMachine.Received(1).GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>());
 			proxyEnv.VirtualMachine.Received(0).AttachCurrentThread(Arg.Any<ValPtr<JEnvironmentRef>>(),
 			                                                        Arg.Any<ReadOnlyValPtr<
-				                                                        VirtualMachineArgumentValueWrapper>>());
+				                                                        VirtualMachineArgumentValue>>());
 			if (vm is null) return;
 			IEnvironment env = vm.GetEnvironment()!;
 			JWeakRef weakRef = JVirtualMachineTests.fixture.Create<JWeakRef>();
@@ -47,7 +47,7 @@ public partial class JVirtualMachineTests
 			proxyEnv.NewWeakGlobalRef(proxyEnv.VirtualMachine.VoidPGlobalRef.Value).Returns(weakRef);
 			Assert.Equal(weakRef, env.ClassFeature.VoidPrimitive.Weak.Reference);
 
-			if (jniVersion < NativeInterface.RequiredVersion)
+			if (jniVersion < (Int32)JRuntimeVersion.SEd2)
 				Assert.Throws<InvalidOperationException>(() => env.ClassFeature.VoidPrimitive.Weak.IsValid(env));
 			else // JNI < 1.6 support 
 				_ = env.ClassFeature.VoidPrimitive.Weak.IsValid(env);

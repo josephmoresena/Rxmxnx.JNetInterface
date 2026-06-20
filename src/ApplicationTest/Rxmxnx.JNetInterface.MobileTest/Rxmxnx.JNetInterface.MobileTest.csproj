@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>$(DefaultFramework)-android</TargetFramework>
+        <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
+        <RuntimeIdentifiers>android-x64;android-arm64</RuntimeIdentifiers>
+        <OutputType>Exe</OutputType>
+        <ApplicationId>com.rxmxnx.jnetinterface.mobiletest</ApplicationId>
+        <ApplicationVersion>1</ApplicationVersion>
+        <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+        <TrimMode>full</TrimMode>
+        <GenerateAotLog>true</GenerateAotLog>
+    </PropertyGroup>
+    <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net9.0')) And '$(NativeAOT)' != 'True'">
+        <RuntimeIdentifiers>$(RuntimeIdentifiers);android-arm</RuntimeIdentifiers>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Release' And '$(NativeAOT)' != 'True'">
+        <PublishAot>false</PublishAot>
+        <RunAOTCompilation>true</RunAOTCompilation>
+        <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Release' And '$(NativeAOT)' == 'True'">
+        <EnablePreviewFeatures>true</EnablePreviewFeatures>
+        <PublishAot>true</PublishAot>
+        <PublishAotUsingRuntimePack>true</PublishAotUsingRuntimePack>
+        <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
+        <IlcGenerateMstatFile>true</IlcGenerateMstatFile>
+        <IlcGenerateDgmlFile>true</IlcGenerateDgmlFile>
+    </PropertyGroup>
+    <Import Project="..\JNetInterface-PackageReference.props"/>
+    <Import Project="..\JNetInterface-Config.props"/>
+    <Import Project="..\..\PInvoke.Reference.props"/>
+</Project>

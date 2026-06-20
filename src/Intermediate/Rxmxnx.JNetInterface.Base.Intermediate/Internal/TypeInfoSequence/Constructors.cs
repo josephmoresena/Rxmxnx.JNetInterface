@@ -12,7 +12,7 @@ internal partial class TypeInfoSequence
 	public TypeInfoSequence(String hash, Int32 classNameLength, Int32 signatureLength) : base(hash, classNameLength)
 	{
 		Int32 arraySignatureOffset = classNameLength + signatureLength + 2;
-		this.Signature = CString.Create<ItemState>(new(this.Hash, signatureLength, classNameLength + 1));
+		this.Signature = InfoSequenceBase.GetClassSignature(this.Hash, classNameLength, signatureLength);
 		this.ArraySignature = this.Hash.Length * 2 - arraySignatureOffset > 2 ?
 			CString.Create<ItemState>(new(this.Hash, signatureLength + 1, arraySignatureOffset)) :
 			CString.Empty;

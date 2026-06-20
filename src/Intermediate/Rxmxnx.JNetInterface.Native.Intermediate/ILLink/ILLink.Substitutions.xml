@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <linker>
+    <!-- Runtime Check Bypass Features -->
     <assembly fullname="Rxmxnx.JNetInterface.Native.Intermediate">
         <type fullname="Rxmxnx.JNetInterface.IVirtualMachine" feature="JNetInterface.DisableMetadataValidation"
               featurevalue="true">
@@ -37,6 +38,9 @@
             <method signature="System.Collections.Generic.IReadOnlySet`1&lt;System.Type&gt; get_TypeBaseTypes()"
                     body="remove"/>
         </type>
+    </assembly>
+    <!-- Jagged Array Auto-generation Feature -->
+    <assembly fullname="Rxmxnx.JNetInterface.Native.Intermediate">
         <type fullname="Rxmxnx.JNetInterface.IVirtualMachine" feature="JNetInterface.DisableJaggedArrayAutoGeneration"
               featurevalue="true">
             <method signature="System.Boolean get_JaggedArrayAutoGenerationEnabled()" body="stub" value="false"/>
@@ -49,6 +53,9 @@
             <method signature="Rxmxnx.JNetInterface.Types.Metadata.JArrayTypeMetadata GetArrayArrayMetadataWithReflection(System.Type)"
                     body="remove"/>
         </type>
+    </assembly>
+    <!-- Metadata Text Representation Feature -->
+    <assembly fullname="Rxmxnx.JNetInterface.Native.Intermediate">
         <type fullname="Rxmxnx.JNetInterface.IVirtualMachine" feature="JNetInterface.DisableTypeMetadataToString"
               featurevalue="true">
             <method signature="System.Boolean get_TypeMetadataToStringEnabled()" body="stub" value="false"/>

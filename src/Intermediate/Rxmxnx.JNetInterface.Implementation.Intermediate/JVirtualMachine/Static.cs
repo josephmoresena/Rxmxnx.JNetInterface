@@ -3,27 +3,26 @@ namespace Rxmxnx.JNetInterface;
 public partial class JVirtualMachine
 {
 	/// <summary>
+	/// Android API level.
+	/// </summary>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	public static Int32? AndroidApiLevel => AndroidHelper.IsZygote ? AndroidHelper.ApiLevel : default;
+	/// <summary>
 	/// Indicates whether trace output is enabled.
 	/// </summary>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public static Boolean TraceEnabled
-	{
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get => AppContext.TryGetSwitch("JNetInterface.EnableTrace", out Boolean enable) && enable;
-	}
+	public static Boolean TraceEnabled => JTrace.TraceEnabled;
 	/// <summary>
 	/// Indicates whether final user-types should be treated as real classes at runtime.
 	/// </summary>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public static Boolean FinalUserTypeRuntimeEnabled
-	{
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get => AppContext.TryGetSwitch("JNetInterface.EnableFinalUserTypeRuntime", out Boolean enable) && enable;
-	}
+	public static Boolean FinalUserTypeRuntimeEnabled => MetadataHelper.FinalUserTypeRuntimeEnabled;
 	/// <summary>
 	/// Indicates whether native call adapters should check parameter references type.
 	/// </summary>
@@ -64,7 +63,7 @@ public partial class JVirtualMachine
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 #endif
 	public static Boolean Register<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
-		=> MetadataHelper.Register<TReference>();
+		=> MetadataHelper.IsCompileCompliant<TReference>() && MetadataHelper.Register<TReference>();
 	/// <summary>
 	/// Retrieves the <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.
 	/// </summary>
@@ -72,7 +71,6 @@ public partial class JVirtualMachine
 	/// <returns>The <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.</returns>
 	public static IVirtualMachine GetVirtualMachine(JVirtualMachineRef reference)
 		=> ReferenceCache.Instance.Get(reference, out _);
-
 	/// <summary>
 	/// Removes the <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.
 	/// </summary>
@@ -83,7 +81,7 @@ public partial class JVirtualMachine
 	/// </returns>
 	public static Boolean RemoveVirtualMachine(JVirtualMachineRef reference)
 	{
-		ReferenceCache.Instance.Get(reference)?._cache.ClearCache();
+		ReferenceCache.Instance.Get(reference)?._core.ClearCache();
 		return ReferenceCache.Instance.Remove(reference);
 	}
 	/// <summary>
@@ -96,9 +94,7 @@ public partial class JVirtualMachine
 #if !NET8_0_OR_GREATER
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 #endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void SetMainClass<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
-	{
-		JDataTypeMetadata typeMetadata = MetadataHelper.GetExactMetadata<TReference>();
-		MainClasses.AppendMainClass(JVirtualMachine.userMainClasses, typeMetadata);
-	}
+		=> MainClasses.SetMainClass<TReference>(JVirtualMachine.userMainClasses);
 }

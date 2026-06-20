@@ -1,0 +1,20 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <PackageVersion Condition="'$(PackageVersion)' == ''">9999.99.99.99-tmp</PackageVersion>
+        <DefineConstants Condition="'$(PackageVersion)' != '9999.99.99.99-tmp'">$(DefineConstants);RELEASE_PACKAGE</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(UsePackage)' != 'true'">
+        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
+    </ItemGroup>
+    <ItemGroup Condition="'$(UsePackage)' != 'true' And '$(TargetPlatformIdentifier)' != 'android'">
+        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
+    </ItemGroup>
+    <ItemGroup Condition="'$(UsePackage)' != 'true' And '$(TargetPlatformIdentifier)' == 'android'">
+        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Mobile.Intermediate\Rxmxnx.JNetInterface.Mobile.Intermediate.csproj"/>
+    </ItemGroup>
+    <ItemGroup Condition="'$(UsePackage)' == 'true'">
+        <PackageReference Condition="'$(TargetPlatformIdentifier)' != 'android'" Include="Rxmxnx.JNetInterface" Version="$(PackageVersion)"/>
+        <PackageReference Condition="'$(TargetPlatformIdentifier)' == 'android'" Include="Rxmxnx.JNetInterface.Mobile" Version="$(PackageVersion)"/>
+    </ItemGroup>
+</Project>

@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface;
 /// This class implements the <see cref="IVirtualMachine"/> interface.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Advanced)]
-public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironment, JEnvironment, Boolean>
+public partial class JEnvironment : IEqualityOperators<JEnvironment, JEnvironment, Boolean>
 {
 	/// <summary>
 	/// Thread name.
@@ -18,78 +18,81 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	/// Indicates whether current thread is daemon.
 	/// </summary>
 	public virtual Boolean IsDaemon => false;
+	/// <inheritdoc cref="IEnvironment.Version"/>
+	public Int32 Version => this._m.Core.Version;
 	/// <summary>
 	/// Indicates whether current thread is attached to a JVM.
 	/// </summary>
-	public virtual Boolean IsAttached => this._cache.VirtualMachine.IsAlive;
+	public virtual Boolean IsAttached => this._m.Core.Host.IsRunning;
+
 	/// <inheritdoc cref="IEnvironment.PendingException"/>
 	public ThrowableException? PendingException
 	{
-		get => this.GetThrown();
-		set => this.SetThrown(value);
+		get => this._m.PendingException;
+		set => this._m.PendingException = value;
 	}
 
 	/// <inheritdoc/>
-	public JEnvironmentRef Reference => this._cache.Reference;
+	public JEnvironmentRef Reference => this._m.Core.Reference;
 	/// <inheritdoc/>
-	public IVirtualMachine VirtualMachine => this._cache.VirtualMachine;
+	public IVirtualMachine VirtualMachine => this._m.Core.Host.Value;
 	/// <inheritdoc/>
-	public Int32 Version => this._cache.Version;
-	/// <inheritdoc/>
-	public Int32 UsedStackBytes => this._cache.UsedStackBytes;
+	public Int32 UsedStackBytes => this._m.Core.UsedStackBytes;
 	/// <inheritdoc/>
 	public Int32 UsableStackBytes
 	{
-		get => this._cache.MaxStackBytes;
-		set => this._cache.SetUsableStackBytes(value);
+		get => this._m.UsableStackBytes;
+		set => this._m.UsableStackBytes = value;
 	}
 
-	void IEnvironment.WithFrame(Int32 capacity, Action action)
+	Int32 IEnvironment.Version
 	{
-		using LocalFrame _ = new(this, capacity);
-		this._cache.CheckJniError();
-		action();
+		get
+		{
+			if (AndroidFeature.IsFixedAndroid) return (Int32)JRuntimeVersion.J6;
+			if (JavaStandardFeature.GetInterfaceVersion() is { } jniVersion) return jniVersion;
+			return this.Version;
+		}
 	}
+
+	void IEnvironment.WithFrame(Int32 capacity, Action action) => this._m.WithFrame(this, capacity, action);
 	void IEnvironment.WithFrame<TState>(Int32 capacity, TState state, Action<TState> action)
-	{
-		using LocalFrame _ = new(this, capacity);
-		this._cache.CheckJniError();
-		action(state);
-	}
+		=> this._m.WithFrame(this, capacity, state, action);
+
 	Boolean? IEnvironment.IsVirtual(JThreadObject jThread)
 	{
 		ImplementationValidationUtilities.ThrowIfProxy(jThread);
 		ImplementationValidationUtilities.ThrowIfDefault(jThread);
-		if (this.Version < NativeInterface19.RequiredVersion) return default;
-		ref readonly NativeInterface19 nativeInterface =
-			ref this._cache.GetNativeInterface<NativeInterface19>(NativeInterface19.IsVirtualThreadInfo);
-		using INativeTransaction jniTransaction = this._cache.VirtualMachine.CreateTransaction(1);
-		JObjectLocalRef localRef = jniTransaction.Add(jThread);
-		return nativeInterface.IsVirtualThread(this.Reference, localRef).Value;
+		if (this.Version >= NativeInterface19.RequiredVersion)
+		{
+			ref readonly NativeInterface19 nativeInterface =
+				ref this._m.Core.GetNativeInterface<NativeInterface19>(NativeInterface19.IsVirtualThreadInfo);
+			using INativeTransaction jniTransaction = this._m.Core.Host.MemoryManager.CreateTransaction(1);
+			JObjectLocalRef localRef = jniTransaction.Add(jThread);
+			return nativeInterface.IsVirtualThread(this.Reference, localRef).Value;
+		}
+		if (JVirtualMachine.AndroidApiLevel > 0 || this.VirtualMachine.Version < JRuntimeVersion.J21) return default;
+		return this._m.Core.IsVirtual(jThread);
 	}
 
 	/// <inheritdoc/>
-	public Boolean JniSecure() => this._cache.JniSecure();
+	public Boolean JniSecure() => this._m.JniSecure();
 	/// <inheritdoc/>
-	public void DescribeException()
-	{
-		ref readonly NativeInterface nativeInterface =
-			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionDescribeInfo);
-		nativeInterface.ErrorFunctions.ExceptionDescribe(this.Reference);
-	}
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public void DescribeException() => EnvironmentCore.DescribeException(this._m.Core);
 
 	/// <inheritdoc/>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
 	public sealed override Boolean Equals(Object? obj)
-		=> (obj is JEnvironment other && this._cache.Equals(other._cache)) ||
+		=> (obj is JEnvironment other && this._m.Core.Equals(other._m.Core)) ||
 			(obj is IEnvironment env && this.Reference == env.Reference);
 	/// <inheritdoc/>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public sealed override Int32 GetHashCode() => this._cache.GetHashCode();
+	public sealed override Int32 GetHashCode() => this._m.Core.GetHashCode();
 
 	/// <summary>
 	/// Determines whether a specified <see cref="JEnvironment"/> and a <see cref="JEnvironment"/> instance

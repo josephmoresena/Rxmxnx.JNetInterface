@@ -1,0 +1,162 @@
+name: FreeBSD Arm64 Actions
+on:
+  workflow_call:
+    inputs:
+      run_tests:
+        required: false
+        default: false
+        type: boolean
+      build_artifacts:
+        required: false
+        default: false
+        type: boolean
+      package_version:
+        required: false
+        default: ''
+        type: string
+
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      SHOW_DIAGNOSTICS: ${{ inputs.run_tests }}
+      JNETINTERFACE_ONLY_NATIVE_TEST: ${{ inputs.package_version != '' }}
+      JNETINTERFACE_JNI_CHECK: false
+      PackageVersion: ${{ inputs.package_version }}
+      NoAndroid: "True"
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 1
+      - name: Restore Internal NuGet Package
+        uses: actions/cache/restore@v5
+        if: inputs.build_artifacts == true
+        with:
+          path: ./package/Nuget
+          key: internal-nuget-${{ github.run_id }}
+          fail-on-cache-miss: true
+          enableCrossOsArchive: true
+      - name: Restore Compiled Tests
+        if: inputs.run_tests == true
+        uses: actions/cache/restore@v5
+        with:
+          path: |
+            ./src/Test/**/bin/Release/net9.0
+          key: internal-tests-bin-${{ github.run_id }}
+          fail-on-cache-miss: true
+      - name: Init FreeBSD 14.4 VM
+        id: vm
+        uses: vmactions/freebsd-vm@v1.4.6
+        with:
+          arch: aarch64
+          release: "14.4"
+          usesh: true
+          copyback: false
+          sync: nfs
+          envs: 'PackageVersion SHOW_DIAGNOSTICS JNETINTERFACE_ONLY_NATIVE_TEST JNETINTERFACE_JNI_CHECK'
+          prepare: |
+            mkdir -p /usr/local/etc/pkg/repos
+            echo 'FreeBSD: { url: "pkg+http://pkg.freebsd.org/FreeBSD:14:aarch64/quarterly" }' > /usr/local/etc/pkg/repos/FreeBSD.conf
+            
+            pkg update -f 
+            pkg install -y python311 py311-pillow sqlite3 unixODBC libgdiplus zip ca_root_nss dotnet openjdk8 openjdk11 openjdk17 openjdk21 openjdk25
+          run: |
+            dotnet dev-certs https --trust
+      - name: Run Tests (FreeBSD 14.4)
+        if: inputs.run_tests == true
+        shell: freebsd {0}
+        run: |
+          cd $GITHUB_WORKSPACE;
+          dotnet test ./src/Test/Rxmxnx.JNetInterface.Base.Tests/bin/Release/net9.0/Rxmxnx.JNetInterface.Base.Tests.dll --logger 'console;verbosity=detailed';
+          dotnet test ./src/Test/Rxmxnx.JNetInterface.Primitives.Tests/bin/Release/net9.0/Rxmxnx.JNetInterface.Primitives.Tests.dll --logger 'console;verbosity=detailed';
+          dotnet test ./src/Test/Rxmxnx.JNetInterface.Native.Tests/bin/Release/net9.0/Rxmxnx.JNetInterface.Native.Tests.dll --logger 'console;verbosity=detailed';
+          dotnet test ./src/Test/Rxmxnx.JNetInterface.Extensions.Tests/bin/Release/net9.0/Rxmxnx.JNetInterface.Extensions.Tests.dll --logger 'console;verbosity=detailed';
+          dotnet test ./src/Test/Rxmxnx.JNetInterface.Implementation.Tests/bin/Release/net9.0/Rxmxnx.JNetInterface.Implementation.Tests.dll --logger 'console;verbosity=detailed';
+      - name: Publish Launcher (FreeBSD 14.4)
+        if: inputs.build_artifacts == true
+        shell: freebsd {0}
+        run: |
+          cd $GITHUB_WORKSPACE;
+          cd ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest;
+          dotnet publish -r freebsd.14-arm64;
+      - name: Run launcher - Compile (FreeBSD 14.5)
+        if: inputs.build_artifacts == true
+        shell: freebsd {0}
+        run: |
+          cd $GITHUB_WORKSPACE;
+          ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "compile";
+          rm -rf ~/.nuget/packages;
+
+      - name: Create Native Artifact Logs
+        if: inputs.build_artifacts == true && inputs.package_version == ''
+        uses: actions/upload-artifact@v6
+        with:
+          name: FreeBSD.14.arm64-Artifact-Logs
+          path: |
+            ./artifacts/native/*
+            ./artifacts-java/native/*
+      - name: Create Release Logs Assets
+        if: inputs.build_artifacts == true && inputs.package_version != ''
+        shell: pwsh
+        run: |
+          $logPatterns = @(
+            "./artifacts/native/*"
+            "./artifacts-java/native/*"
+          )
+          ./ZipAndClean.ps1 -ZipName "FreeBSD.14.arm64-Assets-Logs.zip" -Patterns $logPatterns
+
+      - name: Run launcher - Run (FreeBSD)
+        if: inputs.build_artifacts == true
+        shell: freebsd {0}
+        run: |
+          cd $GITHUB_WORKSPACE;
+          ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "run";
+
+      - name: Remove Jar File
+        if: inputs.build_artifacts == true
+        run: |
+          cd $GITHUB_WORKSPACE;
+          rm ./artifacts-java/*.jar;
+          rm -rf ./artifacts-java/native
+      - name: Cache Java FreeBSD arm64 Libraries
+        if: inputs.build_artifacts == true
+        uses: actions/cache/save@v5
+        with:
+          path: ./artifacts-java
+          key: internal-freebsd-arm64-${{ github.run_id }}
+          enableCrossOsArchive: true
+      - name: Remove Java Libraries File
+        if: inputs.build_artifacts == true
+        run: |
+          cd $GITHUB_WORKSPACE;
+          rm -rf ./artifacts-java;
+
+      - name: Create Native Artifact
+        if: inputs.build_artifacts == true && inputs.package_version == ''
+        uses: actions/upload-artifact@v6
+        with:
+          name: FreeBSD.14.arm64-Artifact
+          path: |
+            ./artifacts/*.class
+            ./artifacts/*NAOT*
+            ./artifacts/*RFM*
+      - name: Create Release Assets
+        if: inputs.build_artifacts == true && inputs.package_version != ''
+        shell: pwsh
+        run: |
+          $binPatterns = @(
+            "./artifacts/*.class",
+            "./artifacts/*arm64*NAOT*",
+            "./artifacts/*arm64*RFM*"
+          )
+          ./ZipAndClean.ps1 -ZipName "FreeBSD.14-arm64-Assets.zip" -Patterns $binPatterns
+
+      - name: Upload Release Assets
+        if: inputs.build_artifacts == true && inputs.package_version != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          gh release upload ${{ github.ref_name }} ./*-Assets*.zip --clobber

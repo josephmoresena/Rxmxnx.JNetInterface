@@ -5,7 +5,7 @@ public partial record ClassObjectMetadata
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="metadata">A <see cref="JDataTypeMetadata"/> instance.</param>
+	/// <param name="metadata">A <see cref="ITypeInformation"/> instance.</param>
 	/// <param name="fromProxy">Indicates whether the current instance is a dummy object (fake java object).</param>
 	private ClassObjectMetadata(ITypeInformation metadata, Boolean? fromProxy) : base(
 		IClassType.GetMetadata<JClassObject>(), fromProxy)

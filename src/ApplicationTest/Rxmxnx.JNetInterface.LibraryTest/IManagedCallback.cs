@@ -38,5 +38,9 @@ public partial interface IManagedCallback
 			$"{nameof(IVirtualMachine.TypeMetadataToStringEnabled)}: {IVirtualMachine.TypeMetadataToStringEnabled}");
 		Console.WriteLine(
 			$"{nameof(JVirtualMachine.FinalUserTypeRuntimeEnabled)}: {JVirtualMachine.FinalUserTypeRuntimeEnabled}");
+		Console.WriteLine(
+			$"{nameof(JVirtualMachine.CheckRefTypeNativeCallEnabled)}: {JVirtualMachine.CheckRefTypeNativeCallEnabled}");
+		Console.WriteLine(
+			$"{nameof(JVirtualMachine.CheckClassRefNativeCallEnabled)}: {JVirtualMachine.CheckClassRefNativeCallEnabled}");
 	}
 }

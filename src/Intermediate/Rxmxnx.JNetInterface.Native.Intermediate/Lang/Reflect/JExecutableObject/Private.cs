@@ -23,13 +23,11 @@ public partial class JExecutableObject
 	/// Retrieves the <see cref="JCallDefinition"/> instance for the current instance.
 	/// </summary>
 	/// <returns>A <see cref="JCallDefinition"/> instance.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JCallDefinition GetCallDefinition()
 	{
 		IEnvironment env = this.Environment;
-		using JStringObject memberName = env.FunctionSet.GetName(this);
-		using JArrayObject<JClassObject> parameterTypes = env.FunctionSet.GetParameterTypes(this);
-		using JClassObject? returnType = env.FunctionSet.GetReturnType(this);
-		return env.AccessFeature.GetDefinition(memberName, parameterTypes, returnType);
+		return env.WithFrame(IVirtualMachine.GetCallDefinitionCapacity, this, JExecutableObject.GetCallDefinition);
 	}
 	/// <summary>
 	/// Retrieves the <see cref="JMethodId"/> identifier for the current instance.
@@ -56,5 +54,19 @@ public partial class JExecutableObject
 	{
 		this._methodId = default;
 		base.ClearValue();
+	}
+
+	/// <summary>
+	/// Retrieves the <see cref="JCallDefinition"/> instance for the current instance.
+	/// </summary>
+	/// <param name="jExecutable">A <see cref="JExecutableObject"/> instance.</param>
+	/// <returns>A <see cref="JCallDefinition"/> instance.</returns>
+	private static JCallDefinition GetCallDefinition(JExecutableObject jExecutable)
+	{
+		IEnvironment env = jExecutable.Environment;
+		using JStringObject memberName = env.FunctionSet.GetName(jExecutable);
+		using JArrayObject<JClassObject> parameterTypes = env.FunctionSet.GetParameterTypes(jExecutable);
+		using JClassObject? returnType = env.FunctionSet.GetReturnType(jExecutable);
+		return env.AccessFeature.GetDefinition(memberName, parameterTypes, returnType);
 	}
 }

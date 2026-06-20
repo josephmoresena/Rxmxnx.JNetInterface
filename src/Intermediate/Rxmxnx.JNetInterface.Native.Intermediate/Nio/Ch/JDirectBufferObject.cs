@@ -26,6 +26,7 @@ public sealed class JDirectBufferObject : JInterfaceObject<JDirectBufferObject>,
 
 	static TypeMetadata IInterfaceType<JDirectBufferObject>.Metadata => JDirectBufferObject.typeMetadata;
 	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd4;
+	static Int32 IDataType.AndroidApiLevel => 24;
 
 	/// <inheritdoc/>
 	private JDirectBufferObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

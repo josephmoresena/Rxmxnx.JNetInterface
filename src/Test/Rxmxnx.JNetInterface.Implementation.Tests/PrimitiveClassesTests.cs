@@ -97,7 +97,7 @@ public sealed partial class PrimitiveClassesTests
 				constructorIds.GetValueOrDefault(classRef) :
 				default;
 		});
-		proxyEnv.NewObject(Arg.Any<JClassLocalRef>(), Arg.Any<JMethodId>(), Arg.Any<ReadOnlyValPtr<JValueWrapper>>())
+		proxyEnv.NewObject(Arg.Any<JClassLocalRef>(), Arg.Any<JMethodId>(), Arg.Any<ReadOnlyValPtr<JValue>>())
 		        .Returns(c =>
 		        {
 			        JClassLocalRef classRef = (JClassLocalRef)c[0];

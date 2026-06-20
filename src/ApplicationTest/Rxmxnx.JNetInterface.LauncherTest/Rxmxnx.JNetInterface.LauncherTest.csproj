@@ -10,6 +10,7 @@
         <InvariantGlobalization>true</InvariantGlobalization>
         <PublishDir Condition="'$(PublishDir)' == ''">..\..\..\</PublishDir>
         <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
+        <NoWarn>$(NoWarn);NU1801;NU1102;NU1301</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
@@ -27,8 +28,6 @@
         <Using Include="Rxmxnx.JNetInterface.ApplicationTest.Util"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="*"/>
-    </ItemGroup>
+    <Import Project="..\..\PInvoke.Reference.props"/>
 
 </Project>

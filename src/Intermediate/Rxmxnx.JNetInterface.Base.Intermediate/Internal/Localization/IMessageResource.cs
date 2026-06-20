@@ -138,6 +138,22 @@ internal partial interface IMessageResource
 	/// Message for unmanaged memory context exception.
 	/// </summary>
 	String UnmanagedMemoryContext { get; }
+	/// <summary>
+	/// Message for non-Native AOT runtime.
+	/// </summary>
+	String AotRequired { get; }
+	/// <summary>
+	/// Message for Android runtime required.
+	/// </summary>
+	String AndroidRuntimeRequired { get; }
+	/// <summary>
+	/// Message for invalid SetEnvironmentPointer(IntPtr) method.
+	/// </summary>
+	String MissingSetEnvironmentPointerMethod { get; }
+	/// <summary>
+	/// Message for invalid JniRuntime state.
+	/// </summary>
+	String MissingJniRuntime { get; }
 
 	/// <summary>
 	/// Message for instantiation exception.
@@ -286,4 +302,8 @@ internal partial interface IMessageResource
 	/// </summary>
 	/// <param name="maxLevel">Maximum level.</param>
 	String InvalidArrayDimension(Int32 maxLevel);
+	/// <summary>
+	/// Message for interface version.
+	/// </summary>
+	String InvalidInterfaceVersion(Int32 currentVersion, Int32 requiredVersion);
 }

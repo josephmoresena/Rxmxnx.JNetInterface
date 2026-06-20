@@ -30,9 +30,9 @@ public sealed partial class JNativeCallAdapterTests
 		proxyEnv.GetStringUtfLength(strRef).Returns(jClass.Name.Length);
 		proxyEnv.GetStringUtfLength(clsStrRef).Returns(classClassTypeMetadata.ClassName.Length);
 		proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-		                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef.Value);
+		                          ReadOnlyValPtr<JValue>.Zero).Returns(strRef.Value);
 		proxyEnv.CallObjectMethod(proxyEnv.ClassLocalRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-		                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(clsStrRef.Value);
+		                          ReadOnlyValPtr<JValue>.Zero).Returns(clsStrRef.Value);
 		proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>()).Returns((ReadOnlyValPtr<Byte>)ctx.Pointer);
 		proxyEnv.GetStringUtfChars(clsStrRef, Arg.Any<ValPtr<JBoolean>>())
 		        .Returns((ReadOnlyValPtr<Byte>)nameNameCtx.Pointer);
@@ -479,7 +479,7 @@ public sealed partial class JNativeCallAdapterTests
 			proxyEnv.GetObjectRefType(arrayRef.Value).Returns(JReferenceType.LocalRefType);
 			proxyEnv.GetStringUtfLength(strRef).Returns(arrayTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef.Value);
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(strRef.Value);
 			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 
@@ -496,7 +496,7 @@ public sealed partial class JNativeCallAdapterTests
 			proxyEnv.Received(1).GetStringUtfLength(strRef);
 			proxyEnv.Received(1).GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>());
 			proxyEnv.Received(1).CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                                      ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                      ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).FindClass(Arg.Any<ReadOnlyValPtr<Byte>>());
 			proxyEnv.Received(0).GetArrayLength(arrayRef);
 		}
@@ -521,7 +521,7 @@ public sealed partial class JNativeCallAdapterTests
 			proxyEnv.GetObjectRefType(arrayRef.Value).Returns(JReferenceType.LocalRefType);
 			proxyEnv.GetStringUtfLength(strRef).Returns(arrayTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef.Value);
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(strRef.Value);
 			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 
@@ -539,7 +539,7 @@ public sealed partial class JNativeCallAdapterTests
 			proxyEnv.Received(final ? 0 : 1).GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>());
 			proxyEnv.Received(final ? 0 : 1).CallObjectMethod(classRef.Value,
 			                                                  proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                                                  ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                                  ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).GetSuperclass(Arg.Any<JClassLocalRef>());
 			proxyEnv.Received(0).FindClass(Arg.Any<ReadOnlyValPtr<Byte>>());
 			proxyEnv.Received(0).GetArrayLength(arrayRef);
@@ -585,7 +585,7 @@ public sealed partial class JNativeCallAdapterTests
 			proxyEnv.GetObjectClass(throwableRef.Value).Returns(classRef);
 			proxyEnv.GetStringUtfLength(strRef).Returns(classTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef.Value);
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(strRef.Value);
 			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 
@@ -603,7 +603,7 @@ public sealed partial class JNativeCallAdapterTests
 			proxyEnv.Received(final ? 0 : 1).GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>());
 			proxyEnv.Received(final ? 0 : 1).CallObjectMethod(classRef.Value,
 			                                                  proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                                                  ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                                  ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).GetSuperclass(Arg.Any<JClassLocalRef>());
 			proxyEnv.Received(0).FindClass(Arg.Any<ReadOnlyValPtr<Byte>>());
 		}
@@ -628,7 +628,7 @@ public sealed partial class JNativeCallAdapterTests
 			proxyEnv.GetObjectClass(throwableRef.Value).Returns(classRef);
 			proxyEnv.GetStringUtfLength(strRef).Returns(classTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef.Value);
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(strRef.Value);
 			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 
@@ -646,7 +646,7 @@ public sealed partial class JNativeCallAdapterTests
 			proxyEnv.Received(final ? 0 : 1).GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>());
 			proxyEnv.Received(final ? 0 : 1).CallObjectMethod(classRef.Value,
 			                                                  proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                                                  ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                                  ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).GetSuperclass(Arg.Any<JClassLocalRef>());
 			proxyEnv.Received(0).FindClass(Arg.Any<ReadOnlyValPtr<Byte>>());
 		}

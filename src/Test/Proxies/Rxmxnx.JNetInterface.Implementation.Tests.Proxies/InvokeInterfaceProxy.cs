@@ -46,11 +46,11 @@ public abstract class InvokeInterfaceProxy
 
 	public abstract JResult DestroyVirtualMachine();
 	public abstract JResult AttachCurrentThread(ValPtr<JEnvironmentRef> envRef,
-		ReadOnlyValPtr<VirtualMachineArgumentValueWrapper> arg);
+		ReadOnlyValPtr<VirtualMachineArgumentValue> arg);
 	public abstract JResult DetachCurrentThread();
 	public abstract JResult GetEnv(ValPtr<JEnvironmentRef> envRef, Int32 version);
 	public abstract JResult AttachCurrentThreadAsDaemon(ValPtr<JEnvironmentRef> envRef,
-		ReadOnlyValPtr<VirtualMachineArgumentValueWrapper> arg);
+		ReadOnlyValPtr<VirtualMachineArgumentValue> arg);
 
 	public void FinalizeProxy() => ReferenceHelper.FinalizeProxy(this);
 
@@ -66,10 +66,10 @@ public abstract class InvokeInterfaceProxy
 		InvokeInterfaceProxy proxy = Substitute.For<InvokeInterfaceProxy>();
 		proxy.GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>()).Returns(JResult.DetachedThreadError);
 		proxy.AttachCurrentThread(Arg.Any<ValPtr<JEnvironmentRef>>(),
-		                          Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>>())
+		                          Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValue>>())
 		     .Returns(JResult.DetachedThreadError);
 		proxy.AttachCurrentThreadAsDaemon(Arg.Any<ValPtr<JEnvironmentRef>>(),
-		                                  Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>>())
+		                                  Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValue>>())
 		     .Returns(JResult.DetachedThreadError);
 		proxy.DetachCurrentThread().Returns(JResult.DetachedThreadError);
 		proxy.DestroyVirtualMachine().Returns(JResult.DetachedThreadError);

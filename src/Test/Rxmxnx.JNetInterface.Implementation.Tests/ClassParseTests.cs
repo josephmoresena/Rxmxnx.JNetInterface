@@ -11,7 +11,7 @@ public sealed class ClassParseTests
 	internal void ClassTest(Boolean lowerVersion = false)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
-		if (lowerVersion) proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
+		if (lowerVersion) proxyEnv.GetVersion().Returns((Int32)JRuntimeVersion.SEd4);
 		try
 		{
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
@@ -39,7 +39,7 @@ public sealed class ClassParseTests
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		if (lowerVersion)
-			proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
+			proxyEnv.GetVersion().Returns((Int32)JRuntimeVersion.SEd4);
 		try
 		{
 			JGlobalRef globalRef = ClassParseTests.fixture.Create<JGlobalRef>();
@@ -73,7 +73,7 @@ public sealed class ClassParseTests
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		if (lowerVersion)
-			proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
+			proxyEnv.GetVersion().Returns((Int32)JRuntimeVersion.SEd4);
 		try
 		{
 			JWeakRef weakRef = ClassParseTests.fixture.Create<JWeakRef>();
@@ -109,7 +109,7 @@ public sealed class ClassParseTests
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JVoidObject>();
 		using IFixedPointer.IDisposable clsCtx =
 			typeMetadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameCtx);
-		if (lowerVersion) proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
+		if (lowerVersion) proxyEnv.GetVersion().Returns((Int32)JRuntimeVersion.SEd4);
 		try
 		{
 			JGlobalRef globalRef = ClassParseTests.fixture.Create<JGlobalRef>();
@@ -120,7 +120,7 @@ public sealed class ClassParseTests
 			proxyEnv.NewWeakGlobalRef(globalRef.Value).Returns(weakRef);
 			proxyEnv.NewGlobalRef(proxyEnv.VoidObjectLocalRef.Value).Returns(globalRef);
 			proxyEnv.NewGlobalRef(weakRef.Value).Returns(globalRef);
-			proxyEnv.NewObject(proxyEnv.VoidObjectLocalRef, Arg.Any<JMethodId>(), ReadOnlyValPtr<JValueWrapper>.Zero)
+			proxyEnv.NewObject(proxyEnv.VoidObjectLocalRef, Arg.Any<JMethodId>(), ReadOnlyValPtr<JValue>.Zero)
 			        .Returns(ClassParseTests.fixture.Create<JObjectLocalRef>());
 			JObjectLocalRef localRef = sameRef ?
 				proxyEnv.VoidObjectLocalRef.Value :
@@ -130,7 +130,7 @@ public sealed class ClassParseTests
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
 			IClassFeature classFeature = env.ClassFeature;
 			proxyEnv.CallObjectMethod(localRef, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(stringRef.Value);
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(stringRef.Value);
 			proxyEnv.GetStringUtfLength(stringRef).Returns(typeMetadata.ClassName.Length);
 			proxyEnv.GetStringUtfChars(stringRef, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
@@ -208,7 +208,7 @@ public sealed class ClassParseTests
 			using IFixedPointer.IDisposable fCtx = IClassType.GetMetadata<JTestObject>().Information.GetFixedPointer();
 
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(stringRef.Value);
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(stringRef.Value);
 			proxyEnv.GetStringUtfLength(stringRef).Returns(typeMetadata.ClassName.Length);
 			proxyEnv.GetStringUtfChars(stringRef, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)fCtx.Pointer);
@@ -217,9 +217,9 @@ public sealed class ClassParseTests
 			Assert.Equal(typeMetadata.Hash, jClass.Hash);
 
 			proxyEnv.Received(1).CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                                      ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                      ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(1).CallBooleanMethod(classRef.Value, proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                       ReadOnlyValPtr<JValue>.Zero);
 		}
 		finally
 		{

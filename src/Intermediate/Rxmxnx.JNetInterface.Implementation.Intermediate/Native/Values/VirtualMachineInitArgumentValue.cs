@@ -8,7 +8,7 @@
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly unsafe struct VirtualMachineInitArgumentValue : INativeType
+public readonly unsafe struct VirtualMachineInitArgumentValue : INativeType
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JVirtualMachineInitArgument;
@@ -16,17 +16,17 @@ internal readonly unsafe struct VirtualMachineInitArgumentValue : INativeType
 	/// <summary>
 	/// JNI version.
 	/// </summary>
-	public Int32 Version { get; init; }
+	internal Int32 Version { get; init; }
 	/// <summary>
 	/// Length of options values.
 	/// </summary>
-	public Int32 OptionsLength { get; init; }
+	internal Int32 OptionsLength { get; init; }
 	/// <summary>
 	/// Pointer to options values.
 	/// </summary>
-	public VirtualMachineInitOptionValue* Options { get; init; }
+	internal VirtualMachineInitOptionValue* Options { get; init; }
 	/// <summary>
 	/// Indicates whether initialization ignores any unrecognized option.
 	/// </summary>
-	public JBoolean IgnoreUnrecognized { get; init; }
+	internal JBoolean IgnoreUnrecognized { get; init; }
 }

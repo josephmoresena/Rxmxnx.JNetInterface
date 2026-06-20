@@ -41,6 +41,13 @@ public class JConstructorObjectTests
 		env.ClassFeature.GetClass(jClass.GetInformation()).Returns(jClass);
 		env.AccessFeature.GetDefinition(jStringConstructorName, jArrayParameters, default).Returns(methodDefinition);
 		env.AccessFeature.GetMethodId(jConstructor).Returns(methodId);
+		env.WithFrame(Arg.Any<Int32>(), Arg.Any<JExecutableObject>(),
+		              Arg.Any<Func<JExecutableObject, JCallDefinition>>()).Returns(c =>
+		{
+			JExecutableObject instance = (JExecutableObject)c[1];
+			Func<JExecutableObject, JCallDefinition> func = (Func<JExecutableObject, JCallDefinition>)c[2];
+			return func(instance);
+		});
 
 		Assert.Equal(methodDefinition, jConstructor.Definition);
 		Assert.Equal(jClass, jConstructor.DeclaringClass);
@@ -86,6 +93,13 @@ public class JConstructorObjectTests
 		env.ClassFeature.GetClass(jClass.GetInformation()).Returns(jClass);
 		env.AccessFeature.GetDefinition(jStringConstructorName, jArrayParameters, default).Returns(methodDefinition);
 		env.AccessFeature.GetMethodId(jConstructor).Returns(methodId);
+		env.WithFrame(Arg.Any<Int32>(), Arg.Any<JExecutableObject>(),
+		              Arg.Any<Func<JExecutableObject, JCallDefinition>>()).Returns(c =>
+		{
+			JExecutableObject instance = (JExecutableObject)c[1];
+			Func<JExecutableObject, JCallDefinition> func = (Func<JExecutableObject, JCallDefinition>)c[2];
+			return func(instance);
+		});
 
 		ILocalObject.ProcessMetadata(jConstructor,
 		                             useMetadata ?

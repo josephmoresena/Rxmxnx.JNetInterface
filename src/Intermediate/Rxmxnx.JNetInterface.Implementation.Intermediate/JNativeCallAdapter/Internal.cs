@@ -19,21 +19,21 @@ public readonly ref partial struct JNativeCallAdapter
 		{
 			if (localRef == default) return default;
 
-			JEnvironment env = this._callAdapter._env;
+			INativeThread env = this._callAdapter._env;
 			this._callAdapter._cache.Activate(out LocalCache previous);
 			try
 			{
 				JClassObject jClass = this.GetObjectClass(localRef, out JReferenceTypeMetadata metadata, true);
-				if (!jClass.Name.AsSpan().SequenceEqual(env.ClassObject.Name))
+				if (!jClass.Name.AsSpan().SequenceEqual(env.ClassFeature.ClassObject.Name))
 				{
 					JLocalObject result = metadata.CreateInstance(jClass, localRef, true);
-					this._callAdapter._cache.RegisterParameter(localRef, result);
+					this._callAdapter._cache.RegisterAlien(localRef, result);
 					return result;
 				}
 			}
 			finally
 			{
-				env.SetObjectCache(previous);
+				env.LocalCache = previous;
 			}
 			JClassLocalRef classRef = new(localRef);
 			return this.CreateInitialClass(classRef);
@@ -67,20 +67,15 @@ public readonly ref partial struct JNativeCallAdapter
 		{
 			if (classRef == default) return default;
 
-			JEnvironment env = this._callAdapter._env;
+			INativeThread env = this._callAdapter._env;
 			if (validateReference) this.ThrowIfNotClassObject(classRef.Value);
 			JClassObject result = env.GetReferenceTypeClass(classRef, true);
 			if (classRef.Value == result.LocalReference)
-			{
-				// Class is owned by this class.
-				this._callAdapter._cache.RegisterParameter(classRef, result);
-			}
+				// Class is owned by this call.
+				this._callAdapter._cache.RegisterAlien(classRef, result);
 			else
-			{
-				// Class is not owned by this class. A ClassView is registered instead.
-				CallClassView callClassView = new(classRef, result);
-				this._callAdapter._cache.RegisterParameter(classRef, callClassView);
-			}
+				// Class is not owned by this call. A ClassView is registered instead.
+				this._callAdapter._cache.RegisterAlien(classRef, new ClassView(classRef, result));
 			return result;
 		}
 	}

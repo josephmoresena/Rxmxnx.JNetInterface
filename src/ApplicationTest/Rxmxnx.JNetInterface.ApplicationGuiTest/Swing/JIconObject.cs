@@ -11,6 +11,7 @@ public sealed class JIconObject : JInterfaceObject<JIconObject>, IInterfaceType<
 
 	static JInterfaceTypeMetadata<JIconObject> IInterfaceType<JIconObject>.Metadata => JIconObject.typeMetadata;
 	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd2;
+	static Int32 IDataType.AndroidApiLevel => -1;
 
 	private JIconObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 	static JIconObject IInterfaceType<JIconObject>.Create(IReferenceType.ObjectInitializer initializer)

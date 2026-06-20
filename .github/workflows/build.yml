@@ -5,6 +5,9 @@ on:
       - main
   pull_request:
     types: [ opened, synchronize, reopened ]
+permissions:
+  actions: write
+  contents: write
 jobs:
   build:
     name: Build and analyze
@@ -25,12 +28,17 @@ jobs:
             8.0.x
             9.0.x
             10.0.x
+      - name: Install Android Workload
+        shell: bash
+        run: |
+          dotnet workload install android
+          dotnet workload update
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Cache SonarCloud packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/sonar/cache
           key: ${{ runner.os }}-sonar
@@ -38,7 +46,7 @@ jobs:
 
       - name: Cache SonarCloud scanner
         id: cache-sonar-scanner
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ./.sonar/scanner
           key: ${{ runner.os }}-sonar-scanner
@@ -66,7 +74,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: pwsh
         run: |
-          ./.sonar/scanner/dotnet-sonarscanner begin /k:"josephmoresena_Rxmxnx.JNetInterface" /o:"josephmoresena" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.scanAll=false /d:sonar.coverage.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs" /d:sonar.cpd.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs" /d:sonar.cs.vstest.reportsPaths=TestResults/*.trx /d:sonar.cs.opencover.reportsPaths=TestResults/*/coverage.opencover.xml 
+          ./.sonar/scanner/dotnet-sonarscanner begin /k:"josephmoresena_Rxmxnx.JNetInterface" /o:"josephmoresena" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.scanAll=false /d:sonar.coverage.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs" /d:sonar.cpd.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs,**/AndroidJniHost/**.cs,**/ContextBuilder/**.cs" /d:sonar.cs.vstest.reportsPaths=TestResults/*.trx /d:sonar.cs.opencover.reportsPaths=TestResults/*/coverage.opencover.xml 
           dotnet build-server shutdown
           dotnet restore src --ignore-failed-sources
           dotnet restore src/Test/Proxies/Native/JvmProxy.NativeProxy.slnx
@@ -100,649 +108,121 @@ jobs:
           done
           echo "-----------------------------------"
           mv bin/Release/*.*nupkg ../Nuget
-
-      - name: Prepare workspace for FreeBSD
-        id: clean-workspace
+      - name: Pack mobile assembly
+        working-directory: ./package/Rxmxnx.JNetInterface.Mobile
         run: |
-          rm -rf .git
-          rm -rf .sonarqube
-          mv ./ApplicationTest src/ApplicationTest
+          dotnet pack -c Release /p:Version=9999.99.99.99-tmp /p:NoIntermediateBuild=true
+          for package in bin/Release/Rxmxnx.JNetInterface.Mobile*.*nupkg; do
+            echo "-----------------------------------"
+            TEMP_DIR=$(mktemp -d)
+            unzip -q "$package" -d "$TEMP_DIR"
+            ls -sh "$package"
+            tree "$TEMP_DIR" -h --noreport | tail -n +2 | sed "s|$TEMP_DIR/||"
+            rm -rf "$TEMP_DIR"
+          done
+          echo "-----------------------------------"
+          mv bin/Release/*.*nupkg ../Nuget
 
-      - name: Init FreeBSD 14.3 VM
-        id: vm
-        uses: vmactions/freebsd-vm@v1.2.5
+      - name: Cache NuGet Packages
+        uses: actions/cache/save@v5
         with:
-          release: "14.3"
-          usesh: true
-          sync: nfs
-          prepare: |
-            pkg update -f 
-            pkg install -y python311 py311-pillow sqlite3 unixODBC libgdiplus zip ca_root_nss dotnet openjdk8 openjdk11 openjdk17 openjdk21
-          run: |
-            dotnet dev-certs https --trust
-
-      - name: Run Tests (FreeBSD 14.3)
-        shell: freebsd {0}
-        run: |
-          cd $GITHUB_WORKSPACE;
-          dotnet test ./src/Test/Rxmxnx.JNetInterface.Base.Tests/bin/Release/net9.0/Rxmxnx.JNetInterface.Base.Tests.dll --logger 'console;verbosity=detailed';
-          dotnet test ./src/Test/Rxmxnx.JNetInterface.Primitives.Tests/bin/Release/net9.0/Rxmxnx.JNetInterface.Primitives.Tests.dll --logger 'console;verbosity=detailed';
-          dotnet test ./src/Test/Rxmxnx.JNetInterface.Native.Tests/bin/Release/net9.0/Rxmxnx.JNetInterface.Native.Tests.dll --logger 'console;verbosity=detailed';
-          dotnet test ./src/Test/Rxmxnx.JNetInterface.Extensions.Tests/bin/Release/net9.0/Rxmxnx.JNetInterface.Extensions.Tests.dll --logger 'console;verbosity=detailed';
-          dotnet test ./src/Test/Rxmxnx.JNetInterface.Implementation.Tests/bin/Release/net9.0/Rxmxnx.JNetInterface.Implementation.Tests.dll --logger 'console;verbosity=detailed';
-
-      - name: Publish Launcher (FreeBSD)
-        shell: freebsd {0}
-        run: |
-          cd $GITHUB_WORKSPACE;
-          cd ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest;
-          dotnet publish -r freebsd.14-x64;
-
-      - name: Run launcher (compile) (FreeBSD)
-        shell: freebsd {0}
-        run: |
-          cd $GITHUB_WORKSPACE;
-          ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "compile";
-
-      - name: Run launcher (run) (FreeBSD)
-        shell: freebsd {0}
-        run: |
-          cd $GITHUB_WORKSPACE;
-          ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "run";
-
-      - name: Create Native Artifact (FreeBSD)
-        uses: actions/upload-artifact@v5
+          path: ./package/Nuget
+          key: internal-nuget-${{ github.run_id }}
+          enableCrossOsArchive: true
+      - name: Cache Compiled Tests
+        uses: actions/cache/save@v5
         with:
-          name: FreeBSD.14-Artifact
           path: |
-            ./artifacts/*.class
-            ./artifacts/*.jar
-            ./artifacts/Application*Test*NAOT*
-            ./artifacts/Application*Test*RFM*
-            ./artifacts/*HelloJni.* 
-
-      - name: Create Native Artifact Logs (FreeBSD)
-        uses: actions/upload-artifact@v5
-        with:
-          name: FreeBSD.14-Artifact-Logs
-          path: |
-            ./artifacts/native/*
+            ./src/Test/**/bin/Release/net9.0
+          key: internal-tests-bin-${{ github.run_id }}
   
-  app-test:
+  android-actions:
     needs: [ build ]
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ windows-latest, ubuntu-latest, macos-latest ]
-    env:
-      JNETINTERFACE_ONLY_NATIVE_TEST: false
-      DOTNET_CLI_USE_MSBUILD_SERVER: false
-      JNETINTERFACE_JNI_CHECK: false
-    steps:
-      - name: APT deb822 sources
-        if: runner.os == 'Linux'
-        run: |
-          if [[ $ImageOS == "ubuntu24" ]]; then
-           sudo bash -c 'cat > /etc/apt/sources.list.d/ubuntu.sources <<EOF
-          Types: deb
-          URIs: https://archive.ubuntu.com/ubuntu/
-          Suites: noble
-          Components: main restricted universe
-          Architectures: amd64
-          
-          Types: deb
-          URIs: https://security.ubuntu.com/ubuntu/
-          Suites: noble-security
-          Components: main restricted universe
-          Architectures: amd64
-          
-          Types: deb
-          URIs: https://archive.ubuntu.com/ubuntu/
-          Suites: noble-updates
-          Components: main restricted universe
-          Architectures: amd64
-          
-          Types: deb
-          URIs: https://azure.ports.ubuntu.com/ubuntu-ports/
-          Suites: noble
-          Components: main restricted multiverse universe
-          Architectures: arm64
-          
-          Types: deb
-          URIs: https://azure.ports.ubuntu.com/ubuntu-ports/
-          Suites: noble-updates
-          Components: main restricted multiverse universe
-          Architectures: arm64
-          
-          Types: deb
-          URIs: https://azure.ports.ubuntu.com/ubuntu-ports/
-          Suites: noble-updates
-          Components: main restricted multiverse universe
-          Architectures: armhf
-          EOF'
-          fi
-
-      - name: Setup NativeAOT pre-requisites
-        if: runner.os == 'Linux'
-        run: |
-          sudo dpkg --add-architecture arm64
-          sudo dpkg --add-architecture armhf
-          
-          sudo bash -c 'cat > /etc/apt/sources.list.d/arm64.list <<EOF
-          deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports/ noble main restricted
-          deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted
-          deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports/ noble-backports main restricted universe multiverse
-          EOF'
-          
-          sudo bash -c 'cat > /etc/apt/sources.list.d/armhf.list <<EOF
-          deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports/ noble main restricted
-          deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted
-          deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports/ noble-backports main restricted universe multiverse
-          EOF'
-          
-          sudo sed -i -e 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
-          sudo sed -i -e 's/deb mirror/deb [arch=amd64] mirror/g' /etc/apt/sources.list
-          
-          sudo apt update 
-          sudo apt upgrade --assume-yes
-          sudo apt-get install coreutils clang llvm zlib1g-dev libkrb5-dev libssl-dev \
-            qemu-user qemu-user-static binfmt-support libicu74:arm64 libicu74:armhf \
-            libstdc++-14-dev:arm64 libstdc++-14-dev:arm64 \
-            binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu zlib1g-dev:arm64 libssl-dev:arm64 \
-            binutils-arm-linux-gnueabihf gcc-arm-linux-gnueabihf zlib1g-dev:armhf libssl-dev:armhf \
-            --assume-yes
-          
-          sudo apt-get clean
-          sudo apt-get autoclean
-          sudo apt-get autoremove -y
-          sudo rm -rf /tmp/*
-          sudo rm -rf /var/tmp/*
-          
-          sudo rm -rf /usr/local/lib/android/sdk
-          
-          df -h
-
-      - name: Setup .NET
-        if: runner.os != 'Windows'
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: |
-            7.0.x
-            8.0.x
-            9.0.x
-            10.0.x
-      - name: Setup .NET x86
-        if: runner.os == 'Windows'
-        run: |
-          winget install Microsoft.DotNet.SDK.7 --architecture x86 --silent --force --disable-interactivity --accept-source-agreements  
-          winget install Microsoft.DotNet.SDK.8 --architecture x86 --silent --force --disable-interactivity --accept-source-agreements  
-          winget install Microsoft.DotNet.SDK.9 --architecture x86 --silent --force --disable-interactivity --accept-source-agreements 
-          winget install Microsoft.DotNet.SDK.10 --architecture x86 --silent --force --disable-interactivity --accept-source-agreements 
-      - name: Setup .NET x64
-        if: runner.os == 'Windows'
-        run: |
-          winget install Microsoft.DotNet.SDK.7 --architecture x64 --silent --force --disable-interactivity --accept-source-agreements
-          winget install Microsoft.DotNet.SDK.8 --architecture x64 --silent --force --disable-interactivity --accept-source-agreements
-          winget install Microsoft.DotNet.SDK.9 --architecture x64 --silent --force --disable-interactivity --accept-source-agreements
-          winget install Microsoft.DotNet.SDK.10 --architecture x64 --silent --force --disable-interactivity --accept-source-agreements
-          
-          dotnet workload update
-
-      - uses: actions/checkout@v5
-        with:
-          fetch-depth: 1
-
-      - name: Build tests
-        run: |
-          dotnet restore src --ignore-failed-sources
-          dotnet restore src/Test/Proxies/Native/JvmProxy.NativeProxy.slnx
-          dotnet build src /p:MultipleFrameworkTest=true --no-restore --configuration Release --disable-build-servers /nr:false /maxcpucount:1
-
-      - name: Windows x86 tests
-        if: runner.os == 'Windows'
-        run: |
-          dotnet test src /p:MultipleFrameworkTest=true --no-build --no-restore --configuration Release  --logger "console;verbosity=detailed" --settings src\Test\x86.runsettings
-      - name: Run tests
-        run: |
-          dotnet test src /p:MultipleFrameworkTest=true --no-build --no-restore --configuration Release  --logger "console;verbosity=detailed"
-
-      - name: Create core assembly
-        working-directory: ./package/Rxmxnx.JNetInterface.Core
-        run: |
-          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp /p:NoIntermediateBuild=true
-      - name: Pack main assembly
-        working-directory: ./package/Rxmxnx.JNetInterface
-        run: |
-          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp /p:NoIntermediateBuild=true
-
-      - name: Publish launcher
-        working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest
-        run: dotnet publish
-
-      - name: Clean up
-        shell: pwsh
-        run: |
-          Get-ChildItem -Recurse -Include *.csproj,*.fsproj,*.vbproj | ForEach-Object {
-              $projDir = Split-Path $_.FullName
-              "bin","obj" | ForEach-Object {
-              $path = Join-Path $projDir $_
-              if (Test-Path $path) {
-                Remove-Item -Recurse -Force $path
-              }
-            }
-          }
-
-      - name: Run launcher (compile)
-        shell: pwsh
-        env:
-          SHOW_DIAGNOSTICS: true
-        run: |
-          if ($IsWindows) {
-            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "compile"
-          
-            Remove-Item -Recurse -Force "$env:WINDIR\SoftwareDistribution\Download" -ErrorAction SilentlyContinue
-            Remove-Item -Recurse -Force "$env:WINDIR\Prefetch" -ErrorAction SilentlyContinue
-            Remove-Item -Recurse -Force "C:\Android\android-sdk" -ErrorAction SilentlyContinue
-            Remove-Item -Recurse -Force "$env:WINDIR\Temp\*" -ErrorAction SilentlyContinue
-            Remove-Item -Recurse -Force "$env:TEMP\*" -ErrorAction SilentlyContinue
-            Remove-Item -Recurse -Force "$env:TMP\*" -ErrorAction SilentlyContinue
-            Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Temp\*" -ErrorAction SilentlyContinue
-          } else {
-            chmod +x Rxmxnx.JNetInterface.LauncherTest
-            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "compile"
-          }
-          Get-ChildItem -Recurse -Include *.csproj,*.fsproj,*.vbproj | ForEach-Object {
-              $projDir = Split-Path $_.FullName
-              "bin","obj" | ForEach-Object {
-              $path = Join-Path $projDir $_
-              if (Test-Path $path) {
-                Remove-Item -Recurse -Force $path
-              }
-            }
-          }
-
-      - name: Create Native Artifact Logs
-        uses: actions/upload-artifact@v5
-        with:
-          name: ${{ runner.os }}-Artifact-Logs
-          path: |
-            ./artifacts/native/*
-
-      - name: Remove Native Logs
-        shell: pwsh
-        run: |
-          if (Test-Path ./artifacts/native) {
-              Remove-Item -Recurse -Force ./artifacts/native/*
-          }
-
-      - name: Create Native Artifact
-        uses: actions/upload-artifact@v5
-        with:
-          name: ${{ runner.os }}-Artifact
-          path: |
-            ./artifacts/*.class
-            ./artifacts/*.jar
-            ./artifacts/Application*Test*NAOT*
-            ./artifacts/Application*Test*RFM*
-            ./artifacts/*HelloJni.* 
-
-      - name: Clean Up Extra
-        if: runner.os != 'Windows'
-        shell: bash
-        run: |
-          sudo rm -rf /tmp/*
-          sudo rm -rf /var/tmp/*
-          sudo rm -rf ~/.nuget/packages
-          
-          df -h
-
-      - name: Clean Up Extra - Windows
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          Remove-Item -Recurse -Force "$env:WINDIR\Temp\*" -ErrorAction SilentlyContinue
-          Remove-Item -Recurse -Force "$env:TEMP\*" -ErrorAction SilentlyContinue
-          Remove-Item -Recurse -Force "$env:TMP\*" -ErrorAction SilentlyContinue
-          Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Temp\*" -ErrorAction SilentlyContinue
-          Remove-Item -Recurse -Force "$env:USERPROFILE\.nuget\packages" -ErrorAction SilentlyContinue
-
-      - name: Run launcher (run - Java Archive)
-        shell: pwsh
-        run: |
-          if ($IsWindows) {
-            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "jar"
-          } else {
-            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "jar"
-          }
-
-      - name: Run launcher (run - Native AOT)
-        shell: pwsh
-        run: |
-          if ($IsWindows) {
-            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "naot"
-          } else {
-            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "naot"
-          }
-
-      - name: Run launcher (run - Reflection Free Mode)
-        shell: pwsh
-        run: |
-          if ($IsWindows) {
-            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "rfm"
-          } else {
-            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "rfm"
-          }
-
-      - name: Run launcher (run - Ready-To-Run)
-        shell: pwsh
-        run: |
-          if ($IsWindows) {
-            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "r2r"
-          } else {
-            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "r2r"
-          }
-
-      - name: Run launcher (run - Full Framework)
-        shell: pwsh
-        run: |
-          if ($IsWindows) {
-            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "net"
-          } else {
-            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "net"
-          }
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    uses: ./.github/workflows/android-actions.yml
+    secrets: inherit
+  freebsd-actions:
+    needs: [ build ]
+    uses: ./.github/workflows/freebsd-actions.yml
+    with:
+      run_tests: true
+      build_artifacts: ${{ github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' }}
+  freebsd-arm64-actions:
+    needs: [ build ]
+    uses: ./.github/workflows/freebsd-arm64-actions.yml
+    with:
+      run_tests: true
+      build_artifacts: ${{ github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' }}
+  cross-actions:
+    needs: [ build ]
+    uses: ./.github/workflows/cross-actions.yml
+    with:
+      run_tests: true
+      build_artifacts: ${{ github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' }}
   
-  android-test:
-    needs: [ build ]
+  cleanup-cache:
+    name: Secure Cleanup
+    needs: [ build, android-actions, freebsd-actions, freebsd-arm64-actions, cross-actions ]
     runs-on: ubuntu-latest
+    if: always()
     steps:
-      - uses: actions/checkout@v5
-      - name: Setup dotnet
-        uses: actions/setup-dotnet@v5
+      - name: Java FreeBSD Libraries
+        uses: actions/cache/restore@v5
+        if: needs.freebsd-actions.result == 'success'
         with:
-          dotnet-version: 10.0.x
-
-      - name: Create core assembly
-        working-directory: ./package/Rxmxnx.JNetInterface.Core
-        run: |
-          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp
-      - name: Pack main assembly
-        working-directory: ./package/Rxmxnx.JNetInterface
-        run: |
-          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp
-
-      - name: Clone NativeAOT-AndroidHelloJniLib
-        run: |
-          git config --global url.https://github.com/.insteadOf git://github.com/
-          git clone --single-branch --branch jnetinterface \
-            https://github.com/josephmoresena/NativeAOT-AndroidHelloJniLib.git
-          
-          echo '<Project>' > Directory.Build.props
-          echo '  <PropertyGroup>' >> Directory.Build.props
-          echo '    <TargetFrameworks>net10.0;net9.0;net8.0</TargetFrameworks>' >> Directory.Build.props
-          echo '    <LangVersion>latest</LangVersion>' >> Directory.Build.props
-          echo '  </PropertyGroup>' >> Directory.Build.props
-          echo '</Project>' >> Directory.Build.props  
-
-      - name: Create nuget.config for bionic-libs
-        working-directory: ./NativeAOT-AndroidHelloJniLib
-        run: |
-          dotnet new nugetconfig
-          dotnet nuget add source "../package/Nuget/" -n TmpSource
-          dotnet add package Rxmxnx.JNetInterface --version 9999.99.99.99-tmp
-
-      - name: Build bionic-libs (.NET 10.0)
-        working-directory: ./NativeAOT-AndroidHelloJniLib
-        run: |
-          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net10.0 \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net10.0/arm64-v8a
-          dotnet publish -r linux-bionic-arm -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net10.0 \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net10.0/armeabi-v7a
-          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net10.0 \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net10.0/x86_64
-
-      - name: Build bionic-libs (.NET 9.0)
-        working-directory: ./NativeAOT-AndroidHelloJniLib
-        run: |
-          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net9.0 \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0/arm64-v8a
-          dotnet publish -r linux-bionic-arm -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net9.0 \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0/armeabi-v7a
-          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net9.0 \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0/x86_64
-      - name: Build bionic-libs (.NET 9.0 - RFM)
-        working-directory: ./NativeAOT-AndroidHelloJniLib
-        run: |
-          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net9.0 -p:IlcDisableReflection=true \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0-RFM/arm64-v8a
-          dotnet publish -r linux-bionic-arm -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net9.0 -p:IlcDisableReflection=true \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0-RFM/armeabi-v7a
-          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net8.0 -p:IlcDisableReflection=true \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net9.0-RFM/x86_64
-      - name: Build bionic-libs (.NET 8.0)
-        working-directory: ./NativeAOT-AndroidHelloJniLib
-        run: |
-          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net8.0 \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0/arm64-v8a
-          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net8.0 \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0/x86_64
-      - name: Build bionic-libs (.NET 8.0 - RFM)
-        working-directory: ./NativeAOT-AndroidHelloJniLib
-        run: |
-          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net8.0 -p:IlcDisableReflection=true \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0-RFM/arm64-v8a
-          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
-            -p:TargetFramework=net8.0 -p:IlcDisableReflection=true \
-            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib-net8.0-RFM/x86_64
-
-      - name: Create Android project structure
-        env:
-          APK_KEYSTORE_BASE64: ${{ secrets.APK_KEYSTORE }}
-        run: |
-          mkdir ./hello-jni_apk 
-          mkdir ./hello-jni_apk/main
-          mkdir ./hello-jni_apk/main/java
-          mkdir ./hello-jni_apk/main/java/com
-          mkdir ./hello-jni_apk/main/java/com/example
-          mkdir ./hello-jni_apk/main/java/com/example/hellojni
-          mkdir ./hello-jni_apk/class
-          mkdir ./hello-jni_apk/dex
-          mkdir ./hello-jni_apk/lib
-          
-          echo "${APK_KEYSTORE_BASE64}" | base64 -d > ./hello-jni_apk/jnetinterface-apk.keystore
-      - name: Create Android java file
-        working-directory: ./hello-jni_apk/main/java/com/example/hellojni
-        run: |
-          echo 'package com.example.hellojni;
-          
-          import android.app.Activity;
-          import android.os.Bundle;
-          import android.view.Gravity;
-          import android.view.View;
-          import android.widget.LinearLayout;
-          import android.widget.TextView;
-          
-          public class HelloJni extends Activity {
-            static {
-              System.loadLibrary("hello-jni");
-            }
-          
-            @Override
-            protected void onCreate(Bundle savedInstanceState) {
-              super.onCreate(savedInstanceState);
-          
-              LinearLayout rootLayout = new LinearLayout(this);
-              rootLayout.setOrientation(LinearLayout.VERTICAL);
-              rootLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-              ));
-              rootLayout.setGravity(Gravity.CENTER);
-          
-              TextView textView = new TextView(this);
-              textView.setText(stringFromJNI());
-              textView.setTextSize(12);
-          
-              LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                1f
-              );
-              textView.setLayoutParams(params);
-          
-              textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                  textView.setText(stringFromJNI());
-                }
-              });
-          
-              rootLayout.addView(textView);
-              setContentView(rootLayout);
-            }
-          
-            private native String stringFromJNI();
-          }
-          ' > HelloJni.java 
-
-      - name: Create Android manifest file
-        working-directory: ./hello-jni_apk/main
-        run: |
-          echo '<?xml version="1.0" encoding="utf-8"?>
-          <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.hellojni" android:theme="@android:style/Theme.DeviceDefault">
-            <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-            <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30"/>
-            <application android:label="JNetInterfaceTestApp">
-              <activity android:name=".HelloJni" android:label="JNetInterfaceTestApp">
-              <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-              </intent-filter>
-              </activity>
-            </application>
-          </manifest>' > AndroidManifest.xml
-
-      - name: Compile Android App
-        working-directory: ./hello-jni_apk
-        shell: bash
-        run: |
-          shopt -s globstar 
-          $JAVA_HOME_8_X64/**/javac -d ./class -sourcepath ./main/java \
-            -bootclasspath $ANDROID_HOME/platforms/android-35/android.jar \
-            ./main/java/**/*.java 
-          
-          $ANDROID_HOME/build-tools/35.0.0/d8 --lib $ANDROID_HOME/platforms/android-35/android.jar \
-            --output ./dex \
-            class/**/*.class 
-      - name: Build Android Apk (.NET 10.0)
-        env:
-          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
-        working-directory: ./hello-jni_apk
-        shell: bash
-        run: |
-          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
-            -I $ANDROID_HOME/platforms/android-35/android.jar \
-            -F jnetinterface-apptest-net10.0.apk ./dex 
-
-          mv ../lib-net10.0/* lib/
-          zip -ur jnetinterface-apptest-net10.0.apk lib/
-          rm -rf lib/*
-
-          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
-            --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
-            --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
-            --out ./../jnetinterface-apptest-net10.0.apk jnetinterface-apptest-net10.0.apk 
-
-      - name: Build Android Apk (.NET 9.0)
-        env:
-          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
-        working-directory: ./hello-jni_apk
-        shell: bash
-        run: |
-          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
-            -I $ANDROID_HOME/platforms/android-35/android.jar \
-            -F jnetinterface-apptest-net9.0.apk ./dex 
-          
-          mv ../lib-net9.0/* lib/
-          zip -ur jnetinterface-apptest-net9.0.apk lib/
-          rm -rf lib/*
-          
-          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
-            --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
-            --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
-            --out ./../jnetinterface-apptest-net9.0.apk jnetinterface-apptest-net9.0.apk 
-      - name: Build Android Apk (.NET 9.0 - RFM)
-        env:
-          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
-        working-directory: ./hello-jni_apk
-        shell: bash
-        run: |
-          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
-          -I $ANDROID_HOME/platforms/android-35/android.jar \
-          -F jnetinterface-apptest-net9.0-RFM.apk ./dex 
-          
-          mv ../lib-net9.0-RFM/* lib/
-          zip -ur jnetinterface-apptest-net9.0-RFM.apk lib/ 
-          rm -rf lib/*
-          
-          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
-          --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
-          --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
-          --out ./../jnetinterface-apptest-net9.0-RFM.apk jnetinterface-apptest-net9.0-RFM.apk 
-      - name: Build Android Apk (.NET 8.0)
-        env:
-          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
-        working-directory: ./hello-jni_apk
-        shell: bash
-        run: |
-          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
-            -I $ANDROID_HOME/platforms/android-35/android.jar \
-            -F jnetinterface-apptest-net8.0.apk ./dex 
-          
-          mv ../lib-net8.0/* lib/
-          zip -ur jnetinterface-apptest-net8.0.apk lib/ 
-          rm -rf lib/*
-          
-          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
-            --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
-            --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
-            --out ./../jnetinterface-apptest-net8.0.apk jnetinterface-apptest-net8.0.apk 
-      - name: Build Android Apk (.NET 8.0 - RFM)
-        env:
-          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
-        working-directory: ./hello-jni_apk
-        shell: bash
-        run: |
-          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
-          -I $ANDROID_HOME/platforms/android-35/android.jar \
-          -F jnetinterface-apptest-net8.0-RFM.apk ./dex 
-          
-          mv ../lib-net8.0-RFM/* lib/
-          zip -ur jnetinterface-apptest-net8.0-RFM.apk lib/ 
-          rm -rf lib/*
-          
-          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
-          --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
-          --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
-          --out ./../jnetinterface-apptest-net8.0-RFM.apk jnetinterface-apptest-net8.0-RFM.apk
-      - name: Create Android Artifact
-        uses: actions/upload-artifact@v5
+          path: ./artifacts-java
+          key: internal-freebsd-${{ github.run_id }}
+          fail-on-cache-miss: false
+          enableCrossOsArchive: true
+      - name: Java FreeBSD arm64 Libraries
+        uses: actions/cache/restore@v5
+        if: needs.freebsd-arm64-actions.result == 'success'
         with:
-          name: Android-Artifact
-          path: jnetinterface-apptest-*.apk
+          path: ./artifacts-java
+          key: internal-freebsd-arm64-${{ github.run_id }}
+          fail-on-cache-miss: false
+          enableCrossOsArchive: true
+      - name: Java MacOS Libraries
+        uses: actions/cache/restore@v5
+        if: needs.cross-actions.result == 'success'
+        with:
+          path: ./artifacts-java
+          key: internal-macOS-${{ github.run_id }}
+          fail-on-cache-miss: false
+          enableCrossOsArchive: true
+      - name: Java Linux Libraries
+        uses: actions/cache/restore@v5
+        if: needs.cross-actions.result == 'success'
+        with:
+          path: ./artifacts-java
+          key: internal-Linux-${{ github.run_id }}
+          fail-on-cache-miss: false
+          enableCrossOsArchive: true
+      - name: Java Windows Libraries
+        uses: actions/cache/restore@v5
+        if: needs.cross-actions.result == 'success'
+        with:
+          path: ./artifacts-java
+          key: internal-Windows-${{ github.run_id }}
+          fail-on-cache-miss: false
+          enableCrossOsArchive: true
+      - name: Create Java Artifact
+        if: needs.freebsd-actions.result == 'success' || needs.freebsd-arm64-actions.result == 'success' || needs.cross-actions.result == 'success'
+        uses: actions/upload-artifact@v6
+        with:
+          name: Java-Artifact
+          path: ./artifacts-java/*
+      - name: Delete Internal Cache
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          echo "Deleting caches..."
+          gh cache delete "internal-nuget-${{ github.run_id }}" || true
+          gh cache delete "internal-freebsd-${{ github.run_id }}" || true
+          gh cache delete "internal-freebsd-arm64-${{ github.run_id }}" || true
+          gh cache delete "internal-Windows-${{ github.run_id }}" || true
+          gh cache delete "internal-Linux-${{ github.run_id }}" || true
+          gh cache delete "internal-macOS-${{ github.run_id }}" || true
+          gh cache delete "internal-tests-bin-${{ github.run_id }}" || true

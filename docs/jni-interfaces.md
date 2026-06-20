@@ -1,11 +1,11 @@
 # `IVirtualMachine` Interface
 
-The `IVirtualMachine` interface represents a `JavaVM` instance managed by `Rxmxnx.JNetInterface`.
+The `IVirtualMachine` interface represents a `JavaVM` instance managed by a `Rxmxnx.JNetInterface` implementation.
 
 ## Static Members
 
-- **`MinimalVersion`**: Specifies the minimum JNI version supported by `Rxmxnx.JNetInterface`.
-    - Using a lower version may lead to functional failures.
+- **`MinimalVersion`**: Specifies the minimum JNI version supported by any `Rxmxnx.JNetInterface` implementation. Using
+  a lower version may lead to functional failures.
 - **`MetadataValidationEnabled`**: Indicates whether runtime validation of type metadata construction is enabled.
 - **`JaggedArrayAutoGenerationEnabled`**: Indicates whether metadata generation for jagged arrays at runtime is enabled.
 - **`TypeMetadataToStringEnabled`**: Indicates whether the `ToString()` implementation of type metadata provides
@@ -14,6 +14,7 @@ The `IVirtualMachine` interface represents a `JavaVM` instance managed by `Rxmxn
 ## Instance Properties & Methods
 
 - **`Version`**: Java runtime version. The type of this property is `JRuntimeVersion` enum.
+- **`AndroidApiLevel`**: The Android API level supported on this instance.
 - **`Reference`**: The `JVirtualMachineRef` reference managed by this instance.
 - **`GetEnvironment()`**: Retrieves the JNI environment (`JNIEnv`), equivalent to the JNI `GetEnv` call.
 - **`InitializeThread(CString?, JGlobalBase?, Int32)`**: Attaches the current thread to the JVM (`AttachCurrentThread`).
@@ -25,6 +26,9 @@ The `IVirtualMachine` interface represents a `JavaVM` instance managed by `Rxmxn
   daemon (`AttachCurrentThreadAsDaemon`).
 - **`FatalError(CString?)` / `FatalError(String?)`**: Triggers a fatal error in the JVM (`FatalError`).
 
+**Note:** The `IInvokedVirtualMachine` interface represents a `JavaVM` instance created and managed through the JNI
+Invocation API by an implementation of `Rxmxnx.JNetInterface`. It extends `IVirtualMachine` and `IDisposable`.
+
 ## Testing
 
 In test environments, this interface can be simulated using the `VirtualMachineProxy` proxy type.
@@ -33,7 +37,7 @@ In test environments, this interface can be simulated using the `VirtualMachineP
 
 # `IEnvironment` Interface
 
-The `IEnvironment` interface represents a `JNIEnv` instance managed by `Rxmxnx.JNetInterface`.
+The `IEnvironment` interface represents a `JNIEnv` instance managed by a `Rxmxnx.JNetInterface` implementation.
 
 ## Properties
 
@@ -52,8 +56,23 @@ The `IEnvironment` interface represents a `JNIEnv` instance managed by `Rxmxnx.J
 - **`GetReferenceType(JObject)`**: Determines the JNI reference type of the specified object.
 - **`IsSameObject(JObject, JObject)`**: Checks whether both instances are equivalent in Java.
 - **`JniSecure()`**: Indicates whether it is safe to make JNI calls in the current environment.
+- **`DescribeException()`**: Prints the pending exception and its backtrace to the standard error output.
 - **`IsVirtual(JThreadObject)`**: Determines if a `java.lang.Thread` instance is virtual.
     - This method requires JNI version 19+.
+
+## `IThread` Interface
+
+The `IThread` interface represents a `JNIEnv` instance attached to the JVM by a `Rxmxnx.JNetInterface` implementation.
+It extends `IEnvironment` and `IDisposable`.
+
+### Properties
+
+- **`IsAttached`**: Indicates whether the current instance is still attached to the JVM through a `Rxmxnx.JNetInterface`
+  implementation.
+- **`Daemon`**: Indicates whether the current instance was attached as a daemon by a `Rxmxnx.JNetInterface`
+  implementation.
+- **`Name`**: The thread name specified when the current instance was attached by a `Rxmxnx.JNetInterface`
+  implementation.
 
 ## Testing
 

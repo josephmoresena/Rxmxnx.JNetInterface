@@ -53,6 +53,7 @@ public readonly partial struct JBoolean : IComparable<JBoolean>, IEquatable<JBoo
 	/// <summary>
 	/// Internal byte value.
 	/// </summary>
+	// ReSharper disable once ConvertToAutoPropertyWhenPossible
 	public Byte ByteValue => this._value;
 
 	/// <summary>

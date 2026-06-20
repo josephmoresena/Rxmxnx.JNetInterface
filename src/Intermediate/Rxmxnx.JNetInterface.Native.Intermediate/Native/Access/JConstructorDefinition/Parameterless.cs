@@ -32,9 +32,7 @@ public partial class JConstructorDefinition
 		/// <typeparam name="TObject">A <see cref="IClassType{TClass}"/> type.</typeparam>
 		/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 		/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
-#if !NET8_0_OR_GREATER
 		[UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 		public TObject New<TObject>(IEnvironment env) where TObject : JLocalObject, IClassType<TObject>
 			=> base.New<TObject>(env, ReadOnlySpan<IObject?>.Empty);
 		/// <summary>
@@ -50,9 +48,7 @@ public partial class JConstructorDefinition
 		/// <typeparam name="TObject">A <see cref="IClassType{TClass}"/> type.</typeparam>
 		/// <param name="jConstructor">A <see cref="JConstructorObject"/> instance.</param>
 		/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
-#if !NET8_0_OR_GREATER
 		[UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 		public TObject NewReflected<TObject>(JConstructorObject jConstructor)
 			where TObject : JLocalObject, IClassType<TObject>
 			=> base.NewReflected<TObject>(jConstructor, ReadOnlySpan<IObject?>.Empty);

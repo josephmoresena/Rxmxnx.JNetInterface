@@ -1,22 +1,17 @@
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=josephmoresena_Rxmxnx.JNetInterface)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=bugs)](https://sonarcloud.io/summary/new_code?id=josephmoresena_Rxmxnx.JNetInterface)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=coverage)](https://sonarcloud.io/summary/new_code?id=josephmoresena_Rxmxnx.JNetInterface)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=josephmoresena_Rxmxnx.JNetInterface)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=josephmoresena_Rxmxnx.JNetInterface)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=josephmoresena_Rxmxnx.JNetInterface)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=josephmoresena_Rxmxnx.JNetInterface)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=alert_status)![Bugs](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=bugs)![Coverage](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=coverage)![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=ncloc)![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=reliability_rating)![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=sqale_rating)![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=josephmoresena_Rxmxnx.JNetInterface)
+
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/josephmoresena/Rxmxnx.JNetInterface)
 
 #### Package Information
 
-| **Core Assembly**                                                                                                                     | **Main Assembly**                                                                                                     |
-|---------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
-| [![NuGet(Core)](https://img.shields.io/nuget/v/Rxmxnx.JNetInterface.Core)](https://www.nuget.org/packages/Rxmxnx.JNetInterface.Core/) | [![NuGet](https://img.shields.io/nuget/v/Rxmxnx.JNetInterface)](https://www.nuget.org/packages/Rxmxnx.JNetInterface/) |
+| **Core Assembly**                                                                                                                                                                                                                         | **Main Assembly**                                                                                                                                                                                                    | **Mobile Assembly**                                                                                                                                                                                                                       |
+|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [![NuGet(Core)](https://img.shields.io/nuget/v/Rxmxnx.JNetInterface.Core)![Downloads](https://img.shields.io/nuget/dt/Rxmxnx.JNetInterface.Core?style=flat-square&color=blue)](https://www.nuget.org/packages/Rxmxnx.JNetInterface.Core/) | [![NuGet](https://img.shields.io/nuget/v/Rxmxnx.JNetInterface)![Downloads](https://img.shields.io/nuget/dt/Rxmxnx.JNetInterface?style=flat-square&color=blue)](https://www.nuget.org/packages/Rxmxnx.JNetInterface/) | [![NuGet](https://img.shields.io/nuget/v/Rxmxnx.JNetInterface.Mobile)![Downloads](https://img.shields.io/nuget/dt/Rxmxnx.JNetInterface.Mobile?style=flat-square&color=blue)](https://www.nuget.org/packages/Rxmxnx.JNetInterface.Mobile/) |
 
 # Description
 
 `Rxmxnx.JNetInterface` provides an implementation of the Java Native Interface (JNI) and the Invocation API for .NET
-applications.
+applications. For .NET for Android (formerly Xamarin Android) projects use `Rxmxnx.JNetInterface.Mobile`.
 
 ## Core Features
 
@@ -28,28 +23,88 @@ applications.
 **Note:** Some features may not be available in [Visual Basic .NET](https://github.com/dotnet/vblang/issues/625) and may
 require additional configuration in [F#](https://github.com/dotnet/fsharp/issues/17605).
 
----
-
 # Getting Started
 
 ## Installation
 
-Install via NuGet:
+Install the appropriate package via NuGet:
+
+**Standard and desktop projects**
 
 ```cmd
 dotnet add package Rxmxnx.JNetInterface
 ```
 
-If you only need the core functionality without linking to a JVM, install:
+Use this package for standard JVM interop scenarios, including desktop/server applications and Android JNI libraries
+built with the `linux-bionic` target framework and NativeAOT.
+
+**.NET for Android projects using Java.Interop**
+
+```cmd
+dotnet add package Rxmxnx.JNetInterface.Mobile
+```
+
+Use this package when targeting .NET for Android with `Java.Interop`.
+
+**API abstractions**
 
 ```cmd
 dotnet add package Rxmxnx.JNetInterface.Core
 ```
 
-**Supported Frameworks:**  
-This package supports **.NET 7.0 and later**. Ensure your project targets a compatible framework.
+Use this package to depend only on the JNetInterface API contracts, enabling implementation-independent and testable
+code.
+
+**Supported Frameworks:**
+
+- This package supports **.NET 7.0 and later**. Ensure your project targets a compatible framework.
+  -Up to version 1.0, `Rxmxnx.JNetInterface` could be referenced from .NET for Android. In newer versions, use
+  `Rxmxnx.JNetInterface.Mobile`, which is designed for safe interoperability with `Java.Interop`.
 
 ---  
+
+## Use Case Roadmap
+
+The `Rxmxnx.JNetInterface` ecosystem is built around a shared abstraction layer (`Rxmxnx.JNetInterface.Core`) with
+multiple runtime-specific implementations. Choose the package that best matches your application model and target
+platform.
+
+| Scenario                                                                                              | Package                                       | Typical use                                                                                                                                                                                                                                                                                               |
+|-------------------------------------------------------------------------------------------------------|-----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Build against high-level Java and JNI abstractions without depending on a specific JVM implementation | `Rxmxnx.JNetInterface.Core`                   | Develop runtime-independent libraries, shared components, source generators, analyzers, or tooling using the common object model, metadata system, and JNI abstractions.                                                                                                                                  |
+| Unit-test code that depends on JNI abstractions without requiring a JVM                               | `Rxmxnx.JNetInterface.Core`                   | Use `EnvironmentProxy`, `ThreadProxy`, and `VirtualMachineProxy` to mock `IEnvironment`, `IThread`, and `IVirtualMachine` during unit testing.                                                                                                                                                            |
+| Locate, load, create, or control Java Virtual Machines                                                | `Rxmxnx.JNetInterface`                        | Manage the JVM runtime library and interact with Java Virtual Machines through the JNI Invocation API and the JNI Native Interface.                                                                                                                                                                       |
+| Build desktop applications, services, NativeAOT executables, or JNI native libraries                  | `Rxmxnx.JNetInterface`                        | Embed a JVM, invoke Java code, or implement Java native methods using a direct JNI implementation.                                                                                                                                                                                                        |
+| Build JNI native libraries for Android                                                                | `Rxmxnx.JNetInterface`                        | Produce NativeAOT `linux-bionic` shared libraries (`.so`) implementing Java native methods for Android applications.                                                                                                                                                                                      |
+| Develop applications or managed libraries for .NET for Android                                        | `Rxmxnx.JNetInterface.Mobile`                 | Integrate with the Android runtime through `java.interop` while preserving the programming model defined by `Rxmxnx.JNetInterface.Core`.                                                                                                                                                                  |
+| Share code across desktop JVM hosts and Android                                                       | `Rxmxnx.JNetInterface.Core` + runtime package | Reference `Rxmxnx.JNetInterface.Core` from shared projects and select either `Rxmxnx.JNetInterface` or `Rxmxnx.JNetInterface.Mobile` as the runtime implementation.                                                                                                                                       |
+| Minimize runtime reflection                                                                           | All packages                                  | `Rxmxnx.JNetInterface.Core` only uses reflection for optional jagged-array metadata generation. `Rxmxnx.JNetInterface` does not use reflection. `Rxmxnx.JNetInterface.Mobile` does not use reflection on .NET 8.0 or later. The .NET 7.0 package requires reflection to interoperate with `java.interop`. |
+
+### Runtime implementations
+
+| Capability                                      | `Rxmxnx.JNetInterface`       | `Rxmxnx.JNetInterface.Mobile`                                 |
+|-------------------------------------------------|------------------------------|---------------------------------------------------------------|
+| **JNI implementation**                          | Direct JNI                   | Direct JNI with `java.interop` interoperability               |
+| **JVM runtime library management**              | ✔                            | ✘                                                             |
+| **JNI Invocation API**                          | ✔                            | ✘                                                             |
+| **JNI Native Interface**                        | ✔                            | ✔                                                             |
+| **Desktop JVM support**                         | ✔                            | ✘                                                             |
+| **Android native components**                   | ✔ (`linux-bionic` NativeAOT) | ✘                                                             |
+| **.NET for Android applications and libraries** | ✘                            | ✔                                                             |
+| **Supported .NET runtimes**                     | CoreCLR, NativeAOT           | Mono, MonoAOT, NativeAOT, and other .NET for Android runtimes |
+
+A simple decision rule:
+
+* **Use `Rxmxnx.JNetInterface.Core`** if you need the high-level API, Java object model, metadata system, or mockable
+  JNI abstractions without requiring a concrete JNI runtime.
+* **Use `Rxmxnx.JNetInterface`** if your application needs to locate or load the JVM runtime library, create or control
+  Java Virtual Machines, invoke Java code through JNI, implement JNI native libraries, or produce NativeAOT executables.
+  This is also the recommended package for building Android JNI native libraries (`linux-bionic`).
+* **Use `Rxmxnx.JNetInterface.Mobile`** if your application or managed library targets .NET for Android and should
+  integrate with the Android runtime through `java.interop`. Use `Rxmxnx.JNetInterface` instead when producing native
+  JNI libraries for Android.
+
+---
 
 ## Overview
 
@@ -89,7 +144,8 @@ The table below shows how common JNI types map to `Rxmxnx.JNetInterface`.
 | N/A                      | jfieldID      | JFieldDefinition <sup>3</sup> | JFieldId              |
 
 1. When initialized via the Invocation API, `IInvokedVirtualMachine` is used. When a thread is attached to the JVM,
-   `IThread` is used.
+   `IThread` is used. On .NET for Android, in order to work alongside with Java.Interop, `Rxmxnx.JNetInterface.Mobile`
+   does not have access to invocation API.
 2. `JClassObject` and `JGlobal` references to classes may not have active JNI references and are loaded as needed.
 3. Definitions serve as keys for JNI access calls.
 
@@ -113,3 +169,47 @@ types when declaring methods, function pointers, or delegates.
 - [Direct Buffer Handling](docs/direct-buffers.md)
 - [Java Error Handling](docs/error-handling.md)
 - [Invocation API, JVirtualMachine and JEnvironment classes](docs/jni-classes.md)
+- [.NET for Android Support](docs/mobile-runtime.md)
+- [Feature Switches](docs/feature-switches.md)
+
+## Disclaimer:
+
+> The software is provided "as is," without warranty of any kind. The authors are not liable for any damages or issues
+> that may arise from its use.
+
+For more details, refer to the full license text included in the [LICENSE](LICENSE.md) file.
+
+---
+
+# Contributing
+
+We warmly welcome contributions to this open-source project! Whether you're here to report issues, propose enhancements,
+or contribute directly to the codebase, your help is greatly appreciated.
+
+For more details, refer to the [CONTRIBUTING](CONTRIBUTING.md) file.
+
+## Translations
+
+We currently support only a few languages, but we are open to adding more! If you'd like to help with translations,
+please open an issue or reach out to us. Your contributions to expanding the project's accessibility are highly valued.
+
+This library currently supports translations for the following languages:
+
+* **English**
+* **Arabic**
+* **Chinese**
+* **French**
+* **German**
+* **Italian**
+* **Japanese**
+* **Portuguese**
+* **Russian**
+* **Spanish**
+
+## Collaboration Guidelines
+
+When contributing, please be respectful and constructive. We aim to create an inclusive and welcoming environment for
+everyone.
+
+Thank you for considering contributing to this project! Your involvement, whether through reporting, coding, or
+translating, helps make this project better for everyone. 🚀

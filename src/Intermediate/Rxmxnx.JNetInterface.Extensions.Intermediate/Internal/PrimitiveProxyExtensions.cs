@@ -1,3 +1,5 @@
+// ReSharper disable ConvertToExtensionBlock
+
 namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
@@ -296,6 +298,9 @@ internal static class PrimitiveProxyExtensions
 	/// </summary>
 	/// <param name="obj">A <see cref="IObject"/> instance.</param>
 	/// <returns>Normalized <see cref="IObject"/> instance.</returns>
+#if !PACKAGE
+	[SuppressMessage("ReSharper", "HeapView.BoxingAllocation")]
+#endif
 	private static IObject? Normalize(this IObject? obj)
 	{
 		if (obj is JPrimitiveObject jObject and not IPrimitiveType)

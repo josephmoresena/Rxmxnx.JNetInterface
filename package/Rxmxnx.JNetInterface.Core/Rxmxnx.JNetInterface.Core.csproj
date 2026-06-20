@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\JNetInterface.Package.targets" />
+  <Import Project="..\JNetInterface.Package.props" />
+  <Import Project="..\Intermediate-to-Package.targets"/>
 
   <!-- Validations -->
   <PropertyGroup>
@@ -21,35 +22,31 @@
     <ProjectReference Include="..\..\src\SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netstandard2.0"/>
   </ItemGroup>
 
-  <ItemGroup>
-    <InternalsVisibleTo Condition="'$(PUBLIC_KEY)' != ''" Include="Rxmxnx.JNetInterface, PublicKey=$(PUBLIC_KEY)"/>
-    <InternalsVisibleTo Condition="'$(PUBLIC_KEY)' == ''" Include="Rxmxnx.JNetInterface"/>
+  <ItemGroup Condition="'$(PUBLIC_KEY)' != ''" >
+    <InternalsVisibleTo Include="Rxmxnx.JNetInterface, PublicKey=$(PUBLIC_KEY)"/>
+    <InternalsVisibleTo Include="Rxmxnx.JNetInterface.Mobile, PublicKey=$(PUBLIC_KEY)"/>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(PUBLIC_KEY)' == ''" >
+    <InternalsVisibleTo Include="Rxmxnx.JNetInterface"/>
+    <InternalsVisibleTo Include="Rxmxnx.JNetInterface.Mobile"/>
   </ItemGroup>
 
   <ItemGroup>
     <None Include="PACKAGE.md" Pack="true" PackagePath="/"/>
-    <None Include="..\..\LICENSE" Pack="true" PackagePath="LICENSE.md"/>
+    <None Include="..\..\LICENSE.md" Pack="true" PackagePath="/"/>
   </ItemGroup>
 
   <PropertyGroup>
     <Authors>Joseph Moreno</Authors>
     <Product>Rxmxnx.JNetInterface</Product>
-    <Description>
-      Rxmxnx.JNetInterface.Core provides an API to use JNI in a high level .NET code.
-    </Description>
+    <Description>Rxmxnx.JNetInterface.Core provides an API to use JNI in a high level .NET code.</Description>
     <Copyright>Copyright © Joseph Moreno 2024</Copyright>
-    <Summary>
-      Rxmxnx.JNetInterface.Core provides an API to use JNI in a high level .NET code.
-    </Summary>
+    <Summary>Rxmxnx.JNetInterface.Core provides an API to use JNI in a high level .NET code.</Summary>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Title>Rxmxnx.JNetInterface.Core</Title>
     <PackageId>Rxmxnx.JNetInterface.Core</PackageId>
-    <PackageTags>
-      PInvoke;Binary;Unmanaged;Memory;NativeAOT;JNI;JNA;Java;JVM;
-      JDK;JRE;NDK;Android;Bionic;FFI;;JNICALL;JNIEXPORT;JNI_OnLoad;JNI_CreateJavaVM;
-      JObject;JClass;JString;JThrowable;JArray;
-      JBoolean;JByte;JChar;JDouble;JFloat;JInt;JLong;JShort
-    </PackageTags>
+    <PackageTags>PInvoke;Binary;Unmanaged;Memory;NativeAOT;JNI;JNA;Java;JVM;JDK;JRE;NDK;Android;Bionic;FFI;;JNICALL;JNIEXPORT;JNI_OnLoad;JNI_CreateJavaVM;JObject;JClass;JString;JThrowable;JArray;JBoolean;JByte;JChar;JDouble;JFloat;JInt;JLong;JShort</PackageTags>
     <PackageReadmeFile>PACKAGE.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>

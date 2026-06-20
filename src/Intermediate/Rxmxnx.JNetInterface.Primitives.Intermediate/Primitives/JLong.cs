@@ -41,6 +41,7 @@ public readonly partial struct JLong : IPrimitiveIntegerType, IPrimitiveNumericT
 	/// <summary>
 	/// <see cref="Int64"/> representation of the current instance.
 	/// </summary>
+	// ReSharper disable once ConvertToAutoPropertyWhenPossible
 	public Int64 Value => this._value;
 	/// <inheritdoc/>
 	public CString ObjectClassName => IPrimitiveType.GetMetadata<JLong>().ClassName;

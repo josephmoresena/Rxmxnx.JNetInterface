@@ -52,6 +52,12 @@ internal sealed class RussianMessageResource : IMessageResource
 	String IMessageResource.NotAttachedThread => "Текущий поток не подключен к JVM.";
 	String IMessageResource.IncompatibleLibrary => "Несовместимая библиотека JVM.";
 	String IMessageResource.UnmanagedMemoryContext => "Блок памяти не управляем.";
+	String IMessageResource.AotRequired => "Для этой операции требуется среда выполнения Native AOT.";
+	String IMessageResource.AndroidRuntimeRequired
+		=> "Текущий процесс должен выполняться исключительно в операционной системе Android.";
+	String IMessageResource.MissingSetEnvironmentPointerMethod
+		=> "Не удалось найти статический метод SetEnvironmentPointer(IntPtr) в типе JniEnvironment.";
+	String IMessageResource.MissingJniRuntime => "В текущем процессе отсутствует активный экземпляр JniRuntime.";
 
 	String IMessageResource.InvalidInstantiation(String className) => $"{className} не является создаваемым типом.";
 	String IMessageResource.InvalidCastTo(Type type) => $"Недопустимое приведение к {type}.";
@@ -125,6 +131,8 @@ internal sealed class RussianMessageResource : IMessageResource
 		=> maxLevel > 0 ?
 			$"Размерность массива должна быть от 1 до {maxLevel}." :
 			"Тип массива имеет слишком много измерений.";
+	String IMessageResource.InvalidInterfaceVersion(Int32 currentVersion, Int32 requiredVersion)
+		=> $"Текущий процесс должен выполняться с версией JNI, совместимой с 0x{requiredVersion:x8}, однако обнаруженная версия — 0x{currentVersion:x8}.";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

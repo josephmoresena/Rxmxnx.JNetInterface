@@ -26,6 +26,10 @@ public class JContainerObject : JComponentObject, IClassType<JContainerObject>
 	);
 
 	static JClassTypeMetadata<JContainerObject> IClassType<JContainerObject>.Metadata => JContainerObject.typeMetadata;
+#if !NET8_0_OR_GREATER
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static Int32 IDataType.AndroidApiLevel => -1;
+#endif
 
 	protected JContainerObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JContainerObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

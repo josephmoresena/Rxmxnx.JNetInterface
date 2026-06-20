@@ -9,6 +9,10 @@ public class JDialogObject : JWindowObject, IClassType<JDialogObject>
 		TypeMetadataBuilder<JWindowObject>.Create<JDialogObject>("java/awt/Dialog"u8).Build();
 
 	static JClassTypeMetadata<JDialogObject> IClassType<JDialogObject>.Metadata => JDialogObject.typeMetadata;
+#if !NET8_0_OR_GREATER
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static Int32 IDataType.AndroidApiLevel => -1;
+#endif
 
 	protected JDialogObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JDialogObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

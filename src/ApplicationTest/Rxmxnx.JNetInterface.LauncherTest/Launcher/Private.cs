@@ -5,7 +5,11 @@ public partial class Launcher
 	private Launcher(DirectoryInfo outputDirectory)
 	{
 		this.OutputDirectory = outputDirectory;
+		this.OutputJavaDirectory = new(outputDirectory.FullName + "-java");
 		this.CurrentArch = RuntimeInformation.OSArchitecture;
+
+		this.OutputDirectory.Create();
+		this.OutputJavaDirectory.Create();
 	}
 
 	private async Task<Jdk?> GetJdk(JdkVersion version, Architecture arch)

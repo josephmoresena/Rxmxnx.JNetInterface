@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 public abstract partial class Launcher
 {
 	public DirectoryInfo OutputDirectory { get; }
+	public DirectoryInfo OutputJavaDirectory { get; }
 	public Architecture CurrentArch { get; }
 
 	public virtual NetVersion[] NetVersions => Enum.GetValues<NetVersion>();
@@ -82,7 +83,7 @@ public abstract partial class Launcher
 		Dictionary<String, Int32> results = new();
 		try
 		{
-			FileInfo? jarFile = this.OutputDirectory.GetFiles("HelloJni.jar").FirstOrDefault();
+			FileInfo? jarFile = this.OutputJavaDirectory.GetFiles("HelloJni.jar").FirstOrDefault();
 			if (jarFile is null) return;
 
 			Jdk[] jdks = this.Architectures.SelectMany(a => this[a]).Distinct()
@@ -138,7 +139,7 @@ public abstract partial class Launcher
 			ExecutablePath = jdk.JavaExecutable,
 			ArgState = jarArgs,
 			AppendArgs = JarArgs.Append,
-			WorkingDirectory = this.OutputDirectory.FullName,
+			WorkingDirectory = this.OutputJavaDirectory.FullName,
 			Notifier = ConsoleNotifier.Notifier,
 		};
 		Int32 result = await Utilities.Execute(state, cancellationToken);

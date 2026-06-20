@@ -28,18 +28,46 @@ public partial record ClassObjectMetadata
 		this.ClassSignature = jClass.ClassSignature;
 		this.Hash = jClass.Hash;
 		this.ArrayDimension = jClass.ArrayDimension;
-		this.IsInterface = kind != JTypeKind.Undefined ?
-			kind is JTypeKind.Interface or JTypeKind.Annotation :
-			jClass.IsInterface;
-		this.IsEnum = kind != JTypeKind.Undefined ? kind is JTypeKind.Enum : jClass.IsEnum;
-		this.IsAnnotation = kind != JTypeKind.Undefined ? kind is JTypeKind.Annotation : jClass.IsAnnotation;
+		this.IsInterface = kind switch
+		{
+			JTypeKind.Undefined => jClass.IsInterface,
+			JTypeKind.Interface or JTypeKind.Annotation => true,
+			_ => false,
+		};
+		this.IsEnum = kind switch
+		{
+			JTypeKind.Undefined => jClass.IsEnum,
+			JTypeKind.Enum => true,
+			_ => false,
+		};
+		this.IsAnnotation = kind switch
+		{
+			JTypeKind.Undefined => jClass.IsAnnotation,
+			JTypeKind.Annotation => true,
+			_ => false,
+		};
 		this.IsFinal = isFinal switch
 		{
-			null when kind is JTypeKind.Primitive or JTypeKind.Enum => true,
-			null when kind is JTypeKind.Interface or JTypeKind.Annotation => false,
+			null when this.IsEnum.Value => true,
+			null when this.IsInterface.Value => false,
 			null => jClass.IsFinal,
 			_ => isFinal,
 		};
+	}
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="classHash">Class hash.</param>
+	/// <param name="classNameLength">JNI class name length.</param>
+	/// <param name="signatureLength">JNI signature length.</param>
+	/// <param name="isArray">Indicates whether className is for array class.</param>
+	internal ClassObjectMetadata(String classHash, Int32 classNameLength, Int32 signatureLength, Boolean isArray) :
+		base(IClassType.GetMetadata<JClassObject>(), false)
+	{
+		this.Name = InfoSequenceBase.GetClassName(classHash, classNameLength);
+		this.ClassSignature = InfoSequenceBase.GetClassSignature(classHash, classNameLength, signatureLength);
+		this.ArrayDimension = isArray ? JClassObject.GetArrayDimension(this.ClassSignature) : 0;
+		this.Hash = classHash;
 	}
 
 	/// <summary>

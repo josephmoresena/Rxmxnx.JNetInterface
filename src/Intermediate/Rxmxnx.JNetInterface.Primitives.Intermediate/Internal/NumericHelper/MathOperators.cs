@@ -67,7 +67,7 @@ internal static partial class NumericHelper
 	/// <inheritdoc cref="IIncrementOperators{TSelf}.op_CheckedIncrement(TSelf)"/>
 	public static T CheckedIncrement<T>(T value) where T : unmanaged, IIncrementOperators<T>
 	{
-		unchecked
+		checked
 		{
 			value++;
 		}

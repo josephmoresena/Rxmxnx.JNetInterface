@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="..\..\Test\Tests.targets"/>
+    <Import Project="..\..\Test\Tests.props"/>
 
     <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('FREEBSD'))">
         <TargetFrameworks>$(Null)</TargetFrameworks>

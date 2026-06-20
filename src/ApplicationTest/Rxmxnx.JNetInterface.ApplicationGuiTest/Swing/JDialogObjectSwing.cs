@@ -1,5 +1,6 @@
 using Rxmxnx.JNetInterface.Awt;
 using Rxmxnx.JNetInterface.Lang;
+using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
 using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
@@ -26,10 +27,29 @@ public class JDialogObjectSwing : JDialogObject, IClassType<JDialogObjectSwing>,
 	static JClassTypeMetadata<JDialogObjectSwing> IClassType<JDialogObjectSwing>.Metadata
 		=> JDialogObjectSwing.typeMetadata;
 	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd2;
+#if !NET8_0_OR_GREATER
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static Int32 IDataType.AndroidApiLevel => -1;
+#endif
 
 	protected JDialogObjectSwing(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JDialogObjectSwing(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	protected JDialogObjectSwing(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
+
+	public new void Add(JComponentObject component, JLocalObject constraints)
+	{
+		if (this.Environment.VirtualMachine.Version >= JRuntimeVersion.J5)
+		{
+			// For JDK 1.5 and later, use the add method directly.
+			base.Add(component, constraints);
+			return;
+		}
+
+		// Cast the javax.swing.JDialog instance to javax.swing.RootPaneContainer
+		JRootPaneContainerObject rootPane = this.CastTo<JRootPaneContainerObject>();
+		using JContainerObject? contentContainer = rootPane.GetContentPane();
+		contentContainer?.Add(component, constraints);
+	}
 
 	public static JDialogObjectSwing Create(JFrameObjectAwt frame, String title, Boolean modal)
 	{

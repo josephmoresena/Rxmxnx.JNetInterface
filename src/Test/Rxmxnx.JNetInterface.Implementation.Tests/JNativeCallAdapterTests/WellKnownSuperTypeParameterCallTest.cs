@@ -66,17 +66,17 @@ public partial class JNativeCallAdapterTests
 			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation.Name.Length);
 			proxyEnv.GetStringUtfLength(strRef1).Returns(errorTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef0.Value);
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(strRef0.Value);
 			proxyEnv.CallObjectMethod(superClassRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef1.Value);
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(strRef1.Value);
 			proxyEnv.GetStringUtfChars(strRef0, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)pointers[0].Pointer);
 			proxyEnv.GetStringUtfChars(strRef1, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)pointers[1].Pointer);
 			proxyEnv.CallIntMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                       ReadOnlyValPtr<JValueWrapper>.Zero).Returns((Int32)modifiers);
+			                       ReadOnlyValPtr<JValue>.Zero).Returns((Int32)modifiers);
 			proxyEnv.CallBooleanMethod(classRef.Value, proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                           ReadOnlyValPtr<JValueWrapper>.Zero).Returns(false);
+			                           ReadOnlyValPtr<JValue>.Zero).Returns(false);
 
 			_ = builder.WithParameter(localRef, out JLocalObject? result);
 
@@ -90,22 +90,22 @@ public partial class JNativeCallAdapterTests
 			proxyEnv.Received(1).GetStringUtfLength(strRef0);
 			proxyEnv.Received(initial ? 1 : 0).GetStringUtfLength(strRef1);
 			proxyEnv.Received(1).CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                                      ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                      ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(initial ? 1 : 0).CallObjectMethod(superClassRef.Value,
 			                                                    proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                                                    ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                                    ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(1).GetStringUtfChars(strRef0, Arg.Any<ValPtr<JBoolean>>());
 			proxyEnv.Received(initial ? 1 : 0).GetStringUtfChars(strRef1, Arg.Any<ValPtr<JBoolean>>());
 			proxyEnv.Received(initial ? 1 : 0).CallIntMethod(classRef.Value,
 			                                                 proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                                                 ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                                 ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).CallIntMethod(superClassRef.Value, proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                                   ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                   ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).CallBooleanMethod(classRef.Value, proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                       ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).CallBooleanMethod(superClassRef.Value,
 			                                       proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                       ReadOnlyValPtr<JValue>.Zero);
 
 			pointers.ForEach(f => f.Dispose());
 		}
@@ -144,15 +144,15 @@ public partial class JNativeCallAdapterTests
 			proxyEnv.GetStringUtfLength(strRef1).Returns(proxyTypeMetadata.ClassName.Length);
 			proxyEnv.GetStringUtfLength(strRef2).Returns(interfaceTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef0.Value);
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(strRef0.Value);
 			proxyEnv.CallObjectMethod(superClassRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef1.Value);
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(strRef1.Value);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetInterfacesMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(arrayRef.Value);
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(arrayRef.Value);
 			proxyEnv.GetArrayLength(arrayRef.ArrayValue).Returns(1);
 			proxyEnv.GetObjectArrayElement(arrayRef, 0).Returns(interfaceClassRef.Value);
 			proxyEnv.CallObjectMethod(interfaceClassRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef2.Value);
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(strRef2.Value);
 			proxyEnv.GetStringUtfChars(strRef0, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)pointers[0].Pointer);
 			proxyEnv.GetStringUtfChars(strRef1, Arg.Any<ValPtr<JBoolean>>())
@@ -160,9 +160,9 @@ public partial class JNativeCallAdapterTests
 			proxyEnv.GetStringUtfChars(strRef2, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)pointers[2].Pointer);
 			proxyEnv.CallIntMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                       ReadOnlyValPtr<JValueWrapper>.Zero).Returns((Int32)modifiers);
+			                       ReadOnlyValPtr<JValue>.Zero).Returns((Int32)modifiers);
 			proxyEnv.CallBooleanMethod(classRef.Value, proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                           ReadOnlyValPtr<JValueWrapper>.Zero).Returns(false);
+			                           ReadOnlyValPtr<JValue>.Zero).Returns(false);
 
 			_ = builder.WithParameter(localRef, out JLocalObject? result);
 
@@ -178,34 +178,34 @@ public partial class JNativeCallAdapterTests
 			proxyEnv.Received(initial ? 1 : 0).GetStringUtfLength(strRef1);
 			proxyEnv.Received(initial ? 1 : 0).GetStringUtfLength(strRef2);
 			proxyEnv.Received(1).CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                                      ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                      ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(initial ? 1 : 0).CallObjectMethod(superClassRef.Value,
 			                                                    proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                                                    ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                                    ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(initial ? 1 : 0).CallObjectMethod(classRef.Value,
 			                                                    proxyEnv.VirtualMachine.ClassGetInterfacesMethodId,
-			                                                    ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                                    ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(initial ? 1 : 0).GetArrayLength(arrayRef.ArrayValue);
 			proxyEnv.Received(initial ? 1 : 0).GetObjectArrayElement(arrayRef, 0);
 			proxyEnv.Received(initial ? 1 : 0).CallObjectMethod(interfaceClassRef.Value,
 			                                                    proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                                                    ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                                    ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(1).GetStringUtfChars(strRef0, Arg.Any<ValPtr<JBoolean>>());
 			proxyEnv.Received(initial ? 1 : 0).GetStringUtfChars(strRef1, Arg.Any<ValPtr<JBoolean>>());
 			proxyEnv.Received(initial ? 1 : 0).GetStringUtfChars(strRef2, Arg.Any<ValPtr<JBoolean>>());
 			proxyEnv.Received(initial ? 1 : 0).CallIntMethod(classRef.Value,
 			                                                 proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                                                 ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                                 ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).CallIntMethod(superClassRef.Value, proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                                   ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                   ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).CallBooleanMethod(classRef.Value, proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                       ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).CallBooleanMethod(superClassRef.Value,
 			                                       proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                       ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).CallBooleanMethod(superClassRef.Value,
 			                                       proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                       ReadOnlyValPtr<JValue>.Zero);
 
 			pointers.ForEach(f => f.Dispose());
 		}
@@ -249,22 +249,22 @@ public partial class JNativeCallAdapterTests
 			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation.Name.Length);
 			proxyEnv.GetStringUtfLength(strRef1).Returns(errorTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef0.Value);
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(strRef0.Value);
 			proxyEnv.CallObjectMethod(elementSuperClassRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef1.Value);
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(strRef1.Value);
 			proxyEnv.GetStringUtfChars(strRef0, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)pointers[0].Pointer);
 			proxyEnv.GetStringUtfChars(strRef1, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)pointers[1].Pointer);
 			proxyEnv.CallIntMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                       ReadOnlyValPtr<JValueWrapper>.Zero).Returns((Int32)arrayModifier);
+			                       ReadOnlyValPtr<JValue>.Zero).Returns((Int32)arrayModifier);
 			proxyEnv.CallIntMethod(elementClassRef.Value, proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                       ReadOnlyValPtr<JValueWrapper>.Zero).Returns((Int32)elementModifier);
+			                       ReadOnlyValPtr<JValue>.Zero).Returns((Int32)elementModifier);
 			proxyEnv.CallBooleanMethod(elementClassRef.Value, proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                           ReadOnlyValPtr<JValueWrapper>.Zero).Returns(false);
+			                           ReadOnlyValPtr<JValue>.Zero).Returns(false);
 			proxyEnv.Received(0).CallBooleanMethod(elementSuperClassRef.Value,
 			                                       proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                       ReadOnlyValPtr<JValue>.Zero);
 
 			_ = builder.WithParameter(localRef, out JLocalObject? result);
 			JArrayObject jArray = Assert.IsType<JArrayObject>(result, false);
@@ -281,28 +281,28 @@ public partial class JNativeCallAdapterTests
 			proxyEnv.Received(1).GetStringUtfLength(strRef0);
 			proxyEnv.Received(initial ? 1 : 0).GetStringUtfLength(strRef1);
 			proxyEnv.Received(1).CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                                      ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                      ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).CallObjectMethod(elementClassRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                                      ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                      ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(initial ? 1 : 0).CallObjectMethod(elementSuperClassRef.Value,
 			                                                    proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                                                    ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                                    ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(initial ? 1 : 0).GetStringUtfChars(strRef1, Arg.Any<ValPtr<JBoolean>>());
 			proxyEnv.Received(initial ? 1 : 0).GetStringUtfChars(strRef1, Arg.Any<ValPtr<JBoolean>>());
 			proxyEnv.Received(initial ? 1 : 0).CallIntMethod(classRef.Value,
 			                                                 proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                                                 ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                                 ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(initial ? 1 : 0).CallIntMethod(elementClassRef.Value,
 			                                                 proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                                                 ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                                 ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).CallIntMethod(elementSuperClassRef.Value,
 			                                   proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                                   ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                   ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).CallBooleanMethod(classRef.Value, proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                       ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).CallBooleanMethod(elementClassRef.Value,
 			                                       proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                       ReadOnlyValPtr<JValue>.Zero);
 
 			pointers.ForEach(f => f.Dispose());
 		}
@@ -345,28 +345,28 @@ public partial class JNativeCallAdapterTests
 				return className.SequenceEqual(elementName) ? elementClassRef : default;
 			});
 			proxyEnv.CallObjectMethod(elementClassRef.Value, proxyEnv.VirtualMachine.ClassGetInterfacesMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(arrayRef.Value);
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(arrayRef.Value);
 			proxyEnv.GetArrayLength(arrayRef.ArrayValue).Returns(1);
 			proxyEnv.GetObjectArrayElement(arrayRef, 0).Returns(interfaceClassRef.Value);
 			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation.Name.Length);
 			proxyEnv.GetStringUtfLength(strRef1).Returns(serializableTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef0.Value);
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(strRef0.Value);
 			proxyEnv.CallObjectMethod(interfaceClassRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef1.Value);
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(strRef1.Value);
 			proxyEnv.GetStringUtfChars(strRef0, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)pointers[0].Pointer);
 			proxyEnv.GetStringUtfChars(strRef1, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)pointers[1].Pointer);
 			proxyEnv.CallIntMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                       ReadOnlyValPtr<JValueWrapper>.Zero).Returns((Int32)arrayModifier);
+			                       ReadOnlyValPtr<JValue>.Zero).Returns((Int32)arrayModifier);
 			proxyEnv.CallIntMethod(elementClassRef.Value, proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                       ReadOnlyValPtr<JValueWrapper>.Zero).Returns((Int32)elementModifier);
+			                       ReadOnlyValPtr<JValue>.Zero).Returns((Int32)elementModifier);
 			proxyEnv.CallBooleanMethod(elementClassRef.Value, proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                           ReadOnlyValPtr<JValueWrapper>.Zero).Returns(false);
+			                           ReadOnlyValPtr<JValue>.Zero).Returns(false);
 			proxyEnv.Received(0).CallBooleanMethod(interfaceClassRef.Value,
 			                                       proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                       ReadOnlyValPtr<JValue>.Zero);
 
 			_ = builder.WithParameter(localRef, out JLocalObject? result);
 			JArrayObject jArray = Assert.IsType<JArrayObject>(result, false);
@@ -382,34 +382,34 @@ public partial class JNativeCallAdapterTests
 			proxyEnv.Received(0).GetSuperclass(elementClassRef);
 			proxyEnv.Received(initial ? 1 : 0).CallObjectMethod(elementClassRef.Value,
 			                                                    proxyEnv.VirtualMachine.ClassGetInterfacesMethodId,
-			                                                    ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                                    ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(initial ? 1 : 0).GetArrayLength(arrayRef.ArrayValue);
 			proxyEnv.Received(initial ? 1 : 0).GetObjectArrayElement(arrayRef, 0);
 			proxyEnv.Received(1).GetStringUtfLength(strRef0);
 			proxyEnv.Received(initial ? 1 : 0).GetStringUtfLength(strRef1);
 			proxyEnv.Received(1).CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                                      ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                      ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).CallObjectMethod(elementClassRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                                      ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                      ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(initial ? 1 : 0).CallObjectMethod(interfaceClassRef.Value,
 			                                                    proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                                                    ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                                    ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(initial ? 1 : 0).GetStringUtfChars(strRef1, Arg.Any<ValPtr<JBoolean>>());
 			proxyEnv.Received(initial ? 1 : 0).GetStringUtfChars(strRef1, Arg.Any<ValPtr<JBoolean>>());
 			proxyEnv.Received(initial ? 1 : 0).CallIntMethod(classRef.Value,
 			                                                 proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                                                 ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                                 ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(initial ? 1 : 0).CallIntMethod(elementClassRef.Value,
 			                                                 proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                                                 ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                                 ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).CallIntMethod(interfaceClassRef.Value,
 			                                   proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                                   ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                   ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).CallBooleanMethod(classRef.Value, proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                       ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).CallBooleanMethod(elementClassRef.Value,
 			                                       proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                       ReadOnlyValPtr<JValue>.Zero);
 
 			pointers.ForEach(f => f.Dispose());
 		}
@@ -453,22 +453,22 @@ public partial class JNativeCallAdapterTests
 			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation.Name.Length);
 			proxyEnv.GetStringUtfLength(strRef1).Returns(enumTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef0.Value);
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(strRef0.Value);
 			proxyEnv.CallObjectMethod(elementSuperClassRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef1.Value);
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(strRef1.Value);
 			proxyEnv.GetStringUtfChars(strRef0, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)pointers[0].Pointer);
 			proxyEnv.GetStringUtfChars(strRef1, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)pointers[1].Pointer);
 			proxyEnv.CallIntMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                       ReadOnlyValPtr<JValueWrapper>.Zero).Returns((Int32)arrayModifier);
+			                       ReadOnlyValPtr<JValue>.Zero).Returns((Int32)arrayModifier);
 			proxyEnv.CallIntMethod(elementClassRef.Value, proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                       ReadOnlyValPtr<JValueWrapper>.Zero).Returns((Int32)elementModifier);
+			                       ReadOnlyValPtr<JValue>.Zero).Returns((Int32)elementModifier);
 			proxyEnv.CallBooleanMethod(elementClassRef.Value, proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                           ReadOnlyValPtr<JValueWrapper>.Zero).Returns(false);
+			                           ReadOnlyValPtr<JValue>.Zero).Returns(false);
 			proxyEnv.Received(0).CallBooleanMethod(elementSuperClassRef.Value,
 			                                       proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                       ReadOnlyValPtr<JValue>.Zero);
 
 			_ = builder.WithParameter(localRef, out JLocalObject? result);
 			JArrayObject jArray = Assert.IsType<JArrayObject>(result, false);
@@ -485,28 +485,28 @@ public partial class JNativeCallAdapterTests
 			proxyEnv.Received(1).GetStringUtfLength(strRef0);
 			proxyEnv.Received(initial ? 1 : 0).GetStringUtfLength(strRef1);
 			proxyEnv.Received(1).CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                                      ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                      ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).CallObjectMethod(elementClassRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                                      ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                      ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(initial ? 1 : 0).CallObjectMethod(elementSuperClassRef.Value,
 			                                                    proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                                                    ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                                    ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(initial ? 1 : 0).GetStringUtfChars(strRef1, Arg.Any<ValPtr<JBoolean>>());
 			proxyEnv.Received(initial ? 1 : 0).GetStringUtfChars(strRef1, Arg.Any<ValPtr<JBoolean>>());
 			proxyEnv.Received(initial ? 1 : 0).CallIntMethod(classRef.Value,
 			                                                 proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                                                 ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                                 ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(initial ? 1 : 0).CallIntMethod(elementClassRef.Value,
 			                                                 proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                                                 ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                                 ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).CallIntMethod(elementSuperClassRef.Value,
 			                                   proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                                   ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                   ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).CallBooleanMethod(classRef.Value, proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                       ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(0).CallBooleanMethod(elementClassRef.Value,
 			                                       proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
+			                                       ReadOnlyValPtr<JValue>.Zero);
 
 			pointers.ForEach(f => f.Dispose());
 		}

@@ -8,8 +8,11 @@ public sealed class JLayoutManagerObject : JInterfaceObject<JLayoutManagerObject
 {
 	private static readonly JInterfaceTypeMetadata<JLayoutManagerObject> typeMetadata =
 		TypeMetadataBuilder<JLayoutManagerObject>.Create("java/awt/LayoutManager"u8).Build();
+
 	static JInterfaceTypeMetadata<JLayoutManagerObject> IInterfaceType<JLayoutManagerObject>.Metadata
 		=> JLayoutManagerObject.typeMetadata;
+	static Int32 IDataType.AndroidApiLevel => -1;
+
 	private JLayoutManagerObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 	static JLayoutManagerObject IInterfaceType<JLayoutManagerObject>.Create(
 		IReferenceType.ObjectInitializer initializer)

@@ -2,7 +2,7 @@
 
 All instances of global, weak global, and local objects (or their local views via `ILocalObject`) implement the
 `IDisposable` interface.  
-When calling the `Dispose` method, `Rxmxnx.JNetInterface` removes the associated JNI references.
+When calling the `Dispose` method, the `Rxmxnx.JNetInterface` implementation removes the associated JNI references.
 
 However, in some cases, calling `Dispose` may not immediately remove the JNI references due to:
 
@@ -36,7 +36,7 @@ However, in some cases, calling `Dispose` may not immediately remove the JNI ref
 All JNI calls that return Java object references return **local references**. These remain valid while the active
 environment frame is maintained or explicitly removed.  
 Local JNI references are valid **only within the thread that created them**. For this reason, all `JLocalObject` and
-`ILocalObject` instances in `Rxmxnx.JNetInterface` are bound to a specific `IEnvironment` instance.
+`ILocalObject` instances in any `Rxmxnx.JNetInterface` implementation are bound to a specific `IEnvironment` instance.
 
 ### Environment Frames
 
@@ -48,14 +48,15 @@ frame may enforce a limit.
 1. **Initial Frame**:
     - The default frame when a thread associates with the JVM via JNI or the Invocation API.
     - Remains valid for as long as the thread is attached.
-
-2. **Call Frame**:
-    - Created by the JVM when executing a Java native call.
-    - `JNativeCallAdapter` must be used to notify `Rxmxnx.JNetInterface` of this temporary frame.
-
-3. **Fixed Frame**:
+2. **Fixed Frame**:
     - A manually created JNI frame with a predefined reference limit.
     - Exceeding this limit causes older references to be invalidated (FIFO behavior).
+3. **Call Frame**:
+    - Created by the JVM when executing a Java native call.
+    - `JNativeCallAdapter` must be used to notify `Rxmxnx.JNetInterface` of this temporary frame.
+4. **JNI Context Frame**:
+    - Created by `Java.Interop` on .NET for Android.
+    - `AndroidJniContext` represents a safe JNI context using `Rxmxnx.JNetInterface.Mobile`.
 
 The `IEnvironment` interface provides the `LocalCapacity` property, allowing:
 
@@ -79,7 +80,7 @@ The `IEnvironment` interface provides the `LocalCapacity` property, allowing:
 
 A frame with a **predefined local reference limit**. When full, older references are **automatically invalidated**.
 
-To use a fixed frame in `Rxmxnx.JNetInterface`:
+To use a fixed frame in a `Rxmxnx.JNetInterface` implementation:
 
 ```csharp
 environment.WithFrame(16, () => { /* JNI operations */ });
@@ -103,7 +104,7 @@ int result = environment.WithFrame(16, () => { return 42; });
 #### Call Frame
 
 Created automatically by the JVM when executing a Java native call. Native calls must follow specific naming and
-parameter conventions.
+parameter conventions. This feature is not available on `Rxmxnx.JNetInterface.Mobile`.
 
 ##### JNI Native Call Parameters
 
@@ -226,9 +227,20 @@ adapter.FinalizeCall<TElement>(JArrayObject<TElement>? result);
 
 ---  
 
+#### JNI Context frame
+
+Created automatically by the `Rxmxnx.JNetInterface.Mobile` when the instantiation of a `AndroidJniContext` is requested.
+
+This frame also stores the `java.interop`-specific references used to interact with the JNI calls performed by
+`Rxmxnx.JNetInterface.Mobile`.
+
+For more details about using `Rxmxnx.JNetInterface.Mobile` API refer to [.NET Android interop](mobile-runtime.md).
+
+--
+
 ## Global Reference Handling
 
-Global JNI references are managed via `JGlobal` instances in `Rxmxnx.JNetInterface`.
+Global JNI references are managed via `JGlobal` instances in any `Rxmxnx.JNetInterface` implementation.
 
 To obtain a `JGlobal` reference from a `JLocalObject`:
 

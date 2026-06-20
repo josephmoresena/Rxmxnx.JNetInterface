@@ -10,6 +10,33 @@ public partial interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	/// </summary>
 	JRuntimeVersion Version { get; }
 	/// <summary>
+	/// Android API Level.
+	/// </summary>
+	/// <remarks>
+	///     <list type="table">
+	///         <listheader>
+	///             <term>Value</term>
+	///             <description>Description</description>
+	///         </listheader>
+	///         <item>
+	///             <term>-1</term>
+	///             <description>The JVM does not support Android classes.</description>
+	///         </item>
+	///         <item>
+	///             <term>0</term>
+	///             <description>The JVM is not Android-based, but supports Android classes.</description>
+	///         </item>
+	///         <item>
+	///             <term>&gt; 0</term>
+	///             <description>The JVM is running on Android and the value represents the Android API level.</description>
+	///         </item>
+	///     </list>
+	/// </remarks>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	Int32 AndroidApiLevel => 0; // 0: Not Android, but supports Android classes.
+	/// <summary>
 	/// JNI reference to the interface.
 	/// </summary>
 	JVirtualMachineRef Reference { get; }

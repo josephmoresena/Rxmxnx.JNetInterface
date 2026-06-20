@@ -6,9 +6,12 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <ApplicationIcon>icon.ico</ApplicationIcon>
         <GenerateAotLog>true</GenerateAotLog>
+        <PublishAot>true</PublishAot>
+        <NativeAOT>true</NativeAOT>
     </PropertyGroup>
 
-    <Import Project="..\JNetInterface-App.targets"/>
+    <Import Project="..\JNetInterface-PackageReference.props"/>
+    <Import Project="..\JNetInterface-App.props"/>
 
     <ItemGroup>
         <None Remove="java.src\**"/>
@@ -22,18 +25,6 @@
         <EmbeddedResource Condition="!$([MSBuild]::IsOSPlatform('LINUX'))" Remove="Images\linux.png"/>
         <EmbeddedResource Condition="!$([MSBuild]::IsOSPlatform('OSX'))" Remove="Images\macosx.png"/>
         <EmbeddedResource Condition="!$([MSBuild]::IsOSPlatform('WINDOWS'))" Remove="Images\windows.png"/>
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(UsePackage)' != 'true'">
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj"/>
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj"/>
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(UsePackage)' == 'true'">
-        <PackageReference Include="Rxmxnx.JNetInterface" Version="9999.99.99.99-tmp"/>
     </ItemGroup>
 
 </Project>

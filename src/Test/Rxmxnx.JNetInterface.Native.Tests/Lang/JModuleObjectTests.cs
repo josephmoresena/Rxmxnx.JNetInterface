@@ -65,6 +65,8 @@ public class JModuleObjectTests
 		Assert.Equal(JModuleObjectTests.classSignature, typeMetadata.Signature);
 		Assert.Equal(JModuleObjectTests.arraySignature, typeMetadata.ArraySignature);
 		Assert.Equal(JModuleObjectTests.hash.ToString(), typeMetadata.Hash);
+		Assert.Equal(JRuntimeVersion.J9, typeMetadata.Since);
+		Assert.Equal(-1, typeMetadata.AndroidApiLevel);
 		Assert.Equal(JModuleObjectTests.hash.ToString(), IDataType.GetHash<JModuleObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
 		Assert.IsType<JFunctionDefinition<JModuleObject>.Parameterless>(

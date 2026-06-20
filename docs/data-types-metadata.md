@@ -1,6 +1,7 @@
 # Type Metadata
 
-Type metadata objects enable `Rxmxnx.JNetInterface` to identify Java object types referenced through JNI at runtime.  
+Type metadata objects enable any `Rxmxnx.JNetInterface` implementation to identify Java object types referenced through
+JNI at runtime.
 By leveraging .NET's strong typing features, it is possible to perform operations on object instances or their
 corresponding Java class instances.
 
@@ -46,12 +47,12 @@ Each metadata object exposes the following properties:
   sequence containing the class name, JNI signature, and array signature.
 - Type metadata includes a `.ToString()` implementation, which may be unnecessary in release builds. To disable it, use
   the feature switch `JNetInterface.DisableTypeMetadataToString`.
-- The minimum recommended Java version to be used with `Rxmxnx.JNetInterface` is version **1.6**; however, limited
-  compatibility can be achieved with version **1.2**.
+- The minimum recommended Java version to be used with any `Rxmxnx.JNetInterface` implementation is version **1.6**;
+  however, limited compatibility can be achieved with version **1.2**.
 
 ## Metadata Builders
 
-Metadata builders are base classes used to initialize type metadata.  
+Metadata builders are base classes used to initialize type metadata.
 For optimal runtime performance, a single metadata instance should be used.  
 These builders are `ref struct` types, making them incompatible with Visual Basic.
 
@@ -91,8 +92,8 @@ is primarily intended for design-time verification.
 
 ## Jagged Array Type Metadata
 
-Unlike .NET, Java does not support multidimensional arrays—only arrays of arrays. `Rxmxnx.JNetInterface` uses reflection
-to generate metadata for these arrays at runtime, ensuring NativeAOT compatibility.
+Unlike .NET, Java does not support multidimensional arrays—only arrays of arrays. `Rxmxnx.JNetInterface.Core` uses
+reflection to generate metadata for these arrays at runtime, ensuring NativeAOT compatibility.
 
 In reflection-free AOT mode, runtime metadata generation is not possible. To ensure
 `JArrayObject<..JArrayObject<...>..>` definitions are available at runtime, manual registration is required.

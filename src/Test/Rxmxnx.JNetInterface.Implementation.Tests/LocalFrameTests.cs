@@ -20,8 +20,8 @@ public sealed class LocalFrameTests
 			{
 				(env as IEnvironment).WithFrame(capacity, env, e =>
 				{
-					LocalCache cache = e.LocalCache;
-					Assert.Equal(capacity, cache.Capacity);
+					IMutableWrapper<Int32?> cache = e.LocalCache;
+					Assert.Equal(capacity, cache.Value);
 				});
 			});
 			Assert.Equal(JResult.MemoryError, ex.Result);
@@ -52,9 +52,9 @@ public sealed class LocalFrameTests
 			proxyEnv.VirtualMachine.ClearReceivedCalls();
 			JLocalObject result = (env as IEnvironment).WithFrame(capacity, env, e =>
 			{
-				LocalCache cache = e.LocalCache;
-				Assert.Equal(capacity, cache.Capacity);
-				Exception ex = Assert.Throws<InvalidOperationException>(() => cache.Capacity = capacity + 1);
+				IMutableWrapper<Int32?> cache = e.LocalCache;
+				Assert.Equal(capacity, cache.Value);
+				Exception ex = Assert.Throws<InvalidOperationException>(() => cache.Value = capacity + 1);
 				Assert.Equal(IMessageResource.GetInstance().StackTraceFixed, ex.Message);
 				return e.ClassObject;
 			});

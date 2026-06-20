@@ -1,6 +1,6 @@
 # Java Data Types Mapping
 
-`Rxmxnx.JNetInterface` provides a structured mapping of Java data types through the `IDataType` interface, with
+`Rxmxnx.JNetInterface.Core` provides a structured mapping of Java data types through the `IDataType` interface, with
 instances of `JDataTypeMetadata` used for identification.  
 The following table illustrates how data type mapping works.
 
@@ -54,7 +54,7 @@ All JNI-interoperable objects are instances of `JObject`. Primitives undergo box
 
 ## Object Casting
 
-Primitive type conversion in `Rxmxnx.JNetInterface` follows Java's promotion and truncation rules. To convert a
+Primitive type conversion in `Rxmxnx.JNetInterface.Core` follows Java's promotion and truncation rules. To convert a
 primitive type to its wrapper object, use the `.ToObject(IEnvironment)` extension method.
 
 For `ILocalObject` instances, conversion to another type can be done using `.CastTo<TReference>()`.
@@ -85,8 +85,8 @@ new local reference is created when performing the cast.
 
 ## Object Metadata
 
-Each mapped type can hold cacheable instance metadata in `Rxmxnx.JNetInterface`, which is useful to avoid unnecessary
-JNI calls when querying certain immutable properties after cast to or from global instances.
+Each mapped type can hold cacheable instance metadata in `Rxmxnx.JNetInterface.Core`, which is useful to avoid
+unnecessary JNI calls when querying certain immutable properties after cast to or from global instances.
 This metadata must be an instance of the `ObjectMetadata` type.
 
 This behavior is enabled by implementing the `ILocalObject` interface along with its protected methods
@@ -99,22 +99,23 @@ This behavior is enabled by implementing the `ILocalObject` interface along with
 
 As a result, metadata types must follow a hierarchy rooted in `ObjectMetadata`.
 
-The public metadata types included in `Rxmxnx.JNetInterface` follow the hierarchy below. Some of them are extensible, as
-they are used by extensible mapped types, while others are sealed because their corresponding mapped types do not allow
-inheritance.
+The public metadata types included in `Rxmxnx.JNetInterface.Core` follow the hierarchy below. Some of them are
+extensible, as they are used by extensible mapped types, while others are sealed because their corresponding mapped
+types do not allow inheritance.
 
 ![ObjectMetadataHierarchy](https://github.com/user-attachments/assets/318635b8-f810-41f4-8996-1fa098566feb)
 
-`Rxmxnx.JNetInterface` also provides an object metadata type for primitive wrapper types. However, since these types are
-final (non-extensible) and Java does not support the creation of custom primitive types, the implementation of this
-metadata is kept internal.
+`Rxmxnx.JNetInterface.Core` also provides an object metadata type for primitive wrapper types. However, since these
+types are final (non-extensible) and Java does not support the creation of custom primitive types, the implementation of
+this metadata is kept internal.
 
 ## Data Type Registration
 
 One of `Rxmxnx.JNetInterface`'s key features is its ability to instantiate objects using the closest mapped and
 registered CLR subclass for the actual instance class.
 
-To register a data type, use the static method `JVirtualMachine.Register<T>()`.
+To register a data type, use the static method `JVirtualMachine.Register<T>()` or `AndroidJniHost.Register<T>()` on
+mobile platforms.
 
 ##### Notes
 
@@ -135,4 +136,8 @@ Main types are mapped and registered types that are initialized with global refe
 instance is created. This ensures that any environment within the JVM can access them without restrictions. These global
 references remain active until the JVM is terminated or explicitly removed from `Rxmxnx.JNetInterface`.
 
-For further details, see the documentation on [GraalVM Native Image](../native-image/README.md).  
+Due to Android runtime limitations, `Rxmxnx.JNetInterface.Mobile` does not support JVM unloading or multiple JVM
+instances.
+
+For further details, see the documentation on [GraalVM Native Image](../native-image/README.md).
+

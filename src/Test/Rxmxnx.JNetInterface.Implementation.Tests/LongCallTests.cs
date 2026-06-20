@@ -137,12 +137,11 @@ public sealed class LongCallTests
 		proxyEnv.Received(isStatic ? 1 : 0)
 		        .GetStaticMethodId(Arg.Any<JClassLocalRef>(), namePtr, Arg.Any<ReadOnlyValPtr<Byte>>());
 
-		proxyEnv.Received(isInstance ? 1 : 0)
-		        .CallLongMethod(localRef, methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>());
+		proxyEnv.Received(isInstance ? 1 : 0).CallLongMethod(localRef, methodId, Arg.Any<ReadOnlyValPtr<JValue>>());
 		proxyEnv.Received(isNonVirtual ? 1 : 0).CallNonVirtualLongMethod(
-			localRef, Arg.Any<JClassLocalRef>(), methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>());
+			localRef, Arg.Any<JClassLocalRef>(), methodId, Arg.Any<ReadOnlyValPtr<JValue>>());
 		proxyEnv.Received(isStatic ? 1 : 0)
-		        .CallStaticLongMethod(Arg.Any<JClassLocalRef>(), methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>());
+		        .CallStaticLongMethod(Arg.Any<JClassLocalRef>(), methodId, Arg.Any<ReadOnlyValPtr<JValue>>());
 
 		foreach (IObject obj in args)
 			(obj as IDisposable)?.Dispose();

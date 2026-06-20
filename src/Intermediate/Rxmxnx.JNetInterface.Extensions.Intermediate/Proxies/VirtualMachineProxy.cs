@@ -1,3 +1,5 @@
+// ReSharper disable MemberCanBeProtected.Global
+
 namespace Rxmxnx.JNetInterface.Proxies;
 
 /// <summary>
@@ -12,6 +14,9 @@ public abstract class VirtualMachineProxy : IVirtualMachine
 	public abstract JRuntimeVersion Version { get; }
 	/// <inheritdoc/>
 	public abstract JVirtualMachineRef Reference { get; }
+
+	/// <inheritdoc/>
+	public virtual Int32 AndroidApiLevel => 0;
 
 	Boolean IVirtualMachine.NoProxy => false;
 	IEnvironment? IVirtualMachine.GetEnvironment() => this.GetEnvironment();

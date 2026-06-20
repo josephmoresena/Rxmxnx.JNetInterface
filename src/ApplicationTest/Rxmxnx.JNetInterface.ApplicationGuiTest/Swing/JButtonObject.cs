@@ -18,10 +18,6 @@ public class JButtonObject : JAbstractButtonObject, IClassType<JButtonObject>
 	                                                                         .Create<JButtonObject>(
 		                                                                         "javax/swing/JButton"u8).Build();
 	static JClassTypeMetadata<JButtonObject> IClassType<JButtonObject>.Metadata => JButtonObject.typeMetadata;
-#if !NET8_0_OR_GREATER
-	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
-	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd1;
-#endif
 
 	protected JButtonObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JButtonObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
@@ -44,4 +40,9 @@ public class JButtonObject : JAbstractButtonObject, IClassType<JButtonObject>
 		=> new(initializer);
 	static JButtonObject IClassType<JButtonObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
+#if !NET8_0_OR_GREATER
+	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd1;
+	static Int32 IDataType.AndroidApiLevel => -1;
+#endif
 }

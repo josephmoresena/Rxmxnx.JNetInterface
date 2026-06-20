@@ -213,11 +213,23 @@ public class HelloDotnet {
         String libraryPath = System.getProperty(""java.library.path"");
         String dotnetVersion = System.getProperty(""dotnet.runtime.version"");
         String arch = System.getProperty(""os.arch"");
+        String osName = System.getProperty(""os.name"");
+        boolean reflectionFreeMode = Boolean.parseBoolean(System.getProperty(""dotnet.reflection.disable""));
         
         currentPath = currentPath.substring(0, currentPath.length() - 2);
         
         if (!libraryPath.equals(currentPath) && !libraryPath.contains(currentPath + File.pathSeparator) && !libraryPath.contains(File.pathSeparator + currentPath))
             System.setProperty(""java.library.path"", currentPath + File.pathSeparator + libraryPath);
+        
+        if (osName != null) {
+            osName = osName.toLowerCase();
+            if (osName.contains(""freebsd""))
+                libraryName += "".FreeBSD"";
+            else if (osName.contains(""netbsd""))
+                libraryName += "".NetBSD"";
+            else if (osName.contains(""sunos"") || osName.contains(""solaris"") || osName.contains(""illumos""))
+                libraryName += "".Solaris"";
+        }
         
         if (arch.equals(""amd64"") || arch.equals(""x86_64""))
             libraryName += "".x64"";
@@ -230,15 +242,22 @@ public class HelloDotnet {
         
         if (dotnetVersion != null && !dotnetVersion.equals("""")) 
             libraryName += '.' + dotnetVersion;
+        else if (libraryName.contains("".FreeBSD""))
+            libraryName += "".net9.0"";
+        else if (reflectionFreeMode)
+            libraryName += "".net8.0"";
+        else
+            libraryName += "".net10.0"";
         
-        if (Boolean.parseBoolean(System.getProperty(""dotnet.reflection.disable"")))
+        if (reflectionFreeMode)
             libraryName += "".RFM"";
         
         return libraryName;
     }
 }";
-	private const String JarManifest = @"Main-Class: com.rxmxnx.dotnet.test.HelloDotnet
-";
+	private const String JarManifest = @"Manifest-Version: 1.0
+Main-Class: com.rxmxnx.dotnet.test.HelloDotnet
+Enable-Native-Access: ALL-UNNAMED";
 	private const String JniConfig = @"[
   {
     ""name"": ""java.lang.Void"",

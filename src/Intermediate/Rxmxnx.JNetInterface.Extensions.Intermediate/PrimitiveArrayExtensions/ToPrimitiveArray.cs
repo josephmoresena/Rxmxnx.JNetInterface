@@ -1,3 +1,5 @@
+// ReSharper disable MemberCanBePrivate.Global
+
 namespace Rxmxnx.JNetInterface;
 
 public static partial class PrimitiveArrayExtensions

@@ -5,6 +5,7 @@ public partial class JConstructorDefinition
 	/// <summary>
 	/// Constructor.
 	/// </summary>
+	// ReSharper disable once MemberCanBePrivate.Global
 	protected JConstructorDefinition(
 #if NET9_0_OR_GREATER
 		params ReadOnlySpan<JArgumentMetadata> metadata
@@ -36,9 +37,7 @@ public partial class JConstructorDefinition
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
-#if !NET8_0_OR_GREATER
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 	protected TObject New<TObject>(IEnvironment env,
 #if NET9_0_OR_GREATER
 		params ReadOnlySpan<IObject?> args
@@ -69,9 +68,7 @@ public partial class JConstructorDefinition
 	/// <param name="jConstructor">A <see cref="JConstructorObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
-#if !NET8_0_OR_GREATER
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 	protected TObject NewReflected<TObject>(JConstructorObject jConstructor,
 #if NET9_0_OR_GREATER
 		params ReadOnlySpan<IObject?> args

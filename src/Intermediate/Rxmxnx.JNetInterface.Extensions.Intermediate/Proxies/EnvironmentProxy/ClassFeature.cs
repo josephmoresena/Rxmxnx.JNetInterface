@@ -32,15 +32,11 @@ public abstract partial class EnvironmentProxy
 	/// <inheritdoc/>
 	public abstract void ThrowNew(JClassObject jClass, CString? message, Boolean throwException);
 	/// <inheritdoc/>
-#if !NET8_0_OR_GREATER
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 	public abstract void ThrowNew<TThrowable>(CString? message, Boolean throwException)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>;
 	/// <inheritdoc/>
-#if !NET8_0_OR_GREATER
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 	public abstract void ThrowNew<TThrowable>(String? message, Boolean throwException)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>;
 }

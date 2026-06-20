@@ -36,9 +36,13 @@ public abstract partial class JDataTypeMetadata : ITypeInformation
 	/// </summary>
 	public abstract JTypeKind Kind { get; }
 	/// <summary>
-	/// Specifies the minimun Java runtime version required for the current type.
+	/// Specifies the minimum Java runtime version required for the current type.
 	/// </summary>
 	public abstract JRuntimeVersion Since { get; }
+	/// <summary>
+	/// Specifies the minimum Android Level API required for the current type.
+	/// </summary>
+	public abstract Int32 AndroidApiLevel { get; }
 
 	/// <inheritdoc/>
 	public CString ClassName => this._info.Name;

@@ -58,6 +58,8 @@ public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPl
 	public void End(String url, Int64 total, String destinationPath)
 		=> ConsoleNotifier.WriteColoredLine(ConsoleColor.Green,
 		                                    $"Downloaded. {url} -> {destinationPath} [{ConsoleNotifier.GetValue(total, out String unitName):0.##} {unitName}]");
+	public void Fail(String stateUrl)
+		=> ConsoleNotifier.WriteColoredLine(ConsoleColor.Red, $"Fail {stateUrl} download.");
 
 	public void Begin(ProcessStartInfo info)
 	{

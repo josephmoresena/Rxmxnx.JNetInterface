@@ -8,7 +8,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly unsafe struct InvocationFunctionSet
+internal readonly unsafe struct InvocationFunctionSet : IInvocationFunctionSet
 {
 	/// <summary>
 	/// Function set for Windows Operating System.
@@ -21,9 +21,7 @@ internal readonly unsafe struct InvocationFunctionSet
 	[FieldOffset(0)]
 	private readonly Unix _unix;
 
-	/// <summary>
-	/// <c>JNI_GetDefaultJavaVMInitArgs</c>.
-	/// </summary>
+	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult GetDefaultVirtualMachineInitArgs(ref VirtualMachineInitArgumentValue initArg)
 	{
@@ -34,9 +32,7 @@ internal readonly unsafe struct InvocationFunctionSet
 				this._unix.GetDefaultVirtualMachineInitArgs(initArgPtr);
 		}
 	}
-	/// <summary>
-	/// <c>JNI_CreateJavaVM</c>.
-	/// </summary>
+	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult CreateVirtualMachine(out JVirtualMachineRef vmRef, out JEnvironmentRef envRef,
 		in VirtualMachineInitArgumentValue initArg)
@@ -50,9 +46,7 @@ internal readonly unsafe struct InvocationFunctionSet
 				this._unix.CreateVirtualMachine(vmRefPtr, envRefPtr, initArgPtr);
 		}
 	}
-	/// <summary>
-	/// <c>JNI_GetCreatedJavaVMs</c>.
-	/// </summary>
+	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult GetCreatedVirtualMachines(JVirtualMachineRef* arr, Int32 arrSize, out Int32 count)
 	{

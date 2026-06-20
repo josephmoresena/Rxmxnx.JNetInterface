@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="..\JNetInterface-Frameworks.targets"/>
+    <Import Project="..\JNetInterface-PackageReference.props"/>
+    <Import Project="..\JNetInterface-Frameworks.props"/>
 
     <PropertyGroup>
         <OutputType>Library</OutputType>

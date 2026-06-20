@@ -96,7 +96,7 @@ public sealed class NioTests
 			proxyEnv.GetObjectRefType(localRef).Returns(JReferenceType.LocalRefType);
 			proxyEnv.GetObjectClass(localRef).Returns(classRef);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(stringRef.Value);
+			                          ReadOnlyValPtr<JValue>.Zero).Returns(stringRef.Value);
 			proxyEnv.GetStringUtfLength(stringRef).Returns(typeMetadata.ClassName.Length);
 			proxyEnv.GetStringUtfChars(stringRef, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
@@ -107,10 +107,10 @@ public sealed class NioTests
 			proxyEnv.FindClass((ReadOnlyValPtr<Byte>)fCtx.Pointer).Returns(classRef);
 			proxyEnv.GetMethodId(classRef, (ReadOnlyValPtr<Byte>)isDirectCtx.Pointer, Arg.Any<ReadOnlyValPtr<Byte>>())
 			        .Returns(isDirectId);
-			proxyEnv.CallBooleanMethod(localRef, isDirectId, ReadOnlyValPtr<JValueWrapper>.Zero).Returns(isDirect);
+			proxyEnv.CallBooleanMethod(localRef, isDirectId, ReadOnlyValPtr<JValue>.Zero).Returns(isDirect);
 			proxyEnv.GetMethodId(classRef, (ReadOnlyValPtr<Byte>)getCapacityCtx.Pointer,
 			                     Arg.Any<ReadOnlyValPtr<Byte>>()).Returns(getCapacityId);
-			proxyEnv.CallLongMethod(localRef, getCapacityId, ReadOnlyValPtr<JValueWrapper>.Zero).Returns(capacity);
+			proxyEnv.CallLongMethod(localRef, getCapacityId, ReadOnlyValPtr<JValue>.Zero).Returns(capacity);
 
 			JNativeCallAdapter call = JNativeCallAdapter.Create(proxyEnv.Reference, localRef, out JBufferObject buffer)
 			                                            .Build();
@@ -123,11 +123,10 @@ public sealed class NioTests
 
 			proxyEnv.Received(1).GetMethodId(classRef, (ReadOnlyValPtr<Byte>)isDirectCtx.Pointer,
 			                                 Arg.Any<ReadOnlyValPtr<Byte>>());
-			proxyEnv.Received(1).CallBooleanMethod(localRef, isDirectId, ReadOnlyValPtr<JValueWrapper>.Zero);
+			proxyEnv.Received(1).CallBooleanMethod(localRef, isDirectId, ReadOnlyValPtr<JValue>.Zero);
 			proxyEnv.Received(isDirect ? 0 : 1).GetMethodId(classRef, (ReadOnlyValPtr<Byte>)getCapacityCtx.Pointer,
 			                                                Arg.Any<ReadOnlyValPtr<Byte>>());
-			proxyEnv.Received(isDirect ? 0 : 1)
-			        .CallLongMethod(localRef, getCapacityId, ReadOnlyValPtr<JValueWrapper>.Zero);
+			proxyEnv.Received(isDirect ? 0 : 1).CallLongMethod(localRef, getCapacityId, ReadOnlyValPtr<JValue>.Zero);
 
 			proxyEnv.Received(isDirect ? 1 : 0).GetDirectBufferAddress(localRef);
 			proxyEnv.Received(isDirect ? 1 : 0).GetDirectBufferCapacity(localRef);

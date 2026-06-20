@@ -18,9 +18,9 @@ public partial class JVirtualMachineTests
 
 			proxyEnv.FindClass((ReadOnlyValPtr<Byte>)ctx.Pointer).Returns(classRef);
 			proxyEnv.CallIntMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetModifiersMethodId,
-			                       ReadOnlyValPtr<JValueWrapper>.Zero).Returns((Int32)modifiers);
+			                       ReadOnlyValPtr<JValue>.Zero).Returns((Int32)modifiers);
 			proxyEnv.CallBooleanMethod(classRef.Value, proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                           ReadOnlyValPtr<JValueWrapper>.Zero).Returns(false);
+			                           ReadOnlyValPtr<JValue>.Zero).Returns(false);
 
 			List<ObjectTracker> trackers = [];
 			using (JClassObject jClass = JClassObject.GetClass<JTestObject>(env))
@@ -34,7 +34,7 @@ public partial class JVirtualMachineTests
 				trackers.Add(tracker2);
 			}
 			proxyEnv.Received(1).FindClass((ReadOnlyValPtr<Byte>)ctx.Pointer);
-			proxyEnv.Received(1).RegisterNatives(classRef, Arg.Any<ReadOnlyValPtr<NativeMethodValueWrapper>>(), 2);
+			proxyEnv.Received(1).RegisterNatives(classRef, Arg.Any<ReadOnlyValPtr<NativeMethodValue>>(), 2);
 			proxyEnv.ClearReceivedCalls();
 
 			JVirtualMachineTests.CollectAndCheckAlive(trackers);
@@ -49,7 +49,7 @@ public partial class JVirtualMachineTests
 					trackers.Add(tracker2);
 				}
 				proxyEnv.Received(1).FindClass((ReadOnlyValPtr<Byte>)ctx.Pointer);
-				proxyEnv.Received(1).RegisterNatives(classRef, Arg.Any<ReadOnlyValPtr<NativeMethodValueWrapper>>(), 1);
+				proxyEnv.Received(1).RegisterNatives(classRef, Arg.Any<ReadOnlyValPtr<NativeMethodValue>>(), 1);
 				proxyEnv.ClearReceivedCalls();
 
 				try
@@ -71,7 +71,7 @@ public partial class JVirtualMachineTests
 					trackers.Add(tracker1);
 				}
 				proxyEnv.Received(1).FindClass((ReadOnlyValPtr<Byte>)ctx.Pointer);
-				proxyEnv.Received(1).RegisterNatives(classRef, Arg.Any<ReadOnlyValPtr<NativeMethodValueWrapper>>(), 1);
+				proxyEnv.Received(1).RegisterNatives(classRef, Arg.Any<ReadOnlyValPtr<NativeMethodValue>>(), 1);
 				proxyEnv.ClearReceivedCalls();
 
 				JVirtualMachineTests.CollectAndCheckDead(trackers, true);

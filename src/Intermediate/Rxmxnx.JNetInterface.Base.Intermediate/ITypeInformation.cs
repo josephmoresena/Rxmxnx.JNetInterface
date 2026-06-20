@@ -30,9 +30,32 @@ public interface ITypeInformation
 	/// </summary>
 	Boolean? IsFinal { get; }
 	/// <summary>
-	/// Specifies the minimun Java runtime version required for the current type.
+	/// Specifies the minimum Java runtime version required for the current type.
 	/// </summary>
 	JRuntimeVersion Since => JRuntimeVersion.Undefined;
+	/// <summary>
+	/// Specifies the minimum Android Level API required for the current type.
+	/// </summary>
+	/// <remarks>
+	///     <list type="table">
+	///         <listheader>
+	///             <term>Value</term>
+	///             <description>Description</description>
+	///         </listheader>
+	///         <item>
+	///             <term>-1</term>
+	///             <description>The current type is not supported by Android.</description>
+	///         </item>
+	///         <item>
+	///             <term>&gt;= 0</term>
+	///             <description>The JVM is running on Android and the value represents the Android API level.</description>
+	///         </item>
+	///     </list>
+	/// </remarks>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	Int32 AndroidApiLevel => 0;
 
 	/// <summary>
 	/// Retrieves the Java class name.

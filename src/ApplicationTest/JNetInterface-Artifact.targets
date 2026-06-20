@@ -1,0 +1,29 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <Target Name="CopyTarget" AfterTargets="Publish">
+        <ItemGroup>
+            <ArtifactToDelete Include="$(PublishDir)$(AssemblyName)*.pdb"/>
+            <ArtifactToDelete Include="$(PublishDir)$(AssemblyName)*.dwarf"/>
+            <ArtifactToDelete Include="$(PublishDir)$(AssemblyName)*.dSYM"/>
+            <ArtifactToDelete Include="$(PublishDir)$(AssemblyName)*.dbg"/>
+            <ArtifactToDelete Include="$(PublishDir)$(AssemblyName)*.dbg"/>
+            <Artifact Include="$(PublishDir)$(AssemblyName)*"/>
+            <Artifact Remove="@(ArtifactToDelete)"/>
+
+            <NativeFileToDelete Condition="$(NativeIntermediateOutputPath) != ''" Include="$(NativeIntermediateOutputPath)$(AssemblyName).o"/>
+            <NativeFileToDelete Condition="$(NativeIntermediateOutputPath) != ''" Include="$(NativeIntermediateOutputPath)$(AssemblyName).obj"/>
+            <NativeFileToDelete Condition="$(NativeIntermediateOutputPath) != ''" Include="$(NativeIntermediateOutputPath)$(AssemblyName).exports"/>
+            <NativeFileToDelete Condition="$(NativeIntermediateOutputPath) != ''" Include="$(NativeIntermediateOutputPath)$(AssemblyName).def"/>
+            <NativeFileToDelete Condition="$(NativeIntermediateOutputPath) != ''" Include="$(NativeIntermediateOutputPath)$(AssemblyName).ilc.rsp"/>
+            <NativeFiles Condition="$(NativeIntermediateOutputPath) != ''" Include="$(NativeIntermediateOutputPath)$(AssemblyName)*"/>
+            <NativeFiles Remove="@(NativeFileToDelete)"/>
+        </ItemGroup>
+
+        <Move Condition="'$(CopyTargetTo)' != ''" SourceFiles="@(Artifact)" DestinationFolder="$(CopyTargetTo)"/>
+        <Move Condition="'$(CopyTargetTo)' != '' And $(NativeIntermediateOutputPath) != ''" SourceFiles="@(NativeFiles)" DestinationFolder="$(CopyTargetTo)\native"/>
+
+        <Delete Condition="'$(CopyTargetTo)' != ''" Files="@(ArtifactToDelete)"/>
+        <Delete Condition="'$(CopyTargetTo)' != ''" Files="@(NativeFileToDelete)"/>
+    </Target>
+
+</Project>

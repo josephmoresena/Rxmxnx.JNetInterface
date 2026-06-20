@@ -16,6 +16,8 @@ public sealed partial class JHelloDotnetObject : JLocalObject, IClassType<JHello
 	                                                                         .Create(
 		                                                                         "com/rxmxnx/dotnet/test/HelloDotnet"u8)
 	                                                                         .Build();
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.J6;
+	static Int32 IDataType.AndroidApiLevel => -1;
 
 	private JHelloDotnetObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	private JHelloDotnetObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

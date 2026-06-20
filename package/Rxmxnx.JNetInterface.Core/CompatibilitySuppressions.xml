@@ -31,4 +31,28 @@
     <Left>lib/net7.0/Rxmxnx.JNetInterface.Core.dll</Left>
     <Right>lib/net8.0/Rxmxnx.JNetInterface.Core.dll</Right>
   </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:&lt;&gt;y__InlineArray2`1</Target>
+    <Left>lib/net9.0/Rxmxnx.JNetInterface.Core.dll</Left>
+    <Right>lib/net10.0/Rxmxnx.JNetInterface.Core.dll</Right>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:&lt;&gt;y__InlineArray3`1</Target>
+    <Left>lib/net9.0/Rxmxnx.JNetInterface.Core.dll</Left>
+    <Right>lib/net10.0/Rxmxnx.JNetInterface.Core.dll</Right>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:&lt;&gt;y__InlineArray4`1</Target>
+    <Left>lib/net9.0/Rxmxnx.JNetInterface.Core.dll</Left>
+    <Right>lib/net10.0/Rxmxnx.JNetInterface.Core.dll</Right>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:&lt;&gt;y__InlineArray8`1</Target>
+    <Left>lib/net9.0/Rxmxnx.JNetInterface.Core.dll</Left>
+    <Right>lib/net10.0/Rxmxnx.JNetInterface.Core.dll</Right>
+  </Suppression>
 </Suppressions>

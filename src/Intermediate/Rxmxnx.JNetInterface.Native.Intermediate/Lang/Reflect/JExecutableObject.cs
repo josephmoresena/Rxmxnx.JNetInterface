@@ -33,6 +33,8 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 		JExecutableObject.typeInterfaces);
 
 	static TypeMetadata IClassType<JExecutableObject>.Metadata => JExecutableObject.typeMetadata;
+	static JRuntimeVersion IDataType.Since => JRuntimeVersion.J8;
+	static Int32 IDataType.AndroidApiLevel => 26;
 
 	/// <summary>
 	/// Executable JNI definition.

@@ -34,9 +34,7 @@ public partial class JLocalObject
 		/// Appends an interface to current type definition.
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
-#if !NET8_0_OR_GREATER
 		[UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 		public void AppendInterface<TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
@@ -49,9 +47,7 @@ public partial class JLocalObject
 		/// </summary>
 		/// <param name="baseMetadata">Current type base definition.</param>
 		/// <typeparam name="TInterface"></typeparam>
-#if !NET8_0_OR_GREATER
 		[UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 		public void AppendInterface<TInterface>(JClassTypeMetadata? baseMetadata)
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{

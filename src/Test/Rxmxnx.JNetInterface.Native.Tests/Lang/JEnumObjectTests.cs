@@ -87,6 +87,8 @@ public class JEnumObjectTests
 		Assert.Equal(JEnumObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JEnumObjectTests.hash.ToString(), IDataType.GetHash<JEnumObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
+		Assert.Equal(JRuntimeVersion.J5, typeMetadata.Since);
+		Assert.Equal(0, typeMetadata.AndroidApiLevel);
 		Assert.IsType<JFunctionDefinition<JEnumObject>.Parameterless>(
 			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFunctionDefinition<JEnumObject>>(

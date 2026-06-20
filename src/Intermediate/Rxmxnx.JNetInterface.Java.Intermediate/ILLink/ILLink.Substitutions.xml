@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<linker>
+    <!-- Fixed Java Version Feature -->
+    <assembly fullname="Rxmxnx.JNetInterface.Java.Intermediate">
+        <!-- Runtime Feature Standard -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.Standard"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+        </type>
+        <!-- Runtime Feature SEd2 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.SEd2"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="65538"/>
+        </type>
+        <!-- Runtime Feature SEd3 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.SEd3"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="65539"/>
+        </type>
+        <!-- Runtime Feature SEd4 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.SEd4"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="65540"/>
+        </type>
+        <!-- Runtime Feature J5 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J5"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="65541"/>
+        </type>
+        <!-- Runtime Feature J6 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J6"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="65542"/>
+        </type>
+        <!-- Runtime Feature J7 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J7"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="65543"/>
+        </type>
+        <!-- Runtime Feature J8 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J8"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="65544"/>
+        </type>
+        <!-- Runtime Feature J9 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J9"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="589824"/>
+        </type>
+        <!-- Runtime Feature J10 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J10"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="655360"/>
+        </type>
+        <!-- Runtime Feature J11 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J11"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="720896"/>
+        </type>
+        <!-- Runtime Feature J12 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J12"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="786432"/>
+        </type>
+        <!-- Runtime Feature J13 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J13"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="851968"/>
+        </type>
+        <!-- Runtime Feature J14 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J14"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="917504"/>
+        </type>
+        <!-- Runtime Feature J15 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J15"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="983040"/>
+        </type>
+        <!-- Runtime Feature J16 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J16"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="1048576"/>
+        </type>
+        <!-- Runtime Feature J17 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J17"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="1114112"/>
+        </type>
+        <!-- Runtime Feature J18 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J18"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="1179648"/>
+        </type>
+        <!-- Runtime Feature J19 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J19"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="1245184"/>
+        </type>
+        <!-- Runtime Feature J20 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J20"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="1310720"/>
+        </type>
+        <!-- Runtime Feature J21 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J21"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="1376256"/>
+        </type>
+        <!-- Runtime Feature J22 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J22"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="1441792"/>
+        </type>
+        <!-- Runtime Feature J23 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J23"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="1507328"/>
+        </type>
+        <!-- Runtime Feature J24 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J24"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="1572864"/>
+        </type>
+        <!-- Runtime Feature J25 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J25"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="1638400"/>
+        </type>
+        <!-- Runtime Feature J26 -->
+        <type fullname="Rxmxnx.JNetInterface.Internal.JavaStandardFeature" feature="JNetInterface.FixedRuntime.J26"
+              featurevalue="true">
+            <method signature="System.Boolean get_IsFixedRuntimeVersion()" body="stub" value="true"/>
+            <method signature="System.Int32 get_MaxRuntimeVersion()" body="stub" value="1703936"/>
+        </type>
+    </assembly>
+</linker>

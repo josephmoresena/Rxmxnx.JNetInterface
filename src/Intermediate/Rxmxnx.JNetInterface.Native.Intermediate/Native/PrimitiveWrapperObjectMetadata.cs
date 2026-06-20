@@ -9,6 +9,7 @@ public abstract record PrimitiveWrapperObjectMetadata : ObjectMetadata
 	/// <summary>
 	/// Primitive signature.
 	/// </summary>
+	// ReSharper disable once UnusedAutoPropertyAccessor.Global
 	public Byte PrimitiveSignature { get; }
 
 	/// <inheritdoc/>

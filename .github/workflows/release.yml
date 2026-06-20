@@ -12,21 +12,188 @@ jobs:
     env:
       SNK_BASE64: ${{ secrets.SN_KEY }}
       PUBLIC_KEY: ${{ secrets.SN_PK }}
-    
     steps:
       - uses: actions/checkout@v5
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.x
+      - name: Install Android Workload
+        shell: bash
+        run: |
+          dotnet workload install android
+          dotnet workload update
+      - name: Setup Tree
+        run: sudo apt-get install tree unzip --assume-yes
       - name: Extract public key
         working-directory: ./package
         run: echo "${SNK_BASE64}" | base64 -d > Rxmxnx.JNetInterface.snk
       - name: Create Core NuGet Package
         working-directory: ./package/Rxmxnx.JNetInterface.Core
-        run: dotnet pack -c Release -o ../Nuget /p:Version=${{ github.event.release.tag_name }} /p:PackageReleaseNotes="See https://github.com/josephmoresena/Rxmxnx.JNetInterface/releases/tag/${{ github.event.release.tag_name }}"
+        run: |
+          dotnet pack -c Release -o ../Nuget /p:Version=${{ github.event.release.tag_name }} /p:PackageReleaseNotes="See https://github.com/josephmoresena/Rxmxnx.JNetInterface/releases/tag/${{ github.event.release.tag_name }}"
+          for package in ../Nuget/Rxmxnx.JNetInterface.Core.${{ github.event.release.tag_name }}.*nupkg; do
+            echo "-----------------------------------"
+            TEMP_DIR=$(mktemp -d)
+            unzip -q "$package" -d "$TEMP_DIR"
+            ls -sh "$package"
+            tree "$TEMP_DIR" -h --noreport | tail -n +2 | sed "s|$TEMP_DIR/||"
+            rm -rf "$TEMP_DIR"
+          done
+          echo "-----------------------------------"
       - name: Create NuGet Package
         working-directory: ./package/Rxmxnx.JNetInterface
-        run: dotnet pack -c Release -o ../Nuget /p:Version=${{ github.event.release.tag_name }} /p:PackageReleaseNotes="See https://github.com/josephmoresena/Rxmxnx.JNetInterface/releases/tag/${{ github.event.release.tag_name }}"
+        run: |
+          dotnet pack -c Release -o ../Nuget /p:Version=${{ github.event.release.tag_name }} /p:PackageReleaseNotes="See https://github.com/josephmoresena/Rxmxnx.JNetInterface/releases/tag/${{ github.event.release.tag_name }}"
+          for package in ../Nuget/Rxmxnx.JNetInterface.${{ github.event.release.tag_name }}.*nupkg; do
+          echo "-----------------------------------"
+          TEMP_DIR=$(mktemp -d)
+          unzip -q "$package" -d "$TEMP_DIR"
+          ls -sh "$package"
+          tree "$TEMP_DIR" -h --noreport | tail -n +2 | sed "s|$TEMP_DIR/||"
+          rm -rf "$TEMP_DIR"
+          done
+          echo "-----------------------------------"
+      - name: Create Mobile NuGet Package
+        working-directory: ./package/Rxmxnx.JNetInterface.Mobile
+        run: |
+          dotnet pack -c Release -o ../Nuget /p:Version=${{ github.event.release.tag_name }} /p:PackageReleaseNotes="See https://github.com/josephmoresena/Rxmxnx.JNetInterface/releases/tag/${{ github.event.release.tag_name }}"
+          for package in ../Nuget/Rxmxnx.JNetInterface.Mobile.${{ github.event.release.tag_name }}.*nupkg; do
+          echo "-----------------------------------"
+          TEMP_DIR=$(mktemp -d)
+          unzip -q "$package" -d "$TEMP_DIR"
+          ls -sh "$package"
+          tree "$TEMP_DIR" -h --noreport | tail -n +2 | sed "s|$TEMP_DIR/||"
+          rm -rf "$TEMP_DIR"
+          done
+          echo "-----------------------------------"
+      - name: Cache NuGet Package
+        uses: actions/cache/save@v5
+        with:
+          path: ./package/Nuget
+          key: internal-nuget-${{ github.run_id }}
+          enableCrossOsArchive: true
+  
+  android-actions:
+    name: Build Native-AOT WebASM Artifacts
+    needs: [ build ]
+    uses: ./.github/workflows/android-actions.yml
+    with:
+      package_version: ${{ github.event.release.tag_name }}
+    secrets: inherit
+  freebsd-actions:
+    name: Build Native-AOT FreeBSD Artifacts
+    needs: [ build ]
+    uses: ./.github/workflows/freebsd-actions.yml
+    with:
+      run_tests: false
+      build_artifacts: true
+      package_version: ${{ github.event.release.tag_name }}
+  freebsd-arm64-actions:
+    name: Build Native-AOT FreeBSD arm64 Artifacts
+    needs: [ build ]
+    uses: ./.github/workflows/freebsd-arm64-actions.yml
+    with:
+      run_tests: false
+      build_artifacts: true
+      package_version: ${{ github.event.release.tag_name }}
+  cross-actions:
+    name: Build Native-AOT Windows, Linux and macOS Artifacts
+    needs: [ build ]
+    uses: ./.github/workflows/cross-actions.yml
+    with:
+      run_tests: false
+      build_artifacts: true
+      package_version: ${{ github.event.release.tag_name }}
+  
+  push-package:
+    name: Push NuGet Package Release
+    needs: [ android-actions, freebsd-actions, freebsd-arm64-actions, cross-actions ]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Restore NuGet Package
+        uses: actions/cache/restore@v5
+        with:
+          path: ./package/Nuget
+          key: internal-nuget-${{ github.run_id }}
+          fail-on-cache-miss: true
+          enableCrossOsArchive: true
+      - name: Java FreeBSD Libraries
+        uses: actions/cache/restore@v5
+        if: needs.freebsd-actions.result == 'success'
+        with:
+          path: |
+            ./artifacts-java
+            ./ZipAndClean.ps1
+          key: internal-freebsd-${{ github.run_id }}
+          fail-on-cache-miss: true
+          enableCrossOsArchive: true
+      - name: Java FreeBSD arm64 Libraries
+        uses: actions/cache/restore@v5
+        if: needs.freebsd-arm64-actions.result == 'success' && needs.freebsd-actions.result == 'success'
+        with:
+          path: ./artifacts-java
+          key: internal-freebsd-arm64-${{ github.run_id }}
+          fail-on-cache-miss: true
+          enableCrossOsArchive: true
+      - name: Java MacOS Libraries
+        uses: actions/cache/restore@v5
+        if: needs.cross-actions.result == 'success' && needs.freebsd-actions.result == 'success'
+        with:
+          path: ./artifacts-java
+          key: internal-macOS-${{ github.run_id }}
+          fail-on-cache-miss: true
+          enableCrossOsArchive: true
+      - name: Java Linux Libraries
+        uses: actions/cache/restore@v5
+        if: needs.cross-actions.result == 'success' && needs.freebsd-actions.result == 'success'
+        with:
+          path: ./artifacts-java
+          key: internal-Linux-${{ github.run_id }}
+          fail-on-cache-miss: true
+          enableCrossOsArchive: true
+      - name: Java Windows Libraries
+        uses: actions/cache/restore@v5
+        if: needs.cross-actions.result == 'success' && needs.freebsd-actions.result == 'success'
+        with:
+          path: ./artifacts-java
+          key: internal-Windows-${{ github.run_id }}
+          fail-on-cache-miss: true
+          enableCrossOsArchive: true
+      - name: Create Release Assets
+        if: needs.freebsd-actions.result == 'success'
+        shell: pwsh
+        run: |
+          $binPatterns = @(
+            "./artifacts-java/*"
+          )
+          ./ZipAndClean.ps1 -ZipName "Java-Assets.zip" -Patterns $binPatterns
+      - name: Upload Release Assets
+        if: needs.freebsd-actions.result == 'success' && needs.freebsd-arm64-actions.result == 'success' && needs.cross-actions.result == 'success'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          gh release upload ${{ github.ref_name }} ./*-Assets*.zip --clobber
       - name: Push NuGet Package
-        run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json
+        working-directory: ./package/Nuget
+        if: |
+          needs.android-actions.result == 'success' &&
+          needs.freebsd-actions.result == 'success' &&
+          needs.freebsd-arm64-actions.result == 'success' &&
+          needs.cross-actions.result == 'success'
+        run: |
+          dotnet nuget push *.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+      - name: Delete Internal Cache
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          echo "Deleting caches..."
+          gh cache delete "internal-nuget-${{ github.run_id }}" || true
+          gh cache delete "internal-freebsd-${{ github.run_id }}" || true
+          gh cache delete "internal-freebsd-arm64-${{ github.run_id }}" || true
+          gh cache delete "internal-Windows-${{ github.run_id }}" || true
+          gh cache delete "internal-Linux-${{ github.run_id }}" || true
+          gh cache delete "internal-macOS-${{ github.run_id }}" || true

@@ -13,9 +13,7 @@ public partial class JLocalObject
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3881,
 		                 Justification = CommonConstants.InternalInheritanceJustification)]
 #endif
-#if !NET8_0_OR_GREATER
 		[UnconditionalSuppressMessage("Trimming", "IL2091")]
-#endif
 		private protected sealed class Proxy<TInterface> : JProxyObject, IInterfaceObject<TInterface>
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{

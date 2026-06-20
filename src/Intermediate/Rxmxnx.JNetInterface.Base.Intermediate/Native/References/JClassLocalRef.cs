@@ -29,11 +29,6 @@ public readonly partial struct JClassLocalRef : IObjectReferenceType, INativePoi
 	/// Constructor.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal JClassLocalRef(IntPtr value) : this(new JObjectLocalRef(value)) { }
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal JClassLocalRef(JWeakRef value) : this(value.Value) { }
 	/// <summary>
 	/// Constructor.
@@ -44,6 +39,12 @@ public readonly partial struct JClassLocalRef : IObjectReferenceType, INativePoi
 	/// Constructor.
 	/// </summary>
 	internal JClassLocalRef(JObjectLocalRef value) => this._value = value;
+
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private JClassLocalRef(IntPtr value) : this(new JObjectLocalRef(value)) { }
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static JClassLocalRef INativePointerType<JClassLocalRef>.New(IntPtr value) => new(value);

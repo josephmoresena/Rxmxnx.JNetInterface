@@ -25,37 +25,45 @@ public static class Utilities
 		using HttpResponseMessage response =
 			await httpClient.GetAsync(state.Url, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
-		response.EnsureSuccessStatusCode();
-
-		Int64? size = response.Content.Headers.ContentLength;
-		Int64 current = 0;
-
-		state.Notifier?.Begin(state.Url, size);
-		File.Delete(state.Destination);
-
-		await using FileStream fs = File.Create(state.Destination);
-		Task copyTask = response.Content.CopyToAsync(fs, cancellationToken);
-
-		if (state.Notifier is null)
+		try
 		{
-			await copyTask;
-			return;
+			response.EnsureSuccessStatusCode();
+
+			Int64? size = response.Content.Headers.ContentLength;
+			Int64 current = 0;
+
+			state.Notifier?.Begin(state.Url, size);
+			File.Delete(state.Destination);
+
+			await using FileStream fs = File.Create(state.Destination);
+			Task copyTask = response.Content.CopyToAsync(fs, cancellationToken);
+
+			if (state.Notifier is null)
+			{
+				await copyTask;
+				return;
+			}
+
+			Int32 cursorTop = -1;
+			Int32 textLength = 0;
+
+			while (!copyTask.IsCompleted)
+			{
+				Int64 previous = current;
+				await Task.WhenAny(Task.Delay(state.Notifier.RefreshTime, cancellationToken), copyTask);
+				if (copyTask.IsCompleted) break;
+				current = fs.Position;
+				if (previous != current)
+					state.Notifier.Progress(state.Url, size, current, ref cursorTop, ref textLength);
+			}
+
+			state.Notifier.End(state.Url, fs.Position, state.Destination);
 		}
-
-		Int32 cursorTop = -1;
-		Int32 textLength = 0;
-
-		while (!copyTask.IsCompleted)
+		catch
 		{
-			Int64 previous = current;
-			await Task.WhenAny(Task.Delay(state.Notifier.RefreshTime, cancellationToken), copyTask);
-			if (copyTask.IsCompleted) break;
-			current = fs.Position;
-			if (previous != current)
-				state.Notifier.Progress(state.Url, size, current, ref cursorTop, ref textLength);
+			state.Notifier?.Fail(state.Url);
+			throw;
 		}
-
-		state.Notifier.End(state.Url, fs.Position, state.Destination);
 	}
 	public static async Task<Int32> Execute(ExecuteState state, CancellationToken cancellationToken = default)
 	{

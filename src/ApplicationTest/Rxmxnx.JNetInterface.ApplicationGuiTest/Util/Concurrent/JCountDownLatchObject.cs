@@ -23,6 +23,7 @@ public class JCountDownLatchObject : JLocalObject, IClassType<JCountDownLatchObj
 	static JClassTypeMetadata<JCountDownLatchObject> IClassType<JCountDownLatchObject>.Metadata
 		=> JCountDownLatchObject.typeMetadata;
 	static JRuntimeVersion IDataType.Since => JRuntimeVersion.J5;
+	static Int32 IDataType.AndroidApiLevel => 9;
 
 	protected JCountDownLatchObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JCountDownLatchObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
