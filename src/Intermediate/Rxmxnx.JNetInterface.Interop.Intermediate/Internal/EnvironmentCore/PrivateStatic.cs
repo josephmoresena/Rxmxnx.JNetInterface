@@ -9,7 +9,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Minimum number of bytes usable from stack.
 	/// </summary>
-	private const Int32 MinStackBytes = 128;
+	private const Int32 minStackBytes = 128;
 
 	/// <summary>
 	/// Disposable context for zero pointer.

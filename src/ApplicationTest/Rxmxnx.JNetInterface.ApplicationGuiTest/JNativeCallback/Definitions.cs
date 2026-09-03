@@ -4,6 +4,7 @@ using Rxmxnx.JNetInterface.Primitives;
 
 namespace Rxmxnx.JNetInterface;
 
+// ReSharper disable once ClassCannotBeInstantiated
 public partial class JNativeCallback
 {
 	private static readonly JMethodDefinition finalizeDef = (JMethodDefinition)IndeterminateCall.CreateMethodDefinition(

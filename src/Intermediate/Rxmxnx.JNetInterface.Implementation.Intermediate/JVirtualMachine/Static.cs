@@ -1,5 +1,6 @@
 namespace Rxmxnx.JNetInterface;
 
+// ReSharper disable once ClassCannotBeInstantiated
 public partial class JVirtualMachine
 {
 	/// <summary>
@@ -50,6 +51,7 @@ public partial class JVirtualMachine
 	/// <summary>
 	/// Main classes' information.
 	/// </summary>
+	// ReSharper disable once MemberCanBePrivate.Global
 	public static IEnumerable<ITypeInformation> MainClassesInformation => JVirtualMachine.userMainClasses.Values;
 
 	/// <summary>

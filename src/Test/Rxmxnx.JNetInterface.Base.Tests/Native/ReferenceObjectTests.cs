@@ -1,3 +1,4 @@
+// ReSharper disable UnusedMember.Local
 namespace Rxmxnx.JNetInterface.Tests.Native;
 
 [ExcludeFromCodeCoverage]
@@ -12,7 +13,7 @@ public sealed class ReferenceObjectTests
 	{
 		CString className = (CString)ReferenceObjectTests.fixture.Create<String>();
 		CString signature = (CString)ReferenceObjectTests.fixture.Create<String>();
-		Byte[] value = ReferenceObjectTests.fixture.CreateMany<Byte>(IntPtr.Size).ToArray();
+		Byte[] value = [.. ReferenceObjectTests.fixture.CreateMany<Byte>(IntPtr.Size),];
 		Span<Byte> bytes = stackalloc Byte[IntPtr.Size * 3];
 		Span<JValue> span = stackalloc JValue[3];
 		ReferenceObjectProxy proxy = new(className, signature, isProxy);
@@ -122,11 +123,9 @@ public sealed class ReferenceObjectTests
 		Assert.Equal(JObject.IsNullOrDefault(jObject), JObject.IsNullOrDefault(view));
 		view.SetAssignableTo<DataTypeProxy>(default);
 
-		if (!jObject.IsDefault)
-		{
-			view.ClearValue();
-			Assert.True(jObject.IsDefault);
-		}
+		if (jObject.IsDefault) return;
+		view.ClearValue();
+		Assert.True(jObject.IsDefault);
 	}
 
 	private abstract class DataTypeProxy : JReferenceObject, IDataType<DataTypeProxy>

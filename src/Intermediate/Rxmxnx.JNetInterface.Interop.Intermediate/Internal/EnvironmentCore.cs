@@ -31,7 +31,7 @@ internal sealed partial class EnvironmentCore : LocalMainClasses, IUnsafeMemoryM
 	/// <summary>
 	/// Maximum number of bytes usable from stack.
 	/// </summary>
-	public Int32 MaxStackBytes { get; private set; } = EnvironmentCore.MinStackBytes;
+	public Int32 MaxStackBytes { get; private set; } = EnvironmentCore.minStackBytes;
 	/// <summary>
 	/// Amount of bytes used from stack.
 	/// </summary>
@@ -205,6 +205,7 @@ internal sealed partial class EnvironmentCore : LocalMainClasses, IUnsafeMemoryM
 	/// </summary>
 	/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
 	/// <returns>A <see cref="ThrowableException"/> exception.</returns>
+	// ReSharper disable once MemberCanBePrivate.Global
 	public ThrowableException CreateThrowableException(JThrowableLocalRef throwableRef)
 	{
 		this.ClearException();
@@ -265,8 +266,8 @@ internal sealed partial class EnvironmentCore : LocalMainClasses, IUnsafeMemoryM
 	/// <param name="value">Value.</param>
 	public void SetUsableStackBytes(Int32 value)
 	{
-		Int32 min = EnvironmentCore.MinStackBytes > this.UsedStackBytes ?
-			EnvironmentCore.MinStackBytes :
+		Int32 min = EnvironmentCore.minStackBytes > this.UsedStackBytes ?
+			EnvironmentCore.minStackBytes :
 			this.UsedStackBytes;
 		if (value < min)
 			throw new ArgumentOutOfRangeException(nameof(value),

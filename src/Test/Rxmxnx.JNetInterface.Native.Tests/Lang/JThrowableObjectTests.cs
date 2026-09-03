@@ -23,7 +23,7 @@ public sealed class JThrowableObjectTests
 		JThrowableLocalRef throwableRef = JThrowableObjectTests.fixture.Create<JThrowableLocalRef>();
 		String message = JThrowableObjectTests.fixture.Create<String>();
 		StackTraceInfo[] stackTrace = emptyStackTrace ?
-			JThrowableObjectTests.fixture.CreateMany<StackTraceInfo>().ToArray() :
+			[.. JThrowableObjectTests.fixture.CreateMany<StackTraceInfo>(),] :
 			[];
 		using JClassObject jClass = new(env);
 		using JClassObject jThrowableClass = new(jClass, IClassType.GetMetadata<JThrowableObject>());
@@ -38,6 +38,7 @@ public sealed class JThrowableObjectTests
 		using JArrayObject<JStackTraceElementObject> stackTraceElements =
 			new(jStackTraceElementArrayClass, default, stackTrace.Length);
 		JStackTraceElementObject[] elements =
+			// ReSharper disable once UseCollectionExpression
 			stackTrace.Select(i => i.CreateStackTrace(jStackTraceElementClass)).ToArray();
 		ThrowableObjectMetadata throwableMetadata = new(new(jThrowableClass))
 		{
@@ -217,6 +218,7 @@ public sealed class JThrowableObjectTests
 			Assert.Equal(jGlobal, exception.GlobalThrowable);
 			Assert.Equal(mutableException.Value, exception);
 
+			// ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
 			exception.WithSafeInvoke(t =>
 			{
 				Assert.Equal(default, t.LocalReference);

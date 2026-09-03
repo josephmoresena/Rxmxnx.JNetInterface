@@ -109,7 +109,7 @@ public abstract unsafe partial class JVirtualMachineLibrary
 		if (vmCount <= 0) return [];
 		JVirtualMachineRef[] arr = this.GetCreatedVirtualMachines(vmCount, out JResult result);
 		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
-		return arr.Select(JVirtualMachine.GetVirtualMachine).ToArray();
+		return [.. arr.Select(JVirtualMachine.GetVirtualMachine),];
 	}
 
 	/// <summary>

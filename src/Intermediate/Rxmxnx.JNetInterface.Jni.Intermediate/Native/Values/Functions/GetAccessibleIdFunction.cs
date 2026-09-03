@@ -27,6 +27,7 @@ internal readonly unsafe struct GetAccessibleIdFunction<TAccessible> : IGetAcces
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TAccessible GetId(JEnvironmentRef envRef, JClassLocalRef localRef, Byte* name, Byte* descriptor)
 	{
+		// ReSharper disable once JoinDeclarationAndInitializer
 		IntPtr result;
 #if !ANDROID
 		if (SystemInfo.IsWindows)

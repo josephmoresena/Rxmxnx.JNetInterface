@@ -23,7 +23,8 @@ public sealed partial class JPrimitiveMemory<TPrimitive> : JPrimitiveMemory, IFi
 		}
 	}
 	/// <inheritdoc/>
-	public Span<TPrimitive> Values => this._context.Values;
+	public Span<TPrimitive> Values
+		=> this._context is not null ? this._context.Values : ((FixedContextValue<TPrimitive>)this).Values;
 
 	/// <summary>
 	/// Copies the content from the current memory back into the array.
@@ -55,5 +56,16 @@ public sealed partial class JPrimitiveMemory<TPrimitive> : JPrimitiveMemory, IFi
 	/// <param name="jNativeMemory">A <see cref="JNativeMemory{TPrimitive}"/> to explicitly convert.</param>
 	/// <returns>A <see cref="JPrimitiveMemory{TPrimitive}"/> instance.</returns>
 	public static explicit operator JPrimitiveMemory<TPrimitive>(JNativeMemory<TPrimitive> jNativeMemory)
-		=> new(jNativeMemory, (IFixedContext<TPrimitive>)jNativeMemory.GetContext());
+		=> new(jNativeMemory, (IFixedContext<TPrimitive>?)jNativeMemory.GetContext());
+	/// <summary>
+	/// Defines an explicit conversion of a given <see cref="JPrimitiveMemory{TPrimitive}"/> to
+	/// <see cref="FixedContextValue{TElement}"/>.
+	/// </summary>
+	/// <param name="jPrimitiveMemory">A <see cref="JPrimitiveMemory{TPrimitive}"/> to explicitly convert.</param>
+	public static explicit operator FixedContextValue<TPrimitive>(JPrimitiveMemory<TPrimitive> jPrimitiveMemory)
+	{
+		if (jPrimitiveMemory.TryCreateFixedValue(out FixedPointerValue fp))
+			return (FixedContextValue<TPrimitive>)fp;
+		return FixedContextValue<TPrimitive>.CreateValue(jPrimitiveMemory._context ?? jPrimitiveMemory);
+	}
 }

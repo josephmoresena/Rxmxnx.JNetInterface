@@ -33,10 +33,14 @@ internal sealed class BaseTypeHelper<[DynamicallyAccessedMembers(DynamicallyAcce
 	/// <summary>
 	/// Constructor.
 	/// </summary>
+#if !NET8_0_OR_GREATER
 	private BaseTypeHelper() => this._set = BaseTypeHelper<TClass>.GetBaseTypes().ToImmutableHashSet();
+#else
+	private BaseTypeHelper() => this._set = [.. BaseTypeHelper<TClass>.GetBaseTypes(),];
+#endif
 
 	/// <summary>
-	/// Retrieves the base types from current type.
+	/// Retrieves the base types from the current type.
 	/// </summary>
 	/// <returns>Enumerable of types.</returns>
 	private static IEnumerable<Type> GetBaseTypes()

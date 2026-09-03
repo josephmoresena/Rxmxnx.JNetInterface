@@ -3,8 +3,8 @@ namespace Rxmxnx.JNetInterface.Tests.Native.Access;
 [ExcludeFromCodeCoverage]
 public sealed class JConstructorDefinitionTests
 {
-	private const String MethodName = "<init>";
-	private const String VoidParameterlessDescriptor = "()V";
+	private const String methodName = "<init>";
+	private const String voidParameterlessDescriptor = "()V";
 
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 	private static readonly JArgumentMetadata[] args =
@@ -78,8 +78,8 @@ public sealed class JConstructorDefinitionTests
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<TDataType>();
 		Boolean isAbstract = typeMetadata.Modifier == JTypeModifier.Abstract;
-		CStringSequence seq = new(JConstructorDefinitionTests.MethodName,
-		                          JConstructorDefinitionTests.VoidParameterlessDescriptor);
+		CStringSequence seq = new(JConstructorDefinitionTests.methodName,
+		                          JConstructorDefinitionTests.voidParameterlessDescriptor);
 		JConstructorDefinition.Parameterless constructorDefinition = new();
 		JObjectLocalRef localRef0 = JConstructorDefinitionTests.fixture.Create<JObjectLocalRef>();
 		JObjectLocalRef localRef1 = JConstructorDefinitionTests.fixture.Create<JObjectLocalRef>();
@@ -108,7 +108,7 @@ public sealed class JConstructorDefinitionTests
 		Assert.True(constructorDefinition.Equals((Object)constructorDefinition));
 		Assert.True(constructorDefinition.Equals((Object)new JConstructorDefinition.Parameterless()));
 		Assert.True(constructorDefinition.Equals(
-			            (Object)new JMethodDefinition.Parameterless((CString)JConstructorDefinitionTests.MethodName)));
+			            (Object)new JMethodDefinition.Parameterless((CString)JConstructorDefinitionTests.methodName)));
 		Assert.Equal(0, constructorDefinition.Count);
 		Assert.Equal(0, constructorDefinition.ReferenceCount);
 		Assert.Equal(0, constructorDefinition.Size);
@@ -138,7 +138,7 @@ public sealed class JConstructorDefinitionTests
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<TDataType>();
 		Boolean isAbstract = typeMetadata.Modifier == JTypeModifier.Abstract;
-		CStringSequence seq = new(JConstructorDefinitionTests.MethodName, JConstructorDefinitionTests.methodDescriptor);
+		CStringSequence seq = new(JConstructorDefinitionTests.methodName, JConstructorDefinitionTests.methodDescriptor);
 		JFakeConstructor constructorDefinition = new(JConstructorDefinitionTests.args);
 		JObjectLocalRef localRef0 = JConstructorDefinitionTests.fixture.Create<JObjectLocalRef>();
 		JObjectLocalRef localRef1 = JConstructorDefinitionTests.fixture.Create<JObjectLocalRef>();
@@ -165,7 +165,7 @@ public sealed class JConstructorDefinitionTests
 		Assert.True(
 			constructorDefinition.Equals((Object)JConstructorDefinition.Create(JConstructorDefinitionTests.args)));
 		Assert.True(constructorDefinition.Equals(
-			            (Object)JMethodDefinition.Create((CString)JConstructorDefinitionTests.MethodName,
+			            (Object)JMethodDefinition.Create((CString)JConstructorDefinitionTests.methodName,
 			                                             JConstructorDefinitionTests.args)));
 		Assert.Equal(JConstructorDefinitionTests.args.Select(a => a.Size).Sum(), constructorDefinition.Size);
 		Assert.Equal(JConstructorDefinitionTests.args.Length, constructorDefinition.Count);
@@ -203,17 +203,17 @@ public sealed class JConstructorDefinitionTests
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Equal(instance, constructorDefinition.New(jClass, parameters));
-		env.AccessFeature.Received(1)
-		   .CallConstructor<JLocalObject>(jClass, constructorDefinition,
-		                                  Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		env.AccessFeature.Received(1).CallConstructor<JLocalObject>(jClass, constructorDefinition,
+		                                                            Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a)
+			                                                            .SequenceEqual(parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Equal(instance, constructorDefinition.New<TDataType>(env, parameters));
 		env.ClassFeature.Received(1).GetClass<TDataType>();
-		env.AccessFeature.Received(1)
-		   .CallConstructor<TDataType>(jClass, constructorDefinition,
-		                               Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		env.AccessFeature.Received(1).CallConstructor<TDataType>(jClass, constructorDefinition,
+		                                                         Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a)
+			                                                         .SequenceEqual(parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
@@ -232,16 +232,16 @@ public sealed class JConstructorDefinitionTests
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Equal(instance, constructorDefinition.NewReflected(jConstructor, parameters));
-		env.AccessFeature.Received(1)
-		   .CallConstructor<JLocalObject>(jConstructor, constructorDefinition,
-		                                  Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		env.AccessFeature.Received(1).CallConstructor<JLocalObject>(jConstructor, constructorDefinition,
+		                                                            Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a)
+			                                                            .SequenceEqual(parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Equal(instance, constructorDefinition.NewReflected<TDataType>(jConstructor, parameters));
-		env.AccessFeature.Received(1)
-		   .CallConstructor<TDataType>(jConstructor, constructorDefinition,
-		                               Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		env.AccessFeature.Received(1).CallConstructor<TDataType>(jConstructor, constructorDefinition,
+		                                                         Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a)
+			                                                         .SequenceEqual(parameters)));
 	}
 #pragma warning disable CA1859
 	private static Boolean IsEmptyArgs(IReadOnlyCollection<IObject?> cArgs)

@@ -10,12 +10,13 @@ public partial class ClassFeatureProxy
 	JClassObject IClassFeature.GetClass(ReadOnlySpan<Byte> className) => this.GetClass(new CString(className));
 	JClassObject IClassFeature.LoadClass(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> rawClassBytes,
 		JClassLoaderObject? jClassLoader)
-		=> this.LoadClass(new(className), rawClassBytes.ToArray(), jClassLoader);
+		=> this.LoadClass(new(className), [.. rawClassBytes,], jClassLoader);
 	JClassObject IClassFeature.LoadClass<TDataType>(ReadOnlySpan<Byte> rawClassBytes, JClassLoaderObject? jClassLoader)
-		=> this.LoadClass<TDataType>(rawClassBytes.ToArray(), jClassLoader);
+		=> this.LoadClass<TDataType>([.. rawClassBytes,], jClassLoader);
 	void IClassFeature.GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash)
 	{
 		TypeInformationProxy? information = this.GetClassInfo(jClass);
+		// ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
 		name = information?.ClassName!;
 		signature = information?.Signature!;
 		hash = information?.Hash!;

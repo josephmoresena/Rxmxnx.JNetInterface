@@ -1,5 +1,6 @@
 namespace Rxmxnx.JNetInterface;
 
+// ReSharper disable once ClassCannotBeInstantiated
 public sealed partial class AndroidJniHost : ITypeManager
 {
 	IEnumerable<ITypeInformation> ITypeManager.ClassesInformation => AndroidJniHost.MainClassesInformation;

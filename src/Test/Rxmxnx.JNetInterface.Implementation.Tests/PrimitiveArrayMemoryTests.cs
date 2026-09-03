@@ -311,6 +311,11 @@ public sealed class PrimitiveArrayMemoryTests
 			proxyEnv.GetObjectRefType(globalRef.Value).Returns(JReferenceType.GlobalRefType);
 
 			using JPrimitiveMemory<TPrimitive> seq = jArray.GetCriticalElements(referenceKind);
+			FixedContextValue<TPrimitive> fCtxValue = (FixedContextValue<TPrimitive>)seq;
+			Assert.True(seq.TryCreateFixedValue(out FixedPointerValue fPointerValue));
+			Assert.Equal(seq.Values.Length, fCtxValue.Values.Length);
+			Assert.Equal(seq.Pointer, fCtxValue.Pointer);
+			Assert.Equal(seq.Pointer, fPointerValue.Pointer);
 			Assert.Equal(value.Length, seq.Values.Length);
 			Assert.Equal(fMem.Pointer, seq.Pointer);
 
@@ -444,6 +449,11 @@ public sealed class PrimitiveArrayMemoryTests
 			proxyEnv.GetObjectRefType(globalRef.Value).Returns(JReferenceType.GlobalRefType);
 
 			using JPrimitiveMemory<TPrimitive> seq = jArray.GetElements(referenceKind);
+			FixedContextValue<TPrimitive> fCtxValue = (FixedContextValue<TPrimitive>)seq;
+			Assert.True(seq.TryCreateFixedValue(out FixedPointerValue fPointerValue));
+			Assert.Equal(seq.Values.Length, fCtxValue.Values.Length);
+			Assert.Equal(seq.Pointer, fCtxValue.Pointer);
+			Assert.Equal(seq.Pointer, fPointerValue.Pointer);
 			Assert.Equal(value.Length, seq.Values.Length);
 			Assert.Equal(fMem.Pointer, seq.Pointer);
 			Assert.Equal(isCopy, seq.Copy);
@@ -929,13 +939,13 @@ public sealed class PrimitiveArrayMemoryTests
 		Assert.Equal(fMem.Pointer, seq.Pointer);
 
 		proxyEnv.ExceptionCheck().Returns(true);
-		Assert.Throws<CriticalException>(() => seq.Dispose());
+		Assert.Throws<CriticalException>(seq.Dispose);
 
 		proxyEnv.ExceptionCheck().Returns(false);
 		env.PendingException = default;
 
 		proxyEnv.ExceptionCheck().Returns(true);
-		Assert.Throws<CriticalException>(() => seqCritical.Dispose());
+		Assert.Throws<CriticalException>(seqCritical.Dispose);
 
 		proxyEnv.ExceptionCheck().Returns(false);
 		env.PendingException = default;

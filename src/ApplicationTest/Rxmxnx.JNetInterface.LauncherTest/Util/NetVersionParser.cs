@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest.Util;
 
-public sealed partial class NetVersionParser
+public static partial class NetVersionParser
 {
 	[GeneratedRegex(@".+\.net(\d{1,}\.\d).{0,}")]
 	private static partial Regex NetVersionRegex();

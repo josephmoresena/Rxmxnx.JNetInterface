@@ -63,5 +63,8 @@ internal interface IVirtualMachineHost : IWrapper<IVirtualMachine>
 	/// <param name="env">A <see cref="INativeThread"/> instance.</param>
 	/// <param name="classes">Current class cache.</param>
 	/// <returns>The initial <see cref="LocalCache"/> instance.</returns>
+#if !PACKAGE
+	[SuppressMessage("ReSharper", "UnusedParameter.Global")]
+#endif
 	LocalCache? GetInitialCache(INativeThread env, ClassCache classes) => default;
 }

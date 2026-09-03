@@ -322,7 +322,8 @@ internal static partial class JTrace
 	{
 		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine(
-			$"thread: {Environment.CurrentManagedThreadId} {count} java.interop object{(count != 1 ? "s" : "")} will be registered.");
+			$"thread: {Environment.CurrentManagedThreadId} {environment.Reference} {count} java.interop object{(count != 1 ? "s" : "")} will be registered.",
+			callerMethod);
 	}
 #endif
 	/// <summary>

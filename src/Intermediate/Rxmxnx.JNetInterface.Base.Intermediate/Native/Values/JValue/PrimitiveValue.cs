@@ -1,6 +1,7 @@
 namespace Rxmxnx.JNetInterface.Native.Values;
 
 #if !PACKAGE
+// ReSharper disable once DefaultStructEqualityIsUsed.Global
 public partial struct JValue
 #else
 internal unsafe partial struct JValue

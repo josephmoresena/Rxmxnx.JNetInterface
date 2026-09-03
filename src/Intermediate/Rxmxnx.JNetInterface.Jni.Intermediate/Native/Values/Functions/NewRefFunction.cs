@@ -30,6 +30,7 @@ internal readonly unsafe struct NewRefFunction<TReference> : INewRefFunction
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TReference NewRef(JEnvironmentRef envRef, JObjectLocalRef localRef)
 	{
+		// ReSharper disable once JoinDeclarationAndInitializer
 		IntPtr result;
 #if !ANDROID
 		if (SystemInfo.IsWindows)

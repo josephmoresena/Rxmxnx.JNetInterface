@@ -11,11 +11,11 @@ public abstract partial class JArrayTypeMetadata
 	/// <summary>
 	/// Name of <see cref="IArrayType.GetArrayArrayMetadata{TElement}"/> method.
 	/// </summary>
-	private const String GetArrayArrayMetadataName = nameof(IArrayType.GetArrayArrayMetadata);
+	private const String getArrayArrayMetadataName = nameof(IArrayType.GetArrayArrayMetadata);
 	/// <summary>
 	/// Flags of <see cref="IArrayType.GetArrayArrayMetadata{TElement}"/> method.
 	/// </summary>
-	private const BindingFlags GetArrayArrayMetadataFlags = BindingFlags.NonPublic | BindingFlags.Static;
+	private const BindingFlags getArrayArrayMetadataFlags = BindingFlags.NonPublic | BindingFlags.Static;
 
 	/// <summary>
 	/// <see cref="MethodInfo"/> of array metadata.
@@ -153,7 +153,7 @@ public abstract partial class JArrayTypeMetadata
 	private static MethodInfo ReflectGetArrayArrayMetadataMethod()
 	{
 		Type typeofT = typeof(IArrayType);
-		return typeofT.GetMethod(JArrayTypeMetadata.GetArrayArrayMetadataName,
-		                         JArrayTypeMetadata.GetArrayArrayMetadataFlags)!;
+		return typeofT.GetMethod(JArrayTypeMetadata.getArrayArrayMetadataName,
+		                         JArrayTypeMetadata.getArrayArrayMetadataFlags)!;
 	}
 }

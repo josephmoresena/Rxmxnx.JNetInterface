@@ -46,6 +46,7 @@ public sealed class JReferenceTests
 	{
 		TPointer ref1 = JReferenceTests.CreatePointer<TPointer>();
 		TPointer ref2 = JReferenceTests.CreatePointer<TPointer>();
+		// ReSharper disable once InlineTemporaryVariable
 		TPointer ref3 = ref1;
 		JGlobalRef globalRef = NativeUtilities.Transform<TPointer, JGlobalRef>(in ref1);
 		JWeakRef weakRef = NativeUtilities.Transform<TPointer, JWeakRef>(in ref1);

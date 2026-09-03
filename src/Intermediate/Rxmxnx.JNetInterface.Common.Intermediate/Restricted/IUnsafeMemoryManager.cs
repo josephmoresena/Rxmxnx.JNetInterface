@@ -1,3 +1,4 @@
+// ReSharper disable UnusedMemberInSuper.Global
 namespace Rxmxnx.JNetInterface.Restricted;
 
 /// <summary>

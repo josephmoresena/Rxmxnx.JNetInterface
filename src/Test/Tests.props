@@ -4,32 +4,29 @@
 
     <PropertyGroup>
         <IsTestProject>true</IsTestProject>
+        <TestSdkVersion>17.13.0</TestSdkVersion>
+        <VisualStudioRunnerVersion>3.0.2</VisualStudioRunnerVersion>
+        <CoverletColectorVersion>6.0.4</CoverletColectorVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">
+        <TestSdkVersion>18.9.0</TestSdkVersion>
+        <VisualStudioRunnerVersion>4.0.0</VisualStudioRunnerVersion>
+        <CoverletColectorVersion>10.0.1</CoverletColectorVersion>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Xunit.SkippableFact" Version="1.5.61"/>
+        <PackageReference Include="Xunit.SkippableFact" Version="1.5.85"/>
         <PackageReference Include="xunit" Version="2.9.3"/>
     </ItemGroup>
-    <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.3"/>
-        <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(TestSdkVersion)"/>
+        <PackageReference Include="xunit.runner.visualstudio" Version="$(VisualStudioRunnerVersion)">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="coverlet.collector" Version="6.0.4">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        <PackageReference Include="coverlet.collector" Version="$(CoverletColectorVersion)">
             <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-    </ItemGroup>
-    <ItemGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.6.0"/>
-        <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="coverlet.collector" Version="10.0.1">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
     </ItemGroup>
 

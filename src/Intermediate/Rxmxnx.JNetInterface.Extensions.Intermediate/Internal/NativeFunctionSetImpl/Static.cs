@@ -2,6 +2,7 @@
 
 namespace Rxmxnx.JNetInterface.Internal;
 
+// ReSharper disable once ClassCannotBeInstantiated
 internal partial class NativeFunctionSetImpl
 {
 	/// <summary>

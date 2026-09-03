@@ -1,5 +1,6 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
+// ReSharper disable once ClassCannotBeInstantiated
 public partial class Launcher
 {
 	private sealed partial class Windows : Launcher, ILauncher<Windows>
@@ -35,8 +36,14 @@ public partial class Launcher
 			    this.GetJdk(version, arch, installationPath) is { } installed)
 				return installed;
 
-			IReadOnlyDictionary<JdkVersion, String> urls = arch is Architecture.X64 ? Windows.amd64Url :
-				arch is Architecture.X86 ? Windows.i686Url : Windows.arm64Url;
+#pragma warning disable CA1859
+			IReadOnlyDictionary<JdkVersion, String> urls = arch switch
+			{
+				Architecture.X64 => Windows.amd64Url,
+				Architecture.X86 => Windows.i686Url,
+				_ => Windows.arm64Url,
+			};
+#pragma warning restore CA1859
 			String tempFileName = Path.GetTempFileName();
 			try
 			{

@@ -529,8 +529,7 @@ public sealed class NativeFunctionSetImplTests
 		using JClassObject jVoidClass = new(jClass, JPrimitiveTypeMetadata.VoidMetadata);
 		using JExecutableObject jExecutable = (JExecutableObject)(nCase switch
 		{
-			0 => typeMetadata.CreateInstance(jExecutableClass, localRef),
-			1 => typeMetadata.CreateInstance(jExecutableClass, localRef),
+			0 or 1 => typeMetadata.CreateInstance(jExecutableClass, localRef),
 			2 => IClassType.GetMetadata<JConstructorObject>().CreateInstance(jMethodClass, localRef),
 			_ => IClassType.GetMetadata<JMethodObject>().CreateInstance(jMethodClass, localRef),
 		});

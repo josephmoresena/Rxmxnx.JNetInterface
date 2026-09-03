@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.Native.Access;
 /// <summary>
 /// This class stores the definition of an indeterminate java call.
 /// </summary>
+// ReSharper disable once ClassCannotBeInstantiated
 public abstract partial class IndeterminateCall : IWrapper<JCallDefinition>
 {
 	/// <summary>

@@ -291,7 +291,7 @@ internal static class PrimitiveProxyExtensions
 	/// <param name="args">Argument array.</param>
 	/// <returns>Normalized argument array.</returns>
 	public static IObject?[] Normalize(this IObject?[] args)
-		=> Array.Exists(args, o => o is JPrimitiveObject) ? args.Select(o => o.Normalize()).ToArray() : args;
+		=> Array.Exists(args, o => o is JPrimitiveObject) ? [.. args.Select(o => o.Normalize()),] : args;
 
 	/// <summary>
 	/// Normalize <see cref="IObject"/> instance.

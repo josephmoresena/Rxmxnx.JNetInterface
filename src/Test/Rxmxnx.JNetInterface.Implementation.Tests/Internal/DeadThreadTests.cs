@@ -201,7 +201,7 @@ public class DeadThreadTests
 
 		Assert.Throws<InvalidOperationException>(() => classFeature.AsClassObject(jClass.Reference));
 		Assert.Throws<InvalidOperationException>(() => classFeature.AsClassObject(jClass));
-		Assert.Throws<InvalidOperationException>(() => classFeature.GetClass<JIntegerObject>());
+		Assert.Throws<InvalidOperationException>(classFeature.GetClass<JIntegerObject>);
 		Assert.Throws<InvalidOperationException>(() => classFeature.GetObjectClass(
 			                                         ILocalObject.CreateMetadata(jClass)));
 		Assert.Throws<InvalidOperationException>(() => classFeature.GetClass(IDataType.GetMetadata<JLocalObject>()));

@@ -404,14 +404,14 @@ public sealed class JArrayObjectTests
 			[basicElementMetadata.BaseMetadata.Type,] :
 			[];
 		basicElementMetadata.Interfaces.ForEach(default(Object), (_, i) => types.Add(i.Type));
-		Type[] elementTypes = types.ToArray();
+		Type[] elementTypes = [.. types,];
 		return elementTypes;
 	}
 	private static Type ArrayCastTest(JArrayObject jArray, Type elementType)
 	{
 		Type arrayType = JArrayObjectTests.typeOfArray.MakeGenericType(elementType);
 		MethodInfo generic = JArrayObjectTests.getMetadataInfo.MakeGenericMethod(arrayType);
-		JArrayTypeMetadata arrayTypeMetadata = (JArrayTypeMetadata)generic.Invoke(default, Array.Empty<Object>())!;
+		JArrayTypeMetadata arrayTypeMetadata = (JArrayTypeMetadata)generic.Invoke(default, [])!;
 		MethodInfo genericTest =
 			JArrayObjectTests.elementCastTestInfo.MakeGenericMethod(arrayTypeMetadata.ElementMetadata.Type);
 		JLocalObject.ArrayView arrayView = (JLocalObject.ArrayView)arrayTypeMetadata.ParseInstance(jArray);

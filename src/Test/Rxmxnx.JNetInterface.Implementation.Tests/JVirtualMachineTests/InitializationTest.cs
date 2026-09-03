@@ -165,6 +165,7 @@ public partial class JVirtualMachineTests
 			});
 
 			IVirtualMachine vm = JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			// ReSharper disable once VariableCanBeNotNullable
 			IEnvironment? env = vm.GetEnvironment()!;
 			Assert.Equal(proxyEnv.VirtualMachine.Reference, vm.Reference);
 
@@ -209,11 +210,13 @@ public partial class JVirtualMachineTests
 		{
 			Assert.IsType<NotSupportedException>(ex);
 			IMessageResource resource = IMessageResource.GetInstance();
+			// ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
 			switch (error)
 			{
 				case ClassLoadingError.FindClass when dataTypeMetadata?.Kind != JTypeKind.Primitive:
 					Assert.Equal(resource.MainClassUnavailable(className!), ex.Message);
 					break;
+				// ReSharper disable once ConstantConditionalAccessQualifier
 				case ClassLoadingError.FindClass when dataTypeMetadata?.Kind == JTypeKind.Primitive:
 					Assert.Equal(resource.PrimitiveClassUnavailable(className!), ex.Message);
 					break;
@@ -230,8 +233,11 @@ public partial class JVirtualMachineTests
 			proxyEnv.Received(!noThrows ? 1 : 0).ExceptionDescribe();
 			proxyEnv.Received(!noThrows ? 1 : 0).ExceptionClear();
 
-			List<IDisposable> disposables = mainPointer.Values.Cast<IDisposable>().ToList();
-			disposables.Add(typePtr);
+			List<IDisposable> disposables =
+			[
+				.. mainPointer.Values,
+				typePtr,
+			];
 			disposables.ForEach(d => d.Dispose());
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);

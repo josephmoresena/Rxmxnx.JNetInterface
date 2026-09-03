@@ -7,6 +7,7 @@ namespace Rxmxnx.JNetInterface;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
+// ReSharper disable once ClassCannotBeInstantiated
 public abstract unsafe partial class JVirtualMachineLibrary
 {
 	/// <inheritdoc cref="IInvocationFunctionSet.GetDefaultVirtualMachineInitArgs(ref VirtualMachineInitArgumentValue)"/>

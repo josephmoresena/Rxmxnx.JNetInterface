@@ -5,7 +5,7 @@ public sealed class DataTypeTests
 {
 	private static readonly IFixture fixture = new Fixture();
 	private static readonly HashSet<JNativeType> nativeTypes =
-		(Enum.GetValuesAsUnderlyingType<JNativeType>() as JNativeType[])!.ToHashSet();
+		[.. (Enum.GetValuesAsUnderlyingType<JNativeType>() as JNativeType[])!,];
 
 	[Fact]
 	internal void Test() { DataTypeTests.PrimitiveTest<PrimitiveProxy>(); }
@@ -56,7 +56,7 @@ public sealed class DataTypeTests
 		Assert.Equal(wrapperInformation.ToString(), voidMetadata.WrapperInformation.ToString());
 
 		Assert.Throws<InvalidOperationException>(() => voidMetadata.ArgumentMetadata);
-		Assert.Throws<InvalidOperationException>(() => voidMetadata.CreateInstance(Array.Empty<Byte>()));
+		Assert.Throws<InvalidOperationException>(() => voidMetadata.CreateInstance([]));
 		String dataTypeString = $"{{ {nameof(JDataTypeMetadata.ClassName)} = {CommonNames.VoidPrimitive}, " +
 			$"{nameof(JDataTypeMetadata.Kind)} = {voidMetadata.Kind}, " +
 			$"{nameof(JPrimitiveTypeMetadata.WrapperClassName)} = {ClassNameHelper.GetClassName(voidMetadata.WrapperClassSignature)}, " +
@@ -110,7 +110,7 @@ public sealed class DataTypeTests
 	}
 	private static void NativeTypeTest<TNative>() where TNative : unmanaged, INativeType
 	{
-		Byte[] bytes = DataTypeTests.fixture.CreateMany<Byte>(NativeUtilities.SizeOf<TNative>()).ToArray();
+		Byte[] bytes = [.. DataTypeTests.fixture.CreateMany<Byte>(NativeUtilities.SizeOf<TNative>()),];
 		ref TNative value = ref bytes.AsSpan().AsValue<TNative>();
 		String prefix = $"{TNative.Type.GetTypeName()}: ";
 		String suffix = value switch

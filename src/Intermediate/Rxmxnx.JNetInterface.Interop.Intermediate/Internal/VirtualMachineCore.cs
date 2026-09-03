@@ -41,7 +41,7 @@ internal abstract partial class VirtualMachineCore : GlobalMainClasses
 	public JResult GetEnv(out JEnvironmentRef envRef, Int32 jniVersion)
 	{
 		ref readonly InvokeInterface invoke = ref this.GetInvokeInterface();
-		return invoke.GetEnv(this.Reference, out envRef, (Int32)JRuntimeVersion.SEd2);
+		return invoke.GetEnv(this.Reference, out envRef, jniVersion);
 	}
 	/// <inheritdoc cref="IVirtualMachineHost.AttachThread(Boolean, VirtualMachineArgumentValue, out JEnvironmentRef)"/>
 	public JResult AttachThread(Boolean isDaemon, VirtualMachineArgumentValue arg, out JEnvironmentRef envRef)

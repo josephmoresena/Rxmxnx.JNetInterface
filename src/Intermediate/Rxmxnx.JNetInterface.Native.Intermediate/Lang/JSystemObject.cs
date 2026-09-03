@@ -5,6 +5,7 @@ using TypeMetadata = JClassTypeMetadata<JSystemObject>;
 /// <summary>
 /// This class represents a local <c>java.lang.System</c> instance.
 /// </summary>
+// ReSharper disable once ClassNeverInstantiated.Global
 public sealed class JSystemObject : JLocalObject.Uninstantiable<JSystemObject>, IUninstantiableType<JSystemObject>
 {
 	/// <summary>

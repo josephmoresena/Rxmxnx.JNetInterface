@@ -1,9 +1,10 @@
+// ReSharper disable MemberCanBePrivate.Global
 namespace Rxmxnx.JNetInterface.Tests;
 
 [ExcludeFromCodeCoverage]
 public abstract class NativeInterfaceProxy
 {
-	internal static NativeInterfaceProxy Detached = NativeInterfaceProxy.CreateDetached();
+	internal static readonly NativeInterfaceProxy Detached = NativeInterfaceProxy.CreateDetached();
 
 	public static readonly JThrowableLocalRef NoThrowable = default;
 	public static readonly JBoolean JniFalse = default;
@@ -193,10 +194,11 @@ public abstract class NativeInterfaceProxy
 	}
 	public unsafe JMethodId? GetMainStaticMethodId(JClassLocalRef classRef, Byte* methodName)
 	{
-		if (classRef.Value == this.VirtualMachine.SystemGlobalRef.Value || classRef == this.SystemLocalRef)
-			if (ReferenceHelper.IsGetPropertyMethod(methodName))
-				return this.VirtualMachine.SystemGetPropertyMethodId;
-		return default;
+		if (classRef.Value != this.VirtualMachine.SystemGlobalRef.Value && classRef != this.SystemLocalRef)
+			return default;
+		return ReferenceHelper.IsGetPropertyMethod(methodName) ?
+			this.VirtualMachine.SystemGetPropertyMethodId :
+			default(JMethodId?);
 	}
 	public JClassLocalRef? GetPrimitiveClass(JClassLocalRef classRef, JFieldId fieldId)
 	{

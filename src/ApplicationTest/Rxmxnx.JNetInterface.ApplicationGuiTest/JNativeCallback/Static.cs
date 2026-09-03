@@ -11,6 +11,7 @@ using Rxmxnx.PInvoke;
 
 namespace Rxmxnx.JNetInterface;
 
+// ReSharper disable once ClassCannotBeInstantiated
 public partial class JNativeCallback
 {
 	public static JRunnableObject CreateRunnable(IEnvironment env, RunnableState state)

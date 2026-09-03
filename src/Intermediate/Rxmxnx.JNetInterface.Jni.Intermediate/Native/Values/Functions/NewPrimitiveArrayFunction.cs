@@ -29,6 +29,7 @@ internal readonly unsafe struct NewPrimitiveArrayFunction<TArrayRef> : INewPrimi
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TArrayRef NewArray(JEnvironmentRef envRef, Int32 length)
 	{
+		// ReSharper disable once JoinDeclarationAndInitializer
 		JArrayLocalRef result;
 #if !ANDROID
 		if (SystemInfo.IsWindows)

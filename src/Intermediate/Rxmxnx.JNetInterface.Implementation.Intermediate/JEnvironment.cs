@@ -4,6 +4,7 @@ namespace Rxmxnx.JNetInterface;
 /// This class implements the <see cref="IVirtualMachine"/> interface.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Advanced)]
+// ReSharper disable once ClassCannotBeInstantiated
 public partial class JEnvironment : IEqualityOperators<JEnvironment, JEnvironment, Boolean>
 {
 	/// <summary>

@@ -11,7 +11,7 @@ public abstract partial class JNativeMemory
 	/// </summary>
 	internal JReleaseMode ReleaseMode { get; set; }
 	/// <summary>
-	/// Indicates current instance is disposed.
+	/// Indicates the current instance is disposed of.
 	/// </summary>
 	internal IWrapper<Boolean> Disposed => this._disposed;
 
@@ -38,7 +38,7 @@ public abstract partial class JNativeMemory
 	/// Constructor.
 	/// </summary>
 	/// <param name="adapter"><see cref="INativeMemoryAdapter"/> instance.</param>
-	/// <param name="isReadOnly">Indicates current memory block is read-only.</param>
+	/// <param name="isReadOnly">Indicates the current memory block is read-only.</param>
 	private protected JNativeMemory(INativeMemoryAdapter adapter, Boolean isReadOnly)
 	{
 		this._adapter = adapter;
@@ -55,24 +55,44 @@ public abstract partial class JNativeMemory
 	/// Commits changes in the native memory.
 	/// </summary>
 	internal void Commit() => this._adapter.Release(JReleaseMode.Commit);
+	/// <summary>
+	/// Tries to create a <see cref="FixedPointerValue"/> from the current instance.
+	/// </summary>
+	/// <param name="value">Output. A <see cref="FixedPointerValue"/> instance.</param>
+	/// <returns>
+	/// <see langword="true" /> if the current instance was successfully converted to <see cref="FixedPointerValue"/>
+	/// value; otherwise, <see langword="false"/>.
+	/// </returns>
+	internal Boolean TryCreateFixedValue(out FixedPointerValue value)
+	{
+		if (FixedPointerValue.TryCreateFixedValue(this._context, out value))
+			return true;
+		// Rxmxnx.PInvoke.Extensions doesn't recognize disposable instance as eligible. Workaround!
+		return this._context is IWrapper.IBase<IFixedPointer> w &&
+			FixedPointerValue.TryCreateFixedValue(w.Value, out value);
+	}
 }
 
 public sealed partial class JNativeMemory<TValue>
 {
 	/// <inheritdoc/>
 	internal JNativeMemory(INativeMemoryAdapter adapter) : base(adapter)
-		=> this._context = this.Memory.AsBinaryContext().Transformation<TValue>(out _);
+	{
+		// Using Rxmxnx.PInvoke.Extensions implementation, the first condition is always true.
+		if (this.TryCreateFixedValue(out _)) return;
+		this._context = this.Memory.AsBinaryContext().Transformation<TValue>(out _);
+	}
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="mem">A <see cref="JNativeMemory"/> instance.</param>
 	/// <param name="context">A <see cref="IReadOnlyFixedContext{TPrimitive}"/> instance.</param>
-	internal JNativeMemory(JNativeMemory mem, IReadOnlyFixedContext<TValue> context) : base(mem)
+	internal JNativeMemory(JNativeMemory mem, IReadOnlyFixedContext<TValue>? context) : base(mem)
 		=> this._context = context;
 
 	/// <summary>
 	/// Retrieves the memory block context.
 	/// </summary>
 	/// <returns>A <see cref="IReadOnlyFixedContext{TValue}"/> instance</returns>
-	internal IReadOnlyFixedContext<TValue> GetContext() => this._context;
+	internal IReadOnlyFixedContext<TValue>? GetContext() => this._context;
 }

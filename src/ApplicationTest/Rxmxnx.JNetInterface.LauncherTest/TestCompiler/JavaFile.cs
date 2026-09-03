@@ -1,8 +1,9 @@
+// ReSharper disable UseRawString
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public partial class TestCompiler
 {
-	private const String JavaCode = @"package com.rxmxnx.dotnet.test;
+	private const String javaCode = @"package com.rxmxnx.dotnet.test;
 
 import java.io.File;
 import java.lang.management.ManagementFactory;
@@ -255,10 +256,10 @@ public class HelloDotnet {
         return libraryName;
     }
 }";
-	private const String JarManifest = @"Manifest-Version: 1.0
+	private const String jarManifest = @"Manifest-Version: 1.0
 Main-Class: com.rxmxnx.dotnet.test.HelloDotnet
 Enable-Native-Access: ALL-UNNAMED";
-	private const String JniConfig = @"[
+	private const String jniConfig = @"[
   {
     ""name"": ""java.lang.Void"",
     ""fields"": [

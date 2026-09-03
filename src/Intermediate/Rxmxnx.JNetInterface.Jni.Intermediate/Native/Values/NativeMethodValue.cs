@@ -1,4 +1,5 @@
-﻿namespace Rxmxnx.JNetInterface.Native.Values;
+﻿// ReSharper disable UnusedAutoPropertyAccessor.Global
+namespace Rxmxnx.JNetInterface.Native.Values;
 
 /// <summary>
 /// Native representation of <see cref="JNativeCallEntry"/> instance

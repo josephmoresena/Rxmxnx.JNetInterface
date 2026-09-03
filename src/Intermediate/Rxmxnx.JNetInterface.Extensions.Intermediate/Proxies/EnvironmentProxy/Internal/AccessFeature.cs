@@ -4,33 +4,33 @@ public abstract partial class EnvironmentProxy
 {
 	TObject IAccessFeature.CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition,
 		ReadOnlySpan<IObject?> args)
-		=> this.CallConstructor<TObject>(jClass, definition, args.ToArray());
+		=> this.CallConstructor<TObject>(jClass, definition, [.. args,]);
 	TObject IAccessFeature.CallConstructor<TObject>(JConstructorObject jConstructor, JConstructorDefinition definition,
 		ReadOnlySpan<IObject?> args)
-		=> this.CallConstructor<TObject>(jConstructor, definition, args.ToArray());
+		=> this.CallConstructor<TObject>(jConstructor, definition, [.. args,]);
 	TResult? IAccessFeature.CallStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition,
 		ReadOnlySpan<IObject?> args) where TResult : default
-		=> this.CallStaticFunction<TResult>(jClass, definition, args.ToArray());
+		=> this.CallStaticFunction<TResult>(jClass, definition, [.. args,]);
 	TResult? IAccessFeature.CallStaticFunction<TResult>(JMethodObject jMethod, JFunctionDefinition definition,
 		ReadOnlySpan<IObject?> args) where TResult : default
-		=> this.CallStaticFunction<TResult>(jMethod, definition, args.ToArray());
+		=> this.CallStaticFunction<TResult>(jMethod, definition, [.. args,]);
 	void IAccessFeature.CallStaticMethod(JClassObject jClass, JMethodDefinition definition, ReadOnlySpan<IObject?> args)
-		=> this.CallStaticMethod(jClass, definition, args.ToArray());
+		=> this.CallStaticMethod(jClass, definition, [.. args,]);
 	void IAccessFeature.CallStaticMethod(JMethodObject jMethod, JMethodDefinition definition,
 		ReadOnlySpan<IObject?> args)
-		=> this.CallStaticMethod(jMethod, definition, args.ToArray());
+		=> this.CallStaticMethod(jMethod, definition, [.. args,]);
 	TResult? IAccessFeature.CallFunction<TResult>(JLocalObject jLocal, JClassObject jClass,
 		JFunctionDefinition definition, Boolean nonVirtual, ReadOnlySpan<IObject?> args) where TResult : default
-		=> this.CallFunction<TResult>(jLocal, jClass, definition, nonVirtual, args.ToArray());
+		=> this.CallFunction<TResult>(jLocal, jClass, definition, nonVirtual, [.. args,]);
 	TResult? IAccessFeature.CallFunction<TResult>(JMethodObject jMethod, JLocalObject jLocal,
 		JFunctionDefinition definition, Boolean nonVirtual, ReadOnlySpan<IObject?> args) where TResult : default
-		=> this.CallFunction<TResult>(jMethod, jLocal, definition, nonVirtual, args.ToArray());
+		=> this.CallFunction<TResult>(jMethod, jLocal, definition, nonVirtual, [.. args,]);
 	void IAccessFeature.CallMethod(JLocalObject jLocal, JClassObject jClass, JMethodDefinition definition,
 		Boolean nonVirtual, ReadOnlySpan<IObject?> args)
-		=> this.CallMethod(jLocal, jClass, definition, nonVirtual, args.ToArray());
+		=> this.CallMethod(jLocal, jClass, definition, nonVirtual, [.. args,]);
 	void IAccessFeature.CallMethod(JMethodObject jMethod, JLocalObject jLocal, JMethodDefinition definition,
 		Boolean nonVirtual, ReadOnlySpan<IObject?> args)
-		=> this.CallMethod(jMethod, jLocal, definition, nonVirtual, args.ToArray());
+		=> this.CallMethod(jMethod, jLocal, definition, nonVirtual, [.. args,]);
 	TResult IAccessFeature.CallInternalStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition,
 		ReadOnlySpan<IObject?> args)
 		=> this.CallStaticFunction<TResult>(jClass, definition, args.ToArray().Normalize())!;
@@ -58,8 +58,8 @@ public abstract partial class EnvironmentProxy
 
 	void IAccessFeature.CallStaticPrimitiveFunction(Span<Byte> bytes, JClassObject jClass,
 		JFunctionDefinition definition, ReadOnlySpan<IObject?> args)
-		=> definition.PrimitiveStaticInvoke(bytes, jClass, args.ToArray());
+		=> definition.PrimitiveStaticInvoke(bytes, jClass, [.. args,]);
 	void IAccessFeature.CallPrimitiveFunction(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
 		JFunctionDefinition definition, Boolean nonVirtual, ReadOnlySpan<IObject?> args)
-		=> definition.PrimitiveInvoke(bytes, jLocal, jClass, nonVirtual, args.ToArray());
+		=> definition.PrimitiveInvoke(bytes, jLocal, jClass, nonVirtual, [.. args,]);
 }

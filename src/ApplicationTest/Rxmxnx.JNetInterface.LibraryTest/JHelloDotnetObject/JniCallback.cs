@@ -7,6 +7,7 @@ using Rxmxnx.PInvoke;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
+// ReSharper disable once ClassCannotBeInstantiated
 public partial class JHelloDotnetObject
 {
 	private sealed class JniCallback(IManagedCallback managed)

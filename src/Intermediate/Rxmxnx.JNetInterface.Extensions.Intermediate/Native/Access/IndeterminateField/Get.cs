@@ -1,5 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native.Access;
 
+// ReSharper disable once ClassCannotBeInstantiated
 public partial class IndeterminateField
 {
 	/// <summary>

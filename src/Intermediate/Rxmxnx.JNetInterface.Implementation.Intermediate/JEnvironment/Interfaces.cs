@@ -4,6 +4,7 @@ namespace Rxmxnx.JNetInterface;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS4035,
                  Justification = CommonConstants.InternalInheritanceJustification)]
 #endif
+// ReSharper disable once ClassCannotBeInstantiated
 partial class JEnvironment : IEquatable<IEnvironment>, IEquatable<JEnvironment>
 {
 #if !PACKAGE

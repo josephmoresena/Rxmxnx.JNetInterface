@@ -5,6 +5,7 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// This class implements the <see cref="IVirtualMachine"/> interface.
 /// </summary>
+// ReSharper disable once ClassCannotBeInstantiated
 public partial class JVirtualMachine : IVirtualMachine
 {
 	/// <summary>

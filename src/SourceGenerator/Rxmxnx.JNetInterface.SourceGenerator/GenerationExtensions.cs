@@ -79,8 +79,7 @@ internal static partial class GenerationExtensions
 	private static NativeTypeHelper? GetHelper(INamedTypeSymbol? typeSymbol, CancellationToken _)
 	{
 		if (typeSymbol is null) return default;
-		ImmutableHashSet<String> interfaces =
-			typeSymbol.AllInterfaces.Select(i => i.ToDisplayString()).ToImmutableHashSet();
+		ImmutableHashSet<String> interfaces = [.. typeSymbol.AllInterfaces.Select(i => i.ToDisplayString()),];
 		return interfaces.Contains("Rxmxnx.JNetInterface.Types.INativeType") ? new(typeSymbol, interfaces) : default;
 	}
 }

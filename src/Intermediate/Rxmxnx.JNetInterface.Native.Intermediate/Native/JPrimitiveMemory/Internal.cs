@@ -37,5 +37,9 @@ public sealed partial class JPrimitiveMemory<TPrimitive>
 {
 	/// <inheritdoc/>
 	internal JPrimitiveMemory(INativeMemoryAdapter adapter) : base(adapter)
-		=> this._context = this.GetBinaryContext().Transformation<TPrimitive>(out IFixedMemory _);
+	{
+		// Using Rxmxnx.PInvoke.Extensions implementation, the first condition is always true.
+		if (this.TryCreateFixedValue(out _)) return;
+		this._context = this.GetBinaryContext().Transformation<TPrimitive>(out IFixedMemory _);
+	}
 }

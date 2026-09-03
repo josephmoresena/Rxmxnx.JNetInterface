@@ -9,6 +9,7 @@ using Rxmxnx.JNetInterface.Primitives;
 
 namespace Rxmxnx.JNetInterface;
 
+// ReSharper disable once ClassCannotBeInstantiated
 public unsafe partial class JNativeCallback
 {
 	private static void RegisterNatives(IEnvironment env)

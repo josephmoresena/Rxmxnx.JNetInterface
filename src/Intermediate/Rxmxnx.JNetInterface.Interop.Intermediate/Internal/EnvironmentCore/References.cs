@@ -45,6 +45,7 @@ internal sealed partial class EnvironmentCore
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 	/// <param name="withNoCheckError">Indicates whether <see cref="CheckJniError"/> should not be called.</param>
 	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
+	// ReSharper disable once MemberCanBePrivate.Global
 	public JGlobalRef CreateGlobalRef(JObjectLocalRef localRef, Boolean withNoCheckError = false)
 	{
 		ref readonly NativeInterface nativeInterface =

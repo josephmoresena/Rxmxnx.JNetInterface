@@ -1,3 +1,4 @@
+// ReSharper disable DuplicatedSequentialIfBodies
 namespace Rxmxnx.JNetInterface.Tests.Internal;
 
 [ExcludeFromCodeCoverage]
@@ -443,55 +444,54 @@ internal unsafe partial class ReferenceHelper
 	private static JObjectLocalRef NewLocalRef(JEnvironmentRef envRef, JObjectLocalRef localRef)
 	{
 		NativeInterfaceProxy proxy = ReferenceHelper.GetProxy(envRef);
-		if (proxy.UseDefaultClassRef)
-		{
-			if (proxy.VirtualMachine.ClassGlobalRef.Value == localRef)
-				return proxy.ClassLocalRef.Value;
-			if (proxy.VirtualMachine.ThrowableGlobalRef.Value == localRef)
-				return proxy.ThrowableLocalRef.Value;
-			if (proxy.VirtualMachine.StackTraceElementGlobalRef.Value == localRef)
-				return proxy.StackTraceElementLocalRef.Value;
-			if (proxy.VirtualMachine.NumberGlobalRef.Value == localRef)
-				return proxy.NumberObjectLocalRef.Value;
+		if (!proxy.UseDefaultClassRef) return proxy.NewLocalRef(localRef);
+		if (proxy.VirtualMachine.ClassGlobalRef.Value == localRef)
+			return proxy.ClassLocalRef.Value;
+		if (proxy.VirtualMachine.ThrowableGlobalRef.Value == localRef)
+			return proxy.ThrowableLocalRef.Value;
+		if (proxy.VirtualMachine.StackTraceElementGlobalRef.Value == localRef)
+			return proxy.StackTraceElementLocalRef.Value;
+		if (proxy.VirtualMachine.NumberGlobalRef.Value == localRef)
+			return proxy.NumberObjectLocalRef.Value;
 
-			if (proxy.VirtualMachine.VoidGlobalRef.Value == localRef)
-				return proxy.VoidObjectLocalRef.Value;
-			if (proxy.VirtualMachine.BooleanGlobalRef.Value == localRef)
-				return proxy.BooleanObjectLocalRef.Value;
-			if (proxy.VirtualMachine.ByteGlobalRef.Value == localRef)
-				return proxy.ByteObjectLocalRef.Value;
-			if (proxy.VirtualMachine.CharacterGlobalRef.Value == localRef)
-				return proxy.CharacterObjectLocalRef.Value;
-			if (proxy.VirtualMachine.DoubleGlobalRef.Value == localRef)
-				return proxy.DoubleObjectLocalRef.Value;
-			if (proxy.VirtualMachine.FloatGlobalRef.Value == localRef)
-				return proxy.FloatObjectLocalRef.Value;
-			if (proxy.VirtualMachine.IntegerGlobalRef.Value == localRef)
-				return proxy.IntegerObjectLocalRef.Value;
-			if (proxy.VirtualMachine.LongGlobalRef.Value == localRef)
-				return proxy.LongObjectLocalRef.Value;
-			if (proxy.VirtualMachine.ShortGlobalRef.Value == localRef)
-				return proxy.ShortObjectLocalRef.Value;
+		if (proxy.VirtualMachine.VoidGlobalRef.Value == localRef)
+			return proxy.VoidObjectLocalRef.Value;
+		if (proxy.VirtualMachine.BooleanGlobalRef.Value == localRef)
+			return proxy.BooleanObjectLocalRef.Value;
+		if (proxy.VirtualMachine.ByteGlobalRef.Value == localRef)
+			return proxy.ByteObjectLocalRef.Value;
+		if (proxy.VirtualMachine.CharacterGlobalRef.Value == localRef)
+			return proxy.CharacterObjectLocalRef.Value;
+		if (proxy.VirtualMachine.DoubleGlobalRef.Value == localRef)
+			return proxy.DoubleObjectLocalRef.Value;
+		if (proxy.VirtualMachine.FloatGlobalRef.Value == localRef)
+			return proxy.FloatObjectLocalRef.Value;
+		if (proxy.VirtualMachine.IntegerGlobalRef.Value == localRef)
+			return proxy.IntegerObjectLocalRef.Value;
+		if (proxy.VirtualMachine.LongGlobalRef.Value == localRef)
+			return proxy.LongObjectLocalRef.Value;
+		if (proxy.VirtualMachine.ShortGlobalRef.Value == localRef)
+			return proxy.ShortObjectLocalRef.Value;
 
-			if (proxy.VirtualMachine.VoidPGlobalRef.Value == localRef)
-				return proxy.VoidPrimitiveLocalRef.Value;
-			if (proxy.VirtualMachine.BooleanPGlobalRef.Value == localRef)
-				return proxy.BooleanPrimitiveLocalRef.Value;
-			if (proxy.VirtualMachine.BytePGlobalRef.Value == localRef)
-				return proxy.BytePrimitiveLocalRef.Value;
-			if (proxy.VirtualMachine.CharPGlobalRef.Value == localRef)
-				return proxy.CharPrimitiveLocalRef.Value;
-			if (proxy.VirtualMachine.DoublePGlobalRef.Value == localRef)
-				return proxy.DoublePrimitiveLocalRef.Value;
-			if (proxy.VirtualMachine.FloatPGlobalRef.Value == localRef)
-				return proxy.FloatPrimitiveLocalRef.Value;
-			if (proxy.VirtualMachine.IntPGlobalRef.Value == localRef)
-				return proxy.IntPrimitiveLocalRef.Value;
-			if (proxy.VirtualMachine.LongPGlobalRef.Value == localRef)
-				return proxy.LongPrimitiveLocalRef.Value;
-			if (proxy.VirtualMachine.ShortPGlobalRef.Value == localRef)
-				return proxy.ShortPrimitiveLocalRef.Value;
-		}
+		if (proxy.VirtualMachine.VoidPGlobalRef.Value == localRef)
+			return proxy.VoidPrimitiveLocalRef.Value;
+		if (proxy.VirtualMachine.BooleanPGlobalRef.Value == localRef)
+			return proxy.BooleanPrimitiveLocalRef.Value;
+		if (proxy.VirtualMachine.BytePGlobalRef.Value == localRef)
+			return proxy.BytePrimitiveLocalRef.Value;
+		if (proxy.VirtualMachine.CharPGlobalRef.Value == localRef)
+			return proxy.CharPrimitiveLocalRef.Value;
+		if (proxy.VirtualMachine.DoublePGlobalRef.Value == localRef)
+			return proxy.DoublePrimitiveLocalRef.Value;
+		if (proxy.VirtualMachine.FloatPGlobalRef.Value == localRef)
+			return proxy.FloatPrimitiveLocalRef.Value;
+		if (proxy.VirtualMachine.IntPGlobalRef.Value == localRef)
+			return proxy.IntPrimitiveLocalRef.Value;
+		if (proxy.VirtualMachine.LongPGlobalRef.Value == localRef)
+			return proxy.LongPrimitiveLocalRef.Value;
+		// ReSharper disable once ConvertIfStatementToReturnStatement
+		if (proxy.VirtualMachine.ShortPGlobalRef.Value == localRef)
+			return proxy.ShortPrimitiveLocalRef.Value;
 		return proxy.NewLocalRef(localRef);
 	}
 	[UnmanagedCallersOnly]
@@ -1125,57 +1125,56 @@ internal unsafe partial class ReferenceHelper
 	private static JReferenceType GetObjectRefType(JEnvironmentRef envRef, JObjectLocalRef localRef)
 	{
 		NativeInterfaceProxy proxy = ReferenceHelper.GetProxy(envRef);
-		if (proxy.UseDefaultClassRef)
-		{
-			if (proxy.VirtualMachine.ClassGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
-			if (proxy.VirtualMachine.ThrowableGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
-			if (proxy.VirtualMachine.StackTraceElementGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
-			if (proxy.VirtualMachine.NumberGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
-			if (proxy.VirtualMachine.SystemGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
+		if (!proxy.UseDefaultClassRef) return proxy.GetObjectRefType(localRef);
+		if (proxy.VirtualMachine.ClassGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
+		if (proxy.VirtualMachine.ThrowableGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
+		if (proxy.VirtualMachine.StackTraceElementGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
+		if (proxy.VirtualMachine.NumberGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
+		if (proxy.VirtualMachine.SystemGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
 
-			if (proxy.VirtualMachine.VoidGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
-			if (proxy.VirtualMachine.BooleanGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
-			if (proxy.VirtualMachine.ByteGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
-			if (proxy.VirtualMachine.CharacterGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
-			if (proxy.VirtualMachine.DoubleGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
-			if (proxy.VirtualMachine.FloatGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
-			if (proxy.VirtualMachine.IntegerGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
-			if (proxy.VirtualMachine.LongGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
-			if (proxy.VirtualMachine.ShortGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
+		if (proxy.VirtualMachine.VoidGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
+		if (proxy.VirtualMachine.BooleanGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
+		if (proxy.VirtualMachine.ByteGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
+		if (proxy.VirtualMachine.CharacterGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
+		if (proxy.VirtualMachine.DoubleGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
+		if (proxy.VirtualMachine.FloatGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
+		if (proxy.VirtualMachine.IntegerGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
+		if (proxy.VirtualMachine.LongGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
+		if (proxy.VirtualMachine.ShortGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
 
-			if (proxy.VirtualMachine.VoidPGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
-			if (proxy.VirtualMachine.BooleanPGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
-			if (proxy.VirtualMachine.BytePGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
-			if (proxy.VirtualMachine.CharPGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
-			if (proxy.VirtualMachine.DoublePGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
-			if (proxy.VirtualMachine.FloatPGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
-			if (proxy.VirtualMachine.IntPGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
-			if (proxy.VirtualMachine.LongPGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
-			if (proxy.VirtualMachine.ShortPGlobalRef.Value == localRef)
-				return JReferenceType.GlobalRefType;
-		}
+		if (proxy.VirtualMachine.VoidPGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
+		if (proxy.VirtualMachine.BooleanPGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
+		if (proxy.VirtualMachine.BytePGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
+		if (proxy.VirtualMachine.CharPGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
+		if (proxy.VirtualMachine.DoublePGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
+		if (proxy.VirtualMachine.FloatPGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
+		if (proxy.VirtualMachine.IntPGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
+		if (proxy.VirtualMachine.LongPGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
+		// ReSharper disable once ConvertIfStatementToReturnStatement
+		if (proxy.VirtualMachine.ShortPGlobalRef.Value == localRef)
+			return JReferenceType.GlobalRefType;
 		return proxy.GetObjectRefType(localRef);
 	}
 

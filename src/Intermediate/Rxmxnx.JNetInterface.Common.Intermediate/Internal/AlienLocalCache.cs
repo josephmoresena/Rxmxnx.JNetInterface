@@ -1,3 +1,4 @@
+// ReSharper disable VirtualMemberNeverOverridden.Global
 namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
@@ -16,6 +17,7 @@ internal abstract class AlienLocalCache : LocalCache, IDisposable
 	/// <summary>
 	/// <see cref="INativeThread"/> instance.
 	/// </summary>
+	// ReSharper disable once MemberCanBeProtected.Global
 	public INativeThread Environment { get; }
 
 	/// <summary>
@@ -86,7 +88,7 @@ internal abstract class AlienLocalCache : LocalCache, IDisposable
 
 	/// <inheritdoc cref="IDisposable.Dispose()"/>
 	/// <param name="disposing">
-	/// Indicates whether current calls is performed by <see cref="IDisposable.Dispose()"/>.
+	/// Indicates whether current calls are performed by <see cref="IDisposable.Dispose()"/>.
 	/// </param>
 	protected virtual void Dispose(Boolean disposing)
 	{

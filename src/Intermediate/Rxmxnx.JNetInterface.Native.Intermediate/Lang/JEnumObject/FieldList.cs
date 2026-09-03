@@ -82,7 +82,7 @@ public partial class JEnumObject
 		private static HashSet<Int32> GetMissingFields(Dictionary<Int32, String>.KeyCollection ordinals,
 			out Int32 maxOrdinal)
 		{
-			HashSet<Int32> result = Enumerable.Range(0, ordinals.Count).ToHashSet();
+			HashSet<Int32> result = [.. Enumerable.Range(0, ordinals.Count),];
 			maxOrdinal = -1;
 			foreach (Int32 ordinal in ordinals)
 			{

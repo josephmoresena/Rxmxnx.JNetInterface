@@ -223,7 +223,7 @@ public sealed partial class JNativeCallAdapterTests
 		JNativeCallAdapter.Builder builder, out List<JLocalObject?> parameters)
 	{
 		parameters = new(20);
-		Span<JObjectLocalRef> refs = JNativeCallAdapterTests.fixture.CreateMany<JObjectLocalRef>(20).ToArray();
+		Span<JObjectLocalRef> refs = [.. JNativeCallAdapterTests.fixture.CreateMany<JObjectLocalRef>(20),];
 
 		parameters.Add(JNativeCallAdapterTests.CreateModule(proxyEnv, builder, refs[0]));
 		parameters.Add(JNativeCallAdapterTests.CreateBooleanArray(proxyEnv, builder, new(refs[1].Pointer)));

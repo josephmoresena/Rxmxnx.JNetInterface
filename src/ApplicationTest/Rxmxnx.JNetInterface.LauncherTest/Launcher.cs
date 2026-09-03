@@ -1,5 +1,8 @@
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable MemberCanBeProtected.Global
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
+// ReSharper disable once ClassCannotBeInstantiated
 public abstract partial class Launcher
 {
 	public DirectoryInfo OutputDirectory { get; }
@@ -32,9 +35,11 @@ public abstract partial class Launcher
 				         .GetFiles(
 					         $"ApplicationTest.*.{this.RuntimeIdentifierPrefix}-{Enum.GetName(a)!.ToLower()}.net*.0{pattern}{exeExtension}")
 				         .OrderBy(f => NetVersionParser.GetNetVersion(f.FullName)).ToArray());
-			Jdk[] jdks = this.Architectures.SelectMany(a => this[a]).Distinct()
-			                 .OrderBy(j => (j.JavaVersion, j.JavaArchitecture == this.CurrentArch, j.JavaArchitecture))
-			                 .ToArray();
+			Jdk[] jdks =
+			[
+				.. this.Architectures.SelectMany(a => this[a]).Distinct()
+				       .OrderBy(j => (j.JavaVersion, j.JavaArchitecture == this.CurrentArch, j.JavaArchitecture)),
+			];
 			foreach (Jdk jdk in jdks)
 			{
 				foreach (FileInfo appFile in archFiles[jdk.JavaArchitecture])
@@ -86,9 +91,11 @@ public abstract partial class Launcher
 			FileInfo? jarFile = this.OutputJavaDirectory.GetFiles("HelloJni.jar").FirstOrDefault();
 			if (jarFile is null) return;
 
-			Jdk[] jdks = this.Architectures.SelectMany(a => this[a]).Distinct()
-			                 .OrderBy(j => (j.JavaVersion, j.JavaArchitecture == this.CurrentArch, j.JavaArchitecture))
-			                 .ToArray();
+			Jdk[] jdks =
+			[
+				.. this.Architectures.SelectMany(a => this[a]).Distinct()
+				       .OrderBy(j => (j.JavaVersion, j.JavaArchitecture == this.CurrentArch, j.JavaArchitecture)),
+			];
 			foreach (Jdk jdk in jdks)
 			{
 				foreach (NetVersion netVersion in netVersions)

@@ -1,5 +1,6 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
+// ReSharper disable once ClassCannotBeInstantiated
 internal partial class AndroidEnvironment : IMainClassLoader
 {
 	JVirtualMachineRef IMainClassLoader.VirtualMachineRef => this._m.Core.Host.Value.Reference;

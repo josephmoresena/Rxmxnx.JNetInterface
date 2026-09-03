@@ -159,23 +159,24 @@ public sealed class ConstructorTests : IndeterminateAccessTestsBase
 
 		Assert.Equal(instance, call.NewCall<TDataType>(env, parameters));
 		env.AccessFeature.Received(1).CallConstructor<TDataType>(jClass, (JConstructorDefinition)call.Definition,
-		                                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		                                                         Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a)
+			                                                         .SequenceEqual(parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		Assert.Equal(instance, call.NewCall(jClass, parameters));
 		env.AccessFeature.Received(1).CallConstructor<JLocalObject>(jClass, (JConstructorDefinition)call.Definition,
-		                                                            Arg.Is<IObject[]>(a => a.SequenceEqual(
-			                                                            parameters)));
+		                                                            Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a)
+			                                                            .SequenceEqual(parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		Assert.Equal(instance, call.StaticFunctionCall(jClass, parameters).Object);
 		env.AccessFeature.Received(1).CallConstructor<JLocalObject>(jClass, (JConstructorDefinition)call.Definition,
-		                                                            Arg.Is<IObject[]>(a => a.SequenceEqual(
-			                                                            parameters)));
+		                                                            Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a)
+			                                                            .SequenceEqual(parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
@@ -183,8 +184,8 @@ public sealed class ConstructorTests : IndeterminateAccessTestsBase
 		Assert.Equal(localRef, instance?.LocalReference ?? localRef);
 		call.StaticMethodCall(jClass, parameters);
 		env.AccessFeature.Received(1).CallConstructor<JLocalObject>(jClass, (JConstructorDefinition)call.Definition,
-		                                                            Arg.Is<IObject[]>(a => a.SequenceEqual(
-			                                                            parameters)));
+		                                                            Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a)
+			                                                            .SequenceEqual(parameters)));
 		Assert.Equal(default, instance?.LocalReference ?? default);
 		instance?.SetValue(localRef);
 
@@ -193,23 +194,24 @@ public sealed class ConstructorTests : IndeterminateAccessTestsBase
 
 		Assert.Equal(instance, IndeterminateCall.ReflectedNewCall<TDataType>(jConstructor, parameters));
 		env.AccessFeature.Received(1).CallConstructor<TDataType>(jConstructor, jConstructor.Definition,
-		                                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		                                                         Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a)
+			                                                         .SequenceEqual(parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		Assert.Equal(instance, IndeterminateCall.ReflectedNewCall(jConstructor, parameters));
 		env.AccessFeature.Received(1).CallConstructor<JLocalObject>(jConstructor, jConstructor.Definition,
-		                                                            Arg.Is<IObject[]>(a => a.SequenceEqual(
-			                                                            parameters)));
+		                                                            Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a)
+			                                                            .SequenceEqual(parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		Assert.Equal(instance, IndeterminateCall.ReflectedStaticFunctionCall(jConstructor, parameters).Object);
 		env.AccessFeature.Received(1).CallConstructor<JLocalObject>(jConstructor, jConstructor.Definition,
-		                                                            Arg.Is<IObject[]>(a => a.SequenceEqual(
-			                                                            parameters)));
+		                                                            Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a)
+			                                                            .SequenceEqual(parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
@@ -217,8 +219,8 @@ public sealed class ConstructorTests : IndeterminateAccessTestsBase
 		Assert.Equal(localRef, instance?.LocalReference ?? localRef);
 		IndeterminateCall.ReflectedStaticMethodCall(jConstructor, parameters);
 		env.AccessFeature.Received(1).CallConstructor<JLocalObject>(jConstructor, jConstructor.Definition,
-		                                                            Arg.Is<IObject[]>(a => a.SequenceEqual(
-			                                                            parameters)));
+		                                                            Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a)
+			                                                            .SequenceEqual(parameters)));
 		Assert.Equal(default, instance?.LocalReference ?? default);
 		instance?.SetValue(localRef);
 	}

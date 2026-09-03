@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Tests.Native.Access;
 [ExcludeFromCodeCoverage]
 public sealed class JMethodDefinitionTests
 {
-	private const String VoidParameterlessDescriptor = "()V";
+	private const String voidParameterlessDescriptor = "()V";
 
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 	private static readonly JArgumentMetadata[] args =
@@ -17,7 +17,7 @@ public sealed class JMethodDefinitionTests
 	private void SimpleTest(Boolean nonVirtual)
 	{
 		String methodName = JMethodDefinitionTests.fixture.Create<String>();
-		CStringSequence seq = new(methodName, JMethodDefinitionTests.VoidParameterlessDescriptor);
+		CStringSequence seq = new(methodName, JMethodDefinitionTests.voidParameterlessDescriptor);
 		JMethodDefinition.Parameterless methodDefinition = new((CString)methodName);
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JObjectLocalRef localRef = JMethodDefinitionTests.fixture.Create<JObjectLocalRef>();
@@ -45,7 +45,7 @@ public sealed class JMethodDefinitionTests
 		Assert.Equal(jMethod, methodDefinition.GetReflected(jStringClass));
 		Assert.Equal(jMethod, methodDefinition.GetStaticReflected(jStringClass));
 
-		Assert.Equal($"{{ Method: {methodName} Descriptor: {JMethodDefinitionTests.VoidParameterlessDescriptor} }}",
+		Assert.Equal($"{{ Method: {methodName} Descriptor: {JMethodDefinitionTests.voidParameterlessDescriptor} }}",
 		             methodDefinition.ToString());
 
 		JMethodDefinition.Invoke(methodDefinition, jString, nonVirtual: nonVirtual);
@@ -103,11 +103,13 @@ public sealed class JMethodDefinitionTests
 
 		methodDefinition.Invoke(jLocal, parameters);
 		env.AccessFeature.Received(1).CallMethod(jLocal, jLocal.Class, methodDefinition, false,
-		                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		                                         Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a).SequenceEqual(
+			                                                           parameters)));
 
 		methodDefinition.Invoke(jLocal, jClass, parameters);
 		env.AccessFeature.Received(1).CallMethod(jLocal, jClass, methodDefinition, false,
-		                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		                                         Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a).SequenceEqual(
+			                                                           parameters)));
 
 		methodDefinition.InvokeNonVirtual(jLocal, jClass);
 		env.AccessFeature.Received(1).CallMethod(jLocal, jClass, methodDefinition, true,
@@ -115,15 +117,17 @@ public sealed class JMethodDefinitionTests
 
 		methodDefinition.InvokeNonVirtual(jLocal, jClass, parameters);
 		env.AccessFeature.Received(1).CallMethod(jLocal, jClass, methodDefinition, true,
-		                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		                                         Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a).SequenceEqual(
+			                                                           parameters)));
 
 		methodDefinition.StaticInvoke(jStringClass);
 		env.AccessFeature.Received(1).CallStaticMethod(jStringClass, methodDefinition,
 		                                               Arg.Is<IObject?[]>(a => JMethodDefinitionTests.IsEmptyArgs(a)));
 
 		methodDefinition.StaticInvoke(jClass, parameters);
-		env.AccessFeature.Received(1)
-		   .CallStaticMethod(jClass, methodDefinition, Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		env.AccessFeature.Received(1).CallStaticMethod(jClass, methodDefinition,
+		                                               Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a).SequenceEqual(
+			                                                                 parameters)));
 
 		methodDefinition.InvokeReflected(jMethod, jLocal);
 		env.AccessFeature.Received(1).CallMethod(jMethod, jLocal, methodDefinition, false,
@@ -131,7 +135,8 @@ public sealed class JMethodDefinitionTests
 
 		methodDefinition.InvokeReflected(jMethod, jLocal, parameters);
 		env.AccessFeature.Received(1).CallMethod(jMethod, jLocal, methodDefinition, false,
-		                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		                                         Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a).SequenceEqual(
+			                                                           parameters)));
 
 		methodDefinition.InvokeNonVirtualReflected(jMethod, jLocal);
 		env.AccessFeature.Received(1).CallMethod(jMethod, jLocal, methodDefinition, true,
@@ -139,15 +144,17 @@ public sealed class JMethodDefinitionTests
 
 		methodDefinition.InvokeNonVirtualReflected(jMethod, jLocal, parameters);
 		env.AccessFeature.Received(1).CallMethod(jMethod, jLocal, methodDefinition, true,
-		                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		                                         Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a).SequenceEqual(
+			                                                           parameters)));
 
 		methodDefinition.InvokeStaticReflected(jMethod);
 		env.AccessFeature.Received(1).CallStaticMethod(jMethod, methodDefinition,
 		                                               Arg.Is<IObject?[]>(a => JMethodDefinitionTests.IsEmptyArgs(a)));
 
 		methodDefinition.InvokeStaticReflected(jMethod, parameters);
-		env.AccessFeature.Received(1)
-		   .CallStaticMethod(jMethod, methodDefinition, Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		env.AccessFeature.Received(1).CallStaticMethod(jMethod, methodDefinition,
+		                                               Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a).SequenceEqual(
+			                                                                 parameters)));
 	}
 
 #pragma warning disable CA1859
