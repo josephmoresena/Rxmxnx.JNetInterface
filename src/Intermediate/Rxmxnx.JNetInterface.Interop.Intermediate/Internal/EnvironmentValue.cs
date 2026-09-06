@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// Internal <see cref="IEnvironment"/> value.
 /// </summary>
-internal readonly struct EnvironmentValue
+internal readonly partial struct EnvironmentValue
 {
 	/// <summary>
 	/// A <see cref="EnvironmentCore"/> instance.
@@ -44,12 +44,6 @@ internal readonly struct EnvironmentValue
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		set => this.SetThrown(value);
 	}
-
-	/// <summary>
-	/// Private constructor.
-	/// </summary>
-	/// <param name="core">A <see cref="EnvironmentCore"/> instance.</param>
-	private EnvironmentValue(EnvironmentCore core) => this.Core = core;
 
 	/// <inheritdoc cref="IEnvironment.JniSecure()"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -129,60 +123,6 @@ internal readonly struct EnvironmentValue
 		this.Core.DeleteLocalFrame(result);
 		JTrace.DeleteObjectCache(frame.Id, result);
 	}
-	/// <summary>
-	/// Creates a new local reference frame and invokes <paramref name="action"/> inside of it.
-	/// </summary>
-	/// <param name="owner">A <see langword="ILocalCacheOwner"/> instance.</param>
-	/// <param name="capacity">New local reference frame capacity.</param>
-	/// <param name="action">An action to invoke inside created new local reference.</param>
-	public void WithFrame(ILocalCacheOwner owner, Int32 capacity, Action action)
-	{
-		using LocalFrame _ = new(owner, capacity);
-		this.Core.CheckJniError();
-		action();
-	}
-	/// <summary>
-	/// Creates a new local reference frame and invokes <paramref name="action"/> inside of it.
-	/// </summary>
-	/// <param name="owner">A <see langword="ILocalCacheOwner"/> instance.</param>
-	/// <param name="capacity">New local reference frame capacity.</param>
-	/// <param name="state">A state object.</param>
-	/// <param name="action">An action to invoke inside created new local reference.</param>
-	public void WithFrame<TState>(ILocalCacheOwner owner, Int32 capacity, TState state, Action<TState> action)
-#if NET9_0_OR_GREATER
-		where TState : allows ref struct
-#endif
-	{
-		using LocalFrame _ = new(owner, capacity);
-		this.Core.CheckJniError();
-		action(state);
-	}
-
-	/// <summary>
-	/// Retrieves the <see cref="ThrowableException"/> pending exception.
-	/// </summary>
-	/// <returns>A <see cref="ThrowableException"/> instance.</returns>
-	private ThrowableException? GetThrown()
-	{
-		ThrowableException? jniException = this.Core.Thrown as ThrowableException;
-		if (jniException is not null || this.Core.Thrown is null) return jniException;
-		if (!this.Core.JniSecure(JniSafetyLevels.ErrorSafe) && this.Core.HasPendingException())
-			// Do not throw if not pending JNI exception.
-			throw this.Core.Thrown;
-		return EnvironmentCore.ParseException(this.Core, this.Core.GetPendingException());
-	}
-	/// <summary>
-	/// Sets <paramref name="throwableException"/> as pending exception.
-	/// </summary>
-	/// <param name="throwableException">A <see cref="ThrowableException"/> instance.</param>
-	private void SetThrown(ThrowableException? throwableException)
-	{
-		if (throwableException is not null && Object.ReferenceEquals(CriticalException.Instance, this.Core.Thrown) &&
-		    this.Core.HasPendingException())
-			// Do not throw if there is no pending JNI exception or exception in the process of being cleared.
-			throw this.Core.Thrown;
-		this.Core.ThrowJniException(throwableException, false);
-	}
 
 	/// <summary>
 	/// Defines an implicit conversion of a given <see cref="EnvironmentCore"/> to
@@ -192,34 +132,34 @@ internal readonly struct EnvironmentValue
 	public static implicit operator EnvironmentValue(EnvironmentCore core) => new(core);
 
 	/// <summary>
-	/// Creates a new local reference frame and executes <paramref name="func"/> inside of it.
+	/// Creates a new local reference frame and invokes <paramref name="action"/> inside of it.
 	/// </summary>
-	/// <param name="owner">A <see langword="ILocalCacheOwner"/> instance.</param>
-	/// <param name="capacity">New local reference frame capacity.</param>
-	/// <param name="func">A function to execute inside created new local reference.</param>
-	public static TResult WithFrame<TResult>(ILocalCacheOwner owner, Int32 capacity, Func<TResult> func)
+	/// <param name="nativeThread">A <see langword="INativeThread"/> instance.</param>
+	/// <param name="action">An action to invoke inside created a new local frame.</param>
+	public static void WithFrame<TAction>(INativeThread nativeThread, ref TAction action)
+#if !NET9_0_OR_GREATER
+		where TAction : IFrameAction
+#else
+		where TAction : IFrameAction, allows ref struct
+#endif
 	{
-		using LocalFrame localFrame = new(owner, capacity);
-		TResult result = func();
-		localFrame.SetResult(result);
-		return result;
+		using LocalFrame _ = new(nativeThread, action.RequiredCapacity);
+		action.Accept(nativeThread);
 	}
 	/// <summary>
 	/// Creates a new local reference frame and executes <paramref name="func"/> inside of it.
 	/// </summary>
-	/// <param name="owner">A <see langword="ILocalCacheOwner"/> instance.</param>
-	/// <param name="capacity">New local reference frame capacity.</param>
-	/// <param name="state">A state object.</param>
-	/// <param name="func">A function to execute inside created new local reference.</param>
-	public static TResult WithFrame<TResult, TState>(ILocalCacheOwner owner, Int32 capacity, TState state,
-		Func<TState, TResult> func)
-#if NET9_0_OR_GREATER
-		where TState : allows ref struct
+	/// <param name="nativeThread">A <see langword="INativeThread"/> instance.</param>
+	/// <param name="func">A function to execute inside created a new local frame.</param>
+	/// <returns>Function result.</returns>
+	public static TResult WithFrame<TResult, TFunction>(INativeThread nativeThread, ref TFunction func)
+#if !NET9_0_OR_GREATER
+		where TFunction : IFrameFunction<TResult>
+#else
+		where TFunction : IFrameFunction<TResult>, allows ref struct
 #endif
 	{
-		using LocalFrame localFrame = new(owner, capacity);
-		TResult result = func(state);
-		localFrame.SetResult(result);
-		return result;
+		using LocalFrame _ = new(nativeThread, func.RequiredCapacity);
+		return func.Apply(nativeThread);
 	}
 }
