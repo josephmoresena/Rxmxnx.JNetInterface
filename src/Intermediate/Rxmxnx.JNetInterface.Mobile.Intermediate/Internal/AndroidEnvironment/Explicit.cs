@@ -37,5 +37,8 @@ internal partial class AndroidEnvironment : IMainClassLoader
 	JClassObject IAlienObjectManager.GetObjectClass(ITypeInformation typeInformation, JObjectLocalRef localRef,
 		out JReferenceTypeMetadata typeMetadata)
 		=> EnvironmentCore.GetObjectClass(this._m.Core, typeInformation, localRef, out typeMetadata);
+	TResult IEnvironment.WithFrameExecute<TFunction, TResult>(ref TFunction func)
+		=> EnvironmentValue.WithFrame<TResult, TFunction>(this, ref func);
+	void IEnvironment.WithFrameExecute<TAction>(ref TAction action) => EnvironmentValue.WithFrame(this, ref action);
 	Boolean? IEnvironment.IsVirtual(JThreadObject jThread) => default;
 }

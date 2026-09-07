@@ -159,7 +159,9 @@ internal readonly partial struct EnvironmentValue
 		where TFunction : IFrameFunction<TResult>, allows ref struct
 #endif
 	{
-		using LocalFrame _ = new(nativeThread, func.RequiredCapacity);
-		return func.Apply(nativeThread);
+		using LocalFrame localFrame = new(nativeThread, func.RequiredCapacity);
+		TResult result = func.Apply(nativeThread);
+		localFrame.SetResult(result);
+		return result;
 	}
 }
