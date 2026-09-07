@@ -35,9 +35,7 @@ public static class FunctionalExtensions
 		where TAction : struct, IFrameAction, allows ref struct
 #endif
 	{
-		if (environment is null)
-			return;
-		environment.WithFrameExecute(ref action);
+		environment?.WithFrameExecute(ref action);
 	}
 	/// <summary>
 	/// Executes a provided frame function within the context of the current environment.

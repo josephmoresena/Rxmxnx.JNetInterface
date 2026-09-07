@@ -1,3 +1,4 @@
+// ReSharper disable MemberCanBeMadeStatic.Global
 namespace Rxmxnx.JNetInterface;
 
 internal readonly partial struct EnvironmentValue
