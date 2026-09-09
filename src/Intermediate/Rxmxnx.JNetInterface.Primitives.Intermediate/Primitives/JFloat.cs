@@ -56,6 +56,11 @@ public readonly partial struct JFloat : IPrimitiveFloatingPointType, IPrimitiveN
 #if PACKAGE
 	JLocalObject IPrimitiveType.ToObject(IEnvironment env) => this.ToObject(env);
 #endif
+	void IObject.GetValue(out JValue value)
+	{
+		Unsafe.SkipInit(out value);
+		Unsafe.As<JValue, Single>(ref value) = this._value;
+	}
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

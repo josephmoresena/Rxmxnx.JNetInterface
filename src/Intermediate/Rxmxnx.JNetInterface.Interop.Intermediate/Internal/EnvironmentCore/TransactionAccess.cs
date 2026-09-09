@@ -56,7 +56,7 @@ internal sealed partial class EnvironmentCore
 				case JReferenceObject referenceObject:
 					ImplementationValidationUtilities.ThrowIfProxy(referenceObject);
 					this.ReloadClass(referenceObject as JClassObject);
-					ImplementationValidationUtilities.ThrowIfDefault(referenceObject, $"Invalid object at {i}.");
+					ImplementationValidationUtilities.ThrowIfDefault(referenceObject, (Byte)i);
 					ref JObjectLocalRef localRef = ref Unsafe.As<JValue, JObjectLocalRef>(ref result[i]);
 					localRef = jniTransaction.Add(referenceObject);
 					break;

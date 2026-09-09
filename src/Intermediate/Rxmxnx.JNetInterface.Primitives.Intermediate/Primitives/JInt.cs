@@ -51,6 +51,11 @@ public readonly partial struct JInt : IPrimitiveIntegerType, IPrimitiveNumericTy
 #if PACKAGE
 	JLocalObject IPrimitiveType.ToObject(IEnvironment env) => this.ToObject(env);
 #endif
+	void IObject.GetValue(out JValue value)
+	{
+		Unsafe.SkipInit(out value);
+		Unsafe.As<JValue, Int32>(ref value) = this._value;
+	}
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -51,6 +51,11 @@ public readonly partial struct JLong : IPrimitiveIntegerType, IPrimitiveNumericT
 #if PACKAGE
 	JLocalObject IPrimitiveType.ToObject(IEnvironment env) => this.ToObject(env);
 #endif
+	void IObject.GetValue(out JValue value)
+	{
+		Unsafe.SkipInit(out value);
+		Unsafe.As<JValue, Int64>(ref value) = this._value;
+	}
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

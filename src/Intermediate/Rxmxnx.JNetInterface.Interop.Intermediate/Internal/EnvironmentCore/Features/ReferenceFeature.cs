@@ -27,64 +27,87 @@ internal sealed partial class EnvironmentCore : IReferenceFeature
 			result.SetClass(initializer.Class);
 		return result;
 	}
-	public JLocalObject CreateWrapper<TPrimitive>(TPrimitive primitive)
+#if !PACKAGE
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
+	public unsafe JLocalObject CreateWrapper<TPrimitive>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, INativeDataType<TPrimitive>
 	{
 		JDataTypeMetadata metadata = IDataType.GetMetadata<TPrimitive>();
 		JClassObject jClass;
-		JObjectLocalRef localRef;
-		JLocalObject result;
-		NativeFunctionSetImpl.SingleObjectBuffer buffer = new();
-		Span<IObject?> span = NativeFunctionSetImpl.SingleObjectBuffer.GetSpan(ref buffer);
-		// ReSharper disable once HeapView.BoxingAllocation
-		span[0] = primitive;
+		JConstructorDefinition definition;
+		delegate*<JClassObject, JObjectLocalRef, void*, JLocalObject> constructor;
 		switch (metadata.Signature[0])
 		{
 			case CommonNames.BooleanSignatureChar:
 				jClass = this.GetClass<JBooleanObject>();
-				localRef = this.NewObject(jClass, NativeFunctionSetImpl.BooleanConstructor, span);
-				result = new JBooleanObject(jClass, localRef, (Byte)primitive == JBoolean.TrueValue);
+				definition = NativeFunctionSetImpl.BooleanConstructor;
+				constructor = &BooleanConstructor;
 				break;
 			case CommonNames.ByteSignatureChar:
 				jClass = this.GetClass<JByteObject>();
-				localRef = this.NewObject(jClass, NativeFunctionSetImpl.ByteConstructor, span);
-				result = new JByteObject(jClass, localRef, (SByte)primitive);
+				definition = NativeFunctionSetImpl.ByteConstructor;
+				constructor = &ByteConstructor;
 				break;
 			case CommonNames.CharSignatureChar:
 				jClass = this.GetClass<JCharacterObject>();
-				localRef = this.NewObject(jClass, NativeFunctionSetImpl.CharacterConstructor, span);
-				result = new JCharacterObject(jClass, localRef, (Char)primitive);
+				definition = NativeFunctionSetImpl.CharacterConstructor;
+				constructor = &CharacterConstructor;
 				break;
 			case CommonNames.DoubleSignatureChar:
 				jClass = this.GetClass<JDoubleObject>();
-				localRef = this.NewObject(jClass, NativeFunctionSetImpl.DoubleConstructor, span);
-				result = new JDoubleObject(jClass, localRef, (Double)primitive);
+				definition = NativeFunctionSetImpl.DoubleConstructor;
+				constructor = &DoubleConstructor;
 				break;
 			case CommonNames.FloatSignatureChar:
 				jClass = this.GetClass<JFloatObject>();
-				localRef = this.NewObject(jClass, NativeFunctionSetImpl.FloatConstructor, span);
-				result = new JFloatObject(jClass, localRef, (Single)primitive);
+				definition = NativeFunctionSetImpl.FloatConstructor;
+				constructor = &FloatConstructor;
 				break;
 			case CommonNames.IntSignatureChar:
 				jClass = this.GetClass<JIntegerObject>();
-				localRef = this.NewObject(jClass, NativeFunctionSetImpl.IntegerConstructor, span);
-				result = new JIntegerObject(jClass, localRef, (Int32)primitive);
+				definition = NativeFunctionSetImpl.IntegerConstructor;
+				constructor = &IntegerConstructor;
 				break;
 			case CommonNames.LongSignatureChar:
 				jClass = this.GetClass<JLongObject>();
-				localRef = this.NewObject(jClass, NativeFunctionSetImpl.LongConstructor, span);
-				result = new JLongObject(jClass, localRef, (Int64)primitive);
+				definition = NativeFunctionSetImpl.LongConstructor;
+				constructor = &LongConstructor;
 				break;
 			case CommonNames.ShortSignatureChar: //S
 				jClass = this.GetClass<JShortObject>();
-				localRef = this.NewObject(jClass, NativeFunctionSetImpl.ShortConstructor, span);
-				result = new JShortObject(jClass, localRef, (Int16)primitive);
+				definition = NativeFunctionSetImpl.ShortConstructor;
+				constructor = &ShortConstructor;
 				break;
 			default:
 				IMessageResource resource = IMessageResource.GetInstance();
 				throw new InvalidOperationException(resource.NotPrimitiveObject);
 		}
+		ref WrapperConstructorArg<TPrimitive> refArgs =
+			ref Unsafe.As<TPrimitive, WrapperConstructorArg<TPrimitive>>(ref primitive);
+		JObjectLocalRef localRef = this.NewObject(jClass, definition, in refArgs);
+		JLocalObject result = constructor(jClass, localRef, Unsafe.AsPointer(ref primitive));
 		return this.Register(result);
+
+		#region StaticConstructors
+		static JLocalObject BooleanConstructor(JClassObject jClass, JObjectLocalRef localRef, void* pointer)
+			=> new JBooleanObject(jClass, localRef, (Byte)Unsafe.AsRef<TPrimitive>(pointer) == JBoolean.TrueValue);
+		static JLocalObject ByteConstructor(JClassObject jClass, JObjectLocalRef localRef, void* pointer)
+			=> new JByteObject(jClass, localRef, (SByte)Unsafe.AsRef<TPrimitive>(pointer));
+		static JLocalObject CharacterConstructor(JClassObject jClass, JObjectLocalRef localRef, void* pointer)
+			=> new JCharacterObject(jClass, localRef, (Char)Unsafe.AsRef<TPrimitive>(pointer));
+		static JLocalObject DoubleConstructor(JClassObject jClass, JObjectLocalRef localRef, void* pointer)
+			=> new JDoubleObject(jClass, localRef, (Double)Unsafe.AsRef<TPrimitive>(pointer));
+		static JLocalObject FloatConstructor(JClassObject jClass, JObjectLocalRef localRef, void* pointer)
+			=> new JFloatObject(jClass, localRef, (Single)Unsafe.AsRef<TPrimitive>(pointer));
+		static JLocalObject IntegerConstructor(JClassObject jClass, JObjectLocalRef localRef, void* pointer)
+			=> new JIntegerObject(jClass, localRef, (Int32)Unsafe.AsRef<TPrimitive>(pointer));
+		static JLocalObject LongConstructor(JClassObject jClass, JObjectLocalRef localRef, void* pointer)
+			=> new JLongObject(jClass, localRef, (Int64)Unsafe.AsRef<TPrimitive>(pointer));
+		static JLocalObject ShortConstructor(JClassObject jClass, JObjectLocalRef localRef, void* pointer)
+			=> new JShortObject(jClass, localRef, (Int16)Unsafe.AsRef<TPrimitive>(pointer));
+		#endregion
 	}
 	public TGlobal Create<TGlobal>(JLocalObject jLocal) where TGlobal : JGlobalBase
 	{

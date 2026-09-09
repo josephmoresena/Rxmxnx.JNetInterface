@@ -67,12 +67,23 @@ internal static class ImplementationValidationUtilities
 	/// Throws an exception if <paramref name="jObject"/> is default.
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-	/// <param name="message">Exception message.</param>
 	/// <exception cref="InvalidOperationException">Throws an exception if <paramref name="jObject"/> is default.</exception>
-	public static void ThrowIfDefault(JReferenceObject jObject, String? message = default)
+	public static void ThrowIfDefault(JReferenceObject jObject)
 	{
 		if (!jObject.IsDefault || !JObject.IsNullOrDefault(jObject)) return;
-		throw new ArgumentException(message ?? IMessageResource.GetInstance().DisposedObject);
+		throw new ArgumentException(IMessageResource.GetInstance().DisposedObject);
+	}
+	/// <summary>
+	/// Throws an exception if <paramref name="jObject"/> is default.
+	/// </summary>
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+	/// <param name="index">Parameter index.</param>
+	/// <exception cref="InvalidOperationException">Throws an exception if <paramref name="jObject"/> is default.</exception>
+	public static void ThrowIfDefault(JReferenceObject jObject, Byte index)
+	{
+		if (!jObject.IsDefault || !JObject.IsNullOrDefault(jObject)) return;
+		// TODO: Localized message.
+		throw new ArgumentException($"Invalid object at {index}.");
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="localRef"/> is default.
@@ -181,5 +192,20 @@ internal static class ImplementationValidationUtilities
 		if (version > 0) return version;
 		IMessageResource resource = IMessageResource.GetInstance();
 		throw new JavaVersionException(resource.IncompatibleLibrary);
+	}
+	/// <summary>
+	/// Throws an exception if <paramref name="index"/> is invalid.
+	/// </summary>
+	/// <param name="index">Index of value.</param>
+	/// <param name="count">Total count of values.</param>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception if <paramref name="index"/> is invalid.
+	/// </exception>
+	public static void ThrowIfInvalidIndex(Byte index, Int32 count)
+	{
+		if (index < count) return;
+		IMessageResource resource = IMessageResource.GetInstance();
+		// TODO: Create message
+		throw new InvalidOperationException();
 	}
 }

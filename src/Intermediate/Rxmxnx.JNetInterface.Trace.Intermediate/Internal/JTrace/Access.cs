@@ -9,7 +9,7 @@ internal static partial class JTrace
 	/// <summary>
 	/// Writes a category name and the retrieval of a field to the trace listeners.
 	/// </summary>
-	/// <param name="jLocal">Field instance object class.</param>
+	/// <param name="jLocal">Field instance object.</param>
 	/// <param name="jClass">Field declaring class.</param>
 	/// <param name="definition">Call definition.</param>
 	/// <param name="callerMethod">Caller member name.</param>
@@ -25,7 +25,7 @@ internal static partial class JTrace
 	/// <summary>
 	/// Writes a category name and the assignment of a value to a field to the trace listeners.
 	/// </summary>
-	/// <param name="jLocal">Field instance object class.</param>
+	/// <param name="jLocal">Field instance object.</param>
 	/// <param name="jClass">Field declaring class.</param>
 	/// <param name="definition">Call definition.</param>
 	/// <param name="value">Value to set.</param>
@@ -45,7 +45,7 @@ internal static partial class JTrace
 	/// <summary>
 	/// Writes a category name and the assignment of a value to a primitive field to the trace listeners.
 	/// </summary>
-	/// <param name="jLocal">Field instance object class.</param>
+	/// <param name="jLocal">Field instance object.</param>
 	/// <param name="jClass">Field declaring class.</param>
 	/// <param name="definition">Call definition.</param>
 	/// <param name="bytes">Binary span containing value to set to.</param>
@@ -61,7 +61,7 @@ internal static partial class JTrace
 	/// <summary>
 	/// Writes a category name and the call of a method to the trace listeners.
 	/// </summary>
-	/// <param name="jLocal">Call instance object class.</param>
+	/// <param name="jLocal">Call instance object.</param>
 	/// <param name="jClass">Method declaring class.</param>
 	/// <param name="definition">Call definition.</param>
 	/// <param name="nonVirtual">Indicates call is non-virtual.</param>
@@ -100,6 +100,44 @@ internal static partial class JTrace
 					break;
 			}
 		}
+		Trace.WriteLine(strBuilder, callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and the call of a method to the trace listeners.
+	/// </summary>
+	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the constructor.</typeparam>
+	/// <param name="jLocal">Call instance object.</param>
+	/// <param name="jClass">Method declaring class.</param>
+	/// <param name="definition">Call definition.</param>
+	/// <param name="nonVirtual">Indicates call is non-virtual.</param>
+	/// <param name="args">Call parameters.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	internal static void CallMethod<TArgs>(JLocalObject? jLocal, JClassObject jClass, JCallDefinition definition,
+		Boolean nonVirtual, in TArgs? args, [CallerMemberName] String callerMethod = "")
+#if !NET9_0_OR_GREATER
+		where TArgs : ICallArgument
+#else
+		where TArgs : ICallArgument, allows ref struct
+#endif
+	{
+		if (!JTrace.TraceEnabled) return;
+		StringBuilder strBuilder = new();
+		if (jLocal is null)
+			if (CommonNames.Constructor.SequenceEqual(definition.Name))
+				strBuilder.AppendLine(
+					$"thread: {Environment.CurrentManagedThreadId} {jClass.Name} {definition.ToTraceText()}");
+			else
+				strBuilder.AppendLine(
+					$"thread: {Environment.CurrentManagedThreadId} {jClass.Name} static {definition.ToTraceText()}");
+		else if (nonVirtual)
+			strBuilder.AppendLine(
+				$"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {jClass.Name} non-virtual {definition.ToTraceText()}");
+		else
+			strBuilder.AppendLine(
+				$"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {definition.ToTraceText()}");
+		String? traceArgs = args?.ToTraceText();
+		if (!String.IsNullOrWhiteSpace(traceArgs))
+			strBuilder.AppendLine(traceArgs);
 		Trace.WriteLine(strBuilder, callerMethod);
 	}
 	/// <summary>

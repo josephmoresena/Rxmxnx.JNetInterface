@@ -10,7 +10,9 @@ public unsafe partial interface IEnvironment
 	/// <param name="func">A reference to the function to execute within the frame.</param>
 	/// <returns>The result produced by the executed function.</returns>
 	/// <remarks>A default implementation is provided to avoid binary compatibility with older and proxy implementations.</remarks>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	internal TResult WithFrameExecute<TFunction, TResult>(ref TFunction func)
 #if !NET9_0_OR_GREATER
 		where TFunction : IFrameFunction<TResult>
@@ -33,7 +35,9 @@ public unsafe partial interface IEnvironment
 	/// <typeparam name="TAction">The type of the action to execute, which must implement <see cref="IFrameAction"/>.</typeparam>
 	/// <param name="action">A reference to the action to be executed within the frame.</param>
 	/// <remarks>A default implementation is provided to avoid binary compatibility with older and proxy implementations.</remarks>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	internal void WithFrameExecute<TAction>(ref TAction action)
 #if !NET9_0_OR_GREATER
 		where TAction : IFrameAction

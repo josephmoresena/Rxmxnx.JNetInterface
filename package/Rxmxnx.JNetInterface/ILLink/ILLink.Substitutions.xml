@@ -34,6 +34,9 @@
                     body="stub"/>
             <method signature="System.Void GetJniExport(System.IntPtr,System.String,System.Boolean,System.IntPtr)"
                     body="stub"/>
+            <!-- Access -->
+            <method signature="System.Void CallMethod`1(Rxmxnx.JNetInterface.Native.JLocalObject,Rxmxnx.JNetInterface.Lang.JClassObject,Rxmxnx.JNetInterface.Native.Access.JCallDefinition,System.Boolean,,System.String)"
+                    body="stub"/>
         </type>
     </assembly>
 </linker>

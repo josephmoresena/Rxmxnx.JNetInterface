@@ -217,9 +217,25 @@ internal sealed partial class EnvironmentCore : IAccessFeature
 	public TObject CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition,
 		ReadOnlySpan<IObject?> args) where TObject : JLocalObject, IDataType<TObject>
 	{
+#if !NET9_0_OR_GREATER
+		LegacyConstructorCall<TObject> call = new(this, jClass, definition);
+		args.WithSafeFixed(call, out TObject result);
+		return result;
+#else
+		return this.CallConstructor<TObject, LegacyCallArgument>(jClass, definition, new(args));
+#endif
+	}
+	public TObject CallConstructor<TObject, TArgs>(JClassObject jClass, JConstructorDefinition definition,
+		in TArgs? args) where TObject : JLocalObject, IDataType<TObject>
+#if !NET9_0_OR_GREATER
+		where TArgs : ICallArgument
+#else
+		where TArgs : ICallArgument, allows ref struct
+#endif
+	{
 		this.CheckClassCompatibility<TObject>(jClass, out Boolean sameClass);
-		JObjectLocalRef localRef = this.NewObject(jClass, definition, args);
-		JTrace.CallMethod(default, jClass, definition, false, args);
+		JObjectLocalRef localRef = this.NewObject(jClass, definition, in args);
+		JTrace.CallMethod(default, jClass, definition, false, in args);
 		return sameClass ?
 			this.CreateObject<TObject>(localRef, true, true)! :
 			this.CreateObject<TObject>(jClass, localRef);
@@ -230,6 +246,25 @@ internal sealed partial class EnvironmentCore : IAccessFeature
 	public TObject CallConstructor<TObject>(JConstructorObject jConstructor, JConstructorDefinition definition,
 		ReadOnlySpan<IObject?> args) where TObject : JLocalObject, IClassType<TObject>
 	{
+#if !NET9_0_OR_GREATER
+		LegacyReflectedConstructorCall<TObject> call = new(this, jConstructor, definition);
+		args.WithSafeFixed(call, out TObject result);
+		return result;
+#else
+		return this.CallConstructor<TObject, LegacyCallArgument>(jConstructor, definition, new(args));
+#endif
+	}
+#if !NET8_0_OR_GREATER || ANDROID
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+#endif
+	public TObject CallConstructor<TObject, TArgs>(JConstructorObject jConstructor, JConstructorDefinition definition,
+		in TArgs? args) where TObject : JLocalObject, IClassType<TObject>
+#if !NET9_0_OR_GREATER
+		where TArgs : ICallArgument
+#else
+		where TArgs : ICallArgument, allows ref struct
+#endif
+	{
 		ImplementationValidationUtilities.ThrowIfProxy(jConstructor);
 		ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jConstructor.Definition);
 		this.CheckClassCompatibility<TObject>(jConstructor.DeclaringClass, out Boolean sameClass);
@@ -238,12 +273,13 @@ internal sealed partial class EnvironmentCore : IAccessFeature
 		_ = jniTransaction.Add(jConstructor);
 		JMethodId methodId = jConstructor.MethodId;
 		JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jConstructor.DeclaringClass));
-		JObjectLocalRef localRef = this.NewObject(definition, classRef, args, jniTransaction, methodId);
-		JTrace.CallMethod(default, jConstructor.DeclaringClass, definition, false, args);
+		JObjectLocalRef localRef = this.NewObject(definition, classRef, in args, jniTransaction, methodId);
+		JTrace.CallMethod(default, jConstructor.DeclaringClass, definition, false, in args);
 		return sameClass ?
 			this.CreateObject<TObject>(localRef, true, true)! :
 			this.CreateObject<TObject>(jConstructor.DeclaringClass, localRef);
 	}
+
 	public TResult? CallStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition,
 		ReadOnlySpan<IObject?> args) where TResult : IDataType<TResult>
 	{

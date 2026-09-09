@@ -278,45 +278,62 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Creates a new object using JNI NewObject call.
 	/// </summary>
+	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the constructor.</typeparam>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="definition">A <see cref="JConstructorDefinition"/> instance.</param>
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	/// <returns>A <see cref="JObjectLocalRef"/> reference.</returns>
-	private JObjectLocalRef NewObject(JClassObject jClass, JConstructorDefinition definition,
-		ReadOnlySpan<IObject?> args)
+	private JObjectLocalRef NewObject<TArgs>(JClassObject jClass, JConstructorDefinition definition, in TArgs? args)
+#if !NET9_0_OR_GREATER
+		where TArgs : ICallArgument
+#else
+		where TArgs : ICallArgument, allows ref struct
+#endif
 	{
 		ImplementationValidationUtilities.ThrowIfProxy(jClass);
 		using INativeTransaction jniTransaction =
 			this.Host.MemoryManager.CreateTransaction(1 + definition.ReferenceCount);
 		AccessCache access = this.GetAccess(jniTransaction, jClass);
 		JMethodId methodId = access.GetMethodId(definition, this._env);
-		return this.NewObject(definition, jClass.Reference, args, jniTransaction, methodId);
+		return this.NewObject(definition, jClass.Reference, in args, jniTransaction, methodId);
 	}
 	/// <summary>
 	/// Creates a new object using JNI NewObject call.
 	/// </summary>
+	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the constructor.</typeparam>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> instance.</param>
 	/// <param name="definition">A <see cref="JConstructorDefinition"/> instance.</param>
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 	/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
 	/// <returns>A <see cref="JObjectLocalRef"/> reference.</returns>
-	private unsafe JObjectLocalRef NewObject(JConstructorDefinition definition, JClassLocalRef classRef,
-		ReadOnlySpan<IObject?> args, INativeTransaction jniTransaction, JMethodId methodId)
+	private unsafe JObjectLocalRef NewObject<TArgs>(JConstructorDefinition definition, JClassLocalRef classRef,
+		in TArgs? args, INativeTransaction jniTransaction, JMethodId methodId)
+#if !NET9_0_OR_GREATER
+		where TArgs : ICallArgument
+#else
+		where TArgs : ICallArgument, allows ref struct
+#endif
 	{
 		ref readonly NativeInterface nativeInterface =
 			ref this.GetNativeInterface<NativeInterface>(NativeInterface.NewObjectInfo);
 		using StackDisposable stackDisposable =
 			this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
-		Rented<Byte> rented = default;
-		Span<JValue> buffer = this.CopyAsJValue(jniTransaction, args,
-		                                        stackDisposable.UsingStack ?
-			                                        stackalloc Byte[requiredBytes] :
-			                                        EnvironmentCore.HeapAlloc(requiredBytes, ref rented));
+		ValPtr<JValue> buffer = stackDisposable.UsingStack ? stackalloc JValue[definition.Count].GetUnsafeValPtr() :
+			requiredBytes > 0 ? (ValPtr<JValue>)NativeMemory.Alloc((UIntPtr)requiredBytes) : ValPtr<JValue>.Zero;
 		JObjectLocalRef localRef;
-		fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
-			localRef = nativeInterface.ObjectFunctions.NewObject.Call(this.Reference, classRef, methodId, ptr);
-		rented.Free();
+		try
+		{
+			ParameterSlot slot = new(this, jniTransaction, buffer, definition.Count);
+			if (args is not null)
+				args.Configure(slot, definition);
+			localRef = nativeInterface.ObjectFunctions.NewObject.Call(this.Reference, classRef, methodId, buffer);
+		}
+		finally
+		{
+			if (!stackDisposable.UsingStack)
+				NativeMemory.Free(buffer.Pointer.ToPointer());
+		}
 		JTrace.CallObjectFunction(default, classRef, methodId, localRef, true);
 		this.CheckJniError();
 		return localRef;
