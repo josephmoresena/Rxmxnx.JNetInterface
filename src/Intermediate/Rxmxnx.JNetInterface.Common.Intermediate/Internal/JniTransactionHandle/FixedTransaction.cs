@@ -20,7 +20,7 @@ internal partial struct JniTransactionHandle
 		/// </summary>
 		private Int32 _count;
 		/// <summary>
-		/// Indicates current instance is disposed.
+		/// Indicates the current instance is disposed of.
 		/// </summary>
 		private Boolean _disposed;
 
@@ -30,7 +30,7 @@ internal partial struct JniTransactionHandle
 		private JniTransactionHandle _handle;
 
 		/// <summary>
-		/// Indicates whether current instance is disposed.
+		/// Indicates whether the current instance is disposed of.
 		/// </summary>
 		protected Boolean Disposed => this._disposed;
 
@@ -75,7 +75,7 @@ internal partial struct JniTransactionHandle
 		}
 
 		/// <summary>
-		/// Puts current value into current transaction.
+		/// Puts the current value into the current transaction.
 		/// </summary>
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 		protected abstract void PutValue(JObjectLocalRef localRef);
@@ -91,7 +91,7 @@ internal partial struct JniTransactionHandle
 
 		/// <inheritdoc cref="IDisposable.Dispose()"/>
 		/// <param name="disposing">
-		/// Indicates whether current calls is performed by <see cref="IDisposable.Dispose()"/>.
+		/// Indicates whether current calls are performed by <see cref="IDisposable.Dispose()"/>.
 		/// </param>
 		protected virtual void Dispose(Boolean disposing)
 		{

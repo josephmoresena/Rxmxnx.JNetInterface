@@ -20,7 +20,11 @@ internal readonly partial struct JniTransactionHandle : IDisposable
 	/// <param name="transactions">Dictionary of transactions.</param>
 	private JniTransactionHandle(IDictionary<Guid, INativeTransaction> transactions)
 	{
+#if !NET9_0_OR_GREATER
 		this._id = Guid.NewGuid();
+#else
+		this._id = Guid.CreateVersion7();
+#endif
 		this._transactions = transactions;
 	}
 
@@ -37,10 +41,10 @@ internal readonly partial struct JniTransactionHandle : IDisposable
 		IDictionary<Guid, INativeTransaction> transactions)
 		=> capacity switch
 		{
-			< 2 => JniTransactionHandle.Create<UnaryTransaction>(transactions),
-			2 => JniTransactionHandle.Create<BinaryTransaction>(transactions),
-			3 => JniTransactionHandle.Create<TernaryTransaction>(transactions),
-			_ => JniTransactionHandle.Create<SetTransaction>(transactions),
+			< 2 => JniTransactionHandle.Initialize<UnaryTransaction>(new(), transactions),
+			2 => JniTransactionHandle.Initialize<BinaryTransaction>(new(), transactions),
+			3 => JniTransactionHandle.Initialize<TernaryTransaction>(new(), transactions),
+			_ => JniTransactionHandle.Initialize<MallocTransaction>(new(capacity), transactions),
 		};
 	/// <summary>
 	/// Creates a synchronizer instance for <paramref name="jObject"/>.
@@ -84,7 +88,7 @@ internal readonly partial struct JniTransactionHandle : IDisposable
 	/// <summary>
 	/// Creates a native memory adapter instance for <paramref name="jArray"/>.
 	/// </summary>
-	/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>
+	/// <typeparam name="TPrimitive">Type of <typeparamref name="TPrimitive"/> element.</typeparam>
 	/// <param name="jArray"><see cref="JArrayObject{TPrimitive}"/> instance.</param>
 	/// <param name="referenceKind">Reference memory kind.</param>
 	/// <param name="critical">Indicates this adapter is for a critical sequence.</param>
@@ -101,26 +105,15 @@ internal readonly partial struct JniTransactionHandle : IDisposable
 	}
 
 	/// <summary>
-	/// Creates an empty <typeparamref name="TTransaction"/> instance.
-	/// </summary>
-	/// <typeparam name="TTransaction">A <see cref="INativeTransaction"/> instance.</typeparam>
-	/// <param name="transactions">Dictionary of transactions.</param>
-	/// <returns>A new <typeparamref name="TTransaction"/> instance.</returns>
-	private static TTransaction Create<TTransaction>(IDictionary<Guid, INativeTransaction> transactions)
-		where TTransaction : INativeTransaction, new()
-	{
-		TTransaction result = new();
-		return JniTransactionHandle.Initialize(result, transactions);
-	}
-	/// <summary>
 	/// Initialize <typeparamref name="TTransaction"/> instance.
 	/// </summary>
 	/// <typeparam name="TTransaction">A <see cref="INativeTransaction"/> instance.</typeparam>
 	/// <param name="transaction">Transaction to initialize.</param>
 	/// <param name="transactions">Dictionary of transactions.</param>
 	/// <returns>Initialized <paramref name="transaction"/>.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private static TTransaction Initialize<TTransaction>(TTransaction transaction,
-		IDictionary<Guid, INativeTransaction> transactions) where TTransaction : INativeTransaction
+		IDictionary<Guid, INativeTransaction> transactions) where TTransaction : class, INativeTransaction
 	{
 		do
 			transaction.Reference = new(transactions);
@@ -135,7 +128,15 @@ internal readonly partial struct JniTransactionHandle : IDisposable
 	/// <returns><paramref name="adapter"/> activated.</returns>
 	private static NativeMemoryAdapter ActivateMemoryAdapter(NativeMemoryAdapter adapter, IEnvironment env)
 	{
-		adapter.Activate(env);
-		return adapter;
+		try
+		{
+			adapter.Activate(env);
+			return adapter;
+		}
+		catch (Exception)
+		{
+			adapter.Dispose();
+			throw;
+		}
 	}
 }

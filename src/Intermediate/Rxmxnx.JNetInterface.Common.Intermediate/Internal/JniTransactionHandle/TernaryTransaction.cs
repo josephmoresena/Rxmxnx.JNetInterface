@@ -1,5 +1,3 @@
-// ReSharper disable ClassNeverInstantiated.Local
-
 namespace Rxmxnx.JNetInterface.Internal;
 
 internal partial struct JniTransactionHandle
