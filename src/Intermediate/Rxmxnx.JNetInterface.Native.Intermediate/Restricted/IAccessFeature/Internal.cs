@@ -10,6 +10,7 @@ internal partial interface IAccessFeature
 	/// <param name="definition"><see cref="JFunctionDefinition"/> definition.</param>
 	/// <param name="args">The <see cref="IObject"/> list with call arguments.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal TResult? CallInternalStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition,
 		ReadOnlySpan<IObject?> args) where TResult : IDataType<TResult>
 		=> this.CallStaticFunction<TResult>(jClass, definition, args);
@@ -19,39 +20,15 @@ internal partial interface IAccessFeature
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JMethodDefinition"/> definition.</param>
 	/// <param name="args">The <see cref="IObject"/> list with call arguments.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal void CallInternalStaticMethod(JClassObject jClass, JMethodDefinition definition,
 		ReadOnlySpan<IObject?> args)
 		=> this.CallStaticMethod(jClass, definition, args);
-	/// <summary>
-	/// Invokes a function on given <see cref="JLocalObject"/> instance and returns its result.
-	/// </summary>
-	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
-	/// <param name="definition"><see cref="JFunctionDefinition"/> definition.</param>
-	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
-	/// <param name="args">The <see cref="IObject"/> list with call arguments.</param>
-	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	internal TResult? CallInternalFunction<TResult>(JLocalObject jLocal, JClassObject jClass,
-		JFunctionDefinition definition, Boolean nonVirtual, ReadOnlySpan<IObject?> args)
-		where TResult : IDataType<TResult>
-		=> this.CallFunction<TResult>(jLocal, jClass, definition, nonVirtual, args);
-	/// <summary>
-	/// Invokes a method on given <see cref="JLocalObject"/> instance.
-	/// </summary>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
-	/// <param name="definition"><see cref="JMethodDefinition"/> definition.</param>
-	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
-	/// <param name="args">The <see cref="IObject"/> list with call arguments.</param>
-	internal void CallInternalMethod(JLocalObject jLocal, JClassObject jClass, JMethodDefinition definition,
-		Boolean nonVirtual, ReadOnlySpan<IObject?> args)
-		=> this.CallMethod(jLocal, jClass, definition, nonVirtual, args);
 
 	/// <summary>
 	/// Retrieves a primitive field from given <see cref="JLocalObject"/> instance.
 	/// </summary>
-	/// <param name="bytes">Binary span to hold result.</param>
+	/// <param name="bytes">Binary span to hold the result.</param>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
@@ -63,13 +40,13 @@ internal partial interface IAccessFeature
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
-	/// <param name="bytes">Binary span containing value to set to.</param>
+	/// <param name="bytes">Binary span containing a value to set to.</param>
 	internal void SetPrimitiveField(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition,
 		ReadOnlySpan<Byte> bytes);
 	/// <summary>
 	/// Retrieves a primitive static field from given <see cref="JClassObject"/> instance.
 	/// </summary>
-	/// <param name="bytes">Binary span to hold result.</param>
+	/// <param name="bytes">Binary span to hold the result.</param>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
 	internal void GetPrimitiveStaticField(Span<Byte> bytes, JClassObject jClass, JFieldDefinition definition);
@@ -78,26 +55,34 @@ internal partial interface IAccessFeature
 	/// </summary>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
-	/// <param name="bytes">Binary span containing value to set to.</param>
+	/// <param name="bytes">Binary span containing a value to set to.</param>
 	internal void SetPrimitiveStaticField(JClassObject jClass, JFieldDefinition definition, ReadOnlySpan<Byte> bytes);
+
 	/// <summary>
-	/// Invokes a primitive static function on given <see cref="JClassObject"/> instance.
+	/// Invokes a function on given <see cref="JLocalObject"/> instance and returns its result.
 	/// </summary>
-	/// <param name="bytes">Binary span to hold result.</param>
-	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
-	/// <param name="definition"><see cref="JFunctionDefinition"/> definition.</param>
-	/// <param name="args">The <see cref="IObject"/> list with call arguments.</param>
-	internal void CallStaticPrimitiveFunction(Span<Byte> bytes, JClassObject jClass, JFunctionDefinition definition,
-		ReadOnlySpan<IObject?> args = default);
-	/// <summary>
-	/// Invokes a primitive function on given <see cref="JLocalObject"/> instance and returns its result.
-	/// </summary>
-	/// <param name="bytes">Binary span to hold result.</param>
+	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JFunctionDefinition"/> definition.</param>
-	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call must be non-virtual.</param>
 	/// <param name="args">The <see cref="IObject"/> list with call arguments.</param>
-	internal void CallPrimitiveFunction(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
-		JFunctionDefinition definition, Boolean nonVirtual, ReadOnlySpan<IObject?> args = default);
+	/// <returns><typeparamref name="TResult"/> function result.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal TResult? CallInternalFunction<TResult>(JLocalObject jLocal, JClassObject jClass,
+		JFunctionDefinition definition, Boolean nonVirtual, ReadOnlySpan<IObject?> args)
+		where TResult : IDataType<TResult>
+		=> this.CallFunction<TResult>(jLocal, jClass, definition, nonVirtual, args);
+	/// <summary>
+	/// Invokes a method on given <see cref="JLocalObject"/> instance.
+	/// </summary>
+	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
+	/// <param name="definition"><see cref="JMethodDefinition"/> definition.</param>
+	/// <param name="nonVirtual">Indicates whether the current call must be non-virtual.</param>
+	/// <param name="args">The <see cref="IObject"/> list with call arguments.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal void CallInternalMethod(JLocalObject jLocal, JClassObject jClass, JMethodDefinition definition,
+		Boolean nonVirtual, ReadOnlySpan<IObject?> args)
+		=> this.CallMethod(jLocal, jClass, definition, nonVirtual, args);
 }

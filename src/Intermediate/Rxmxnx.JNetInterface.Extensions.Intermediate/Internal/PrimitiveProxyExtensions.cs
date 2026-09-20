@@ -14,10 +14,10 @@ internal static class PrimitiveProxyExtensions
 	/// Invokes current function as typed primitive function.
 	/// </summary>
 	/// <param name="definition"><see cref="JFunctionDefinition"/> instance.</param>
-	/// <param name="bytes"><see cref="Span{T}"/> to hold result.</param>
+	/// <param name="bytes"><see cref="Span{T}"/> to hold a result.</param>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
-	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call must be non-virtual.</param>
 	/// <param name="args">Function arguments.</param>
 	public static void PrimitiveInvoke(this JFunctionDefinition definition, Span<Byte> bytes, JLocalObject jLocal,
 		JClassObject jClass, Boolean nonVirtual, IObject?[] args)
@@ -61,10 +61,10 @@ internal static class PrimitiveProxyExtensions
 		}
 	}
 	/// <summary>
-	/// Invokes current function as static typed primitive function.
+	/// Invokes the current function as a static-typed primitive function.
 	/// </summary>
 	/// <param name="definition"><see cref="JFunctionDefinition"/> instance.</param>
-	/// <param name="bytes"><see cref="Span{T}"/> to hold result.</param>
+	/// <param name="bytes"><see cref="Span{T}"/> to hold a result.</param>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="args">Function arguments.</param>
 	public static void PrimitiveStaticInvoke(this JFunctionDefinition definition, Span<Byte> bytes, JClassObject jClass,
@@ -117,7 +117,7 @@ internal static class PrimitiveProxyExtensions
 		}
 	}
 	/// <summary>
-	/// Retrieves current field as typed primitive field.
+	/// Retrieves the current field as typed primitive field.
 	/// </summary>
 	/// <param name="definition"><see cref="JFieldDefinition"/> instance.</param>
 	/// <param name="bytes"><see cref="Span{T}"/> to hold field value.</param>
@@ -161,7 +161,7 @@ internal static class PrimitiveProxyExtensions
 		}
 	}
 	/// <summary>
-	/// Retrieves current static field as typed primitive field.
+	/// Retrieves the current static field as a typed primitive field.
 	/// </summary>
 	/// <param name="definition"><see cref="JFieldDefinition"/> instance.</param>
 	/// <param name="bytes"><see cref="Span{T}"/> to hold field value.</param>
@@ -201,7 +201,7 @@ internal static class PrimitiveProxyExtensions
 		}
 	}
 	/// <summary>
-	/// Sets current field value as typed primitive field.
+	/// Sets the current field value as a typed primitive field.
 	/// </summary>
 	/// <param name="definition"><see cref="JFieldDefinition"/> instance.</param>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
@@ -245,7 +245,7 @@ internal static class PrimitiveProxyExtensions
 		}
 	}
 	/// <summary>
-	/// Sets current static field value as typed primitive field.
+	/// Sets the current static field value as a typed primitive field.
 	/// </summary>
 	/// <param name="definition"><see cref="JFieldDefinition"/> instance.</param>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
@@ -286,7 +286,7 @@ internal static class PrimitiveProxyExtensions
 		}
 	}
 	/// <summary>
-	/// Normalize argument array to standard form.
+	/// Normalize an argument array to standard form.
 	/// </summary>
 	/// <param name="args">Argument array.</param>
 	/// <returns>Normalized argument array.</returns>

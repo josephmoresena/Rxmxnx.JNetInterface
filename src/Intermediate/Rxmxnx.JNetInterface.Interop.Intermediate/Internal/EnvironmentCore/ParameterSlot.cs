@@ -16,12 +16,9 @@ internal sealed partial class EnvironmentCore
 		public void SetParameterValue<TObject>(Byte index, TObject? value) where TObject : IObject
 		{
 			ImplementationValidationUtilities.ThrowIfInvalidIndex(index, count);
-			if (value is null)
-			{
-				this.SetNullValue(index);
-				return;
-			}
 			ValPtr<JValue> result = buffer + index;
+			result.Reference = JValue.Empty;
+			if (value is null) return;
 			if (value is not JReferenceObject jObject)
 			{
 				// It's a primitive value. No boxing!

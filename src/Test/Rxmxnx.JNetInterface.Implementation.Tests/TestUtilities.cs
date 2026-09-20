@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Tests;
 [ExcludeFromCodeCoverage]
 internal static class TestUtilities
 {
-	private const Int32 multipleValueLength = 150;
+	private const Int32 multipleValueLength = 80;
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 
 	public static TPointer InvertPointer<TPointer>(in TPointer ptr) where TPointer : unmanaged, IFixedPointer

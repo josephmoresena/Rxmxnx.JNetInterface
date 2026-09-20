@@ -7,7 +7,7 @@ using IPrimitiveValueType = IPrimitiveType<JBoolean, Boolean>;
 /// Primitive <c>boolean</c>. Represents a Boolean (<see langword="true"/> or <see langword="false"/>) value.
 /// </summary>
 [StructLayout(LayoutKind.Explicit, Size = sizeof(Byte), Pack = 0)]
-[DebuggerDisplay(nameof(JChar.Value))]
+[DebuggerDisplay(nameof(JBoolean.Value))]
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1210,
                  Justification = CommonConstants.NoBooleanComparisonOperatorsJustification)]

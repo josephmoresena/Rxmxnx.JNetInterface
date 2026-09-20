@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Restricted;
 internal partial interface IAccessFeature
 {
 	/// <summary>
-	/// Invokes a constructor method for given <see cref="JClassObject"/> instance.
+	/// Invokes a constructor for given <see cref="JClassObject"/> instance.
 	/// </summary>
 	/// <typeparam name="TObject"><see cref="IDataType"/> type of created instance.</typeparam>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
@@ -13,7 +13,7 @@ internal partial interface IAccessFeature
 	TObject CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition,
 		ReadOnlySpan<IObject?> args) where TObject : JLocalObject, IDataType<TObject>;
 	/// <summary>
-	/// Invokes a reflected constructor method on <paramref name="jConstructor"/>.
+	/// Invokes a constructor reflected on <paramref name="jConstructor"/> instance.
 	/// </summary>
 	/// <typeparam name="TObject"><see cref="IDataType"/> type of created instance.</typeparam>
 	/// <param name="jConstructor">A <see cref="JConstructorObject"/> instance.</param>
@@ -64,7 +64,7 @@ internal partial interface IAccessFeature
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JFunctionDefinition"/> definition.</param>
-	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call must be non-virtual.</param>
 	/// <param name="args">The <see cref="IObject"/> list with call arguments.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
 	TResult? CallFunction<TResult>(JLocalObject jLocal, JClassObject jClass, JFunctionDefinition definition,
@@ -76,7 +76,7 @@ internal partial interface IAccessFeature
 	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="definition"><see cref="JFunctionDefinition"/> definition.</param>
-	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call must be non-virtual.</param>
 	/// <param name="args">The <see cref="IObject"/> list with call arguments.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
 	TResult? CallFunction<TResult>(JMethodObject jMethod, JLocalObject jLocal, JFunctionDefinition definition,
@@ -87,7 +87,7 @@ internal partial interface IAccessFeature
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JMethodDefinition"/> definition.</param>
-	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call must be non-virtual.</param>
 	/// <param name="args">The <see cref="IObject"/> list with call arguments.</param>
 	void CallMethod(JLocalObject jLocal, JClassObject jClass, JMethodDefinition definition, Boolean nonVirtual,
 		ReadOnlySpan<IObject?> args);
@@ -97,7 +97,7 @@ internal partial interface IAccessFeature
 	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="definition"><see cref="JMethodDefinition"/> definition.</param>
-	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call must be non-virtual.</param>
 	/// <param name="args">The <see cref="IObject"/> list with call arguments.</param>
 	void CallMethod(JMethodObject jMethod, JLocalObject jLocal, JMethodDefinition definition, Boolean nonVirtual,
 		ReadOnlySpan<IObject?> args);

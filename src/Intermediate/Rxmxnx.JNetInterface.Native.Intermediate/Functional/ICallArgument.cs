@@ -15,4 +15,15 @@ public interface ICallArgument
 	/// <inheritdoc cref="Object.ToString()"/>
 	/// <remarks>Use this method for trace.</remarks>
 	protected internal String? ToTraceText() => this.ToString();
+
+	/// <summary>
+	/// Default empty argument.
+	/// </summary>
+	public readonly struct Empty : ICallArgument
+	{
+		void ICallArgument.Configure<TSlot>(TSlot slot, JCallDefinition callDefinition)
+		{
+			// NONE
+		}
+	}
 }

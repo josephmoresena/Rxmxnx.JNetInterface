@@ -281,11 +281,11 @@ internal sealed partial class EnvironmentCore : LocalMainClasses, IUnsafeMemoryM
 	public Boolean IsVirtual(JThreadObject jThread)
 	{
 		Span<JBoolean> result = stackalloc JBoolean[1];
-		Span<Byte> bytes = MemoryMarshal.AsBytes(result);
 		JFunctionDefinition functionDefinition = NativeFunctionSetImpl.IsVirtualDefinition;
 		using INativeTransaction jniTransaction = this.GetInstanceTransaction(
 			jThread.Class, jThread, functionDefinition, out JObjectLocalRef localRef, out JMethodId methodId);
-		this.CallPrimitiveFunction(bytes, functionDefinition, localRef, default, [], jniTransaction, methodId);
+		this.CallPrimitiveFunction<ICallArgument.Empty>(MemoryMarshal.AsBytes(result), functionDefinition, localRef,
+		                                                default, default, jniTransaction, methodId);
 		return result[0].Value;
 	}
 }

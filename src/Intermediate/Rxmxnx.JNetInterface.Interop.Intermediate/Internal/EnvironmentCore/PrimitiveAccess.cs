@@ -246,65 +246,90 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Invokes a primitive static function.
 	/// </summary>
-	/// <param name="bytes">Binary span to hold result.</param>
+	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the constructor.</typeparam>
+	/// <param name="bytes">Binary span to hold the result.</param>
 	/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
 	/// <param name="definition"><see cref="JFunctionDefinition"/> definition.</param>
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 	/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
-	private unsafe void CallStaticPrimitiveFunction(Span<Byte> bytes, JFunctionDefinition definition,
-		JClassLocalRef classRef, ReadOnlySpan<IObject?> args, INativeTransaction jniTransaction, JMethodId methodId)
+	private unsafe void CallStaticPrimitiveFunction<TArgs>(Span<Byte> bytes, JFunctionDefinition definition,
+		JClassLocalRef classRef, in TArgs? args, INativeTransaction jniTransaction, JMethodId methodId)
+#if !NET9_0_OR_GREATER
+		where TArgs : ICallArgument
+#else
+		where TArgs : ICallArgument, allows ref struct
+#endif
 	{
 		Byte signature = definition.Descriptor[^1];
 		ref readonly MethodFunctionSet<JClassLocalRef> staticMethodFunctions =
 			ref this.GetStaticMethodFunctions(signature);
 		using StackDisposable stackDisposable =
 			this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
-		Rented<Byte> rented = default;
-		Span<JValue> buffer = this.CopyAsJValue(jniTransaction, args,
-		                                        stackDisposable.UsingStack ?
-			                                        stackalloc Byte[requiredBytes] :
-			                                        EnvironmentCore.HeapAlloc(requiredBytes, ref rented));
-		fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
-		{
-			switch (signature)
+		ValPtr<JValue> buffer = stackDisposable.UsingStack ? stackalloc JValue[definition.Count].GetUnsafeValPtr() :
+			requiredBytes > 0 ? (ValPtr<JValue>)NativeMemory.Alloc((UIntPtr)requiredBytes) : ValPtr<JValue>.Zero;
+		delegate*<EnvironmentCore, Span<Byte>, JClassLocalRef, JMethodId, JValue*, in MethodFunctionSet<JClassLocalRef>,
+			void> function = signature switch
 			{
-				case CommonNames.BooleanSignatureChar:
-					this.CallStaticPrimitiveFunction(bytes, classRef, signature, methodId, ptr,
-					                                 staticMethodFunctions.CallBooleanMethod);
-					break;
-				case CommonNames.ByteSignatureChar:
-					this.CallStaticPrimitiveFunction(bytes, classRef, signature, methodId, ptr,
-					                                 staticMethodFunctions.CallByteMethod);
-					break;
-				case CommonNames.CharSignatureChar:
-					this.CallStaticPrimitiveFunction(bytes, classRef, signature, methodId, ptr,
-					                                 staticMethodFunctions.CallCharMethod);
-					break;
-				case CommonNames.DoubleSignatureChar:
-					this.CallStaticPrimitiveFunction(bytes, classRef, signature, methodId, ptr,
-					                                 staticMethodFunctions.CallDoubleMethod);
-					break;
-				case CommonNames.FloatSignatureChar:
-					this.CallStaticPrimitiveFunction(bytes, classRef, signature, methodId, ptr,
-					                                 staticMethodFunctions.CallFloatMethod);
-					break;
-				case CommonNames.IntSignatureChar:
-					this.CallStaticPrimitiveFunction(bytes, classRef, signature, methodId, ptr,
-					                                 staticMethodFunctions.CallIntMethod);
-					break;
-				case CommonNames.LongSignatureChar:
-					this.CallStaticPrimitiveFunction(bytes, classRef, signature, methodId, ptr,
-					                                 staticMethodFunctions.CallLongMethod);
-					break;
-				case CommonNames.ShortSignatureChar:
-					this.CallStaticPrimitiveFunction(bytes, classRef, signature, methodId, ptr,
-					                                 staticMethodFunctions.CallShortMethod);
-					break;
-			}
+				CommonNames.BooleanSignatureChar => &CallBooleanFunction,
+				CommonNames.ByteSignatureChar => &CallByteFunction,
+				CommonNames.CharSignatureChar => &CallCharFunction,
+				CommonNames.DoubleSignatureChar => &CallDoubleFunction,
+				CommonNames.FloatSignatureChar => &CallFloatFunction,
+				CommonNames.IntSignatureChar => &CallIntFunction,
+				CommonNames.LongSignatureChar => &CallLongFunction,
+				CommonNames.ShortSignatureChar => &CallShortFunction,
+				_ => throw new InvalidOperationException(IMessageResource.GetInstance().NotPrimitiveObject),
+			};
+		try
+		{
+			ParameterSlot slot = new(this, jniTransaction, buffer, definition.Count);
+			if (args is not null)
+				args.Configure(slot, definition);
+			function(this, bytes, classRef, methodId, buffer, in staticMethodFunctions);
 		}
-		rented.Free();
+		finally
+		{
+			if (!stackDisposable.UsingStack)
+				NativeMemory.Free(buffer.Pointer.ToPointer());
+		}
 		this.CheckJniError();
+		return;
+
+		#region StaticCalls
+		static void CallBooleanFunction(EnvironmentCore core, Span<Byte> bytes, JClassLocalRef classRef,
+			JMethodId methodId, JValue* buffer, in MethodFunctionSet<JClassLocalRef> functions)
+			=> core.CallStaticPrimitiveFunction(bytes, classRef, CommonNames.BooleanSignatureChar, methodId, buffer,
+			                                    in functions.CallBooleanMethod);
+		static void CallByteFunction(EnvironmentCore core, Span<Byte> bytes, JClassLocalRef classRef,
+			JMethodId methodId, JValue* buffer, in MethodFunctionSet<JClassLocalRef> functions)
+			=> core.CallStaticPrimitiveFunction(bytes, classRef, CommonNames.ByteSignatureChar, methodId, buffer,
+			                                    in functions.CallByteMethod);
+		static void CallCharFunction(EnvironmentCore core, Span<Byte> bytes, JClassLocalRef classRef,
+			JMethodId methodId, JValue* buffer, in MethodFunctionSet<JClassLocalRef> functions)
+			=> core.CallStaticPrimitiveFunction(bytes, classRef, CommonNames.CharSignatureChar, methodId, buffer,
+			                                    in functions.CallCharMethod);
+		static void CallDoubleFunction(EnvironmentCore core, Span<Byte> bytes, JClassLocalRef classRef,
+			JMethodId methodId, JValue* buffer, in MethodFunctionSet<JClassLocalRef> functions)
+			=> core.CallStaticPrimitiveFunction(bytes, classRef, CommonNames.DoubleSignatureChar, methodId, buffer,
+			                                    in functions.CallDoubleMethod);
+		static void CallFloatFunction(EnvironmentCore core, Span<Byte> bytes, JClassLocalRef classRef,
+			JMethodId methodId, JValue* buffer, in MethodFunctionSet<JClassLocalRef> functions)
+			=> core.CallStaticPrimitiveFunction(bytes, classRef, CommonNames.FloatSignatureChar, methodId, buffer,
+			                                    in functions.CallFloatMethod);
+		static void CallIntFunction(EnvironmentCore core, Span<Byte> bytes, JClassLocalRef classRef, JMethodId methodId,
+			JValue* buffer, in MethodFunctionSet<JClassLocalRef> functions)
+			=> core.CallStaticPrimitiveFunction(bytes, classRef, CommonNames.IntSignatureChar, methodId, buffer,
+			                                    in functions.CallIntMethod);
+		static void CallLongFunction(EnvironmentCore core, Span<Byte> bytes, JClassLocalRef classRef,
+			JMethodId methodId, JValue* buffer, in MethodFunctionSet<JClassLocalRef> functions)
+			=> core.CallStaticPrimitiveFunction(bytes, classRef, CommonNames.LongSignatureChar, methodId, buffer,
+			                                    in functions.CallLongMethod);
+		static void CallShortFunction(EnvironmentCore core, Span<Byte> bytes, JClassLocalRef classRef,
+			JMethodId methodId, JValue* buffer, in MethodFunctionSet<JClassLocalRef> functions)
+			=> core.CallStaticPrimitiveFunction(bytes, classRef, CommonNames.ShortSignatureChar, methodId, buffer,
+			                                    in functions.CallShortMethod);
+		#endregion
 	}
 	/// <summary>
 	/// Invokes a primitive static function.
@@ -328,6 +353,145 @@ internal sealed partial class EnvironmentCore
 		TPrimitive result = callFunction.Call(this.Reference, classRef, methodId, ptr);
 		MemoryMarshal.AsRef<TPrimitive>(bytes) = result;
 		JTrace.CallPrimitiveFunction(default, classRef, signature, methodId, result);
+	}
+	/// <summary>
+	/// Invokes a primitive function on given <see cref="JObjectLocalRef"/> reference.
+	/// </summary>
+	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the java call.</typeparam>
+	/// <param name="bytes">Destination span.</param>
+	/// <param name="localRef"><see cref="JObjectLocalRef"/> reference.</param>
+	/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
+	/// <param name="definition"><see cref="JMethodDefinition"/> definition.</param>
+	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
+	/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
+	/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
+	private unsafe void CallPrimitiveFunction<TArgs>(Span<Byte> bytes, JFunctionDefinition definition,
+		JObjectLocalRef localRef, JClassLocalRef? classRef, in TArgs? args, INativeTransaction jniTransaction,
+		JMethodId methodId)
+#if !NET9_0_OR_GREATER
+		where TArgs : ICallArgument
+#else
+		where TArgs : ICallArgument, allows ref struct
+#endif
+	{
+		Byte signature = definition.Descriptor[^1];
+		ref readonly InstanceMethodFunctionSet instanceMethodFunctions =
+			ref this.GetInstanceMethodFunctions(signature, classRef.HasValue);
+		using StackDisposable stackDisposable =
+			this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
+		ValPtr<JValue> buffer = stackDisposable.UsingStack ? stackalloc JValue[definition.Count].GetUnsafeValPtr() :
+			requiredBytes > 0 ? (ValPtr<JValue>)NativeMemory.Alloc((UIntPtr)requiredBytes) : ValPtr<JValue>.Zero;
+		delegate* <EnvironmentCore, Span<Byte>, JObjectLocalRef, JClassLocalRef, JMethodId, JValue*, in
+			InstanceMethodFunctionSet, void> function = signature switch
+			{
+				CommonNames.BooleanSignatureChar => &CallBooleanFunction,
+				CommonNames.ByteSignatureChar => &CallByteFunction,
+				CommonNames.CharSignatureChar => &CallCharFunction,
+				CommonNames.DoubleSignatureChar => &CallDoubleFunction,
+				CommonNames.FloatSignatureChar => &CallFloatFunction,
+				CommonNames.IntSignatureChar => &CallIntFunction,
+				CommonNames.LongSignatureChar => &CallLongFunction,
+				CommonNames.ShortSignatureChar => &CallShortFunction,
+				_ => throw new InvalidOperationException(IMessageResource.GetInstance().NotPrimitiveObject),
+			};
+		try
+		{
+			ParameterSlot slot = new(this, jniTransaction, buffer, definition.Count);
+			if (args is not null)
+				args.Configure(slot, definition);
+			function(this, bytes, localRef, classRef.GetValueOrDefault(), methodId, buffer, in instanceMethodFunctions);
+		}
+		finally
+		{
+			if (!stackDisposable.UsingStack)
+				NativeMemory.Free(buffer.Pointer.ToPointer());
+		}
+		this.CheckJniError();
+		return;
+		static void CallBooleanFunction(EnvironmentCore core, Span<Byte> bytes, JObjectLocalRef localRef,
+			JClassLocalRef classRef, JMethodId methodId, JValue* buffer, in InstanceMethodFunctionSet functions)
+		{
+			if (classRef == default)
+				core.CallPrimitiveFunction(bytes, localRef, CommonNames.BooleanSignatureChar, methodId, buffer,
+				                           in functions.MethodFunctions.CallBooleanMethod);
+			else
+				core.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, CommonNames.BooleanSignatureChar,
+				                                     methodId, buffer,
+				                                     in functions.NonVirtualFunctions.CallNonVirtualBooleanMethod);
+		}
+		static void CallByteFunction(EnvironmentCore core, Span<Byte> bytes, JObjectLocalRef localRef,
+			JClassLocalRef classRef, JMethodId methodId, JValue* buffer, in InstanceMethodFunctionSet functions)
+		{
+			if (classRef == default)
+				core.CallPrimitiveFunction(bytes, localRef, CommonNames.ByteSignatureChar, methodId, buffer,
+				                           in functions.MethodFunctions.CallByteMethod);
+			else
+				core.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, CommonNames.ByteSignatureChar, methodId,
+				                                     buffer, in functions.NonVirtualFunctions.CallNonVirtualByteMethod);
+		}
+		static void CallCharFunction(EnvironmentCore core, Span<Byte> bytes, JObjectLocalRef localRef,
+			JClassLocalRef classRef, JMethodId methodId, JValue* buffer, in InstanceMethodFunctionSet functions)
+		{
+			if (classRef == default)
+				core.CallPrimitiveFunction(bytes, localRef, CommonNames.CharSignatureChar, methodId, buffer,
+				                           in functions.MethodFunctions.CallCharMethod);
+			else
+				core.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, CommonNames.CharSignatureChar, methodId,
+				                                     buffer, in functions.NonVirtualFunctions.CallNonVirtualCharMethod);
+		}
+		static void CallDoubleFunction(EnvironmentCore core, Span<Byte> bytes, JObjectLocalRef localRef,
+			JClassLocalRef classRef, JMethodId methodId, JValue* buffer, in InstanceMethodFunctionSet functions)
+		{
+			if (classRef == default)
+				core.CallPrimitiveFunction(bytes, localRef, CommonNames.DoubleSignatureChar, methodId, buffer,
+				                           in functions.MethodFunctions.CallDoubleMethod);
+			else
+				core.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, CommonNames.DoubleSignatureChar,
+				                                     methodId, buffer,
+				                                     in functions.NonVirtualFunctions.CallNonVirtualDoubleMethod);
+		}
+		static void CallFloatFunction(EnvironmentCore core, Span<Byte> bytes, JObjectLocalRef localRef,
+			JClassLocalRef classRef, JMethodId methodId, JValue* buffer, in InstanceMethodFunctionSet functions)
+		{
+			if (classRef == default)
+				core.CallPrimitiveFunction(bytes, localRef, CommonNames.FloatSignatureChar, methodId, buffer,
+				                           in functions.MethodFunctions.CallFloatMethod);
+			else
+				core.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, CommonNames.FloatSignatureChar,
+				                                     methodId, buffer,
+				                                     in functions.NonVirtualFunctions.CallNonVirtualFloatMethod);
+		}
+		static void CallIntFunction(EnvironmentCore core, Span<Byte> bytes, JObjectLocalRef localRef,
+			JClassLocalRef classRef, JMethodId methodId, JValue* buffer, in InstanceMethodFunctionSet functions)
+		{
+			if (classRef == default)
+				core.CallPrimitiveFunction(bytes, localRef, CommonNames.IntSignatureChar, methodId, buffer,
+				                           in functions.MethodFunctions.CallIntMethod);
+			else
+				core.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, CommonNames.IntSignatureChar, methodId,
+				                                     buffer, in functions.NonVirtualFunctions.CallNonVirtualIntMethod);
+		}
+		static void CallLongFunction(EnvironmentCore core, Span<Byte> bytes, JObjectLocalRef localRef,
+			JClassLocalRef classRef, JMethodId methodId, JValue* buffer, in InstanceMethodFunctionSet functions)
+		{
+			if (classRef == default)
+				core.CallPrimitiveFunction(bytes, localRef, CommonNames.LongSignatureChar, methodId, buffer,
+				                           in functions.MethodFunctions.CallLongMethod);
+			else
+				core.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, CommonNames.LongSignatureChar, methodId,
+				                                     buffer, in functions.NonVirtualFunctions.CallNonVirtualLongMethod);
+		}
+		static void CallShortFunction(EnvironmentCore core, Span<Byte> bytes, JObjectLocalRef localRef,
+			JClassLocalRef classRef, JMethodId methodId, JValue* buffer, in InstanceMethodFunctionSet functions)
+		{
+			if (classRef == default)
+				core.CallPrimitiveFunction(bytes, localRef, CommonNames.ShortSignatureChar, methodId, buffer,
+				                           in functions.MethodFunctions.CallShortMethod);
+			else
+				core.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, CommonNames.ShortSignatureChar,
+				                                     methodId, buffer,
+				                                     in functions.NonVirtualFunctions.CallNonVirtualShortMethod);
+		}
 	}
 	/// <summary>
 	/// Invokes a primitive non-virtual function.
@@ -426,6 +590,7 @@ internal sealed partial class EnvironmentCore
 	{
 		ref readonly InstanceMethodFunctionSet instanceMethodFunctions =
 			ref this.GetInstanceMethodFunctions(signature, false);
+
 		switch (signature)
 		{
 			case CommonNames.BooleanSignatureChar:
