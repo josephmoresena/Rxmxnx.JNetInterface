@@ -7,11 +7,10 @@ public partial class IndeterminateField
 	/// This struct stores query for Object to Primitive validation.
 	/// </summary>
 #if !PACKAGE
-	internal
+	internal readonly struct InfoObjectQuery
 #else
-		private
+	private readonly struct InfoObjectQuery
 #endif
-		readonly struct InfoObjectQuery
 	{
 		/// <summary>
 		/// JNI primitive signature.

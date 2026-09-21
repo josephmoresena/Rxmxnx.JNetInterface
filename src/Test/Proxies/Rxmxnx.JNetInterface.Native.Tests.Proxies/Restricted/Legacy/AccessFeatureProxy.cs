@@ -2,15 +2,19 @@ namespace Rxmxnx.JNetInterface.Tests.Restricted;
 
 public partial class AccessFeatureProxy
 {
+	[Obsolete]
 	void IAccessFeature.GetPrimitiveField(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
 		JFieldDefinition definition)
 		=> bytes.WithSafeFixed((this, jLocal, jClass, definition), AccessFeatureProxy.GetPrimitiveField);
+	[Obsolete]
 	void IAccessFeature.GetPrimitiveStaticField(Span<Byte> bytes, JClassObject jClass, JFieldDefinition definition)
 		=> bytes.WithSafeFixed((this, jClass, definition), AccessFeatureProxy.GetPrimitiveStaticField);
 
+	[Obsolete]
 	void IAccessFeature.SetPrimitiveField(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition,
 		ReadOnlySpan<Byte> bytes)
 		=> bytes.WithSafeFixed((this, jLocal, jClass, definition), AccessFeatureProxy.SetPrimitiveField);
+	[Obsolete]
 	void IAccessFeature.SetPrimitiveStaticField(JClassObject jClass, JFieldDefinition definition,
 		ReadOnlySpan<Byte> bytes)
 		=> bytes.WithSafeFixed((this, jClass, definition), AccessFeatureProxy.SetPrimitiveStaticField);
@@ -56,15 +60,19 @@ public partial class AccessFeatureProxy
 		Boolean nonVirtual, ReadOnlySpan<IObject?> args)
 		=> this.CallMethod(jMethod, jLocal, definition, nonVirtual, [.. args,]);
 
+	[Obsolete]
 	private static void GetPrimitiveField(in IFixedMemory mem,
 		(AccessFeatureProxy feature, JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition) args)
 		=> args.feature.GetPrimitiveField(mem, args.jLocal, args.jClass, args.definition);
+	[Obsolete]
 	private static void GetPrimitiveStaticField(in IFixedMemory mem,
 		(AccessFeatureProxy feature, JClassObject jClass, JFieldDefinition definition) args)
 		=> args.feature.GetPrimitiveStaticField(mem, args.jClass, args.definition);
+	[Obsolete]
 	private static void SetPrimitiveField(in IReadOnlyFixedMemory mem,
 		(AccessFeatureProxy feature, JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition) args)
 		=> args.feature.SetPrimitiveField(args.jLocal, args.jClass, args.definition, mem);
+	[Obsolete]
 	private static void SetPrimitiveStaticField(in IReadOnlyFixedMemory mem,
 		(AccessFeatureProxy feature, JClassObject jClass, JFieldDefinition definition) args)
 		=> args.feature.SetPrimitiveStaticField(args.jClass, args.definition, mem);
