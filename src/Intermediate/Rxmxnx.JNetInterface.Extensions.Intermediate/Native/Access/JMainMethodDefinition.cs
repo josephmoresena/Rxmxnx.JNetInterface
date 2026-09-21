@@ -56,7 +56,7 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 #endif
 
 	/// <summary>
-	/// Invokes current definition as static method in <paramref name="mainClass"/>.
+	/// Invokes current definition as a static method in <paramref name="mainClass"/>.
 	/// </summary>
 	/// <param name="mainClass">A Java main class.</param>
 	/// <param name="args">Java arguments array.</param>

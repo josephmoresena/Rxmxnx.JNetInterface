@@ -17,24 +17,25 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	{
 		IEnvironment env = jEnum.Environment;
 		JClassObject enumClass = env.ClassFeature.EnumObject;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.NameDefinition, jEnum, enumClass)!;
+		JStringObject? result = NativeFunctionSetImpl.NameDefinition.Invoke(jEnum, enumClass);
+		Debug.Assert(result is not null);
+		return result;
 	}
 	/// <inheritdoc/>
 	public override JStringObject GetName<TMember>(TMember jMember)
 	{
 		IEnvironment env = jMember.Environment;
 		JClassObject memberInterface = env.ClassFeature.GetClass<JMemberObject>();
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetNameDefinition, jMember, memberInterface)!;
+		JStringObject? result = NativeFunctionSetImpl.GetNameDefinition.Invoke(jMember, memberInterface);
+		Debug.Assert(result is not null);
+		return result;
 	}
 	/// <inheritdoc/>
 	public override Int32 GetOrdinal(JEnumObject jEnum)
 	{
 		IEnvironment env = jEnum.Environment;
 		JClassObject enumClass = env.ClassFeature.EnumObject;
-		Span<Int32> result = stackalloc Int32[1];
-		env.AccessFeature.CallPrimitiveFunction(result.AsBytes(), jEnum, enumClass,
-		                                        NativeFunctionSetImpl.OrdinalDefinition, false);
-		return result[0];
+		return NativeFunctionSetImpl.OrdinalDefinition.Invoke(jEnum, enumClass).Value;
 	}
 
 	/// <inheritdoc/>
@@ -42,7 +43,9 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	{
 		IEnvironment env = jClass.Environment;
 		JClassObject classClass = env.ClassFeature.ClassObject;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetNameDefinition, jClass, classClass)!;
+		JStringObject? result = NativeFunctionSetImpl.GetNameDefinition.Invoke(jClass, classClass);
+		Debug.Assert(result is not null);
+		return result;
 	}
 
 	/// <inheritdoc/>
@@ -50,64 +53,65 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	{
 		IEnvironment env = jStackTraceElement.Environment;
 		JClassObject stackTraceElementClass = env.ClassFeature.StackTraceElementObject;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetClassNameDefinition, jStackTraceElement,
-		                                  stackTraceElementClass)!;
+		JStringObject? result =
+			NativeFunctionSetImpl.GetClassNameDefinition.Invoke(jStackTraceElement, stackTraceElementClass);
+		Debug.Assert(result is not null);
+		return result;
 	}
 	/// <inheritdoc/>
 	public override Int32 GetLineNumber(JStackTraceElementObject jStackTraceElement)
 	{
 		IEnvironment env = jStackTraceElement.Environment;
-		Span<Int32> result = stackalloc Int32[1];
 		JClassObject stackTraceElementClass = env.ClassFeature.StackTraceElementObject;
-		env.AccessFeature.CallPrimitiveFunction(result.AsBytes(), jStackTraceElement, stackTraceElementClass,
-		                                        NativeFunctionSetImpl.GetLineNumberDefinition, false);
-		return result[0];
+		return NativeFunctionSetImpl.GetLineNumberDefinition.Invoke(jStackTraceElement, stackTraceElementClass).Value;
 	}
 	/// <inheritdoc/>
 	public override JStringObject? GetFileName(JStackTraceElementObject jStackTraceElement)
 	{
 		IEnvironment env = jStackTraceElement.Environment;
 		JClassObject stackTraceElementClass = env.ClassFeature.StackTraceElementObject;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetFileNameDefinition, jStackTraceElement,
-		                                  stackTraceElementClass);
+		return NativeFunctionSetImpl.GetFileNameDefinition.Invoke(jStackTraceElement, stackTraceElementClass);
 	}
 	/// <inheritdoc/>
 	public override JStringObject GetMethodName(JStackTraceElementObject jStackTraceElement)
 	{
 		IEnvironment env = jStackTraceElement.Environment;
 		JClassObject stackTraceElementClass = env.ClassFeature.StackTraceElementObject;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetMethodNameDefinition, jStackTraceElement,
-		                                  stackTraceElementClass)!;
+		JStringObject? result =
+			NativeFunctionSetImpl.GetMethodNameDefinition.Invoke(jStackTraceElement, stackTraceElementClass);
+		Debug.Assert(result is not null);
+		return result;
 	}
 	/// <inheritdoc/>
 	public override Boolean IsNativeMethod(JStackTraceElementObject jStackTraceElement)
 	{
 		IEnvironment env = jStackTraceElement.Environment;
-		Span<Byte> bytes = stackalloc Byte[1];
 		JClassObject stackTraceElementClass = env.ClassFeature.StackTraceElementObject;
-		env.AccessFeature.CallPrimitiveFunction(bytes, jStackTraceElement, stackTraceElementClass,
-		                                        NativeFunctionSetImpl.IsNativeMethodDefinition, false);
-		return bytes[0] == JBoolean.TrueValue;
+		return NativeFunctionSetImpl.IsNativeMethodDefinition.Invoke(jStackTraceElement, stackTraceElementClass).Value;
 	}
 
 	/// <inheritdoc/>
-	public override TPrimitive GetPrimitiveValue<TPrimitive>(JNumberObject jNumber)
+#if !PACKAGE
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
+	public override unsafe TPrimitive GetPrimitiveValue<TPrimitive>(JNumberObject jNumber)
 	{
 		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
 		IEnvironment env = jNumber.Environment;
 		JClassObject numberClass = env.ClassFeature.NumberObject;
-		JFunctionDefinition functionDefinition = metadata.NativeType switch
-		{
-			JNativeType.JByte => NativeFunctionSetImpl.ByteValueDefinition,
-			JNativeType.JShort => NativeFunctionSetImpl.ShortValueDefinition,
-			JNativeType.JInt => NativeFunctionSetImpl.IntValueDefinition,
-			JNativeType.JLong => NativeFunctionSetImpl.LongValueDefinition,
-			JNativeType.JFloat => NativeFunctionSetImpl.FloatValueDefinition,
-			_ => NativeFunctionSetImpl.DoubleValueDefinition,
-		};
-		Span<TPrimitive> result = stackalloc TPrimitive[1];
-		env.AccessFeature.CallPrimitiveFunction(result.AsBytes(), jNumber, numberClass, functionDefinition, false);
-		return result[0];
+		JFunctionDefinition<TPrimitive>.Parameterless? functionDefinition =
+			(JFunctionDefinition)(metadata.NativeType switch
+			{
+				JNativeType.JByte => NativeFunctionSetImpl.ByteValueDefinition,
+				JNativeType.JShort => NativeFunctionSetImpl.ShortValueDefinition,
+				JNativeType.JInt => NativeFunctionSetImpl.IntValueDefinition,
+				JNativeType.JLong => NativeFunctionSetImpl.LongValueDefinition,
+				JNativeType.JFloat => NativeFunctionSetImpl.FloatValueDefinition,
+				_ => NativeFunctionSetImpl.DoubleValueDefinition,
+			}) as JFunctionDefinition<TPrimitive>.Parameterless;
+		Debug.Assert(functionDefinition is not null);
+		return functionDefinition.Invoke(jNumber, numberClass);
 	}
 
 	/// <inheritdoc/>
@@ -115,66 +119,69 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	{
 		IEnvironment env = jThrowable.Environment;
 		JClassObject throwableClass = env.ClassFeature.ThrowableObject;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetMessageDefinition, jThrowable, throwableClass)!;
+		JStringObject? result = NativeFunctionSetImpl.GetMessageDefinition.Invoke(jThrowable, throwableClass);
+		Debug.Assert(result is not null);
+		return result;
 	}
 	/// <inheritdoc/>
 	public override JArrayObject<JStackTraceElementObject> GetStackTrace(JThrowableObject jThrowable)
 	{
 		IEnvironment env = jThrowable.Environment;
 		JClassObject throwableClass = env.ClassFeature.ThrowableObject;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetStackTraceDefinition, jThrowable, throwableClass)!;
+		JArrayObject<JStackTraceElementObject>? result =
+			NativeFunctionSetImpl.GetStackTraceDefinition.Invoke(jThrowable, throwableClass);
+		Debug.Assert(result is not null);
+		return result;
 	}
 	/// <inheritdoc/>
 	public override Boolean IsPrimitiveClass(JClassObject jClass)
 	{
 		IEnvironment env = jClass.Environment;
-		Span<Byte> bytes = stackalloc Byte[1];
 		JClassObject classClass = env.ClassFeature.ClassObject;
-		env.AccessFeature.CallPrimitiveFunction(bytes, jClass, classClass, NativeFunctionSetImpl.IsPrimitiveDefinition,
-		                                        false);
-		return bytes[0] == JBoolean.TrueValue;
+		return NativeFunctionSetImpl.IsPrimitiveDefinition.Invoke(jClass, classClass).Value;
 	}
 	/// <inheritdoc/>
 	public override Boolean IsFinal(JClassObject jClass, out JModifierObject.Modifiers modifiers)
 	{
 		IEnvironment env = jClass.Environment;
 		modifiers = NativeFunctionSetImpl.GetClassModifiers(jClass);
-		return jClass.IsArray ?
-			env.WithFrame(IVirtualMachine.IsFinalArrayCapacity, jClass, NativeFunctionSetImpl.IsFinalArrayType) :
-			modifiers.HasFlag(JModifierObject.Modifiers.Final);
+		if (!jClass.IsArray) return modifiers.HasFlag(JModifierObject.Modifiers.Final);
+		IsFinalArrayTypeFunc func = new(jClass);
+		func.WithFrame(env, out Boolean result);
+		return result;
 	}
 	/// <inheritdoc/>
 	public override JArrayObject<JClassObject> GetInterfaces(JClassObject jClass)
 	{
 		IEnvironment env = jClass.Environment;
 		JClassObject classClass = env.ClassFeature.ClassObject;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetInterfacesDefinition, jClass, classClass)!;
+		JArrayObject<JClassObject>? result = NativeFunctionSetImpl.GetInterfacesDefinition.Invoke(jClass, classClass);
+		Debug.Assert(result is not null);
+		return result;
 	}
 
 	/// <inheritdoc/>
 	public override Boolean IsDirectBuffer(JBufferObject jBuffer)
 	{
 		IEnvironment env = jBuffer.Environment;
-		Span<Byte> bytes = stackalloc Byte[1];
-		env.AccessFeature.CallPrimitiveFunction(bytes, jBuffer, env.ClassFeature.BufferObject,
-		                                        NativeFunctionSetImpl.IsDirectBufferDefinition, false);
-		return bytes[0] == JBoolean.TrueValue;
+		JClassObject bufferClass = env.ClassFeature.BufferObject;
+		return NativeFunctionSetImpl.IsDirectBufferDefinition.Invoke(jBuffer, bufferClass).Value;
 	}
 	/// <inheritdoc/>
 	public override Int64 BufferCapacity(JBufferObject jBuffer)
 	{
 		IEnvironment env = jBuffer.Environment;
-		Span<Int64> result = stackalloc Int64[1];
-		env.AccessFeature.CallPrimitiveFunction(result.AsBytes(), jBuffer, env.ClassFeature.BufferObject,
-		                                        NativeFunctionSetImpl.BufferCapacityDefinition, false);
-		return result[0];
+		JClassObject jClass = env.ClassFeature.BufferObject;
+		return NativeFunctionSetImpl.BufferCapacityDefinition.Invoke(jBuffer, jClass).Value;
 	}
 	/// <inheritdoc/>
 	public override JClassObject GetDeclaringClass<TMember>(TMember jMember)
 	{
 		IEnvironment env = jMember.Environment;
 		JClassObject memberInterface = env.ClassFeature.GetClass<JMemberObject>();
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetDeclaringClassDefinition, jMember, memberInterface)!;
+		JClassObject? result = NativeFunctionSetImpl.GetDeclaringClassDefinition.Invoke(jMember, memberInterface);
+		Debug.Assert(result is not null);
+		return result;
 	}
 	/// <inheritdoc/>
 	public override JArrayObject<JClassObject> GetParameterTypes(JExecutableObject jExecutable)
@@ -182,24 +189,28 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		IEnvironment env = jExecutable.Environment;
 		Boolean useExecutableClass = IReferenceType.GetMetadata<JExecutableObject>().IsCompatibleWith(env);
 		JClassObject jClass = useExecutableClass ? env.ClassFeature.GetClass<JExecutableObject>() : jExecutable.Class;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetParameterTypesDefinition, jExecutable, jClass)!;
+		JArrayObject<JClassObject>? result =
+			NativeFunctionSetImpl.GetParameterTypesDefinition.Invoke(jExecutable, jClass);
+		Debug.Assert(result is not null);
+		return result;
 	}
 	/// <inheritdoc/>
 	public override JClassObject? GetReturnType(JExecutableObject jMethod)
 	{
 		if (jMethod is not JMethodObject && (jMethod is JConstructorObject || !jMethod.InstanceOf<JMethodObject>()))
 			return default;
-
 		IEnvironment env = jMethod.Environment;
 		JClassObject methodClass = env.ClassFeature.MethodObject;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetReturnTypeDefinition, jMethod, methodClass);
+		return NativeFunctionSetImpl.GetReturnTypeDefinition.Invoke(jMethod, methodClass);
 	}
 	/// <inheritdoc/>
 	public override JClassObject GetFieldType(JFieldObject jField)
 	{
 		IEnvironment env = jField.Environment;
 		JClassObject fieldClass = env.ClassFeature.FieldObject;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetTypeDefinition, jField, fieldClass)!;
+		JClassObject? result = NativeFunctionSetImpl.GetTypeDefinition.Invoke(jField, fieldClass);
+		Debug.Assert(result is not null);
+		return result;
 	}
 #if !PACKAGE
 	/// <summary>
@@ -214,8 +225,8 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 #endif
 	{
 		IEnvironment env = jBooleanObject.Environment;
-		JClassObject jClass = env.ClassFeature.BooleanObject;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.BooleanValueDefinition, jBooleanObject, jClass);
+		JClassObject booleanClass = env.ClassFeature.BooleanObject;
+		return NativeFunctionSetImpl.BooleanValueDefinition.Invoke(jBooleanObject, booleanClass);
 	}
 #if !PACKAGE
 	/// <summary>
@@ -230,22 +241,25 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 #endif
 	{
 		IEnvironment env = jCharacterObject.Environment;
-		JClassObject jClass = env.ClassFeature.CharacterObject;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.CharValueDefinition, jCharacterObject, jClass);
+		JClassObject characterClass = env.ClassFeature.CharacterObject;
+		return NativeFunctionSetImpl.CharValueDefinition.Invoke(jCharacterObject, characterClass);
 	}
 	/// <inheritdoc/>
 	public override JStringObject? GetProperty(JStringObject jString)
 	{
 		IEnvironment env = jString.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JSystemObject>(env);
-		return JFunctionDefinition.StaticInvoke(NativeFunctionSetImpl.GetPropertyDefinition, jClass, [jString,]);
+		ref NativeCallArgs<JStringObject> args =
+			ref Unsafe.As<JStringObject, NativeCallArgs<JStringObject>>(ref jString);
+		return env.AccessFeature.CallStaticFunction<JStringObject, NativeCallArgs<JStringObject>>(
+			jClass, NativeFunctionSetImpl.GetPropertyDefinition, in args);
 	}
 	/// <inheritdoc/>
 	public override void SetProperty(JStringObject jStringKey, JStringObject? jStringValue)
 	{
 		IEnvironment env = jStringKey.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JSystemObject>(env);
-		JMethodDefinition.StaticInvoke(NativeFunctionSetImpl.SetPropertyDefinition, jClass,
-		                               [jStringKey, jStringValue,]);
+		NativeCallArgs<JStringObject, JStringObject> args = new(jStringKey, jStringValue);
+		env.AccessFeature.CallStaticMethod(jClass, NativeFunctionSetImpl.SetPropertyDefinition, in args);
 	}
 }

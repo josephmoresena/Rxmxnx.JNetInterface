@@ -219,23 +219,6 @@ internal partial class NativeFunctionSetImpl
 		new(NativeFunctionSet.GetModuleMethodInfo);
 
 	/// <summary>
-	/// Indicates whether an array class is final.
-	/// </summary>
-	/// <param name="arrayClass">A <see cref="JClassObject"/> instance.</param>
-	/// <returns>
-	/// <see langword="true"/> if <paramref name="arrayClass"/> is final; otherwise;
-	/// <see langword="false"/>.
-	/// </returns>
-	private static Boolean IsFinalArrayType(JClassObject arrayClass)
-	{
-		Int32 dimension = arrayClass.ArrayDimension;
-		if (dimension + 1 == arrayClass.ClassSignature.Length) return true;
-		IEnvironment env = arrayClass.Environment;
-		JClassObject elementClass = env.ClassFeature.GetClass(arrayClass.ClassSignature.AsSpan()[(dimension + 1)..^1]);
-		_ = env.ClassFeature.GetTypeMetadata(elementClass);
-		return elementClass.IsFinal;
-	}
-	/// <summary>
 	/// Indicates whether a non-array class is final.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
@@ -248,9 +231,6 @@ internal partial class NativeFunctionSetImpl
 		if (jClass.ArrayDimension + 1 == jClass.ClassSignature.Length) return JModifierObject.PrimitiveModifiers;
 		IEnvironment env = jClass.Environment;
 		JClassObject classClass = env.ClassFeature.ClassObject;
-		Span<JModifierObject.Modifiers> result = stackalloc JModifierObject.Modifiers[1];
-		env.AccessFeature.CallPrimitiveFunction(result.AsBytes(), jClass, classClass,
-		                                        NativeFunctionSetImpl.GetModifiersDefinition, false, []);
-		return result[0];
+		return (JModifierObject.Modifiers)NativeFunctionSetImpl.GetModifiersDefinition.Invoke(jClass, classClass).Value;
 	}
 }

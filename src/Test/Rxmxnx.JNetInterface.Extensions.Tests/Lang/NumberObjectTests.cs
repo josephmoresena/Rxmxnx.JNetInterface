@@ -142,9 +142,8 @@ public sealed class NumberObjectTests
 		Assert.True(jNumberObject.Equals((Object?)(JObject?)objectMetadata.Value));
 
 		env.ClassFeature.Received(0).GetClass<JNumberObject>();
-		env.AccessFeature.Received(0).CallPrimitiveFunction(Arg.Any<IFixedMemory>(), Arg.Any<TNumber>(),
-		                                                    Arg.Any<JClassObject>(),
-		                                                    Arg.Any<JFunctionDefinition<TPrimitive>>(), false, []);
+		env.AccessFeature.Received(0).CallFunction<TPrimitive>(Arg.Any<TNumber>(), Arg.Any<JClassObject>(),
+		                                                       Arg.Any<JFunctionDefinition<TPrimitive>>(), false, []);
 
 		JSerializableObject jSerializable = jNumberObject.CastTo<JSerializableObject>();
 		JComparableObject jComparable = jNumberObject.CastTo<JComparableObject>();

@@ -22,5 +22,10 @@ public partial class ClassFeatureProxy
 		hash = information?.Hash!;
 	}
 	JClassObject IClassFeature.GetClass<TDataType>()
-		=> !this.UseNonGeneric ? this.GetClass<TDataType>() : this.GetNonGenericClass(typeof(TDataType));
+	{
+		// ReSharper disable once ConvertIfStatementToReturnStatement
+		if (this.UseNonGeneric)
+			return this.GetNonGenericClass(typeof(TDataType));
+		return this.GetClass<TDataType>();
+	}
 }

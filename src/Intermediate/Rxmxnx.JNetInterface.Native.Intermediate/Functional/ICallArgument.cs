@@ -21,6 +21,11 @@ public interface ICallArgument
 	/// </summary>
 	public readonly struct Empty : ICallArgument
 	{
+		/// <summary>
+		/// Internal instance.
+		/// </summary>
+		public static readonly Empty Instance = default;
+		
 		void ICallArgument.Configure<TSlot>(TSlot slot, JCallDefinition callDefinition)
 		{
 			// NONE

@@ -3,19 +3,6 @@ namespace Rxmxnx.JNetInterface.Native.Access;
 public partial class JMethodDefinition
 {
 	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="methodName">Method name.</param>
-	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	protected JMethodDefinition(ReadOnlySpan<Byte> methodName,
-#if NET9_0_OR_GREATER
-		params ReadOnlySpan<JArgumentMetadata> metadata
-#else
-		ReadOnlySpan<JArgumentMetadata> metadata
-#endif
-	) : base(methodName, metadata) { }
-
-	/// <summary>
 	/// Invokes a method on <paramref name="jLocal"/> which matches with current definition.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>

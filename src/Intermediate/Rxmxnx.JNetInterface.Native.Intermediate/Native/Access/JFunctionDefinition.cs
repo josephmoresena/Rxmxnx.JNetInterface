@@ -3,7 +3,11 @@
 /// <summary>
 /// This class stores a function definition.
 /// </summary>
+#if !PACKAGE
 public abstract partial class JFunctionDefinition : JCallDefinition
+#else
+public abstract class JFunctionDefinition : JCallDefinition
+#endif
 {
 	/// <summary>
 	/// Internal constructor.
@@ -49,6 +53,19 @@ public abstract partial class JFunctionDefinition : JCallDefinition
 /// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
 public partial class JFunctionDefinition<TResult> : JFunctionDefinition where TResult : IDataType<TResult>
 {
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="functionName">Function name.</param>
+	/// <param name="metadata">Metadata of the types of call arguments.</param>
+	protected JFunctionDefinition(ReadOnlySpan<Byte> functionName,
+#if NET9_0_OR_GREATER
+		params ReadOnlySpan<JArgumentMetadata> metadata
+#else
+		ReadOnlySpan<JArgumentMetadata> metadata
+#endif
+	) : base(functionName, IDataType.GetMetadata<TResult>().Signature, metadata) { }
+
 	/// <summary>
 	/// Internal Constructor.
 	/// </summary>

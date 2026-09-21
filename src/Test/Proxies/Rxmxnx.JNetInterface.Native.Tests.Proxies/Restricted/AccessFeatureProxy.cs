@@ -3,6 +3,11 @@ namespace Rxmxnx.JNetInterface.Tests.Restricted;
 [ExcludeFromCodeCoverage]
 public abstract partial class AccessFeatureProxy : IAccessFeature
 {
+	/// <summary>
+	/// Indicates whether an error should be raised for primitive-type call operations marked as obsolete.
+	/// </summary>
+	private const Boolean callPrimitiveError = false;
+
 	public abstract TField? GetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition)
 		where TField : IDataType<TField>;
 	public abstract TField? GetField<TField>(JFieldObject jField, JLocalObject jLocal, JFieldDefinition definition)
@@ -59,8 +64,10 @@ public abstract partial class AccessFeatureProxy : IAccessFeature
 		IReadOnlyFixedMemory mem);
 	public abstract void SetPrimitiveStaticField(JClassObject jClass, JFieldDefinition definition,
 		IReadOnlyFixedMemory mem);
+	[Obsolete("Use CallFunction<TPrimitive> method", AccessFeatureProxy.callPrimitiveError)]
 	public abstract void CallPrimitiveFunction(IFixedMemory mem, JLocalObject jLocal, JClassObject jClass,
 		JFunctionDefinition definition, Boolean nonVirtual, IObject?[] args);
+	[Obsolete("Use CallStaticFunction<TPrimitive> method", AccessFeatureProxy.callPrimitiveError)]
 	public abstract void CallStaticPrimitiveFunction(IFixedMemory mem, JClassObject jClass,
 		JFunctionDefinition definition, IObject?[] args);
 }

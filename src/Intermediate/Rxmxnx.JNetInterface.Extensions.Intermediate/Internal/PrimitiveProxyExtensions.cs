@@ -7,8 +7,10 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// </summary>
 #if !PACKAGE
 [ExcludeFromCodeCoverage]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal static class PrimitiveProxyExtensions
+internal static unsafe class PrimitiveProxyExtensions
 {
 	/// <summary>
 	/// Invokes current function as typed primitive function.
@@ -22,42 +24,29 @@ internal static class PrimitiveProxyExtensions
 	public static void PrimitiveInvoke(this JFunctionDefinition definition, Span<Byte> bytes, JLocalObject jLocal,
 		JClassObject jClass, Boolean nonVirtual, IObject?[] args)
 	{
-		switch (definition.Descriptor[^1])
+		delegate* <Span<Byte>, JFunctionDefinition, JLocalObject, JClassObject, Boolean, IObject?[], void> invoke =
+			definition.Descriptor[^1] switch
+			{
+				CommonNames.BooleanSignatureChar => &Invoke<JBoolean>,
+				CommonNames.ByteSignatureChar => &Invoke<JByte>,
+				CommonNames.CharSignatureChar => &Invoke<JChar>,
+				CommonNames.DoubleSignatureChar => &Invoke<JDouble>,
+				CommonNames.FloatSignatureChar => &Invoke<JFloat>,
+				CommonNames.IntSignatureChar => &Invoke<JInt>,
+				CommonNames.LongSignatureChar => &Invoke<JLong>,
+				CommonNames.ShortSignatureChar => &Invoke<JShort>,
+				_ => throw new InvalidOperationException(IMessageResource.GetInstance()
+				                                                         .InvalidPrimitiveDefinitionMessage),
+			};
+		invoke(bytes, definition, jLocal, jClass, nonVirtual, args);
+		return;
+		static void Invoke<TPrimitive>(Span<Byte> bytes, JFunctionDefinition definition, JLocalObject jLocal,
+			JClassObject jClass, Boolean nonVirtual, IObject?[] args)
+			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
-			case CommonNames.BooleanSignatureChar:
-				bytes.AsValue<JBoolean>() = JFunctionDefinition<JBoolean>.Invoke(
-					definition as JFunctionDefinition<JBoolean> ?? new(definition), jLocal, jClass, nonVirtual, args);
-				break;
-			case CommonNames.ByteSignatureChar:
-				bytes.AsValue<JByte>() = JFunctionDefinition<JByte>.Invoke(
-					definition as JFunctionDefinition<JByte> ?? new(definition), jLocal, jClass, nonVirtual, args);
-				break;
-			case CommonNames.CharSignatureChar:
-				bytes.AsValue<JChar>() = JFunctionDefinition<JChar>.Invoke(
-					definition as JFunctionDefinition<JChar> ?? new(definition), jLocal, jClass, nonVirtual, args);
-				break;
-			case CommonNames.DoubleSignatureChar:
-				bytes.AsValue<JDouble>() = JFunctionDefinition<JDouble>.Invoke(
-					definition as JFunctionDefinition<JDouble> ?? new(definition), jLocal, jClass, nonVirtual, args);
-				break;
-			case CommonNames.FloatSignatureChar:
-				bytes.AsValue<JFloat>() = JFunctionDefinition<JFloat>.Invoke(
-					definition as JFunctionDefinition<JFloat> ?? new(definition), jLocal, jClass, nonVirtual, args);
-				break;
-			case CommonNames.IntSignatureChar:
-				bytes.AsValue<JInt>() = JFunctionDefinition<JInt>.Invoke(
-					definition as JFunctionDefinition<JInt> ?? new(definition), jLocal, jClass, nonVirtual, args);
-				break;
-			case CommonNames.LongSignatureChar:
-				bytes.AsValue<JLong>() = JFunctionDefinition<JLong>.Invoke(
-					definition as JFunctionDefinition<JLong> ?? new(definition), jLocal, jClass, nonVirtual, args);
-				break;
-			case CommonNames.ShortSignatureChar:
-				bytes.AsValue<JShort>() = JFunctionDefinition<JShort>.Invoke(
-					definition as JFunctionDefinition<JShort> ?? new(definition), jLocal, jClass, nonVirtual, args);
-				break;
-			default:
-				throw new InvalidOperationException(IMessageResource.GetInstance().InvalidPrimitiveDefinitionMessage);
+			IEnvironment env = jLocal.Environment;
+			bytes.AsValue<TPrimitive>() = env.AccessFeature.CallFunction<TPrimitive>(
+				jLocal, jClass, definition as JFunctionDefinition<TPrimitive> ?? new(definition), nonVirtual, args);
 		}
 	}
 	/// <summary>
@@ -70,50 +59,29 @@ internal static class PrimitiveProxyExtensions
 	public static void PrimitiveStaticInvoke(this JFunctionDefinition definition, Span<Byte> bytes, JClassObject jClass,
 		IObject?[] args)
 	{
-		switch (definition.Descriptor[^1])
+		delegate* <Span<Byte>, JFunctionDefinition, JClassObject, IObject?[], void> invoke =
+			definition.Descriptor[^1] switch
+			{
+				CommonNames.BooleanSignatureChar => &Invoke<JBoolean>,
+				CommonNames.ByteSignatureChar => &Invoke<JByte>,
+				CommonNames.CharSignatureChar => &Invoke<JChar>,
+				CommonNames.DoubleSignatureChar => &Invoke<JDouble>,
+				CommonNames.FloatSignatureChar => &Invoke<JFloat>,
+				CommonNames.IntSignatureChar => &Invoke<JInt>,
+				CommonNames.LongSignatureChar => &Invoke<JLong>,
+				CommonNames.ShortSignatureChar => &Invoke<JShort>,
+				_ => throw new InvalidOperationException(IMessageResource.GetInstance()
+				                                                         .InvalidPrimitiveDefinitionMessage),
+			};
+		invoke(bytes, definition, jClass, args);
+		return;
+		static void Invoke<TPrimitive>(Span<Byte> bytes, JFunctionDefinition definition, JClassObject jClass,
+			IObject?[] args) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
-			case CommonNames.BooleanSignatureChar:
-				bytes.AsValue<JBoolean>() =
-					JFunctionDefinition<JBoolean>.StaticInvoke(
-						definition as JFunctionDefinition<JBoolean> ?? new(definition), jClass, args);
-				break;
-			case CommonNames.ByteSignatureChar:
-				bytes.AsValue<JByte>() =
-					JFunctionDefinition<JByte>.StaticInvoke(definition as JFunctionDefinition<JByte> ?? new(definition),
-					                                        jClass, args);
-				break;
-			case CommonNames.CharSignatureChar:
-				bytes.AsValue<JChar>() =
-					JFunctionDefinition<JChar>.StaticInvoke(definition as JFunctionDefinition<JChar> ?? new(definition),
-					                                        jClass, args);
-				break;
-			case CommonNames.DoubleSignatureChar:
-				bytes.AsValue<JDouble>() =
-					JFunctionDefinition<JDouble>.StaticInvoke(
-						definition as JFunctionDefinition<JDouble> ?? new(definition), jClass, args);
-				break;
-			case CommonNames.FloatSignatureChar:
-				bytes.AsValue<JFloat>() =
-					JFunctionDefinition<JFloat>.StaticInvoke(
-						definition as JFunctionDefinition<JFloat> ?? new(definition), jClass, args);
-				break;
-			case CommonNames.IntSignatureChar:
-				bytes.AsValue<JInt>() =
-					JFunctionDefinition<JInt>.StaticInvoke(definition as JFunctionDefinition<JInt> ?? new(definition),
-					                                       jClass, args);
-				break;
-			case CommonNames.LongSignatureChar:
-				bytes.AsValue<JLong>() =
-					JFunctionDefinition<JLong>.StaticInvoke(definition as JFunctionDefinition<JLong> ?? new(definition),
-					                                        jClass, args);
-				break;
-			case CommonNames.ShortSignatureChar:
-				bytes.AsValue<JShort>() =
-					JFunctionDefinition<JShort>.StaticInvoke(
-						definition as JFunctionDefinition<JShort> ?? new(definition), jClass, args);
-				break;
-			default:
-				throw new InvalidOperationException(IMessageResource.GetInstance().InvalidPrimitiveDefinitionMessage);
+			IEnvironment env = jClass.Environment;
+			bytes.AsValue<TPrimitive>() =
+				env.AccessFeature.CallStaticFunction<TPrimitive>(
+					jClass, definition as JFunctionDefinition<TPrimitive> ?? new(definition), args);
 		}
 	}
 	/// <summary>
@@ -126,38 +94,27 @@ internal static class PrimitiveProxyExtensions
 	public static void PrimitiveGet(this JFieldDefinition definition, Span<Byte> bytes, JLocalObject jLocal,
 		JClassObject jClass)
 	{
-		switch (definition.Descriptor[^1])
+		delegate* <Span<Byte>, JFieldDefinition, JLocalObject, JClassObject, void> get =
+			definition.Descriptor[^1] switch
+			{
+				CommonNames.BooleanSignatureChar => &Get<JBoolean>,
+				CommonNames.ByteSignatureChar => &Get<JByte>,
+				CommonNames.CharSignatureChar => &Get<JChar>,
+				CommonNames.DoubleSignatureChar => &Get<JDouble>,
+				CommonNames.FloatSignatureChar => &Get<JFloat>,
+				CommonNames.IntSignatureChar => &Get<JInt>,
+				CommonNames.LongSignatureChar => &Get<JLong>,
+				CommonNames.ShortSignatureChar => &Get<JShort>,
+				_ => throw new InvalidOperationException(IMessageResource.GetInstance()
+				                                                         .InvalidPrimitiveDefinitionMessage),
+			};
+		get(bytes, definition, jLocal, jClass);
+		return;
+		static void Get<TPrimitive>(Span<Byte> bytes, JFieldDefinition definition, JLocalObject jLocal,
+			JClassObject jClass) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
-			case CommonNames.BooleanSignatureChar:
-				bytes.AsValue<JBoolean>() =
-					(definition as JFieldDefinition<JBoolean> ?? new(definition)).Get(jLocal, jClass);
-				break;
-			case CommonNames.ByteSignatureChar:
-				bytes.AsValue<JByte>() = (definition as JFieldDefinition<JByte> ?? new(definition)).Get(jLocal, jClass);
-				break;
-			case CommonNames.CharSignatureChar:
-				bytes.AsValue<JChar>() = (definition as JFieldDefinition<JChar> ?? new(definition)).Get(jLocal, jClass);
-				break;
-			case CommonNames.DoubleSignatureChar:
-				bytes.AsValue<JDouble>() =
-					(definition as JFieldDefinition<JDouble> ?? new(definition)).Get(jLocal, jClass);
-				break;
-			case CommonNames.FloatSignatureChar:
-				bytes.AsValue<JFloat>() =
-					(definition as JFieldDefinition<JFloat> ?? new(definition)).Get(jLocal, jClass);
-				break;
-			case CommonNames.IntSignatureChar:
-				bytes.AsValue<JInt>() = (definition as JFieldDefinition<JInt> ?? new(definition)).Get(jLocal, jClass);
-				break;
-			case CommonNames.LongSignatureChar:
-				bytes.AsValue<JLong>() = (definition as JFieldDefinition<JLong> ?? new(definition)).Get(jLocal, jClass);
-				break;
-			case CommonNames.ShortSignatureChar:
-				bytes.AsValue<JShort>() =
-					(definition as JFieldDefinition<JShort> ?? new(definition)).Get(jLocal, jClass);
-				break;
-			default:
-				throw new InvalidOperationException(IMessageResource.GetInstance().InvalidPrimitiveDefinitionMessage);
+			bytes.AsValue<TPrimitive>() =
+				(definition as JFieldDefinition<TPrimitive> ?? new(definition)).Get(jLocal, jClass);
 		}
 	}
 	/// <summary>
@@ -168,36 +125,25 @@ internal static class PrimitiveProxyExtensions
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	public static void PrimitiveStaticGet(this JFieldDefinition definition, Span<Byte> bytes, JClassObject jClass)
 	{
-		switch (definition.Descriptor[^1])
+		delegate* <Span<Byte>, JFieldDefinition, JClassObject, void> get = definition.Descriptor[^1] switch
 		{
-			case CommonNames.BooleanSignatureChar:
-				bytes.AsValue<JBoolean>() =
-					(definition as JFieldDefinition<JBoolean> ?? new(definition)).StaticGet(jClass);
-				break;
-			case CommonNames.ByteSignatureChar:
-				bytes.AsValue<JByte>() = (definition as JFieldDefinition<JByte> ?? new(definition)).StaticGet(jClass);
-				break;
-			case CommonNames.CharSignatureChar:
-				bytes.AsValue<JChar>() = (definition as JFieldDefinition<JChar> ?? new(definition)).StaticGet(jClass);
-				break;
-			case CommonNames.DoubleSignatureChar:
-				bytes.AsValue<JDouble>() =
-					(definition as JFieldDefinition<JDouble> ?? new(definition)).StaticGet(jClass);
-				break;
-			case CommonNames.FloatSignatureChar:
-				bytes.AsValue<JFloat>() = (definition as JFieldDefinition<JFloat> ?? new(definition)).StaticGet(jClass);
-				break;
-			case CommonNames.IntSignatureChar:
-				bytes.AsValue<JInt>() = (definition as JFieldDefinition<JInt> ?? new(definition)).StaticGet(jClass);
-				break;
-			case CommonNames.LongSignatureChar:
-				bytes.AsValue<JLong>() = (definition as JFieldDefinition<JLong> ?? new(definition)).StaticGet(jClass);
-				break;
-			case CommonNames.ShortSignatureChar:
-				bytes.AsValue<JShort>() = (definition as JFieldDefinition<JShort> ?? new(definition)).StaticGet(jClass);
-				break;
-			default:
-				throw new InvalidOperationException(IMessageResource.GetInstance().InvalidPrimitiveDefinitionMessage);
+			CommonNames.BooleanSignatureChar => &Get<JBoolean>,
+			CommonNames.ByteSignatureChar => &Get<JByte>,
+			CommonNames.CharSignatureChar => &Get<JChar>,
+			CommonNames.DoubleSignatureChar => &Get<JDouble>,
+			CommonNames.FloatSignatureChar => &Get<JFloat>,
+			CommonNames.IntSignatureChar => &Get<JInt>,
+			CommonNames.LongSignatureChar => &Get<JLong>,
+			CommonNames.ShortSignatureChar => &Get<JShort>,
+			_ => throw new InvalidOperationException(IMessageResource.GetInstance().InvalidPrimitiveDefinitionMessage),
+		};
+		get(bytes, definition, jClass);
+		return;
+		static void Get<TPrimitive>(Span<Byte> bytes, JFieldDefinition definition, JClassObject jClass)
+			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+		{
+			bytes.AsValue<TPrimitive>() =
+				(definition as JFieldDefinition<TPrimitive> ?? new(definition)).StaticGet(jClass);
 		}
 	}
 	/// <summary>
@@ -210,38 +156,27 @@ internal static class PrimitiveProxyExtensions
 	public static void PrimitiveSet(this JFieldDefinition definition, JLocalObject jLocal, JClassObject jClass,
 		ReadOnlySpan<Byte> bytes)
 	{
-		switch (definition.Descriptor[^1])
+		delegate* <ReadOnlySpan<Byte>, JFieldDefinition, JLocalObject, JClassObject, void> set =
+			definition.Descriptor[^1] switch
+			{
+				CommonNames.BooleanSignatureChar => &Set<JBoolean>,
+				CommonNames.ByteSignatureChar => &Set<JByte>,
+				CommonNames.CharSignatureChar => &Set<JChar>,
+				CommonNames.DoubleSignatureChar => &Set<JDouble>,
+				CommonNames.FloatSignatureChar => &Set<JFloat>,
+				CommonNames.IntSignatureChar => &Set<JInt>,
+				CommonNames.LongSignatureChar => &Set<JLong>,
+				CommonNames.ShortSignatureChar => &Set<JShort>,
+				_ => throw new InvalidOperationException(IMessageResource.GetInstance()
+				                                                         .InvalidPrimitiveDefinitionMessage),
+			};
+		set(bytes, definition, jLocal, jClass);
+		return;
+		static void Set<TPrimitive>(ReadOnlySpan<Byte> bytes, JFieldDefinition definition, JLocalObject jLocal,
+			JClassObject jClass) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
-			case CommonNames.BooleanSignatureChar:
-				(definition as JFieldDefinition<JBoolean> ?? new(definition)).Set(
-					jLocal, bytes.AsValue<JBoolean>(), jClass);
-				break;
-			case CommonNames.ByteSignatureChar:
-				(definition as JFieldDefinition<JByte> ?? new(definition)).Set(jLocal, bytes.AsValue<JByte>(), jClass);
-				break;
-			case CommonNames.CharSignatureChar:
-				(definition as JFieldDefinition<JChar> ?? new(definition)).Set(jLocal, bytes.AsValue<JChar>(), jClass);
-				break;
-			case CommonNames.DoubleSignatureChar:
-				(definition as JFieldDefinition<JDouble> ?? new(definition)).Set(
-					jLocal, bytes.AsValue<JDouble>(), jClass);
-				break;
-			case CommonNames.FloatSignatureChar:
-				(definition as JFieldDefinition<JFloat> ?? new(definition)).Set(
-					jLocal, bytes.AsValue<JFloat>(), jClass);
-				break;
-			case CommonNames.IntSignatureChar:
-				(definition as JFieldDefinition<JInt> ?? new(definition)).Set(jLocal, bytes.AsValue<JInt>(), jClass);
-				break;
-			case CommonNames.LongSignatureChar:
-				(definition as JFieldDefinition<JLong> ?? new(definition)).Set(jLocal, bytes.AsValue<JLong>(), jClass);
-				break;
-			case CommonNames.ShortSignatureChar:
-				(definition as JFieldDefinition<JShort> ?? new(definition)).Set(
-					jLocal, bytes.AsValue<JShort>(), jClass);
-				break;
-			default:
-				throw new InvalidOperationException(IMessageResource.GetInstance().InvalidPrimitiveDefinitionMessage);
+			(definition as JFieldDefinition<TPrimitive> ?? new(definition)).Set(
+				jLocal, bytes.AsValue<TPrimitive>(), jClass);
 		}
 	}
 	/// <summary>
@@ -253,36 +188,25 @@ internal static class PrimitiveProxyExtensions
 	public static void PrimitiveStaticSet(this JFieldDefinition definition, JClassObject jClass,
 		ReadOnlySpan<Byte> bytes)
 	{
-		switch (definition.Descriptor[^1])
+		delegate* <ReadOnlySpan<Byte>, JFieldDefinition, JClassObject, void> set = definition.Descriptor[^1] switch
 		{
-			case CommonNames.BooleanSignatureChar:
-				(definition as JFieldDefinition<JBoolean> ?? new(definition)).StaticSet(
-					jClass, bytes.AsValue<JBoolean>());
-				break;
-			case CommonNames.ByteSignatureChar:
-				(definition as JFieldDefinition<JByte> ?? new(definition)).StaticSet(jClass, bytes.AsValue<JByte>());
-				break;
-			case CommonNames.CharSignatureChar:
-				(definition as JFieldDefinition<JChar> ?? new(definition)).StaticSet(jClass, bytes.AsValue<JChar>());
-				break;
-			case CommonNames.DoubleSignatureChar:
-				(definition as JFieldDefinition<JDouble> ?? new(definition))
-					.StaticSet(jClass, bytes.AsValue<JDouble>());
-				break;
-			case CommonNames.FloatSignatureChar:
-				(definition as JFieldDefinition<JFloat> ?? new(definition)).StaticSet(jClass, bytes.AsValue<JFloat>());
-				break;
-			case CommonNames.IntSignatureChar:
-				(definition as JFieldDefinition<JInt> ?? new(definition)).StaticSet(jClass, bytes.AsValue<JInt>());
-				break;
-			case CommonNames.LongSignatureChar:
-				(definition as JFieldDefinition<JLong> ?? new(definition)).StaticSet(jClass, bytes.AsValue<JLong>());
-				break;
-			case CommonNames.ShortSignatureChar:
-				(definition as JFieldDefinition<JShort> ?? new(definition)).StaticSet(jClass, bytes.AsValue<JShort>());
-				break;
-			default:
-				throw new InvalidOperationException(IMessageResource.GetInstance().InvalidPrimitiveDefinitionMessage);
+			CommonNames.BooleanSignatureChar => &Set<JBoolean>,
+			CommonNames.ByteSignatureChar => &Set<JByte>,
+			CommonNames.CharSignatureChar => &Set<JChar>,
+			CommonNames.DoubleSignatureChar => &Set<JDouble>,
+			CommonNames.FloatSignatureChar => &Set<JFloat>,
+			CommonNames.IntSignatureChar => &Set<JInt>,
+			CommonNames.LongSignatureChar => &Set<JLong>,
+			CommonNames.ShortSignatureChar => &Set<JShort>,
+			_ => throw new InvalidOperationException(IMessageResource.GetInstance().InvalidPrimitiveDefinitionMessage),
+		};
+		set(bytes, definition, jClass);
+		return;
+		static void Set<TPrimitive>(ReadOnlySpan<Byte> bytes, JFieldDefinition definition, JClassObject jClass)
+			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+		{
+			(definition as JFieldDefinition<TPrimitive> ?? new(definition)).StaticSet(
+				jClass, bytes.AsValue<TPrimitive>());
 		}
 	}
 	/// <summary>

@@ -1,5 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native.Access;
 
+#if !PACKAGE
 public abstract partial class JFunctionDefinition
 {
 	/// <summary>
@@ -9,7 +10,7 @@ public abstract partial class JFunctionDefinition
 	/// <param name="definition">A <see cref="JFunctionDefinition{TResult}"/> definition.</param>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
-	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call must be non-virtual.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
 	internal static TResult? Invoke<TResult>(JFunctionDefinition<TResult> definition, JLocalObject jLocal,
@@ -29,16 +30,18 @@ public abstract partial class JFunctionDefinition
 		ReadOnlySpan<IObject?> args = default) where TResult : IDataType<TResult>
 		=> JFunctionDefinition<TResult>.StaticInvoke(definition, jClass, args);
 }
+#endif
 
 public partial class JFunctionDefinition<TResult>
 {
+#if !PACKAGE
 	/// <summary>
 	/// Invokes <paramref name="definition"/> on <paramref name="jLocal"/> which matches with current definition.
 	/// </summary>
 	/// <param name="definition">A <see cref="JFunctionDefinition{TResult}"/> definition.</param>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
-	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call must be non-virtual.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
 	internal static TResult? Invoke(JFunctionDefinition<TResult> definition, JLocalObject jLocal,
@@ -62,7 +65,7 @@ public partial class JFunctionDefinition<TResult>
 		IEnvironment env = jClass.Environment;
 		return env.AccessFeature.CallInternalStaticFunction<TResult>(jClass, definition, args);
 	}
-
+#endif
 	/// <summary>
 	/// Create a <see cref="JFunctionDefinition{TResult}"/> instance for <paramref name="metadata"/>.
 	/// </summary>

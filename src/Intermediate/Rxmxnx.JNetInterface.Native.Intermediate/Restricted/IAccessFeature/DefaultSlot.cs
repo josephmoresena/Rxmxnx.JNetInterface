@@ -13,7 +13,7 @@ internal partial interface IAccessFeature
 		/// <summary>
 		/// Internal instance.
 		/// </summary>
-		private readonly IObject?[] _args = new IObject?[count];
+		private readonly IObject?[] _args = count > 0 ? new IObject?[count] : [];
 
 		void IParameterSlot.SetParameterValue<TObject>(Byte index, TObject? value) where TObject : default
 			=> this._args[index] = value;

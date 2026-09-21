@@ -54,18 +54,11 @@ public sealed class NativeFunctionSetImplTests
 		using JEnumObject jEnum = Assert.IsType<JEnumObject>(typeMetadata.CreateInstance(jEnumClass, localRef, true));
 
 		env.ClassFeature.GetClass<JEnumObject>().Returns(jEnumClass);
-		env.AccessFeature.When(a => a.CallPrimitiveFunction(Arg.Any<IFixedMemory>(), Arg.Any<JEnumObject>(),
-		                                                    Arg.Any<JClassObject>(), definition, false, [])).Do(c =>
-		{
-			Int32 ordinalValue = ordinal;
-			ordinalValue.AsBytes().CopyTo((c[0] as IFixedMemory)!.Bytes);
-		});
-
+		env.AccessFeature.CallFunction<JInt>(jEnum, jEnumClass, definition, false, []).Returns(ordinal);
 		Assert.Equal(ordinal, NativeFunctionSetImpl.Instance.GetOrdinal(jEnum));
 
 		env.ClassFeature.Received(1).GetClass<JEnumObject>();
-		env.AccessFeature.Received(1)
-		   .CallPrimitiveFunction(Arg.Any<IFixedMemory>(), jEnum, jEnumClass, definition, false, []);
+		env.AccessFeature.Received(1).CallFunction<JInt>(jEnum, jEnumClass, definition, false, []);
 	}
 
 	[Fact]
@@ -109,19 +102,14 @@ public sealed class NativeFunctionSetImplTests
 				typeMetadata.CreateInstance(jStackTraceElementClass, localRef, true));
 
 		env.ClassFeature.GetClass<JStackTraceElementObject>().Returns(jStackTraceElementClass);
-		env.AccessFeature.When(a => a.CallPrimitiveFunction(Arg.Any<IFixedMemory>(),
-		                                                    Arg.Any<JStackTraceElementObject>(),
-		                                                    Arg.Any<JClassObject>(), definition, false, [])).Do(c =>
-		{
-			Int32 lineNumber = info.LineNumber;
-			lineNumber.AsBytes().CopyTo((c[0] as IFixedMemory)!.Bytes);
-		});
+		env.AccessFeature.CallFunction<JInt>(jStackTraceElement, jStackTraceElementClass, definition, false, [])
+		   .Returns(info.LineNumber);
 
 		Assert.Equal(info.LineNumber, NativeFunctionSetImpl.Instance.GetLineNumber(jStackTraceElement));
 
 		env.ClassFeature.Received(1).GetClass<JStackTraceElementObject>();
-		env.AccessFeature.Received(1).CallPrimitiveFunction(Arg.Any<IFixedMemory>(), jStackTraceElement,
-		                                                    jStackTraceElementClass, definition, false, []);
+		env.AccessFeature.Received(1)
+		   .CallFunction<JInt>(jStackTraceElement, jStackTraceElementClass, definition, false, []);
 	}
 	[Fact]
 	internal void GetFileNameTest()
@@ -190,19 +178,14 @@ public sealed class NativeFunctionSetImplTests
 				typeMetadata.CreateInstance(jStackTraceElementClass, localRef, true));
 
 		env.ClassFeature.GetClass<JStackTraceElementObject>().Returns(jStackTraceElementClass);
-		env.AccessFeature.When(a => a.CallPrimitiveFunction(Arg.Any<IFixedMemory>(),
-		                                                    Arg.Any<JStackTraceElementObject>(),
-		                                                    Arg.Any<JClassObject>(), definition, false, [])).Do(c =>
-		{
-			Boolean isNativeMethod = info.NativeMethod;
-			isNativeMethod.AsBytes().CopyTo((c[0] as IFixedMemory)!.Bytes);
-		});
+		env.AccessFeature.CallFunction<JBoolean>(jStackTraceElement, jStackTraceElementClass, definition, false, [])
+		   .Returns(info.NativeMethod);
 
 		Assert.Equal(info.NativeMethod, NativeFunctionSetImpl.Instance.IsNativeMethod(jStackTraceElement));
 
 		env.ClassFeature.Received(1).GetClass<JStackTraceElementObject>();
-		env.AccessFeature.Received(1).CallPrimitiveFunction(Arg.Any<IFixedMemory>(), jStackTraceElement,
-		                                                    jStackTraceElementClass, definition, false, []);
+		env.AccessFeature.Received(1)
+		   .CallFunction<JBoolean>(jStackTraceElement, jStackTraceElementClass, definition, false, []);
 	}
 
 	[Fact]
@@ -299,18 +282,12 @@ public sealed class NativeFunctionSetImplTests
 		Boolean result = NativeFunctionSetImplTests.fixture.Create<Boolean>();
 
 		env.ClassFeature.GetClass<JClassObject>().Returns(jClass);
-		env.AccessFeature.When(a => a.CallPrimitiveFunction(Arg.Any<IFixedMemory>(), Arg.Any<JClassObject>(),
-		                                                    Arg.Any<JClassObject>(), definition, false, [])).Do(c =>
-		{
-			JBoolean primitive = result;
-			primitive.AsBytes().CopyTo((c[0] as IFixedMemory)!.Bytes);
-		});
 
+		env.AccessFeature.CallFunction<JBoolean>(jClass, jClass, definition, false, []).Returns(result);
 		Assert.Equal(result, NativeFunctionSetImpl.Instance.IsPrimitiveClass(jClass));
 
 		env.ClassFeature.Received(1).GetClass<JClassObject>();
-		env.AccessFeature.Received(1)
-		   .CallPrimitiveFunction(Arg.Any<IFixedMemory>(), jClass, jClass, definition, false, []);
+		env.AccessFeature.Received(1).CallFunction<JBoolean>(jClass, jClass, definition, false, []);
 	}
 	[Fact]
 	internal void IsFinalClassTest()
@@ -382,18 +359,13 @@ public sealed class NativeFunctionSetImplTests
 			new JDirectByteBufferObject(jDirectByteBufferClass, mem, localRef);
 
 		env.ClassFeature.GetClass<JBufferObject>().Returns(jBufferClass);
-		env.AccessFeature.When(a => a.CallPrimitiveFunction(Arg.Any<IFixedMemory>(), Arg.Any<JBufferObject>(),
-		                                                    Arg.Any<JClassObject>(), definition, false, [])).Do(c =>
-		{
-			Boolean isDirect = directBuffer ?? true;
-			isDirect.AsBytes().CopyTo((c[0] as IFixedMemory)!.Bytes);
-		});
+		env.AccessFeature.CallFunction<JBoolean>(jBuffer, jBufferClass, definition, false, [])
+		   .Returns(directBuffer ?? true);
 
 		Assert.Equal(directBuffer ?? true, NativeFunctionSetImpl.Instance.IsDirectBuffer(jBuffer));
 
 		env.ClassFeature.Received(1).GetClass<JBufferObject>();
-		env.AccessFeature.Received(1).CallPrimitiveFunction(Arg.Any<IFixedMemory>(), jBuffer,
-		                                                    jBufferClass, definition, false, []);
+		env.AccessFeature.Received(1).CallFunction<JBoolean>(jBuffer, jBufferClass, definition, false, []);
 	}
 	[Theory]
 	[InlineData]
@@ -414,19 +386,14 @@ public sealed class NativeFunctionSetImplTests
 			new JBufferObject(jClass, localRef) :
 			new JDirectByteBufferObject(jDirectByteBufferClass, mem, localRef);
 
+		env.ClassFeature.UseNonGeneric = false;
 		env.ClassFeature.GetClass<JBufferObject>().Returns(jBufferClass);
-		env.AccessFeature.When(a => a.CallPrimitiveFunction(Arg.Any<IFixedMemory>(), Arg.Any<JBufferObject>(),
-		                                                    Arg.Any<JClassObject>(), definition, false, [])).Do(c =>
-		{
-			Int64 localCapacity = capacity.Value;
-			localCapacity.AsBytes().CopyTo((c[0] as IFixedMemory)!.Bytes);
-		});
 
+		env.AccessFeature.CallFunction<JLong>(jBuffer, jBufferClass, definition, false, []).Returns(capacity);
 		Assert.Equal(capacity, NativeFunctionSetImpl.Instance.BufferCapacity(jBuffer));
 
 		env.ClassFeature.Received(1).GetClass<JBufferObject>();
-		env.AccessFeature.Received(1).CallPrimitiveFunction(Arg.Any<IFixedMemory>(), jBuffer,
-		                                                    jBufferClass, definition, false, []);
+		env.AccessFeature.Received(1).CallFunction<JLong>(jBuffer, jBufferClass, definition, false, []);
 	}
 
 	[Fact]
@@ -585,18 +552,12 @@ public sealed class NativeFunctionSetImplTests
 			Assert.IsType<JNumberObject>(typeMetadata.CreateInstance(jNumberClass, localRef, true));
 
 		env.ClassFeature.GetClass<JNumberObject>().Returns(jNumberClass);
-		env.AccessFeature.When(a => a.CallPrimitiveFunction(Arg.Any<IFixedMemory>(), Arg.Any<JNumberObject>(),
-		                                                    Arg.Any<JClassObject>(), definition, false, [])).Do(c =>
-		{
-			TPrimitive primitive = value;
-			primitive.AsBytes().CopyTo((c[0] as IFixedMemory)!.Bytes);
-		});
+		env.AccessFeature.CallFunction<TPrimitive>(jNumber, jNumberClass, definition, false, []).Returns(value);
 
 		Assert.Equal(value, NativeFunctionSetImpl.Instance.GetPrimitiveValue<TPrimitive>(jNumber));
 
 		env.ClassFeature.Received(1).GetClass<JNumberObject>();
-		env.AccessFeature.Received(1).CallPrimitiveFunction(Arg.Any<IFixedMemory>(), jNumber,
-		                                                    jNumberClass, definition, false, []);
+		env.AccessFeature.Received(1).CallFunction<TPrimitive>(jNumber, jNumberClass, definition, false, []);
 	}
 	private static void FinalClassTest<TDataType>() where TDataType : IDataType<TDataType>
 	{
@@ -611,16 +572,21 @@ public sealed class NativeFunctionSetImplTests
 			default;
 
 		env.ClassFeature.GetClass<JClassObject>().Returns(jClassClass);
-		env.AccessFeature.When(a => a.CallPrimitiveFunction(Arg.Any<IFixedMemory>(), Arg.Any<JClassObject>(),
-		                                                    Arg.Any<JClassObject>(), definition, false, [])).Do(c =>
-		{
-			JModifierObject.Modifiers modifiers = NativeFunctionSetImplTests.GetModifiers((c[1] as JClassObject)!);
-			modifiers.AsBytes().CopyTo((c[0] as IFixedMemory)!.Bytes);
-		});
+		env.AccessFeature.CallFunction<JInt>(jClass, jClassClass, definition, false, [])
+		   .Returns((Int32)NativeFunctionSetImplTests.GetModifiers(jClass));
 		if (jClassElement is not null) env.ClassFeature.GetClass(jClassElement.Name).Returns(jClassElement);
 
-		env.WithFrame(Arg.Any<Int32>(), Arg.Any<JClassObject>(), Arg.Any<Func<JClassObject, Boolean>>())
-		   .Returns(c => (c[2] as Func<JClassObject, Boolean>)!((c[1] as JClassObject)!));
+		env.WithFrame(Arg.Any<Int32>(),
+		              Arg.Any<ValueTuple<IEnvironment, ValPtr<NativeFunctionSetImpl.IsFinalArrayTypeFunc>>>(),
+		              Arg.Any<Func<ValueTuple<IEnvironment, ValPtr<NativeFunctionSetImpl.IsFinalArrayTypeFunc>>,
+			              Boolean>>()).Returns(c =>
+		{
+			if (c[2] is not Func<ValueTuple<IEnvironment, ValPtr<NativeFunctionSetImpl.IsFinalArrayTypeFunc>>, Boolean>
+				    func ||
+			    c[1] is not ValueTuple<IEnvironment, ValPtr<NativeFunctionSetImpl.IsFinalArrayTypeFunc>> tuple)
+				throw new();
+			return func(tuple);
+		});
 
 		Assert.Equal(jClass.IsFinal, NativeFunctionSetImpl.Instance.IsFinal(jClass, out _));
 		Boolean nonPrimitive = !(jClassElement ?? jClass).IsPrimitive;
@@ -630,15 +596,13 @@ public sealed class NativeFunctionSetImplTests
 			env.ClassFeature.Received(0).GetClass<JClassObject>();
 		else
 			env.ClassFeature.Received().GetClass<JClassObject>();
-		env.AccessFeature.Received(count)
-		   .CallPrimitiveFunction(Arg.Any<IFixedMemory>(), jClass, jClassClass, definition, false, []);
+		env.AccessFeature.Received(count).CallFunction<JInt>(jClass, jClassClass, definition, false, []);
 		if (jClassElement is null) return;
 		env.ClassFeature.Received(count).GetClass(jClassElement.Name);
 		// To optimize JNI calls, element TypeMetadata should be pre-computed.
 		env.ClassFeature.Received(count).GetTypeMetadata(jClassElement);
-		// We are calling JClassObject.IsFinal which is always initialized when class is created from IDataType<T>
-		env.AccessFeature.Received(0)
-		   .CallPrimitiveFunction(Arg.Any<IFixedMemory>(), jClassElement, jClassClass, definition, false, []);
+		// We are calling JClassObject.IsFinal, which is always initialized when class is created from IDataType<T>
+		env.AccessFeature.Received(0).CallFunction<JInt>(jClassElement, jClassClass, definition, false, []);
 	}
 	private static JDataTypeMetadata GetElementMetadata<TDataType>() where TDataType : IDataType<TDataType>
 	{

@@ -149,6 +149,7 @@ public sealed class JBooleanObjectTests
 			Assert.IsType<JBooleanObject>(typeMetadata.CreateInstance(jBooleanObjectClass, localRef, true)) :
 			new(jBooleanObjectClass, localRef, value);
 
+		env.ClassFeature.BooleanObject.Returns(jBooleanObjectClass);
 		env.AccessFeature.CallFunction<JBoolean>(jBooleanObject, jBooleanObjectClass,
 		                                         NativeFunctionSetImpl.BooleanValueDefinition, false, [])
 		   .Returns(value);

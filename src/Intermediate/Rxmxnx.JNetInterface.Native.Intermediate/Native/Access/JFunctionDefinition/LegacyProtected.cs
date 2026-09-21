@@ -3,19 +3,6 @@ namespace Rxmxnx.JNetInterface.Native.Access;
 public partial class JFunctionDefinition<TResult>
 {
 	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="functionName">Function name.</param>
-	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	protected JFunctionDefinition(ReadOnlySpan<Byte> functionName,
-#if NET9_0_OR_GREATER
-		params ReadOnlySpan<JArgumentMetadata> metadata
-#else
-		ReadOnlySpan<JArgumentMetadata> metadata
-#endif
-	) : base(functionName, IDataType.GetMetadata<TResult>().Signature, metadata) { }
-
-	/// <summary>
 	/// Invokes a function on <paramref name="jLocal"/> which matches with current definition.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
