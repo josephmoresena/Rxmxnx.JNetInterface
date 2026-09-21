@@ -212,19 +212,10 @@ public sealed class GetTests : IndeterminateAccessTestsBase
 		Assert.Equal(definition, nonGenericField.Definition);
 		Assert.Equal(typeMetadata.Signature, field.FieldType);
 
-		env.AccessFeature.When(a => a.GetPrimitiveField(Arg.Any<IFixedMemory>(), Arg.Any<JLocalObject>(),
-		                                                Arg.Any<JClassObject>(), field.Definition)).Do(c =>
-		{
-			IFixedMemory mem = (IFixedMemory)c[0];
-			primitiveArray.AsSpan().AsBytes().CopyTo(mem.Bytes);
-		});
-		env.AccessFeature
-		   .When(a => a.GetPrimitiveStaticField(Arg.Any<IFixedMemory>(), Arg.Any<JClassObject>(), field.Definition))
-		   .Do(c =>
-		   {
-			   IFixedMemory mem = (IFixedMemory)c[0];
-			   primitiveArray.AsSpan().AsBytes().CopyTo(mem.Bytes);
-		   });
+		env.AccessFeature.GetField<TPrimitive>(Arg.Any<JLocalObject>(), Arg.Any<JClassObject>(), field.Definition)
+		   .Returns(primitiveArray[0]);
+		env.AccessFeature.GetStaticField<TPrimitive>(Arg.Any<JClassObject>(), field.Definition)
+		   .Returns(primitiveArray[0]);
 		env.AccessFeature.GetField<TPrimitive>(Arg.Any<JFieldObject>(), Arg.Any<JLocalObject>(), field.Definition)
 		   .Returns(primitiveArray[0]);
 		env.AccessFeature.GetStaticField<TPrimitive>(Arg.Any<JFieldObject>(), field.Definition)
@@ -236,21 +227,19 @@ public sealed class GetTests : IndeterminateAccessTestsBase
 		IndeterminateResult result = new(MemoryMarshal.Cast<Byte, JValue.PrimitiveValue>(bytes)[0],
 		                                 typeMetadata.Signature);
 		IndeterminateAccessTestsBase.Compare(result, field.Get(jString));
-		env.AccessFeature.Received(1).GetPrimitiveField(Arg.Any<IFixedMemory>(), jString, jString.Class,
-		                                                field.Definition);
+		env.AccessFeature.Received(1).GetField<TPrimitive>(jString, jString.Class, field.Definition);
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		IndeterminateAccessTestsBase.Compare(result, field.Get(jString, jClassClass));
-		env.AccessFeature.Received(1).GetPrimitiveField(Arg.Any<IFixedMemory>(), jString, jClassClass,
-		                                                field.Definition);
+		env.AccessFeature.Received(1).GetField<TPrimitive>(jString, jClassClass, field.Definition);
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		IndeterminateAccessTestsBase.Compare(result, field.StaticGet(jStringClass));
-		env.AccessFeature.Received(1).GetPrimitiveStaticField(Arg.Any<IFixedMemory>(), jStringClass, field.Definition);
+		env.AccessFeature.Received(1).GetStaticField<TPrimitive>(jStringClass, field.Definition);
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();

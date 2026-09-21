@@ -105,7 +105,7 @@ public sealed class SetTests : IndeterminateAccessTestsBase
 		                     ?.GetGenericArguments() is { } wrapperTypes)
 		{
 			action += SetTests.primitiveFieldWrapperTestInfo
-			                  .MakeGenericMethod([..((IEnumerable<Type>)wrapperTypes).Reverse(),])
+			                  .MakeGenericMethod([.. ((IEnumerable<Type>)wrapperTypes).Reverse(),])
 			                  .CreateDelegate<Action>();
 			action += SetTests.wrapperFieldPrimitiveTestInfo.MakeGenericMethod(wrapperTypes).CreateDelegate<Action>();
 		}
@@ -232,7 +232,7 @@ public sealed class SetTests : IndeterminateAccessTestsBase
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 	}
-	private static unsafe void PrimitiveTest<TPrimitive>() where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+	private static void PrimitiveTest<TPrimitive>() where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		ReadOnlySpan<Byte> fieldName = (CString)SetTests.fixture.Create<String>();
 		JFieldDefinition definition = new JFieldDefinition<TPrimitive>(fieldName);
@@ -266,37 +266,20 @@ public sealed class SetTests : IndeterminateAccessTestsBase
 		Assert.Equal(definition, nonGenericField.Definition);
 		Assert.Equal(typeMetadata.Signature, field.FieldType);
 
-		env.AccessFeature.When(a => a.SetPrimitiveField(Arg.Any<JLocalObject>(), Arg.Any<JClassObject>(),
-		                                                field.Definition, Arg.Any<IReadOnlyFixedMemory>())).Do(c =>
-		{
-			IReadOnlyFixedMemory mem = (IReadOnlyFixedMemory)c[3];
-			Assert.True(primitiveArray.AsSpan().AsBytes().SequenceEqual(mem.Bytes[..sizeof(TPrimitive)]));
-		});
-		env.AccessFeature
-		   .When(a => a.SetPrimitiveStaticField(Arg.Any<JClassObject>(), field.Definition,
-		                                        Arg.Any<IReadOnlyFixedMemory>())).Do(c =>
-		   {
-			   IReadOnlyFixedMemory mem = (IReadOnlyFixedMemory)c[2];
-			   Assert.True(primitiveArray.AsSpan().AsBytes().SequenceEqual(mem.Bytes[..sizeof(TPrimitive)]));
-		   });
-
 		field.Set(jString, primitiveArray[0]);
-		env.AccessFeature.Received(1).SetPrimitiveField(jString, jString.Class,
-		                                                field.Definition, Arg.Any<IReadOnlyFixedMemory>());
+		env.AccessFeature.Received(1).SetField(jString, jString.Class, field.Definition, primitiveArray[0]);
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		field.Set(jString, jClassClass, primitiveArray[0]);
-		env.AccessFeature.Received(1).SetPrimitiveField(jString, jClassClass,
-		                                                field.Definition, Arg.Any<IReadOnlyFixedMemory>());
+		env.AccessFeature.Received(1).SetField(jString, jClassClass, field.Definition, primitiveArray[0]);
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		field.StaticSet(jStringClass, primitiveArray[0]);
-		env.AccessFeature.Received(1)
-		   .SetPrimitiveStaticField(jStringClass, field.Definition, Arg.Any<IReadOnlyFixedMemory>());
+		env.AccessFeature.Received(1).SetStaticField(jStringClass, field.Definition, primitiveArray[0]);
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
@@ -314,22 +297,19 @@ public sealed class SetTests : IndeterminateAccessTestsBase
 		env.AccessFeature.ClearReceivedCalls();
 
 		field.Set(jString, primitiveObject);
-		env.AccessFeature.Received(1).SetPrimitiveField(jString, jString.Class,
-		                                                field.Definition, Arg.Any<IReadOnlyFixedMemory>());
+		env.AccessFeature.Received(1).SetField(jString, jString.Class, field.Definition, primitiveArray[0]);
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		field.Set(jString, jClassClass, primitiveObject);
-		env.AccessFeature.Received(1).SetPrimitiveField(jString, jClassClass,
-		                                                field.Definition, Arg.Any<IReadOnlyFixedMemory>());
+		env.AccessFeature.Received(1).SetField(jString, jClassClass, field.Definition, primitiveArray[0]);
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		field.StaticSet(jStringClass, primitiveObject);
-		env.AccessFeature.Received(1)
-		   .SetPrimitiveStaticField(jStringClass, field.Definition, Arg.Any<IReadOnlyFixedMemory>());
+		env.AccessFeature.Received(1).SetStaticField(jStringClass, field.Definition, primitiveArray[0]);
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
@@ -347,16 +327,13 @@ public sealed class SetTests : IndeterminateAccessTestsBase
 		env.AccessFeature.ClearReceivedCalls();
 
 		Assert.ThrowsAny<InvalidCastException>(() => field.Set(jString, jClassClass));
-		env.AccessFeature.Received(0).SetPrimitiveField(jString, jString.Class,
-		                                                field.Definition, Arg.Any<IReadOnlyFixedMemory>());
+		env.AccessFeature.Received(0).SetField(jString, jString.Class, field.Definition, primitiveArray[0]);
 
 		Assert.ThrowsAny<InvalidCastException>(() => field.Set(jString, jClassClass, jClassClass));
-		env.AccessFeature.Received(0).SetPrimitiveField(jString, jClassClass,
-		                                                field.Definition, Arg.Any<IReadOnlyFixedMemory>());
+		env.AccessFeature.Received(0).SetField(jString, jClassClass, field.Definition, primitiveArray[0]);
 
 		Assert.ThrowsAny<InvalidCastException>(() => field.StaticSet(jStringClass, jClassClass));
-		env.AccessFeature.Received(0)
-		   .SetPrimitiveStaticField(jStringClass, field.Definition, Arg.Any<IReadOnlyFixedMemory>());
+		env.AccessFeature.Received(0).SetStaticField(jStringClass, field.Definition, primitiveArray[0]);
 
 		Assert.ThrowsAny<InvalidCastException>(() => IndeterminateField.ReflectedSet(jField, jString, jClassClass));
 		env.AccessFeature.Received(0).SetField(jField, jString, jField.Definition, Arg.Any<TPrimitive>());
@@ -364,7 +341,7 @@ public sealed class SetTests : IndeterminateAccessTestsBase
 		Assert.ThrowsAny<InvalidCastException>(() => IndeterminateField.ReflectedStaticSet(jField, jClassClass));
 		env.AccessFeature.Received(0).SetStaticField(jField, jField.Definition, Arg.Any<TPrimitive>());
 	}
-	private static unsafe void PrimitiveFieldWrapperTest<TPrimitive, TWrapper>()
+	private static void PrimitiveFieldWrapperTest<TPrimitive, TWrapper>()
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper, TPrimitive>
 	{
@@ -407,19 +384,6 @@ public sealed class SetTests : IndeterminateAccessTestsBase
 		Assert.Equal(definition, nonGenericField.Definition);
 		Assert.Equal(primitiveTypeMetadata.Signature, field.FieldType);
 
-		env.AccessFeature.When(a => a.SetPrimitiveField(Arg.Any<JLocalObject>(), Arg.Any<JClassObject>(),
-		                                                field.Definition, Arg.Any<IReadOnlyFixedMemory>())).Do(c =>
-		{
-			IReadOnlyFixedMemory mem = (IReadOnlyFixedMemory)c[3];
-			Assert.True(primitiveArray.AsSpan().AsBytes().SequenceEqual(mem.Bytes[..sizeof(TPrimitive)]));
-		});
-		env.AccessFeature
-		   .When(a => a.SetPrimitiveStaticField(Arg.Any<JClassObject>(), field.Definition,
-		                                        Arg.Any<IReadOnlyFixedMemory>())).Do(c =>
-		   {
-			   IReadOnlyFixedMemory mem = (IReadOnlyFixedMemory)c[2];
-			   Assert.True(primitiveArray.AsSpan().AsBytes().SequenceEqual(mem.Bytes[..sizeof(TPrimitive)]));
-		   });
 		env.FunctionSet.GetPrimitiveValue<JByte>(Arg.Any<JNumberObject>())
 		   .Returns(_ => (JByte)IPrimitiveType.GetMetadata<JByte>().CreateInstance(primitiveArray.AsSpan().AsBytes()));
 		env.FunctionSet.GetPrimitiveValue<JDouble>(Arg.Any<JNumberObject>())
@@ -446,22 +410,19 @@ public sealed class SetTests : IndeterminateAccessTestsBase
 		   .Returns(_ => (JChar)IPrimitiveType.GetMetadata<JChar>().CreateInstance(primitiveArray.AsSpan().AsBytes()));
 
 		field.Set(jString, instance);
-		env.AccessFeature.Received(1).SetPrimitiveField(jString, jString.Class,
-		                                                field.Definition, Arg.Any<IReadOnlyFixedMemory>());
+		env.AccessFeature.Received(1).SetField(jString, jString.Class, field.Definition, primitiveArray[0]);
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		field.Set(jString, jClassClass, instance);
-		env.AccessFeature.Received(1).SetPrimitiveField(jString, jClassClass,
-		                                                field.Definition, Arg.Any<IReadOnlyFixedMemory>());
+		env.AccessFeature.Received(1).SetField(jString, jClassClass, field.Definition, primitiveArray[0]);
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		field.StaticSet(jStringClass, instance);
-		env.AccessFeature.Received(1)
-		   .SetPrimitiveStaticField(jStringClass, field.Definition, Arg.Any<IReadOnlyFixedMemory>());
+		env.AccessFeature.Received(1).SetStaticField(jStringClass, field.Definition, primitiveArray[0]);
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
@@ -499,8 +460,7 @@ public sealed class SetTests : IndeterminateAccessTestsBase
 
 		field.Set(jString, jLocalInstance);
 		env.ReferenceFeature.Received(1).Create<JWeak>(jLocalInstance);
-		env.AccessFeature.Received(1).SetPrimitiveField(jString, jString.Class,
-		                                                field.Definition, Arg.Any<IReadOnlyFixedMemory>());
+		env.AccessFeature.Received(1).SetField(jString, jString.Class, field.Definition, primitiveArray[0]);
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
@@ -509,8 +469,7 @@ public sealed class SetTests : IndeterminateAccessTestsBase
 
 		field.Set(jString, jClassClass, jLocalInstance);
 		env.ReferenceFeature.Received(1).Create<JWeak>(jLocalInstance);
-		env.AccessFeature.Received(1).SetPrimitiveField(jString, jClassClass,
-		                                                field.Definition, Arg.Any<IReadOnlyFixedMemory>());
+		env.AccessFeature.Received(1).SetField(jString, jClassClass, field.Definition, primitiveArray[0]);
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
@@ -519,8 +478,7 @@ public sealed class SetTests : IndeterminateAccessTestsBase
 
 		field.StaticSet(jStringClass, jLocalInstance);
 		env.ReferenceFeature.Received(1).Create<JWeak>(jLocalInstance);
-		env.AccessFeature.Received(1)
-		   .SetPrimitiveStaticField(jStringClass, field.Definition, Arg.Any<IReadOnlyFixedMemory>());
+		env.AccessFeature.Received(1).SetStaticField(jStringClass, field.Definition, primitiveArray[0]);
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
@@ -554,22 +512,19 @@ public sealed class SetTests : IndeterminateAccessTestsBase
 			                                                           true);
 
 		field.Set(jString, jFakeNumber);
-		env.AccessFeature.Received(1).SetPrimitiveField(jString, jString.Class,
-		                                                field.Definition, Arg.Any<IReadOnlyFixedMemory>());
+		env.AccessFeature.Received(1).SetField(jString, jString.Class, field.Definition, primitiveArray[0]);
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		field.Set(jString, jClassClass, jFakeNumber);
-		env.AccessFeature.Received(1).SetPrimitiveField(jString, jClassClass,
-		                                                field.Definition, Arg.Any<IReadOnlyFixedMemory>());
+		env.AccessFeature.Received(1).SetField(jString, jClassClass, field.Definition, primitiveArray[0]);
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		field.StaticSet(jStringClass, jFakeNumber);
-		env.AccessFeature.Received(1)
-		   .SetPrimitiveStaticField(jStringClass, field.Definition, Arg.Any<IReadOnlyFixedMemory>());
+		env.AccessFeature.Received(1).SetStaticField(jStringClass, field.Definition, primitiveArray[0]);
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
