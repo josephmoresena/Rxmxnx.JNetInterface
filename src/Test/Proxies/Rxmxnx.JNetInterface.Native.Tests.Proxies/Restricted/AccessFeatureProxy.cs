@@ -4,9 +4,9 @@ namespace Rxmxnx.JNetInterface.Tests.Restricted;
 public abstract partial class AccessFeatureProxy : IAccessFeature
 {
 	/// <summary>
-	/// Indicates whether an error should be raised for primitive-type call operations marked as obsolete.
+	/// Indicates whether an error should be raised for primitive-type operations marked as obsolete.
 	/// </summary>
-	private const Boolean callPrimitiveError = false;
+	private const Boolean primitiveFunctionsError = false;
 
 	public abstract TField? GetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition)
 		where TField : IDataType<TField>;
@@ -57,17 +57,21 @@ public abstract partial class AccessFeatureProxy : IAccessFeature
 		Boolean nonVirtual, IObject?[] args);
 	public abstract void CallMethod(JMethodObject jMethod, JLocalObject jLocal, JMethodDefinition definition,
 		Boolean nonVirtual, IObject?[] args);
+	[Obsolete("Use GetField<TPrimitive> method", AccessFeatureProxy.primitiveFunctionsError)]
 	public abstract void GetPrimitiveField(IFixedMemory bytes, JLocalObject jLocal, JClassObject jClass,
 		JFieldDefinition definition);
+	[Obsolete("Use GetStaticField<TPrimitive> method", AccessFeatureProxy.primitiveFunctionsError)]
 	public abstract void GetPrimitiveStaticField(IFixedMemory bytes, JClassObject jClass, JFieldDefinition definition);
+	[Obsolete("Use SetField<TPrimitive> method", AccessFeatureProxy.primitiveFunctionsError)]
 	public abstract void SetPrimitiveField(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition,
 		IReadOnlyFixedMemory mem);
+	[Obsolete("Use SetStaticField<TPrimitive> method", AccessFeatureProxy.primitiveFunctionsError)]
 	public abstract void SetPrimitiveStaticField(JClassObject jClass, JFieldDefinition definition,
 		IReadOnlyFixedMemory mem);
-	[Obsolete("Use CallFunction<TPrimitive> method", AccessFeatureProxy.callPrimitiveError)]
+	[Obsolete("Use CallFunction<TPrimitive> method", AccessFeatureProxy.primitiveFunctionsError)]
 	public abstract void CallPrimitiveFunction(IFixedMemory mem, JLocalObject jLocal, JClassObject jClass,
 		JFunctionDefinition definition, Boolean nonVirtual, IObject?[] args);
-	[Obsolete("Use CallStaticFunction<TPrimitive> method", AccessFeatureProxy.callPrimitiveError)]
+	[Obsolete("Use CallStaticFunction<TPrimitive> method", AccessFeatureProxy.primitiveFunctionsError)]
 	public abstract void CallStaticPrimitiveFunction(IFixedMemory mem, JClassObject jClass,
 		JFunctionDefinition definition, IObject?[] args);
 }
