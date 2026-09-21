@@ -59,9 +59,7 @@ public unsafe partial class IndeterminateField
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
 	public IndeterminateResult StaticGet(JClassObject jClass)
 	{
-		IEnvironment env = jClass.Environment;
 		ReadOnlySpan<Byte> signature = this.FieldType;
-
 		if (signature.Length == 1)
 		{
 			delegate* <out JValue.PrimitiveValue, JClassObject, JFieldDefinition, void> getPrimitive =
@@ -80,6 +78,7 @@ public unsafe partial class IndeterminateField
 			getPrimitive(out JValue.PrimitiveValue pValue, jClass, this.Definition);
 			return new(pValue, signature);
 		}
+		IEnvironment env = jClass.Environment;
 		JLocalObject? jObject = env.AccessFeature.GetStaticField<JLocalObject>(jClass, this.Definition);
 		return new(jObject, signature);
 		static void GetPrimitive<TPrimitive>(out JValue.PrimitiveValue result, JClassObject jClass,
