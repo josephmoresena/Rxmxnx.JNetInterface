@@ -5,6 +5,18 @@
 /// </summary>
 public partial class JConstructorDefinition : JCallDefinition
 {
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	// ReSharper disable once MemberCanBePrivate.Global
+	protected JConstructorDefinition(
+#if NET9_0_OR_GREATER
+		params ReadOnlySpan<JArgumentMetadata> metadata
+#else
+		ReadOnlySpan<JArgumentMetadata> metadata
+#endif
+	) : base(CommonNames.Constructor, metadata) { }
+
 	/// <inheritdoc/>
 	private protected JConstructorDefinition(AccessibleInfoSequence info, Int32 callSize, Int32[] sizes,
 		Int32 referenceCount) : base(info, callSize, sizes, referenceCount) { }
@@ -38,6 +50,30 @@ public partial class JConstructorDefinition : JCallDefinition
 		if (typeMetadata.ClassName.AsSpan().SequenceEqual(jClass.Name.AsSpan()))
 			NativeValidationUtilities.ThrowIfAbstractClass(typeMetadata);
 		return env.AccessFeature.CallConstructor<TObject>(jClass, this, args);
+	}
+	/// <summary>
+	/// Creates a new <typeparamref name="TObject"/> instance using a constructor on <paramref name="jClass"/>
+	/// which matches with current definition.
+	/// </summary>
+	/// <typeparam name="TObject">The <see cref="IDataType"/> type of the created object.</typeparam>
+	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the constructor.</typeparam>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="args">The arguments to pass to.</param>
+	/// <returns>A new <typeparamref name="TObject"/>.</returns>
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+	private TObject New<TObject, TArgs>(JClassObject jClass, in TArgs? args)
+#if !NET9_0_OR_GREATER
+		where TArgs : ICallArgument
+#else
+		where TArgs : ICallArgument, allows ref struct
+#endif
+		where TObject : JLocalObject, IClassType<TObject>
+	{
+		IEnvironment env = jClass.Environment;
+		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<TObject>();
+		if (typeMetadata.ClassName.AsSpan().SequenceEqual(jClass.Name.AsSpan()))
+			NativeValidationUtilities.ThrowIfAbstractClass(typeMetadata);
+		return env.AccessFeature.CallConstructor<TObject, TArgs>(jClass, this, in args);
 	}
 
 	/// <summary>

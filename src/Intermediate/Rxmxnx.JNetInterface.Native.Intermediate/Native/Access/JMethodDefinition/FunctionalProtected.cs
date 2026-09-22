@@ -6,7 +6,7 @@ public partial class JMethodDefinition
 	/// <summary>
 	/// Invokes a method on <paramref name="jLocal"/> which matches with current definition.
 	/// </summary>
-	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the constructor.</typeparam>
+	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the method.</typeparam>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	protected void Invoke<TArgs>(JLocalObject jLocal, in TArgs? args)
@@ -23,7 +23,7 @@ public partial class JMethodDefinition
 	/// Invokes a method on <paramref name="jLocal"/> which matches with current definition but using the
 	/// implementation declared on <paramref name="jClass"/>.
 	/// </summary>
-	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the constructor.</typeparam>
+	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the method.</typeparam>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
 	/// <param name="args">The arguments to pass to.</param>
@@ -41,7 +41,7 @@ public partial class JMethodDefinition
 	/// Invokes a method on <paramref name="jLocal"/> which matches with current definition but using the
 	/// implementation declared on <paramref name="jClass"/>.
 	/// </summary>
-	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the constructor.</typeparam>
+	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the method.</typeparam>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
 	/// <param name="args">The arguments to pass to.</param>
@@ -58,7 +58,7 @@ public partial class JMethodDefinition
 	/// <summary>
 	/// Invokes a static method on <paramref name="jClass"/> which matches with current definition.
 	/// </summary>
-	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the constructor.</typeparam>
+	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the method.</typeparam>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	protected void StaticInvoke<TArgs>(JClassObject jClass, in TArgs? args)
@@ -74,7 +74,7 @@ public partial class JMethodDefinition
 	/// <summary>
 	/// Invokes a reflected method which matches with current definition.
 	/// </summary>
-	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the constructor.</typeparam>
+	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the method.</typeparam>
 	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
@@ -91,7 +91,7 @@ public partial class JMethodDefinition
 	/// <summary>
 	/// Invokes a reflected method which matches with current definition.
 	/// </summary>
-	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the constructor.</typeparam>
+	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the method.</typeparam>
 	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
@@ -108,7 +108,7 @@ public partial class JMethodDefinition
 	/// <summary>
 	/// Invokes a reflected static method which matches with current definition.
 	/// </summary>
-	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the constructor.</typeparam>
+	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the method.</typeparam>
 	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	protected void InvokeStaticReflected<TArgs>(JMethodObject jMethod, in TArgs? args)
