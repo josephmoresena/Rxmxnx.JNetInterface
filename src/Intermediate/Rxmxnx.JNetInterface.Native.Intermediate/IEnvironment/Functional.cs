@@ -3,9 +3,18 @@ namespace Rxmxnx.JNetInterface;
 public unsafe partial interface IEnvironment
 {
 	/// <summary>
+	/// Temporal thread static environment used to avoid closure.
+	/// </summary>
+	[ThreadStatic]
+	private static IEnvironment? tempEnv;
+
+	/// <summary>
 	/// Executes a provided frame-based function within a controlled JNI environment frame and returns the result.
 	/// </summary>
-	/// <typeparam name="TFunction">The type of the function to execute, which must implement <see cref="IFrameFunction{TResult}"/>.</typeparam>
+	/// <typeparam name="TFunction">
+	/// The type of the function to execute, which must implement
+	/// <see cref="IFrameFunction{TResult}"/>.
+	/// </typeparam>
 	/// <typeparam name="TResult">The result type produced by the function.</typeparam>
 	/// <param name="func">A reference to the function to execute within the frame.</param>
 	/// <returns>The result produced by the executed function.</returns>
@@ -20,13 +29,20 @@ public unsafe partial interface IEnvironment
 		where TFunction : IFrameFunction<TResult>, allows ref struct
 #endif
 	{
-#pragma warning disable CS8500
-		fixed (TFunction* ptr = &func)
-#pragma warning restore CS8500
+		IEnvironment.tempEnv = this;
+		try
 		{
-			// ReSharper disable once RedundantCast
-			ValueTuple<IEnvironment, ValPtr<TFunction>> args = (this, (ValPtr<TFunction>)ptr);
-			return this.WithFrame(func.RequiredCapacity, args, static a => a.Item2.Reference.Apply(a.Item1));
+#pragma warning disable CS8500
+			fixed (TFunction* ptr = &func)
+#pragma warning restore CS8500
+			{
+				return this.WithFrame(func.RequiredCapacity, (ValPtr<TFunction>)ptr,
+				                      static a => a.Reference.Apply(IEnvironment.tempEnv, []));
+			}
+		}
+		finally
+		{
+			IEnvironment.tempEnv = default;
 		}
 	}
 	/// <summary>
@@ -45,13 +61,20 @@ public unsafe partial interface IEnvironment
 		where TAction : IFrameAction, allows ref struct
 #endif
 	{
-#pragma warning disable CS8500
-		fixed (TAction* ptr = &action)
-#pragma warning restore CS8500
+		IEnvironment.tempEnv = this;
+		try
 		{
-			// ReSharper disable once RedundantCast
-			ValueTuple<IEnvironment, ValPtr<TAction>> args = (this, (ValPtr<TAction>)ptr);
-			this.WithFrame(action.RequiredCapacity, args, static a => a.Item2.Reference.Accept(a.Item1));
+#pragma warning disable CS8500
+			fixed (TAction* ptr = &action)
+#pragma warning restore CS8500
+			{
+				this.WithFrame<ValPtr<TAction>>(action.RequiredCapacity, ptr,
+				                                static a => a.Reference.Accept(IEnvironment.tempEnv, []));
+			}
+		}
+		finally
+		{
+			IEnvironment.tempEnv = default;
 		}
 	}
 }

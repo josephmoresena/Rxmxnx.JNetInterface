@@ -6,7 +6,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal readonly struct FrameAction(Int32 capacity, Action action) : IFrameAction
 {
 	Int32 IFrameAction.RequiredCapacity => capacity;
-	void IFrameAction.Accept(IEnvironment _) => action();
+	void IFrameAction.Accept(IEnvironment _, ReadOnlySpan<JLocalObject?> __) => action();
 }
 
 /// <summary>
@@ -15,14 +15,14 @@ internal readonly struct FrameAction(Int32 capacity, Action action) : IFrameActi
 #if !NET9_0_OR_GREATER
 internal readonly struct FrameAction<TState>(Int32 capacity, TState state, Action<TState> action) : IFrameAction
 {
-	void IFrameAction.Accept(IEnvironment _) => action(state);
+	void IFrameAction.Accept(IEnvironment _, ReadOnlySpan<JLocalObject?> __) => action(state);
 #else
 internal readonly ref struct FrameAction<TState>(Int32 capacity, TState state, Action<TState> action) : IFrameAction
 	where TState : allows ref struct
 {
 	private readonly TState _state = state;
 
-	void IFrameAction.Accept(IEnvironment _) => action(this._state);
+	void IFrameAction.Accept(IEnvironment _, ReadOnlySpan<JLocalObject?> __) => action(this._state);
 #endif
 	Int32 IFrameAction.RequiredCapacity => capacity;
 }
@@ -33,7 +33,7 @@ internal readonly ref struct FrameAction<TState>(Int32 capacity, TState state, A
 internal readonly struct FrameFunction<TResult>(Int32 capacity, Func<TResult> func) : IFrameFunction<TResult>
 {
 	Int32 IFrameFunction<TResult>.RequiredCapacity => capacity;
-	TResult IFrameFunction<TResult>.Apply(IEnvironment _) => func();
+	TResult IFrameFunction<TResult>.Apply(IEnvironment _, ReadOnlySpan<JLocalObject?> __) => func();
 }
 
 /// <summary>
@@ -43,14 +43,14 @@ internal readonly struct FrameFunction<TResult>(Int32 capacity, Func<TResult> fu
 internal readonly struct FrameFunction<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func)
 	: IFrameFunction<TResult>
 {
-	TResult IFrameFunction<TResult>.Apply(IEnvironment _) => func(state);
+	TResult IFrameFunction<TResult>.Apply(IEnvironment _, ReadOnlySpan<JLocalObject?> __) => func(state);
 #else
 internal readonly ref struct FrameFunction<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func)
 	: IFrameFunction<TResult> where TState : allows ref struct
 {
 	private readonly TState _state = state;
 
-	TResult IFrameFunction<TResult>.Apply(IEnvironment _) => func(this._state);
+	TResult IFrameFunction<TResult>.Apply(IEnvironment _, ReadOnlySpan<JLocalObject?> __) => func(this._state);
 #endif
 	Int32 IFrameFunction<TResult>.RequiredCapacity => capacity;
 }

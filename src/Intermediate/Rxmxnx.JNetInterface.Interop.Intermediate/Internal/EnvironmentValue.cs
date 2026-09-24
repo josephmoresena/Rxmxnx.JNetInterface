@@ -144,7 +144,7 @@ internal readonly partial struct EnvironmentValue
 #endif
 	{
 		using LocalFrame _ = new(nativeThread, action.RequiredCapacity);
-		action.Accept(nativeThread);
+		action.Accept(nativeThread, []);
 	}
 	/// <summary>
 	/// Creates a new local reference frame and executes <paramref name="func"/> inside of it.
@@ -160,7 +160,7 @@ internal readonly partial struct EnvironmentValue
 #endif
 	{
 		using LocalFrame localFrame = new(nativeThread, func.RequiredCapacity);
-		TResult result = func.Apply(nativeThread);
+		TResult result = func.Apply(nativeThread, []);
 		localFrame.SetResult(result);
 		return result;
 	}

@@ -576,16 +576,13 @@ public sealed class NativeFunctionSetImplTests
 		   .Returns((Int32)NativeFunctionSetImplTests.GetModifiers(jClass));
 		if (jClassElement is not null) env.ClassFeature.GetClass(jClassElement.Name).Returns(jClassElement);
 
-		env.WithFrame(Arg.Any<Int32>(),
-		              Arg.Any<ValueTuple<IEnvironment, ValPtr<NativeFunctionSetImpl.IsFinalArrayTypeFunc>>>(),
-		              Arg.Any<Func<ValueTuple<IEnvironment, ValPtr<NativeFunctionSetImpl.IsFinalArrayTypeFunc>>,
-			              Boolean>>()).Returns(c =>
+		env.WithFrame(Arg.Any<Int32>(), Arg.Any<ValPtr<NativeFunctionSetImpl.IsFinalArrayTypeFunc>>(),
+		              Arg.Any<Func<ValPtr<NativeFunctionSetImpl.IsFinalArrayTypeFunc>, Boolean>>()).Returns(c =>
 		{
-			if (c[2] is not Func<ValueTuple<IEnvironment, ValPtr<NativeFunctionSetImpl.IsFinalArrayTypeFunc>>, Boolean>
-				    func ||
-			    c[1] is not ValueTuple<IEnvironment, ValPtr<NativeFunctionSetImpl.IsFinalArrayTypeFunc>> tuple)
+			if (c[2] is not Func<ValPtr<NativeFunctionSetImpl.IsFinalArrayTypeFunc>, Boolean> func ||
+			    c[1] is not ValPtr<NativeFunctionSetImpl.IsFinalArrayTypeFunc> ptr)
 				throw new();
-			return func(tuple);
+			return func(ptr);
 		});
 
 		Assert.Equal(jClass.IsFinal, NativeFunctionSetImpl.Instance.IsFinal(jClass, out _));

@@ -14,7 +14,7 @@ internal partial class NativeFunctionSetImpl
 #endif
 	{
 		Int32 IFrameFunction<Boolean>.RequiredCapacity => IVirtualMachine.IsFinalArrayCapacity;
-		Boolean IFrameFunction<Boolean>.Apply(IEnvironment env)
+		Boolean IFrameFunction<Boolean>.Apply(IEnvironment env, ReadOnlySpan<JLocalObject?> objects)
 		{
 			Int32 dimension = arrayClass.ArrayDimension;
 			if (dimension + 1 == arrayClass.ClassSignature.Length) return true;
