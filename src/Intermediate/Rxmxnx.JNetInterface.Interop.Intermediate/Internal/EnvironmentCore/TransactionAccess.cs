@@ -21,7 +21,7 @@ internal sealed partial class EnvironmentCore
 			jniTransaction.Add(this.ReloadClass(jLocalClass).Value) :
 			jniTransaction.Add(jLocal);
 	/// <summary>
-	/// Indicates whether current call must use <see langword="stackalloc"/> or <see langword="new"/> to
+	/// Indicates whether the current call must use <see langword="stackalloc"/> or <see langword="new"/> to
 	/// hold JNI call parameter.
 	/// </summary>
 	/// <param name="jCall">A <see cref="JCallDefinition"/> instance.</param>
@@ -36,44 +36,12 @@ internal sealed partial class EnvironmentCore
 		return this.UseStackAlloc(requiredBytes);
 	}
 	/// <summary>
-	/// Retrieves <paramref name="argSpan"/> as a <see cref="JValue"/> span containing <paramref name="args"/> information.
-	/// </summary>
-	/// <param name="jniTransaction">A <see cref="INativeTransaction"/> transaction.</param>
-	/// <param name="args">A <see cref="IObject"/> span.</param>
-	/// <param name="argSpan">Destination span.</param>
-	/// <exception cref="InvalidOperationException">Invalid object.</exception>
-	private Span<JValue> CopyAsJValue(INativeTransaction jniTransaction, ReadOnlySpan<IObject?> args,
-		Span<Byte> argSpan)
-	{
-		Span<JValue> result = argSpan.AsValues<Byte, JValue>();
-		for (Int32 i = 0; i < args.Length; i++)
-		{
-			switch (args[i])
-			{
-				case IPrimitiveType primitive:
-					primitive.CopyTo(result, i);
-					break;
-				case JReferenceObject referenceObject:
-					ImplementationValidationUtilities.ThrowIfProxy(referenceObject);
-					this.ReloadClass(referenceObject as JClassObject);
-					ImplementationValidationUtilities.ThrowIfDefault(referenceObject, (Byte)i);
-					ref JObjectLocalRef localRef = ref Unsafe.As<JValue, JObjectLocalRef>(ref result[i]);
-					localRef = jniTransaction.Add(referenceObject);
-					break;
-				default:
-					result[i] = JValue.Empty;
-					continue;
-			}
-		}
-		return result;
-	}
-	/// <summary>
 	/// Creates <see cref="INativeTransaction"/> for class transaction.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="definition">Transaction call definition.</param>
 	/// <param name="methodId">Call method id.</param>
-	/// <param name="execution">Indicates whether transaction is for call execution..</param>
+	/// <param name="execution">Indicates whether the transaction is for call execution.</param>
 	/// <returns>A <see cref="INativeTransaction"/> instance.</returns>
 	private INativeTransaction GetClassTransaction(JClassObject jClass, JCallDefinition definition,
 		out JMethodId methodId, Boolean execution = true)
@@ -85,7 +53,7 @@ internal sealed partial class EnvironmentCore
 		return jniTransaction;
 	}
 	/// <summary>
-	/// Creates <see cref="INativeTransaction"/> for instance transaction.
+	/// Creates a <see cref="INativeTransaction"/> for instance transaction.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="definition">Transaction call definition.</param>
@@ -100,7 +68,7 @@ internal sealed partial class EnvironmentCore
 		return jniTransaction;
 	}
 	/// <summary>
-	/// Creates <see cref="INativeTransaction"/> for instance transaction.
+	/// Creates <see cref="INativeTransaction"/> for instance, transaction.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>

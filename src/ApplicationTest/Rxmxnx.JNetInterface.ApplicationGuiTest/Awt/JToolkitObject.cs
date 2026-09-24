@@ -1,3 +1,4 @@
+using Rxmxnx.JNetInterface.ApplicationTest;
 using Rxmxnx.JNetInterface.Awt.Event;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
@@ -35,13 +36,8 @@ public class JToolkitObject : JLocalObject, IClassType<JToolkitObject>
 	{
 		IEnvironment env = this.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JToolkitObject>(env);
-		JToolkitObject.addAwtEventListenerDef.MethodCall(this, jClass, false,
-#if !NET9_0_OR_GREATER
-		                                                 [eventListener, (JLong)(Int64)mask,]
-#else
-		                                                 eventListener, (JLong)(Int64)mask
-#endif
-		);
+		GenericArgument<IObject, JLong> arg = new(eventListener, (Int64)mask);
+		JToolkitObject.addAwtEventListenerDef.MethodCall(this, jClass, false, in arg);
 	}
 
 	public static JToolkitObject GetDefaultToolkit(IEnvironment env)

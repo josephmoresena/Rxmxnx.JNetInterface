@@ -1,3 +1,4 @@
+using Rxmxnx.JNetInterface.ApplicationTest;
 using Rxmxnx.JNetInterface.Awt;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
@@ -56,11 +57,10 @@ public class JDialogObjectSwing : JDialogObject, IClassType<JDialogObjectSwing>,
 		IEnvironment env = frame.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JDialogObjectSwing>(env);
 		using JStringObject jString = JStringObject.Create(env, title);
-#if !NET9_0_OR_GREATER
-		return JDialogObjectSwing.constructorDef.NewCall<JDialogObjectSwing>(env, [frame, jString, (JBoolean)modal,]);
-#else
-		return JDialogObjectSwing.constructorDef.NewCall<JDialogObjectSwing>(env, frame, jString, (JBoolean)modal);
-#endif
+		GenericArgument<JFrameObjectAwt, JStringObject, JBoolean> args = new(frame, jString, modal);
+		return JDialogObjectSwing.constructorDef
+		                         .NewCall<JDialogObjectSwing,
+			                         GenericArgument<JFrameObjectAwt, JStringObject, JBoolean>>(env, in args);
 	}
 
 	static JDialogObjectSwing IClassType<JDialogObjectSwing>.Create(IReferenceType.ClassInitializer initializer)

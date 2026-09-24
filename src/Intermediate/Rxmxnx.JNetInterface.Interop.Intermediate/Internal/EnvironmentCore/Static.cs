@@ -128,12 +128,12 @@ internal sealed partial class EnvironmentCore
 		nativeInterface.ErrorFunctions.ExceptionDescribe(core.Reference);
 	}
 	/// <summary>
-	/// Retrieves a global reference for given class reference.
+	/// Retrieves a global reference for the given class reference.
 	/// </summary>
 	/// <param name="core">A <see cref="EnvironmentCore"/> instance.</param>
 	/// <param name="typeInformation">Type information.</param>
 	/// <param name="classRef">A local class reference.</param>
-	/// <param name="deleteLocalRef">Indicates whether local class reference should be deleted.</param>
+	/// <param name="deleteLocalRef">Indicates whether the local class reference should be deleted.</param>
 	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
 	internal static JGlobalRef GetMainClassGlobalRef(EnvironmentCore core, ITypeInformation typeInformation,
 		JClassLocalRef classRef, Boolean deleteLocalRef = true)

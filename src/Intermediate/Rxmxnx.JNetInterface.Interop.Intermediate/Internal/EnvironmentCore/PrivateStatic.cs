@@ -12,7 +12,7 @@ internal sealed partial class EnvironmentCore
 	private const Int32 minStackBytes = 128;
 
 	/// <summary>
-	/// Disposable context for zero pointer.
+	/// Disposable context for a zero pointer.
 	/// </summary>
 	private static readonly IFixedContext<Byte>.IDisposable zeroByteContext = default(Memory<Byte>).GetFixedContext();
 
@@ -53,7 +53,7 @@ internal sealed partial class EnvironmentCore
 	/// <param name="jLocal">Field instance object class.</param>
 	/// <param name="jClass">Field declaring class.</param>
 	/// <param name="definition">Call definition.</param>
-	/// <param name="bytes">Binary span containing value to set to.</param>
+	/// <param name="bytes">Binary span containing the value to set to.</param>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
@@ -257,7 +257,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>boolean</c> <see cref="JniMethodInfo"/> instance for instance method call.
 	/// </summary>
-	/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call is non-virtual.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -268,7 +268,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>byte</c> <see cref="JniMethodInfo"/> instance for instance method call.
 	/// </summary>
-	/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call is non-virtual.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -279,7 +279,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>char</c> <see cref="JniMethodInfo"/> instance for instance method call.
 	/// </summary>
-	/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call is non-virtual.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -290,7 +290,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>double</c> <see cref="JniMethodInfo"/> instance for instance method call.
 	/// </summary>
-	/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call is non-virtual.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -301,7 +301,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>float</c> <see cref="JniMethodInfo"/> instance for instance method call.
 	/// </summary>
-	/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call is non-virtual.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -312,7 +312,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>int</c> <see cref="JniMethodInfo"/> instance for instance method call.
 	/// </summary>
-	/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call is non-virtual.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -323,7 +323,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>long</c> <see cref="JniMethodInfo"/> instance for instance method call.
 	/// </summary>
-	/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call is non-virtual.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -334,7 +334,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>short</c> <see cref="JniMethodInfo"/> instance for instance method call.
 	/// </summary>
-	/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call is non-virtual.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -345,7 +345,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>void</c> <see cref="JniMethodInfo"/> instance for instance method call.
 	/// </summary>
-	/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call is non-virtual.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -356,7 +356,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>Object</c> <see cref="JniMethodInfo"/> instance for instance method call.
 	/// </summary>
-	/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call is non-virtual.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -367,7 +367,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>boolean</c> <see cref="JniMethodInfo"/> instance for static field call.
 	/// </summary>
-	/// <param name="getField">Indicates whether current call is for get field value.</param>
+	/// <param name="getField">Indicates whether the current call is for get field value.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -378,7 +378,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>byte</c> <see cref="JniMethodInfo"/> instance for static field call.
 	/// </summary>
-	/// <param name="getField">Indicates whether current call is for get field value.</param>
+	/// <param name="getField">Indicates whether the current call is for get field value.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -389,7 +389,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>char</c> <see cref="JniMethodInfo"/> instance for static field call.
 	/// </summary>
-	/// <param name="getField">Indicates whether current call is for get field value.</param>
+	/// <param name="getField">Indicates whether the current call is for get field value.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -400,7 +400,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>double</c> <see cref="JniMethodInfo"/> instance for static field call.
 	/// </summary>
-	/// <param name="getField">Indicates whether current call is for get field value.</param>
+	/// <param name="getField">Indicates whether the current call is for get field value.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -411,7 +411,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>float</c> <see cref="JniMethodInfo"/> instance for static field call.
 	/// </summary>
-	/// <param name="getField">Indicates whether current call is for get field value.</param>
+	/// <param name="getField">Indicates whether the current call is for get field value.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -422,7 +422,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>int</c> <see cref="JniMethodInfo"/> instance for static field call.
 	/// </summary>
-	/// <param name="getField">Indicates whether current call is for get field value.</param>
+	/// <param name="getField">Indicates whether the current call is for get field value.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -433,7 +433,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>long</c> <see cref="JniMethodInfo"/> instance for static field call.
 	/// </summary>
-	/// <param name="getField">Indicates whether current call is for get field value.</param>
+	/// <param name="getField">Indicates whether the current call is for get field value.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -444,7 +444,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>short</c> <see cref="JniMethodInfo"/> instance for static field call.
 	/// </summary>
-	/// <param name="getField">Indicates whether current call is for get field value.</param>
+	/// <param name="getField">Indicates whether the current call is for get field value.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -455,7 +455,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>boolean</c> <see cref="JniMethodInfo"/> instance for instance field call.
 	/// </summary>
-	/// <param name="getField">Indicates whether current call is for get field value.</param>
+	/// <param name="getField">Indicates whether the current call is for get field value.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -466,7 +466,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>byte</c> <see cref="JniMethodInfo"/> instance for instance field call.
 	/// </summary>
-	/// <param name="getField">Indicates whether current call is for get field value.</param>
+	/// <param name="getField">Indicates whether the current call is for get field value.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -477,7 +477,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>char</c> <see cref="JniMethodInfo"/> instance for instance field call.
 	/// </summary>
-	/// <param name="getField">Indicates whether current call is for get field value.</param>
+	/// <param name="getField">Indicates whether the current call is for get field value.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -488,7 +488,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>double</c> <see cref="JniMethodInfo"/> instance for instance field call.
 	/// </summary>
-	/// <param name="getField">Indicates whether current call is for get field value.</param>
+	/// <param name="getField">Indicates whether the current call is for get field value.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -499,7 +499,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>float</c> <see cref="JniMethodInfo"/> instance for instance field call.
 	/// </summary>
-	/// <param name="getField">Indicates whether current call is for get field value.</param>
+	/// <param name="getField">Indicates whether the current call is for get field value.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -510,7 +510,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>int</c> <see cref="JniMethodInfo"/> instance for instance field call.
 	/// </summary>
-	/// <param name="getField">Indicates whether current call is for get field value.</param>
+	/// <param name="getField">Indicates whether the current call is for get field value.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -521,7 +521,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>long</c> <see cref="JniMethodInfo"/> instance for instance field call.
 	/// </summary>
-	/// <param name="getField">Indicates whether current call is for get field value.</param>
+	/// <param name="getField">Indicates whether the current call is for get field value.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
@@ -532,7 +532,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves the <c>short</c> <see cref="JniMethodInfo"/> instance for instance field call.
 	/// </summary>
-	/// <param name="getField">Indicates whether current call is for get field value.</param>
+	/// <param name="getField">Indicates whether the current call is for get field value.</param>
 	/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]

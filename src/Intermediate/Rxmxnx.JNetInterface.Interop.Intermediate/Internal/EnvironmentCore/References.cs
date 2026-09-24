@@ -27,7 +27,7 @@ internal sealed partial class EnvironmentCore
 		this._objects.Capacity = capacity;
 	}
 	/// <summary>
-	/// Sets current object cache.
+	/// Sets the current object cache.
 	/// </summary>
 	/// <param name="localCache">A <see cref="LocalCache"/> instance.</param>
 	public void SetObjectCache(LocalCache localCache) => this._objects = localCache;

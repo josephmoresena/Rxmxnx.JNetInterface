@@ -201,7 +201,7 @@ internal static class ImplementationValidationUtilities
 	/// <exception cref="InvalidOperationException">
 	/// Throws an exception if <paramref name="index"/> is invalid.
 	/// </exception>
-	public static void ThrowIfInvalidIndex(Byte index, Int32 count)
+	public static void ThrowIfInvalidIndex(Int32 index, Int32 count)
 	{
 		if (index < count) return;
 		IMessageResource resource = IMessageResource.GetInstance();

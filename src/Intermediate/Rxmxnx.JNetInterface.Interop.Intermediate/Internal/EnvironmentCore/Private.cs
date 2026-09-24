@@ -15,7 +15,7 @@ internal sealed partial class EnvironmentCore
 	/// </summary>
 	private readonly INativeThread _env;
 	/// <summary>
-	/// Indicates whether current thread is building a JNI throwable exception.
+	/// Indicates whether the current thread is building a JNI throwable exception.
 	/// </summary>
 	private Boolean _buildingException;
 	/// <summary>
@@ -42,11 +42,11 @@ internal sealed partial class EnvironmentCore
 			throw new ArgumentException(IMessageResource.GetInstance().InvalidClass, jClass.ToTraceText());
 	}
 	/// <summary>
-	/// Retrieves managed <see cref="ArrayFunctionSet"/> reference from current instance.
+	/// Retrieves managed <see cref="ArrayFunctionSet"/> reference from the current instance.
 	/// </summary>
 	/// <param name="primitiveSignature">Primitive signature char.</param>
 	/// <param name="arrayFunction">Requested array function.</param>
-	/// <returns>A managed <see cref="ArrayFunctionSet"/> reference from current instance.</returns>
+	/// <returns>A managed <see cref="ArrayFunctionSet"/> reference from the current instance.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private ref readonly ArrayFunctionSet GetArrayFunctions(Byte primitiveSignature,
 		ArrayFunctionSet.PrimitiveFunction arrayFunction)
@@ -66,11 +66,11 @@ internal sealed partial class EnvironmentCore
 		return ref this.GetNativeInterface<NativeInterface>(info).ArrayFunctions;
 	}
 	/// <summary>
-	/// Retrieves managed <see cref="InstanceMethodFunctionSet"/> reference from current instance.
+	/// Retrieves managed <see cref="InstanceMethodFunctionSet"/> reference from the current instance.
 	/// </summary>
-	/// <param name="signatureChar">Signature first char.</param>
-	/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
-	/// <returns>A managed <see cref="InstanceMethodFunctionSet"/> reference from current instance.</returns>
+	/// <param name="signatureChar">Signature-first char.</param>
+	/// <param name="nonVirtual">Indicates whether the current call is non-virtual.</param>
+	/// <returns>A managed <see cref="InstanceMethodFunctionSet"/> reference from the current instance.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private ref readonly InstanceMethodFunctionSet GetInstanceMethodFunctions(Byte signatureChar, Boolean nonVirtual)
 	{
@@ -91,10 +91,10 @@ internal sealed partial class EnvironmentCore
 		return ref this.GetNativeInterface<NativeInterface>(info).InstanceMethodFunctions;
 	}
 	/// <summary>
-	/// Retrieves managed <see cref="MethodFunctionSet{JClassLocalRef}"/> reference from current instance.
+	/// Retrieves managed <see cref="MethodFunctionSet{JClassLocalRef}"/> reference from the current instance.
 	/// </summary>
 	/// <param name="primitiveSignature">Primitive signature char.</param>
-	/// <returns>A managed <see cref="MethodFunctionSet{JClassLocalRef}"/> reference from current instance.</returns>
+	/// <returns>A managed <see cref="MethodFunctionSet{JClassLocalRef}"/> reference from the current instance.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private ref readonly MethodFunctionSet<JClassLocalRef> GetStaticMethodFunctions(Byte primitiveSignature)
 	{
@@ -114,11 +114,11 @@ internal sealed partial class EnvironmentCore
 		return ref this.GetNativeInterface<NativeInterface>(info).StaticMethodFunctions;
 	}
 	/// <summary>
-	/// Retrieves managed <see cref="FieldFunctionSet{JObjectLocalRef}"/> reference from current instance.
+	/// Retrieves managed <see cref="FieldFunctionSet{JObjectLocalRef}"/> reference from the current instance.
 	/// </summary>
 	/// <param name="primitiveSignature">Primitive signature char.</param>
-	/// <param name="getField">Indicates whether current call is for get field value.</param>
-	/// <returns>A managed <see cref="FieldFunctionSet{JObjectLocalRef}"/> reference from current instance.</returns>
+	/// <param name="getField">Indicates whether the current call is for get field value.</param>
+	/// <returns>A managed <see cref="FieldFunctionSet{JObjectLocalRef}"/> reference from the current instance.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private ref readonly FieldFunctionSet<JObjectLocalRef> GetInstanceFieldFunctions(Byte primitiveSignature,
 		Boolean getField)
@@ -138,11 +138,11 @@ internal sealed partial class EnvironmentCore
 		return ref this.GetNativeInterface<NativeInterface>(info).InstanceFieldFunctions;
 	}
 	/// <summary>
-	/// Retrieves managed <see cref="FieldFunctionSet{JClassLocalRef}"/> reference from current instance.
+	/// Retrieves managed <see cref="FieldFunctionSet{JClassLocalRef}"/> reference from the current instance.
 	/// </summary>
 	/// <param name="primitiveSignature">Primitive signature char.</param>
-	/// <param name="getField">Indicates whether current call is for get field value.</param>
-	/// <returns>A managed <see cref="FieldFunctionSet{JClassLocalRef}"/> reference from current instance.</returns>
+	/// <param name="getField">Indicates whether the current call is for get field value.</param>
+	/// <returns>A managed <see cref="FieldFunctionSet{JClassLocalRef}"/> reference from the current instance.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private ref readonly FieldFunctionSet<JClassLocalRef> GetStaticFieldFunctions(Byte primitiveSignature,
 		Boolean getField)
@@ -162,12 +162,12 @@ internal sealed partial class EnvironmentCore
 		return ref this.GetNativeInterface<NativeInterface>(info).StaticFieldFunctions;
 	}
 	/// <summary>
-	/// Creates an object from given reference.
+	/// Creates an object from the given reference.
 	/// </summary>
 	/// <typeparam name="TResult">A <see cref="IDataType"/> type.</typeparam>
 	/// <param name="localRef">A <see cref="JClassLocalRef"/> reference.</param>
-	/// <param name="register">Indicates whether object must be registered.</param>
-	/// <param name="useTypeClass">Indicates whether object must use <typeparamref name="TResult"/> class.</param>
+	/// <param name="register">Indicates whether the result object must be registered.</param>
+	/// <param name="useTypeClass">Indicates whether the result object must use <typeparamref name="TResult"/> class.</param>
 	/// <returns>A <typeparamref name="TResult"/> instance.</returns>
 	private TResult? CreateObject<TResult>(JObjectLocalRef localRef, Boolean register, Boolean useTypeClass)
 		where TResult : IDataType<TResult>
@@ -187,7 +187,7 @@ internal sealed partial class EnvironmentCore
 		return register ? this.Register(result) : result;
 	}
 	/// <summary>
-	/// Creates an object from given reference.
+	/// Creates an object from the given reference.
 	/// </summary>
 	/// <typeparam name="TResult">A <see cref="IDataType"/> type.</typeparam>
 	/// <param name="jClass">Object class.</param>
@@ -204,7 +204,7 @@ internal sealed partial class EnvironmentCore
 		return this.Register(result);
 	}
 	/// <summary>
-	/// Indicates whether current JNI call must use <see langword="stackalloc"/> or <see langword="new"/> to
+	/// Indicates whether the current JNI call must use <see langword="stackalloc"/> or <see langword="new"/> to
 	/// hold JNI call parameter.
 	/// </summary>
 	/// <param name="requiredBytes">Output. Number of bytes to allocate.</param>
@@ -228,7 +228,7 @@ internal sealed partial class EnvironmentCore
 	/// The string is encoded in modified UTF-8.
 	/// </param>
 	/// <param name="throwException">
-	/// Indicates whether exception should be thrown in managed code.
+	/// Indicates whether the exception should be thrown in managed code.
 	/// </param>
 	/// <param name="message">
 	/// The message used to construct the <see cref="ThrowableException"/> instance.
@@ -255,7 +255,7 @@ internal sealed partial class EnvironmentCore
 	/// The string is encoded in modified UTF-8.
 	/// </param>
 	/// <param name="throwException">
-	/// Indicates whether exception should be thrown in managed code.
+	/// Indicates whether the exception should be thrown in managed code.
 	/// </param>
 	/// <param name="message">
 	/// The message used to construct the <see cref="ThrowableException"/> instance.
@@ -286,7 +286,7 @@ internal sealed partial class EnvironmentCore
 			return nativeInterface.ErrorFunctions.ThrowNew(this.Reference, classRef, ptr);
 	}
 	/// <summary>
-	/// Creates JNI exception from the thrown exception.
+	/// Creates a JNI exception from the thrown exception.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="throwableMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
@@ -371,7 +371,7 @@ internal sealed partial class EnvironmentCore
 		return new(jStringClass, localRef.Transform<JObjectLocalRef, JStringLocalRef>());
 	}
 	/// <summary>
-	/// Sets given <see cref="JThrowableLocalRef"/> reference as pending exception.
+	/// Sets given <see cref="JThrowableLocalRef"/> reference as the pending exception.
 	/// </summary>
 	/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
 	private void Throw(JThrowableLocalRef throwableRef)
@@ -385,7 +385,7 @@ internal sealed partial class EnvironmentCore
 	/// Sets <paramref name="jniException"/> as managed pending exception and throws it.
 	/// </summary>
 	/// <param name="throwException">
-	/// Indicates whether exception should be thrown in managed code.
+	/// Indicates whether the exception should be thrown in managed code.
 	/// </param>
 	/// <param name="jniException">A <see cref="JniException"/> instance.</param>
 	/// <exception cref="ThrowableException">
@@ -407,9 +407,9 @@ internal sealed partial class EnvironmentCore
 		jLocal.ClearValue();
 	}
 	/// <summary>
-	/// Creates a <see cref="StackDisposable"/> instance for current call.
+	/// Creates a <see cref="StackDisposable"/> instance for the current call.
 	/// </summary>
-	/// <param name="useStackAlloc">Indicates whether current call is using stack.</param>
+	/// <param name="useStackAlloc">Indicates whether the current call is using stack.</param>
 	/// <param name="requiredBytes">Number of bytes to use from stack.</param>
 	/// <returns>A <see cref="StackDisposable"/> instance.</returns>
 	private StackDisposable GetStackDisposable(Boolean useStackAlloc, Int32 requiredBytes)
@@ -427,7 +427,7 @@ internal sealed partial class EnvironmentCore
 		return ptr.GetUnsafeFixedContext(stackSpan.Length, disposable);
 	}
 	/// <summary>
-	/// Checks and throws a Throwable exception in non-critical state.
+	/// Checks and throws a Throwable exception in a non-critical state.
 	/// </summary>
 	private void ExceptionOccurred()
 	{

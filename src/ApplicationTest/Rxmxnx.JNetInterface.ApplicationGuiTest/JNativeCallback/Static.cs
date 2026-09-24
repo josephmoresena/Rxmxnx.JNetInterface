@@ -3,11 +3,16 @@ using System.Runtime.CompilerServices;
 
 using Rxmxnx.JNetInterface.ApplicationTest;
 using Rxmxnx.JNetInterface.Awt.Event;
+using Rxmxnx.JNetInterface.Functional;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
+using Rxmxnx.JNetInterface.Native.Access;
 using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.PInvoke;
+#if NET9_0_OR_GREATER
+using System.Runtime.InteropServices;
+#endif
 
 namespace Rxmxnx.JNetInterface;
 
@@ -61,11 +66,8 @@ public partial class JNativeCallback
 		Boolean createState = true;
 		try
 		{
-#if !NET9_0_OR_GREATER
-			return JNativeCallback.constructorDef.NewCall<TObject>(env, [longKey[0], longKey[1],]).CastTo<TInterface>();
-#else
-			return JNativeCallback.constructorDef.NewCall<TObject>(env, longKey[0], longKey[1]).CastTo<TInterface>();
-#endif
+			LongKeyArg arg = new(longKey);
+			return JNativeCallback.constructorDef.NewCall<TObject, LongKeyArg>(env, in arg).CastTo<TInterface>();
 		}
 		catch (Exception)
 		{
@@ -76,6 +78,32 @@ public partial class JNativeCallback
 		{
 			if (createState)
 				JNativeCallback.states.TryAdd(longKey.AsValues<JLong, Guid>()[0], state);
+		}
+	}
+
+#if !NET9_0_OR_GREATER
+	private readonly struct LongKeyArg(ReadOnlySpan<JLong> longKey) : ICallArgument
+	{
+		private readonly ReadOnlyValPtr<JLong> _ptr = longKey.GetUnsafeValPtr();
+
+		private ReadOnlySpan<JLong> GetKey() => this._ptr.Pointer.GetUnsafeReadOnlySpan<JLong>(2);
+#else
+	private readonly ref struct LongKeyArg(ReadOnlySpan<JLong> longKey) : ICallArgument
+	{
+		private readonly ref JLong _ref = ref MemoryMarshal.GetReference(longKey);
+
+		private ReadOnlySpan<JLong> GetKey() => MemoryMarshal.CreateReadOnlySpan(ref this._ref, 2);
+
+		public String ToTraceText() => this.ToString();
+#endif
+
+		public void Configure<TSlot>(TSlot slot, JCallDefinition callDefinition) where TSlot : IParameterSlot
+			=> slot.SetParameterValues(0, this.GetKey());
+
+		public override String ToString()
+		{
+			ReadOnlySpan<JLong> longKey = this.GetKey();
+			return $"[0: {longKey[0]}, {longKey[1]}]";
 		}
 	}
 }

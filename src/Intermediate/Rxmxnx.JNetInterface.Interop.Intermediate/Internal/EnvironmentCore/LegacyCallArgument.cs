@@ -50,17 +50,12 @@ internal sealed partial class EnvironmentCore
 		// ReSharper disable once ConvertToPrimaryConstructor
 		public LegacyCallArgument(ReadOnlySpan<IObject?> args) => this.Values = args;
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		String ICallArgument.ToTraceText() => this.ToString();
 #endif
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		void ICallArgument.Configure<TSlot>(TSlot slot, JCallDefinition callDefinition)
-		{
-			ReadOnlySpan<IObject?> values = this.Values;
-			for (Int32 index = 0; index < values.Length; index++)
-			{
-				IObject? arg = values[index];
-				slot.SetParameterValue((Byte)index, arg);
-			}
-		}
+			=> slot.SetParameterValues(0, this.Values);
 
 		/// <inheritdoc/>
 		public override String ToString()

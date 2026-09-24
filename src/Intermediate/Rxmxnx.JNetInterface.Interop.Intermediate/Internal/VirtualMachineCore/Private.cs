@@ -81,7 +81,7 @@ internal abstract partial class VirtualMachineCore
 	}
 
 	/// <summary>
-	/// Detaches current thread from <see cref="IVirtualMachine"/> referenced by <paramref name="core"/>.
+	/// Detaches the current thread from <see cref="IVirtualMachine"/> referenced by <paramref name="core"/>.
 	/// </summary>
 	/// <param name="core">A <see cref="VirtualMachineCore"/> reference.</param>
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>

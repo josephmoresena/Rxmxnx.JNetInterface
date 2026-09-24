@@ -17,7 +17,7 @@ internal partial interface IAccessFeature
 
 		void IParameterSlot.SetParameterValue<TObject>(Byte index, TObject? value) where TObject : default
 			=> this._args[index] = value;
-		void IParameterSlot.SetNullValue(Byte index) => this._args[index] = default;
+		void IParameterSlot.SetParameterNull(Byte index) => this._args[index] = default;
 
 		/// <summary>
 		/// Defines an explicit conversion of a given <see cref="DefaultSlot"/> to <see cref="ReadOnlySpan{IObject}"/>.

@@ -1,3 +1,5 @@
+// ReSharper disable MemberCanBePrivate.Global
+
 namespace Rxmxnx.JNetInterface.Native.Access;
 
 public partial class JConstructorDefinition

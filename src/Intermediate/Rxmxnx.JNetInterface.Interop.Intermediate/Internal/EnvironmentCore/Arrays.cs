@@ -263,7 +263,7 @@ internal sealed partial class EnvironmentCore
 	/// <param name="signature">Primitive signature.</param>
 	/// <param name="bufferPtr">Buffer memory address.</param>
 	/// <param name="index">Region start index.</param>
-	/// <param name="count">Number of elements in region.</param>
+	/// <param name="count">Number of elements in a region.</param>
 	/// <exception cref="ArgumentException"/>
 	private void GetPrimitiveArrayRegion(JArrayObject jArray, Byte signature, IntPtr bufferPtr, Int32 index,
 		Int32 count = 1)
@@ -322,7 +322,7 @@ internal sealed partial class EnvironmentCore
 	/// <param name="signature">Primitive signature.</param>
 	/// <param name="bufferPtr">Buffer memory address.</param>
 	/// <param name="index">Region start index.</param>
-	/// <param name="count">Number of elements in region.</param>
+	/// <param name="count">Number of elements in a region.</param>
 	/// <exception cref="ArgumentException"/>
 	private void SetPrimitiveArrayRegion(JArrayObject jArray, Byte signature, IntPtr bufferPtr, Int32 index,
 		Int32 count = 1)

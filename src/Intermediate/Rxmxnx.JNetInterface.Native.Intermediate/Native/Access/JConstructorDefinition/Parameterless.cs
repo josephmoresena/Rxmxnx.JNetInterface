@@ -24,7 +24,7 @@ public partial class JConstructorDefinition
 		/// </summary>
 		/// <param name="jClass">An <see cref="JClassObject"/> instance.</param>
 		/// <returns>A new <see cref="JLocalObject"/> instance.</returns>
-		public JLocalObject New(JClassObject jClass) => base.New(jClass, in ICallArgument.Empty.Instance);
+		public JLocalObject New(JClassObject jClass) => base.New(jClass, in ICallArgument.Default);
 		/// <summary>
 		/// Creates a new <typeparamref name="TObject"/> instance using a constructor which matches with
 		/// current definition.
@@ -34,14 +34,14 @@ public partial class JConstructorDefinition
 		/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
 		[UnconditionalSuppressMessage("Trimming", "IL2091")]
 		public TObject New<TObject>(IEnvironment env) where TObject : JLocalObject, IClassType<TObject>
-			=> base.New<TObject, ICallArgument.Empty>(env, in ICallArgument.Empty.Instance);
+			=> base.New<TObject, ICallArgument.Empty>(env, in ICallArgument.Default);
 		/// <summary>
 		/// Invokes a reflected constructor which matches with current definition.
 		/// </summary>
 		/// <param name="jConstructor">A <see cref="JConstructorObject"/> instance.</param>
 		/// <returns>A new <see cref="JLocalObject"/> instance.</returns>
 		public JLocalObject NewReflected(JConstructorObject jConstructor)
-			=> base.NewReflected(jConstructor, in ICallArgument.Empty.Instance);
+			=> base.NewReflected(jConstructor, in ICallArgument.Default);
 		/// <summary>
 		/// Invokes a reflected constructor which matches with current definition.
 		/// </summary>
@@ -51,6 +51,6 @@ public partial class JConstructorDefinition
 		[UnconditionalSuppressMessage("Trimming", "IL2091")]
 		public TObject NewReflected<TObject>(JConstructorObject jConstructor)
 			where TObject : JLocalObject, IClassType<TObject>
-			=> base.NewReflected<TObject, ICallArgument.Empty>(jConstructor, in ICallArgument.Empty.Instance);
+			=> base.NewReflected<TObject, ICallArgument.Empty>(jConstructor, in ICallArgument.Default);
 	}
 }

@@ -1,3 +1,4 @@
+using Rxmxnx.JNetInterface.ApplicationTest;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
@@ -60,13 +61,8 @@ public class JComponentObject : JLocalObject, IClassType<JComponentObject>
 	{
 		IEnvironment env = this.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JComponentObject>(env);
-		JComponentObject.setVisibleDef.MethodCall(this, jClass, false,
-#if !NET9_0_OR_GREATER
-		                                          [(JBoolean)visible,]
-#else
-		                                          (JBoolean)visible
-#endif
-		);
+		GenericArgument<JBoolean> arg = (JBoolean)visible;
+		JComponentObject.setVisibleDef.MethodCall(this, jClass, false, in arg);
 	}
 	public Boolean IsVisible()
 	{
@@ -79,13 +75,8 @@ public class JComponentObject : JLocalObject, IClassType<JComponentObject>
 	{
 		IEnvironment env = this.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JComponentObject>(env);
-		JComponentObject.setSizeCoordinateDef.MethodCall(this, jClass, false,
-#if !NET9_0_OR_GREATER
-		                                                 [(JInt)width, (JInt)height,]
-#else
-		                                                 (JInt)width, (JInt)height
-#endif
-		);
+		GenericArgument<JInt, JInt> arg = new(width, height);
+		JComponentObject.setSizeCoordinateDef.MethodCall(this, jClass, false, in arg);
 	}
 
 	static JComponentObject IClassType<JComponentObject>.Create(IReferenceType.ClassInitializer initializer)

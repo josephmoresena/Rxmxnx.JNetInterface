@@ -124,6 +124,7 @@ internal sealed partial class EnvironmentCore
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 	/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
+	[SkipLocalsInit]
 	private unsafe TResult? CallObjectFunction<TResult, TArgs>(JFunctionDefinition definition, JObjectLocalRef localRef,
 		JClassLocalRef? classRef, in TArgs? args, INativeTransaction jniTransaction, JMethodId methodId)
 		where TResult : IDataType<TResult>
@@ -143,8 +144,7 @@ internal sealed partial class EnvironmentCore
 		try
 		{
 			ParameterSlot slot = new(this, jniTransaction, buffer, definition.Count);
-			if (args is not null)
-				args.Configure(slot, definition);
+			slot.Configure(ref Unsafe.AsRef(in args), definition);
 			result = !classRef.HasValue ?
 				instanceMethodFunctions.MethodFunctions.CallObjectMethod.Call(
 					this.Reference, localRef, methodId, buffer) :
@@ -171,6 +171,7 @@ internal sealed partial class EnvironmentCore
 	/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 	/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
+	[SkipLocalsInit]
 	private unsafe TResult? CallObjectStaticFunction<TResult, TArgs>(JFunctionDefinition definition,
 		JClassLocalRef classRef, in TArgs? args, INativeTransaction jniTransaction, JMethodId methodId)
 		where TResult : IDataType<TResult>
@@ -190,8 +191,7 @@ internal sealed partial class EnvironmentCore
 		try
 		{
 			ParameterSlot slot = new(this, jniTransaction, buffer, definition.Count);
-			if (args is not null)
-				args.Configure(slot, definition);
+			slot.Configure(ref Unsafe.AsRef(in args), definition);
 			localRef = nativeInterface.StaticMethodFunctions.CallObjectMethod.Call(
 				this.Reference, classRef, methodId, buffer);
 		}
@@ -214,6 +214,7 @@ internal sealed partial class EnvironmentCore
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 	/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
+	[SkipLocalsInit]
 	private unsafe void CallMethod<TArgs>(JMethodDefinition definition, JObjectLocalRef localRef,
 		JClassLocalRef? classRef, in TArgs? args, INativeTransaction jniTransaction, JMethodId methodId)
 #if !NET9_0_OR_GREATER
@@ -231,8 +232,7 @@ internal sealed partial class EnvironmentCore
 		try
 		{
 			ParameterSlot slot = new(this, jniTransaction, buffer, definition.Count);
-			if (args is not null)
-				args.Configure(slot, definition);
+			slot.Configure(ref Unsafe.AsRef(in args), definition);
 			if (!classRef.HasValue)
 				instanceMethodFunctions.MethodFunctions.CallVoidMethod.Call(this.Reference, localRef, methodId, buffer);
 			else
@@ -255,6 +255,7 @@ internal sealed partial class EnvironmentCore
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 	/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
+	[SkipLocalsInit]
 	private unsafe void CallStaticMethod<TArgs>(JMethodDefinition definition, JClassLocalRef classRef, in TArgs? args,
 		INativeTransaction jniTransaction, JMethodId methodId)
 #if !NET9_0_OR_GREATER
@@ -272,8 +273,7 @@ internal sealed partial class EnvironmentCore
 		try
 		{
 			ParameterSlot slot = new(this, jniTransaction, buffer, definition.Count);
-			if (args is not null)
-				args.Configure(slot, definition);
+			slot.Configure(ref Unsafe.AsRef(in args), definition);
 			nativeInterface.StaticMethodFunctions.CallVoidMethod.Call(this.Reference, classRef, methodId, buffer);
 		}
 		finally
@@ -317,6 +317,7 @@ internal sealed partial class EnvironmentCore
 	/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 	/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
 	/// <returns>A <see cref="JObjectLocalRef"/> reference.</returns>
+	[SkipLocalsInit]
 	private unsafe JObjectLocalRef NewObject<TArgs>(JConstructorDefinition definition, JClassLocalRef classRef,
 		in TArgs? args, INativeTransaction jniTransaction, JMethodId methodId)
 #if !NET9_0_OR_GREATER
@@ -335,8 +336,7 @@ internal sealed partial class EnvironmentCore
 		try
 		{
 			ParameterSlot slot = new(this, jniTransaction, buffer, definition.Count);
-			if (args is not null)
-				args.Configure(slot, definition);
+			slot.Configure(ref Unsafe.AsRef(in args), definition);
 			localRef = nativeInterface.ObjectFunctions.NewObject.Call(this.Reference, classRef, methodId, buffer);
 		}
 		finally
