@@ -21,7 +21,7 @@ public readonly unsafe struct JReferenceTypeToken
 	private delegate*<JReferenceTypeMetadata> GetMetadataPointer { get; init; }
 
 	/// <summary>
-	/// Tries to retrieve the metadata from the current token.
+	/// Retrieves the metadata associated with the current token.
 	/// </summary>
 	/// <returns>The <see cref="JReferenceTypeMetadata"/> instance associated with the current token.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
