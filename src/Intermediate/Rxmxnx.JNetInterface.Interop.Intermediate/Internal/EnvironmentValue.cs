@@ -138,9 +138,9 @@ internal readonly partial struct EnvironmentValue
 	/// <param name="action">An action to invoke inside created a new local frame.</param>
 	public static void WithFrame<TAction>(INativeThread nativeThread, ref TAction action)
 #if !NET9_0_OR_GREATER
-		where TAction : IFrameAction
+		where TAction : ILocalFrameAction
 #else
-		where TAction : IFrameAction, allows ref struct
+		where TAction : ILocalFrameAction, allows ref struct
 #endif
 	{
 		using LocalFrame _ = new(nativeThread, action.RequiredCapacity);
@@ -154,9 +154,9 @@ internal readonly partial struct EnvironmentValue
 	/// <returns>Function result.</returns>
 	public static TResult WithFrame<TResult, TFunction>(INativeThread nativeThread, ref TFunction func)
 #if !NET9_0_OR_GREATER
-		where TFunction : IFrameFunction<TResult>
+		where TFunction : ILocalFrameFunction<TResult>
 #else
-		where TFunction : IFrameFunction<TResult>, allows ref struct
+		where TFunction : ILocalFrameFunction<TResult>, allows ref struct
 #endif
 	{
 		using LocalFrame localFrame = new(nativeThread, func.RequiredCapacity);

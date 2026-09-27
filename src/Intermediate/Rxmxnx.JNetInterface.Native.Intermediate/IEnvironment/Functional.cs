@@ -13,7 +13,7 @@ public unsafe partial interface IEnvironment
 	/// </summary>
 	/// <typeparam name="TFunction">
 	/// The type of the function to execute, which must implement
-	/// <see cref="IFrameFunction{TResult}"/>.
+	/// <see cref="ILocalFrameFunction{TOutput}"/>.
 	/// </typeparam>
 	/// <typeparam name="TResult">The result type produced by the function.</typeparam>
 	/// <param name="func">A reference to the function to execute within the frame.</param>
@@ -24,9 +24,9 @@ public unsafe partial interface IEnvironment
 #endif
 	internal TResult WithFrameExecute<TFunction, TResult>(ref TFunction func)
 #if !NET9_0_OR_GREATER
-		where TFunction : IFrameFunction<TResult>
+		where TFunction : ILocalFrameFunction<TResult>
 #else
-		where TFunction : IFrameFunction<TResult>, allows ref struct
+		where TFunction : ILocalFrameFunction<TResult>, allows ref struct
 #endif
 	{
 		IEnvironment.tempEnv = this;
@@ -48,7 +48,7 @@ public unsafe partial interface IEnvironment
 	/// <summary>
 	/// Executes a specified action within a controlled JNI environment frame.
 	/// </summary>
-	/// <typeparam name="TAction">The type of the action to execute, which must implement <see cref="IFrameAction"/>.</typeparam>
+	/// <typeparam name="TAction">The type of the action to execute, which must implement <see cref="ILocalFrameAction"/>.</typeparam>
 	/// <param name="action">A reference to the action to be executed within the frame.</param>
 	/// <remarks>A default implementation is provided to avoid binary compatibility with older and proxy implementations.</remarks>
 #if !PACKAGE
@@ -56,9 +56,9 @@ public unsafe partial interface IEnvironment
 #endif
 	internal void WithFrameExecute<TAction>(ref TAction action)
 #if !NET9_0_OR_GREATER
-		where TAction : IFrameAction
+		where TAction : ILocalFrameAction
 #else
-		where TAction : IFrameAction, allows ref struct
+		where TAction : ILocalFrameAction, allows ref struct
 #endif
 	{
 		IEnvironment.tempEnv = this;

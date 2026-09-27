@@ -8,12 +8,12 @@ internal partial class NativeFunctionSetImpl
 	/// </summary>
 	/// <param name="arrayClass">A <see cref="JClassObject"/> instance.</param>
 #if !PACKAGE
-	public readonly struct IsFinalArrayTypeFunc(JClassObject arrayClass) : IFrameFunction<Boolean>
+	public readonly struct IsFinalArrayTypeFunc(JClassObject arrayClass) : ILocalFrameFunction<Boolean>
 #else
 	private readonly struct IsFinalArrayTypeFunc(JClassObject arrayClass) : IFrameFunction<Boolean>
 #endif
 	{
-		Int32 IFrameFunction<Boolean>.RequiredCapacity => IVirtualMachine.IsFinalArrayCapacity;
+		Int32 ILocalFrameFunction<Boolean>.RequiredCapacity => IVirtualMachine.IsFinalArrayCapacity;
 		Boolean IFrameFunction<Boolean>.Apply(IEnvironment env, ReadOnlySpan<JLocalObject?> objects)
 		{
 			Int32 dimension = arrayClass.ArrayDimension;

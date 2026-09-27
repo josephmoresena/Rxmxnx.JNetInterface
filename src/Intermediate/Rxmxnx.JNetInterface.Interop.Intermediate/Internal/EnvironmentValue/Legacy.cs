@@ -11,7 +11,7 @@ internal readonly partial struct EnvironmentValue
 	/// <param name="action">An action to invoke inside created a new local frame.</param>
 	public void WithFrame(INativeThread nativeThread, Int32 capacity, Action action)
 	{
-		FrameAction val = new(capacity, action);
+		LocalFrameAction val = new(capacity, action);
 		EnvironmentValue.WithFrame(nativeThread, ref val);
 	}
 	/// <summary>
@@ -26,7 +26,7 @@ internal readonly partial struct EnvironmentValue
 		where TState : allows ref struct
 #endif
 	{
-		FrameAction<TState> val = new(capacity, state, action);
+		LocalFrameAction<TState> val = new(capacity, state, action);
 		EnvironmentValue.WithFrame(nativeThread, ref val);
 	}
 
@@ -39,8 +39,8 @@ internal readonly partial struct EnvironmentValue
 	/// <returns>Function result.</returns>
 	public static TResult WithFrame<TResult>(INativeThread nativeThread, Int32 capacity, Func<TResult> func)
 	{
-		FrameFunction<TResult> val = new(capacity, func);
-		return EnvironmentValue.WithFrame<TResult, FrameFunction<TResult>>(nativeThread, ref val);
+		LocalFrameFunction<TResult> val = new(capacity, func);
+		return EnvironmentValue.WithFrame<TResult, LocalFrameFunction<TResult>>(nativeThread, ref val);
 	}
 	/// <summary>
 	/// Creates a new local reference frame and executes <paramref name="func"/> inside of it.
@@ -56,7 +56,7 @@ internal readonly partial struct EnvironmentValue
 		where TState : allows ref struct
 #endif
 	{
-		FrameFunction<TResult, TState> val = new(capacity, state, func);
-		return EnvironmentValue.WithFrame<TResult, FrameFunction<TResult, TState>>(nativeThread, ref val);
+		LocalFrameFunction<TResult, TState> val = new(capacity, state, func);
+		return EnvironmentValue.WithFrame<TResult, LocalFrameFunction<TResult, TState>>(nativeThread, ref val);
 	}
 }

@@ -17,10 +17,10 @@ public partial interface IReferenceType : IDataType, ILocalObject, IDisposable
 	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd0;
 
 	/// <summary>
-	/// Retrieves the metadata for given reference type.
+	/// Retrieves the metadata for a given reference type.
 	/// </summary>
 	/// <typeparam name="TReference">Type of the current java reference datatype.</typeparam>
-	/// <returns>The <see cref="JReferenceTypeMetadata"/> instance for given type.</returns>
+	/// <returns>The <see cref="JReferenceTypeMetadata"/> instance for a given type.</returns>
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public new static JReferenceTypeMetadata
