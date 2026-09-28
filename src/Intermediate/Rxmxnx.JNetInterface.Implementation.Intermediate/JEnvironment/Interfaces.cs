@@ -18,9 +18,10 @@ partial class JEnvironment : IEquatable<IEnvironment>, IEquatable<JEnvironment>
 	Boolean IEquatable<JEnvironment>.Equals(JEnvironment? other)
 		=> other is not null && this._m.Core.Equals(other._m.Core);
 	Boolean IEnvironment.NoProxy => true;
-	TResult IEnvironment.WithFrameExecute<TFunction, TResult>(ref TFunction func)
-		=> EnvironmentValue.WithFrame<TResult, TFunction>(this, ref func);
-	void IEnvironment.WithFrameExecute<TAction>(ref TAction action) => EnvironmentValue.WithFrame(this, ref action);
+	TResult IEnvironment.WithFrameExecute<TFunction, TResult>(ref TFunction func, Int32 capacity)
+		=> EnvironmentValue.WithFrame<TResult, TFunction>(this, capacity, ref func);
+	void IEnvironment.WithFrameExecute<TAction>(ref TAction action, Int32 capacity)
+		=> EnvironmentValue.WithFrame(this, capacity, ref action);
 	Int32? IEnvironment.LocalCapacity
 	{
 		get => this._m.LocalCapacity;

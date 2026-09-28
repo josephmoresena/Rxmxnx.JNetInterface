@@ -576,13 +576,11 @@ public sealed class NativeFunctionSetImplTests
 		   .Returns((Int32)NativeFunctionSetImplTests.GetModifiers(jClass));
 		if (jClassElement is not null) env.ClassFeature.GetClass(jClassElement.Name).Returns(jClassElement);
 
-		env.WithFrame(Arg.Any<Int32>(), Arg.Any<ValPtr<NativeFunctionSetImpl.IsFinalArrayTypeFunc>>(),
-		              Arg.Any<Func<ValPtr<NativeFunctionSetImpl.IsFinalArrayTypeFunc>, Boolean>>()).Returns(c =>
+		env.WithFrame(Arg.Any<Int32>(), Arg.Any<IntPtr>(), Arg.Any<Func<IntPtr, Boolean>>()).Returns(c =>
 		{
-			if (c[2] is not Func<ValPtr<NativeFunctionSetImpl.IsFinalArrayTypeFunc>, Boolean> func ||
-			    c[1] is not ValPtr<NativeFunctionSetImpl.IsFinalArrayTypeFunc> ptr)
+			if (c[2] is not Delegate func || c[1] is null)
 				throw new();
-			return func(ptr);
+			return (Boolean)func.DynamicInvoke(c[1])!;
 		});
 
 		Assert.Equal(jClass.IsFinal, NativeFunctionSetImpl.Instance.IsFinal(jClass, out _));

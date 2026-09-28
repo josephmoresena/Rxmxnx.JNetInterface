@@ -135,31 +135,33 @@ internal readonly partial struct EnvironmentValue
 	/// Creates a new local reference frame and invokes <paramref name="action"/> inside of it.
 	/// </summary>
 	/// <param name="nativeThread">A <see langword="INativeThread"/> instance.</param>
+	/// <param name="capacity">New local reference frame capacity.</param>
 	/// <param name="action">An action to invoke inside created a new local frame.</param>
-	public static void WithFrame<TAction>(INativeThread nativeThread, ref TAction action)
+	public static void WithFrame<TAction>(INativeThread nativeThread, Int32 capacity, ref TAction action)
 #if !NET9_0_OR_GREATER
-		where TAction : ILocalFrameAction
+		where TAction : IFrameAction
 #else
-		where TAction : ILocalFrameAction, allows ref struct
+		where TAction : IFrameAction, allows ref struct
 #endif
 	{
-		using LocalFrame _ = new(nativeThread, action.RequiredCapacity);
+		using LocalFrame _ = new(nativeThread, capacity);
 		action.Accept(nativeThread, []);
 	}
 	/// <summary>
 	/// Creates a new local reference frame and executes <paramref name="func"/> inside of it.
 	/// </summary>
 	/// <param name="nativeThread">A <see langword="INativeThread"/> instance.</param>
+	/// <param name="capacity">New local reference frame capacity.</param>
 	/// <param name="func">A function to execute inside created a new local frame.</param>
 	/// <returns>Function result.</returns>
-	public static TResult WithFrame<TResult, TFunction>(INativeThread nativeThread, ref TFunction func)
+	public static TResult WithFrame<TResult, TFunction>(INativeThread nativeThread, Int32 capacity, ref TFunction func)
 #if !NET9_0_OR_GREATER
-		where TFunction : ILocalFrameFunction<TResult>
+		where TFunction : IFrameFunction<TResult>
 #else
-		where TFunction : ILocalFrameFunction<TResult>, allows ref struct
+		where TFunction : IFrameFunction<TResult>, allows ref struct
 #endif
 	{
-		using LocalFrame localFrame = new(nativeThread, func.RequiredCapacity);
+		using LocalFrame localFrame = new(nativeThread, capacity);
 		TResult result = func.Apply(nativeThread, []);
 		localFrame.SetResult(result);
 		return result;

@@ -8,49 +8,52 @@ public static class FunctionalExtensions
 	/// <summary>
 	/// Executes a provided frame action within the context of the current environment.
 	/// </summary>
-	/// <typeparam name="TAction">The <see cref="ILocalFrameAction"/> type of the frame action to execute.</typeparam>
+	/// <typeparam name="TAction">The <see cref="IFrameAction"/> type of the frame action to execute.</typeparam>
 	/// <param name="environment">The <see cref="IEnvironment"/> instance which the action is executed.</param>
+	/// <param name="capacity">New local reference frame capacity.</param>
 	/// <param name="action">The frame action to execute.</param>
-	public static void WithFrame<TAction>(this IEnvironment? environment, TAction? action)
+	public static void WithFrame<TAction>(this IEnvironment? environment, Int32 capacity, TAction? action)
 #if !NET9_0_OR_GREATER
-		where TAction : ILocalFrameAction
+		where TAction : IFrameAction
 #else
-		where TAction : ILocalFrameAction, allows ref struct
+		where TAction : IFrameAction, allows ref struct
 #endif
 	{
 		if (environment is null || action is null)
 			return;
-		environment.WithFrameExecute(ref action);
+		environment.WithFrameExecute(ref action, capacity);
 	}
 	/// <summary>
 	/// Executes the current frame action within the context of the specified environment.
 	/// </summary>
-	/// <typeparam name="TAction">The <see cref="ILocalFrameAction"/> type of the frame action to execute.</typeparam>
-	/// <param name="environment">The <see cref="IEnvironment"/> instance which the action is executed.</param>
+	/// <typeparam name="TAction">The <see cref="IFrameAction"/> type of the frame action to execute.</typeparam>
 	/// <param name="action">The frame action to execute.</param>
-	public static void WithFrame<TAction>(this ref TAction action, IEnvironment? environment)
+	/// <param name="environment">The <see cref="IEnvironment"/> instance which the action is executed.</param>
+	/// <param name="capacity">New local reference frame capacity.</param>
+	public static void WithFrame<TAction>(this ref TAction action, IEnvironment? environment, Int32 capacity)
 #if !NET9_0_OR_GREATER
-		where TAction : struct, ILocalFrameAction
+		where TAction : struct, IFrameAction
 #else
-		where TAction : struct, ILocalFrameAction, allows ref struct
+		where TAction : struct, IFrameAction, allows ref struct
 #endif
 	{
-		environment?.WithFrameExecute(ref action);
+		environment?.WithFrameExecute(ref action, capacity);
 	}
 	/// <summary>
 	/// Executes a provided frame function within the context of the current environment.
 	/// </summary>
-	/// <typeparam name="TFunction">The <see cref="ILocalFrameFunction{TOutput}"/> type of the frame action to execute.</typeparam>
+	/// <typeparam name="TFunction">The <see cref="IFrameFunction{TOutput}"/> type of the frame action to execute.</typeparam>
 	/// <typeparam name="TResult">The type of the result returned by the frame function.</typeparam>
 	/// <param name="environment">The <see cref="IEnvironment"/> instance which the function is executed.</param>
+	/// <param name="capacity">New local reference frame capacity.</param>
 	/// <param name="func">The frame function to execute.</param>
 	/// <param name="result">Output. The result returned by the frame function.</param>
-	public static void WithFrame<TFunction, TResult>(this IEnvironment? environment, TFunction? func,
+	public static void WithFrame<TFunction, TResult>(this IEnvironment? environment, Int32 capacity, TFunction? func,
 		out TResult result)
 #if !NET9_0_OR_GREATER
-		where TFunction : ILocalFrameFunction<TResult>
+		where TFunction : IFrameFunction<TResult>
 #else
-		where TFunction : ILocalFrameFunction<TResult>, allows ref struct
+		where TFunction : IFrameFunction<TResult>, allows ref struct
 #endif
 	{
 		if (environment is null || func is null)
@@ -58,22 +61,23 @@ public static class FunctionalExtensions
 			Unsafe.SkipInit(out result);
 			return;
 		}
-		result = environment.WithFrameExecute<TFunction, TResult>(ref func);
+		result = environment.WithFrameExecute<TFunction, TResult>(ref func, capacity);
 	}
 	/// <summary>
 	/// Executes the current frame function within the context of the specified environment.
 	/// </summary>
-	/// <typeparam name="TFunction">The <see cref="ILocalFrameFunction{TOutput}"/> type of the frame action to execute.</typeparam>
+	/// <typeparam name="TFunction">The <see cref="IFrameFunction{TOutput}"/> type of the frame action to execute.</typeparam>
 	/// <typeparam name="TResult">The type of the result returned by the frame function.</typeparam>
-	/// <param name="environment">The <see cref="IEnvironment"/> instance which the function is executed.</param>
 	/// <param name="func">The frame function to execute.</param>
+	/// <param name="environment">The <see cref="IEnvironment"/> instance which the function is executed.</param>
+	/// <param name="capacity">New local reference frame capacity.</param>
 	/// <param name="result">Output. The result returned by the frame function.</param>
-	public static void WithFrame<TFunction, TResult>(this ref TFunction func, IEnvironment? environment,
+	public static void WithFrame<TFunction, TResult>(this ref TFunction func, IEnvironment? environment, Int32 capacity,
 		out TResult result)
 #if !NET9_0_OR_GREATER
-		where TFunction : struct, ILocalFrameFunction<TResult>
+		where TFunction : struct, IFrameFunction<TResult>
 #else
-		where TFunction : struct, ILocalFrameFunction<TResult>, allows ref struct
+		where TFunction : struct, IFrameFunction<TResult>, allows ref struct
 #endif
 	{
 		if (environment is null)
@@ -81,6 +85,6 @@ public static class FunctionalExtensions
 			Unsafe.SkipInit(out result);
 			return;
 		}
-		result = environment.WithFrameExecute<TFunction, TResult>(ref func);
+		result = environment.WithFrameExecute<TFunction, TResult>(ref func, capacity);
 	}
 }

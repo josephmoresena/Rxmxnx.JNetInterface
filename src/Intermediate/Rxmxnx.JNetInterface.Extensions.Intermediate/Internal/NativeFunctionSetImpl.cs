@@ -95,7 +95,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-	public override unsafe TPrimitive GetPrimitiveValue<TPrimitive>(JNumberObject jNumber)
+	public override TPrimitive GetPrimitiveValue<TPrimitive>(JNumberObject jNumber)
 	{
 		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
 		IEnvironment env = jNumber.Environment;
@@ -147,7 +147,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		modifiers = NativeFunctionSetImpl.GetClassModifiers(jClass);
 		if (!jClass.IsArray) return modifiers.HasFlag(JModifierObject.Modifiers.Final);
 		IsFinalArrayTypeFunc func = new(jClass);
-		func.WithFrame(env, out Boolean result);
+		func.WithFrame(env, IVirtualMachine.IsFinalArrayCapacity, out Boolean result);
 		return result;
 	}
 	/// <inheritdoc/>

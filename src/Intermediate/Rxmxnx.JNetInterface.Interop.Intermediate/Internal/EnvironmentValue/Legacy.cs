@@ -1,4 +1,5 @@
 // ReSharper disable MemberCanBeMadeStatic.Global
+
 namespace Rxmxnx.JNetInterface;
 
 internal readonly partial struct EnvironmentValue
@@ -11,8 +12,8 @@ internal readonly partial struct EnvironmentValue
 	/// <param name="action">An action to invoke inside created a new local frame.</param>
 	public void WithFrame(INativeThread nativeThread, Int32 capacity, Action action)
 	{
-		LocalFrameAction val = new(capacity, action);
-		EnvironmentValue.WithFrame(nativeThread, ref val);
+		LocalFrameAction val = new(action);
+		EnvironmentValue.WithFrame(nativeThread, capacity, ref val);
 	}
 	/// <summary>
 	/// Creates a new local reference frame and invokes <paramref name="action"/> inside of it.
@@ -26,8 +27,8 @@ internal readonly partial struct EnvironmentValue
 		where TState : allows ref struct
 #endif
 	{
-		LocalFrameAction<TState> val = new(capacity, state, action);
-		EnvironmentValue.WithFrame(nativeThread, ref val);
+		LocalFrameAction<TState> val = new(state, action);
+		EnvironmentValue.WithFrame(nativeThread, capacity, ref val);
 	}
 
 	/// <summary>
@@ -39,8 +40,8 @@ internal readonly partial struct EnvironmentValue
 	/// <returns>Function result.</returns>
 	public static TResult WithFrame<TResult>(INativeThread nativeThread, Int32 capacity, Func<TResult> func)
 	{
-		LocalFrameFunction<TResult> val = new(capacity, func);
-		return EnvironmentValue.WithFrame<TResult, LocalFrameFunction<TResult>>(nativeThread, ref val);
+		LocalFrameFunction<TResult> val = new(func);
+		return EnvironmentValue.WithFrame<TResult, LocalFrameFunction<TResult>>(nativeThread, capacity, ref val);
 	}
 	/// <summary>
 	/// Creates a new local reference frame and executes <paramref name="func"/> inside of it.
@@ -56,7 +57,8 @@ internal readonly partial struct EnvironmentValue
 		where TState : allows ref struct
 #endif
 	{
-		LocalFrameFunction<TResult, TState> val = new(capacity, state, func);
-		return EnvironmentValue.WithFrame<TResult, LocalFrameFunction<TResult, TState>>(nativeThread, ref val);
+		LocalFrameFunction<TResult, TState> val = new(state, func);
+		return EnvironmentValue
+			.WithFrame<TResult, LocalFrameFunction<TResult, TState>>(nativeThread, capacity, ref val);
 	}
 }
