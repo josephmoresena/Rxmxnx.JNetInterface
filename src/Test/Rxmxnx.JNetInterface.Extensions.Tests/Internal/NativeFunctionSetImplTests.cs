@@ -578,9 +578,9 @@ public sealed class NativeFunctionSetImplTests
 
 		env.WithFrame(Arg.Any<Int32>(), Arg.Any<IntPtr>(), Arg.Any<Func<IntPtr, Boolean>>()).Returns(c =>
 		{
-			if (c[2] is not Delegate func || c[1] is null)
+			if (c[2] is not Func<IntPtr, Boolean> func || c[1] is not IntPtr ptr)
 				throw new();
-			return (Boolean)func.DynamicInvoke(c[1])!;
+			return func(ptr);
 		});
 
 		Assert.Equal(jClass.IsFinal, NativeFunctionSetImpl.Instance.IsFinal(jClass, out _));
