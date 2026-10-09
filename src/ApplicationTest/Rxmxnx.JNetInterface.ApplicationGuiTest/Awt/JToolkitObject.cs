@@ -37,7 +37,7 @@ public class JToolkitObject : JLocalObject, IClassType<JToolkitObject>
 		IEnvironment env = this.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JToolkitObject>(env);
 		GenericArgument<IObject, JLong> arg = new(eventListener, (Int64)mask);
-		JToolkitObject.addAwtEventListenerDef.MethodCall(this, jClass, false, in arg);
+		JToolkitObject.addAwtEventListenerDef.MethodCall(this, jClass, false, ref arg);
 	}
 
 	public static JToolkitObject GetDefaultToolkit(IEnvironment env)

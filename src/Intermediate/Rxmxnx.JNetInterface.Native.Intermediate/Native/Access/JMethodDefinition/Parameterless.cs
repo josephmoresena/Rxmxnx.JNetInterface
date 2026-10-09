@@ -16,7 +16,7 @@ public partial class JMethodDefinition
 		/// Invokes a method on <paramref name="jLocal"/> which matches with current definition.
 		/// </summary>
 		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-		public void Invoke(JLocalObject jLocal) => base.Invoke(jLocal, in ICallArgument.Default);
+		public void Invoke(JLocalObject jLocal) => base.Invoke(jLocal, ref ICallArgument.Default);
 		/// <summary>
 		/// Invokes a method on <paramref name="jLocal"/> which matches with current definition but using the
 		/// implementation declared on <paramref name="jClass"/>.
@@ -24,7 +24,7 @@ public partial class JMethodDefinition
 		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 		/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
 		public void Invoke(JLocalObject jLocal, JClassObject jClass)
-			=> base.Invoke(jLocal, jClass, in ICallArgument.Default);
+			=> base.Invoke(jLocal, jClass, ref ICallArgument.Default);
 		/// <summary>
 		/// Invokes a method on <paramref name="jLocal"/> which matches with current definition but using the
 		/// implementation declared on <paramref name="jClass"/>.
@@ -32,12 +32,12 @@ public partial class JMethodDefinition
 		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 		/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
 		public void InvokeNonVirtual(JLocalObject jLocal, JClassObject jClass)
-			=> base.InvokeNonVirtual(jLocal, jClass, in ICallArgument.Default);
+			=> base.InvokeNonVirtual(jLocal, jClass, ref ICallArgument.Default);
 		/// <summary>
 		/// Invokes a static method on <paramref name="jClass"/> which matches with current definition.
 		/// </summary>
 		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
-		public void StaticInvoke(JClassObject jClass) => base.StaticInvoke(jClass, in ICallArgument.Default);
+		public void StaticInvoke(JClassObject jClass) => base.StaticInvoke(jClass, ref ICallArgument.Default);
 
 		/// <summary>
 		/// Invokes a reflected method which matches with current definition.
@@ -46,7 +46,7 @@ public partial class JMethodDefinition
 		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 		/// <returns>Function result.</returns>
 		public void InvokeReflected(JMethodObject jMethod, JLocalObject jLocal)
-			=> base.InvokeReflected(jMethod, jLocal, in ICallArgument.Default);
+			=> base.InvokeReflected(jMethod, jLocal, ref ICallArgument.Default);
 		/// <summary>
 		/// Invokes a reflected method which matches with current definition.
 		/// </summary>
@@ -54,13 +54,13 @@ public partial class JMethodDefinition
 		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 		/// <returns>Function result.</returns>
 		public void InvokeNonVirtualReflected(JMethodObject jMethod, JLocalObject jLocal)
-			=> base.InvokeNonVirtualReflected(jMethod, jLocal, in ICallArgument.Default);
+			=> base.InvokeNonVirtualReflected(jMethod, jLocal, ref ICallArgument.Default);
 		/// <summary>
 		/// Invokes a reflected static method which matches with current definition.
 		/// </summary>
 		/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 		/// <returns>Function result.</returns>
 		public void InvokeStaticReflected(JMethodObject jMethod)
-			=> base.InvokeStaticReflected(jMethod, in ICallArgument.Default);
+			=> base.InvokeStaticReflected(jMethod, ref ICallArgument.Default);
 	}
 }

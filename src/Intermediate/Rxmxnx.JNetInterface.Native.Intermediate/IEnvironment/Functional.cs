@@ -35,8 +35,9 @@ public unsafe partial interface IEnvironment
 #pragma warning disable CS8500
 			fixed (TFunction* ptr = &func)
 			{
-				return this.WithFrame(capacity, (IntPtr)ptr,
-				                      static p => ((TFunction*)p)[0].Apply(IEnvironment.tempEnv, []));
+				ValueTuple<IntPtr, Type> state = ValueTuple.Create((IntPtr)ptr, typeof(TFunction));
+				return this.WithFrame(capacity, state,
+				                      static s => ((TFunction*)s.Item1)[0].Apply(IEnvironment.tempEnv, []));
 #pragma warning restore CS8500
 			}
 		}
@@ -68,7 +69,8 @@ public unsafe partial interface IEnvironment
 #pragma warning disable CS8500
 			fixed (TAction* ptr = &action)
 			{
-				this.WithFrame(capacity, (IntPtr)ptr, static p => ((TAction*)p)[0].Accept(IEnvironment.tempEnv, []));
+				ValueTuple<IntPtr, Type> state = ValueTuple.Create((IntPtr)ptr, typeof(TAction));
+				this.WithFrame(capacity, state, static p => ((TAction*)p.Item1)[0].Accept(IEnvironment.tempEnv, []));
 			}
 #pragma warning restore CS8500
 		}

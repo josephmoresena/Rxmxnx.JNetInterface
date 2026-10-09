@@ -2,6 +2,15 @@ namespace Rxmxnx.JNetInterface.Native.Access;
 
 public partial class JMethodDefinition
 {
+	/// <summary>
+	/// Create a <see cref="JMethodDefinition"/> instance for <paramref name="metadata"/>.
+	/// </summary>
+	/// <param name="methodName">Method name.</param>
+	/// <param name="metadata">Metadata of the types of call arguments.</param>
+	/// <returns>A <see cref="JMethodDefinition"/> instance.</returns>
+	internal static JMethodDefinition Create(ReadOnlySpan<Byte> methodName,
+		ReadOnlySpan<JArgumentMetadata> metadata = default)
+		=> metadata.Length > 0 ? new JMethodDefinition(methodName, metadata) : new Parameterless(methodName);
 #if !PACKAGE
 	/// <summary>
 	/// Invokes <paramref name="definition"/> on <paramref name="jLocal"/> which matches with current definition.
@@ -30,13 +39,4 @@ public partial class JMethodDefinition
 		env.AccessFeature.CallInternalStaticMethod(jClass, definition, args);
 	}
 #endif
-	/// <summary>
-	/// Create a <see cref="JMethodDefinition"/> instance for <paramref name="metadata"/>.
-	/// </summary>
-	/// <param name="methodName">Method name.</param>
-	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	/// <returns>A <see cref="JMethodDefinition"/> instance.</returns>
-	internal static JMethodDefinition Create(ReadOnlySpan<Byte> methodName,
-		ReadOnlySpan<JArgumentMetadata> metadata = default)
-		=> metadata.Length > 0 ? new JMethodDefinition(methodName, metadata) : new Parameterless(methodName);
 }

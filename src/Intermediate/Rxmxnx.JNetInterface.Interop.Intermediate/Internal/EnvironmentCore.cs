@@ -33,7 +33,7 @@ internal sealed partial class EnvironmentCore : LocalMainClasses, IUnsafeMemoryM
 	/// </summary>
 	public Int32 MaxStackBytes { get; private set; } = EnvironmentCore.minStackBytes;
 	/// <summary>
-	/// Amount of bytes used from stack.
+	/// Number of bytes used from a stack.
 	/// </summary>
 	public Int32 UsedStackBytes { get; private set; }
 	/// <summary>
@@ -110,10 +110,10 @@ internal sealed partial class EnvironmentCore : LocalMainClasses, IUnsafeMemoryM
 	}
 
 	/// <summary>
-	/// Retrieves managed <see cref="NativeInterface"/> reference from current instance.
+	/// Retrieves managed <see cref="NativeInterface"/> reference from the current instance.
 	/// </summary>
 	/// <param name="info">A <see cref="JniMethodInfo"/> instance.</param>
-	/// <returns>A managed <see cref="NativeInterface"/> reference from current instance.</returns>
+	/// <returns>A managed <see cref="NativeInterface"/> reference from the current instance.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public unsafe ref readonly TNativeInterface GetNativeInterface<TNativeInterface>(JniMethodInfo info)
 		where TNativeInterface : unmanaged, INativeInterface<TNativeInterface>
@@ -148,7 +148,7 @@ internal sealed partial class EnvironmentCore : LocalMainClasses, IUnsafeMemoryM
 	/// </summary>
 	/// <param name="throwableException">A <see cref="ThrowableException"/> instance.</param>
 	/// <param name="throwException">
-	/// Indicates whether exception should be thrown in managed code.
+	/// Indicates whether an exception should be thrown in managed code.
 	/// </param>
 	/// <exception cref="ThrowableException">
 	/// Throws if <paramref name="throwableException"/> is not null.
@@ -193,7 +193,7 @@ internal sealed partial class EnvironmentCore : LocalMainClasses, IUnsafeMemoryM
 	/// <summary>
 	/// Checks if there is a pending JNI exception.
 	/// </summary>
-	/// <returns><see langword="true"/> if there is pending JNI exception; otherwise, <see langword="false"/>.</returns>
+	/// <returns><see langword="true"/> if there is a pending JNI exception; otherwise, <see langword="false"/>.</returns>
 	public Boolean HasPendingException()
 	{
 		ref readonly NativeInterface nativeInterface =
@@ -261,7 +261,7 @@ internal sealed partial class EnvironmentCore : LocalMainClasses, IUnsafeMemoryM
 		nativeInterface.ErrorFunctions.ExceptionClear(this.Reference);
 	}
 	/// <summary>
-	/// Sets number of bytes usable by JNI calls from stack.
+	/// Sets the number of bytes usable by JNI calls from stack.
 	/// </summary>
 	/// <param name="value">Value.</param>
 	public void SetUsableStackBytes(Int32 value)
@@ -284,8 +284,8 @@ internal sealed partial class EnvironmentCore : LocalMainClasses, IUnsafeMemoryM
 		JFunctionDefinition functionDefinition = NativeFunctionSetImpl.IsVirtualDefinition;
 		using INativeTransaction jniTransaction = this.GetInstanceTransaction(
 			jThread.Class, jThread, functionDefinition, out JObjectLocalRef localRef, out JMethodId methodId);
-		this.CallPrimitiveFunction<ICallArgument.Empty>(MemoryMarshal.AsBytes(result), functionDefinition, localRef,
-		                                                default, default, jniTransaction, methodId);
+		this.CallPrimitiveFunction(MemoryMarshal.AsBytes(result), functionDefinition, localRef, default,
+		                           ref ICallArgument.Default, jniTransaction, methodId);
 		return result[0].Value;
 	}
 }

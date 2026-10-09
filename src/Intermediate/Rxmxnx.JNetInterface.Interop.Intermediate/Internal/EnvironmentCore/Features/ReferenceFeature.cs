@@ -84,9 +84,7 @@ internal sealed partial class EnvironmentCore : IReferenceFeature
 				IMessageResource resource = IMessageResource.GetInstance();
 				throw new InvalidOperationException(resource.NotPrimitiveObject);
 		}
-		ref WrapperConstructorArg<TPrimitive> refArgs =
-			ref Unsafe.As<TPrimitive, WrapperConstructorArg<TPrimitive>>(ref primitive);
-		JObjectLocalRef localRef = this.NewObject(jClass, definition, in refArgs);
+		JObjectLocalRef localRef = this.NewObject(jClass, definition, ref primitive);
 		JLocalObject result = constructor(jClass, localRef, Unsafe.AsPointer(ref primitive));
 		return this.Register(result);
 

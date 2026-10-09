@@ -61,8 +61,7 @@ public class JComponentObject : JLocalObject, IClassType<JComponentObject>
 	{
 		IEnvironment env = this.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JComponentObject>(env);
-		GenericArgument<JBoolean> arg = (JBoolean)visible;
-		JComponentObject.setVisibleDef.MethodCall(this, jClass, false, in arg);
+		JComponentObject.setVisibleDef.MethodCall(this, jClass, false, (JBoolean)visible);
 	}
 	public Boolean IsVisible()
 	{
@@ -76,7 +75,7 @@ public class JComponentObject : JLocalObject, IClassType<JComponentObject>
 		IEnvironment env = this.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JComponentObject>(env);
 		GenericArgument<JInt, JInt> arg = new(width, height);
-		JComponentObject.setSizeCoordinateDef.MethodCall(this, jClass, false, in arg);
+		JComponentObject.setSizeCoordinateDef.MethodCall(this, jClass, false, ref arg);
 	}
 
 	static JComponentObject IClassType<JComponentObject>.Create(IReferenceType.ClassInitializer initializer)

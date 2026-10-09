@@ -107,7 +107,7 @@ internal sealed partial class EnvironmentCore
 			jClassClass, jClass, functionDefinition, out JObjectLocalRef localRef, out JMethodId methodId);
 		JTrace.CallMethod(jClass, jClassClass, functionDefinition, false);
 		return core.CallObjectFunction<JModuleObject, ICallArgument.Empty>(
-			functionDefinition, localRef, default, default, jniTransaction, methodId);
+			functionDefinition, localRef, default, ref ICallArgument.Default, jniTransaction, methodId);
 	}
 #endif
 	/// <summary>

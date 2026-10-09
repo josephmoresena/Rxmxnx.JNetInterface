@@ -34,6 +34,21 @@ public abstract partial class JFunctionDefinition
 
 public partial class JFunctionDefinition<TResult>
 {
+	/// <summary>
+	/// Create a <see cref="JFunctionDefinition{TResult}"/> instance for <paramref name="metadata"/>.
+	/// </summary>
+	/// <param name="functionName">Function name.</param>
+	/// <param name="metadata">Metadata of the types of call arguments.</param>
+	/// <returns>A <see cref="JFunctionDefinition{TResult}"/> instance.</returns>
+	/// <returns><typeparamref name="TResult"/> function result.</returns>
+	internal static JFunctionDefinition<TResult> Create(ReadOnlySpan<Byte> functionName,
+		ReadOnlySpan<JArgumentMetadata> metadata = default)
+	{
+		// ReSharper disable once ConvertIfStatementToReturnStatement
+		if (metadata.Length > 0)
+			return new(functionName, metadata);
+		return new Parameterless(functionName);
+	}
 #if !PACKAGE
 	/// <summary>
 	/// Invokes <paramref name="definition"/> on <paramref name="jLocal"/> which matches with current definition.
@@ -66,16 +81,4 @@ public partial class JFunctionDefinition<TResult>
 		return env.AccessFeature.CallInternalStaticFunction<TResult>(jClass, definition, args);
 	}
 #endif
-	/// <summary>
-	/// Create a <see cref="JFunctionDefinition{TResult}"/> instance for <paramref name="metadata"/>.
-	/// </summary>
-	/// <param name="functionName">Function name.</param>
-	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	/// <returns>A <see cref="JFunctionDefinition{TResult}"/> instance.</returns>
-	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	internal static JFunctionDefinition<TResult> Create(ReadOnlySpan<Byte> functionName,
-		ReadOnlySpan<JArgumentMetadata> metadata = default)
-		=> metadata.Length > 0 ?
-			new JFunctionDefinition<TResult>(functionName, metadata) :
-			new Parameterless(functionName);
 }

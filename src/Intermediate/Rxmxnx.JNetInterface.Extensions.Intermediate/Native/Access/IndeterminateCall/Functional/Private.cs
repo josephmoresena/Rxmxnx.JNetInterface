@@ -21,7 +21,7 @@ public abstract unsafe partial class IndeterminateCall
 	[ExcludeFromCodeCoverage]
 #endif
 	private IndeterminateResult FunctionCall<TArgs>(JFunctionDefinition definition, JLocalObject jLocal,
-		JClassObject jClass, Boolean nonVirtual, scoped in TArgs? args)
+		JClassObject jClass, Boolean nonVirtual, scoped ref TArgs args)
 #if !NET9_0_OR_GREATER
 		where TArgs : ICallArgument
 #else
@@ -31,7 +31,7 @@ public abstract unsafe partial class IndeterminateCall
 		ReadOnlySpan<Byte> signature = this.ReturnType;
 		if (signature.Length == 1)
 		{
-			delegate* <out JValue.PrimitiveValue, JLocalObject, JClassObject, Boolean, JFunctionDefinition, in TArgs?,
+			delegate* <out JValue.PrimitiveValue, JLocalObject, JClassObject, Boolean, JFunctionDefinition, ref TArgs,
 				void> invoke = signature[0] switch
 				{
 					CommonNames.BooleanSignatureChar => &Invoke<JBoolean>,
@@ -44,21 +44,21 @@ public abstract unsafe partial class IndeterminateCall
 					CommonNames.ShortSignatureChar => &Invoke<JShort>,
 					_ => throw new InvalidOperationException(IMessageResource.GetInstance().NotPrimitiveObject),
 				};
-			invoke(out JValue.PrimitiveValue pValue, jLocal, jClass, nonVirtual, definition, in args);
+			invoke(out JValue.PrimitiveValue pValue, jLocal, jClass, nonVirtual, definition, ref args);
 			return new(pValue, signature);
 		}
 		IEnvironment env = jLocal.Environment;
 		JLocalObject? jObject =
-			env.AccessFeature.CallFunction<JLocalObject, TArgs>(jLocal, jClass, definition, nonVirtual, in args);
+			env.AccessFeature.CallFunction<JLocalObject, TArgs>(jLocal, jClass, definition, nonVirtual, ref args);
 		return new(jObject, signature);
 		static void Invoke<TPrimitive>(out JValue.PrimitiveValue result, JLocalObject jLocal, JClassObject jClass,
-			Boolean nonVirtual, JFunctionDefinition definition, in TArgs? args)
+			Boolean nonVirtual, JFunctionDefinition definition, ref TArgs args)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			result = default;
 			IEnvironment env = jLocal.Environment;
 			Unsafe.As<JValue.PrimitiveValue, TPrimitive>(ref result) =
-				env.AccessFeature.CallFunction<TPrimitive, TArgs>(jLocal, jClass, definition, nonVirtual, in args);
+				env.AccessFeature.CallFunction<TPrimitive, TArgs>(jLocal, jClass, definition, nonVirtual, ref args);
 		}
 	}
 	/// <summary>
@@ -73,7 +73,7 @@ public abstract unsafe partial class IndeterminateCall
 	[ExcludeFromCodeCoverage]
 #endif
 	private IndeterminateResult StaticFunctionCall<TArgs>(JFunctionDefinition definition, JClassObject jClass,
-		scoped in TArgs? args)
+		scoped ref TArgs args)
 #if !NET9_0_OR_GREATER
 		where TArgs : ICallArgument
 #else
@@ -85,7 +85,7 @@ public abstract unsafe partial class IndeterminateCall
 
 		if (signature.Length == 1)
 		{
-			delegate* <out JValue.PrimitiveValue, JClassObject, JFunctionDefinition, in TArgs?, void> invoke =
+			delegate* <out JValue.PrimitiveValue, JClassObject, JFunctionDefinition, ref TArgs, void> invoke =
 				signature[0] switch
 				{
 					CommonNames.BooleanSignatureChar => &Invoke<JBoolean>,
@@ -98,19 +98,19 @@ public abstract unsafe partial class IndeterminateCall
 					CommonNames.ShortSignatureChar => &Invoke<JShort>,
 					_ => throw new InvalidOperationException(IMessageResource.GetInstance().NotPrimitiveObject),
 				};
-			invoke(out JValue.PrimitiveValue pValue, jClass, definition, in args);
+			invoke(out JValue.PrimitiveValue pValue, jClass, definition, ref args);
 			return new(pValue, signature);
 		}
 
-		JLocalObject? jObject = env.AccessFeature.CallStaticFunction<JLocalObject, TArgs>(jClass, definition, in args);
+		JLocalObject? jObject = env.AccessFeature.CallStaticFunction<JLocalObject, TArgs>(jClass, definition, ref args);
 		return new(jObject, signature);
 		static void Invoke<TPrimitive>(out JValue.PrimitiveValue result, JClassObject jClass,
-			JFunctionDefinition definition, in TArgs? args) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+			JFunctionDefinition definition, ref TArgs args) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			result = default;
 			IEnvironment env = jClass.Environment;
 			Unsafe.As<JValue.PrimitiveValue, TPrimitive>(ref result) =
-				env.AccessFeature.CallStaticFunction<TPrimitive, TArgs>(jClass, definition, in args);
+				env.AccessFeature.CallStaticFunction<TPrimitive, TArgs>(jClass, definition, ref args);
 		}
 	}
 	/// <summary>
@@ -126,7 +126,7 @@ public abstract unsafe partial class IndeterminateCall
 	[ExcludeFromCodeCoverage]
 #endif
 	private static void MethodCall<TArgs>(JMethodDefinition definition, JLocalObject jLocal, JClassObject jClass,
-		Boolean nonVirtual, in TArgs? args)
+		Boolean nonVirtual, ref TArgs args)
 #if !NET9_0_OR_GREATER
 		where TArgs : ICallArgument
 #else
@@ -134,7 +134,7 @@ public abstract unsafe partial class IndeterminateCall
 #endif
 	{
 		IEnvironment env = jLocal.Environment;
-		env.AccessFeature.CallMethod(jLocal, jClass, definition, nonVirtual, in args);
+		env.AccessFeature.CallMethod(jLocal, jClass, definition, nonVirtual, ref args);
 	}
 	/// <summary>
 	/// Invokes a static method on given <see cref="JClassObject"/> instance.
@@ -146,7 +146,7 @@ public abstract unsafe partial class IndeterminateCall
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	private static void StaticMethodCall<TArgs>(JMethodDefinition definition, JClassObject jClass, in TArgs? args)
+	private static void StaticMethodCall<TArgs>(JMethodDefinition definition, JClassObject jClass, ref TArgs args)
 #if !NET9_0_OR_GREATER
 		where TArgs : ICallArgument
 #else
@@ -154,7 +154,7 @@ public abstract unsafe partial class IndeterminateCall
 #endif
 	{
 		IEnvironment env = jClass.Environment;
-		env.AccessFeature.CallStaticMethod(jClass, definition, in args);
+		env.AccessFeature.CallStaticMethod(jClass, definition, ref args);
 	}
 	/// <summary>
 	/// Invokes a constructor on given <see cref="JClassObject"/> instance.
@@ -169,7 +169,7 @@ public abstract unsafe partial class IndeterminateCall
 #endif
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 	private static TObject NewCall<TObject, TArgs>(JConstructorDefinition definition, JClassObject jClass,
-		in TArgs? args) where TObject : JLocalObject, IClassType<TObject>
+		ref TArgs args) where TObject : JLocalObject, IClassType<TObject>
 #if !NET9_0_OR_GREATER
 		where TArgs : ICallArgument
 #else
@@ -177,6 +177,6 @@ public abstract unsafe partial class IndeterminateCall
 #endif
 	{
 		IEnvironment env = jClass.Environment;
-		return env.AccessFeature.CallConstructor<TObject, TArgs>(jClass, definition, in args);
+		return env.AccessFeature.CallConstructor<TObject, TArgs>(jClass, definition, ref args);
 	}
 }

@@ -1,7 +1,4 @@
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
-using Rxmxnx.JNetInterface.Functional;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
@@ -25,20 +22,5 @@ public class GetObjectDefinition : JFunctionDefinition<JLocalObject>
 	private GetObjectDefinition() : base("getObject"u8, JArgumentMetadata.Get<JInt>()) { }
 
 	public JLocalObject? Invoke(JClassObject helloDotnetClass, JInt value)
-#if !NET9_0_OR_GREATER
-		=> this.StaticInvoke(helloDotnetClass, in Unsafe.As<JInt, JIntArg>(ref value));
-#else
-		=> this.StaticInvoke(helloDotnetClass, in Unsafe.As<JInt, JIntArg>(ref value));
-#endif
-
-	[StructLayout(LayoutKind.Sequential)]
-	private readonly struct JIntArg : ICallArgument
-	{
-		private readonly JInt _value;
-
-		public void Configure<TSlot>(TSlot slot, JCallDefinition _) where TSlot : IParameterSlot
-		{
-			slot.SetParameterValue(0, this._value);
-		}
-	}
+		=> this.StaticInvoke(helloDotnetClass, ref value);
 }

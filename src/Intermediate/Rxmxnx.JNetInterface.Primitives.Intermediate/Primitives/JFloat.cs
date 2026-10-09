@@ -62,6 +62,8 @@ public readonly partial struct JFloat : IPrimitiveFloatingPointType, IPrimitiveN
 		Unsafe.SkipInit(out value);
 		Unsafe.As<JValue, Single>(ref value) = this._value;
 	}
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void ICallArgument.Configure<TSlot>(TSlot slot, JCallDefinition callDefinition) => slot.SetParameterValue(0, this);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

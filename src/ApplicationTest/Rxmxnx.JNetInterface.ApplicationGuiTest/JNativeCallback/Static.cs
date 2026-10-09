@@ -67,7 +67,7 @@ public partial class JNativeCallback
 		try
 		{
 			LongKeyArg arg = new(longKey);
-			return JNativeCallback.constructorDef.NewCall<TObject, LongKeyArg>(env, in arg).CastTo<TInterface>();
+			return JNativeCallback.constructorDef.NewCall<TObject, LongKeyArg>(env, ref arg).CastTo<TInterface>();
 		}
 		catch (Exception)
 		{

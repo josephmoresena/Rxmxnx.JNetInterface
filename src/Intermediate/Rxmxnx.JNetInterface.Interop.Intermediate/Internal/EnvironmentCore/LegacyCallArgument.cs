@@ -49,13 +49,12 @@ internal sealed partial class EnvironmentCore
 		/// <param name="args">A read-only span of <see cref="IObject"/> instances.</param>
 		// ReSharper disable once ConvertToPrimaryConstructor
 		public LegacyCallArgument(ReadOnlySpan<IObject?> args) => this.Values = args;
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		String ICallArgument.ToTraceText() => this.ToString();
 #endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		void ICallArgument.Configure<TSlot>(TSlot slot, JCallDefinition callDefinition)
 			=> slot.SetParameterValues(0, this.Values);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		String ICallArgument.ToTraceText() => this.ToString();
 
 		/// <inheritdoc/>
 		public override String ToString()
@@ -97,7 +96,7 @@ internal sealed partial class EnvironmentCore
 			scoped ReadOnlyFixedContextValue<IObject?> fixedContext)
 		{
 			LegacyCallArgument args = new(fixedContext);
-			return core.CallConstructor<TObject, LegacyCallArgument>(jClass, definition, in args);
+			return core.CallConstructor<TObject, LegacyCallArgument>(jClass, definition, ref args);
 		}
 	}
 
@@ -118,7 +117,7 @@ internal sealed partial class EnvironmentCore
 			scoped ReadOnlyFixedContextValue<IObject?> fixedContext)
 		{
 			LegacyCallArgument args = new(fixedContext);
-			return core.CallConstructor<TObject, LegacyCallArgument>(jConstructor, definition, in args);
+			return core.CallConstructor<TObject, LegacyCallArgument>(jConstructor, definition, ref args);
 		}
 	}
 
@@ -140,7 +139,7 @@ internal sealed partial class EnvironmentCore
 			// Although the list is read-only, byteContext is not.
 			Span<Byte> bytes =
 				MemoryMarshal.CreateSpan(ref MemoryMarshal.GetReference(byteContext.Values), byteContext.Values.Length);
-			core.CallStaticPrimitiveFunction(bytes, jClass, definition, in args);
+			core.CallStaticPrimitiveFunction(bytes, jClass, definition, ref args);
 		}
 	}
 
@@ -160,7 +159,7 @@ internal sealed partial class EnvironmentCore
 			scoped ReadOnlyFixedContextValue<IObject?> fixedContext)
 		{
 			LegacyCallArgument args = new(fixedContext);
-			return core.CallStaticFunction<TResult, LegacyCallArgument>(jClass, definition, in args);
+			return core.CallStaticFunction<TResult, LegacyCallArgument>(jClass, definition, ref args);
 		}
 	}
 
@@ -181,7 +180,7 @@ internal sealed partial class EnvironmentCore
 			scoped ReadOnlyFixedContextValue<IObject?> fixedContext)
 		{
 			LegacyCallArgument args = new(fixedContext);
-			return core.CallStaticFunction<TObject, LegacyCallArgument>(jMethod, definition, in args);
+			return core.CallStaticFunction<TObject, LegacyCallArgument>(jMethod, definition, ref args);
 		}
 	}
 
@@ -199,7 +198,7 @@ internal sealed partial class EnvironmentCore
 		void IReadOnlyFixedContextAction<IObject?>.Accept(scoped ReadOnlyFixedContextValue<IObject?> fixedContext)
 		{
 			LegacyCallArgument args = new(fixedContext);
-			core.CallStaticMethod(jClass, definition, in args);
+			core.CallStaticMethod(jClass, definition, ref args);
 		}
 	}
 
@@ -217,7 +216,7 @@ internal sealed partial class EnvironmentCore
 		void IReadOnlyFixedContextAction<IObject?>.Accept(scoped ReadOnlyFixedContextValue<IObject?> fixedContext)
 		{
 			LegacyCallArgument args = new(fixedContext);
-			core.CallStaticMethod(jMethod, definition, in args);
+			core.CallStaticMethod(jMethod, definition, ref args);
 		}
 	}
 
@@ -242,7 +241,7 @@ internal sealed partial class EnvironmentCore
 			LegacyCallArgument args = new((ReadOnlyFixedContextValue<IObject?>)list[1].Value);
 			Span<Byte> bytes =
 				MemoryMarshal.CreateSpan(ref MemoryMarshal.GetReference(byteContext.Values), byteContext.Values.Length);
-			core.CallPrimitiveFunction(bytes, jLocal, jClass, definition, nonVirtual, in args);
+			core.CallPrimitiveFunction(bytes, jLocal, jClass, definition, nonVirtual, ref args);
 		}
 	}
 
@@ -265,7 +264,7 @@ internal sealed partial class EnvironmentCore
 			scoped ReadOnlyFixedContextValue<IObject?> fixedContext)
 		{
 			LegacyCallArgument args = new(fixedContext);
-			return core.CallFunction<TResult, LegacyCallArgument>(jLocal, jClass, definition, nonVirtual, in args);
+			return core.CallFunction<TResult, LegacyCallArgument>(jLocal, jClass, definition, nonVirtual, ref args);
 		}
 	}
 
@@ -289,7 +288,7 @@ internal sealed partial class EnvironmentCore
 			scoped ReadOnlyFixedContextValue<IObject?> fixedContext)
 		{
 			LegacyCallArgument args = new(fixedContext);
-			return core.CallFunction<TObject, LegacyCallArgument>(jMethod, jLocal, definition, nonVirtual, in args);
+			return core.CallFunction<TObject, LegacyCallArgument>(jMethod, jLocal, definition, nonVirtual, ref args);
 		}
 	}
 
@@ -311,7 +310,7 @@ internal sealed partial class EnvironmentCore
 		void IReadOnlyFixedContextAction<IObject?>.Accept(scoped ReadOnlyFixedContextValue<IObject?> fixedContext)
 		{
 			LegacyCallArgument args = new(fixedContext);
-			core.CallMethod(jLocal, jClass, definition, nonVirtual, in args);
+			core.CallMethod(jLocal, jClass, definition, nonVirtual, ref args);
 		}
 	}
 
@@ -333,7 +332,7 @@ internal sealed partial class EnvironmentCore
 		void IReadOnlyFixedContextAction<IObject?>.Accept(scoped ReadOnlyFixedContextValue<IObject?> fixedContext)
 		{
 			LegacyCallArgument args = new(fixedContext);
-			core.CallMethod(jMethod, jLocal, definition, nonVirtual, in args);
+			core.CallMethod(jMethod, jLocal, definition, nonVirtual, ref args);
 		}
 	}
 #endif

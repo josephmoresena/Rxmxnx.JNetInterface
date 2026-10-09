@@ -21,7 +21,7 @@ internal sealed partial class EnvironmentCore
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 		                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-		public unsafe void Configure<TArgs>(ref TArgs? args, JCallDefinition callDefinition)
+		public unsafe void Configure<TArgs>(ref TArgs args, JCallDefinition callDefinition)
 #if !NET9_0_OR_GREATER
 			where TArgs : ICallArgument
 #else
@@ -29,8 +29,7 @@ internal sealed partial class EnvironmentCore
 #endif
 		{
 			NativeMemory.Clear(buffer, (UIntPtr)(count * sizeof(JValue)));
-			if (args is not null)
-				args.Configure(this, callDefinition);
+			args.Configure(this, callDefinition);
 		}
 
 		/// <inheritdoc/>

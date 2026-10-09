@@ -60,7 +60,7 @@ public class JDialogObjectSwing : JDialogObject, IClassType<JDialogObjectSwing>,
 		GenericArgument<JFrameObjectAwt, JStringObject, JBoolean> args = new(frame, jString, modal);
 		return JDialogObjectSwing.constructorDef
 		                         .NewCall<JDialogObjectSwing,
-			                         GenericArgument<JFrameObjectAwt, JStringObject, JBoolean>>(env, in args);
+			                         GenericArgument<JFrameObjectAwt, JStringObject, JBoolean>>(env, ref args);
 	}
 
 	static JDialogObjectSwing IClassType<JDialogObjectSwing>.Create(IReferenceType.ClassInitializer initializer)

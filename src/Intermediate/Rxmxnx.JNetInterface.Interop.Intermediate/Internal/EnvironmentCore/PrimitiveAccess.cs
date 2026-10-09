@@ -254,8 +254,8 @@ internal sealed partial class EnvironmentCore
 	/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 	/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
 	[SkipLocalsInit]
-	private unsafe void CallStaticPrimitiveFunction<TArgs>(Span<Byte> bytes, JFunctionDefinition definition,
-		JClassLocalRef classRef, in TArgs? args, INativeTransaction jniTransaction, JMethodId methodId)
+	private unsafe void CallStaticPrimitiveFunction<TArgs>(scoped Span<Byte> bytes, JFunctionDefinition definition,
+		JClassLocalRef classRef, ref TArgs args, INativeTransaction jniTransaction, JMethodId methodId)
 #if !NET9_0_OR_GREATER
 		where TArgs : ICallArgument
 #else
@@ -366,8 +366,8 @@ internal sealed partial class EnvironmentCore
 	/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 	/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
 	[SkipLocalsInit]
-	private unsafe void CallPrimitiveFunction<TArgs>(Span<Byte> bytes, JFunctionDefinition definition,
-		JObjectLocalRef localRef, JClassLocalRef? classRef, in TArgs? args, INativeTransaction jniTransaction,
+	private unsafe void CallPrimitiveFunction<TArgs>(scoped Span<Byte> bytes, JFunctionDefinition definition,
+		JObjectLocalRef localRef, JClassLocalRef? classRef, ref TArgs args, INativeTransaction jniTransaction,
 		JMethodId methodId)
 #if !NET9_0_OR_GREATER
 		where TArgs : ICallArgument

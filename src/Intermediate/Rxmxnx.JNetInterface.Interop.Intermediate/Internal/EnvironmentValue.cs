@@ -144,6 +144,7 @@ internal readonly partial struct EnvironmentValue
 		where TAction : IFrameAction, allows ref struct
 #endif
 	{
+		Debug.Assert(typeof(TAction).IsValueType);
 		using LocalFrame _ = new(nativeThread, capacity);
 		action.Accept(nativeThread, []);
 	}
@@ -161,6 +162,7 @@ internal readonly partial struct EnvironmentValue
 		where TFunction : IFrameFunction<TResult>, allows ref struct
 #endif
 	{
+		Debug.Assert(typeof(TFunction).IsValueType);
 		using LocalFrame localFrame = new(nativeThread, capacity);
 		TResult result = func.Apply(nativeThread, []);
 		localFrame.SetResult(result);

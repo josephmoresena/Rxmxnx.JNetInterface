@@ -12,15 +12,22 @@ public abstract partial class IndeterminateCall
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public JLocalObject NewCall<TArgs>(JClassObject jClass, in TArgs? args)
+	public JLocalObject NewCall<TArgs>(JClassObject jClass, TArgs? args)
 #if !NET9_0_OR_GREATER
 		where TArgs : ICallArgument
 #else
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
+		if (args is null)
+			return this.NewCall(jClass, ref ICallArgument.Default);
+		if (!typeof(TArgs).IsValueType)
+		{
+			NonGenericCallArgument nonGeneric = NonGenericCallArgument.Create(args);
+			return this.NewCall(jClass, ref nonGeneric);
+		}
 		JConstructorDefinition definition = NativeValidationUtilities.ThrowIfNotConstructor(this.Definition);
-		return IndeterminateCall.NewCall<JLocalObject, TArgs>(definition, jClass, in args);
+		return IndeterminateCall.NewCall<JLocalObject, TArgs>(definition, jClass, ref args);
 	}
 
 	/// <summary>
@@ -34,7 +41,7 @@ public abstract partial class IndeterminateCall
 	[ExcludeFromCodeCoverage]
 #endif
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
-	public TObject NewCall<TObject, TArgs>(IEnvironment env, in TArgs? args)
+	public TObject NewCall<TObject, TArgs>(IEnvironment env, TArgs? args)
 		where TObject : JLocalObject, IClassType<TObject>
 #if !NET9_0_OR_GREATER
 		where TArgs : ICallArgument
@@ -42,9 +49,16 @@ public abstract partial class IndeterminateCall
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
+		if (args is null)
+			return this.NewCall<TObject, ICallArgument.Empty>(env, ref ICallArgument.Default);
+		if (!typeof(TArgs).IsValueType)
+		{
+			NonGenericCallArgument nonGeneric = NonGenericCallArgument.Create(args);
+			return this.NewCall<TObject, NonGenericCallArgument>(env, ref nonGeneric);
+		}
 		NativeValidationUtilities.ThrowIfAbstractClass(IClassType.GetMetadata<TObject>());
 		JConstructorDefinition definition = NativeValidationUtilities.ThrowIfNotConstructor(this.Definition);
 		JClassObject jClass = JClassObject.GetClass<TObject>(env);
-		return IndeterminateCall.NewCall<TObject, TArgs>(definition, jClass, in args);
+		return IndeterminateCall.NewCall<TObject, TArgs>(definition, jClass, ref args);
 	}
 }

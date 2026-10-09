@@ -1,6 +1,3 @@
-using System.Runtime.CompilerServices;
-
-using Rxmxnx.JNetInterface.ApplicationTest;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
@@ -46,9 +43,7 @@ public class JCountDownLatchObject : JLocalObject, IClassType<JCountDownLatchObj
 	public static JCountDownLatchObject Create(IEnvironment env, Int32 value)
 	{
 		using JClassObject jClass = JClassObject.GetClass<JCountDownLatchObject>(env);
-		ref GenericArgument<JInt> intArg = ref Unsafe.As<Int32, GenericArgument<JInt>>(ref value);
-		return JCountDownLatchObject.constructorDef.NewCall<JCountDownLatchObject, GenericArgument<JInt>>(
-			env, in intArg);
+		return JCountDownLatchObject.constructorDef.NewCall<JCountDownLatchObject, JInt>(env, value);
 	}
 
 	static JCountDownLatchObject IClassType<JCountDownLatchObject>.Create(IReferenceType.ClassInitializer initializer)

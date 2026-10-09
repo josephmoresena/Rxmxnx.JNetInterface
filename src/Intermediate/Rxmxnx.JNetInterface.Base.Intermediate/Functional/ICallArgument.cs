@@ -8,7 +8,9 @@ public interface ICallArgument
 	/// <summary>
 	/// Internal instance.
 	/// </summary>
-	public static readonly Empty Default = default;
+#pragma warning disable CA2211
+	public static Empty Default = default;
+#pragma warning restore CA2211
 
 	/// <summary>
 	/// Configures the argument values into the specified slot.
@@ -17,6 +19,7 @@ public interface ICallArgument
 	/// <param name="slot">The call parameter slot to configure.</param>
 	/// <param name="callDefinition">The JNI call definition.</param>
 	void Configure<TSlot>(TSlot slot, JCallDefinition callDefinition) where TSlot : IParameterSlot;
+
 	/// <inheritdoc cref="Object.ToString()"/>
 	/// <remarks>Use this method for trace.</remarks>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -27,10 +30,14 @@ public interface ICallArgument
 	/// </summary>
 	public readonly struct Empty : ICallArgument
 	{
+		/// <inheritdoc/>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		void ICallArgument.Configure<TSlot>(TSlot slot, JCallDefinition callDefinition)
+		public void Configure<TSlot>(TSlot slot, JCallDefinition callDefinition) where TSlot : IParameterSlot
 		{
 			// NONE
 		}
+		/// <inheritdoc/>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public String ToTraceText() => String.Empty;
 	}
 }

@@ -252,7 +252,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		ref NativeCallArgs<JStringObject> args =
 			ref Unsafe.As<JStringObject, NativeCallArgs<JStringObject>>(ref jString);
 		return env.AccessFeature.CallStaticFunction<JStringObject, NativeCallArgs<JStringObject>>(
-			jClass, NativeFunctionSetImpl.GetPropertyDefinition, in args);
+			jClass, NativeFunctionSetImpl.GetPropertyDefinition, ref args);
 	}
 	/// <inheritdoc/>
 	public override void SetProperty(JStringObject jStringKey, JStringObject? jStringValue)
@@ -260,6 +260,6 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		IEnvironment env = jStringKey.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JSystemObject>(env);
 		NativeCallArgs<JStringObject, JStringObject> args = new(jStringKey, jStringValue);
-		env.AccessFeature.CallStaticMethod(jClass, NativeFunctionSetImpl.SetPropertyDefinition, in args);
+		env.AccessFeature.CallStaticMethod(jClass, NativeFunctionSetImpl.SetPropertyDefinition, ref args);
 	}
 }

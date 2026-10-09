@@ -142,6 +142,7 @@ public sealed class DataTypeTests
 		public abstract UInt16 ToUInt16(IFormatProvider? provider);
 		public abstract UInt32 ToUInt32(IFormatProvider? provider);
 		public abstract UInt64 ToUInt64(IFormatProvider? provider);
+		public abstract void Configure<TSlot>(TSlot slot, JCallDefinition callDefinition) where TSlot : IParameterSlot;
 	}
 
 	private readonly struct NativeProxy : INativeType

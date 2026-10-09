@@ -1,7 +1,11 @@
 namespace Rxmxnx.JNetInterface.Native.Access;
 
 // ReSharper disable once ClassCannotBeInstantiated
-public abstract partial class IndeterminateCall
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
+public abstract unsafe partial class IndeterminateCall
 {
 	/// <summary>
 	/// Invokes a function on given <see cref="JLocalObject"/> instance and returns its result.
@@ -13,13 +17,28 @@ public abstract partial class IndeterminateCall
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public IndeterminateResult FunctionCall<TArgs>(JLocalObject jLocal, in TArgs? args)
+	public IndeterminateResult FunctionCall<TArgs>(JLocalObject jLocal, TArgs? args)
 #if !NET9_0_OR_GREATER
 		where TArgs : ICallArgument
 #else
 		where TArgs : ICallArgument, allows ref struct
 #endif
-		=> this.FunctionCall(jLocal, jLocal.Class, false, in args);
+	{
+		if (args is null)
+			return this.FunctionCall(jLocal, ref ICallArgument.Default);
+		if (!typeof(TArgs).IsValueType)
+		{
+			NonGenericCallArgument nonGeneric = NonGenericCallArgument.Create(args);
+			return this.FunctionCall(jLocal, ref nonGeneric);
+		}
+#pragma warning disable CS8500
+		fixed (TArgs* ptr = &Unsafe.AsRef(in args))
+#pragma warning restore CS8500
+		{
+			GenericCallArgument<TArgs> generic = new(ptr);
+			return this.FunctionCall(jLocal, ref generic);
+		}
+	}
 	/// <summary>
 	/// Invokes a function on given <see cref="JLocalObject"/> instance and returns its result.
 	/// </summary>
@@ -33,24 +52,27 @@ public abstract partial class IndeterminateCall
 	[ExcludeFromCodeCoverage]
 #endif
 	public IndeterminateResult FunctionCall<TArgs>(JLocalObject jLocal, JClassObject jClass, Boolean nonVirtual,
-		in TArgs? args)
+		TArgs? args)
 #if !NET9_0_OR_GREATER
 		where TArgs : ICallArgument
 #else
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
-		IndeterminateResult result = IndeterminateResult.Empty;
-		switch (this.Definition)
+		if (args is null)
+			return this.FunctionCall(jLocal, jClass, nonVirtual, ref ICallArgument.Default);
+		if (!typeof(TArgs).IsValueType)
 		{
-			case JMethodDefinition methodDefinition:
-				IndeterminateCall.MethodCall(methodDefinition, jLocal, jClass, nonVirtual, in args);
-				break;
-			case JFunctionDefinition definition:
-				result = this.FunctionCall(definition, jLocal, jClass, nonVirtual, in args);
-				break;
+			NonGenericCallArgument nonGeneric = NonGenericCallArgument.Create(args);
+			return this.FunctionCall(jLocal, jClass, nonVirtual, ref nonGeneric);
 		}
-		return result;
+#pragma warning disable CS8500
+		fixed (TArgs* ptr = &Unsafe.AsRef(in args))
+#pragma warning restore CS8500
+		{
+			GenericCallArgument<TArgs> generic = new(ptr);
+			return this.FunctionCall(jLocal, jClass, nonVirtual, ref generic);
+		}
 	}
 	/// <summary>
 	/// Invokes a static function on given <see cref="JClassObject"/> instance and returns its result.
@@ -62,28 +84,26 @@ public abstract partial class IndeterminateCall
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public IndeterminateResult StaticFunctionCall<TArgs>(JClassObject jClass, in TArgs? args)
+	public IndeterminateResult StaticFunctionCall<TArgs>(JClassObject jClass, TArgs? args)
 #if !NET9_0_OR_GREATER
 		where TArgs : ICallArgument
 #else
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
-		IndeterminateResult result = IndeterminateResult.Empty;
-		switch (this.Definition)
+		if (args is null)
+			return this.StaticFunctionCall(jClass, ref ICallArgument.Default);
+		if (!typeof(TArgs).IsValueType)
 		{
-			case JConstructorDefinition constructorDefinition:
-				JLocalObject newObject =
-					IndeterminateCall.NewCall<JLocalObject, TArgs>(constructorDefinition, jClass, in args);
-				result = new(newObject, jClass.ClassSignature);
-				break;
-			case JMethodDefinition methodDefinition:
-				IndeterminateCall.StaticMethodCall(methodDefinition, jClass, in args);
-				break;
-			case JFunctionDefinition definition:
-				result = this.StaticFunctionCall(definition, jClass, in args);
-				break;
+			NonGenericCallArgument nonGeneric = NonGenericCallArgument.Create(args);
+			return this.StaticFunctionCall(jClass, ref nonGeneric);
 		}
-		return result;
+#pragma warning disable CS8500
+		fixed (TArgs* ptr = &Unsafe.AsRef(in args))
+#pragma warning restore CS8500
+		{
+			GenericCallArgument<TArgs> generic = new(ptr);
+			return this.StaticFunctionCall(jClass, ref generic);
+		}
 	}
 }

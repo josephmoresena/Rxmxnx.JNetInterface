@@ -44,4 +44,5 @@ public abstract class PrimitiveProxy<T> : IPrimitiveType, IWrapper<T> where T : 
 	void IObject.CopyTo(Span<Byte> span, ref Int32 offset) { throw new NotImplementedException(); }
 	void IObject.CopyTo(Span<JValue> span, Int32 index) { throw new NotImplementedException(); }
 	public abstract T Value { get; }
+	public abstract void Configure<TSlot>(TSlot slot, JCallDefinition callDefinition) where TSlot : IParameterSlot;
 }

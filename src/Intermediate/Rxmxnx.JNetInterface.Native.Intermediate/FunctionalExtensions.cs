@@ -21,7 +21,13 @@ public static class FunctionalExtensions
 	{
 		if (environment is null || action is null)
 			return;
-		environment.WithFrameExecute(ref action, capacity);
+		if (typeof(TAction).IsValueType)
+		{
+			environment.WithFrameExecute(ref action, capacity);
+			return;
+		}
+		NonGenericFrameAction nonGeneric = NonGenericFrameAction.Create(action);
+		environment.WithFrameExecute(ref nonGeneric, capacity);
 	}
 	/// <summary>
 	/// Executes the current frame action within the context of the specified environment.
@@ -36,9 +42,7 @@ public static class FunctionalExtensions
 #else
 		where TAction : struct, IFrameAction, allows ref struct
 #endif
-	{
-		environment?.WithFrameExecute(ref action, capacity);
-	}
+		=> environment?.WithFrameExecute(ref action, capacity);
 	/// <summary>
 	/// Executes a provided frame function within the context of the current environment.
 	/// </summary>
@@ -61,7 +65,13 @@ public static class FunctionalExtensions
 			Unsafe.SkipInit(out result);
 			return;
 		}
-		result = environment.WithFrameExecute<TFunction, TResult>(ref func, capacity);
+		if (typeof(TFunction).IsValueType)
+		{
+			result = environment.WithFrameExecute<TFunction, TResult>(ref func, capacity);
+			return;
+		}
+		NonGenericFrameFunction<TResult> nonGeneric = NonGenericFrameFunction<TResult>.Create(func);
+		result = environment.WithFrameExecute<NonGenericFrameFunction<TResult>, TResult>(ref nonGeneric, capacity);
 	}
 	/// <summary>
 	/// Executes the current frame function within the context of the specified environment.

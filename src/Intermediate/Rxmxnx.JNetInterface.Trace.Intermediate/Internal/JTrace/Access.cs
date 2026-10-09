@@ -113,7 +113,7 @@ internal static partial class JTrace
 	/// <param name="args">Call parameters.</param>
 	/// <param name="callerMethod">Caller member name.</param>
 	internal static void CallMethod<TArgs>(JLocalObject? jLocal, JClassObject jClass, JCallDefinition definition,
-		Boolean nonVirtual, in TArgs? args, [CallerMemberName] String callerMethod = "")
+		Boolean nonVirtual, ref TArgs args, [CallerMemberName] String callerMethod = "")
 #if !NET9_0_OR_GREATER
 		where TArgs : ICallArgument
 #else
@@ -135,7 +135,7 @@ internal static partial class JTrace
 		else
 			strBuilder.AppendLine(
 				$"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {definition.ToTraceText()}");
-		String? traceArgs = args?.ToTraceText();
+		String? traceArgs = args.ToTraceText();
 		if (!String.IsNullOrWhiteSpace(traceArgs))
 			strBuilder.AppendLine(traceArgs);
 		Trace.WriteLine(strBuilder, callerMethod);

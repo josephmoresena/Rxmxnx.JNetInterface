@@ -576,11 +576,13 @@ public sealed class NativeFunctionSetImplTests
 		   .Returns((Int32)NativeFunctionSetImplTests.GetModifiers(jClass));
 		if (jClassElement is not null) env.ClassFeature.GetClass(jClassElement.Name).Returns(jClassElement);
 
-		env.WithFrame(Arg.Any<Int32>(), Arg.Any<IntPtr>(), Arg.Any<Func<IntPtr, Boolean>>()).Returns(c =>
+		env.WithFrame(Arg.Any<Int32>(), Arg.Any<ValueTuple<IntPtr, Type>>(),
+		              Arg.Any<Func<ValueTuple<IntPtr, Type>, Boolean>>()).Returns(c =>
 		{
-			if (c[2] is not Func<IntPtr, Boolean> func || c[1] is not IntPtr ptr)
+			if (c[2] is not Func<ValueTuple<IntPtr, Type>, Boolean> func || c[1] is not ValueTuple<IntPtr, Type> state)
 				throw new();
-			return func(ptr);
+			Assert.Equal(typeof(NativeFunctionSetImpl.IsFinalArrayTypeFunc), state.Item2);
+			return func(state);
 		});
 
 		Assert.Equal(jClass.IsFinal, NativeFunctionSetImpl.Instance.IsFinal(jClass, out _));

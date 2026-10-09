@@ -1,6 +1,3 @@
-using System.Runtime.CompilerServices;
-
-using Rxmxnx.JNetInterface.ApplicationTest;
 using Rxmxnx.JNetInterface.Awt;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native.Access;
@@ -62,8 +59,7 @@ public class JFrameObjectSwing : JFrameObjectAwt, IClassType<JFrameObjectSwing>,
 	{
 		IEnvironment env = this.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JFrameObjectSwing>(env);
-		ref GenericArgument<JInt> intArg = ref Unsafe.As<CloseOperation, GenericArgument<JInt>>(ref operation);
-		JFrameObjectSwing.setDefaultCloseOperationDef.MethodCall(this, jClass, false, in intArg);
+		JFrameObjectSwing.setDefaultCloseOperationDef.MethodCall(this, jClass, false, (JInt)(Int32)operation);
 	}
 	public void SetContentPane(JContainerObject contentPane)
 	{

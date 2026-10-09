@@ -9,7 +9,8 @@ internal sealed partial class EnvironmentCore
 		LegacyStaticPrimitiveFunctionCall call = new(this, jClass, definition);
 		call.WithSafeFixed(bytes, args);
 #else
-		this.CallStaticPrimitiveFunction<LegacyCallArgument>(bytes, jClass, definition, new(args));
+		LegacyCallArgument callArgument = new(args);
+		this.CallStaticPrimitiveFunction(bytes, jClass, definition, ref callArgument);
 #endif
 	}
 	public void CallPrimitiveFunction(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
@@ -19,7 +20,8 @@ internal sealed partial class EnvironmentCore
 		LegacyInstancePrimitiveFunctionCall call = new(this, jLocal, jClass, definition, nonVirtual);
 		call.WithSafeFixed(bytes, args);
 #else
-		this.CallPrimitiveFunction<LegacyCallArgument>(bytes, jLocal, jClass, definition, nonVirtual, new(args));
+		LegacyCallArgument callArgument = new(args);
+		this.CallPrimitiveFunction(bytes, jLocal, jClass, definition, nonVirtual, ref callArgument);
 #endif
 	}
 	public TObject CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition,
@@ -30,7 +32,8 @@ internal sealed partial class EnvironmentCore
 		args.WithSafeFixed(call, out TObject result);
 		return result;
 #else
-		return this.CallConstructor<TObject, LegacyCallArgument>(jClass, definition, new(args));
+		LegacyCallArgument callArgument = new(args);
+		return this.CallConstructor<TObject, LegacyCallArgument>(jClass, definition, ref callArgument);
 #endif
 	}
 #if !NET8_0_OR_GREATER || ANDROID
@@ -44,7 +47,8 @@ internal sealed partial class EnvironmentCore
 		args.WithSafeFixed(call, out TObject result);
 		return result;
 #else
-		return this.CallConstructor<TObject, LegacyCallArgument>(jConstructor, definition, new(args));
+		LegacyCallArgument callArgument = new(args);
+		return this.CallConstructor<TObject, LegacyCallArgument>(jConstructor, definition, ref callArgument);
 #endif
 	}
 	public TResult? CallStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition,
@@ -55,7 +59,8 @@ internal sealed partial class EnvironmentCore
 		args.WithSafeFixed(call, out TResult? result);
 		return result;
 #else
-		return this.CallStaticFunction<TResult, LegacyCallArgument>(jClass, definition, new(args));
+		LegacyCallArgument callArgument = new(args);
+		return this.CallStaticFunction<TResult, LegacyCallArgument>(jClass, definition, ref callArgument);
 #endif
 	}
 	public TResult? CallStaticFunction<TResult>(JMethodObject jMethod, JFunctionDefinition definition,
@@ -66,7 +71,8 @@ internal sealed partial class EnvironmentCore
 		args.WithSafeFixed(call, out TResult? result);
 		return result;
 #else
-		return this.CallStaticFunction<TResult, LegacyCallArgument>(jMethod, definition, new(args));
+		LegacyCallArgument callArgument = new(args);
+		return this.CallStaticFunction<TResult, LegacyCallArgument>(jMethod, definition, ref callArgument);
 #endif
 	}
 	public void CallStaticMethod(JClassObject jClass, JMethodDefinition definition, ReadOnlySpan<IObject?> args)
@@ -75,7 +81,8 @@ internal sealed partial class EnvironmentCore
 		LegacyStaticMethodCall call = new(this, jClass, definition);
 		args.WithSafeFixed(call);
 #else
-		this.CallStaticMethod<LegacyCallArgument>(jClass, definition, new(args));
+		LegacyCallArgument callArgument = new(args);
+		this.CallStaticMethod(jClass, definition, ref callArgument);
 #endif
 	}
 	public void CallStaticMethod(JMethodObject jMethod, JMethodDefinition definition, ReadOnlySpan<IObject?> args)
@@ -84,7 +91,8 @@ internal sealed partial class EnvironmentCore
 		LegacyReflectedStaticMethodCall call = new(this, jMethod, definition);
 		args.WithSafeFixed(call);
 #else
-		this.CallStaticMethod<LegacyCallArgument>(jMethod, definition, new(args));
+		LegacyCallArgument callArgument = new(args);
+		this.CallStaticMethod(jMethod, definition, ref callArgument);
 #endif
 	}
 	public TResult? CallFunction<TResult>(JLocalObject jLocal, JClassObject jClass, JFunctionDefinition definition,
@@ -95,7 +103,8 @@ internal sealed partial class EnvironmentCore
 		args.WithSafeFixed(call, out TResult? result);
 		return result;
 #else
-		return this.CallFunction<TResult, LegacyCallArgument>(jLocal, jClass, definition, nonVirtual, new(args));
+		LegacyCallArgument callArgument = new(args);
+		return this.CallFunction<TResult, LegacyCallArgument>(jLocal, jClass, definition, nonVirtual, ref callArgument);
 #endif
 	}
 	public TResult? CallFunction<TResult>(JMethodObject jMethod, JLocalObject jLocal, JFunctionDefinition definition,
@@ -106,7 +115,9 @@ internal sealed partial class EnvironmentCore
 		args.WithSafeFixed(call, out TResult? result);
 		return result;
 #else
-		return this.CallFunction<TResult, LegacyCallArgument>(jMethod, jLocal, definition, nonVirtual, new(args));
+		LegacyCallArgument callArgument = new(args);
+		return this.CallFunction<TResult, LegacyCallArgument>(jMethod, jLocal, definition, nonVirtual,
+		                                                      ref callArgument);
 #endif
 	}
 	public void CallMethod(JLocalObject jLocal, JClassObject jClass, JMethodDefinition definition, Boolean nonVirtual,
@@ -116,7 +127,8 @@ internal sealed partial class EnvironmentCore
 		LegacyInstanceMethodCall call = new(this, jLocal, jClass, definition, nonVirtual);
 		args.WithSafeFixed(call);
 #else
-		this.CallMethod<LegacyCallArgument>(jLocal, jClass, definition, nonVirtual, new(args));
+		LegacyCallArgument callArgument = new(args);
+		this.CallMethod(jLocal, jClass, definition, nonVirtual, ref callArgument);
 #endif
 	}
 	public void CallMethod(JMethodObject jMethod, JLocalObject jLocal, JMethodDefinition definition, Boolean nonVirtual,
@@ -126,7 +138,8 @@ internal sealed partial class EnvironmentCore
 		LegacyReflectedInstanceMethodCall call = new(this, jMethod, jLocal, definition, nonVirtual);
 		args.WithSafeFixed(call);
 #else
-		this.CallMethod<LegacyCallArgument>(jMethod, jLocal, definition, nonVirtual, new(args));
+		LegacyCallArgument callArgument = new(args);
+		this.CallMethod(jMethod, jLocal, definition, nonVirtual, ref callArgument);
 #endif
 	}
 }

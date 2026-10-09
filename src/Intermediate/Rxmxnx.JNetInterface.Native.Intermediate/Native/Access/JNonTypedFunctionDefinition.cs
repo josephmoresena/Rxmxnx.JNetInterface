@@ -17,63 +17,63 @@ public sealed partial class JNonTypedFunctionDefinition(
 ) : JFunctionDefinition<JLocalObject>(functionName, JAccessibleObjectDefinition.ValidateSignature(returnTypeSignature),
                                       metadata)
 {
-	/// <inheritdoc cref="JFunctionDefinition{TResult}.Invoke(JLocalObject, ReadOnlySpan{IObject?})"/>
-	public new JLocalObject? Invoke<TArgs>(JLocalObject jLocal, in TArgs? args)
+	/// <inheritdoc cref="JFunctionDefinition{TResult}.Invoke{TArgs}(JLocalObject, ref TArgs)"/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public new JLocalObject? Invoke<TArgs>(JLocalObject jLocal, ref TArgs args)
 #if !NET9_0_OR_GREATER
-		where TArgs : ICallArgument
+		where TArgs : struct, ICallArgument
 #else
-		where TArgs : ICallArgument, allows ref struct
+		where TArgs : struct, ICallArgument, allows ref struct
 #endif
-		=> base.Invoke(jLocal, args);
-	/// <inheritdoc cref="JFunctionDefinition{TResult}.Invoke(JLocalObject, JClassObject, ReadOnlySpan{IObject?})"/>
-	public new JLocalObject? Invoke<TArgs>(JLocalObject jLocal, JClassObject jClass, in TArgs? args)
+		=> base.Invoke(jLocal, ref args);
+	/// <inheritdoc cref="JFunctionDefinition{TResult}.Invoke{TArgs}(JLocalObject, JClassObject, ref TArgs)"/>
+	public new JLocalObject? Invoke<TArgs>(JLocalObject jLocal, JClassObject jClass, ref TArgs args)
 #if !NET9_0_OR_GREATER
-		where TArgs : ICallArgument
+		where TArgs : struct, ICallArgument
 #else
-		where TArgs : ICallArgument, allows ref struct
+		where TArgs : struct, ICallArgument, allows ref struct
 #endif
-		=> base.Invoke(jLocal, jClass, args);
-	/// <inheritdoc cref="JFunctionDefinition{TResult}.InvokeNonVirtual(JLocalObject, JClassObject, ReadOnlySpan{IObject?})"/>
-	public new JLocalObject? InvokeNonVirtual<TArgs>(JLocalObject jLocal, JClassObject jClass, in TArgs? args)
+		=> base.Invoke(jLocal, jClass, ref args);
+	/// <inheritdoc cref="JFunctionDefinition{TResult}.InvokeNonVirtual{TArgs}(JLocalObject, JClassObject, ref TArgs)"/>
+	public new JLocalObject? InvokeNonVirtual<TArgs>(JLocalObject jLocal, JClassObject jClass, ref TArgs args)
 #if !NET9_0_OR_GREATER
-		where TArgs : ICallArgument
+		where TArgs : struct, ICallArgument
 #else
-		where TArgs : ICallArgument, allows ref struct
+		where TArgs : struct, ICallArgument, allows ref struct
 #endif
-		=> base.InvokeNonVirtual(jLocal, jClass, args);
-	/// <inheritdoc cref="JFunctionDefinition{TResult}.StaticInvoke(JClassObject, ReadOnlySpan{IObject?})"/>
-	public new JLocalObject? StaticInvoke<TArgs>(JClassObject jClass, in TArgs? args)
+		=> base.InvokeNonVirtual(jLocal, jClass, ref args);
+	/// <inheritdoc cref="JFunctionDefinition{TResult}.StaticInvoke{TArgs}(JClassObject, ref TArgs)"/>
+	public new JLocalObject? StaticInvoke<TArgs>(JClassObject jClass, ref TArgs args)
 #if !NET9_0_OR_GREATER
-		where TArgs : ICallArgument
+		where TArgs : struct, ICallArgument
 #else
-		where TArgs : ICallArgument, allows ref struct
+		where TArgs : struct, ICallArgument, allows ref struct
 #endif
-		=> base.StaticInvoke(jClass, args);
-
-	/// <inheritdoc cref="JFunctionDefinition{TResult}.InvokeReflected(JMethodObject, JLocalObject, ReadOnlySpan{IObject?})"/>
-	public new JLocalObject? InvokeReflected<TArgs>(JMethodObject jMethod, JLocalObject jLocal, in TArgs? args)
+		=> base.StaticInvoke(jClass, ref args);
+	/// <inheritdoc cref="JFunctionDefinition{TResult}.InvokeReflected{TArgs}(JMethodObject, JLocalObject, ref TArgs)"/>
+	public new JLocalObject? InvokeReflected<TArgs>(JMethodObject jMethod, JLocalObject jLocal, ref TArgs args)
 #if !NET9_0_OR_GREATER
-		where TArgs : ICallArgument
+		where TArgs : struct, ICallArgument
 #else
-		where TArgs : ICallArgument, allows ref struct
+		where TArgs : struct, ICallArgument, allows ref struct
 #endif
 		=> base.InvokeReflected(jMethod, jLocal, args);
 	/// <inheritdoc
-	///     cref="JFunctionDefinition{TResult}.InvokeNonVirtualReflected(JMethodObject, JLocalObject, ReadOnlySpan{IObject?})"/>
+	///     cref="JFunctionDefinition{TResult}.InvokeNonVirtualReflected{TArgs}(JMethodObject, JLocalObject, ref TArgs)"/>
 	public new JLocalObject? InvokeNonVirtualReflected<TArgs>(JMethodObject jMethod, JLocalObject jLocal,
-		in TArgs? args)
+		ref TArgs args)
 #if !NET9_0_OR_GREATER
-		where TArgs : ICallArgument
+		where TArgs : struct, ICallArgument
 #else
-		where TArgs : ICallArgument, allows ref struct
+		where TArgs : struct, ICallArgument, allows ref struct
 #endif
-		=> base.InvokeNonVirtualReflected(jMethod, jLocal, args);
-	/// <inheritdoc cref="JFunctionDefinition{TResult}.InvokeStaticReflected(JMethodObject, ReadOnlySpan{IObject})"/>
-	public new JLocalObject? InvokeStaticReflected<TArgs>(JMethodObject jMethod, in TArgs? args)
+		=> base.InvokeNonVirtualReflected(jMethod, jLocal, ref args);
+	/// <inheritdoc cref="JFunctionDefinition{TResult}.InvokeStaticReflected{TArgs}(JMethodObject, ref TArgs)"/>
+	public new JLocalObject? InvokeStaticReflected<TArgs>(JMethodObject jMethod, ref TArgs args)
 #if !NET9_0_OR_GREATER
-		where TArgs : ICallArgument
+		where TArgs : struct, ICallArgument
 #else
-		where TArgs : ICallArgument, allows ref struct
+		where TArgs : struct, ICallArgument, allows ref struct
 #endif
-		=> base.InvokeStaticReflected(jMethod, args);
+		=> base.InvokeStaticReflected(jMethod, ref args);
 }

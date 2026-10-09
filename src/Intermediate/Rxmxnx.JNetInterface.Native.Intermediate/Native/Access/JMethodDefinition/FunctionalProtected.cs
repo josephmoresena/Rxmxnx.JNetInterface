@@ -1,4 +1,5 @@
 // ReSharper disable MemberCanBePrivate.Global
+
 namespace Rxmxnx.JNetInterface.Native.Access;
 
 public partial class JMethodDefinition
@@ -9,15 +10,26 @@ public partial class JMethodDefinition
 	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the method.</typeparam>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
-	protected void Invoke<TArgs>(JLocalObject jLocal, in TArgs? args)
+	protected void Invoke<TArgs>(JLocalObject jLocal, TArgs? args)
 #if !NET9_0_OR_GREATER
 		where TArgs : ICallArgument
 #else
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
-		IEnvironment env = jLocal.Environment;
-		env.AccessFeature.CallMethod(jLocal, jLocal.Class, this, false, in args);
+		if (args is null)
+		{
+			this.Invoke(jLocal, ref ICallArgument.Default);
+			return;
+		}
+		if (typeof(TArgs).IsValueType)
+		{
+			IEnvironment env = jLocal.Environment;
+			env.AccessFeature.CallMethod(jLocal, jLocal.Class, this, false, ref args);
+			return;
+		}
+		NonGenericCallArgument nonGeneric = NonGenericCallArgument.Create(args);
+		this.Invoke(jLocal, ref nonGeneric);
 	}
 	/// <summary>
 	/// Invokes a method on <paramref name="jLocal"/> which matches with current definition but using the
@@ -27,15 +39,26 @@ public partial class JMethodDefinition
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
 	/// <param name="args">The arguments to pass to.</param>
-	protected void Invoke<TArgs>(JLocalObject jLocal, JClassObject jClass, in TArgs? args)
+	protected void Invoke<TArgs>(JLocalObject jLocal, JClassObject jClass, TArgs? args)
 #if !NET9_0_OR_GREATER
 		where TArgs : ICallArgument
 #else
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
-		IEnvironment env = jLocal.Environment;
-		env.AccessFeature.CallMethod(jLocal, jClass, this, false, in args);
+		if (args is null)
+		{
+			this.Invoke(jLocal, jClass, ref ICallArgument.Default);
+			return;
+		}
+		if (typeof(TArgs).IsValueType)
+		{
+			IEnvironment env = jLocal.Environment;
+			env.AccessFeature.CallMethod(jLocal, jClass, this, false, ref args);
+			return;
+		}
+		NonGenericCallArgument nonGeneric = NonGenericCallArgument.Create(args);
+		this.Invoke(jLocal, jClass, ref nonGeneric);
 	}
 	/// <summary>
 	/// Invokes a method on <paramref name="jLocal"/> which matches with current definition but using the
@@ -45,15 +68,26 @@ public partial class JMethodDefinition
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
 	/// <param name="args">The arguments to pass to.</param>
-	protected void InvokeNonVirtual<TArgs>(JLocalObject jLocal, JClassObject jClass, in TArgs? args)
+	protected void InvokeNonVirtual<TArgs>(JLocalObject jLocal, JClassObject jClass, TArgs? args)
 #if !NET9_0_OR_GREATER
 		where TArgs : ICallArgument
 #else
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
-		IEnvironment env = jLocal.Environment;
-		env.AccessFeature.CallMethod(jLocal, jClass, this, true, in args);
+		if (args is null)
+		{
+			this.InvokeNonVirtual(jLocal, jClass, ref ICallArgument.Default);
+			return;
+		}
+		if (typeof(TArgs).IsValueType)
+		{
+			IEnvironment env = jLocal.Environment;
+			env.AccessFeature.CallMethod(jLocal, jClass, this, true, ref args);
+			return;
+		}
+		NonGenericCallArgument nonGeneric = NonGenericCallArgument.Create(args);
+		this.InvokeNonVirtual(jLocal, jClass, ref nonGeneric);
 	}
 	/// <summary>
 	/// Invokes a static method on <paramref name="jClass"/> which matches with current definition.
@@ -61,15 +95,26 @@ public partial class JMethodDefinition
 	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the method.</typeparam>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
-	protected void StaticInvoke<TArgs>(JClassObject jClass, in TArgs? args)
+	protected void StaticInvoke<TArgs>(JClassObject jClass, TArgs? args)
 #if !NET9_0_OR_GREATER
 		where TArgs : ICallArgument
 #else
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
-		IEnvironment env = jClass.Environment;
-		env.AccessFeature.CallStaticMethod(jClass, this, in args);
+		if (args is null)
+		{
+			this.StaticInvoke(jClass, ref ICallArgument.Default);
+			return;
+		}
+		if (typeof(TArgs).IsValueType)
+		{
+			IEnvironment env = jClass.Environment;
+			env.AccessFeature.CallStaticMethod(jClass, this, ref args);
+			return;
+		}
+		NonGenericCallArgument nonGeneric = NonGenericCallArgument.Create(args);
+		this.StaticInvoke(jClass, ref nonGeneric);
 	}
 	/// <summary>
 	/// Invokes a reflected method which matches with current definition.
@@ -78,15 +123,26 @@ public partial class JMethodDefinition
 	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
-	protected void InvokeReflected<TArgs>(JMethodObject jMethod, JLocalObject jLocal, in TArgs? args)
+	protected void InvokeReflected<TArgs>(JMethodObject jMethod, JLocalObject jLocal, TArgs? args)
 #if !NET9_0_OR_GREATER
 		where TArgs : ICallArgument
 #else
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
-		IEnvironment env = jMethod.Environment;
-		env.AccessFeature.CallMethod(jMethod, jLocal, this, false, in args);
+		if (args is null)
+		{
+			this.InvokeReflected(jMethod, jLocal, ref ICallArgument.Default);
+			return;
+		}
+		if (typeof(TArgs).IsValueType)
+		{
+			IEnvironment env = jMethod.Environment;
+			env.AccessFeature.CallMethod(jMethod, jLocal, this, false, ref args);
+			return;
+		}
+		NonGenericCallArgument nonGeneric = NonGenericCallArgument.Create(args);
+		this.InvokeReflected(jMethod, jLocal, ref nonGeneric);
 	}
 	/// <summary>
 	/// Invokes a reflected method which matches with current definition.
@@ -95,15 +151,26 @@ public partial class JMethodDefinition
 	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
-	protected void InvokeNonVirtualReflected<TArgs>(JMethodObject jMethod, JLocalObject jLocal, in TArgs? args)
+	protected void InvokeNonVirtualReflected<TArgs>(JMethodObject jMethod, JLocalObject jLocal, TArgs? args)
 #if !NET9_0_OR_GREATER
 		where TArgs : ICallArgument
 #else
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
-		IEnvironment env = jMethod.Environment;
-		env.AccessFeature.CallMethod(jMethod, jLocal, this, true, in args);
+		if (args is null)
+		{
+			this.InvokeNonVirtualReflected(jMethod, jLocal, ref ICallArgument.Default);
+			return;
+		}
+		if (typeof(TArgs).IsValueType)
+		{
+			IEnvironment env = jMethod.Environment;
+			env.AccessFeature.CallMethod(jMethod, jLocal, this, true, ref args);
+			return;
+		}
+		NonGenericCallArgument nonGeneric = NonGenericCallArgument.Create(args);
+		this.InvokeNonVirtualReflected(jMethod, jLocal, ref nonGeneric);
 	}
 	/// <summary>
 	/// Invokes a reflected static method which matches with current definition.
@@ -111,14 +178,25 @@ public partial class JMethodDefinition
 	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the method.</typeparam>
 	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
-	protected void InvokeStaticReflected<TArgs>(JMethodObject jMethod, in TArgs? args)
+	protected void InvokeStaticReflected<TArgs>(JMethodObject jMethod, TArgs? args)
 #if !NET9_0_OR_GREATER
 		where TArgs : ICallArgument
 #else
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
-		IEnvironment env = jMethod.Environment;
-		env.AccessFeature.CallStaticMethod(jMethod, this, in args);
+		if (args is null)
+		{
+			this.InvokeStaticReflected(jMethod, ref ICallArgument.Default);
+			return;
+		}
+		if (typeof(TArgs).IsValueType)
+		{
+			IEnvironment env = jMethod.Environment;
+			env.AccessFeature.CallStaticMethod(jMethod, this, ref args);
+			return;
+		}
+		NonGenericCallArgument nonGeneric = NonGenericCallArgument.Create(args);
+		this.InvokeStaticReflected(jMethod, ref nonGeneric);
 	}
 }
