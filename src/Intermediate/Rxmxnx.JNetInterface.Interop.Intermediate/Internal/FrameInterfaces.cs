@@ -5,6 +5,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// </summary>
 internal readonly struct LocalFrameAction(Action action) : IFrameAction
 {
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IFrameAction.Accept(IEnvironment _, ReadOnlySpan<JLocalObject?> __) => action();
 }
 
@@ -14,6 +15,7 @@ internal readonly struct LocalFrameAction(Action action) : IFrameAction
 #if !NET9_0_OR_GREATER
 internal readonly struct LocalFrameAction<TState>(TState state, Action<TState> action) : IFrameAction
 {
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IFrameAction.Accept(IEnvironment _, ReadOnlySpan<JLocalObject?> __) => action(state);
 #else
 internal readonly ref struct LocalFrameAction<TState>(TState state, Action<TState> action)
@@ -21,6 +23,7 @@ internal readonly ref struct LocalFrameAction<TState>(TState state, Action<TStat
 {
 	private readonly TState _state = state;
 
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IFrameAction.Accept(IEnvironment _, ReadOnlySpan<JLocalObject?> __) => action(this._state);
 #endif
 }
@@ -30,6 +33,7 @@ internal readonly ref struct LocalFrameAction<TState>(TState state, Action<TStat
 /// </summary>
 internal readonly struct LocalFrameFunction<TResult>(Func<TResult> func) : IFrameFunction<TResult>
 {
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	TResult IFrameFunction<TResult>.Apply(IEnvironment _, ReadOnlySpan<JLocalObject?> __) => func();
 }
 
@@ -40,6 +44,7 @@ internal readonly struct LocalFrameFunction<TResult>(Func<TResult> func) : IFram
 internal readonly struct LocalFrameFunction<TResult, TState>(TState state, Func<TState, TResult> func)
 	: IFrameFunction<TResult>
 {
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	TResult IFrameFunction<TResult>.Apply(IEnvironment _, ReadOnlySpan<JLocalObject?> __) => func(state);
 #else
 internal readonly ref struct LocalFrameFunction<TResult, TState>(TState state, Func<TState, TResult> func)
@@ -47,6 +52,7 @@ internal readonly ref struct LocalFrameFunction<TResult, TState>(TState state, F
 {
 	private readonly TState _state = state;
 
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	TResult IFrameFunction<TResult>.Apply(IEnvironment _, ReadOnlySpan<JLocalObject?> __) => func(this._state);
 #endif
 }

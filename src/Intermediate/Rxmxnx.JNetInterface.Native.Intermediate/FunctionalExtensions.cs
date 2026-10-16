@@ -12,6 +12,7 @@ public static class FunctionalExtensions
 	/// <param name="environment">The <see cref="IEnvironment"/> instance which the action is executed.</param>
 	/// <param name="capacity">New local reference frame capacity.</param>
 	/// <param name="action">The frame action to execute.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void WithFrame<TAction>(this IEnvironment? environment, Int32 capacity, TAction? action)
 #if !NET9_0_OR_GREATER
 		where TAction : IFrameAction
@@ -36,6 +37,7 @@ public static class FunctionalExtensions
 	/// <param name="action">The frame action to execute.</param>
 	/// <param name="environment">The <see cref="IEnvironment"/> instance which the action is executed.</param>
 	/// <param name="capacity">New local reference frame capacity.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void WithFrame<TAction>(this ref TAction action, IEnvironment? environment, Int32 capacity)
 #if !NET9_0_OR_GREATER
 		where TAction : struct, IFrameAction
@@ -52,6 +54,7 @@ public static class FunctionalExtensions
 	/// <param name="capacity">New local reference frame capacity.</param>
 	/// <param name="func">The frame function to execute.</param>
 	/// <param name="result">Output. The result returned by the frame function.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void WithFrame<TFunction, TResult>(this IEnvironment? environment, Int32 capacity, TFunction? func,
 		out TResult result)
 #if !NET9_0_OR_GREATER
@@ -82,6 +85,7 @@ public static class FunctionalExtensions
 	/// <param name="environment">The <see cref="IEnvironment"/> instance which the function is executed.</param>
 	/// <param name="capacity">New local reference frame capacity.</param>
 	/// <param name="result">Output. The result returned by the frame function.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void WithFrame<TFunction, TResult>(this ref TFunction func, IEnvironment? environment, Int32 capacity,
 		out TResult result)
 #if !NET9_0_OR_GREATER
