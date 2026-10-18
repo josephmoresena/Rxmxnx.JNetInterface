@@ -7,7 +7,7 @@ namespace Rxmxnx.JNetInterface.Native;
 public record BufferObjectMetadata : ObjectMetadata
 {
 	/// <summary>
-	/// Indicates whether current buffer is direct.
+	/// Indicates whether the current buffer is direct.
 	/// </summary>
 	public Boolean IsDirect { get; init; }
 	/// <summary>

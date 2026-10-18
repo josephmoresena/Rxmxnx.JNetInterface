@@ -44,7 +44,7 @@ public sealed class JArgumentMetadata
 	/// <summary>
 	/// Creates a <see cref="JArgumentMetadata"/> from <paramref name="signature"/> value.
 	/// </summary>
-	/// <param name="signature">The signature of type.</param>
+	/// <param name="signature">The signature of a type.</param>
 	/// <returns>A <see cref="JArgumentMetadata"/> from <paramref name="signature"/> value</returns>
 	public static JArgumentMetadata Create(ReadOnlySpan<Byte> signature)
 	{

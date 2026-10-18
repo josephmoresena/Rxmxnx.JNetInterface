@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Restricted;
 
 /// <summary>
-/// This interface exposes JNI accessing feature.
+/// This interface exposes the JNI accessing feature.
 /// </summary>
 internal partial interface IAccessFeature
 {
@@ -82,7 +82,7 @@ internal partial interface IAccessFeature
 		where TField : IDataType<TField>, IObject;
 	
 	/// <summary>
-	/// Register <paramref name="calls"/> as native methods in current class.
+	/// Register <paramref name="calls"/> as native methods in the current class.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="calls">Native calls to register.</param>

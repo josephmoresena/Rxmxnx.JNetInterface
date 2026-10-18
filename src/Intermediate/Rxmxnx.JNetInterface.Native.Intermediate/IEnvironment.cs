@@ -60,7 +60,7 @@ public partial interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// Indicates whether JNI execution is secure.
 	/// </summary>
 	/// <returns>
-	/// <see langword="true"/> if is secure execute JNI calls; otherwise, <see langword="false"/>.
+	/// <see langword="true"/> if is secure, execute JNI calls; otherwise, <see langword="false"/>.
 	/// </returns>
 	Boolean JniSecure();
 	/// <summary>
@@ -68,7 +68,7 @@ public partial interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// </summary>
 	/// <param name="jThread"></param>
 	/// <returns>
-	/// <see langword="true"/> if <paramref name="jThread"/> is virtual; otherwise, <seealso langword="false"/>.
+	/// <see langword="true"/> if <paramref name="jThread"/> is virtual; otherwise, <see langword="false"/>.
 	/// </returns>
 	Boolean? IsVirtual(JThreadObject jThread);
 	/// <summary>

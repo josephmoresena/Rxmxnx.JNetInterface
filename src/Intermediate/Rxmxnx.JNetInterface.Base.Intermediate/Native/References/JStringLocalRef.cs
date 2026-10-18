@@ -2,9 +2,9 @@
 
 /// <summary>
 /// JNI local handle for string objects (<c>jstring</c>). Represents a native-signed integer
-/// which serves as opaque identifier for an string object (<c>java.lang.String</c>).
+/// which serves as an opaque identifier for a string object (<c>java.lang.String</c>).
 /// </summary>
-/// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
+/// <remarks>This handle is valid only for the thread that owns the reference.</remarks>
 [StructLayout(LayoutKind.Explicit)]
 public readonly partial struct JStringLocalRef : IObjectReferenceType, INativePointerType<JStringLocalRef>
 {

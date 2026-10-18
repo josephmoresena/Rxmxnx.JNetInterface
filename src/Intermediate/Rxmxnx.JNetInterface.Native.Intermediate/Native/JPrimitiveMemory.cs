@@ -30,7 +30,7 @@ public sealed partial class JPrimitiveMemory<TPrimitive> : JPrimitiveMemory, IFi
 	/// Copies the content from the current memory back into the array.
 	/// </summary>
 	/// <returns>
-	/// <see langword="true"/> if the current memory is not a copy or if the copy-back operation was performed;
+	/// <see langword="true"/> if the current memory is not a copy, or if the copy-back operation was performed;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
 	public new Boolean Commit()

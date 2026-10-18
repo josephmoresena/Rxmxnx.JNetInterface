@@ -2,9 +2,9 @@
 
 /// <summary>
 /// JNI local handle for throwable objects (<c>jthrowable</c>). Represents a native-signed integer
-/// which serves as opaque identifier for an throwable object (<c>java.lang.Throwable</c>).
+/// which serves as an opaque identifier for a throwable object (<c>java.lang.Throwable</c>).
 /// </summary>
-/// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
+/// <remarks>This handle is valid only for the thread that owns the reference.</remarks>
 [StructLayout(LayoutKind.Explicit)]
 public readonly partial struct JThrowableLocalRef : IObjectReferenceType, INativePointerType<JThrowableLocalRef>
 {

@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Restricted;
 
 /// <summary>
-/// This interface exposes JNI array feature.
+/// This interface exposes the JNI array feature.
 /// </summary>
 internal partial interface IArrayFeature
 {

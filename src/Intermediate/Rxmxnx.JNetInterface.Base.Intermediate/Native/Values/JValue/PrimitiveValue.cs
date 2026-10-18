@@ -25,7 +25,7 @@ internal unsafe partial struct JValue
 		private readonly Int32 _msi = 0;
 
 		/// <summary>
-		/// Indicates whether current instance has the <see langword="default"/> value.
+		/// Indicates whether the current instance has the <see langword="default"/> value.
 		/// </summary>
 		public Boolean IsDefault => this._lsi == 0 && this._msi == 0;
 	}

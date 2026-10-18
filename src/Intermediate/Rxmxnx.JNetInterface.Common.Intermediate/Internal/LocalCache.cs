@@ -76,26 +76,26 @@ internal class LocalCache
 #endif
 
 	/// <summary>
-	/// Indicates whether current value is registered in the cache tree.
+	/// Indicates whether the current value is registered in the cache tree.
 	/// </summary>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if <paramref name="localRef"/> is already registered by current cache tree; otherwise,
-	/// <see langword="false"/>.
+	/// <see langword="true"/> if <paramref name="localRef"/> is already registered by the current cache tree;
+	/// otherwise, <see langword="false"/>.
 	/// </returns>
 	public Boolean IsRegistered(JObjectLocalRef localRef)
 		=> this.Contains(localRef) || (this._previous?.IsRegistered(localRef) ?? localRef == default);
 	/// <summary>
-	/// Indicates whether current value is contained by current cache.
+	/// Indicates whether the current value is contained by the current cache.
 	/// </summary>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if <paramref name="localRef"/> is already registered by current cache; otherwise,
+	/// <see langword="true"/> if <paramref name="localRef"/> is already registered by the current cache; otherwise,
 	/// <see langword="false"/>.
 	/// </returns>
 	public Boolean Contains(JObjectLocalRef localRef) => this._objects.ContainsKey(localRef);
 	/// <summary>
-	/// Clear current cache.
+	/// Clear the current cache.
 	/// </summary>
 	/// <param name="owner">A <see cref="ILocalCacheOwner"/> instance.</param>
 	/// <param name="exclude">A <see cref="JObjectLocalRef"/> reference to exclude.</param>

@@ -1,8 +1,8 @@
 ﻿namespace Rxmxnx.JNetInterface.Native.References;
 
 /// <summary>
-/// JNI weak global handle for fully-qualified-class objects (<c>jweak</c>).
-/// Represents a native-signed integer which serves as opaque identifier for any
+/// JNI weak global handle for fully qualified-class objects (<c>jweak</c>).
+/// Represents a native-signed integer which serves as an opaque identifier for any
 /// object.
 /// </summary>
 /// <remarks>This identifier may be valid until it is explicitly unloaded.</remarks>

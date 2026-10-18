@@ -26,12 +26,12 @@ public partial class JLocalObject
 		/// <inheritdoc cref="JDataTypeMetadata.ClassName"/>
 		public ReadOnlySpan<Byte> DataTypeName { get; } = dataTypeName;
 		/// <summary>
-		/// Indicates whether current type is annotation.
+		/// Indicates whether the current type is annotation.
 		/// </summary>
 		public readonly Boolean IsAnnotation => this._kind is JTypeKind.Annotation;
 
 		/// <summary>
-		/// Appends an interface to current type definition.
+		/// Appends an interface to the current type definition.
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
 		[UnconditionalSuppressMessage("Trimming", "IL2091")]
@@ -43,7 +43,7 @@ public partial class JLocalObject
 		}
 
 		/// <summary>
-		/// Appends an interface to current type definition.
+		/// Appends an interface to the current type definition.
 		/// </summary>
 		/// <param name="baseMetadata">Current type base definition.</param>
 		/// <typeparam name="TInterface"></typeparam>
@@ -64,7 +64,7 @@ public partial class JLocalObject
 		}
 
 		/// <summary>
-		/// Appends an interface to current type definition.
+		/// Appends an interface to the current type definition.
 		/// </summary>
 		/// <param name="metadata">A <see cref="JInterfaceTypeMetadata"/> instance.</param>
 		private void AppendInterface(JInterfaceTypeMetadata metadata)
@@ -107,7 +107,7 @@ public partial class JLocalObject
 				state.NotContained.Add(ITypeInformation.GetJavaClassName(interfaceMetadata));
 		}
 		/// <summary>
-		/// Appends a superinterface to current type definition.
+		/// Appends a superinterface to the current type definition.
 		/// </summary>
 		/// <param name="state">A <see cref="SuperInterfaceImplementationState"/> instance.</param>
 		/// <param name="metadata">A <see cref="JInterfaceTypeMetadata"/> instance.</param>
@@ -158,7 +158,7 @@ public partial class JLocalObject
 		}
 
 		/// <summary>
-		/// Appends an interface to current type definition.
+		/// Appends an interface to the current type definition.
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <returns>Current instance.</returns>

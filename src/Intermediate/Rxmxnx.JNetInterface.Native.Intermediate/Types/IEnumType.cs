@@ -16,10 +16,10 @@ public interface IEnumType : IClassType
 	static JRuntimeVersion IDataType.Since => JRuntimeVersion.J5;
 
 	/// <summary>
-	/// Retrieves the metadata for given enum type.
+	/// Retrieves the metadata for a given enum type.
 	/// </summary>
 	/// <typeparam name="TEnum">Type of the current java enum datatype.</typeparam>
-	/// <returns>The <see cref="JEnumTypeMetadata"/> instance for given type.</returns>
+	/// <returns>The <see cref="JEnumTypeMetadata"/> instance for a given type.</returns>
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public new static JEnumTypeMetadata GetMetadata<TEnum>() where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>

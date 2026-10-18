@@ -13,7 +13,7 @@ public partial class JGlobalBase
 	private readonly IMutableReference<IntPtr> _value;
 
 	/// <summary>
-	/// Indicate whether the current instance is disposed.
+	/// Indicate whether the current instance is disposed of.
 	/// </summary>
 	private Boolean _isDisposed;
 
@@ -39,7 +39,7 @@ public partial class JGlobalBase
 	/// Indicates whether JNI execution is secure.
 	/// </summary>
 	/// <returns>
-	/// <see langword="true"/> if is secure execute JNI calls; otherwise, <see langword="false"/>.
+	/// <see langword="true"/> if is secure, execute JNI calls; otherwise, <see langword="false"/>.
 	/// </returns>
 	private Boolean JniSecure() => this.VirtualMachine.GetEnvironment() is { } env && env.JniSecure();
 	/// <inheritdoc cref="IDisposable.Dispose()"/>

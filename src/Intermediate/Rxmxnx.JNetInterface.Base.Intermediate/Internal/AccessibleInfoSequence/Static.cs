@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal sealed partial class AccessibleInfoSequence
 {
 	/// <summary>
-	/// Writes a call information on <paramref name="span"/> using <paramref name="arg"/>.
+	/// Writes the call information on <paramref name="span"/> using <paramref name="arg"/>.
 	/// </summary>
 	/// <param name="span">A UTF-16 char buffer.</param>
 	/// <param name="arg">A <see cref="CallSpanState"/> instance.</param>
@@ -19,7 +19,7 @@ internal sealed partial class AccessibleInfoSequence
 		returnTypeSpan.CopyTo(buffer);
 	}
 	/// <summary>
-	/// Writes a field information on <paramref name="span"/> using <paramref name="arg"/>.
+	/// Writes the field information on <paramref name="span"/> using <paramref name="arg"/>.
 	/// </summary>
 	/// <param name="span">A UTF-16 char buffer.</param>
 	/// <param name="arg">A <see cref="FieldSpanState"/> instance.</param>
@@ -33,7 +33,7 @@ internal sealed partial class AccessibleInfoSequence
 		returnTypeSpan.CopyTo(buffer);
 	}
 	/// <summary>
-	/// Retrieves the needed length to write the all call arguments signature.
+	/// Retrieves the necessary length to write the all call arguments signature.
 	/// </summary>
 	/// <param name="args">List of call arguments.</param>
 	/// <param name="callSize">Total size in bytes of call parameters.</param>

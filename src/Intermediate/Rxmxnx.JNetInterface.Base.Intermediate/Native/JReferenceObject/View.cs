@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Native;
 public partial class JReferenceObject
 {
 	/// <summary>
-	/// This class is used for create view instances of object.
+	/// This class is used to create view instances of an object.
 	/// </summary>
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
@@ -56,7 +56,7 @@ public partial class JReferenceObject
 	}
 
 	/// <summary>
-	/// This class is used for create view instances of object.
+	/// This class is used to create view instances of an object.
 	/// </summary>
 	/// <typeparam name="TObject">A <see cref="IObject"/> instance.</typeparam>
 	public abstract class View<TObject> : View, IWrapper<TObject> where TObject : JReferenceObject, IObject

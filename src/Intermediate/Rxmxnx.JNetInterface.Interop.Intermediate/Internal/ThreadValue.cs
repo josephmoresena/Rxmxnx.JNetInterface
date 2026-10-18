@@ -6,7 +6,7 @@ namespace Rxmxnx.JNetInterface;
 internal readonly struct ThreadValue
 {
 	/// <summary>
-	/// Indicates whether current instance is disposable.
+	/// Indicates whether the current instance is disposable.
 	/// </summary>
 	public readonly Boolean IsDisposable;
 
@@ -15,7 +15,7 @@ internal readonly struct ThreadValue
 	/// </summary>
 	private readonly ThreadCreationArgs _args;
 	/// <summary>
-	/// Indicates whether the current instance is disposed.
+	/// Indicates whether the current instance is disposed of.
 	/// </summary>
 	private readonly IMutableWrapper<Boolean> _isDisposed;
 
