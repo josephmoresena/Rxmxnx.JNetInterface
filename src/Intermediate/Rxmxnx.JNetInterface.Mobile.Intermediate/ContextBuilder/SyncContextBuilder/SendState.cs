@@ -32,19 +32,6 @@ public ref partial struct SyncContextBuilder
 		protected abstract void Invoke(SyncContextBuilder builder);
 
 		/// <summary>
-		/// Performs a volatile-read semantic operation on a remotely mutated result reference,
-		/// forcing the JIT compiler to invalidate CPU registers and synchronize thread caches.
-		/// </summary>
-		/// <param name="refResult">The managed reference to the result variable mutated by the remote thread.</param>
-		/// <typeparam name="TResult">The generic type of the result object or value structure.</typeparam>
-		/// <returns>The up-to-date value of <typeparamref name="TResult"/> read directly from physical memory.</returns>
-		public static TResult VolatileRead<TResult>(ref TResult refResult)
-		{
-			if (!typeof(TResult).IsValueType)
-				return (TResult)Volatile.Read(ref Unsafe.As<TResult, Object>(ref refResult));
-			return MemoryMarshal.CreateSpan(ref refResult, 1)[0];
-		}
-		/// <summary>
 		/// Processes the given state object if it is of type <see cref="SendState"/>.
 		/// Executes the corresponding logic defined in the send state.
 		/// </summary>

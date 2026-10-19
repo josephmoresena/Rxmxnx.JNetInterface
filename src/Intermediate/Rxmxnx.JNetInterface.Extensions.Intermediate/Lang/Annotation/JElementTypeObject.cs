@@ -13,7 +13,7 @@ public sealed class JElementTypeObject : JEnumObject<JElementTypeObject>, IEnumT
 	public enum ElementType
 	{
 		/// <summary>
-		/// Class, interface (including annotation type), or enum declaration
+		/// Class, interface (including the annotation type), or enum declaration
 		/// </summary>
 		Type = 0x0,
 		/// <summary>

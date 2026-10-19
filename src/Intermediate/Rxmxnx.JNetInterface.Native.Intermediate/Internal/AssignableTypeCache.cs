@@ -21,7 +21,7 @@ internal sealed class AssignableTypeCache
 	}
 
 	/// <summary>
-	/// Indicates whether current instance is assignable to <typeparamref name="TDataType"/> type.
+	/// Indicates whether the current instance is assignable to <typeparamref name="TDataType"/> type.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
 	/// <returns>
@@ -35,10 +35,12 @@ internal sealed class AssignableTypeCache
 		return this._assignableTypes.TryGetValue(metadata.Type, out Boolean value) ? value : default(Boolean?);
 	}
 	/// <summary>
-	/// Sets current instance as assignable to <typeparamref name="TDataType"/> type.
+	/// Sets the current instance as assignable to <typeparamref name="TDataType"/> type.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
-	/// <param name="isAssignable">Indicates whether current instance is assignable to <typeparamref name="TDataType"/> type.</param>
+	/// <param name="isAssignable">
+	/// Indicates whether the current instance is assignable to <typeparamref name="TDataType"/> type.
+	/// </param>
 	internal void SetAssignableTo<TDataType>(Boolean isAssignable)
 		where TDataType : JReferenceObject, IDataType<TDataType>
 	{

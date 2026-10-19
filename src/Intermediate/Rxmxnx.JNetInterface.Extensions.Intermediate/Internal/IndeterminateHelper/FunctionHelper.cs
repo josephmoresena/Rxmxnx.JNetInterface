@@ -23,7 +23,7 @@ internal static partial class IndeterminateHelper
 	/// </summary>
 	/// <param name="jMethod">Reflected method instance.</param>
 	/// <param name="jLocal">Target object.</param>
-	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call must be non-virtual.</param>
 	/// <param name="args">Function arguments.</param>
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
 	public static IndeterminateResult ReflectedFunctionCall(JMethodObject jMethod, JLocalObject jLocal,

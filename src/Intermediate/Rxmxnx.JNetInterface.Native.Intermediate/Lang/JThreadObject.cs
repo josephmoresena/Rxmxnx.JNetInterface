@@ -32,7 +32,7 @@ public class JThreadObject : JLocalObject, IClassType<JThreadObject>, IInterface
 	static TypeMetadata IClassType<JThreadObject>.Metadata => JThreadObject.typeMetadata;
 
 	/// <summary>
-	/// Indicates whether current thread is virtual.
+	/// Indicates whether the current thread is virtual.
 	/// </summary>
 	public Boolean? IsVirtual => this.Environment.IsVirtual(this);
 

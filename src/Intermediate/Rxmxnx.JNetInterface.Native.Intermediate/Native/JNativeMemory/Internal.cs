@@ -11,7 +11,7 @@ public abstract partial class JNativeMemory
 	/// </summary>
 	internal JReleaseMode ReleaseMode { get; set; }
 	/// <summary>
-	/// Indicates the current instance is disposed of.
+	/// Indicates the current instance is disposed.
 	/// </summary>
 	internal IWrapper<Boolean> Disposed => this._disposed;
 

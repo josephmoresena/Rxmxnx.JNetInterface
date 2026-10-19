@@ -92,7 +92,7 @@ public partial struct AsyncContextBuilder
 		/// </summary>
 		/// <param name="env">Output. A <see cref="INativeThread"/> instance</param>
 		/// <returns>Created <see cref="IThread"/> instance.</returns>
-		public IThread CreateThread(out INativeThread env)
+		protected IThread CreateThread(out INativeThread env)
 		{
 			IThread result = !this._args.IsDaemon ?
 				this._host.Value.InitializeThread(this._args.Name, this._args.ThreadGroup) :

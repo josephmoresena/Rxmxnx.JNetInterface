@@ -1,3 +1,4 @@
+// ReSharper disable UnusedParameter.Global
 namespace Rxmxnx.JNetInterface.Functional;
 
 /// <summary>

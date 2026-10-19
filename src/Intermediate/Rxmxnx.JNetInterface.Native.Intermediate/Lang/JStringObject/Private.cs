@@ -41,7 +41,7 @@ public partial class JStringObject
 	/// </summary>
 	private Int32? _utf8Length;
 	/// <summary>
-	/// UTF-8 string long length.
+	/// UTF-8 string-long length.
 	/// </summary>
 	private Int64? _utf8LongLength;
 

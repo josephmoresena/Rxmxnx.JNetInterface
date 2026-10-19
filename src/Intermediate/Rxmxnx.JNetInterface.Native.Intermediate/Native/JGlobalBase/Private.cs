@@ -13,7 +13,7 @@ public partial class JGlobalBase
 	private readonly IMutableReference<IntPtr> _value;
 
 	/// <summary>
-	/// Indicate whether the current instance is disposed of.
+	/// Indicate whether the current instance is disposed.
 	/// </summary>
 	private Boolean _isDisposed;
 

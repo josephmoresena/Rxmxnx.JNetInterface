@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Native.Access;
 public partial class IndeterminateField
 {
 	/// <summary>
-	/// This struct stores query for Object to Primitive validation.
+	/// This struct stores the query for Object to Primitive validation.
 	/// </summary>
 #if !PACKAGE
 	internal readonly struct InfoObjectQuery

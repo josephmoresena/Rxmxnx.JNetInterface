@@ -20,7 +20,7 @@ public readonly ref struct IndeterminateResult
 	private readonly ref PrimitiveWrapperObjectMetadata? _objectMetadata;
 
 	/// <summary>
-	/// Signature of function result data type.
+	/// Signature of the function result data type.
 	/// </summary>
 	public ReadOnlySpan<Byte> Signature { get; }
 	/// <summary>

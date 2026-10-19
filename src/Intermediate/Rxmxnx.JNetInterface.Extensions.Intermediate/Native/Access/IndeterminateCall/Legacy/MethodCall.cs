@@ -20,7 +20,7 @@ public abstract partial class IndeterminateCall
 	/// Invokes a method on given <see cref="JLocalObject"/> instance.
 	/// </summary>
 	/// <param name="jLocal">Target object.</param>
-	/// <param name="jClass">Declaring call class.</param>
+	/// <param name="jClass">The declaring call class.</param>
 	/// <param name="nonVirtual">Indicates whether the current call must be non-virtual.</param>
 	/// <param name="args">Method arguments.</param>
 	public void MethodCall(JLocalObject jLocal, JClassObject jClass, Boolean nonVirtual,

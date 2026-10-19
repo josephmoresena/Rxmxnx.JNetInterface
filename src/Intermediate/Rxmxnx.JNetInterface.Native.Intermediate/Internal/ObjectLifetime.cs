@@ -50,7 +50,7 @@ internal sealed partial class ObjectLifetime(
 		init => this._isRealClass = value;
 	}
 	/// <summary>
-	/// Retrieves current value as bytes.
+	/// Retrieves the current value as bytes.
 	/// </summary>
 	public ReadOnlySpan<Byte> Span => this._value.Reference.AsBytes();
 
@@ -91,7 +91,7 @@ internal sealed partial class ObjectLifetime(
 	/// Sets the current instance value.
 	/// </summary>
 	/// <param name="jLocal">The java object to load.</param>
-	/// <param name="localRef">A local object reference the value of the current instance.</param>
+	/// <param name="localRef">A local-object-reference the value of the current instance.</param>
 	public void SetValue(JLocalObject jLocal, JObjectLocalRef localRef)
 	{
 		this.LoadNewValue(jLocal, localRef);
@@ -102,7 +102,7 @@ internal sealed partial class ObjectLifetime(
 	/// </summary>
 	/// <typeparam name="TValue">Type of <see langword="IObjectReference"/> instance.</typeparam>
 	/// <param name="jLocal">The java object to load.</param>
-	/// <param name="localRef">A local object reference the value of the current instance.</param>
+	/// <param name="localRef">A local-object-reference the value of the current instance.</param>
 	public void SetValue<TValue>(JLocalObject jLocal, TValue localRef)
 		where TValue : unmanaged, IObjectReferenceType, INativePointerType<TValue>
 	{
@@ -217,7 +217,7 @@ internal sealed partial class ObjectLifetime(
 			this.Environment.ClassFeature.IsInstanceOf<TDataType>(jLocal);
 	}
 	/// <summary>
-	/// Indicates whether current object is loaded.
+	/// Indicates whether the current object is loaded.
 	/// </summary>
 	/// <param name="jLocal">The java object to check.</param>
 	/// <returns>
@@ -273,7 +273,7 @@ internal sealed partial class ObjectLifetime(
 			this.Secondary._weak = default;
 	}
 	/// <summary>
-	/// Sets current instance as assignable to <typeparamref name="TDataType"/> type.
+	/// Sets the current instance as assignable to <typeparamref name="TDataType"/> type.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
 	public void SetAssignableTo<TDataType>(Boolean isAssignable)

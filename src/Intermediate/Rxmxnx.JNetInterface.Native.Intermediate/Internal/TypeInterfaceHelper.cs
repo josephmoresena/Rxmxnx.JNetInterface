@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
-/// Set of interfaces for given type.
+/// Set of interfaces for a given type.
 /// </summary>
 internal sealed class TypeInterfaceHelper<
 	[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TReference>

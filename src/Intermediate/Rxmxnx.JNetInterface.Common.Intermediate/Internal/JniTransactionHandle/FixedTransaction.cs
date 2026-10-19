@@ -20,7 +20,7 @@ internal partial struct JniTransactionHandle
 		/// </summary>
 		private Int32 _count;
 		/// <summary>
-		/// Indicates the current instance is disposed of.
+		/// Indicates the current instance is disposed.
 		/// </summary>
 		private Boolean _disposed;
 
@@ -30,7 +30,7 @@ internal partial struct JniTransactionHandle
 		private JniTransactionHandle _handle;
 
 		/// <summary>
-		/// Indicates whether the current instance is disposed of.
+		/// Indicates whether the current instance is disposed.
 		/// </summary>
 		protected Boolean Disposed => this._disposed;
 

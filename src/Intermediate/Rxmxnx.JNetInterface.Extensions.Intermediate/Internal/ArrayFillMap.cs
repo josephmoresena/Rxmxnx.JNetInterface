@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Map structure for multidimensional array creation.
 /// </summary>
-/// <typeparam name="TElement">The type of array element.</typeparam>
+/// <typeparam name="TElement">The type of the array element.</typeparam>
 #if !PACKAGE
 [ExcludeFromCodeCoverage]
 #endif

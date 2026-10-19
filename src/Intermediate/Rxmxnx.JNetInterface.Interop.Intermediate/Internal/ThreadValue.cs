@@ -15,7 +15,7 @@ internal readonly struct ThreadValue
 	/// </summary>
 	private readonly ThreadCreationArgs _args;
 	/// <summary>
-	/// Indicates whether the current instance is disposed of.
+	/// Indicates whether the current instance is disposed.
 	/// </summary>
 	private readonly IMutableWrapper<Boolean> _isDisposed;
 

@@ -5,7 +5,7 @@ public partial class JExecutableObject
 	/// <inheritdoc cref="JExecutableObject.Definition"/>
 	private JCallDefinition? _callDefinition;
 	/// <summary>
-	/// Class information for declaring class.
+	/// Class information for the declaring class.
 	/// </summary>
 	private ITypeInformation? _classInformation;
 	/// <inheritdoc cref="JExecutableObject.MethodId"/>

@@ -52,7 +52,7 @@ internal partial struct JniTransactionHandle
 			}
 			catch (ObjectDisposedException)
 			{
-				// The current transaction is disposed of.
+				// The current transaction is disposed.
 				return false;
 			}
 

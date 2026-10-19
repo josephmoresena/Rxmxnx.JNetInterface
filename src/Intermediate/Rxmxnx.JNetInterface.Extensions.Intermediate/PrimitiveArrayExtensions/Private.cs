@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface;
 public static partial class PrimitiveArrayExtensions
 {
 	/// <summary>
-	/// Creates a multi-dimensional java array of primitive values.
+	/// Creates a multidimensional java array of primitive values.
 	/// </summary>
 	/// <typeparam name="TArrayObject">The type of the array.</typeparam>
 	/// <typeparam name="TPrimitive">The primitive type of the array elements.</typeparam>

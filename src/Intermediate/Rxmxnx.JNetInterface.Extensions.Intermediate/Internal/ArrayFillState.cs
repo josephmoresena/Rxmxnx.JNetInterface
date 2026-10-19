@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// State structure for multidimensional array fill.
 /// </summary>
-/// <typeparam name="TElement">The type of array element.</typeparam>
+/// <typeparam name="TElement">The type of the array element.</typeparam>
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
