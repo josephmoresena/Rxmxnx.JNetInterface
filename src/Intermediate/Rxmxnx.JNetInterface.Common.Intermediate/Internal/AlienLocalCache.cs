@@ -1,4 +1,5 @@
 // ReSharper disable VirtualMemberNeverOverridden.Global
+
 namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
@@ -43,7 +44,7 @@ internal abstract class AlienLocalCache : LocalCache, IDisposable
 	}
 
 	/// <summary>
-	/// Registers an object in current alien local object frame.
+	/// Registers an object in the current alien local object frame.
 	/// </summary>
 	/// <param name="localRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
@@ -53,7 +54,7 @@ internal abstract class AlienLocalCache : LocalCache, IDisposable
 		this[localRef] = jLocal.Lifetime.GetCacheable();
 	}
 	/// <summary>
-	/// Registers a class in current alien local object frame.
+	/// Registers a class in the current alien local object frame.
 	/// </summary>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
@@ -64,7 +65,7 @@ internal abstract class AlienLocalCache : LocalCache, IDisposable
 		this.Environment.LoadClass(jClass);
 	}
 	/// <summary>
-	/// Registers a class in current alien local object frame.
+	/// Registers a class in the current alien local object frame.
 	/// </summary>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <param name="classView">A <see cref="JLocalObject.View{JClassObject}"/> instance.</param>
@@ -114,14 +115,14 @@ internal abstract class AlienLocalCache : LocalCache, IDisposable
 #endif
 
 	/// <summary>
-	/// Clears current instance.
+	/// Clears the current instance.
 	/// </summary>
 	private void Clear()
 	{
 		this.Environment.ClassCache.Unload(this._classes);
 		this._aliens.Clear();
 		this._classes.Clear();
-		// At this point, any alien object becomes to an unregistered reference.
+		// At this point, any alien object becomes an unregistered reference.
 	}
 
 	~AlienLocalCache() { this.Dispose(false); }

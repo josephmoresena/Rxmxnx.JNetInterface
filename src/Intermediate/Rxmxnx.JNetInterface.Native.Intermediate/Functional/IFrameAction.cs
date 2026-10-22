@@ -11,5 +11,5 @@ public interface IFrameAction
 	/// </summary>
 	/// <param name="env">The environment context in which the action is executed.</param>
 	/// <param name="objects">The objects to be used within the action.</param>
-	void Accept(IEnvironment env, ReadOnlySpan<JLocalObject?> objects);
+	void Accept(IEnvironment env, scoped ReadOnlySpan<JLocalObject?> objects);
 }

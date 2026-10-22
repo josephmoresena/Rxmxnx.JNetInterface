@@ -34,6 +34,15 @@ internal partial class AndroidEnvironment : IMainClassLoader
 	JClassObject IAlienObjectManager.GetObjectClass(JObjectLocalRef localRef, out JReferenceTypeMetadata typeMetadata)
 		=> EnvironmentCore.GetObjectClass(this._m.Core, localRef, out typeMetadata);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	JClassObject IAlienObjectManager.GetObjectClass(JObjectLocalRef localRef)
+	{
+		using LocalFrame frame = new(this, IVirtualMachine.GetObjectClassCapacity);
+		JClassLocalRef classRef = EnvironmentCore.GetObjectClass(this._m.Core, localRef);
+		JClassObject jClass = this._m.Core.GetClass(classRef, false, JTypeKind.Undefined);
+		this._m.Core.LoadClass(frame, classRef, jClass); // Runtime class loading.
+		return jClass;
+	}
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	JClassObject IAlienObjectManager.GetObjectClass(ITypeInformation typeInformation, JObjectLocalRef localRef,
 		out JReferenceTypeMetadata typeMetadata)
 		=> EnvironmentCore.GetObjectClass(this._m.Core, typeInformation, localRef, out typeMetadata);

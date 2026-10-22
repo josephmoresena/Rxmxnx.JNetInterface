@@ -55,5 +55,8 @@
     <ItemGroup Condition="'$(TargetPlatformIdentifier)' != 'android'">
         <ProjectReference Include="..\Rxmxnx.JNetInterface.ModernJni.Intermediate\Rxmxnx.JNetInterface.ModernJni.Intermediate.csproj"/>
     </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="ILLink\ILLink.Substitutions.xml" />
+    </ItemGroup>
 
 </Project>

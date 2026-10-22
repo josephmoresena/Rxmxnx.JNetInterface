@@ -171,6 +171,32 @@ internal static partial class MetadataHelper
 	public static JReferenceTypeMetadata? GetExactMetadata(String hash)
 		=> MetadataHelper.storage.GetValueOrDefault(hash);
 	/// <summary>
+	/// Retrieves exact <see cref="JReferenceTypeMetadata"/> metadata.
+	/// </summary>
+	/// <param name="token">A <see cref="JReferenceTypeToken"/> instance.</param>
+	/// <returns>A <see cref="JReferenceTypeMetadata"/> metadata.</returns>
+	public static JReferenceTypeMetadata? GetExactMetadata(JReferenceTypeToken token)
+	{
+		JReferenceTypeMetadata? result = token.GetMetadata();
+		if (result is null)
+			return token.NativeType switch
+			{
+				JNativeType.JClass => MetadataHelper.GetExactMetadata<JClassObject>(),
+				JNativeType.JString => MetadataHelper.GetExactMetadata<JStringObject>(),
+				JNativeType.JBooleanArray => MetadataHelper.GetExactMetadata<JArrayObject<JBoolean>>(),
+				JNativeType.JByteArray => MetadataHelper.GetExactMetadata<JArrayObject<JByte>>(),
+				JNativeType.JCharArray => MetadataHelper.GetExactMetadata<JArrayObject<JChar>>(),
+				JNativeType.JDoubleArray => MetadataHelper.GetExactMetadata<JArrayObject<JDouble>>(),
+				JNativeType.JFloatArray => MetadataHelper.GetExactMetadata<JArrayObject<JFloat>>(),
+				JNativeType.JIntArray => MetadataHelper.GetExactMetadata<JArrayObject<JInt>>(),
+				JNativeType.JLongArray => MetadataHelper.GetExactMetadata<JArrayObject<JLong>>(),
+				JNativeType.JShortArray => MetadataHelper.GetExactMetadata<JArrayObject<JShort>>(),
+				_ => default,
+			} as JReferenceTypeMetadata;
+		MetadataHelper.Register(result);
+		return result;
+	}
+	/// <summary>
 	/// Retrieves exact <see cref="JDataTypeMetadata"/> metadata.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType{TDataType}"/> type.</typeparam>
@@ -181,7 +207,7 @@ internal static partial class MetadataHelper
 		return IDataType.GetMetadata<TDataType>();
 	}
 	/// <summary>
-	/// Retrieves exact array metadata from element class hash.
+	/// Retrieves exact array metadata from an element class hash.
 	/// </summary>
 	/// <param name="elementHash">A JNI class hash.</param>
 	/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
@@ -221,7 +247,7 @@ internal static partial class MetadataHelper
 	/// </summary>
 	/// <param name="className">A java type name.</param>
 	/// <param name="escape">Indicates whether <paramref name="className"/> should be escaped.</param>
-	/// <returns><see cref="CStringSequence"/> with class information for given type.</returns>
+	/// <returns><see cref="TypeInfoSequence"/> with class information for the given type.</returns>
 	public static TypeInfoSequence GetClassInformation(ReadOnlySpan<Byte> className, Boolean escape)
 		=> new(className, escape);
 	/// <summary>
@@ -229,7 +255,7 @@ internal static partial class MetadataHelper
 	/// <paramref name="otherClass"/>.
 	/// </summary>
 	/// <param name="jClass">Java class instance.</param>
-	/// <param name="otherClass">Other java class instance.</param>
+	/// <param name="otherClass">Another java class instance.</param>
 	/// <returns>
 	/// <see langword="true"/> if an object of <paramref name="jClass"/> can be safely cast to
 	/// <paramref name="otherClass"/>; <see langword="null"/> if an object of <paramref name="otherClass"/>
@@ -308,7 +334,7 @@ internal static partial class MetadataHelper
 		return isAssignable;
 	}
 	/// <summary>
-	/// Register class tree.
+	/// Register a class tree.
 	/// </summary>
 	/// <param name="hashClass">Hash class.</param>
 	/// <param name="superClassHash">Super class hash.</param>
@@ -319,7 +345,7 @@ internal static partial class MetadataHelper
 		MetadataHelper.storage.RegisterSuperClassRelationship(assignationKey);
 	}
 	/// <summary>
-	/// Register class tree.
+	/// Register a class tree.
 	/// </summary>
 	/// <param name="hashView">Hash class view.</param>
 	/// <param name="superViewHash">Super view hash.</param>
@@ -331,7 +357,7 @@ internal static partial class MetadataHelper
 	}
 
 	/// <summary>
-	/// Indicates whether <typeparamref name="TDataType"/> is compatible with current compilation.
+	/// Indicates whether <typeparamref name="TDataType"/> is compatible with the current compilation.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="Rxmxnx.JNetInterface.Types.IDataType"/> type.</typeparam>
 	/// <returns>
