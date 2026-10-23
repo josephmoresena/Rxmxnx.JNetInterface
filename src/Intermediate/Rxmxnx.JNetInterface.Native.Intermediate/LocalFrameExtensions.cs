@@ -1,9 +1,9 @@
 namespace Rxmxnx.JNetInterface;
 
 /// <summary>
-/// Functional interfaces extensions.
+/// Functional local frame extensions.
 /// </summary>
-public static class FunctionalExtensions
+public static class LocalFrameExtensions
 {
 	/// <summary>
 	/// Executes a provided frame action within the context of the current environment.
@@ -48,7 +48,7 @@ public static class FunctionalExtensions
 	/// <summary>
 	/// Executes a provided frame function within the context of the current environment.
 	/// </summary>
-	/// <typeparam name="TFunction">The <see cref="IFrameFunction{TOutput}"/> type of the frame action to execute.</typeparam>
+	/// <typeparam name="TFunction">The <see cref="IFrameFunction{TOutput}"/> type of the frame function to execute.</typeparam>
 	/// <typeparam name="TResult">The type of the result returned by the frame function.</typeparam>
 	/// <param name="environment">The <see cref="IEnvironment"/> instance which the function is executed.</param>
 	/// <param name="capacity">New local reference frame capacity.</param>
@@ -79,7 +79,7 @@ public static class FunctionalExtensions
 	/// <summary>
 	/// Executes the current frame function within the context of the specified environment.
 	/// </summary>
-	/// <typeparam name="TFunction">The <see cref="IFrameFunction{TOutput}"/> type of the frame action to execute.</typeparam>
+	/// <typeparam name="TFunction">The <see cref="IFrameFunction{TOutput}"/> type of the frame function to execute.</typeparam>
 	/// <typeparam name="TResult">The type of the result returned by the frame function.</typeparam>
 	/// <param name="func">The frame function to execute.</param>
 	/// <param name="environment">The <see cref="IEnvironment"/> instance which the function is executed.</param>

@@ -45,6 +45,8 @@ public partial class JLocalObject
 				CommonValidationUtilities.ThrowIfInvalidCast(IDataType.GetMetadata<TElement>(), result);
 			}
 
+			JArrayObject IWrapper<JArrayObject>.Value => this;
+
 			/// <inheritdoc/>
 			public override String ToString() => $"{this.GetStringValue()} {this.Reference}";
 			/// <inheritdoc/>

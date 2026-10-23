@@ -11,11 +11,11 @@ internal static unsafe partial class NativeCallUtilities
 	/// </typeparam>
 	/// <param name="env">The native thread environment in which the action will execute.</param>
 	/// <param name="cache">An object that represents the local cache for the current context.</param>
-	/// <param name="tokens">A span of reference type tokens to be used during the action execution.</param>
 	/// <param name="action">A reference to the action that will be executed.</param>
+	/// <param name="tokens">A span of reference type tokens to be used during the action execution.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static void Invoke<TAction>(INativeThread env, AlienLocalCache cache,
-		ReadOnlySpan<JReferenceTypeToken> tokens, ref TAction action)
+	public static void Invoke<TAction>(INativeThread env, AlienLocalCache cache, ref TAction action,
+		scoped ReadOnlySpan<JReferenceTypeToken> tokens)
 #if !NET9_0_OR_GREATER
 		where TAction : IFrameAction
 #else
@@ -46,12 +46,12 @@ internal static unsafe partial class NativeCallUtilities
 	/// </typeparam>
 	/// <param name="env">The native thread environment in which the function will be executed.</param>
 	/// <param name="cache">An object that represents the local cache for the current context.</param>
-	/// <param name="tokens">A span of reference type tokens to be used during the function execution.</param>
 	/// <param name="func">A reference to the function that will be executed.</param>
+	/// <param name="tokens">A span of reference type tokens to be used during the function execution.</param>
 	/// <param name="result">The output primitive result produced by the executed function.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void PrimitiveInvoke<TPrimitive, TFunction>(INativeThread env, AlienLocalCache cache,
-		ReadOnlySpan<JReferenceTypeToken> tokens, ref TFunction func, out TPrimitive result)
+		ref TFunction func, scoped ReadOnlySpan<JReferenceTypeToken> tokens, out TPrimitive result)
 #if !NET9_0_OR_GREATER
 		where TFunction : IFrameFunction<TPrimitive>
 #else
@@ -84,12 +84,12 @@ internal static unsafe partial class NativeCallUtilities
 	/// </typeparam>
 	/// <param name="env">The native thread environment in which the function will execute.</param>
 	/// <param name="cache">An object that represents the local cache for the current context.</param>
-	/// <param name="tokens">A span of reference type tokens to be used during the function execution.</param>
 	/// <param name="func">A reference to the function that will be executed.</param>
+	/// <param name="tokens">A span of reference type tokens to be used during the function execution.</param>
 	/// <param name="result">Outputs the resulting object reference produced by the function execution.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void ObjectInvoke<TObjectReference, TFunction>(INativeThread env, AlienLocalCache cache,
-		ReadOnlySpan<JReferenceTypeToken> tokens, ref TFunction func, out TObjectReference result)
+		ref TFunction func, scoped ReadOnlySpan<JReferenceTypeToken> tokens, out TObjectReference result)
 #if !NET9_0_OR_GREATER
 		where TFunction : IFrameFunction<JReferenceObject?>
 #else
@@ -108,6 +108,42 @@ internal static unsafe partial class NativeCallUtilities
 #endif
 		{
 			BufferObjectFunction<TObjectReference, TFunction> bufferFunc = new(env, cache, tokens, funcPtr);
+			BufferManager<JLocalObject?>.AllocWithReference(ref bufferFunc, out result);
+		}
+	}
+	/// <summary>
+	/// Invokes the specified function within the context of a native thread, using the provided cache, reference
+	/// type tokens, and outputs the resulting object reference.
+	/// </summary>m>
+	/// <typeparam name="TFunction">
+	/// The type of the function to be executed. Must implement the <see cref="IFrameFunction{TOutput}"/> interface
+	/// where the output is of type <see cref="IArrayObject{IObject}"/>.
+	/// </typeparam>
+	/// <param name="env">The native thread environment in which the function will execute.</param>
+	/// <param name="cache">An object that represents the local cache for the current context.</param>
+	/// <param name="func">A reference to the function that will be executed.</param>
+	/// <param name="tokens">A span of reference type tokens to be used during the function execution.</param>
+	/// <param name="result">Outputs the resulting object reference produced by the function execution.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static void ArrayObjectInvoke<TFunction>(INativeThread env, AlienLocalCache cache, ref TFunction func,
+		scoped ReadOnlySpan<JReferenceTypeToken> tokens, out JObjectArrayLocalRef result)
+#if !NET9_0_OR_GREATER
+		where TFunction : IFrameFunction<IArrayObject<ILocalObject>>
+#else
+		where TFunction : IFrameFunction<IArrayObject<ILocalObject>?>, allows ref struct
+#endif
+	{
+		Debug.Assert(typeof(TFunction).IsValueType);
+		Debug.Assert(tokens.Length <= Byte.MaxValue);
+
+#pragma warning disable CS8500
+		fixed (TFunction* funcPtr = &func)
+#pragma warning restore CS8500
+#if !NET9_0_OR_GREATER
+		fixed (JReferenceTypeToken* _ = &MemoryMarshal.GetReference(tokens))
+#endif
+		{
+			BufferArrayObjectFunction<JObjectArrayLocalRef, TFunction> bufferFunc = new(env, cache, tokens, funcPtr);
 			BufferManager<JLocalObject?>.AllocWithReference(ref bufferFunc, out result);
 		}
 	}
