@@ -33,7 +33,7 @@ internal static unsafe partial class NativeCallUtilities
 #endif
 		{
 			BufferAction<TAction> bufferAction = new(env, cache, tokens, actionPtr);
-			BufferManager<JLocalObject?>.AllocWithReference(ref bufferAction);
+			BufferManager<JReferenceObject?>.AllocWithReference(ref bufferAction);
 		}
 	}
 	/// <summary>
@@ -70,7 +70,7 @@ internal static unsafe partial class NativeCallUtilities
 #endif
 		{
 			BufferPrimitiveFunction<TPrimitive, TFunction> bufferFunc = new(env, cache, tokens, funcPtr);
-			BufferManager<JLocalObject?>.AllocWithReference(ref bufferFunc, out result);
+			BufferManager<JReferenceObject?>.AllocWithReference(ref bufferFunc, out result);
 		}
 	}
 	/// <summary>
@@ -108,7 +108,7 @@ internal static unsafe partial class NativeCallUtilities
 #endif
 		{
 			BufferObjectFunction<TObjectReference, TFunction> bufferFunc = new(env, cache, tokens, funcPtr);
-			BufferManager<JLocalObject?>.AllocWithReference(ref bufferFunc, out result);
+			BufferManager<JReferenceObject?>.AllocWithReference(ref bufferFunc, out result);
 		}
 	}
 	/// <summary>
@@ -144,7 +144,7 @@ internal static unsafe partial class NativeCallUtilities
 #endif
 		{
 			BufferArrayObjectFunction<JObjectArrayLocalRef, TFunction> bufferFunc = new(env, cache, tokens, funcPtr);
-			BufferManager<JLocalObject?>.AllocWithReference(ref bufferFunc, out result);
+			BufferManager<JReferenceObject?>.AllocWithReference(ref bufferFunc, out result);
 		}
 	}
 }

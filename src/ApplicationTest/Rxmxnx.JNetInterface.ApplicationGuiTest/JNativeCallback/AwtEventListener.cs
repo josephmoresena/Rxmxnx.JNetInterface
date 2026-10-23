@@ -94,7 +94,7 @@ public partial class JNativeCallback
 		private readonly struct EventDispatchedAction(AwtEventListenerState state) : IFrameAction
 		{
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			void IFrameAction.Accept(IEnvironment env, scoped ReadOnlySpan<JLocalObject?> objects)
+			void IFrameAction.Accept(IEnvironment env, scoped ReadOnlySpan<JReferenceObject?> objects)
 			{
 				if (objects.Length < 1 || objects[0] is not JAwtEventObject awtEvent) return;
 				state.EventDispatched(awtEvent);

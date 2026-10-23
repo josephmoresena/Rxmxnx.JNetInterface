@@ -13,7 +13,7 @@ internal partial class NativeFunctionSetImpl
 	private readonly struct IsFinalArrayTypeFunc(JClassObject arrayClass) : IFrameFunction<Boolean>
 #endif
 	{
-		Boolean IFrameFunction<Boolean>.Apply(IEnvironment env, ReadOnlySpan<JLocalObject?> objects)
+		Boolean IFrameFunction<Boolean>.Apply(IEnvironment env, ReadOnlySpan<JReferenceObject?> objects)
 		{
 			Int32 dimension = arrayClass.ArrayDimension;
 			if (dimension + 1 == arrayClass.ClassSignature.Length) return true;

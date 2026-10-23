@@ -76,7 +76,7 @@ public unsafe partial class JNativeCallback
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		JStringObject? IFrameFunction<JStringObject?>.Apply(IEnvironment env,
-			scoped ReadOnlySpan<JLocalObject?> objects)
+			scoped ReadOnlySpan<JReferenceObject?> objects)
 		{
 			try
 			{

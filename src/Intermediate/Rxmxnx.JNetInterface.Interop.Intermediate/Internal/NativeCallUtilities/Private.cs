@@ -1,4 +1,4 @@
-using JObject = Rxmxnx.JNetInterface.Native.JLocalObject;
+using JObject = Rxmxnx.JNetInterface.Native.JReferenceObject;
 
 namespace Rxmxnx.JNetInterface.Internal;
 
@@ -38,7 +38,7 @@ internal static partial class NativeCallUtilities
 			return NativeCallUtilities.CreateFinalAlienObject(env, cache, typeMetadata, localRef);
 		JClassObject jClass =
 			NativeCallUtilities.GetObjectClass(env, localRef, out JReferenceTypeMetadata classMetadata, true);
-		return (JObject)NativeCallUtilities.CreateAlienObject(cache, jClass, localRef, classMetadata, typeMetadata);
+		return NativeCallUtilities.CreateAlienObject(cache, jClass, localRef, classMetadata, typeMetadata);
 	}
 	/// <summary>
 	/// Retrieves initial final <typaramref name="TObject"/> instance for <paramref name="localRef"/>.
@@ -54,7 +54,7 @@ internal static partial class NativeCallUtilities
 	{
 		JClassObject jClass = typeMetadata.GetClass(env);
 		NativeCallUtilities.ThrowIfNotLocalReference(env, localRef);
-		return (JObject)NativeCallUtilities.CreateAlienObject(cache, jClass, localRef, typeMetadata);
+		return NativeCallUtilities.CreateAlienObject(cache, jClass, localRef, typeMetadata);
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="localRef"/> is not a class reference.

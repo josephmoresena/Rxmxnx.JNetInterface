@@ -11,7 +11,7 @@ internal readonly struct NonGenericFrameFunction<TOutput> : IFrameFunction<TOutp
 	private IFrameFunction<TOutput> Value { get; init; }
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	TOutput IFrameFunction<TOutput>.Apply(IEnvironment env, ReadOnlySpan<JLocalObject?> objects)
+	TOutput IFrameFunction<TOutput>.Apply(IEnvironment env, ReadOnlySpan<JReferenceObject?> objects)
 		=> this.Value.Apply(env, objects);
 
 	/// <summary>

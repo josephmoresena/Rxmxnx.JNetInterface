@@ -1,17 +1,19 @@
+using JObject = Rxmxnx.JNetInterface.Native.JReferenceObject;
+
 namespace Rxmxnx.JNetInterface.Internal;
 
 internal static partial class NativeCallUtilities
 {
 	/// <summary>
-	/// Represents an object function to be executed on a <see cref="JLocalObject"/> buffer.
+	/// Represents an object function to be executed on a <see cref="JObject"/> buffer.
 	/// </summary>
 #if !NET9_0_OR_GREATER
 	private readonly struct
-		BufferObjectFunction<TObjectReference, TFunction> : IScopedBufferFunction<JLocalObject?, TObjectReference>
+		BufferObjectFunction<TObjectReference, TFunction> : IScopedBufferFunction<JObject?, TObjectReference>
 		where TFunction : IFrameFunction<JReferenceObject?>
 #else
 	private readonly ref struct
-		BufferObjectFunction<TObjectReference, TFunction> : IScopedBufferFunction<JLocalObject?, TObjectReference>
+		BufferObjectFunction<TObjectReference, TFunction> : IScopedBufferFunction<JObject?, TObjectReference>
 		where TFunction : IFrameFunction<JReferenceObject?>, allows ref struct
 #endif
 		where TObjectReference : unmanaged, INativePointerType<TObjectReference>
@@ -80,11 +82,11 @@ internal static partial class NativeCallUtilities
 		}
 
 		/// <inheritdoc/>
-		public TObjectReference Apply(scoped ScopedBuffer<JLocalObject?> buffer)
+		public TObjectReference Apply(scoped ScopedBuffer<JObject?> buffer)
 		{
-			Span<JLocalObject?> span = NativeCallUtilities.GetObjects(this._env, this._cache, this.Tokens, buffer.Span);
-			JReferenceObject? result = this._funcPtr.Reference.Apply(this._env, span);
-			return !JObject.IsNullOrDefault(result) ? result.As<TObjectReference>() : default;
+			Span<JObject?> span = NativeCallUtilities.GetObjects(this._env, this._cache, this.Tokens, buffer.Span);
+			JObject? result = this._funcPtr.Reference.Apply(this._env, span);
+			return !Lang.JObject.IsNullOrDefault(result) ? result.As<TObjectReference>() : default;
 		}
 	}
 }

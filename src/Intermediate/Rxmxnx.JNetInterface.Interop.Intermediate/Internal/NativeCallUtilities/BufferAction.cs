@@ -1,14 +1,16 @@
+using JObject = Rxmxnx.JNetInterface.Native.JReferenceObject;
+
 namespace Rxmxnx.JNetInterface.Internal;
 
 internal static partial class NativeCallUtilities
 {
 	/// <summary>
-	/// Represents an action to be performed on a <see cref="JLocalObject"/> buffer.
+	/// Represents an action to be performed on a <see cref="JReferenceObject"/> buffer.
 	/// </summary>
 #if !NET9_0_OR_GREATER
-	private readonly struct BufferAction<TAction> : IScopedBufferAction<JLocalObject?> where TAction : IFrameAction
+	private readonly struct BufferAction<TAction> : IScopedBufferAction<JObject?> where TAction : IFrameAction
 #else
-	private readonly ref struct BufferAction<TAction> : IScopedBufferAction<JLocalObject?>
+	private readonly ref struct BufferAction<TAction> : IScopedBufferAction<JObject?>
 		where TAction : IFrameAction, allows ref struct
 #endif
 	{
@@ -77,9 +79,9 @@ internal static partial class NativeCallUtilities
 
 		/// <inheritdoc/>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Accept(scoped ScopedBuffer<JLocalObject?> buffer)
+		public void Accept(scoped ScopedBuffer<JObject?> buffer)
 		{
-			Span<JLocalObject?> span = NativeCallUtilities.GetObjects(this._env, this._cache, this.Tokens, buffer.Span);
+			Span<JObject?> span = NativeCallUtilities.GetObjects(this._env, this._cache, this.Tokens, buffer.Span);
 			this._actionPtr.Reference.Accept(this._env, span);
 		}
 	}

@@ -6,7 +6,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal readonly struct LocalFrameAction(Action action) : IFrameAction
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	void IFrameAction.Accept(IEnvironment _, ReadOnlySpan<JLocalObject?> __) => action();
+	void IFrameAction.Accept(IEnvironment _, ReadOnlySpan<JReferenceObject?> __) => action();
 }
 
 /// <summary>
@@ -16,7 +16,7 @@ internal readonly struct LocalFrameAction(Action action) : IFrameAction
 internal readonly struct LocalFrameAction<TState>(TState state, Action<TState> action) : IFrameAction
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	void IFrameAction.Accept(IEnvironment _, ReadOnlySpan<JLocalObject?> __) => action(state);
+	void IFrameAction.Accept(IEnvironment _, ReadOnlySpan<JReferenceObject?> __) => action(state);
 #else
 internal readonly ref struct LocalFrameAction<TState>(TState state, Action<TState> action)
 	: IFrameAction where TState : allows ref struct
@@ -24,7 +24,7 @@ internal readonly ref struct LocalFrameAction<TState>(TState state, Action<TStat
 	private readonly TState _state = state;
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	void IFrameAction.Accept(IEnvironment _, ReadOnlySpan<JLocalObject?> __) => action(this._state);
+	void IFrameAction.Accept(IEnvironment _, ReadOnlySpan<JReferenceObject?> __) => action(this._state);
 #endif
 }
 
@@ -34,7 +34,7 @@ internal readonly ref struct LocalFrameAction<TState>(TState state, Action<TStat
 internal readonly struct LocalFrameFunction<TResult>(Func<TResult> func) : IFrameFunction<TResult>
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	TResult IFrameFunction<TResult>.Apply(IEnvironment _, ReadOnlySpan<JLocalObject?> __) => func();
+	TResult IFrameFunction<TResult>.Apply(IEnvironment _, ReadOnlySpan<JReferenceObject?> __) => func();
 }
 
 /// <summary>
@@ -45,7 +45,7 @@ internal readonly struct LocalFrameFunction<TResult, TState>(TState state, Func<
 	: IFrameFunction<TResult>
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	TResult IFrameFunction<TResult>.Apply(IEnvironment _, ReadOnlySpan<JLocalObject?> __) => func(state);
+	TResult IFrameFunction<TResult>.Apply(IEnvironment _, ReadOnlySpan<JReferenceObject?> __) => func(state);
 #else
 internal readonly ref struct LocalFrameFunction<TResult, TState>(TState state, Func<TState, TResult> func)
 	: IFrameFunction<TResult> where TState : allows ref struct
@@ -53,6 +53,6 @@ internal readonly ref struct LocalFrameFunction<TResult, TState>(TState state, F
 	private readonly TState _state = state;
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	TResult IFrameFunction<TResult>.Apply(IEnvironment _, ReadOnlySpan<JLocalObject?> __) => func(this._state);
+	TResult IFrameFunction<TResult>.Apply(IEnvironment _, ReadOnlySpan<JReferenceObject?> __) => func(this._state);
 #endif
 }

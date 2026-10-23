@@ -93,7 +93,7 @@ public partial class JNativeCallback
 		private readonly struct ActionPerformedAction(ActionListenerState state) : IFrameAction
 		{
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			void IFrameAction.Accept(IEnvironment env, scoped ReadOnlySpan<JLocalObject?> objects)
+			void IFrameAction.Accept(IEnvironment env, scoped ReadOnlySpan<JReferenceObject?> objects)
 			{
 				if (objects.Length < 1 || objects[0] is not JActionEventObject actionEvent) return;
 				state.ActionPerformed(actionEvent);

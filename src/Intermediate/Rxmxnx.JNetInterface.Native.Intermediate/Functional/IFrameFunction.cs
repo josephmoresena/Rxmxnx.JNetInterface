@@ -1,4 +1,5 @@
 // ReSharper disable UnusedParameter.Global
+
 namespace Rxmxnx.JNetInterface.Functional;
 
 /// <summary>
@@ -13,5 +14,5 @@ public interface IFrameFunction<out TOutput>
 	/// <param name="env">The environment instance used to execute the function.</param>
 	/// <param name="objects">The objects to be used within the function.</param>
 	/// <returns>The result of the function execution.</returns>
-	TOutput Apply(IEnvironment env, scoped ReadOnlySpan<JLocalObject?> objects);
+	TOutput Apply(IEnvironment env, scoped ReadOnlySpan<JReferenceObject?> objects);
 }

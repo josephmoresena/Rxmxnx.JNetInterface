@@ -74,7 +74,8 @@ public partial class JNativeCallback
 		private readonly struct RunAction(RunnableState state) : IFrameAction
 		{
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			void IFrameAction.Accept(IEnvironment env, scoped ReadOnlySpan<JLocalObject?> objects) => state.Run(env);
+			void IFrameAction.Accept(IEnvironment env, scoped ReadOnlySpan<JReferenceObject?> objects)
+				=> state.Run(env);
 		}
 	}
 }

@@ -11,7 +11,8 @@ internal readonly struct NonGenericFrameAction : IFrameAction
 	private IFrameAction Value { get; init; }
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	void IFrameAction.Accept(IEnvironment env, ReadOnlySpan<JLocalObject?> objects) => this.Value.Accept(env, objects);
+	void IFrameAction.Accept(IEnvironment env, ReadOnlySpan<JReferenceObject?> objects)
+		=> this.Value.Accept(env, objects);
 
 	/// <summary>
 	/// Creates a new <see cref="NonGenericFrameAction"/> instance.

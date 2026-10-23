@@ -1,17 +1,18 @@
+using JObject = Rxmxnx.JNetInterface.Native.JReferenceObject;
+
 namespace Rxmxnx.JNetInterface.Internal;
 
 internal static partial class NativeCallUtilities
 {
 	/// <summary>
-	/// Represents a primitive function to be executed on a <see cref="JLocalObject"/> buffer.
+	/// Represents a primitive function to be executed on a <see cref="JObject"/> buffer.
 	/// </summary>
 #if !NET9_0_OR_GREATER
-	private readonly struct
-		BufferPrimitiveFunction<TPrimitive, TFunction> : IScopedBufferFunction<JLocalObject?, TPrimitive>
+	private readonly struct BufferPrimitiveFunction<TPrimitive, TFunction> : IScopedBufferFunction<JObject?, TPrimitive>
 		where TFunction : IFrameFunction<TPrimitive>
 #else
 	private readonly ref struct
-		BufferPrimitiveFunction<TPrimitive, TFunction> : IScopedBufferFunction<JLocalObject?, TPrimitive>
+		BufferPrimitiveFunction<TPrimitive, TFunction> : IScopedBufferFunction<JObject?, TPrimitive>
 		where TFunction : IFrameFunction<TPrimitive>, allows ref struct
 #endif
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
@@ -80,9 +81,9 @@ internal static partial class NativeCallUtilities
 		}
 
 		/// <inheritdoc/>
-		public TPrimitive Apply(scoped ScopedBuffer<JLocalObject?> buffer)
+		public TPrimitive Apply(scoped ScopedBuffer<JObject?> buffer)
 		{
-			Span<JLocalObject?> span = NativeCallUtilities.GetObjects(this._env, this._cache, this.Tokens, buffer.Span);
+			Span<JObject?> span = NativeCallUtilities.GetObjects(this._env, this._cache, this.Tokens, buffer.Span);
 			return this._funcPtr.Reference.Apply(this._env, span);
 		}
 	}
