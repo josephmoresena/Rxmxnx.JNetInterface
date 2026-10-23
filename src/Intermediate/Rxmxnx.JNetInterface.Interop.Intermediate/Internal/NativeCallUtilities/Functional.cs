@@ -114,7 +114,7 @@ internal static unsafe partial class NativeCallUtilities
 	/// <summary>
 	/// Invokes the specified function within the context of a native thread, using the provided cache, reference
 	/// type tokens, and outputs the resulting object reference.
-	/// </summary>m>
+	/// </summary>
 	/// <typeparam name="TFunction">
 	/// The type of the function to be executed. Must implement the <see cref="IFrameFunction{TOutput}"/> interface
 	/// where the output is of type <see cref="IArrayObject{IObject}"/>.
@@ -128,7 +128,7 @@ internal static unsafe partial class NativeCallUtilities
 	public static void ArrayObjectInvoke<TFunction>(INativeThread env, AlienLocalCache cache, ref TFunction func,
 		scoped ReadOnlySpan<JReferenceTypeToken> tokens, out JObjectArrayLocalRef result)
 #if !NET9_0_OR_GREATER
-		where TFunction : IFrameFunction<IArrayObject<ILocalObject>>
+		where TFunction : IFrameFunction<IArrayObject<ILocalObject>?>
 #else
 		where TFunction : IFrameFunction<IArrayObject<ILocalObject>?>, allows ref struct
 #endif

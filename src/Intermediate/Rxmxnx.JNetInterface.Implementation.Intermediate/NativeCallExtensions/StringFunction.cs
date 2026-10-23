@@ -15,10 +15,10 @@ public static partial class NativeCallExtensions
 	public static void WithNativeFrame<TFunction>(this IVirtualMachine? vm, JEnvironmentRef envRef, TFunction? func,
 		out JStringLocalRef result,
 #if !NET9_0_OR_GREATER
-		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default) where TFunction : IFrameFunction<JStringObject>
+		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default) where TFunction : IFrameFunction<JStringObject?>
 #else
 		params ReadOnlySpan<JReferenceTypeToken> tokens)
-		where TFunction : IFrameFunction<JStringObject>, allows ref struct
+		where TFunction : IFrameFunction<JStringObject?>, allows ref struct
 #endif
 	{
 		if (vm is not JVirtualMachine { IsAlive: true, } jvm || envRef == default || func is null)
@@ -31,7 +31,7 @@ public static partial class NativeCallExtensions
 			jvm.GetEnvironment(envRef).ObjectInvoke(ref func, out result, tokens);
 			return;
 		}
-		NonGenericFrameFunction<JStringObject> nonGeneric = NonGenericFrameFunction<JStringObject>.Create(func);
+		NonGenericFrameFunction<JStringObject?> nonGeneric = NonGenericFrameFunction<JStringObject?>.Create(func);
 		jvm.GetEnvironment(envRef).ObjectInvoke(ref nonGeneric, out result, tokens);
 	}
 	/// <summary>
@@ -46,10 +46,10 @@ public static partial class NativeCallExtensions
 	public static void WithNativeFrame<TFunction>(this JEnvironmentRef envRef, TFunction? func,
 		out JStringLocalRef result,
 #if !NET9_0_OR_GREATER
-		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default) where TFunction : IFrameFunction<JStringObject>
+		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default) where TFunction : IFrameFunction<JStringObject?>
 #else
 		params ReadOnlySpan<JReferenceTypeToken> tokens)
-		where TFunction : IFrameFunction<JStringObject>, allows ref struct
+		where TFunction : IFrameFunction<JStringObject?>, allows ref struct
 #endif
 	{
 		if (envRef == default || func is null)
@@ -79,10 +79,10 @@ public static partial class NativeCallExtensions
 		out JStringLocalRef result,
 #if !NET9_0_OR_GREATER
 		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default)
-		where TFunction : struct, IFrameFunction<JStringObject>
+		where TFunction : struct, IFrameFunction<JStringObject?>
 #else
 		params ReadOnlySpan<JReferenceTypeToken> tokens)
-		where TFunction : struct, IFrameFunction<JStringObject>, allows ref struct
+		where TFunction : struct, IFrameFunction<JStringObject?>, allows ref struct
 #endif
 	{
 		if (vm is not JVirtualMachine { IsAlive: true, } jvm || envRef == default)
@@ -105,10 +105,10 @@ public static partial class NativeCallExtensions
 		out JStringLocalRef result,
 #if !NET9_0_OR_GREATER
 		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default)
-		where TFunction : struct, IFrameFunction<JStringObject>
+		where TFunction : struct, IFrameFunction<JStringObject?>
 #else
 		params ReadOnlySpan<JReferenceTypeToken> tokens)
-		where TFunction : struct, IFrameFunction<JStringObject>, allows ref struct
+		where TFunction : struct, IFrameFunction<JStringObject?>, allows ref struct
 #endif
 	{
 		if (envRef == default)

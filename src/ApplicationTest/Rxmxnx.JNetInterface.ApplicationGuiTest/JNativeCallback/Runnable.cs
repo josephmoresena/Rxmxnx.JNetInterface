@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 using Rxmxnx.JNetInterface.ApplicationTest;
+using Rxmxnx.JNetInterface.Functional;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
@@ -60,15 +61,8 @@ public partial class JNativeCallback
 
 			try
 			{
-				JNativeCallAdapter callAdapter = JNativeCallAdapter.Create(environmentRef).Build();
-				try
-				{
-					ws.Value.Run(callAdapter.Environment);
-				}
-				finally
-				{
-					callAdapter.FinalizeCall();
-				}
+				RunAction action = new(ws.Value);
+				action.WithNativeFrame(environmentRef);
 			}
 			catch (RunningStateException) { }
 		}
@@ -76,5 +70,11 @@ public partial class JNativeCallback
 		static Runnable IClassType<Runnable>.Create(IReferenceType.ClassInitializer initializer) => new(initializer);
 		static Runnable IClassType<Runnable>.Create(IReferenceType.ObjectInitializer initializer) => new(initializer);
 		static Runnable IClassType<Runnable>.Create(IReferenceType.GlobalInitializer initializer) => new(initializer);
+
+		private readonly struct RunAction(RunnableState state) : IFrameAction
+		{
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			void IFrameAction.Accept(IEnvironment env, scoped ReadOnlySpan<JLocalObject?> objects) => state.Run(env);
+		}
 	}
 }

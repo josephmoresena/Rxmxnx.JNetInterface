@@ -3,10 +3,12 @@ using System.Runtime.InteropServices;
 
 using Rxmxnx.JNetInterface.ApplicationTest;
 using Rxmxnx.JNetInterface.Awt.Event;
+using Rxmxnx.JNetInterface.Functional;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
 using Rxmxnx.JNetInterface.Native.References;
+using Rxmxnx.JNetInterface.Native.Values;
 using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
@@ -71,19 +73,12 @@ public partial class JNativeCallback
 
 			try
 			{
-				JNativeCallAdapter callAdapter = JNativeCallAdapter.Create(environmentRef)
-				                                                   .WithParameter(
-					                                                   localRef, out JActionEventObject? actionEvent)
-				                                                   .Build();
-				try
-				{
-					if (actionEvent is not null)
-						ws.Value.ActionPerformed(actionEvent);
-				}
-				finally
-				{
-					callAdapter.FinalizeCall();
-				}
+				ActionPerformedAction action = new(ws.Value);
+#if !NET9_0_OR_GREATER
+				action.WithNativeFrame(environmentRef, [JReferenceTypeToken.Create<JActionEventObject>(localRef),]);
+#else
+				action.WithNativeFrame(environmentRef, JReferenceTypeToken.Create<JActionEventObject>(localRef));
+#endif
 			}
 			catch (RunningStateException) { }
 		}
@@ -94,5 +89,15 @@ public partial class JNativeCallback
 			=> new(initializer);
 		static ActionListener IClassType<ActionListener>.Create(IReferenceType.GlobalInitializer initializer)
 			=> new(initializer);
+
+		private readonly struct ActionPerformedAction(ActionListenerState state) : IFrameAction
+		{
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			void IFrameAction.Accept(IEnvironment env, scoped ReadOnlySpan<JLocalObject?> objects)
+			{
+				if (objects.Length < 1 || objects[0] is not JActionEventObject actionEvent) return;
+				state.ActionPerformed(actionEvent);
+			}
+		}
 	}
 }

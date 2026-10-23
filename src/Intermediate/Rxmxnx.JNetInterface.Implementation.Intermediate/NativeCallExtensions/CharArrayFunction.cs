@@ -15,10 +15,11 @@ public static partial class NativeCallExtensions
 	public static void WithNativeFrame<TFunction>(this IVirtualMachine? vm, JEnvironmentRef envRef, TFunction? func,
 		out JCharArrayLocalRef result,
 #if !NET9_0_OR_GREATER
-		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default) where TFunction : IFrameFunction<JArrayObject<JChar>>
+		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default)
+		where TFunction : IFrameFunction<JArrayObject<JChar>?>
 #else
 		params ReadOnlySpan<JReferenceTypeToken> tokens)
-		where TFunction : IFrameFunction<JArrayObject<JChar>>, allows ref struct
+		where TFunction : IFrameFunction<JArrayObject<JChar>?>, allows ref struct
 #endif
 	{
 		if (vm is not JVirtualMachine { IsAlive: true, } jvm || envRef == default || func is null)
@@ -47,10 +48,11 @@ public static partial class NativeCallExtensions
 	public static void WithNativeFrame<TFunction>(this JEnvironmentRef envRef, TFunction? func,
 		out JCharArrayLocalRef result,
 #if !NET9_0_OR_GREATER
-		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default) where TFunction : IFrameFunction<JArrayObject<JChar>>
+		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default)
+		where TFunction : IFrameFunction<JArrayObject<JChar>?>
 #else
 		params ReadOnlySpan<JReferenceTypeToken> tokens)
-		where TFunction : IFrameFunction<JArrayObject<JChar>>, allows ref struct
+		where TFunction : IFrameFunction<JArrayObject<JChar>?>, allows ref struct
 #endif
 	{
 		if (envRef == default || func is null)
@@ -81,10 +83,10 @@ public static partial class NativeCallExtensions
 		out JCharArrayLocalRef result,
 #if !NET9_0_OR_GREATER
 		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default)
-		where TFunction : struct, IFrameFunction<JArrayObject<JChar>>
+		where TFunction : struct, IFrameFunction<JArrayObject<JChar>?>
 #else
 		params ReadOnlySpan<JReferenceTypeToken> tokens)
-		where TFunction : struct, IFrameFunction<JArrayObject<JChar>>, allows ref struct
+		where TFunction : struct, IFrameFunction<JArrayObject<JChar>?>, allows ref struct
 #endif
 	{
 		if (vm is not JVirtualMachine { IsAlive: true, } jvm || envRef == default)
@@ -107,10 +109,10 @@ public static partial class NativeCallExtensions
 		out JCharArrayLocalRef result,
 #if !NET9_0_OR_GREATER
 		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default)
-		where TFunction : struct, IFrameFunction<JArrayObject<JChar>>
+		where TFunction : struct, IFrameFunction<JArrayObject<JChar>?>
 #else
 		params ReadOnlySpan<JReferenceTypeToken> tokens)
-		where TFunction : struct, IFrameFunction<JArrayObject<JChar>>, allows ref struct
+		where TFunction : struct, IFrameFunction<JArrayObject<JChar>?>, allows ref struct
 #endif
 	{
 		if (envRef == default)

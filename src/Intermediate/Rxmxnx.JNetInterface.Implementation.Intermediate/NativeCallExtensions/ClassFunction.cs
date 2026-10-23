@@ -15,10 +15,10 @@ public static partial class NativeCallExtensions
 	public static void WithNativeFrame<TFunction>(this IVirtualMachine? vm, JEnvironmentRef envRef, TFunction? func,
 		out JClassLocalRef result,
 #if !NET9_0_OR_GREATER
-		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default) where TFunction : IFrameFunction<JClassObject>
+		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default) where TFunction : IFrameFunction<JClassObject?>
 #else
 		params ReadOnlySpan<JReferenceTypeToken> tokens)
-		where TFunction : IFrameFunction<JClassObject>, allows ref struct
+		where TFunction : IFrameFunction<JClassObject?>, allows ref struct
 #endif
 	{
 		if (vm is not JVirtualMachine { IsAlive: true, } jvm || envRef == default || func is null)
@@ -46,10 +46,10 @@ public static partial class NativeCallExtensions
 	public static void WithNativeFrame<TFunction>(this JEnvironmentRef envRef, TFunction? func,
 		out JClassLocalRef result,
 #if !NET9_0_OR_GREATER
-		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default) where TFunction : IFrameFunction<JClassObject>
+		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default) where TFunction : IFrameFunction<JClassObject?>
 #else
 		params ReadOnlySpan<JReferenceTypeToken> tokens)
-		where TFunction : IFrameFunction<JClassObject>, allows ref struct
+		where TFunction : IFrameFunction<JClassObject?>, allows ref struct
 #endif
 	{
 		if (envRef == default || func is null)
@@ -79,10 +79,10 @@ public static partial class NativeCallExtensions
 		out JClassLocalRef result,
 #if !NET9_0_OR_GREATER
 		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default)
-		where TFunction : struct, IFrameFunction<JClassObject>
+		where TFunction : struct, IFrameFunction<JClassObject?>
 #else
 		params ReadOnlySpan<JReferenceTypeToken> tokens)
-		where TFunction : struct, IFrameFunction<JClassObject>, allows ref struct
+		where TFunction : struct, IFrameFunction<JClassObject?>, allows ref struct
 #endif
 	{
 		if (vm is not JVirtualMachine { IsAlive: true, } jvm || envRef == default)
@@ -105,10 +105,10 @@ public static partial class NativeCallExtensions
 		out JClassLocalRef result,
 #if !NET9_0_OR_GREATER
 		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default)
-		where TFunction : struct, IFrameFunction<JClassObject>
+		where TFunction : struct, IFrameFunction<JClassObject?>
 #else
 		params ReadOnlySpan<JReferenceTypeToken> tokens)
-		where TFunction : struct, IFrameFunction<JClassObject>, allows ref struct
+		where TFunction : struct, IFrameFunction<JClassObject?>, allows ref struct
 #endif
 	{
 		if (envRef == default)

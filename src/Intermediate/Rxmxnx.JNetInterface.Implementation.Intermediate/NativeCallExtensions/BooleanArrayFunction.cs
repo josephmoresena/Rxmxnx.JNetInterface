@@ -16,10 +16,10 @@ public static partial class NativeCallExtensions
 		out JBooleanArrayLocalRef result,
 #if !NET9_0_OR_GREATER
 		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default)
-		where TFunction : IFrameFunction<JArrayObject<JBoolean>>
+		where TFunction : IFrameFunction<JArrayObject<JBoolean>?>
 #else
 		params ReadOnlySpan<JReferenceTypeToken> tokens)
-		where TFunction : IFrameFunction<JArrayObject<JBoolean>>, allows ref struct
+		where TFunction : IFrameFunction<JArrayObject<JBoolean>?>, allows ref struct
 #endif
 	{
 		if (vm is not JVirtualMachine { IsAlive: true, } jvm || envRef == default || func is null)
@@ -49,10 +49,10 @@ public static partial class NativeCallExtensions
 		out JBooleanArrayLocalRef result,
 #if !NET9_0_OR_GREATER
 		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default)
-		where TFunction : IFrameFunction<JArrayObject<JBoolean>>
+		where TFunction : IFrameFunction<JArrayObject<JBoolean>?>
 #else
 		params ReadOnlySpan<JReferenceTypeToken> tokens)
-		where TFunction : IFrameFunction<JArrayObject<JBoolean>>, allows ref struct
+		where TFunction : IFrameFunction<JArrayObject<JBoolean>?>, allows ref struct
 #endif
 	{
 		if (envRef == default || func is null)
@@ -83,10 +83,10 @@ public static partial class NativeCallExtensions
 		out JBooleanArrayLocalRef result,
 #if !NET9_0_OR_GREATER
 		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default)
-		where TFunction : struct, IFrameFunction<JArrayObject<JBoolean>>
+		where TFunction : struct, IFrameFunction<JArrayObject<JBoolean>?>
 #else
 		params ReadOnlySpan<JReferenceTypeToken> tokens)
-		where TFunction : struct, IFrameFunction<JArrayObject<JBoolean>>, allows ref struct
+		where TFunction : struct, IFrameFunction<JArrayObject<JBoolean>?>, allows ref struct
 #endif
 	{
 		if (vm is not JVirtualMachine { IsAlive: true, } jvm || envRef == default)
@@ -109,10 +109,10 @@ public static partial class NativeCallExtensions
 		out JBooleanArrayLocalRef result,
 #if !NET9_0_OR_GREATER
 		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default)
-		where TFunction : struct, IFrameFunction<JArrayObject<JBoolean>>
+		where TFunction : struct, IFrameFunction<JArrayObject<JBoolean>?>
 #else
 		params ReadOnlySpan<JReferenceTypeToken> tokens)
-		where TFunction : struct, IFrameFunction<JArrayObject<JBoolean>>, allows ref struct
+		where TFunction : struct, IFrameFunction<JArrayObject<JBoolean>?>, allows ref struct
 #endif
 	{
 		if (envRef == default)
