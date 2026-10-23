@@ -32,8 +32,8 @@ public static partial class NativeCallExtensions
 			jvm.GetEnvironment(envRef).ObjectInvoke(ref func, out result, tokens);
 			return;
 		}
-		NonGenericFrameFunction<JArrayObject<JByte>> nonGeneric =
-			NonGenericFrameFunction<JArrayObject<JByte>>.Create(func);
+		NonGenericFrameFunction<JArrayObject<JByte>?> nonGeneric =
+			NonGenericFrameFunction<JArrayObject<JByte>?>.Create(func);
 		jvm.GetEnvironment(envRef).ObjectInvoke(ref nonGeneric, out result, tokens);
 	}
 	/// <summary>
@@ -65,8 +65,8 @@ public static partial class NativeCallExtensions
 			JEnvironment.GetEnvironment(envRef).ObjectInvoke(ref func, out result, tokens);
 			return;
 		}
-		NonGenericFrameFunction<JArrayObject<JByte>> nonGeneric =
-			NonGenericFrameFunction<JArrayObject<JByte>>.Create(func);
+		NonGenericFrameFunction<JArrayObject<JByte>?> nonGeneric =
+			NonGenericFrameFunction<JArrayObject<JByte>?>.Create(func);
 		JEnvironment.GetEnvironment(envRef).ObjectInvoke(ref nonGeneric, out result, tokens);
 	}
 	/// <summary>

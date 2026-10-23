@@ -62,7 +62,7 @@ public static partial class NativeCallExtensions
 			JEnvironment.GetEnvironment(envRef).ObjectInvoke(ref func, out result, tokens);
 			return;
 		}
-		NonGenericFrameFunction<JStringObject> nonGeneric = NonGenericFrameFunction<JStringObject>.Create(func);
+		NonGenericFrameFunction<JStringObject?> nonGeneric = NonGenericFrameFunction<JStringObject?>.Create(func);
 		JEnvironment.GetEnvironment(envRef).ObjectInvoke(ref nonGeneric, out result, tokens);
 	}
 	/// <summary>
