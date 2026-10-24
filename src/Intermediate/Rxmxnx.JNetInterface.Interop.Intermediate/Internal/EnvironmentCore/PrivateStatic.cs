@@ -27,27 +27,6 @@ internal sealed partial class EnvironmentCore
 	private static Boolean IsMainOrDefault(JGlobalBase jGlobal)
 		=> jGlobal.IsDefault || LocalMainClasses.IsMainGlobal(jGlobal as JGlobal);
 	/// <summary>
-	/// Creates a <see cref="IFixedContext{Byte}.IDisposable"/> instance from a span created in heap.
-	/// </summary>
-	/// <param name="count">Number of allocated bytes.</param>
-	/// <returns>A <see cref="IFixedContext{Byte}.IDisposable"/> instance</returns>
-	private static IFixedContext<Byte>.IDisposable AllocHeapContext(Int32 count)
-		=> count == 0 ? EnvironmentCore.zeroByteContext : ArrayPool<Byte>.Shared.RentFixed(count, true);
-	/// <summary>
-	/// Creates a <typeparamref name="T"/> span allocated in heap.
-	/// </summary>
-	/// <typeparam name="T">Type of elements in span.</typeparam>
-	/// <param name="count">Number of allocated elements.</param>
-	/// <param name="rented">A <see cref="Rented{T}"/> reference.</param>
-	/// <returns>A <typeparamref name="T"/> span.</returns>
-	private static Span<T> HeapAlloc<T>(Int32 count, ref Rented<T> rented) where T : unmanaged
-	{
-		if (count == 0)
-			return Span<T>.Empty;
-		rented = new(count, out Span<T> result);
-		return result;
-	}
-	/// <summary>
 	/// Traces the assignment of a value to a primitive field.
 	/// </summary>
 	/// <param name="jLocal">Field instance object class.</param>

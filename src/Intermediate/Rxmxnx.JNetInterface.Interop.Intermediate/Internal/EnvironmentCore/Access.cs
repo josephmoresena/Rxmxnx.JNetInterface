@@ -6,6 +6,30 @@ namespace Rxmxnx.JNetInterface.Internal;
 #endif
 internal sealed partial class EnvironmentCore
 {
+	private unsafe void RegisterNatives(JClassObject jClass, IReadOnlyList<JNativeCallEntry> calls, Span<NativeMethodValue> buffer, List<MemoryHandle> handles,
+		NativeInterface nativeInterface)
+	{
+		for (Int32 i = 0; i < calls.Count; i++)
+			buffer[i] = NativeMethodValue.Create(calls[i], handles);
+		try
+		{
+			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
+			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
+			JResult result;
+			fixed (NativeMethodValue* ptr = &MemoryMarshal.GetReference(buffer))
+			{
+				result = nativeInterface.NativeRegistryFunctions.RegisterNatives(
+					this.Reference, classRef, ptr, buffer.Length);
+			}
+			this.CheckJniError();
+			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
+			this.Host.TypeManager.RegisterNatives(jClass.Hash, calls);
+		}
+		finally
+		{
+			handles.ForEach(h => h.Dispose());
+		}
+	}
 	/// <summary>
 	/// Sets a static object field to given <paramref name="classRef"/> reference.
 	/// </summary>

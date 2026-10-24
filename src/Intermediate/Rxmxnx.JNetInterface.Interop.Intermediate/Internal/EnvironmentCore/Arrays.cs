@@ -405,17 +405,33 @@ internal sealed partial class EnvironmentCore
 		TElement initialElement) where TElement : IDataType<TElement>
 	{
 		Int32 requiredBytes = metadata.SizeOf * jArray.Length;
+		Byte signature = metadata.Signature[0];
 		using StackDisposable stackDisposable =
 			this.GetStackDisposable(this.UseStackAlloc(requiredBytes), requiredBytes);
-		Rented<Byte> rented = default;
-		Span<Byte> buffer = stackDisposable.UsingStack ?
-			stackalloc Byte[requiredBytes] :
-			EnvironmentCore.HeapAlloc(requiredBytes, ref rented);
+		if (stackDisposable.UsingStack)
+		{
+			this.FillPrimitiveArray(jArray, signature, initialElement, stackalloc Byte[requiredBytes]);
+			return;
+		}
+		using IDisposable _ = NativeUtilities.HeapAlloc(requiredBytes, out FixedContextValue<Byte> heap);
+		this.FillPrimitiveArray(jArray, signature, initialElement, heap.Bytes);
+	}
+	/// <summary>
+	/// Fills <paramref name="jArray"/> with <paramref name="initialElement"/> value.
+	/// </summary>
+	/// <typeparam name="TElement">A <see cref="IDataType"/> primitive type.</typeparam>
+	/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
+	/// <param name="signature">Primitive element type signature.</param>
+	/// <param name="initialElement">A <see cref="IDataType"/> primitive value.</param>
+	/// <param name="buffer">Temporal primitive buffer.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private unsafe void FillPrimitiveArray<TElement>(JArrayObject jArray, Byte signature, TElement initialElement,
+		Span<Byte> buffer) where TElement : IDataType<TElement>
+	{
 		Int32 offset = 0;
-		while (offset < requiredBytes)
+		while (offset < buffer.Length)
 			initialElement.CopyTo(buffer, ref offset);
 		fixed (Byte* ptr = &MemoryMarshal.GetReference(buffer))
-			this.SetPrimitiveArrayRegion(jArray, metadata.Signature[0], new(ptr), 0, jArray.Length);
-		rented.Free();
+			this.SetPrimitiveArrayRegion(jArray, signature, new(ptr), 0, jArray.Length);
 	}
 }

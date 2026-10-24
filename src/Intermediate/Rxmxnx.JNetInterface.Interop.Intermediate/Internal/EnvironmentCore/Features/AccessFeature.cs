@@ -206,31 +206,13 @@ internal sealed partial class EnvironmentCore : IAccessFeature
 		Int32 requiredBytes = calls.Count * NativeMethodValue.Size;
 		using StackDisposable stackDisposable =
 			this.GetStackDisposable(this.UseStackAlloc(requiredBytes), requiredBytes);
-		Rented<NativeMethodValue> rented = default;
-		Span<NativeMethodValue> buffer = stackDisposable.UsingStack ?
-			stackalloc NativeMethodValue[calls.Count] :
-			EnvironmentCore.HeapAlloc(calls.Count, ref rented);
-		for (Int32 i = 0; i < calls.Count; i++)
-			buffer[i] = NativeMethodValue.Create(calls[i], handles);
-		try
+		if (stackDisposable.UsingStack)
 		{
-			using INativeTransaction jniTransaction = this.Host.MemoryManager.CreateTransaction(1);
-			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
-			JResult result;
-			fixed (NativeMethodValue* ptr = &MemoryMarshal.GetReference(buffer))
-			{
-				result = nativeInterface.NativeRegistryFunctions.RegisterNatives(
-					this.Reference, classRef, ptr, buffer.Length);
-			}
-			this.CheckJniError();
-			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
-			this.Host.TypeManager.RegisterNatives(jClass.Hash, calls);
+			this.RegisterNatives(jClass, calls, stackalloc NativeMethodValue[calls.Count], handles, nativeInterface);
+			return;
 		}
-		finally
-		{
-			rented.Free();
-			handles.ForEach(h => h.Dispose());
-		}
+		using IDisposable _ = NativeUtilities.HeapAlloc(calls.Count, out FixedContextValue<NativeMethodValue> heap);
+		this.RegisterNatives(jClass, calls, heap.Values, handles, nativeInterface);
 	}
 	public void ClearNatives(JClassObject jClass)
 	{
