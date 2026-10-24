@@ -6,8 +6,16 @@ namespace Rxmxnx.JNetInterface.Internal;
 #endif
 internal sealed partial class EnvironmentCore
 {
-	private unsafe void RegisterNatives(JClassObject jClass, IReadOnlyList<JNativeCallEntry> calls, Span<NativeMethodValue> buffer, List<MemoryHandle> handles,
-		NativeInterface nativeInterface)
+	/// <summary>
+	/// Registers native method definitions for a specified Java class within the current native interface context.
+	/// </summary>
+	/// <param name="jClass">The <see cref="JClassObject"/> instance for which native methods are being registered.</param>
+	/// <param name="calls">A read-only list of native method call entries representing the methods to be registered.</param>
+	/// <param name="buffer">A span of <see cref="NativeMethodValue"/> used to store structured method definitions for registration.</param>
+	/// <param name="handles">A list of <see cref="MemoryHandle"/> objects used to track pinned memory resources during the operation.</param>
+	/// <param name="nativeInterface">The native interface instance providing functions to register native methods.</param>
+	private unsafe void RegisterNatives(JClassObject jClass, IReadOnlyList<JNativeCallEntry> calls,
+		Span<NativeMethodValue> buffer, List<MemoryHandle> handles, NativeInterface nativeInterface)
 	{
 		for (Int32 i = 0; i < calls.Count; i++)
 			buffer[i] = NativeMethodValue.Create(calls[i], handles);

@@ -421,10 +421,8 @@ internal sealed partial class EnvironmentCore
 	/// <returns>A <see cref="IFixedContext{T}.IDisposable"/> instance</returns>
 	private IFixedContext<Byte>.IDisposable GetStackContext(scoped Span<Byte> stackSpan)
 	{
-		StackDisposable disposable = new(this, stackSpan.Length);
 		ValPtr<Byte> ptr = (ValPtr<Byte>)stackSpan.GetUnsafeIntPtr();
-		// ReSharper disable once HeapView.BoxingAllocation
-		return ptr.GetUnsafeFixedContext(stackSpan.Length, disposable);
+		return ptr.GetUnsafeFixedContext(stackSpan.Length, StackDisposable.CreateDisposable(this, stackSpan.Length));
 	}
 	/// <summary>
 	/// Checks and throws a Throwable exception in a non-critical state.

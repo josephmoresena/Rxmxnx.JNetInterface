@@ -42,5 +42,23 @@ internal sealed partial class EnvironmentCore
 
 		/// <inheritdoc/>
 		public void Dispose() => this._core?.FreeStack(this._usedBytes);
+
+		/// <summary>
+		/// Creates a disposable object to handle stack resource cleanup.
+		/// </summary>
+		/// <param name="core">A <see cref="EnvironmentCore"/> cache.</param>
+		/// <param name="usedBytes">Number of used bytes.</param>
+		/// <returns>An <see cref="IDisposable"/> instance to manage resource disposal.</returns>
+		public static IDisposable CreateDisposable(EnvironmentCore core, Int32 usedBytes)
+			=> new Disposable(new(core, usedBytes));
+
+		/// <summary>
+		/// Internal wrapper.
+		/// </summary>
+		/// <param name="instance">Current instance.</param>
+		private sealed class Disposable(StackDisposable instance) : IDisposable
+		{
+			void IDisposable.Dispose() => instance.Dispose();
+		}
 	}
 }
