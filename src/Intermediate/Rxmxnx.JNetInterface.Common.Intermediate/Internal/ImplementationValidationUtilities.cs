@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
-/// Utility class for argument validation in current implementation.
+/// Utility class for argument validation in the current implementation.
 /// </summary>
 internal static class ImplementationValidationUtilities
 {
@@ -96,13 +96,12 @@ internal static class ImplementationValidationUtilities
 			throw new ArgumentException(IMessageResource.GetInstance().InvalidReferenceType("null"));
 	}
 	/// <summary>
-	/// Throws an exception if <paramref name="thread"/> is different to current thread.
+	/// Throws an exception if <paramref name="thread"/> is different to the current thread.
 	/// </summary>
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 	/// <param name="thread">A <see cref="Thread"/> instance.</param>
 	/// <exception cref="InvalidOperationException">
-	/// Throws an exception if <paramref name="thread"/> is different to current
-	/// thread.
+	/// Throws an exception if <paramref name="thread"/> is different to the current thread.
 	/// </exception>
 	public static void ThrowIfDifferentThread(JEnvironmentRef envRef, Thread thread)
 	{
@@ -136,10 +135,10 @@ internal static class ImplementationValidationUtilities
 		throw new RunningStateException(resource.DeadVirtualMachine);
 	}
 	/// <summary>
-	/// Throws an exception if current thread is not attached to JVM.
+	/// Throws an exception if the current thread is not attached to JVM.
 	/// </summary>
-	/// <param name="isAttached">Indicates whether current thread is attached to a JVM.</param>
-	/// <exception cref="InvalidOperationException">Throws an exception if current thread is not attached to JVM</exception>
+	/// <param name="isAttached">Indicates whether the current thread is attached to a JVM.</param>
+	/// <exception cref="InvalidOperationException">Throws an exception if the current thread is not attached to JVM</exception>
 	public static void ThrowIfNotAttached(Boolean isAttached)
 	{
 		if (isAttached) return;
@@ -162,13 +161,13 @@ internal static class ImplementationValidationUtilities
 		throw new UnsafeStateException(message);
 	}
 	/// <summary>
-	/// Throws an exception if JNI execution is not avaliable in current version.
+	/// Throws an exception if JNI execution is not available in the current version.
 	/// </summary>
 	/// <param name="functionName">Name of JNI function.</param>
 	/// <param name="requiredVersion">Required version to execute JNI function.</param>
 	/// <param name="currentVersion">Current version of JNI.</param>
 	/// <exception cref="NotImplementedException">
-	/// Throws an exception if JNI execution is not avaliable in current version.
+	/// Throws an exception if JNI execution is not available in the current version.
 	/// </exception>
 	public static void ThrowIfInvalidVersion(String functionName, Int32 requiredVersion, Int32 currentVersion)
 	{

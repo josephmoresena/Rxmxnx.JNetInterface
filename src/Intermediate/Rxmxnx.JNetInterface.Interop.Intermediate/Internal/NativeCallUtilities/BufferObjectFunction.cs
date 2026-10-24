@@ -10,11 +10,11 @@ internal static partial class NativeCallUtilities
 #if !NET9_0_OR_GREATER
 	private readonly struct
 		BufferObjectFunction<TObjectReference, TFunction> : IScopedBufferFunction<JObject?, TObjectReference>
-		where TFunction : IFrameFunction<JReferenceObject?>
+		where TFunction : IFrameFunction<JObject?>
 #else
 	private readonly ref struct
 		BufferObjectFunction<TObjectReference, TFunction> : IScopedBufferFunction<JObject?, TObjectReference>
-		where TFunction : IFrameFunction<JReferenceObject?>, allows ref struct
+		where TFunction : IFrameFunction<JObject?>, allows ref struct
 #endif
 		where TObjectReference : unmanaged, INativePointerType<TObjectReference>
 	{

@@ -27,15 +27,15 @@ public ref partial struct SyncContextBuilder
 		protected SendState(SyncContextBuilder* builderPtr) => this._builderPtr = builderPtr;
 
 		/// <summary>
-		/// Executes the current send logic using the specified context builder.
+		/// Executes the current SEND logic using the specified context builder.
 		/// </summary>
 		protected abstract void Invoke(SyncContextBuilder builder);
 
 		/// <summary>
 		/// Processes the given state object if it is of type <see cref="SendState"/>.
-		/// Executes the corresponding logic defined in the send state.
+		/// Executes the corresponding logic defined in the SEND state.
 		/// </summary>
-		/// <param name="obj">An object that represents the send state.</param>
+		/// <param name="obj">An object that represents the SEND state.</param>
 		public static void Send(Object? obj)
 		{
 			if (obj is not SendState state) return;

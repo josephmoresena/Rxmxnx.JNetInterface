@@ -13,7 +13,7 @@ public readonly unsafe struct JReferenceTypeToken
 	/// <summary>
 	/// Represents the native type associated with the JNI reference.
 	/// </summary>
-	public JNativeType NativeType { get; init; }
+	public JNativeType NativeType { get; private init; }
 
 	/// <summary>
 	/// Points to a function responsible for retrieving metadata of the reference type.

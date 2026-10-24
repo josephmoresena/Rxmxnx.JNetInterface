@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 
 /// <summary>
-/// Set of function pointers to use Java library through Invocation API.
+/// Set of function pointers to use a Java library through Invocation API.
 /// </summary>
 [StructLayout(LayoutKind.Explicit)]
 #if !PACKAGE

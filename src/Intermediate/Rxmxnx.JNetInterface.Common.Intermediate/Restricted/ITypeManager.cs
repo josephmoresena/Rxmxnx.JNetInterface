@@ -42,19 +42,19 @@ internal interface ITypeManager
 	/// <returns>A <see cref="JGlobal"/> instance.</returns>
 	JGlobal LoadGlobal(JClassObject jClass);
 	/// <summary>
-	/// Retrieves class metadata for given hash.
+	/// Retrieves class metadata for a given hash.
 	/// </summary>
 	/// <param name="classHash">Class hash.</param>
 	/// <returns>A <see cref="ITypeInformation"/> instance.</returns>
 	ITypeInformation? GetTypeInformation(String classHash);
 	/// <summary>
-	/// Registers native methods for given class.
+	/// Registers native methods for a given class hash.
 	/// </summary>
 	/// <param name="classHash">Class hash.</param>
 	/// <param name="calls">A <see cref="JNativeCallEntry"/> array.</param>
 	void RegisterNatives(String classHash, IReadOnlyList<JNativeCallEntry> calls);
 	/// <summary>
-	/// Unregister any native method for given class.
+	/// Unregister any native method for a given class.
 	/// </summary>
 	/// <param name="classHash">Class hash.</param>
 	void UnregisterNatives(String classHash);

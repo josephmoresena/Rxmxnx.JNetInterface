@@ -61,12 +61,12 @@ internal class ClassCache(JReferenceType type)
 		}
 	}
 	/// <summary>
-	/// Clears current cache.
+	/// Clears the current cache.
 	/// </summary>
 	public void Clear() => this._access.Clear();
 
 	/// <summary>
-	/// Set as unloaded a class with given hash.
+	/// Set as unloaded a class with a given hash.
 	/// </summary>
 	/// <param name="hash">A class hash.</param>
 	/// <param name="classRef">Unloaded <see cref="JClassLocalRef"/> reference.</param>

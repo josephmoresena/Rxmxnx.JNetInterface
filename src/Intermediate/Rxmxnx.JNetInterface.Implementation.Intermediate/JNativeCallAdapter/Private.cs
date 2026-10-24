@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace Rxmxnx.JNetInterface;
 
 public readonly ref partial struct JNativeCallAdapter

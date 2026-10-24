@@ -56,7 +56,7 @@ public partial class JEnvironment : IEqualityOperators<JEnvironment, JEnvironmen
 		}
 	}
 
-	void IEnvironment.WithFrame(Int32 capacity, System.Action action) => this._m.WithFrame(this, capacity, action);
+	void IEnvironment.WithFrame(Int32 capacity, Action action) => this._m.WithFrame(this, capacity, action);
 	void IEnvironment.WithFrame<TState>(Int32 capacity, TState state, Action<TState> action)
 		=> this._m.WithFrame(this, capacity, state, action);
 

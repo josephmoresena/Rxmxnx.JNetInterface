@@ -13,7 +13,7 @@ internal readonly struct UnknownReflectionMetadata
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="signature">The signature of type.</param>
+	/// <param name="signature">The signature of the type.</param>
 	public UnknownReflectionMetadata(ReadOnlySpan<Byte> signature)
 		=> this.ArgumentMetadata = JArgumentMetadata.Create(signature);
 

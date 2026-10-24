@@ -16,7 +16,7 @@ internal interface IAlienObjectManager
 	/// Retrieves the <see cref="JClassObject"/> according to <paramref name="classRef"/>.
 	/// </summary>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
-	/// <param name="keepReference">Indicates whether class reference should be assigned to created object.</param>
+	/// <param name="keepReference">Indicates whether the class reference should be assigned to the created object.</param>
 	/// <returns>A <see cref="JClassObject"/> instance.</returns>
 	JClassObject GetReferenceTypeClass(JClassLocalRef classRef, Boolean keepReference = false);
 	/// <summary>
