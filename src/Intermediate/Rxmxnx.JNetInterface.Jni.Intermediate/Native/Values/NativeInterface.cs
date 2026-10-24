@@ -116,11 +116,20 @@ internal readonly unsafe partial struct NativeInterface : INativeInterface<Nativ
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Int32 GetVersion(JEnvironmentRef envRef)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._getVersion.Windows(envRef);
+			if (SystemInfo.IsWindows)
+				return this._getVersion.Windows(envRef);
 #endif
-		return this._getVersion.Unix(envRef);
+			return this._getVersion.Unix(envRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 	/// <summary>
 	/// <c>ExceptionCheck</c>.
@@ -131,11 +140,20 @@ internal readonly unsafe partial struct NativeInterface : INativeInterface<Nativ
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JBoolean ExceptionCheck(JEnvironmentRef envRef)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._exceptionCheck.Windows(envRef);
+			if (SystemInfo.IsWindows)
+				return this._exceptionCheck.Windows(envRef);
 #endif
-		return this._exceptionCheck.Unix(envRef);
+			return this._exceptionCheck.Unix(envRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 	/// <summary>
 	/// <c>GetVirtualMachine</c>.
@@ -146,13 +164,22 @@ internal readonly unsafe partial struct NativeInterface : INativeInterface<Nativ
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult GetVirtualMachine(JEnvironmentRef envRef, out JVirtualMachineRef vmRef)
 	{
-		fixed (JVirtualMachineRef* vmRefPtr = &vmRef)
+		try
 		{
+			fixed (JVirtualMachineRef* vmRefPtr = &vmRef)
+			{
 #if !ANDROID
-			if (SystemInfo.IsWindows)
-				return this._getVirtualMachine.Windows(envRef, vmRefPtr);
+				if (SystemInfo.IsWindows)
+					return this._getVirtualMachine.Windows(envRef, vmRefPtr);
 #endif
-			return this._getVirtualMachine.Unix(envRef, vmRefPtr);
+				return this._getVirtualMachine.Unix(envRef, vmRefPtr);
+			}
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
 		}
 	}
 }

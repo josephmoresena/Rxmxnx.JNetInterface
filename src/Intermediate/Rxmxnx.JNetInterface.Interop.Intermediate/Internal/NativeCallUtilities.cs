@@ -47,11 +47,13 @@ internal static partial class NativeCallUtilities
 		JObjectLocalRef localRef, JReferenceTypeMetadata classMetadata, JReferenceTypeMetadata? typeMetadata = default)
 	{
 		JLocalObject jLocal = classMetadata.CreateInstance(jClass, localRef, true);
-		if (typeMetadata is null || classMetadata == typeMetadata)
+		Boolean isNotViewOutput = classMetadata.Kind is JTypeKind.Class or JTypeKind.Enum;
+		if (isNotViewOutput && (typeMetadata is null || classMetadata == typeMetadata))
 		{
 			cache.RegisterAlien(localRef, jLocal);
 			return jLocal;
 		}
+		typeMetadata ??= classMetadata;
 		JReferenceObject result = typeMetadata.ParseInstance(jLocal, typeMetadata.Modifier != JTypeModifier.Final);
 		cache.RegisterAlien(localRef, result as ILocalObject ?? jLocal);
 		return result;
