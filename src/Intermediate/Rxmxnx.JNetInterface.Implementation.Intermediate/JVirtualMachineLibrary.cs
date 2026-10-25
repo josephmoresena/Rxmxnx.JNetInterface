@@ -166,9 +166,9 @@ public abstract unsafe partial class JVirtualMachineLibrary
 		return new Impl<PInvokeInvocation>(default, PInvokeInvocation.GetInvocationSet<TLibrary>());
 	}
 	/// <summary>
-	/// Creates a virtual machine library using loaded JVM library.
+	/// Creates a virtual machine library using a loaded JVM library.
 	/// </summary>
-	/// <param name="handle">Handle of loaded JVM library.</param>
+	/// <param name="handle">Handle of a loaded JVM library.</param>
 	/// <returns>
 	/// A <see cref="JVirtualMachineLibrary"/> instance if <paramref name="handle"/> is
 	/// valid for a JVM library; otherwise, <see langword="null"/>.
@@ -179,9 +179,9 @@ public abstract unsafe partial class JVirtualMachineLibrary
 	public static JVirtualMachineLibrary? Create(IntPtr handle) => JVirtualMachineLibrary.Create(handle, false);
 
 	/// <summary>
-	/// Creates a virtual machine library using loaded JVM library.
+	/// Creates a virtual machine library using a loaded JVM library.
 	/// </summary>
-	/// <param name="handle">Handle of loaded JVM library.</param>
+	/// <param name="handle">Handle of a loaded JVM library.</param>
 	/// <param name="ownHandle">Indicates whether <paramref name="handle"/> is own by the current call.</param>
 	/// <returns>
 	/// A <see cref="JVirtualMachineLibrary"/> instance if <paramref name="handle"/> is
@@ -211,7 +211,7 @@ public abstract unsafe partial class JVirtualMachineLibrary
 	/// </summary>
 	/// <param name="handle">The native JVM library OS handle.</param>
 	/// <param name="name">The name of the exported JNI symbol.</param>
-	/// <param name="address">When the method returns, contains the symbol address, if it exists.</param>
+	/// <param name="address">When the method returns, contains the symbol address if it exists.</param>
 	/// <returns>
 	/// <see langword="true"/> if the address of the exported symbol was found successfully; otherwise,
 	/// <see langword="false"/>.

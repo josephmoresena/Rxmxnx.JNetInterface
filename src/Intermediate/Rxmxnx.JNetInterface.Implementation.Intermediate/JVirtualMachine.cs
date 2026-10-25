@@ -15,7 +15,7 @@ public partial class JVirtualMachine : IVirtualMachine
 	/// <inheritdoc cref="IVirtualMachine.Version"/>
 	public JRuntimeVersion Version => this._core.GetVersion(this);
 	/// <summary>
-	/// Indicates whether current instance is disposable.
+	/// Indicates whether the current instance is disposable.
 	/// </summary>
 	public virtual Boolean IsDisposable => false;
 	/// <inheritdoc/>
