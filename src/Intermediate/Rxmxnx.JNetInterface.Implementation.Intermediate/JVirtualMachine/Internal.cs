@@ -29,6 +29,7 @@ public partial class JVirtualMachine
 	/// <returns>
 	/// The <see cref="IEnvironment"/> instance referenced by <paramref name="envRef"/>.
 	/// </returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal JEnvironment GetEnvironment(JEnvironmentRef envRef) => this._core.ThreadCache.GetUnsafe(envRef);
 
 	/// <summary>
