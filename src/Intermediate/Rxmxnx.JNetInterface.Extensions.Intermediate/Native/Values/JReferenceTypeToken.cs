@@ -201,6 +201,73 @@ public readonly unsafe struct JReferenceTypeToken
 			GetMetadataPointer = &IReferenceType.GetMetadata<TReference>,
 			NativeType = JReferenceTypeToken.GetNativeType<TReference>(),
 		};
+	/// <summary>
+	/// Creates an instance of <see cref="JReferenceTypeToken"/> from the specified <see cref="JThrowableLocalRef"/>.
+	/// </summary>
+	/// <typeparam name="TThrowable">Type of java throwable type.</typeparam>
+	/// <param name="throwableRef">
+	/// A <see cref="JThrowableLocalRef"/> to be converted into a <see cref="JReferenceTypeToken"/>.
+	/// </param>
+	/// <returns>
+	/// A new instance of <see cref="JReferenceTypeToken"/> initialized with the provided <paramref name="throwableRef"/>
+	/// and metadata for <typeparamref name="TThrowable"/>.
+	/// </returns>
+	public static JReferenceTypeToken
+		Create<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TThrowable>(
+			JThrowableLocalRef throwableRef) where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		=> new()
+		{
+			Reference = throwableRef.Value,
+			GetMetadataPointer = &IReferenceType.GetMetadata<TThrowable>,
+			NativeType = JNativeType.JThrowable,
+		};
+	/// <summary>
+	/// Creates an instance of <see cref="JReferenceTypeToken"/> from the specified <see cref="JArrayLocalRef"/>.
+	/// </summary>
+	/// <typeparam name="TElement">Type of array element.</typeparam>
+	/// <param name="arrayRef">A <see cref="JArrayLocalRef"/> to be converted into a <see cref="JReferenceTypeToken"/>.</param>
+	/// <returns>
+	/// A new instance of <see cref="JReferenceTypeToken"/> initialized with the provided <paramref name="arrayRef"/>
+	/// and metadata for the array of <typeparamref name="TElement"/>.
+	/// </returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static JReferenceTypeToken Create<TElement>(JArrayLocalRef arrayRef) where TElement : IDataType<TElement>
+		=> JReferenceTypeToken.CreateArray<TElement>(arrayRef.Value);
+	/// <summary>
+	/// Creates an instance of <see cref="JReferenceTypeToken"/> from the specified <see cref="JObjectArrayLocalRef"/>.
+	/// </summary>
+	/// <typeparam name="TElement">Type of reference array element. A <see cref="ILocalObject"/> reference type.</typeparam>
+	/// <param name="arrayRef">
+	/// A <see cref="JObjectArrayLocalRef"/> to be converted into a <see cref="JReferenceTypeToken"/>.
+	/// </param>
+	/// <returns>
+	/// A new instance of <see cref="JReferenceTypeToken"/> initialized with the provided <paramref name="arrayRef"/>
+	/// and metadata for the array of <typeparamref name="TElement"/>.
+	/// </returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static JReferenceTypeToken
+		Create<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TElement>(
+			JObjectArrayLocalRef arrayRef) where TElement : JReferenceObject, IReferenceType<TElement>
+		=> JReferenceTypeToken.CreateArray<TElement>(arrayRef.Value);
+
+	/// <summary>
+	/// Creates an array token for <typeparamref name="TElement"/>.
+	/// </summary>
+	/// <typeparam name="TElement">Type of array element.</typeparam>
+	/// <param name="reference">JNI local reference of the array.</param>
+	/// <returns>A <see cref="JReferenceTypeToken"/> whose metadata is the array of <typeparamref name="TElement"/>.</returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private static JReferenceTypeToken CreateArray<TElement>(JObjectLocalRef reference)
+		where TElement : IDataType<TElement>
+		=> new()
+		{
+			Reference = reference,
+			GetMetadataPointer = &IReferenceType.GetMetadata<JArrayObject<TElement>>,
+			NativeType = JReferenceTypeToken.GetNativeType<JArrayObject<TElement>>(),
+		};
 
 	/// <summary>
 	/// Determines the corresponding <see cref="JNativeType"/> for the specified reference type parameter.
