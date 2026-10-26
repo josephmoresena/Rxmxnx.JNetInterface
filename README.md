@@ -162,6 +162,7 @@ types when declaring methods, function pointers, or delegates.
 - [Java Data Types Mapping](docs/data-types-mapping.md)
 - [IVirtualMachine and IEnvironment Interfaces](docs/jni-interfaces.md)
 - [JNI Reference Handling](docs/jni-references.md)
+- [Functional Interfaces](docs/functional-interfaces.md)
 - [Data Type Metadata](docs/data-types-metadata.md)
 - [Java Class Handling](docs/class-object.md)
 - [Java String and Java Array Handling](docs/native-objects.md)

@@ -26,6 +26,7 @@ However, in some cases, calling `Dispose` may not immediately remove the JNI ref
         - [Fixed Frame](#fixed-frame)
         - [Call Frame](#call-frame)
             - [JNI Native Call Parameters](#jni-native-call-parameters)
+        - [JReferenceTypeToken](#jreferencetypetoken)
 - [Global Reference Handling](#global-reference-handling)
 - [Global Weak Reference Handling](#global-weak-reference-handling)
 
@@ -53,7 +54,9 @@ frame may enforce a limit.
     - Exceeding this limit causes older references to be invalidated (FIFO behavior).
 3. **Call Frame**:
     - Created by the JVM when executing a Java native call.
-    - `JNativeCallAdapter` must be used to notify `Rxmxnx.JNetInterface` of this temporary frame.
+    - Entered through `IFrameAction` or `IFrameFunction<TOutput>` with `WithNativeFrame`. See
+      [JNI Native Calls](functional-interfaces.md#jni-native-calls).
+    - `JNativeCallAdapter` can build the same frame explicitly in `Rxmxnx.JNetInterface`.
 4. **JNI Context Frame**:
     - Created by `Java.Interop` on .NET for Android.
     - `AndroidJniContext` represents a safe JNI context using `Rxmxnx.JNetInterface.Mobile`.
@@ -72,7 +75,9 @@ The `IEnvironment` interface provides the `LocalCapacity` property, allowing:
 - Setting `LocalCapacity` in initial or call frames triggers the JNI `EnsureLocalCapacity` call.
     - If unsuccessful, a `JniException` is thrown.
 - Only one active frame exists per environment at a time.
-- Once a frame is finalized, its parent frame is reactivated, invalidating any references from the finalized frame.
+- Once a frame is finalized, its parent frame is reactivated. A local reference from the finalized frame is no longer
+  valid, and the object that held it no longer has a JNI reference. A local object returned from the frame keeps its
+  reference.
 
 ---  
 
@@ -91,7 +96,10 @@ Alternative overloads allow passing state or returning a result:
 ```csharp
 environment.WithFrame(16, state, (s) => { /* JNI operations */ });
 int result = environment.WithFrame(16, () => { return 42; });
-```  
+```
+
+`WithFrame` also runs an `IFrameAction` or `IFrameFunction<TOutput>` inside the fixed frame. Those overloads belong to
+`Rxmxnx.JNetInterface.Core`. See [Fixed Frames](functional-interfaces.md#fixed-frames).
 
 ##### Notes
 
@@ -103,8 +111,21 @@ int result = environment.WithFrame(16, () => { return 42; });
 
 #### Call Frame
 
-Created automatically by the JVM when executing a Java native call. Native calls must follow specific naming and
-parameter conventions. This feature is not available on `Rxmxnx.JNetInterface.Mobile`.
+Created automatically by the JVM when executing a Java native call. Native calls follow the JNI naming and parameter
+conventions below.
+
+The implementation of a native method enters this frame through `IFrameAction` or `IFrameFunction<TOutput>`:
+
+```csharp
+action.WithNativeFrame(envRef, localRef);
+function.WithNativeFrame(envRef, out JStringLocalRef result, localRef);
+```
+
+`WithNativeFrame` is available in `Rxmxnx.JNetInterface` and `Rxmxnx.JNetInterface.Mobile`. The full contract,
+including reference tokens and return types, is described in
+[JNI Native Calls](functional-interfaces.md#jni-native-calls).
+
+`JNativeCallAdapter` builds the same frame explicitly. It is available only in `Rxmxnx.JNetInterface`.
 
 ##### JNI Native Call Parameters
 
@@ -125,26 +146,26 @@ Example Java native call signatures and corresponding JNI parameters:
 
 *Refer to the [JNI Naming Conventions](jni-classes.md#naming-conventions).*
 
-To create a call frame in `Rxmxnx.JNetInterface`, use:
+To build that frame with `JNativeCallAdapter`, use:
 
 ```csharp
-JNativeCall.Create(JEnvironmentRef envRef).Build();
-JNativeCall.Create(IVirtualMachine vm, JEnvironmentRef envRef).Build();
+JNativeCallAdapter.Create(JEnvironmentRef envRef).Build();
+JNativeCallAdapter.Create(IVirtualMachine vm, JEnvironmentRef envRef).Build();
 ```  
 
 For different cases:
 
 - **Instance methods:**
   ```csharp
-  JNativeCall.Create(JEnvironmentRef envRef, JObjectLocalRef localRef, out JLocalObject jLocal).Build();
-  JNativeCall.Create(IVirtualMachine vm, JEnvironmentRef envRef, JObjectLocalRef localRef, out JLocalObject jLocal).Build();
-  JNativeCall.Create<TObject>(JEnvironmentRef envRef, JObjectLocalRef localRef, out TObject jObject).Build();
-  JNativeCall.Create<TObject>(IVirtualMachine vm, JEnvironmentRef envRef, JObjectLocalRef localRef, out TObject jObject).Build();
+  JNativeCallAdapter.Create(JEnvironmentRef envRef, JObjectLocalRef localRef, out JLocalObject jLocal).Build();
+  JNativeCallAdapter.Create(IVirtualMachine vm, JEnvironmentRef envRef, JObjectLocalRef localRef, out JLocalObject jLocal).Build();
+  JNativeCallAdapter.Create<TObject>(JEnvironmentRef envRef, JObjectLocalRef localRef, out TObject jObject).Build();
+  JNativeCallAdapter.Create<TObject>(IVirtualMachine vm, JEnvironmentRef envRef, JObjectLocalRef localRef, out TObject jObject).Build();
   ```  
 - **Static methods:**
   ```csharp
-  JNativeCall.Create(JEnvironmentRef envRef, JClassLocalRef classRef, out JClassObject jClass).Build();
-  JNativeCall.Create(IVirtualMachine vm, JEnvironmentRef envRef, JClassLocalRef classRef, out JClassObject jClass).Build();
+  JNativeCallAdapter.Create(JEnvironmentRef envRef, JClassLocalRef classRef, out JClassObject jClass).Build();
+  JNativeCallAdapter.Create(IVirtualMachine vm, JEnvironmentRef envRef, JClassLocalRef classRef, out JClassObject jClass).Build();
   ```  
 
 To use reference type argument calls, use `WithParameter` method before call `Build()` method.
@@ -224,6 +245,98 @@ adapter.FinalizeCall<TElement>(JArrayObject<TElement>? result);
   immutable.
 - Local references associated with the target instance/class and parameters cannot be manually released.
   Calling `.Dispose()` has no effect on these references.
+
+---  
+
+#### JReferenceTypeToken
+
+`JReferenceTypeToken` is a sequential `readonly struct` in `Rxmxnx.JNetInterface.Core`. It keeps a JNI local reference
+and the JNI type of that reference together. `Reference` holds the reference as a `JObjectLocalRef`. `NativeType` holds
+the `JNativeType`.
+
+The struct is unmanaged, so a sequence of tokens can be stored with `stackalloc`. A `JReferenceTypeToken` carries more
+information than a raw JNI reference, such as `JObjectLocalRef`, `JClassLocalRef`, `JStringLocalRef`, or
+`JObjectArrayLocalRef`. `WithNativeFrame` receives a `ReadOnlySpan<JReferenceTypeToken>`, and that span can point at
+the stack buffer for the native call:
+
+```csharp
+Span<JReferenceTypeToken> tokens = stackalloc JReferenceTypeToken[2];
+tokens[0] = objectRef;
+tokens[1] = JReferenceTypeToken.Create<JIntegerObject>(integerRef);
+action.WithNativeFrame(envRef, tokens);
+```
+
+`Rxmxnx.JNetInterface` and `Rxmxnx.JNetInterface.Mobile` use the token in their native calls. `WithNativeFrame` receives
+it, and [JNI Native Calls](functional-interfaces.md#jni-native-calls) describes how those calls read it.
+
+`GetMetadata()` retrieves the type metadata when it is available.
+
+Each local reference from the parameter table converts implicitly:
+
+| Local reference         | `NativeType`    | Metadata                 |
+|-------------------------|-----------------|--------------------------|
+| `JObjectLocalRef`       | `JObject`       | —                        |
+| `JClassLocalRef`        | `JClass`        | `JClassObject`           |
+| `JStringLocalRef`       | `JString`       | `JStringObject`          |
+| `JThrowableLocalRef`    | `JThrowable`    | `JThrowableObject`       |
+| `JArrayLocalRef`        | `JArray`        | —                        |
+| `JObjectArrayLocalRef`  | `JObjectArray`  | —                        |
+| `JBooleanArrayLocalRef` | `JBooleanArray` | `JArrayObject<JBoolean>` |
+| `JByteArrayLocalRef`    | `JByteArray`    | `JArrayObject<JByte>`    |
+| `JCharArrayLocalRef`    | `JCharArray`    | `JArrayObject<JChar>`    |
+| `JDoubleArrayLocalRef`  | `JDoubleArray`  | `JArrayObject<JDouble>`  |
+| `JFloatArrayLocalRef`   | `JFloatArray`   | `JArrayObject<JFloat>`   |
+| `JIntArrayLocalRef`     | `JIntArray`     | `JArrayObject<JInt>`     |
+| `JLongArrayLocalRef`    | `JLongArray`    | `JArrayObject<JLong>`    |
+| `JShortArrayLocalRef`   | `JShortArray`   | `JArrayObject<JShort>`   |
+
+With `JObjectLocalRef`, `JArrayLocalRef`, and `JObjectArrayLocalRef`, no metadata can be assumed.
+
+`Create` builds a token from a local reference and the metadata of a mapped type.
+
+| Method                                   | Type argument                                       | Metadata            |
+|------------------------------------------|-----------------------------------------------------|---------------------|
+| `Create<TReference>(JObjectLocalRef)`    | `JReferenceObject` and `IReferenceType<TReference>` | `TReference`        |
+| `Create<TThrowable>(JThrowableLocalRef)` | `JThrowableObject` and `IThrowableType<TThrowable>` | `TThrowable`        |
+| `Create<TElement>(JArrayLocalRef)`       | `IDataType<TElement>`                               | Array of `TElement` |
+| `Create<TElement>(JObjectArrayLocalRef)` | `JReferenceObject` and `IReferenceType<TElement>`   | Array of `TElement` |
+
+`NativeType` follows the metadata type:
+
+| `TReference`             | `NativeType`    |
+|--------------------------|-----------------|
+| `JClassObject`           | `JClass`        |
+| `JStringObject`          | `JString`       |
+| Throwable family         | `JThrowable`    |
+| `JArrayObject<JBoolean>` | `JBooleanArray` |
+| `JArrayObject<JByte>`    | `JByteArray`    |
+| `JArrayObject<JChar>`    | `JCharArray`    |
+| `JArrayObject<JDouble>`  | `JDoubleArray`  |
+| `JArrayObject<JFloat>`   | `JFloatArray`   |
+| `JArrayObject<JInt>`     | `JIntArray`     |
+| `JArrayObject<JLong>`    | `JLongArray`    |
+| `JArrayObject<JShort>`   | `JShortArray`   |
+| Any other array          | `JObjectArray`  |
+| Any other reference type | `JObject`       |
+
+For the `Create<TElement>(JArrayLocalRef)` overload:
+
+| `TElement`        | `NativeType`    |
+|-------------------|-----------------|
+| `JBoolean`        | `JBooleanArray` |
+| `JByte`           | `JByteArray`    |
+| `JChar`           | `JCharArray`    |
+| `JDouble`         | `JDoubleArray`  |
+| `JFloat`          | `JFloatArray`   |
+| `JInt`            | `JIntArray`     |
+| `JLong`           | `JLongArray`    |
+| `JShort`          | `JShortArray`   |
+| Any other element | `JObjectArray`  |
+
+```csharp
+JReferenceTypeToken token = JReferenceTypeToken.Create<JIntegerObject>(objectRef);
+JReferenceTypeToken classToken = classRef;
+```
 
 ---  
 
