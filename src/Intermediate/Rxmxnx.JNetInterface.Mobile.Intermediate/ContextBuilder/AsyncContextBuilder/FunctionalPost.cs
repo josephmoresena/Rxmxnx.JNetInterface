@@ -32,7 +32,7 @@ public partial struct AsyncContextBuilder
 	/// <returns>Asynchronous <paramref name="func"/> invocation operation.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Task<TResult> Post<TResult, TFunction>(SynchronizationContext context, TFunction func,
-		Boolean useWeakGlobal = true) where TFunction : struct, IAndroidNativeFunction<TResult>
+		Boolean useWeakGlobal = true) where TFunction : IAndroidNativeFunction<TResult>
 	{
 		AsyncFunctionState<TResult, TFunction> taskState =
 			new(AndroidJniHost.GetAndroidHost(), this, useWeakGlobal) { Function = func, };
