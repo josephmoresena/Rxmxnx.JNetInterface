@@ -50,7 +50,7 @@ public abstract partial class IndeterminateCall
 #endif
 	{
 		if (args is null)
-			return this.NewCall<TObject, ICallArgument.Empty>(env, ref ICallArgument.Default);
+			return this.NewCall<TObject, DefaultCallArgument>(env, ref ICallArgument.Default);
 		if (!typeof(TArgs).IsValueType)
 		{
 			NonGenericCallArgument nonGeneric = NonGenericCallArgument.Create(args);

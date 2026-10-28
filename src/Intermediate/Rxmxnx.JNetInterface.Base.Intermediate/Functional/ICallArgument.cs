@@ -8,9 +8,7 @@ public interface ICallArgument
 	/// <summary>
 	/// Internal instance.
 	/// </summary>
-#pragma warning disable CA2211
-	public static Empty Default = default;
-#pragma warning restore CA2211
+	public static ref DefaultCallArgument Default => ref DefaultCallArgument.Instance;
 
 	/// <summary>
 	/// Configures the argument values into the specified slot.
@@ -23,20 +21,4 @@ public interface ICallArgument
 	/// <remarks>Use this method for trace.</remarks>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	protected internal String? ToTraceText() => this.ToString();
-
-	/// <summary>
-	/// Default empty argument.
-	/// </summary>
-	public readonly struct Empty : ICallArgument
-	{
-		/// <inheritdoc/>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Configure<TSlot>(TSlot slot) where TSlot : IParameterSlot
-		{
-			// NONE
-		}
-		/// <inheritdoc/>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public String ToTraceText() => String.Empty;
-	}
 }

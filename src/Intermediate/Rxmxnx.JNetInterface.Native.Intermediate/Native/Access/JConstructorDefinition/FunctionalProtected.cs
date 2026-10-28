@@ -46,7 +46,7 @@ public partial class JConstructorDefinition
 	{
 		JClassObject jClass = env.ClassFeature.GetClass<TObject>();
 		if (args is null)
-			return this.New<TObject, ICallArgument.Empty>(jClass, ref ICallArgument.Default);
+			return this.New<TObject, DefaultCallArgument>(jClass, ref ICallArgument.Default);
 		if (typeof(TArgs).IsValueType)
 			return this.New<TObject, TArgs>(jClass, ref args);
 		NonGenericCallArgument nonGeneric = NonGenericCallArgument.Create(args);
@@ -68,7 +68,7 @@ public partial class JConstructorDefinition
 #endif
 	{
 		if (args is null)
-			return this.NewReflected<JLocalObject, ICallArgument.Empty>(jConstructor, ref ICallArgument.Default);
+			return this.NewReflected<JLocalObject, DefaultCallArgument>(jConstructor, ref ICallArgument.Default);
 		if (typeof(TArgs).IsValueType)
 		{
 			IEnvironment env = jConstructor.Environment;
@@ -95,7 +95,7 @@ public partial class JConstructorDefinition
 #endif
 	{
 		if (args is null)
-			return this.NewReflected<TObject, ICallArgument.Empty>(jConstructor, ref ICallArgument.Default);
+			return this.NewReflected<TObject, DefaultCallArgument>(jConstructor, ref ICallArgument.Default);
 		if (typeof(TArgs).IsValueType)
 		{
 			IEnvironment env = jConstructor.Environment;

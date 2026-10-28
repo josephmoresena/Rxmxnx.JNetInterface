@@ -6,7 +6,7 @@ namespace Rxmxnx.JNetInterface.Native.Access;
 public readonly ref struct IndeterminateResult
 {
 	/// <summary>
-	/// Empty result.
+	/// DefaultCallArgument result.
 	/// </summary>
 	public static IndeterminateResult Empty => default;
 

@@ -34,7 +34,7 @@ public partial class JConstructorDefinition
 		/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
 		[UnconditionalSuppressMessage("Trimming", "IL2091")]
 		public TObject New<TObject>(IEnvironment env) where TObject : JLocalObject, IClassType<TObject>
-			=> base.New<TObject, ICallArgument.Empty>(env, ref ICallArgument.Default);
+			=> base.New<TObject, DefaultCallArgument>(env, ref ICallArgument.Default);
 		/// <summary>
 		/// Invokes a reflected constructor which matches with current definition.
 		/// </summary>
@@ -51,6 +51,6 @@ public partial class JConstructorDefinition
 		[UnconditionalSuppressMessage("Trimming", "IL2091")]
 		public TObject NewReflected<TObject>(JConstructorObject jConstructor)
 			where TObject : JLocalObject, IClassType<TObject>
-			=> base.NewReflected<TObject, ICallArgument.Empty>(jConstructor, ref ICallArgument.Default);
+			=> base.NewReflected<TObject, DefaultCallArgument>(jConstructor, ref ICallArgument.Default);
 	}
 }

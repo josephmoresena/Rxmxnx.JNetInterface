@@ -85,7 +85,7 @@ internal sealed partial class EnvironmentCore
 		using INativeTransaction jniTransaction = core.GetInstanceTransaction(
 			jClassClass, jClass, functionDefinition, out JObjectLocalRef localRef, out JMethodId methodId);
 		JTrace.CallMethod(jClass, jClassClass, functionDefinition, false);
-		return core.CallObjectFunction<JModuleObject, ICallArgument.Empty>(
+		return core.CallObjectFunction<JModuleObject, DefaultCallArgument>(
 			functionDefinition, localRef, default, ref ICallArgument.Default, jniTransaction, methodId);
 	}
 #endif
