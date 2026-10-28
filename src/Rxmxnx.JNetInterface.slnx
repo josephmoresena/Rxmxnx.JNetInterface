@@ -55,17 +55,6 @@
         <File Path="..\ZipAndClean.ps1" />
     </Folder>
     <Folder Name="/Global/">
-        <File Path="..\.github\workflows\cross-actions.yml" />
-        <File Path="..\.github\workflows\freebsd-actions.yml" />
-        <File Path="..\.github\workflows\freebsd-arm64-actions.yml" />
-        <File Path="..\.github\workflows\release.yml" />
-        <File Path="..\.github\workflows\android-actions.yml" />
-        <File Path="..\.github\workflows\build.yml" />
-        <File Path="..\.gitignore" />
-        <File Path="..\CONTRIBUTING.md" />
-        <File Path="..\LICENSE.md" />
-        <File Path="..\README.md" />
-        <File Path="..\ZipAndClean.ps1" />
         <File Path="Library.props" />
         <File Path="Mobile.Library.props" />
         <File Path="PInvoke.Reference.props" />
