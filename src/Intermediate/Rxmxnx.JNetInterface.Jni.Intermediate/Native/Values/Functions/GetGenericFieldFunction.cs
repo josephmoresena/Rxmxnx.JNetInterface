@@ -42,7 +42,8 @@ internal readonly unsafe struct GetGenericFieldFunction<TReceiver, TField> : IGe
 					envRef, receiver.Pointer, fieldId),
 				JNativeType.JFloat when SystemInfo.IsWindows => this._function.Windows.Float(
 					envRef, receiver.Pointer, fieldId),
-				JNativeType.JInt when SystemInfo.IsWindows => this._function.Windows.Int(envRef, receiver.Pointer, fieldId),
+				JNativeType.JInt when SystemInfo.IsWindows => this._function.Windows.Int(
+					envRef, receiver.Pointer, fieldId),
 				JNativeType.JLong when SystemInfo.IsWindows => this._function.Windows.Long(
 					envRef, receiver.Pointer, fieldId),
 				JNativeType.JShort when SystemInfo.IsWindows => this._function.Windows.Short(

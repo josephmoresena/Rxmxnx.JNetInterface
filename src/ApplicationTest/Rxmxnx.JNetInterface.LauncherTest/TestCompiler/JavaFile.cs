@@ -1,4 +1,5 @@
 // ReSharper disable UseRawString
+
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public partial class TestCompiler

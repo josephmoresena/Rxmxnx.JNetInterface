@@ -10,7 +10,8 @@ public partial class JVirtualMachineTests
 		using IFixedPointer.IDisposable ctx = classTypeMetadata.Information.GetFixedPointer();
 		try
 		{
-			const JModifierObject.Modifiers modifiers = JModifierObject.Modifiers.Public | JModifierObject.Modifiers.Final;
+			const JModifierObject.Modifiers modifiers =
+				JModifierObject.Modifiers.Public | JModifierObject.Modifiers.Final;
 			JClassLocalRef classRef = JVirtualMachineTests.fixture.Create<JClassLocalRef>();
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
 			JMethodDefinition.Parameterless method1 = new("method1"u8);

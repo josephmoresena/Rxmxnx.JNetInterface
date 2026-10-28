@@ -1,4 +1,5 @@
 // ReSharper disable UnusedMemberInSuper.Global
+
 namespace Rxmxnx.JNetInterface.Restricted;
 
 internal partial interface IAccessFeature

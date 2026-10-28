@@ -22,11 +22,11 @@ internal readonly struct NonGenericFrameAction : IFrameAction
 	/// <returns>A new <see cref="NonGenericFrameAction"/> instance.</returns>
 	public static NonGenericFrameAction Create<TAction>(TAction action)
 #if !NET9_0_OR_GREATER
-			where TAction : IFrameAction
-		{
-			Debug.Assert(!typeof(TAction).IsValueType);
-			return new() { Value = action, };
-		}
+		where TAction : IFrameAction
+	{
+		Debug.Assert(!typeof(TAction).IsValueType);
+		return new() { Value = action, };
+	}
 #else
 		where TAction : IFrameAction, allows ref struct
 	{

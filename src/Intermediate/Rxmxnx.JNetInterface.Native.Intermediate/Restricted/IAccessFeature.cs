@@ -80,7 +80,7 @@ internal partial interface IAccessFeature
 	/// <param name="value">The field value to set to.</param>
 	void SetStaticField<TField>(JFieldObject jField, JFieldDefinition definition, TField? value)
 		where TField : IDataType<TField>, IObject;
-	
+
 	/// <summary>
 	/// Register <paramref name="calls"/> as native methods in the current class.
 	/// </summary>

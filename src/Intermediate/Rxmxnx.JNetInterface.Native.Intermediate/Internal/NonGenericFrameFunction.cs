@@ -22,11 +22,11 @@ internal readonly struct NonGenericFrameFunction<TOutput> : IFrameFunction<TOutp
 	/// <returns>A new <see cref="NonGenericFrameFunction{TOutput}"/> instance.</returns>
 	public static NonGenericFrameFunction<TOutput> Create<TFunction>(TFunction func)
 #if !NET9_0_OR_GREATER
-			where TFunction : IFrameFunction<TOutput>
-		{
-			Debug.Assert(!typeof(TFunction).IsValueType);
-			return new() { Value = func, };
-		}
+		where TFunction : IFrameFunction<TOutput>
+	{
+		Debug.Assert(!typeof(TFunction).IsValueType);
+		return new() { Value = func, };
+	}
 #else
 		where TFunction : IFrameFunction<TOutput>, allows ref struct
 	{

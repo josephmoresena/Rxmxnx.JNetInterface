@@ -1,4 +1,5 @@
 // ReSharper disable UnusedMember.Local
+
 namespace Rxmxnx.JNetInterface.Tests.Native;
 
 [ExcludeFromCodeCoverage]

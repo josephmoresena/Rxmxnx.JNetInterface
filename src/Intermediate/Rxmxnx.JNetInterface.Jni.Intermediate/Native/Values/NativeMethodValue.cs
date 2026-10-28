@@ -1,4 +1,5 @@
 ﻿// ReSharper disable UnusedAutoPropertyAccessor.Global
+
 namespace Rxmxnx.JNetInterface.Native.Values;
 
 /// <summary>

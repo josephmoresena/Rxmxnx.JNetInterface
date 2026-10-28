@@ -7,15 +7,6 @@ namespace Rxmxnx.JNetInterface;
 // ReSharper disable once ClassCannotBeInstantiated
 partial class JEnvironment
 {
-#if !PACKAGE
-	/// <summary>
-	/// Local cache.
-	/// </summary>
-	internal LocalCache LocalCache => this._m.LocalCache;
-	/// <inheritdoc cref="IClassFeature.ClassObject"/>
-	internal JClassObject ClassObject => this._m.Core.ClassObject;
-#endif
-
 	/// <summary>
 	/// Sends JNI fatal error signal to VM.
 	/// </summary>
@@ -34,4 +25,12 @@ partial class JEnvironment
 		JVirtualMachine vm = (JVirtualMachine)JVirtualMachine.GetVirtualMachine(vmRef);
 		return vm.GetEnvironment(reference);
 	}
+#if !PACKAGE
+	/// <summary>
+	/// Local cache.
+	/// </summary>
+	internal LocalCache LocalCache => this._m.LocalCache;
+	/// <inheritdoc cref="IClassFeature.ClassObject"/>
+	internal JClassObject ClassObject => this._m.Core.ClassObject;
+#endif
 }

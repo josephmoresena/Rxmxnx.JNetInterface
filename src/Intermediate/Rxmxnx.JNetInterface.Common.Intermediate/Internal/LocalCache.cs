@@ -9,14 +9,13 @@ internal class LocalCache
 #endif
 {
 	/// <summary>
-	/// Object dictionary.
-	/// </summary>
-	private readonly Dictionary<JObjectLocalRef, ObjectLifetime> _objects;
-
-	/// <summary>
 	/// Internal id.
 	/// </summary>
 	public readonly Guid Id;
+	/// <summary>
+	/// Object dictionary.
+	/// </summary>
+	private readonly Dictionary<JObjectLocalRef, ObjectLifetime> _objects;
 	/// <summary>
 	/// Previous cache.
 	/// </summary>

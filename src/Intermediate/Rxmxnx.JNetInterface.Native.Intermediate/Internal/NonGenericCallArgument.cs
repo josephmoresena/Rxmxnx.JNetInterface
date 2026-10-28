@@ -29,11 +29,11 @@ internal readonly struct NonGenericCallArgument : ICallArgument
 	/// <returns>A new <see cref="NonGenericCallArgument"/> encapsulating the provided call argument.</returns>
 	public static NonGenericCallArgument Create<TArgs>(TArgs args)
 #if !NET9_0_OR_GREATER
-			where TArgs : ICallArgument
-		{
-			Debug.Assert(!typeof(TArgs).IsValueType);
-			return new() { Value = args, };
-		}
+		where TArgs : ICallArgument
+	{
+		Debug.Assert(!typeof(TArgs).IsValueType);
+		return new() { Value = args, };
+	}
 #else
 		where TArgs : ICallArgument, allows ref struct
 	{

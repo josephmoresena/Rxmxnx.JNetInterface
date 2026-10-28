@@ -6,8 +6,7 @@ public ref partial struct SyncContextBuilder
 	/// <summary>
 	/// Object state for <see cref="SynchronizationContext.Send(SendOrPostCallback, Object)"/>
 	/// </summary>
-	private sealed unsafe class SendFunctionState<TResult, TFunction>(
-		SyncContextBuilder* builderPtr)
+	private sealed unsafe class SendFunctionState<TResult, TFunction>(SyncContextBuilder* builderPtr)
 		: SendState<TResult>(builderPtr) where TFunction : IAndroidNativeFunction<TResult>
 #if NET9_0_OR_GREATER
 		, allows ref struct

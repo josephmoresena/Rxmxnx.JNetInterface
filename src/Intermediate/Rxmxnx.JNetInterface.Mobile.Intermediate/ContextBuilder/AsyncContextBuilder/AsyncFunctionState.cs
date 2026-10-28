@@ -11,7 +11,8 @@ public partial struct AsyncContextBuilder
 		IVirtualMachineHost host,
 		AsyncContextBuilder builder,
 		Boolean useWeakGlobal,
-		Boolean isDaemon = false) : AsyncState<TResult>(host, builder, useWeakGlobal, isDaemon) where TFunction : IAndroidNativeFunction<TResult>
+		Boolean isDaemon = false)
+		: AsyncState<TResult>(host, builder, useWeakGlobal, isDaemon) where TFunction : IAndroidNativeFunction<TResult>
 	{
 		/// <summary>
 		/// Internal function to be executed.

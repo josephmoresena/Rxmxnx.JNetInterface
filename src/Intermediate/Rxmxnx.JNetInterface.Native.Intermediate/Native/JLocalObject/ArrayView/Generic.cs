@@ -36,6 +36,8 @@ public partial class JLocalObject
 			internal Generic(JLocalObject jLocal, JClassObject? jClass) : base(jLocal, jClass) { }
 			/// <inheritdoc/>
 			internal Generic(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+
+			JArrayObject IWrapper<JArrayObject>.Value => this;
 			/// <inheritdoc/>
 			internal override void ValidateObjectElement(JReferenceObject? jObject)
 			{
@@ -44,8 +46,6 @@ public partial class JLocalObject
 					jObject is TElement;
 				CommonValidationUtilities.ThrowIfInvalidCast(IDataType.GetMetadata<TElement>(), result);
 			}
-
-			JArrayObject IWrapper<JArrayObject>.Value => this;
 
 			/// <inheritdoc/>
 			public override String ToString() => $"{this.GetStringValue()} {this.Reference}";

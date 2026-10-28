@@ -1,4 +1,5 @@
 // ReSharper disable MemberCanBePrivate.Global
+
 namespace Rxmxnx.JNetInterface.Native.Access;
 
 // ReSharper disable once ClassCannotBeInstantiated

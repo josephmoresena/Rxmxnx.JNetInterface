@@ -55,7 +55,8 @@ internal readonly unsafe struct CallNonVirtualGenericFunction<TResult> : ICallNo
 					envRef, localRef, classRef, methodId, args),
 				JNativeType.JShort when SystemInfo.IsWindows => this._function.Windows.Short(
 					envRef, localRef, classRef, methodId, args),
-				_ when SystemInfo.IsWindows => this._function.Windows.Object(envRef, localRef, classRef, methodId, args),
+				_ when SystemInfo.IsWindows =>
+					this._function.Windows.Object(envRef, localRef, classRef, methodId, args),
 #endif
 				JNativeType.JBoolean => this._function.Unix.Boolean(envRef, localRef, classRef, methodId, args),
 				JNativeType.JByte => this._function.Unix.Byte(envRef, localRef, classRef, methodId, args),

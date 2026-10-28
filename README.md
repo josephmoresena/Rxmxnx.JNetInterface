@@ -82,16 +82,16 @@ platform.
 
 ### Runtime implementations
 
-| Capability                                      | `Rxmxnx.JNetInterface`       | `Rxmxnx.JNetInterface.Mobile`                                 |
-|-------------------------------------------------|------------------------------|---------------------------------------------------------------|
-| **JNI implementation**                          | Direct JNI                   | Direct JNI with `java.interop` interoperability               |
-| **JVM runtime library management**              | ✔                            | ✘                                                             |
-| **JNI Invocation API**                          | ✔                            | ✘                                                             |
-| **JNI Native Interface**                        | ✔                            | ✔                                                             |
-| **Desktop JVM support**                         | ✔                            | ✘                                                             |
-| **Android native components**                   | ✔ (`linux-bionic` NativeAOT) | ✘                                                             |
-| **.NET for Android applications and libraries** | ✘                            | ✔                                                             |
-| **Supported .NET runtimes**                     | CoreCLR, NativeAOT           | Mono, MonoAOT, NativeAOT, and other .NET for Android runtimes |
+| Capability                                      | `Rxmxnx.JNetInterface`        | `Rxmxnx.JNetInterface.Mobile`                                 |
+|-------------------------------------------------|-------------------------------|---------------------------------------------------------------|
+| **JNI implementation**                          | Direct JNI                    | Direct JNI with `java.interop` interoperability               |
+| **JVM runtime library management**              | ✔                            | ✘                                                            |
+| **JNI Invocation API**                          | ✔                            | ✘                                                            |
+| **JNI Native Interface**                        | ✔                            | ✔                                                            |
+| **Desktop JVM support**                         | ✔                            | ✘                                                            |
+| **Android native components**                   | ✔ (`linux-bionic` NativeAOT) | ✘                                                            |
+| **.NET for Android applications and libraries** | ✘                            | ✔                                                            |
+| **Supported .NET runtimes**                     | CoreCLR, NativeAOT            | Mono, MonoAOT, NativeAOT, and other .NET for Android runtimes |
 
 A simple decision rule:
 

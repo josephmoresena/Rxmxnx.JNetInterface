@@ -76,7 +76,7 @@ public partial class JNativeCallback
 			{
 				EventDispatchedAction action = new(ws.Value);
 #if !NET9_0_OR_GREATER
-			action.WithNativeFrame(environmentRef, [JReferenceTypeToken.Create<JAwtEventObject>(localRef),]);
+				action.WithNativeFrame(environmentRef, [JReferenceTypeToken.Create<JAwtEventObject>(localRef),]);
 #else
 				action.WithNativeFrame(environmentRef, JReferenceTypeToken.Create<JAwtEventObject>(localRef));
 #endif

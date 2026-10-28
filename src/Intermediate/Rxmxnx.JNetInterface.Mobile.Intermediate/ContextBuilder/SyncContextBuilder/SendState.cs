@@ -57,7 +57,8 @@ public ref partial struct SyncContextBuilder
 	private abstract unsafe class SendState<TResult> : SendState
 	{
 		/// <summary>
-		/// Represents the result of the operation executed within <see cref="SynchronizationContext.Send(SendOrPostCallback, Object)"/>.
+		/// Represents the result of the operation executed within
+		/// <see cref="SynchronizationContext.Send(SendOrPostCallback, Object)"/>.
 		/// </summary>
 		public TResult? Result { get; protected set; }
 

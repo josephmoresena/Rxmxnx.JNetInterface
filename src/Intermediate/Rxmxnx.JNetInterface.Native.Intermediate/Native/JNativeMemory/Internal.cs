@@ -60,7 +60,7 @@ public abstract partial class JNativeMemory
 	/// </summary>
 	/// <param name="value">Output. A <see cref="FixedPointerValue"/> instance.</param>
 	/// <returns>
-	/// <see langword="true" /> if the current instance was successfully converted to <see cref="FixedPointerValue"/>
+	/// <see langword="true"/> if the current instance was successfully converted to <see cref="FixedPointerValue"/>
 	/// value; otherwise, <see langword="false"/>.
 	/// </returns>
 	internal Boolean TryCreateFixedValue(out FixedPointerValue value)

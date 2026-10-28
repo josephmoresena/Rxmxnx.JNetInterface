@@ -83,7 +83,7 @@ public static partial class NativeCallExtensions
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void WithNativeFrame<TAction>(this ref TAction action, JEnvironmentRef envRef,
 #if !NET9_0_OR_GREATER
-		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default) where TAction :struct, IFrameAction
+		scoped ReadOnlySpan<JReferenceTypeToken> tokens = default) where TAction : struct, IFrameAction
 #else
 		params ReadOnlySpan<JReferenceTypeToken> tokens) where TAction : struct, IFrameAction, allows ref struct
 #endif

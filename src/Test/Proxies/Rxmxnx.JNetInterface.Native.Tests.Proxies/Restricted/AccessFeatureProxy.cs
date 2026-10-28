@@ -1,4 +1,5 @@
 // ReSharper disable MemberCanBeProtected.Global
+
 namespace Rxmxnx.JNetInterface.Tests.Restricted;
 
 [ExcludeFromCodeCoverage]

@@ -33,6 +33,12 @@ public class MainActivity : Activity, View.IOnClickListener, IAndroidNativeFunct
 
 	public MainActivity() => AndroidJniHost.CreateSyncContext().With(this).Invoke(this, out this._mobileState);
 
+	MobileState IAndroidNativeFunction<MobileState>.Apply(AndroidJniContext jctx)
+	{
+		using JClassObject androidToastClass = JClassObject.GetClass<AndroidToast>(jctx.Environment);
+		return new(jctx.Objects[0]!.Global, androidToastClass.Global);
+	}
+
 	public void OnClick(View? v)
 	{
 		if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
@@ -69,12 +75,6 @@ public class MainActivity : Activity, View.IOnClickListener, IAndroidNativeFunct
 		this._backgroundThread.Wait();
 		this.ReleaseUnmanagedResources();
 		base.Dispose(disposing);
-	}
-
-	MobileState IAndroidNativeFunction<MobileState>.Apply(AndroidJniContext jctx)
-	{
-		using JClassObject androidToastClass = JClassObject.GetClass<AndroidToast>(jctx.Environment);
-		return new(jctx.Objects[0]!.Global, androidToastClass.Global);
 	}
 
 	~MainActivity() { this.ReleaseUnmanagedResources(); }

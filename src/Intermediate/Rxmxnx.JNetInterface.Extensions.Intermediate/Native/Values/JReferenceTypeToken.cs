@@ -272,7 +272,10 @@ public readonly unsafe struct JReferenceTypeToken
 	/// <summary>
 	/// Determines the corresponding <see cref="JNativeType"/> for the specified reference type parameter.
 	/// </summary>
-	/// <typeparam name="TReference">The reference type for which the corresponding native type is resolved. It must inherit from <see cref="JReferenceObject"/> and implement <see cref="IReferenceType{TReference}"/>.</typeparam>
+	/// <typeparam name="TReference">
+	/// The reference type for which the corresponding native type is resolved. It must inherit
+	/// from <see cref="JReferenceObject"/> and implement <see cref="IReferenceType{TReference}"/>.
+	/// </typeparam>
 	/// <returns>The <see cref="JNativeType"/> value that represents the native type associated with the given reference type.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
