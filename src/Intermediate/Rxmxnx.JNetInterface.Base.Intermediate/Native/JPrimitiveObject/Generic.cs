@@ -65,6 +65,6 @@ internal partial class JPrimitiveObject
 			offset += this.SizeOf;
 		}
 		/// <inheritdoc/>
-		public abstract void Configure<TSlot>(TSlot slot, JCallDefinition callDefinition) where TSlot : IParameterSlot;
+		public abstract void Configure<TSlot>(TSlot slot) where TSlot : IParameterSlot;
 	}
 }

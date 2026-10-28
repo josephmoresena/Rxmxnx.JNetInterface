@@ -8,12 +8,14 @@ internal partial interface IAccessFeature
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	private readonly struct DefaultSlot(Int32 count) : IParameterSlot
+	private readonly struct DefaultSlot(JCallDefinition definition) : IParameterSlot
 	{
 		/// <summary>
 		/// Internal instance.
 		/// </summary>
-		private readonly IObject?[] _args = count > 0 ? new IObject?[count] : [];
+		private readonly IObject?[] _args = definition.Count > 0 ? new IObject?[definition.Count] : [];
+
+		JCallDefinition IParameterSlot.CallDefinition => definition;
 
 		void IParameterSlot.SetParameterValue<TObject>(Byte index, TObject? value) where TObject : default
 			=> this._args[index] = value;

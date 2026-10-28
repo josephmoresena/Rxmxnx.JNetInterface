@@ -11,12 +11,12 @@ internal readonly struct NonGenericCallArgument : ICallArgument
 	private ICallArgument? Value { get; init; }
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	void ICallArgument.Configure<TSlot>(TSlot slot, JCallDefinition callDefinition)
+	void ICallArgument.Configure<TSlot>(TSlot slot)
 	{
 		if (this.Value is not null)
-			this.Value.Configure(slot, callDefinition);
+			this.Value.Configure(slot);
 		else
-			ICallArgument.Default.Configure(slot, callDefinition);
+			ICallArgument.Default.Configure(slot);
 	}
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	String ICallArgument.ToTraceText() => this.Value?.ToTraceText() ?? String.Empty;

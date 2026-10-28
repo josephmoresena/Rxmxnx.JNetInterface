@@ -23,7 +23,7 @@ public abstract partial class IndeterminateCall
 #endif
 	{
 		JConstructorDefinition definition = NativeValidationUtilities.ThrowIfNotConstructor(this.Definition);
-		return IndeterminateCall.NewCall<JLocalObject, TArgs>(definition, jClass, ref Unsafe.AsRef(in args));
+		return IndeterminateCall.NewCall<JLocalObject, TArgs>(definition, jClass, ref args);
 	}
 
 	/// <summary>
@@ -49,6 +49,6 @@ public abstract partial class IndeterminateCall
 		NativeValidationUtilities.ThrowIfAbstractClass(IClassType.GetMetadata<TObject>());
 		JConstructorDefinition definition = NativeValidationUtilities.ThrowIfNotConstructor(this.Definition);
 		JClassObject jClass = JClassObject.GetClass<TObject>(env);
-		return IndeterminateCall.NewCall<TObject, TArgs>(definition, jClass, ref Unsafe.AsRef(in args));
+		return IndeterminateCall.NewCall<TObject, TArgs>(definition, jClass, ref args);
 	}
 }

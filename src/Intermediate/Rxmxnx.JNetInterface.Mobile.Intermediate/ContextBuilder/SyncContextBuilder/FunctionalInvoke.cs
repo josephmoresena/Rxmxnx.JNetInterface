@@ -37,7 +37,7 @@ public ref partial struct SyncContextBuilder
 #else
 		where TAction : struct, IAndroidNativeAction, allows ref struct
 #endif
-		=> this.ActionInvoke(ref Unsafe.AsRef(in action));
+		=> this.ActionInvoke(ref action);
 	/// <summary>
 	/// Creates a new JNI context, invokes <paramref name="func"/> and returns its result.
 	/// </summary>

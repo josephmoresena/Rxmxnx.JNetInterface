@@ -51,8 +51,7 @@ internal sealed partial class EnvironmentCore
 		public LegacyCallArgument(ReadOnlySpan<IObject?> args) => this.Values = args;
 #endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		void ICallArgument.Configure<TSlot>(TSlot slot, JCallDefinition callDefinition)
-			=> slot.SetParameterValues(0, this.Values);
+		void ICallArgument.Configure<TSlot>(TSlot slot) => slot.SetParameterValues(0, this.Values);
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		String ICallArgument.ToTraceText() => this.ToString();
 

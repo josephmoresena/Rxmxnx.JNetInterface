@@ -88,6 +88,5 @@ internal sealed unsafe partial class JPrimitiveObject<TPrimitive> : JPrimitiveOb
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public override void Configure<TSlot>(TSlot slot, JCallDefinition callDefinition)
-		=> this.Value.Configure(slot, callDefinition);
+	public override void Configure<TSlot>(TSlot slot) => this.Value.Configure(slot);
 }

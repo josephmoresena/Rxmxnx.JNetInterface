@@ -11,8 +11,14 @@ internal sealed partial class EnvironmentCore
 	/// </summary>
 	/// <param name="jClass">The <see cref="JClassObject"/> instance for which native methods are being registered.</param>
 	/// <param name="calls">A read-only list of native method call entries representing the methods to be registered.</param>
-	/// <param name="buffer">A span of <see cref="NativeMethodValue"/> used to store structured method definitions for registration.</param>
-	/// <param name="handles">A list of <see cref="MemoryHandle"/> objects used to track pinned memory resources during the operation.</param>
+	/// <param name="buffer">
+	/// A span of <see cref="NativeMethodValue"/> used to store structured method definitions for
+	/// registration.
+	/// </param>
+	/// <param name="handles">
+	/// A list of <see cref="MemoryHandle"/> objects used to track pinned memory resources during the
+	/// operation.
+	/// </param>
 	/// <param name="nativeInterface">The native interface instance providing functions to register native methods.</param>
 	private unsafe void RegisterNatives(JClassObject jClass, IReadOnlyList<JNativeCallEntry> calls,
 		Span<NativeMethodValue> buffer, List<MemoryHandle> handles, NativeInterface nativeInterface)
@@ -175,8 +181,8 @@ internal sealed partial class EnvironmentCore
 		JObjectLocalRef result;
 		try
 		{
-			ParameterSlot slot = new(this, jniTransaction, buffer, definition.Count);
-			slot.Configure(ref args, definition);
+			ParameterSlot slot = new(this, jniTransaction, buffer, definition);
+			slot.Configure(ref args);
 			result = !classRef.HasValue ?
 				instanceMethodFunctions.MethodFunctions.CallObjectMethod.Call(
 					this.Reference, localRef, methodId, buffer) :
@@ -222,8 +228,8 @@ internal sealed partial class EnvironmentCore
 		JObjectLocalRef localRef;
 		try
 		{
-			ParameterSlot slot = new(this, jniTransaction, buffer, definition.Count);
-			slot.Configure(ref args, definition);
+			ParameterSlot slot = new(this, jniTransaction, buffer, definition);
+			slot.Configure(ref args);
 			localRef = nativeInterface.StaticMethodFunctions.CallObjectMethod.Call(
 				this.Reference, classRef, methodId, buffer);
 		}
@@ -263,8 +269,8 @@ internal sealed partial class EnvironmentCore
 			requiredBytes > 0 ? (ValPtr<JValue>)NativeMemory.Alloc((UIntPtr)requiredBytes) : ValPtr<JValue>.Zero;
 		try
 		{
-			ParameterSlot slot = new(this, jniTransaction, buffer, definition.Count);
-			slot.Configure(ref args, definition);
+			ParameterSlot slot = new(this, jniTransaction, buffer, definition);
+			slot.Configure(ref args);
 			if (!classRef.HasValue)
 				instanceMethodFunctions.MethodFunctions.CallVoidMethod.Call(this.Reference, localRef, methodId, buffer);
 			else
@@ -304,8 +310,8 @@ internal sealed partial class EnvironmentCore
 			requiredBytes > 0 ? (ValPtr<JValue>)NativeMemory.Alloc((UIntPtr)requiredBytes) : ValPtr<JValue>.Zero;
 		try
 		{
-			ParameterSlot slot = new(this, jniTransaction, buffer, definition.Count);
-			slot.Configure(ref args, definition);
+			ParameterSlot slot = new(this, jniTransaction, buffer, definition);
+			slot.Configure(ref args);
 			nativeInterface.StaticMethodFunctions.CallVoidMethod.Call(this.Reference, classRef, methodId, buffer);
 		}
 		finally
@@ -367,8 +373,8 @@ internal sealed partial class EnvironmentCore
 		JObjectLocalRef localRef;
 		try
 		{
-			ParameterSlot slot = new(this, jniTransaction, buffer, definition.Count);
-			slot.Configure(ref args, definition);
+			ParameterSlot slot = new(this, jniTransaction, buffer, definition);
+			slot.Configure(ref args);
 			localRef = nativeInterface.ObjectFunctions.NewObject.Call(this.Reference, classRef, methodId, buffer);
 		}
 		finally

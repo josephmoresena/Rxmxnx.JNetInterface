@@ -17,8 +17,7 @@ public interface ICallArgument
 	/// </summary>
 	/// <typeparam name="TSlot">The <see cref="IParameterSlot"/> type of the slot to configure.</typeparam>
 	/// <param name="slot">The call parameter slot to configure.</param>
-	/// <param name="callDefinition">The JNI call definition.</param>
-	void Configure<TSlot>(TSlot slot, JCallDefinition callDefinition) where TSlot : IParameterSlot;
+	void Configure<TSlot>(TSlot slot) where TSlot : IParameterSlot;
 
 	/// <inheritdoc cref="Object.ToString()"/>
 	/// <remarks>Use this method for trace.</remarks>
@@ -32,7 +31,7 @@ public interface ICallArgument
 	{
 		/// <inheritdoc/>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Configure<TSlot>(TSlot slot, JCallDefinition callDefinition) where TSlot : IParameterSlot
+		public void Configure<TSlot>(TSlot slot) where TSlot : IParameterSlot
 		{
 			// NONE
 		}

@@ -1,4 +1,5 @@
 // ReSharper disable UnusedMemberInSuper.Global
+
 namespace Rxmxnx.JNetInterface.Restricted;
 
 internal partial interface IAccessFeature
@@ -19,8 +20,8 @@ internal partial interface IAccessFeature
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
-		DefaultSlot slot = new(definition.Count);
-		args.Configure(slot, definition);
+		DefaultSlot slot = new(definition);
+		args.Configure(slot);
 		this.CallStaticPrimitiveFunction(bytes, jClass, definition, slot);
 	}
 	/// <summary>
@@ -41,8 +42,8 @@ internal partial interface IAccessFeature
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
-		DefaultSlot slot = new(definition.Count);
-		args.Configure(slot, definition);
+		DefaultSlot slot = new(definition);
+		args.Configure(slot);
 		this.CallPrimitiveFunction(bytes, jLocal, jClass, definition, nonVirtual, slot);
 	}
 }

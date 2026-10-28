@@ -9,27 +9,33 @@ internal sealed partial class EnvironmentCore
 		EnvironmentCore core,
 		INativeTransaction jniTransaction,
 		ValPtr<JValue> buffer,
-		Int32 count) : IParameterSlot
+		JCallDefinition callDefinition) : IParameterSlot
 	{
+		/// <inheritdoc/>
+		public JCallDefinition CallDefinition
+		{
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			get => callDefinition;
+		}
+
 		/// <summary>
 		/// Configures the parameter slot with the provided arguments and call definition.
 		/// </summary>
 		/// <typeparam name="TArgs">The type of the arguments for the JNI call.</typeparam>
 		/// <param name="args">The reference to the arguments to configure. If null, the parameter buffer is cleared.</param>
-		/// <param name="callDefinition">The definition of the JNI call to configure the arguments with.</param>
 #if !PACKAGE
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 		                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-		public unsafe void Configure<TArgs>(ref TArgs args, JCallDefinition callDefinition)
+		public unsafe void Configure<TArgs>(ref TArgs args)
 #if !NET9_0_OR_GREATER
 			where TArgs : ICallArgument
 #else
 			where TArgs : ICallArgument, allows ref struct
 #endif
 		{
-			NativeMemory.Clear(buffer, (UIntPtr)(count * sizeof(JValue)));
-			args.Configure(this, callDefinition);
+			NativeMemory.Clear(buffer, (UIntPtr)(callDefinition.Count * sizeof(JValue)));
+			args.Configure(this);
 		}
 
 		/// <inheritdoc/>
@@ -38,8 +44,8 @@ internal sealed partial class EnvironmentCore
 			where TObject : IObject
 		{
 			if (values.Length == 0) return;
-			ImplementationValidationUtilities.ThrowIfInvalidIndex(index, count);
-			ImplementationValidationUtilities.ThrowIfInvalidIndex(index + values.Length - 1, count);
+			ImplementationValidationUtilities.ThrowIfInvalidIndex(index, callDefinition.Count);
+			ImplementationValidationUtilities.ThrowIfInvalidIndex(index + values.Length - 1, callDefinition.Count);
 			Span<JValue> result = buffer.Pointer.GetUnsafeSpan<JValue>(values.Length);
 			if (!RuntimeHelpers.IsReferenceOrContainsReferences<TObject>())
 			{
@@ -74,7 +80,7 @@ internal sealed partial class EnvironmentCore
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void SetParameterValue<TObject>(Byte index, TObject? value) where TObject : IObject
 		{
-			ImplementationValidationUtilities.ThrowIfInvalidIndex(index, count);
+			ImplementationValidationUtilities.ThrowIfInvalidIndex(index, callDefinition.Count);
 			ValPtr<JValue> result = buffer + index;
 			if (value is null) return;
 			if (value is not JReferenceObject jObject)

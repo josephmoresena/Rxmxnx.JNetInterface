@@ -14,10 +14,10 @@ internal readonly unsafe struct GenericCallArgument<TArgs>(TArgs* ptr) : ICallAr
 {
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public void Configure<TSlot>(TSlot slot, JCallDefinition callDefinition) where TSlot : IParameterSlot
+	public void Configure<TSlot>(TSlot slot) where TSlot : IParameterSlot
 	{
 		Debug.Assert(typeof(TSlot).IsValueType);
-		ptr[0].Configure(slot, callDefinition);
+		ptr[0].Configure(slot);
 	}
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -6,6 +6,11 @@ namespace Rxmxnx.JNetInterface.Native;
 public interface IParameterSlot
 {
 	/// <summary>
+	/// Current call definition.
+	/// </summary>
+	JCallDefinition CallDefinition { get; }
+
+	/// <summary>
 	/// Sets the values of the parameters starting from the specified index.
 	/// </summary>
 	/// <typeparam name="TObject">The <see cref="IObject"/> type of the values.</typeparam>

@@ -58,7 +58,7 @@ public readonly partial struct JChar : IPrimitiveIntegerType, IPrimitiveNumericT
 		Unsafe.As<JValue, UInt16>(ref value) = this._value;
 	}
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	void ICallArgument.Configure<TSlot>(TSlot slot, JCallDefinition callDefinition) => slot.SetParameterValue(0, this);
+	void ICallArgument.Configure<TSlot>(TSlot slot) => slot.SetParameterValue(0, this);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

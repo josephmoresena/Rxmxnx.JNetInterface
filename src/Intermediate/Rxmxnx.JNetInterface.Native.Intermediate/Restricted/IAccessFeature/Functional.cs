@@ -20,8 +20,8 @@ internal partial interface IAccessFeature
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
-		DefaultSlot slot = new(definition.Count);
-		args.Configure(slot, definition);
+		DefaultSlot slot = new(definition);
+		args.Configure(slot);
 		return this.CallConstructor<TObject>(jClass, definition, slot);
 	}
 	/// <summary>
@@ -43,8 +43,8 @@ internal partial interface IAccessFeature
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
-		DefaultSlot slot = new(definition.Count);
-		args.Configure(slot, definition);
+		DefaultSlot slot = new(definition);
+		args.Configure(slot);
 		return this.CallConstructor<TObject>(jConstructor, definition, slot);
 	}
 	/// <summary>
@@ -64,8 +64,8 @@ internal partial interface IAccessFeature
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
-		DefaultSlot slot = new(definition.Count);
-		args.Configure(slot, definition);
+		DefaultSlot slot = new(definition);
+		args.Configure(slot);
 		return this.CallStaticFunction<TResult>(jClass, definition, slot);
 	}
 	/// <summary>
@@ -85,8 +85,8 @@ internal partial interface IAccessFeature
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
-		DefaultSlot slot = new(definition.Count);
-		args.Configure(slot, definition);
+		DefaultSlot slot = new(definition);
+		args.Configure(slot);
 		return this.CallStaticFunction<TResult>(jMethod, definition, slot);
 	}
 	/// <summary>
@@ -103,8 +103,8 @@ internal partial interface IAccessFeature
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
-		DefaultSlot slot = new(definition.Count);
-		args.Configure(slot, definition);
+		DefaultSlot slot = new(definition);
+		args.Configure(slot);
 		this.CallStaticMethod(jClass, definition, slot);
 	}
 	/// <summary>
@@ -121,8 +121,8 @@ internal partial interface IAccessFeature
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
-		DefaultSlot slot = new(definition.Count);
-		args.Configure(slot, definition);
+		DefaultSlot slot = new(definition);
+		args.Configure(slot);
 		this.CallStaticMethod(jMethod, definition, slot);
 	}
 	/// <summary>
@@ -144,8 +144,8 @@ internal partial interface IAccessFeature
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
-		DefaultSlot slot = new(definition.Count);
-		args.Configure(slot, definition);
+		DefaultSlot slot = new(definition);
+		args.Configure(slot);
 		return this.CallFunction<TResult>(jLocal, jClass, definition, nonVirtual, slot);
 	}
 	/// <summary>
@@ -167,8 +167,8 @@ internal partial interface IAccessFeature
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
-		DefaultSlot slot = new(definition.Count);
-		args.Configure(slot, definition);
+		DefaultSlot slot = new(definition);
+		args.Configure(slot);
 		return this.CallFunction<TResult>(jMethod, jLocal, definition, nonVirtual, slot);
 	}
 	/// <summary>
@@ -188,8 +188,8 @@ internal partial interface IAccessFeature
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
-		DefaultSlot slot = new(definition.Count);
-		args.Configure(slot, definition);
+		DefaultSlot slot = new(definition);
+		args.Configure(slot);
 		this.CallMethod(jLocal, jClass, definition, nonVirtual, slot);
 	}
 	/// <summary>
@@ -209,8 +209,8 @@ internal partial interface IAccessFeature
 		where TArgs : ICallArgument, allows ref struct
 #endif
 	{
-		DefaultSlot slot = new(definition.Count);
-		args.Configure(slot, definition);
+		DefaultSlot slot = new(definition);
+		args.Configure(slot);
 		this.CallMethod(jMethod, jLocal, definition, nonVirtual, slot);
 	}
 }

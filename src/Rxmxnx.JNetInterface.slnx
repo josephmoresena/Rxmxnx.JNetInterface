@@ -22,6 +22,38 @@
         <File Path="ApplicationTest\JNetInterface-Frameworks.props" />
         <File Path="ApplicationTest\Rxmxnx.JNetInterface.ApplicationGuiTest\java.src\com\rxmxnx\jnetinterface\NativeCallback.java" />
     </Folder>
+    <Folder Name="/Documentation/">
+        <File Path="..\docs\class-object.md" />
+        <File Path="..\docs\data-types-mapping.md" />
+        <File Path="..\docs\data-types-metadata.md" />
+        <File Path="..\docs\direct-buffers.md" />
+        <File Path="..\docs\error-handling.md" />
+        <File Path="..\docs\feature-switches.md" />
+        <File Path="..\docs\functional-interfaces.md" />
+        <File Path="..\docs\jni-accessing.md" />
+        <File Path="..\docs\jni-classes.md" />
+        <File Path="..\docs\jni-interfaces.md" />
+        <File Path="..\docs\jni-references.md" />
+        <File Path="..\docs\mobile-runtime.md" />
+        <File Path="..\docs\native-objects.md" />
+    </Folder>
+    <Folder Name="/Documentation/NativeImage/">
+        <File Path="..\native-image\jni-config.json" />
+        <File Path="..\native-image\README.md" />
+    </Folder>
+    <Folder Name="/GitHub/">
+        <File Path="..\.github\workflows\android-actions.yml" />
+        <File Path="..\.github\workflows\build.yml" />
+        <File Path="..\.github\workflows\cross-actions.yml" />
+        <File Path="..\.github\workflows\freebsd-actions.yml" />
+        <File Path="..\.github\workflows\freebsd-arm64-actions.yml" />
+        <File Path="..\.github\workflows\release.yml" />
+        <File Path="..\.gitignore" />
+        <File Path="..\CONTRIBUTING.md" />
+        <File Path="..\LICENSE.md" />
+        <File Path="..\README.md" />
+        <File Path="..\ZipAndClean.ps1" />
+    </Folder>
     <Folder Name="/Global/">
         <File Path="..\.github\workflows\cross-actions.yml" />
         <File Path="..\.github\workflows\freebsd-actions.yml" />
@@ -37,25 +69,6 @@
         <File Path="Library.props" />
         <File Path="Mobile.Library.props" />
         <File Path="PInvoke.Reference.props" />
-    </Folder>
-    <Folder Name="/Global/Documentation/">
-        <File Path="..\docs\class-object.md" />
-        <File Path="..\docs\data-types-mapping.md" />
-        <File Path="..\docs\data-types-metadata.md" />
-        <File Path="..\docs\direct-buffers.md" />
-        <File Path="..\docs\error-handling.md" />
-        <File Path="..\docs\feature-switches.md" />
-        <File Path="..\docs\functional-interfaces.md" />
-        <File Path="..\docs\jni-accessing.md" />
-        <File Path="..\docs\jni-classes.md" />
-        <File Path="..\docs\jni-interfaces.md" />
-        <File Path="..\docs\jni-references.md" />
-        <File Path="..\docs\mobile-runtime.md" />
-        <File Path="..\docs\native-objects.md" />
-    </Folder>
-    <Folder Name="/Global/NativeImage/">
-        <File Path="..\native-image\README.md" />
-        <File Path="..\native-image\jni-config.json" />
     </Folder>
     <Folder Name="/Intermediate/">
         <File Path="Intermediate\README.md" />

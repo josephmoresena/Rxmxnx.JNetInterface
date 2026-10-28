@@ -6,7 +6,6 @@ using Rxmxnx.JNetInterface.Awt.Event;
 using Rxmxnx.JNetInterface.Functional;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
-using Rxmxnx.JNetInterface.Native.Access;
 using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.PInvoke;
@@ -97,7 +96,7 @@ public partial class JNativeCallback
 		public String ToTraceText() => this.ToString();
 #endif
 
-		public void Configure<TSlot>(TSlot slot, JCallDefinition callDefinition) where TSlot : IParameterSlot
+		public void Configure<TSlot>(TSlot slot) where TSlot : IParameterSlot
 			=> slot.SetParameterValues(0, this.GetKey());
 
 		public override String ToString()

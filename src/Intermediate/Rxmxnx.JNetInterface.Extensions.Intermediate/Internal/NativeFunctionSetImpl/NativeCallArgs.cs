@@ -11,10 +11,7 @@ internal partial class NativeFunctionSetImpl
 	[StructLayout(LayoutKind.Sequential)]
 	private readonly struct NativeCallArgs<T0>(T0? a0) : ICallArgument where T0 : IObject
 	{
-		void ICallArgument.Configure<TSlot>(TSlot slot, JCallDefinition callDefinition)
-		{
-			slot.SetParameterValue(0, a0);
-		}
+		void ICallArgument.Configure<TSlot>(TSlot slot) { slot.SetParameterValue(0, a0); }
 	}
 
 	/// <summary>
@@ -27,7 +24,7 @@ internal partial class NativeFunctionSetImpl
 	[StructLayout(LayoutKind.Sequential)]
 	private readonly struct NativeCallArgs<T0, T1>(T0? a0, T1? a1) : ICallArgument where T0 : IObject where T1 : IObject
 	{
-		void ICallArgument.Configure<TSlot>(TSlot slot, JCallDefinition callDefinition)
+		void ICallArgument.Configure<TSlot>(TSlot slot)
 		{
 			slot.SetParameterValue(0, a0);
 			slot.SetParameterValue(1, a1);

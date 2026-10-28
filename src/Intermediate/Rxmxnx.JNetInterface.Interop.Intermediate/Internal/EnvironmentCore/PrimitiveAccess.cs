@@ -284,8 +284,8 @@ internal sealed partial class EnvironmentCore
 			};
 		try
 		{
-			ParameterSlot slot = new(this, jniTransaction, buffer, definition.Count);
-			slot.Configure(ref Unsafe.AsRef(in args), definition);
+			ParameterSlot slot = new(this, jniTransaction, buffer, definition);
+			slot.Configure(ref args);
 			function(this, bytes, classRef, methodId, buffer, in staticMethodFunctions);
 		}
 		finally
@@ -397,8 +397,8 @@ internal sealed partial class EnvironmentCore
 			};
 		try
 		{
-			ParameterSlot slot = new(this, jniTransaction, buffer, definition.Count);
-			slot.Configure(ref Unsafe.AsRef(in args), definition);
+			ParameterSlot slot = new(this, jniTransaction, buffer, definition);
+			slot.Configure(ref args);
 			function(this, bytes, localRef, classRef.GetValueOrDefault(), methodId, buffer, in instanceMethodFunctions);
 		}
 		finally
