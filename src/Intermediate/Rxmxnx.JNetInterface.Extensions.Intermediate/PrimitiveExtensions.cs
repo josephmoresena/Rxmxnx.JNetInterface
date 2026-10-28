@@ -17,14 +17,22 @@ public static class PrimitiveExtensions
 #pragma warning restore CA2255
 	internal static void Initializer()
 	{
-		_ = IArrayType.GetArrayArrayMetadata<JBoolean>();
-		_ = IArrayType.GetArrayArrayMetadata<JByte>();
-		_ = IArrayType.GetArrayArrayMetadata<JChar>();
-		_ = IArrayType.GetArrayArrayMetadata<JDouble>();
-		_ = IArrayType.GetArrayArrayMetadata<JFloat>();
-		_ = IArrayType.GetArrayArrayMetadata<JInt>();
-		_ = IArrayType.GetArrayArrayMetadata<JLong>();
-		_ = IArrayType.GetArrayArrayMetadata<JShort>();
+		try
+		{
+			_ = IArrayType.GetArrayArrayMetadata<JBoolean>();
+			_ = IArrayType.GetArrayArrayMetadata<JByte>();
+			_ = IArrayType.GetArrayArrayMetadata<JChar>();
+			_ = IArrayType.GetArrayArrayMetadata<JDouble>();
+			_ = IArrayType.GetArrayArrayMetadata<JFloat>();
+			_ = IArrayType.GetArrayArrayMetadata<JInt>();
+			_ = IArrayType.GetArrayArrayMetadata<JLong>();
+			_ = IArrayType.GetArrayArrayMetadata<JShort>();
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine(e);
+			throw;
+		}
 	}
 #endif
 
