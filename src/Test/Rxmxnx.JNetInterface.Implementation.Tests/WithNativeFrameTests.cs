@@ -1,3 +1,5 @@
+// ReSharper disable RedundantExplicitParamsArrayCreation
+
 namespace Rxmxnx.JNetInterface.Tests;
 
 /// <summary>
@@ -104,58 +106,58 @@ public sealed class WithNativeFrameTests
 			=> this.Run(5, () =>
 			{
 				StructAction action = new(localRef, metadata);
-				env.Reference.WithNativeFrame(action, token);
-				action.WithNativeFrame(env.Reference, token);
-				vm.WithNativeFrame(env.Reference, action, token);
-				action.WithNativeFrame(vm, env.Reference, token);
-				env.Reference.WithNativeFrame(new ClassAction(localRef, metadata), token);
+				env.Reference.WithNativeFrame(action, [token,]);
+				action.WithNativeFrame(env.Reference, [token,]);
+				vm.WithNativeFrame(env.Reference, action, [token,]);
+				action.WithNativeFrame(vm, env.Reference, [token,]);
+				env.Reference.WithNativeFrame(new ClassAction(localRef, metadata), [token,]);
 			});
 		public void Primitive<TPrimitive>(TPrimitive value) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 			=> this.Run(5, () =>
 			{
 				StructFunction<TPrimitive> func = new(localRef, metadata, value);
-				env.Reference.WithNativeFrame(func, out TPrimitive result, token);
+				env.Reference.WithNativeFrame(func, out TPrimitive result, [token,]);
 				Assert.Equal(value, result);
-				func.WithNativeFrame(env.Reference, out result, token);
+				func.WithNativeFrame(env.Reference, out result, [token,]);
 				Assert.Equal(value, result);
-				vm.WithNativeFrame(env.Reference, func, out result, token);
+				vm.WithNativeFrame(env.Reference, func, out result, [token,]);
 				Assert.Equal(value, result);
-				func.WithNativeFrame(vm, env.Reference, out result, token);
+				func.WithNativeFrame(vm, env.Reference, out result, [token,]);
 				Assert.Equal(value, result);
 				env.Reference.WithNativeFrame(new ClassFunction<TPrimitive>(localRef, metadata, value), out result,
-				                              token);
+				                              [token,]);
 				Assert.Equal(value, result);
 			});
 		public void Object()
 			=> this.Run(5, () =>
 			{
 				StructFunction<JReferenceObject?> func = new(localRef, metadata, null);
-				env.Reference.WithNativeFrame(func, out JObjectLocalRef result, token);
+				env.Reference.WithNativeFrame(func, out JObjectLocalRef result, [token,]);
 				Assert.Equal(localRef, result);
-				func.WithNativeFrame(env.Reference, out result, token);
+				func.WithNativeFrame(env.Reference, out result, [token,]);
 				Assert.Equal(localRef, result);
-				vm.WithNativeFrame(env.Reference, func, out result, token);
+				vm.WithNativeFrame(env.Reference, func, out result, [token,]);
 				Assert.Equal(localRef, result);
-				func.WithNativeFrame(vm, env.Reference, out result, token);
+				func.WithNativeFrame(vm, env.Reference, out result, [token,]);
 				Assert.Equal(localRef, result);
 				env.Reference.WithNativeFrame(new ClassFunction<JReferenceObject?>(localRef, metadata, null),
-				                              out result, token);
+				                              out result, [token,]);
 				Assert.Equal(localRef, result);
 			});
 		public void String(JStringObject value)
 			=> this.Run(5, () =>
 			{
 				StructFunction<JStringObject?> func = new(localRef, metadata, value);
-				env.Reference.WithNativeFrame(func, out JStringLocalRef result, token);
+				env.Reference.WithNativeFrame(func, out JStringLocalRef result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(env.Reference, out result, token);
+				func.WithNativeFrame(env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				vm.WithNativeFrame(env.Reference, func, out result, token);
+				vm.WithNativeFrame(env.Reference, func, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(vm, env.Reference, out result, token);
+				func.WithNativeFrame(vm, env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 				env.Reference.WithNativeFrame(new ClassFunction<JStringObject?>(localRef, metadata, value), out result,
-				                              token);
+				                              [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 			});
 
@@ -163,16 +165,16 @@ public sealed class WithNativeFrameTests
 			=> this.Run(5, () =>
 			{
 				StructFunction<JClassObject?> func = new(localRef, metadata, value);
-				env.Reference.WithNativeFrame(func, out JClassLocalRef result, token);
+				env.Reference.WithNativeFrame(func, out JClassLocalRef result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(env.Reference, out result, token);
+				func.WithNativeFrame(env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				vm.WithNativeFrame(env.Reference, func, out result, token);
+				vm.WithNativeFrame(env.Reference, func, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(vm, env.Reference, out result, token);
+				func.WithNativeFrame(vm, env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 				env.Reference.WithNativeFrame(new ClassFunction<JClassObject?>(localRef, metadata, value), out result,
-				                              token);
+				                              [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 			});
 
@@ -180,16 +182,16 @@ public sealed class WithNativeFrameTests
 			=> this.Run(5, () =>
 			{
 				StructFunction<JThrowableObject?> func = new(localRef, metadata, value);
-				env.Reference.WithNativeFrame(func, out JThrowableLocalRef result, token);
+				env.Reference.WithNativeFrame(func, out JThrowableLocalRef result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(env.Reference, out result, token);
+				func.WithNativeFrame(env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				vm.WithNativeFrame(env.Reference, func, out result, token);
+				vm.WithNativeFrame(env.Reference, func, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(vm, env.Reference, out result, token);
+				func.WithNativeFrame(vm, env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 				env.Reference.WithNativeFrame(new ClassFunction<JThrowableObject?>(localRef, metadata, value),
-				                              out result, token);
+				                              out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 			});
 
@@ -197,16 +199,16 @@ public sealed class WithNativeFrameTests
 			=> this.Run(5, () =>
 			{
 				StructFunction<JArrayObject?> func = new(localRef, metadata, value);
-				env.Reference.WithNativeFrame(func, out JArrayLocalRef result, token);
+				env.Reference.WithNativeFrame(func, out JArrayLocalRef result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(env.Reference, out result, token);
+				func.WithNativeFrame(env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				vm.WithNativeFrame(env.Reference, func, out result, token);
+				vm.WithNativeFrame(env.Reference, func, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(vm, env.Reference, out result, token);
+				func.WithNativeFrame(vm, env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 				env.Reference.WithNativeFrame(new ClassFunction<JArrayObject?>(localRef, metadata, value), out result,
-				                              token);
+				                              [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 			});
 
@@ -214,16 +216,16 @@ public sealed class WithNativeFrameTests
 			=> this.Run(5, () =>
 			{
 				StructFunction<IArrayObject<ILocalObject>?> func = new(localRef, metadata, value);
-				env.Reference.WithNativeFrame(func, out JObjectArrayLocalRef result, token);
+				env.Reference.WithNativeFrame(func, out JObjectArrayLocalRef result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(env.Reference, out result, token);
+				func.WithNativeFrame(env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				vm.WithNativeFrame(env.Reference, func, out result, token);
+				vm.WithNativeFrame(env.Reference, func, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(vm, env.Reference, out result, token);
+				func.WithNativeFrame(vm, env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 				env.Reference.WithNativeFrame(new ClassFunction<IArrayObject<ILocalObject>?>(localRef, metadata, value),
-				                              out result, token);
+				                              out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 			});
 
@@ -231,16 +233,16 @@ public sealed class WithNativeFrameTests
 			=> this.Run(5, () =>
 			{
 				StructFunction<JArrayObject<JBoolean>?> func = new(localRef, metadata, value);
-				env.Reference.WithNativeFrame(func, out JBooleanArrayLocalRef result, token);
+				env.Reference.WithNativeFrame(func, out JBooleanArrayLocalRef result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(env.Reference, out result, token);
+				func.WithNativeFrame(env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				vm.WithNativeFrame(env.Reference, func, out result, token);
+				vm.WithNativeFrame(env.Reference, func, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(vm, env.Reference, out result, token);
+				func.WithNativeFrame(vm, env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 				env.Reference.WithNativeFrame(new ClassFunction<JArrayObject<JBoolean>?>(localRef, metadata, value),
-				                              out result, token);
+				                              out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 			});
 
@@ -248,16 +250,16 @@ public sealed class WithNativeFrameTests
 			=> this.Run(5, () =>
 			{
 				StructFunction<JArrayObject<JByte>?> func = new(localRef, metadata, value);
-				env.Reference.WithNativeFrame(func, out JByteArrayLocalRef result, token);
+				env.Reference.WithNativeFrame(func, out JByteArrayLocalRef result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(env.Reference, out result, token);
+				func.WithNativeFrame(env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				vm.WithNativeFrame(env.Reference, func, out result, token);
+				vm.WithNativeFrame(env.Reference, func, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(vm, env.Reference, out result, token);
+				func.WithNativeFrame(vm, env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 				env.Reference.WithNativeFrame(new ClassFunction<JArrayObject<JByte>?>(localRef, metadata, value),
-				                              out result, token);
+				                              out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 			});
 
@@ -265,16 +267,16 @@ public sealed class WithNativeFrameTests
 			=> this.Run(5, () =>
 			{
 				StructFunction<JArrayObject<JChar>?> func = new(localRef, metadata, value);
-				env.Reference.WithNativeFrame(func, out JCharArrayLocalRef result, token);
+				env.Reference.WithNativeFrame(func, out JCharArrayLocalRef result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(env.Reference, out result, token);
+				func.WithNativeFrame(env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				vm.WithNativeFrame(env.Reference, func, out result, token);
+				vm.WithNativeFrame(env.Reference, func, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(vm, env.Reference, out result, token);
+				func.WithNativeFrame(vm, env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 				env.Reference.WithNativeFrame(new ClassFunction<JArrayObject<JChar>?>(localRef, metadata, value),
-				                              out result, token);
+				                              out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 			});
 
@@ -282,16 +284,16 @@ public sealed class WithNativeFrameTests
 			=> this.Run(5, () =>
 			{
 				StructFunction<JArrayObject<JShort>?> func = new(localRef, metadata, value);
-				env.Reference.WithNativeFrame(func, out JShortArrayLocalRef result, token);
+				env.Reference.WithNativeFrame(func, out JShortArrayLocalRef result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(env.Reference, out result, token);
+				func.WithNativeFrame(env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				vm.WithNativeFrame(env.Reference, func, out result, token);
+				vm.WithNativeFrame(env.Reference, func, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(vm, env.Reference, out result, token);
+				func.WithNativeFrame(vm, env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 				env.Reference.WithNativeFrame(new ClassFunction<JArrayObject<JShort>?>(localRef, metadata, value),
-				                              out result, token);
+				                              out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 			});
 
@@ -299,16 +301,16 @@ public sealed class WithNativeFrameTests
 			=> this.Run(5, () =>
 			{
 				StructFunction<JArrayObject<JInt>?> func = new(localRef, metadata, value);
-				env.Reference.WithNativeFrame(func, out JIntArrayLocalRef result, token);
+				env.Reference.WithNativeFrame(func, out JIntArrayLocalRef result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(env.Reference, out result, token);
+				func.WithNativeFrame(env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				vm.WithNativeFrame(env.Reference, func, out result, token);
+				vm.WithNativeFrame(env.Reference, func, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(vm, env.Reference, out result, token);
+				func.WithNativeFrame(vm, env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 				env.Reference.WithNativeFrame(new ClassFunction<JArrayObject<JInt>?>(localRef, metadata, value),
-				                              out result, token);
+				                              out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 			});
 
@@ -316,16 +318,16 @@ public sealed class WithNativeFrameTests
 			=> this.Run(5, () =>
 			{
 				StructFunction<JArrayObject<JLong>?> func = new(localRef, metadata, value);
-				env.Reference.WithNativeFrame(func, out JLongArrayLocalRef result, token);
+				env.Reference.WithNativeFrame(func, out JLongArrayLocalRef result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(env.Reference, out result, token);
+				func.WithNativeFrame(env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				vm.WithNativeFrame(env.Reference, func, out result, token);
+				vm.WithNativeFrame(env.Reference, func, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(vm, env.Reference, out result, token);
+				func.WithNativeFrame(vm, env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 				env.Reference.WithNativeFrame(new ClassFunction<JArrayObject<JLong>?>(localRef, metadata, value),
-				                              out result, token);
+				                              out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 			});
 
@@ -333,16 +335,16 @@ public sealed class WithNativeFrameTests
 			=> this.Run(5, () =>
 			{
 				StructFunction<JArrayObject<JFloat>?> func = new(localRef, metadata, value);
-				env.Reference.WithNativeFrame(func, out JFloatArrayLocalRef result, token);
+				env.Reference.WithNativeFrame(func, out JFloatArrayLocalRef result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(env.Reference, out result, token);
+				func.WithNativeFrame(env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				vm.WithNativeFrame(env.Reference, func, out result, token);
+				vm.WithNativeFrame(env.Reference, func, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(vm, env.Reference, out result, token);
+				func.WithNativeFrame(vm, env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 				env.Reference.WithNativeFrame(new ClassFunction<JArrayObject<JFloat>?>(localRef, metadata, value),
-				                              out result, token);
+				                              out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 			});
 
@@ -350,16 +352,16 @@ public sealed class WithNativeFrameTests
 			=> this.Run(5, () =>
 			{
 				StructFunction<JArrayObject<JDouble>?> func = new(localRef, metadata, value);
-				env.Reference.WithNativeFrame(func, out JDoubleArrayLocalRef result, token);
+				env.Reference.WithNativeFrame(func, out JDoubleArrayLocalRef result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(env.Reference, out result, token);
+				func.WithNativeFrame(env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				vm.WithNativeFrame(env.Reference, func, out result, token);
+				vm.WithNativeFrame(env.Reference, func, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
-				func.WithNativeFrame(vm, env.Reference, out result, token);
+				func.WithNativeFrame(vm, env.Reference, out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 				env.Reference.WithNativeFrame(new ClassFunction<JArrayObject<JDouble>?>(localRef, metadata, value),
-				                              out result, token);
+				                              out result, [token,]);
 				Assert.Equal(value.Reference.Value, result.Value);
 			});
 

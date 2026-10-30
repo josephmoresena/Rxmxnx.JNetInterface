@@ -25,7 +25,9 @@ public partial class JThrowableObject
 		IEnvironment env = this.Environment;
 		if (env.Version < (Int32)JRuntimeVersion.SEd4) return [];
 		using JArrayObject<JStackTraceElementObject> stackTrace = env.FunctionSet.GetStackTrace(this);
-		StackTraceFunction stackTraceFunction = new(stackTrace!);
+#pragma warning disable CS8620
+		StackTraceFunction stackTraceFunction = new(stackTrace);
+#pragma warning restore CS8620
 		stackTraceFunction.WithFrame(env, IVirtualMachine.GetStackTraceCapacity, out StackTraceInfo[] result);
 		return result;
 	}
@@ -45,7 +47,8 @@ public partial class JThrowableObject
 		: IFrameFunction<StackTraceInfo[]>
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		StackTraceInfo[] IFrameFunction<StackTraceInfo[]>.Apply(IEnvironment env, ReadOnlySpan<JReferenceObject?> _)
+		StackTraceInfo[] IFrameFunction<StackTraceInfo[]>.Apply(IEnvironment env,
+			ReadOnlySpan<JReferenceObject?> objects)
 		{
 			if (stackTrace.Count == 0) return [];
 			StackTraceInfo[] result = new StackTraceInfo[stackTrace.Count];

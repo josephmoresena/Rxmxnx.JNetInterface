@@ -65,7 +65,7 @@ public partial class JExecutableObject
 	private readonly struct CallDefinitionFunction(JExecutableObject executable) : IFrameFunction<JCallDefinition>
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		JCallDefinition IFrameFunction<JCallDefinition>.Apply(IEnvironment env, ReadOnlySpan<JReferenceObject?> _)
+		JCallDefinition IFrameFunction<JCallDefinition>.Apply(IEnvironment env, ReadOnlySpan<JReferenceObject?> objects)
 		{
 			using JStringObject memberName = env.FunctionSet.GetName(executable);
 			using JArrayObject<JClassObject> parameterTypes = env.FunctionSet.GetParameterTypes(executable);
