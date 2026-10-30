@@ -48,7 +48,7 @@ jobs:
           fail-on-cache-miss: true
       - name: Init FreeBSD 14.5 VM
         id: vm
-        uses: vmactions/freebsd-vm@v1.4.6
+        uses: vmactions/freebsd-vm@v1.5.9
         with:
           release: "14.5"
           usesh: true
