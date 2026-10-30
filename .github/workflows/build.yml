@@ -74,13 +74,112 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: pwsh
         run: |
-          ./.sonar/scanner/dotnet-sonarscanner begin /k:"josephmoresena_Rxmxnx.JNetInterface" /o:"josephmoresena" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.scanAll=false /d:sonar.coverage.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs" /d:sonar.cpd.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs,**/AndroidJniHost/**.cs,**/ContextBuilder/**.cs" /d:sonar.cs.vstest.reportsPaths=TestResults/*.trx /d:sonar.cs.opencover.reportsPaths=TestResults/*/coverage.opencover.xml 
+          $sonarStarted = $false
+
+          # ----------------------------------------
+          # SonarQube - Begin
+          # ----------------------------------------
+          Write-Host "Starting SonarScanner..."
+
+          if ([string]::IsNullOrWhiteSpace($env:SONAR_TOKEN)) {
+            Write-Warning "SONAR_TOKEN is not available. SonarQube analysis will be skipped."
+          }
+          else {
+            ./.sonar/scanner/dotnet-sonarscanner begin `
+              /k:"josephmoresena_Rxmxnx.JNetInterface" `
+              /o:"josephmoresena" `
+              /d:sonar.token="$env:SONAR_TOKEN" `
+              /d:sonar.host.url="https://sonarcloud.io" `
+              /d:sonar.scanner.scanAll=false `
+              /d:sonar.coverage.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs" `
+              /d:sonar.cpd.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs,**/AndroidJniHost/**.cs,**/ContextBuilder/**.cs" `
+              /d:sonar.cs.vstest.reportsPaths="TestResults/*.trx" `
+              /d:sonar.cs.opencover.reportsPaths="TestResults/*/coverage.opencover.xml"
+
+            if ($LASTEXITCODE -eq 0 -and (Test-Path ".sonarqube/conf/SonarQubeAnalysisConfig.xml")) {
+              $sonarStarted = $true
+              Write-Host "SonarScanner started successfully."
+            }
+            else {
+              Write-Warning "SonarScanner begin failed. Continuing with build and tests."
+            }
+          }
+
+          # ----------------------------------------
+          # Restore
+          # ----------------------------------------
+          Write-Host "Restoring..."
+
           dotnet build-server shutdown
           dotnet restore src --ignore-failed-sources
+
+          if ($LASTEXITCODE -ne 0) {
+            throw "dotnet restore failed with exit code $LASTEXITCODE"
+          }
+
           dotnet restore src/Test/Proxies/Native/JvmProxy.NativeProxy.slnx
-          dotnet build src /p:MultipleFrameworkTest=true --no-restore --configuration Release --disable-build-servers /nr:false /maxcpucount:1
-          dotnet test src /p:MultipleFrameworkTest=true --no-build --no-restore --configuration release --verbosity normal --collect:"XPlat Code Coverage" --results-directory TestResults/ --logger "trx;verbosity=detailed" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
-          ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+
+          if ($LASTEXITCODE -ne 0) {
+            throw "dotnet restore failed with exit code $LASTEXITCODE"
+          }
+
+          # ----------------------------------------
+          # Build
+          # ----------------------------------------
+          Write-Host "Building..."
+
+          dotnet build src `
+            /p:MultipleFrameworkTest=true `
+            --no-restore `
+            --configuration Release `
+            --disable-build-servers `
+            /nr:false `
+            /maxcpucount:1
+
+          if ($LASTEXITCODE -ne 0) {
+            throw "dotnet build failed with exit code $LASTEXITCODE"
+          }
+
+          # ----------------------------------------
+          # Tests
+          # ----------------------------------------
+          Write-Host "Testing..."
+
+          dotnet test src `
+            /p:MultipleFrameworkTest=true `
+            --no-build `
+            --no-restore `
+            --configuration release `
+            --verbosity normal `
+            --collect:"XPlat Code Coverage" `
+            --results-directory TestResults/ `
+            --logger "trx;verbosity=detailed" `
+            -- `
+            DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+
+          if ($LASTEXITCODE -ne 0) {
+            throw "dotnet test failed with exit code $LASTEXITCODE"
+          }
+
+          # ----------------------------------------
+          # SonarQube - End
+          # ----------------------------------------
+          if ($sonarStarted) {
+            Write-Host "Finishing SonarScanner..."
+
+            ./.sonar/scanner/dotnet-sonarscanner end `
+              /d:sonar.token="$env:SONAR_TOKEN"
+
+            if ($LASTEXITCODE -ne 0) {
+              Write-Warning "SonarScanner end failed. Build and tests completed successfully."
+            }
+            else {
+              Write-Host "SonarQube analysis completed successfully."
+            }
+          }
+          else {
+            Write-Warning "SonarQube analysis was skipped."
+          }
       - name: Pack core assembly
         working-directory: ./package/Rxmxnx.JNetInterface.Core
         run: |
