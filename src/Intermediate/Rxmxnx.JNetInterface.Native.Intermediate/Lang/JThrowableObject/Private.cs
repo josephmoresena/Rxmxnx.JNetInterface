@@ -25,22 +25,8 @@ public partial class JThrowableObject
 		IEnvironment env = this.Environment;
 		if (env.Version < (Int32)JRuntimeVersion.SEd4) return [];
 		using JArrayObject<JStackTraceElementObject> stackTrace = env.FunctionSet.GetStackTrace(this);
-		return this.Environment.WithFrame(IVirtualMachine.GetStackTraceCapacity, stackTrace,
-		                                  JThrowableObject.GetStackTraceInfo!);
-	}
-
-	/// <summary>
-	/// Retrieves <see cref="StackTraceInfo"/> instance from <paramref name="stackTrace"/> array.
-	/// </summary>
-	/// <param name="stackTrace">A <see cref="JStackTraceElementObject"/> array.</param>
-	/// <returns>A <see cref="StackTraceInfo"/> array.</returns>
-	/// <remarks>This method runs within a local frame. Any local references created will be deleted.</remarks>
-	private static StackTraceInfo[] GetStackTraceInfo(IReadOnlyList<JStackTraceElementObject> stackTrace)
-	{
-		if (stackTrace.Count == 0) return [];
-		StackTraceInfo[] result = new StackTraceInfo[stackTrace.Count];
-		for (Int32 i = 0; i < result.Length; i++)
-			result[i] = (StackTraceElementObjectMetadata)ILocalObject.CreateMetadata(stackTrace[i]);
+		StackTraceFunction stackTraceFunction = new(stackTrace!);
+		stackTraceFunction.WithFrame(env, IVirtualMachine.GetStackTraceCapacity, out StackTraceInfo[] result);
 		return result;
 	}
 
@@ -50,4 +36,22 @@ public partial class JThrowableObject
 		=> new(initializer);
 	static JThrowableObject IClassType<JThrowableObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
+
+	/// <summary>
+	/// Frame function that reads a throwable stack trace.
+	/// </summary>
+	/// <param name="stackTrace">A <see cref="JStackTraceElementObject"/> array.</param>
+	private readonly struct StackTraceFunction(IReadOnlyList<JStackTraceElementObject> stackTrace)
+		: IFrameFunction<StackTraceInfo[]>
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		StackTraceInfo[] IFrameFunction<StackTraceInfo[]>.Apply(IEnvironment env, ReadOnlySpan<JReferenceObject?> _)
+		{
+			if (stackTrace.Count == 0) return [];
+			StackTraceInfo[] result = new StackTraceInfo[stackTrace.Count];
+			for (Int32 i = 0; i < result.Length; i++)
+				result[i] = (StackTraceElementObjectMetadata)ILocalObject.CreateMetadata(stackTrace[i]);
+			return result;
+		}
+	}
 }

@@ -46,10 +46,6 @@ public static partial class PrimitiveArrayExtensions
 	/// <param name="lengths">A read-only span specifying the length of each dimension.</param>
 	/// <returns>A <see cref="JArrayObject"/> instance.</returns>
 #if !PACKAGE
-#if !NET9_0_OR_GREATER
-	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
-	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
-#endif
 	[ExcludeFromCodeCoverage]
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -59,41 +55,18 @@ public static partial class PrimitiveArrayExtensions
 	{
 		Int32 frameSize = lengths.Length * 2;
 #if NET9_0_OR_GREATER
-		return env.WithFrame<JArrayObject, ArrayFillMap<TPrimitive>>(
-			frameSize, new(new(lengths, values)) { ArrayTypeMetadata = arrayTypeMetadata, Environment = env, },
-			PrimitiveArrayExtensions.CreateInitialArray);
-#else
-		unsafe
+		InitialArrayFunction<TPrimitive> function = new(new(new(lengths, values))
 		{
-			fixed (Int32* dimensionPtr = &MemoryMarshal.GetReference(lengths))
-			fixed (TPrimitive* memoryPtr = &MemoryMarshal.GetReference(values))
-			{
-				return env.WithFrame<JArrayObject, ArrayFillMap<TPrimitive>>(
-					frameSize,
-					new(new(dimensionPtr, lengths.Length, memoryPtr, values.Length))
-					{
-						ArrayTypeMetadata = arrayTypeMetadata, Environment = env,
-					}, PrimitiveArrayExtensions.CreateInitialArray);
-			}
-		}
+			ArrayTypeMetadata = arrayTypeMetadata,
+		});
+		function.WithFrame(env, frameSize, out JArrayObject result);
+#else
+		InitialArrayFunction<TPrimitive> function = new(arrayTypeMetadata, env, frameSize);
+		function.WithSafeFixed(lengths, values, out JArrayObject result);
 #endif
-	}
-	/// <summary>
-	/// Creates the initial multidimensional array.
-	/// </summary>
-	/// <typeparam name="TPrimitive">A <see cref="IPrimitiveType{TPrimitive}"/> type.</typeparam>
-	/// <param name="map">A <see cref="ArrayFillMap{TPrimitive}"/> instance.</param>
-	/// <returns>A <see cref="JArrayObject"/> instance.</returns>
-#if !PACKAGE
-	[ExcludeFromCodeCoverage]
-#endif
-	private static JArrayObject CreateInitialArray<TPrimitive>(ArrayFillMap<TPrimitive> map)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
-	{
-		JArrayObject result = map.ArrayTypeMetadata.CreateInstance(map.Environment, map.State.GetLength(0));
-		PrimitiveArrayExtensions.FillArray(result, 0, ref map.State);
 		return result;
 	}
+
 	/// <summary>
 	/// Fills <paramref name="jArray"/> instance according to <paramref name="state"/>.
 	/// </summary>

@@ -21,8 +21,4 @@ internal struct ArrayFillMap<TElement>(ArrayFillState<TElement> state)
 	/// Array type metadata.
 	/// </summary>
 	public required JArrayTypeMetadata ArrayTypeMetadata { get; init; }
-	/// <summary>
-	/// A <see cref="IEnvironment"/> instance.
-	/// </summary>
-	public required IEnvironment Environment { get; init; }
 }

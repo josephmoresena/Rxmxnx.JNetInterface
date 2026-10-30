@@ -453,10 +453,10 @@ public sealed class SetTests : IndeterminateAccessTestsBase
 		env.ClassFeature.IsInstanceOf<JNumberObject>(jWeak).Returns(instance is JNumberObject);
 		env.ClassFeature.IsInstanceOf<JBooleanObject>(jWeak).Returns(instance is JBooleanObject);
 		env.ClassFeature.IsInstanceOf<JCharacterObject>(jWeak).Returns(instance is JCharacterObject);
-		env.WithFrame(Arg.Any<Int32>(), Arg.Any<IndeterminateField.InfoObjectQuery>(),
-		              Arg.Any<Func<IndeterminateField.InfoObjectQuery, IndeterminateField.InfoObjectResult>>())
-		   .Returns(c => (c[2] as Func<IndeterminateField.InfoObjectQuery, IndeterminateField.InfoObjectResult>)!(
-			            (IndeterminateField.InfoObjectQuery)c[1]));
+		env.WithFrame(Arg.Any<Int32>(), Arg.Any<ValueTuple<IntPtr, Type>>(),
+		              Arg.Any<Func<ValueTuple<IntPtr, Type>, IndeterminateField.InfoObjectResult>>())
+		   .Returns(call => call.Arg<Func<ValueTuple<IntPtr, Type>, IndeterminateField.InfoObjectResult>>()(
+			            call.Arg<ValueTuple<IntPtr, Type>>()));
 
 		field.Set(jString, jLocalInstance);
 		env.ReferenceFeature.Received(1).Create<JWeak>(jLocalInstance);
