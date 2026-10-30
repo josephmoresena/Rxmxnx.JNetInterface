@@ -103,7 +103,9 @@ public readonly ref struct IndeterminateResult
 	internal IndeterminateResult(JLocalObject? jObject, ReadOnlySpan<Byte> signature)
 	{
 		this._primitive = default;
-		this._objectMetadata = ref IMutableReference.CreateObject<PrimitiveWrapperObjectMetadata>(default!).Reference!;
+#pragma warning disable CS8619
+		this._objectMetadata = ref IMutableReference.CreateObject<PrimitiveWrapperObjectMetadata>(default!).Reference;
+#pragma warning restore CS8619
 		this.Object = jObject;
 		this.Signature = signature;
 	}

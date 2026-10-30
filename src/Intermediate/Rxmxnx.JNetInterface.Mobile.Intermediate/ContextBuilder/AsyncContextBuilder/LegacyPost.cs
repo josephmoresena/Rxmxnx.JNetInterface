@@ -76,7 +76,9 @@ public partial struct AsyncContextBuilder
 		TaskCompletionSource<TResult> source = new();
 		PostState<TResult> postState = new(taskState, source);
 		context.Post(PostState<TResult>.Post, postState);
-		return source.Task!;
+#pragma warning disable CS8619
+		return source.Task;
+#pragma warning restore CS8619
 	}
 	/// <summary>
 	/// Creates a new JNI async context, invokes <paramref name="func"/> and returns its result.
@@ -119,6 +121,8 @@ public partial struct AsyncContextBuilder
 		TaskCompletionSource<TResult> source = new();
 		PostState<TResult> postState = new(taskState, source);
 		context.Post(PostState<TResult>.Post, postState);
-		return source.Task!;
+#pragma warning disable CS8619
+		return source.Task;
+#pragma warning restore CS8619
 	}
 }

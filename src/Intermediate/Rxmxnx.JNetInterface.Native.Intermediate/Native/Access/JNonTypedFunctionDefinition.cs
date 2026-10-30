@@ -57,7 +57,7 @@ public sealed partial class JNonTypedFunctionDefinition(
 #else
 		where TArgs : struct, ICallArgument, allows ref struct
 #endif
-		=> base.InvokeReflected(jMethod, jLocal, args);
+		=> base.InvokeReflected(jMethod, jLocal, ref args);
 	/// <inheritdoc
 	///     cref="JFunctionDefinition{TResult}.InvokeNonVirtualReflected{TArgs}(JMethodObject, JLocalObject, ref TArgs)"/>
 	public new JLocalObject? InvokeNonVirtualReflected<TArgs>(JMethodObject jMethod, JLocalObject jLocal,
