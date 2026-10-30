@@ -79,7 +79,8 @@ public static partial class PrimitiveArrayExtensions
 		}
 #endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		JArrayObject IFrameFunction<JArrayObject>.Apply(IEnvironment env, scoped ReadOnlySpan<JReferenceObject?> _)
+		JArrayObject IFrameFunction<JArrayObject>.Apply(IEnvironment env,
+			scoped ReadOnlySpan<JReferenceObject?> objects)
 		{
 			JArrayObject result = this._map.ArrayTypeMetadata.CreateInstance(env, this._map.State.GetLength(0));
 			PrimitiveArrayExtensions.FillArray(result, 0, ref this._map.State);
