@@ -56,9 +56,9 @@ public partial class JEnvironment : IEqualityOperators<JEnvironment, JEnvironmen
 		}
 	}
 
-	void IEnvironment.WithFrame(Int32 capacity, Action action) => this._m.WithFrame(this, capacity, action);
+	void IEnvironment.WithFrame(Int32 capacity, Action action) => EnvironmentValue.WithFrame(this, capacity, action);
 	void IEnvironment.WithFrame<TState>(Int32 capacity, TState state, Action<TState> action)
-		=> this._m.WithFrame(this, capacity, state, action);
+		=> EnvironmentValue.WithFrame(this, capacity, state, action);
 
 	Boolean? IEnvironment.IsVirtual(JThreadObject jThread)
 	{

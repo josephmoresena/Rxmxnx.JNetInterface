@@ -59,7 +59,7 @@ public partial class JLocalObject
 					new SuperInterfaceImplementationState
 					{
 						BaseInterfaces = baseMetadata?.BaseMetadata?.Interfaces ?? InterfaceSet.Empty,
-						Interfaces = this._interfaces!,
+						Interfaces = this._interfaces,
 					}, TypeMetadataBuilder.AppendSuperinterface);
 		}
 

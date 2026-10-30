@@ -12,11 +12,6 @@ internal sealed partial class EnvironmentCore
 	private const Int32 minStackBytes = 128;
 
 	/// <summary>
-	/// Disposable context for a zero pointer.
-	/// </summary>
-	private static readonly IFixedContext<Byte>.IDisposable zeroByteContext = default(Memory<Byte>).GetFixedContext();
-
-	/// <summary>
 	/// Indicates whether <paramref name="jGlobal"/> is a main global object or default.
 	/// </summary>
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>

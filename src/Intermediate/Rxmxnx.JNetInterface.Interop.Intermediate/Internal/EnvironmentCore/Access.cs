@@ -176,8 +176,13 @@ internal sealed partial class EnvironmentCore
 			ref this.GetInstanceMethodFunctions(CommonNames.ObjectSignaturePrefixChar, classRef != default);
 		using StackDisposable stackDisposable =
 			this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
-		ValPtr<JValue> buffer = stackDisposable.UsingStack ? stackalloc JValue[definition.Count].GetUnsafeValPtr() :
-			requiredBytes > 0 ? (ValPtr<JValue>)NativeMemory.Alloc((UIntPtr)requiredBytes) : ValPtr<JValue>.Zero;
+		ValPtr<JValue> buffer;
+		if (stackDisposable.UsingStack)
+			buffer = stackalloc JValue[definition.Count].GetUnsafeValPtr();
+		else if (requiredBytes > 0)
+			buffer = (ValPtr<JValue>)NativeMemory.Alloc((UIntPtr)requiredBytes);
+		else
+			buffer = ValPtr<JValue>.Zero;
 		JObjectLocalRef result;
 		try
 		{
@@ -223,8 +228,13 @@ internal sealed partial class EnvironmentCore
 			ref this.GetNativeInterface<NativeInterface>(NativeInterface.CallStaticObjectMethodInfo);
 		using StackDisposable stackDisposable =
 			this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
-		ValPtr<JValue> buffer = stackDisposable.UsingStack ? stackalloc JValue[definition.Count].GetUnsafeValPtr() :
-			requiredBytes > 0 ? (ValPtr<JValue>)NativeMemory.Alloc((UIntPtr)requiredBytes) : ValPtr<JValue>.Zero;
+		ValPtr<JValue> buffer;
+		if (stackDisposable.UsingStack)
+			buffer = stackalloc JValue[definition.Count].GetUnsafeValPtr();
+		else if (requiredBytes > 0)
+			buffer = (ValPtr<JValue>)NativeMemory.Alloc((UIntPtr)requiredBytes);
+		else
+			buffer = ValPtr<JValue>.Zero;
 		JObjectLocalRef localRef;
 		try
 		{
@@ -265,8 +275,13 @@ internal sealed partial class EnvironmentCore
 			ref this.GetInstanceMethodFunctions(CommonNames.VoidSignatureChar, classRef != default);
 		using StackDisposable stackDisposable =
 			this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
-		ValPtr<JValue> buffer = stackDisposable.UsingStack ? stackalloc JValue[definition.Count].GetUnsafeValPtr() :
-			requiredBytes > 0 ? (ValPtr<JValue>)NativeMemory.Alloc((UIntPtr)requiredBytes) : ValPtr<JValue>.Zero;
+		ValPtr<JValue> buffer;
+		if (stackDisposable.UsingStack)
+			buffer = stackalloc JValue[definition.Count].GetUnsafeValPtr();
+		else if (requiredBytes > 0)
+			buffer = (ValPtr<JValue>)NativeMemory.Alloc((UIntPtr)requiredBytes);
+		else
+			buffer = ValPtr<JValue>.Zero;
 		try
 		{
 			ParameterSlot slot = new(this, jniTransaction, buffer, definition);
@@ -306,8 +321,13 @@ internal sealed partial class EnvironmentCore
 			ref this.GetNativeInterface<NativeInterface>(NativeInterface.CallStaticVoidMethodInfo);
 		using StackDisposable stackDisposable =
 			this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
-		ValPtr<JValue> buffer = stackDisposable.UsingStack ? stackalloc JValue[definition.Count].GetUnsafeValPtr() :
-			requiredBytes > 0 ? (ValPtr<JValue>)NativeMemory.Alloc((UIntPtr)requiredBytes) : ValPtr<JValue>.Zero;
+		ValPtr<JValue> buffer;
+		if (stackDisposable.UsingStack)
+			buffer = stackalloc JValue[definition.Count].GetUnsafeValPtr();
+		else if (requiredBytes > 0)
+			buffer = (ValPtr<JValue>)NativeMemory.Alloc((UIntPtr)requiredBytes);
+		else
+			buffer = ValPtr<JValue>.Zero;
 		try
 		{
 			ParameterSlot slot = new(this, jniTransaction, buffer, definition);
@@ -368,8 +388,13 @@ internal sealed partial class EnvironmentCore
 			ref this.GetNativeInterface<NativeInterface>(NativeInterface.NewObjectInfo);
 		using StackDisposable stackDisposable =
 			this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
-		ValPtr<JValue> buffer = stackDisposable.UsingStack ? stackalloc JValue[definition.Count].GetUnsafeValPtr() :
-			requiredBytes > 0 ? (ValPtr<JValue>)NativeMemory.Alloc((UIntPtr)requiredBytes) : ValPtr<JValue>.Zero;
+		ValPtr<JValue> buffer;
+		if (stackDisposable.UsingStack)
+			buffer = stackalloc JValue[definition.Count].GetUnsafeValPtr();
+		else if (requiredBytes > 0)
+			buffer = (ValPtr<JValue>)NativeMemory.Alloc((UIntPtr)requiredBytes);
+		else
+			buffer = ValPtr<JValue>.Zero;
 		JObjectLocalRef localRef;
 		try
 		{

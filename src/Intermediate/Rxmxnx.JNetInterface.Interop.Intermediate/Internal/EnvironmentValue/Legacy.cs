@@ -1,5 +1,3 @@
-// ReSharper disable MemberCanBeMadeStatic.Global
-
 namespace Rxmxnx.JNetInterface;
 
 internal readonly partial struct EnvironmentValue
@@ -10,9 +8,7 @@ internal readonly partial struct EnvironmentValue
 	/// <param name="nativeThread">A <see langword="INativeThread"/> instance.</param>
 	/// <param name="capacity">New local reference frame capacity.</param>
 	/// <param name="action">An action to invoke inside created a new local frame.</param>
-#pragma warning disable CA1822
-	public void WithFrame(INativeThread nativeThread, Int32 capacity, Action action)
-#pragma warning restore CA1822
+	public static void WithFrame(INativeThread nativeThread, Int32 capacity, Action action)
 	{
 		LocalFrameAction val = new(action);
 		EnvironmentValue.WithFrame(nativeThread, capacity, ref val);
@@ -24,9 +20,8 @@ internal readonly partial struct EnvironmentValue
 	/// <param name="capacity">New local reference frame capacity.</param>
 	/// <param name="state">A state object.</param>
 	/// <param name="action">An action to invoke inside created a new local frame.</param>
-#pragma warning disable CA1822
-	public void WithFrame<TState>(INativeThread nativeThread, Int32 capacity, TState state, Action<TState> action)
-#pragma warning restore CA1822
+	public static void WithFrame<TState>(INativeThread nativeThread, Int32 capacity, TState state,
+		Action<TState> action)
 #if NET9_0_OR_GREATER
 		where TState : allows ref struct
 #endif

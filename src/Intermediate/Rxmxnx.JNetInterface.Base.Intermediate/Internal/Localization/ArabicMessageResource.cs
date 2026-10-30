@@ -47,6 +47,7 @@ internal sealed class ArabicMessageResource : IMessageResource
 	String IMessageResource.InvalidReferenceObject => "كائن JReferenceObject غير صالح.";
 	String IMessageResource.InvalidObjectMetadata => "بيانات التعريف للكائن غير صالحة.";
 	String IMessageResource.DisposedObject => "تم التخلص من كائن JReferenceObject.";
+	String IMessageResource.InvalidParameterIndex => "فهرس المعامل غير صالح.";
 	String IMessageResource.InvalidArrayLength => "يجب أن يكون طول المصفوفة صفرًا أو رقمًا موجبًا.";
 	String IMessageResource.DeadVirtualMachine => "الآلة الافتراضية JVM الحالية لا تعمل.";
 	String IMessageResource.NotAttachedThread => "لم يتم إرفاق الخيط الحالي بـ JVM.";
@@ -134,6 +135,8 @@ internal sealed class ArabicMessageResource : IMessageResource
 			"نوع المصفوفة يحتوي على عدد كبير جدًا من الأبعاد.";
 	String IMessageResource.InvalidInterfaceVersion(Int32 currentVersion, Int32 requiredVersion)
 		=> $"يجب تشغيل العملية الحالية باستخدام إصدار JNI متوافق مع 0x{requiredVersion:x8}، ولكن الإصدار المكتشف هو 0x{currentVersion:x8}.";
+
+	String IMessageResource.InvalidObjectAt(Int32 index) => $"كائن غير صالح عند {index}.";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

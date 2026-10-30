@@ -82,8 +82,7 @@ internal static class ImplementationValidationUtilities
 	public static void ThrowIfDefault(JReferenceObject jObject, Byte index)
 	{
 		if (!jObject.IsDefault || !JObject.IsNullOrDefault(jObject)) return;
-		// TODO: Localized message.
-		throw new ArgumentException($"Invalid object at {index}.");
+		throw new ArgumentException(IMessageResource.GetInstance().InvalidObjectAt(index));
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="localRef"/> is default.
@@ -203,8 +202,6 @@ internal static class ImplementationValidationUtilities
 	public static void ThrowIfInvalidIndex(Int32 index, Int32 count)
 	{
 		if (index < count) return;
-		IMessageResource resource = IMessageResource.GetInstance();
-		// TODO: Create message
-		throw new InvalidOperationException();
+		throw new InvalidOperationException(IMessageResource.GetInstance().InvalidParameterIndex);
 	}
 }

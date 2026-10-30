@@ -1,5 +1,9 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal static unsafe partial class NativeCallUtilities
 {
 	/// <summary>

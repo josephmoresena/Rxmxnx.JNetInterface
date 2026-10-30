@@ -1,5 +1,9 @@
 namespace Rxmxnx.JNetInterface;
 
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 public unsafe partial interface IEnvironment
 {
 	/// <summary>
@@ -21,6 +25,8 @@ public unsafe partial interface IEnvironment
 	/// <remarks>A default implementation is provided to avoid binary compatibility with older and proxy implementations.</remarks>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2696,
+	                 Justification = CommonConstants.ThreadStaticClosureJustification)]
 #endif
 	internal TResult WithFrameExecute<TFunction, TResult>(ref TFunction func, Int32 capacity)
 #if !NET9_0_OR_GREATER
@@ -55,6 +61,8 @@ public unsafe partial interface IEnvironment
 	/// <remarks>A default implementation is provided to avoid binary compatibility with older and proxy implementations.</remarks>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2696,
+	                 Justification = CommonConstants.ThreadStaticClosureJustification)]
 #endif
 	internal void WithFrameExecute<TAction>(ref TAction action, Int32 capacity)
 #if !NET9_0_OR_GREATER

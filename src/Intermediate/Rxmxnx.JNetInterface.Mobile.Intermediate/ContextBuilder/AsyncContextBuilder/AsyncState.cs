@@ -40,6 +40,11 @@ public partial struct AsyncContextBuilder
 		private readonly Array? _shorts;
 
 		/// <summary>
+		/// Indicates whether <see cref="Dispose()"/> already released the stored references.
+		/// </summary>
+		private Boolean _disposed;
+
+		/// <summary>
 		/// Indicates whether the objects should be stored as weak references.
 		/// </summary>
 		protected Boolean UseWeakGlobal { get; }
@@ -73,6 +78,20 @@ public partial struct AsyncContextBuilder
 		/// <remarks>This method may attach the current thread using <see cref="JniRuntime"/>.</remarks>
 		public void Dispose()
 		{
+			this.Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary>
+		/// Releases the JNI references stored by this state.
+		/// </summary>
+		/// <param name="disposing">
+		/// <see langword="true"/> when called from <see cref="Dispose()"/>; otherwise, <see langword="false"/>.
+		/// </param>
+		protected virtual void Dispose(Boolean disposing)
+		{
+			if (!disposing || this._disposed) return;
+			this._disposed = true;
 			for (Int32 index = 0; index < this._objectCount; index++)
 			{
 				if (this._objects[index].Reference == default) continue;

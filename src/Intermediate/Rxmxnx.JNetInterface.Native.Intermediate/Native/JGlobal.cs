@@ -87,7 +87,7 @@ public sealed class JGlobal : JGlobalBase
 	public JGlobal GetCacheable(IEnvironment env)
 	{
 		if (!this.IsMinimalValid(env) || this.Secondary is null || this.Secondary.IsDisposable) return this;
-		return this.Secondary!;
+		return this.Secondary;
 	}
 	/// <summary>
 	/// Synchronizes current instance with <paramref name="other"/>.

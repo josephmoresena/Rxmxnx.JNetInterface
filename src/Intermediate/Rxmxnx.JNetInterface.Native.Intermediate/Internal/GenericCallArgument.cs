@@ -5,6 +5,10 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// This struct is designed to encapsulate a single argument, its associated metadata, and its intended use within a
 /// generic invocation.
 /// </summary>
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 #pragma warning disable CS8500
 internal readonly unsafe struct GenericCallArgument<TArgs>(TArgs* ptr) : ICallArgument where TArgs : ICallArgument
 #pragma warning restore CS8500

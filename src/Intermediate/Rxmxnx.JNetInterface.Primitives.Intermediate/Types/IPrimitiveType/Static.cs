@@ -71,6 +71,10 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 	/// <returns>
 	/// <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.
 	/// </returns>
+#if !PACKAGE
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1244,
+	                 Justification = CommonConstants.ExactPrimitiveEqualityJustification)]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private protected static Boolean Equals(TPrimitive primitive, Object? obj)
 	{

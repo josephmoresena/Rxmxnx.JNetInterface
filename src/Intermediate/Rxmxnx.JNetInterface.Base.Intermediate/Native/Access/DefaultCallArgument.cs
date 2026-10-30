@@ -9,7 +9,12 @@ public readonly struct DefaultCallArgument : ICallArgument
 	/// <summary>
 	/// Internal instance.
 	/// </summary>
-	internal static DefaultCallArgument Instance;
+	private static DefaultCallArgument instance;
+
+	/// <summary>
+	/// Internal instance.
+	/// </summary>
+	internal static ref DefaultCallArgument Instance => ref DefaultCallArgument.instance;
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

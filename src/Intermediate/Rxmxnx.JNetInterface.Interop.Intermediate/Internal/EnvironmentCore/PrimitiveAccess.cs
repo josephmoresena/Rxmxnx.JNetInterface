@@ -267,8 +267,13 @@ internal sealed partial class EnvironmentCore
 			ref this.GetStaticMethodFunctions(signature);
 		using StackDisposable stackDisposable =
 			this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
-		ValPtr<JValue> buffer = stackDisposable.UsingStack ? stackalloc JValue[definition.Count].GetUnsafeValPtr() :
-			requiredBytes > 0 ? (ValPtr<JValue>)NativeMemory.Alloc((UIntPtr)requiredBytes) : ValPtr<JValue>.Zero;
+		ValPtr<JValue> buffer;
+		if (stackDisposable.UsingStack)
+			buffer = stackalloc JValue[definition.Count].GetUnsafeValPtr();
+		else if (requiredBytes > 0)
+			buffer = (ValPtr<JValue>)NativeMemory.Alloc((UIntPtr)requiredBytes);
+		else
+			buffer = ValPtr<JValue>.Zero;
 		delegate*<EnvironmentCore, Span<Byte>, JClassLocalRef, JMethodId, JValue*, in MethodFunctionSet<JClassLocalRef>,
 			void> function = signature switch
 			{
@@ -380,8 +385,13 @@ internal sealed partial class EnvironmentCore
 			ref this.GetInstanceMethodFunctions(signature, classRef.HasValue);
 		using StackDisposable stackDisposable =
 			this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
-		ValPtr<JValue> buffer = stackDisposable.UsingStack ? stackalloc JValue[definition.Count].GetUnsafeValPtr() :
-			requiredBytes > 0 ? (ValPtr<JValue>)NativeMemory.Alloc((UIntPtr)requiredBytes) : ValPtr<JValue>.Zero;
+		ValPtr<JValue> buffer;
+		if (stackDisposable.UsingStack)
+			buffer = stackalloc JValue[definition.Count].GetUnsafeValPtr();
+		else if (requiredBytes > 0)
+			buffer = (ValPtr<JValue>)NativeMemory.Alloc((UIntPtr)requiredBytes);
+		else
+			buffer = ValPtr<JValue>.Zero;
 		delegate* <EnvironmentCore, Span<Byte>, JObjectLocalRef, JClassLocalRef, JMethodId, JValue*, in
 			InstanceMethodFunctionSet, void> function = signature switch
 			{
@@ -494,6 +504,28 @@ internal sealed partial class EnvironmentCore
 		}
 	}
 	/// <summary>
+	/// Invokes a primitive function.
+	/// </summary>
+	/// <typeparam name="TPrimitive">A <see cref="IPrimitiveType{TPrimitive}"/> type.</typeparam>
+	/// <param name="bytes">Destination span.</param>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+	/// <param name="signature">Primitive signature.</param>
+	/// <param name="ptr">Pointer to call the argument array.</param>
+	/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
+	/// <param name="callFunction">Function to invoke function.</param>
+#if !PACKAGE
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS107,
+	                 Justification = CommonConstants.PrimitiveCallJustification)]
+#endif
+	private unsafe void CallPrimitiveFunction<TPrimitive>(Span<Byte> bytes, JObjectLocalRef localRef, Byte signature,
+		JMethodId methodId, JValue* ptr, in CallGenericFunction<JObjectLocalRef, TPrimitive> callFunction)
+		where TPrimitive : unmanaged, INativeDataType<TPrimitive>, IPrimitiveType<TPrimitive>
+	{
+		TPrimitive result = callFunction.Call(this.Reference, localRef, methodId, ptr);
+		result.CopyTo(bytes);
+		JTrace.CallPrimitiveFunction(localRef, default, signature, methodId, result);
+	}
+	/// <summary>
 	/// Invokes a primitive non-virtual function.
 	/// </summary>
 	/// <typeparam name="TPrimitive">A <see cref="IPrimitiveType{TPrimitive}"/> type.</typeparam>
@@ -516,28 +548,6 @@ internal sealed partial class EnvironmentCore
 		TPrimitive result = callFunction.Call(this.Reference, localRef, classRef, methodId, ptr);
 		result.CopyTo(bytes);
 		JTrace.CallPrimitiveFunction(localRef, classRef, signature, methodId, result);
-	}
-	/// <summary>
-	/// Invokes a primitive function.
-	/// </summary>
-	/// <typeparam name="TPrimitive">A <see cref="IPrimitiveType{TPrimitive}"/> type.</typeparam>
-	/// <param name="bytes">Destination span.</param>
-	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
-	/// <param name="signature">Primitive signature.</param>
-	/// <param name="ptr">Pointer to call the argument array.</param>
-	/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
-	/// <param name="callFunction">Function to invoke function.</param>
-#if !PACKAGE
-	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS107,
-	                 Justification = CommonConstants.PrimitiveCallJustification)]
-#endif
-	private unsafe void CallPrimitiveFunction<TPrimitive>(Span<Byte> bytes, JObjectLocalRef localRef, Byte signature,
-		JMethodId methodId, JValue* ptr, in CallGenericFunction<JObjectLocalRef, TPrimitive> callFunction)
-		where TPrimitive : unmanaged, INativeDataType<TPrimitive>, IPrimitiveType<TPrimitive>
-	{
-		TPrimitive result = callFunction.Call(this.Reference, localRef, methodId, ptr);
-		result.CopyTo(bytes);
-		JTrace.CallPrimitiveFunction(localRef, default, signature, methodId, result);
 	}
 	/// <summary>
 	/// Retrieves a <see cref="JArgumentMetadata"/> array from <paramref name="parameterTypes"/>.

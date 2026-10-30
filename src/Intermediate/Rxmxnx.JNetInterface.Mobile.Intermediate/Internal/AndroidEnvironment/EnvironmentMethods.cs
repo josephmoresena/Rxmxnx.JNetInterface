@@ -10,13 +10,13 @@ internal partial class AndroidEnvironment
 	/// <inheritdoc/>
 	public Boolean JniSecure() => this._m.JniSecure();
 	/// <inheritdoc/>
-	public void WithFrame(Int32 capacity, Action action) => this._m.WithFrame(this, capacity, action);
+	public void WithFrame(Int32 capacity, Action action) => EnvironmentValue.WithFrame(this, capacity, action);
 	/// <inheritdoc/>
 	public void WithFrame<TState>(Int32 capacity, TState state, Action<TState> action)
 #if NET9_0_OR_GREATER
 		where TState : allows ref struct
 #endif
-		=> this._m.WithFrame(this, capacity, state, action);
+		=> EnvironmentValue.WithFrame(this, capacity, state, action);
 	/// <inheritdoc/>
 	public TResult WithFrame<TResult>(Int32 capacity, Func<TResult> func)
 		=> EnvironmentValue.WithFrame(this, capacity, func);

@@ -4,6 +4,10 @@ namespace Rxmxnx.JNetInterface.Native.Values;
 /// Represents a reference type token used for processing reference-type entities.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 public readonly unsafe struct JReferenceTypeToken
 {
 	/// <summary>
@@ -288,11 +292,17 @@ public readonly unsafe struct JReferenceTypeToken
 		JNativeType nativeType = JNativeType.JObject;
 		Type typeofT = typeof(TReference);
 		if (typeofT == typeof(JClassObject))
+		{
 			nativeType = JNativeType.JClass;
+		}
 		else if (typeofT == typeof(JStringObject))
+		{
 			nativeType = JNativeType.JString;
+		}
 		else if (TReference.FamilyType == typeof(JThrowableObject))
+		{
 			nativeType = JNativeType.JThrowable;
+		}
 		else if (TReference.FamilyType == typeof(JArrayObject))
 		{
 			if (typeofT == typeof(JArrayObject<JBoolean>))
