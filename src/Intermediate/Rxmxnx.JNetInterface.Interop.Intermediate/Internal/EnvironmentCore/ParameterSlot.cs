@@ -46,7 +46,7 @@ internal sealed partial class EnvironmentCore
 			if (values.Length == 0) return;
 			ImplementationValidationUtilities.ThrowIfInvalidIndex(index, callDefinition.Count);
 			ImplementationValidationUtilities.ThrowIfInvalidIndex(index + values.Length - 1, callDefinition.Count);
-			Span<JValue> result = buffer.Pointer.GetUnsafeSpan<JValue>(values.Length);
+			Span<JValue> result = (buffer + index).Pointer.GetUnsafeSpan<JValue>(values.Length);
 			if (!RuntimeHelpers.IsReferenceOrContainsReferences<TObject>())
 			{
 				delegate*<void*, Span<JValue>, void> copy = Unsafe.SizeOf<TObject>() switch
@@ -96,7 +96,11 @@ internal sealed partial class EnvironmentCore
 		}
 		/// <inheritdoc/>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void SetParameterNull(Byte index) => Unsafe.Add(ref buffer.Reference, index) = JValue.Empty;
+		public void SetParameterDefault(Byte index)
+		{
+			ImplementationValidationUtilities.ThrowIfInvalidIndex(index, callDefinition.Count);
+			Unsafe.Add(ref buffer.Reference, index) = JValue.Empty;
+		}
 
 		/// <summary>
 		/// Copies the primitive values from the given pointer to the given span.

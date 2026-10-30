@@ -240,7 +240,7 @@ writes each argument into an `IParameterSlot`:
 
 - `SetParameterValue<TObject>(Byte, TObject?)` writes one argument.
 - `SetParameterValues<TObject>(Byte, ReadOnlySpan<TObject?>)` writes a sequence from the given index.
-- `SetParameterNull(Byte)` writes a `null` argument.
+- `SetParameterDefault(Byte)` writes the default value of an argument.
 
 `ICallArgument.Empty`, also available as `ICallArgument.Default`, configures a parameterless call.
 

@@ -32,8 +32,8 @@ public interface IParameterSlot
 	/// <param name="value">The value to assign to the parameter. The value must implement the <see cref="IObject"/> interface.</param>
 	void SetParameterValue<TObject>(Byte index, TObject? value) where TObject : IObject;
 	/// <summary>
-	/// Sets the value of the parameter at the specified index to null.
+	/// Sets the value of the parameter at the specified index to default.
 	/// </summary>
-	/// <param name="index">The zero-based index of the parameter to be set to null.</param>
-	void SetParameterNull(Byte index);
+	/// <param name="index">The zero-based index of the parameter to be set to default.</param>
+	void SetParameterDefault(Byte index);
 }
