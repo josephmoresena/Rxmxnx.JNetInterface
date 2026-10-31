@@ -7,6 +7,7 @@ public partial class TestCompiler
 		private readonly RestoreNetArgs _args = args;
 		private readonly String _outputPath = outputPath;
 
+		public RestoreNetArgs RestoreArgs => this._args;
 		public Boolean EnableTrace { get; init; }
 		public Publish Publish { get; set; }
 		public Boolean BuildDependencies { get; set; }
