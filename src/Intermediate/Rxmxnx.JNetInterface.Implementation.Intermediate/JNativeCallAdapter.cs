@@ -158,7 +158,7 @@ public readonly ref partial struct JNativeCallAdapter
 	public readonly ref partial struct Builder
 	{
 		/// <summary>
-		/// Appends to current call a <see cref="JLocalObject"/> parameter.
+		/// Appends to the current call a <see cref="JLocalObject"/> parameter.
 		/// </summary>
 		/// <param name="localRef">A parameter <see cref="JObjectLocalRef"/> reference.</param>
 		/// <param name="jLocal">A <see cref="JLocalObject"/> instance from <paramref name="localRef"/>.</param>
@@ -169,7 +169,7 @@ public readonly ref partial struct JNativeCallAdapter
 			return this;
 		}
 		/// <summary>
-		/// Appends to current call a <see cref="JClassObject"/> parameter.
+		/// Appends to the current call a <see cref="JClassObject"/> parameter.
 		/// </summary>
 		/// <param name="classRef">A parameter <see cref="JClassLocalRef"/> reference.</param>
 		/// <param name="jClass">A <see cref="JClassObject"/> instance from <paramref name="classRef"/>.</param>
@@ -180,7 +180,7 @@ public readonly ref partial struct JNativeCallAdapter
 			return this;
 		}
 		/// <summary>
-		/// Appends to current call a <see cref="JStringObject"/> parameter.
+		/// Appends to the current call a <see cref="JStringObject"/> parameter.
 		/// </summary>
 		/// <param name="stringRef">A parameter <see cref="JStringLocalRef"/> reference.</param>
 		/// <param name="jString">A <see cref="JStringObject"/> instance from <paramref name="stringRef"/>.</param>
@@ -191,7 +191,7 @@ public readonly ref partial struct JNativeCallAdapter
 			return this;
 		}
 		/// <summary>
-		/// Appends to current call a <see cref="JThrowableObject"/> parameter.
+		/// Appends to the current call a <see cref="JThrowableObject"/> parameter.
 		/// </summary>
 		/// <param name="throwableRef">A parameter <see cref="JThrowableLocalRef"/> reference.</param>
 		/// <param name="jThrowable">A <see cref="JThrowableObject"/> instance from <paramref name="throwableRef"/>.</param>
@@ -202,7 +202,7 @@ public readonly ref partial struct JNativeCallAdapter
 			return this;
 		}
 		/// <summary>
-		/// Appends to current call a <see cref="JArrayObject"/> parameter.
+		/// Appends to the current call a <see cref="JArrayObject"/> parameter.
 		/// </summary>
 		/// <param name="arrayRef">A parameter <see cref="JArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject"/> instance from <paramref name="arrayRef"/>.</param>
@@ -213,7 +213,7 @@ public readonly ref partial struct JNativeCallAdapter
 			return this;
 		}
 		/// <summary>
-		/// Appends to current call a <see cref="JBoolean"/> array parameter.
+		/// Appends to the current call a <see cref="JBoolean"/> array parameter.
 		/// </summary>
 		/// <param name="arrayRef">A parameter <see cref="JBooleanArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{JBoolean}"/> instance from <paramref name="arrayRef"/>.</param>
@@ -224,7 +224,7 @@ public readonly ref partial struct JNativeCallAdapter
 			return this;
 		}
 		/// <summary>
-		/// Appends to current call a <see cref="JByte"/> array parameter.
+		/// Appends to the current call a <see cref="JByte"/> array parameter.
 		/// </summary>
 		/// <param name="arrayRef">A parameter <see cref="JByteArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{JByte}"/> instance from <paramref name="arrayRef"/>.</param>
@@ -235,7 +235,7 @@ public readonly ref partial struct JNativeCallAdapter
 			return this;
 		}
 		/// <summary>
-		/// Appends to current call a <see cref="JChar"/> array parameter.
+		/// Appends to the current call a <see cref="JChar"/> array parameter.
 		/// </summary>
 		/// <param name="arrayRef">A parameter <see cref="JCharArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{JChar}"/> instance from <paramref name="arrayRef"/>.</param>
@@ -246,7 +246,7 @@ public readonly ref partial struct JNativeCallAdapter
 			return this;
 		}
 		/// <summary>
-		/// Appends to current call a <see cref="JDouble"/> array parameter.
+		/// Appends to the current call a <see cref="JDouble"/> array parameter.
 		/// </summary>
 		/// <param name="arrayRef">A parameter <see cref="JDoubleArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{JDouble}"/> instance from <paramref name="arrayRef"/>.</param>
@@ -257,7 +257,7 @@ public readonly ref partial struct JNativeCallAdapter
 			return this;
 		}
 		/// <summary>
-		/// Appends to current call a <see cref="JFloat"/> array parameter.
+		/// Appends to the current call a <see cref="JFloat"/> array parameter.
 		/// </summary>
 		/// <param name="arrayRef">A parameter <see cref="JFloatArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{JFloat}"/> instance from <paramref name="arrayRef"/>.</param>
@@ -268,7 +268,7 @@ public readonly ref partial struct JNativeCallAdapter
 			return this;
 		}
 		/// <summary>
-		/// Appends to current call a <see cref="JInt"/> array parameter.
+		/// Appends to the current call a <see cref="JInt"/> array parameter.
 		/// </summary>
 		/// <param name="arrayRef">A parameter <see cref="JIntArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{JInt}"/> instance from <paramref name="arrayRef"/>.</param>
@@ -279,7 +279,7 @@ public readonly ref partial struct JNativeCallAdapter
 			return this;
 		}
 		/// <summary>
-		/// Appends to current call a <see cref="JLong"/> array parameter.
+		/// Appends to the current call a <see cref="JLong"/> array parameter.
 		/// </summary>
 		/// <param name="arrayRef">A parameter <see cref="JLongArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{JLong}"/> instance from <paramref name="arrayRef"/>.</param>
@@ -290,7 +290,7 @@ public readonly ref partial struct JNativeCallAdapter
 			return this;
 		}
 		/// <summary>
-		/// Appends to current call a <see cref="JShort"/> array parameter.
+		/// Appends to the current call a <see cref="JShort"/> array parameter.
 		/// </summary>
 		/// <param name="arrayRef">A parameter <see cref="JShortArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{JShort}"/> instance from <paramref name="arrayRef"/>.</param>
@@ -301,7 +301,7 @@ public readonly ref partial struct JNativeCallAdapter
 			return this;
 		}
 		/// <summary>
-		/// Appends to current call a <see cref="JLocalObject"/> array parameter.
+		/// Appends to the current call a <see cref="JLocalObject"/> array parameter.
 		/// </summary>
 		/// <param name="arrayRef">A parameter <see cref="JObjectArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{JLocalObject}"/> instance from <paramref name="arrayRef"/>.</param>
@@ -316,7 +316,7 @@ public readonly ref partial struct JNativeCallAdapter
 			return this;
 		}
 		/// <summary>
-		/// Appends to current call a <typeparamref name="TObject"/> parameter.
+		/// Appends to the current call a <typeparamref name="TObject"/> parameter.
 		/// </summary>
 		/// <typeparam name="TObject">A <see cref="IReferenceType"/> type.</typeparam>
 		/// <param name="localRef">A parameter <see cref="JObjectLocalRef"/> reference.</param>
@@ -343,7 +343,7 @@ public readonly ref partial struct JNativeCallAdapter
 			return this;
 		}
 		/// <summary>
-		/// Appends to current call a <see cref="JThrowableObject"/> parameter.
+		/// Appends to the current call a <see cref="JThrowableObject"/> parameter.
 		/// </summary>
 		/// <param name="throwableRef">A parameter <see cref="JThrowableLocalRef"/> reference.</param>
 		/// <param name="jThrowable">A <see cref="JThrowableObject"/> instance from <paramref name="throwableRef"/>.</param>
@@ -358,7 +358,7 @@ public readonly ref partial struct JNativeCallAdapter
 			return this;
 		}
 		/// <summary>
-		/// Appends to current call a <typeparamref name="TElement"/> array parameter.
+		/// Appends to the current call a <typeparamref name="TElement"/> array parameter.
 		/// </summary>
 		/// <typeparam name="TElement">A <see cref="IDataType"/> type.</typeparam>
 		/// <param name="arrayRef">A parameter <see cref="JArrayLocalRef"/> reference.</param>

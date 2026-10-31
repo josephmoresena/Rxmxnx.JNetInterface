@@ -11,6 +11,7 @@ public sealed class JValueTests
 	internal void IsDefault()
 	{
 		JValue def = default;
+		// ReSharper disable once UseCollectionExpression
 		JValue val = MemoryMarshal.Read<JValue>(JValueTests.fixture.CreateMany<Byte>(JValue.Size).ToArray());
 		Assert.True(def.IsDefault);
 		Assert.False(val.IsDefault);

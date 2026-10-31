@@ -297,10 +297,8 @@ public sealed class JLocalObjectTests
 			Assert.Equal(jWeak, jLocal.Weak);
 			env.ReferenceFeature.Received(0).Create<JWeak>(jLocal);
 		}
-		if (nCase > 2)
-		{
-			Assert.Equal(jGlobal, jLocal.Global);
-			env.ReferenceFeature.Received(0).Create<JGlobal>(jLocal);
-		}
+		if (nCase <= 2) return;
+		Assert.Equal(jGlobal, jLocal.Global);
+		env.ReferenceFeature.Received(0).Create<JGlobal>(jLocal);
 	}
 }

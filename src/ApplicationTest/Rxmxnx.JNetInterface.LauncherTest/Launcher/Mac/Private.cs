@@ -9,8 +9,10 @@ public partial class Launcher
 
 		private Mac(DirectoryInfo outputDirectory, out Task initialize) : base(outputDirectory)
 		{
-			this.Architectures = Enum.GetValues<Architecture>()
-			                         .Where(a => a == this.CurrentArch || a is Architecture.X64).ToArray();
+			this.Architectures =
+			[
+				.. Enum.GetValues<Architecture>().Where(a => a == this.CurrentArch || a is Architecture.X64),
+			];
 			initialize = this.Initialize();
 		}
 

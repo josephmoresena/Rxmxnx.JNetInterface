@@ -248,7 +248,7 @@ public sealed class JStringObjectTests
 		JNativeMemory<Char> sequence = jString.GetNativeChars();
 		try
 		{
-			IReadOnlyFixedContext<Char> charsContext = sequence.GetContext();
+			IReadOnlyFixedContext<Char> charsContext = sequence.GetContext() ?? sequence;
 
 			Assert.Equal(chars.Pointer, sequence.Pointer);
 			Assert.Equal(sequence.Copy, sequence.Copy);
@@ -289,7 +289,7 @@ public sealed class JStringObjectTests
 		JNativeMemory<Char> sequence = jString.GetCriticalChars();
 		try
 		{
-			IReadOnlyFixedContext<Char> charsContext = sequence.GetContext();
+			IReadOnlyFixedContext<Char> charsContext = sequence.GetContext() ?? sequence;
 
 			Assert.Equal(chars.Pointer, sequence.Pointer);
 			Assert.Equal(sequence.Copy, sequence.Copy);
@@ -427,7 +427,7 @@ public sealed class JStringObjectTests
 		Assert.True(jString.Equals(IWrapper.CreateObject(jString.Value)));
 		Assert.True(jString.Equals((Object)jLocal));
 		Assert.True((jString as IEquatable<IWrapper<String>>).Equals(IWrapper.CreateObject(jString.Value)));
-		Assert.Equal(jString.Value.ToArray(), jString);
+		Assert.Equal([.. jString.Value,], jString);
 
 		jString.Environment.Received(0)
 		       .IsSameObject(jString, Arg.Is<JLocalObject>(l => l.LocalReference.Equals(stringRef)));

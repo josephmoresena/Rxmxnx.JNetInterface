@@ -22,7 +22,7 @@ internal static partial class IndeterminateHelper
 	/// </summary>
 	/// <param name="jMethod">Reflected method instance.</param>
 	/// <param name="jLocal">Target object.</param>
-	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call must be non-virtual.</param>
 	/// <param name="args">Method arguments.</param>
 	public static void ReflectedMethodCall(JMethodObject jMethod, JLocalObject jLocal, Boolean nonVirtual,
 #if NET9_0_OR_GREATER

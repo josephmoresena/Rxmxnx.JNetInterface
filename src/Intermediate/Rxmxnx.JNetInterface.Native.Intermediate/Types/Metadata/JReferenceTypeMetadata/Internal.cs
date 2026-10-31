@@ -8,7 +8,7 @@ public abstract partial class JReferenceTypeMetadata
 	private protected IAppendableProperty? InterfaceProperties => this.Interfaces as IAppendableProperty;
 
 	/// <summary>
-	/// Retrieves the class for current data type.
+	/// Retrieves the class for the current data type.
 	/// </summary>
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	/// <returns>A <see cref="JClassObject"/> instance.</returns>
@@ -28,7 +28,7 @@ public abstract partial class JReferenceTypeMetadata
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="dispose">
-	/// Indicates whether current instance should be disposed after casting.
+	/// Indicates whether the current instance should be disposed of after casting.
 	/// </param>
 	/// <returns>A <see cref="IDataType"/> instance from <paramref name="jLocal"/>.</returns>
 	[return: NotNullIfNotNull(nameof(jLocal))]

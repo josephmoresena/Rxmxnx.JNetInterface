@@ -145,7 +145,7 @@ internal static class CommonValidationUtilities
 	/// Throws an exception if the instance cannot be cast to <paramref name="typeMetadata"/> instance.
 	/// </summary>
 	/// <param name="typeMetadata">A <see cref="JDataTypeMetadata"/> instance.</param>
-	/// <param name="allowedCast">Indicates whether current cast is allowed.</param>
+	/// <param name="allowedCast">Indicates whether the current cast is allowed.</param>
 	/// <exception cref="InvalidCastException">
 	/// Throws an exception if the instance cannot be cast to <paramref name="typeMetadata"/> instance.
 	/// </exception>
@@ -216,7 +216,7 @@ internal static class CommonValidationUtilities
 		throw new InvalidOperationException(message);
 	}
 	/// <summary>
-	/// Throws an exception if CLR type doesn't match with metadata type.
+	/// Throws an exception if the CLR type doesn't match with the metadata type.
 	/// </summary>
 	/// <param name="typeOfT">Datatype CLR type.</param>
 	/// <param name="dataTypeMetadata">Datatype metadata.</param>
@@ -235,7 +235,7 @@ internal static class CommonValidationUtilities
 	/// </summary>
 	/// <param name="currentTypeMetadata">Current <see cref="JDataTypeMetadata"/> instance.</param>
 	/// <param name="currentDimension">Number of current datatype dimensions.</param>
-	/// <param name="level">Level of nesting for current type.</param>
+	/// <param name="level">Level of nesting for the current type.</param>
 	/// <exception cref="InvalidOperationException">
 	/// Throws and exception if <paramref name="currentDimension"/> value is <see langword="null"/>.
 	/// </exception>

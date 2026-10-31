@@ -40,12 +40,12 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	}
 
 	/// <summary>
-	/// Retrieves a <typeparamref name="TReference"/> instance from current global instance.
+	/// Retrieves a <typeparamref name="TReference"/> instance from the current global instance.
 	/// </summary>
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	/// <param name="createReference">Indicates whether a local reference should be created.</param>
-	/// <returns>A <typeparamref name="TReference"/> instance from current global instance.</returns>
+	/// <returns>A <typeparamref name="TReference"/> instance from the current global instance.</returns>
 	public TReference
 		AsLocal<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TReference>(IEnvironment env,
 			Boolean createReference = false) where TReference : JReferenceObject, IReferenceType<TReference>
@@ -97,7 +97,7 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// <summary>
 	/// Sets the current instance value.
 	/// </summary>
-	/// <param name="globalRef">A global object reference the value of the current instance.</param>
+	/// <param name="globalRef">A global object references the value of the current instance.</param>
 	protected void SetValue(IntPtr globalRef)
 	{
 		this._value.Value = globalRef;

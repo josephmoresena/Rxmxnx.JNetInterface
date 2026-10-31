@@ -30,9 +30,9 @@ internal abstract partial class VirtualMachineCore : GlobalMainClasses
 	}
 
 	/// <summary>
-	/// Retrieves managed <see cref="InvokeInterface"/> reference from current instance.
+	/// Retrieves managed <see cref="InvokeInterface"/> reference from the current instance.
 	/// </summary>
-	/// <returns>A managed <see cref="InvokeInterface"/> reference from current instance.</returns>
+	/// <returns>A managed <see cref="InvokeInterface"/> reference from the current instance.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public unsafe ref readonly InvokeInterface GetInvokeInterface()
 		=> ref *(InvokeInterface*)this.Reference.InterfacePointer;
@@ -41,7 +41,7 @@ internal abstract partial class VirtualMachineCore : GlobalMainClasses
 	public JResult GetEnv(out JEnvironmentRef envRef, Int32 jniVersion)
 	{
 		ref readonly InvokeInterface invoke = ref this.GetInvokeInterface();
-		return invoke.GetEnv(this.Reference, out envRef, (Int32)JRuntimeVersion.SEd2);
+		return invoke.GetEnv(this.Reference, out envRef, jniVersion);
 	}
 	/// <inheritdoc cref="IVirtualMachineHost.AttachThread(Boolean, VirtualMachineArgumentValue, out JEnvironmentRef)"/>
 	public JResult AttachThread(Boolean isDaemon, VirtualMachineArgumentValue arg, out JEnvironmentRef envRef)
@@ -192,8 +192,8 @@ internal sealed class VirtualMachineCore<TThread> : VirtualMachineCore where TTh
 	/// Attaches the current thread to the virtual machine for <paramref name="purpose"/>.
 	/// </summary>
 	/// <param name="isAlive">Indicates whether the current virtual machine is alive.</param>
-	/// <param name="purpose">The purpose of requested thread.</param>
-	/// <returns>A <see cref="IThread"/> instance for given purpose.</returns>
+	/// <param name="purpose">The purpose of the requested thread.</param>
+	/// <returns>A <see cref="IThread"/> instance for the given purpose.</returns>
 	public IThread CreateThread(Boolean isAlive, ThreadPurpose purpose)
 	{
 		if (!isAlive) return new DeadThread(this.VirtualMachine);

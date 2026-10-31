@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Map structure for multidimensional array creation.
 /// </summary>
-/// <typeparam name="TElement">The type of array element.</typeparam>
+/// <typeparam name="TElement">The type of the array element.</typeparam>
 #if !PACKAGE
 [ExcludeFromCodeCoverage]
 #endif
@@ -21,8 +21,4 @@ internal struct ArrayFillMap<TElement>(ArrayFillState<TElement> state)
 	/// Array type metadata.
 	/// </summary>
 	public required JArrayTypeMetadata ArrayTypeMetadata { get; init; }
-	/// <summary>
-	/// A <see cref="IEnvironment"/> instance.
-	/// </summary>
-	public required IEnvironment Environment { get; init; }
 }

@@ -49,6 +49,7 @@ internal sealed class SpanishMessageResource : IMessageResource
 	String IMessageResource.InvalidReferenceObject => "JReferenceObject no válido.";
 	String IMessageResource.InvalidObjectMetadata => "Metadatos de objeto no válidos.";
 	String IMessageResource.DisposedObject => "JReferenceObject ha sido eliminado.";
+	String IMessageResource.InvalidParameterIndex => "Índice de parámetro no válido.";
 	String IMessageResource.InvalidArrayLength => "La longitud del array debe ser cero o positiva.";
 	String IMessageResource.DeadVirtualMachine => "La JVM actual no está en ejecución.";
 	String IMessageResource.NotAttachedThread => "El hilo actual no está adjunto a la JVM.";
@@ -136,6 +137,8 @@ internal sealed class SpanishMessageResource : IMessageResource
 			"El tipo de arreglo tiene demasiadas dimensiones.";
 	String IMessageResource.InvalidInterfaceVersion(Int32 currentVersion, Int32 requiredVersion)
 		=> $"El proceso actual debe ejecutarse con una versión de JNI compatible con 0x{requiredVersion:x8}, pero la versión detectada es 0x{currentVersion:x8}.";
+
+	String IMessageResource.InvalidObjectAt(Int32 index) => $"Objeto no válido en {index}.";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

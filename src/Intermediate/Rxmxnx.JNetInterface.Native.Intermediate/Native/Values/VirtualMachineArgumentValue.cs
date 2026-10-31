@@ -21,7 +21,7 @@ internal readonly unsafe struct VirtualMachineArgumentValue(Int32 version, Byte*
 	/// </summary>
 	public readonly Byte* Name = name;
 	/// <summary>
-	/// Global reference to thread group.
+	/// Global reference to a thread group.
 	/// </summary>
 	public readonly JGlobalRef Group = group;
 

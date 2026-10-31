@@ -127,6 +127,7 @@ internal abstract class LocalMainClasses : MainClasses<JClassObject>
 	/// <see langword="true"/> if <paramref name="jGlobal"/> is main global class; otherwise;
 	/// <see langword="false"/>.
 	/// </returns>
+	// ReSharper disable once MemberCanBeProtected.Global
 	public static Boolean IsMainGlobal(JGlobal? jGlobal)
 	{
 		if (jGlobal?.ObjectMetadata is not ClassObjectMetadata classMetadata) return false;

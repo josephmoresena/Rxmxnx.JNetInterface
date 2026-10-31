@@ -34,11 +34,20 @@ internal readonly unsafe struct MonitorFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult MonitorEnter(JEnvironmentRef envRef, JObjectLocalRef localRef)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._windows.MonitorEnter(envRef, localRef);
+			if (SystemInfo.IsWindows)
+				return this._windows.MonitorEnter(envRef, localRef);
 #endif
-		return this._unix.MonitorEnter(envRef, localRef);
+			return this._unix.MonitorEnter(envRef, localRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 	/// <summary>
 	/// <c>MonitorExit</c>.
@@ -49,11 +58,20 @@ internal readonly unsafe struct MonitorFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult MonitorExit(JEnvironmentRef envRef, JObjectLocalRef localRef)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._windows.MonitorExit(envRef, localRef);
+			if (SystemInfo.IsWindows)
+				return this._windows.MonitorExit(envRef, localRef);
 #endif
-		return this._unix.MonitorExit(envRef, localRef);
+			return this._unix.MonitorExit(envRef, localRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 
 #if !ANDROID

@@ -39,7 +39,7 @@ public partial class JThrowableObject
 		}
 
 		/// <summary>
-		/// Appends an interface to current type definition.
+		/// Appends an interface to the current type definition.
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <returns>Current instance.</returns>

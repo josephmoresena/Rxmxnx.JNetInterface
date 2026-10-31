@@ -1,5 +1,6 @@
 namespace Rxmxnx.JNetInterface;
 
+// ReSharper disable once ClassCannotBeInstantiated
 public partial class JVirtualMachine : IVirtualMachineHost, ITypeManager
 {
 	IEnumerable<ITypeInformation> ITypeManager.ClassesInformation => JVirtualMachine.MainClassesInformation;

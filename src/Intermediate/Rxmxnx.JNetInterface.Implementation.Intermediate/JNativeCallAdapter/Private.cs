@@ -52,47 +52,6 @@ public readonly ref partial struct JNativeCallAdapter
 		private readonly JNativeCallAdapter _callAdapter;
 
 		/// <summary>
-		/// Throws an exception if <paramref name="localRef"/> is not a class reference.
-		/// </summary>
-		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
-		/// <exception cref="ArgumentException">
-		/// Throws an exception if <paramref name="localRef"/> is not a class reference.
-		/// </exception>
-		private void ThrowIfNotClassObject(JObjectLocalRef localRef)
-		{
-			INativeThread env = this._callAdapter._env;
-			Builder.ThrowIfNotLocalReference(env, localRef);
-			JClassObject jClass = JVirtualMachine.CheckClassRefNativeCallEnabled ?
-				env.GetObjectClass(localRef) :
-				env.ClassFeature.ClassObject;
-
-			if (jClass.Name.AsSpan().SequenceEqual(env.ClassFeature.ClassObject.Name)) return;
-			IMessageResource resource = IMessageResource.GetInstance();
-			String objectClassName = ClassNameHelper.GetClassName(jClass.ClassSignature);
-			String className = ClassNameHelper.GetClassName(env.ClassFeature.ClassObject.ClassSignature);
-			String message = resource.NotTypeObject(objectClassName, className);
-			throw new ArgumentException(message);
-		}
-		/// <summary>
-		/// Retrieves the class object and instantiation metadata.
-		/// </summary>
-		/// <param name="localRef">Object instance to get class.</param>
-		/// <param name="typeMetadata">Output. Instantiation metadata.</param>
-		/// <param name="validateReference">Indicates whether <paramref name="localRef"/> should be checked as local.</param>
-		/// <returns>Object's class <see cref="JClassObject"/> instance</returns>
-		private JClassObject GetObjectClass(JObjectLocalRef localRef, out JReferenceTypeMetadata typeMetadata,
-			Boolean validateReference = false)
-		{
-			INativeThread env = this._callAdapter._env;
-			if (env.LocalCache.GetLifetime(localRef)?.Class is { } jClass)
-			{
-				typeMetadata = env.ClassFeature.GetTypeMetadata(jClass);
-				return jClass;
-			}
-			if (validateReference) Builder.ThrowIfNotLocalReference(env, localRef);
-			return env.GetObjectClass(localRef, out typeMetadata);
-		}
-		/// <summary>
 		/// Retrieves initial final <typaramref name="TObject"/> instance for <paramref name="localRef"/>.
 		/// </summary>
 		/// <typeparam name="TObject">A <see cref="IReferenceType"/> type.</typeparam>
@@ -107,8 +66,8 @@ public readonly ref partial struct JNativeCallAdapter
 			INativeThread env = this._callAdapter._env;
 			JReferenceTypeMetadata typeMetadata = (JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TObject>();
 			JClassObject jClass = typeMetadata.GetClass(env);
-			Builder.ThrowIfNotLocalReference(env, localRef);
-			return (TObject)this.CreateObject(jClass, localRef, typeMetadata, typeMetadata);
+			NativeCallUtilities.ThrowIfNotLocalReference(env, localRef);
+			return (TObject)this.CreateObject(jClass, localRef, typeMetadata);
 		}
 		/// <summary>
 		/// Creates an object of type <paramref name="typeMetadata"/> using <paramref name="jClass"/> and
@@ -123,20 +82,18 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <paramref name="localRef"/>.
 		/// </returns>
 		private JReferenceObject CreateObject(JClassObject jClass, JObjectLocalRef localRef,
-			JReferenceTypeMetadata classMetadata, JReferenceTypeMetadata typeMetadata)
+			JReferenceTypeMetadata classMetadata, JReferenceTypeMetadata? typeMetadata = default)
 		{
 			INativeThread env = this._callAdapter._env;
-			this._callAdapter._cache.Activate(out LocalCache previous);
+			CallFrame cache = this._callAdapter._cache;
+			cache.Activate(out LocalCache previous);
 			try
 			{
-				JLocalObject jLocal = classMetadata.CreateInstance(jClass, localRef, true);
-				Boolean disposeParse = typeMetadata.Modifier != JTypeModifier.Final && classMetadata != typeMetadata;
-				JReferenceObject result = typeMetadata.ParseInstance(jLocal, disposeParse);
-				this._callAdapter._cache.RegisterAlien(localRef, result as ILocalObject ?? jLocal);
-				return result;
+				return NativeCallUtilities.CreateAlienObject(cache, jClass, localRef, classMetadata, typeMetadata);
 			}
 			finally
 			{
+				// Revert cache activation.
 				env.LocalCache = previous;
 			}
 		}

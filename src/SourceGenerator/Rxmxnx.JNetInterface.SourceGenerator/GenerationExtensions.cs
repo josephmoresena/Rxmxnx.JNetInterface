@@ -63,13 +63,13 @@ internal static partial class GenerationExtensions
 	/// Retrieves the <paramref name="ctx"/> node as a <see cref="INamedTypeSymbol"/> instance.
 	/// </summary>
 	/// <param name="ctx">A <see cref="GeneratorSyntaxContext"/> instance.</param>
-	/// <param name="_">A <see cref="CancellationToken"/> instance.</param>
+	/// <param name="cancellationToken">A <see cref="CancellationToken"/> instance.</param>
 	/// <returns>
 	/// The current node as <see cref="INamedTypeSymbol"/> instance or <see langword="null"/>.
 	/// </returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private static INamedTypeSymbol? GetNamedTypeSymbol(GeneratorSyntaxContext ctx, CancellationToken _)
-		=> ctx.SemanticModel.GetDeclaredSymbol(ctx.Node) as INamedTypeSymbol;
+	private static INamedTypeSymbol? GetNamedTypeSymbol(GeneratorSyntaxContext ctx, CancellationToken cancellationToken)
+		=> ctx.SemanticModel.GetDeclaredSymbol(ctx.Node, cancellationToken) as INamedTypeSymbol;
 	/// <summary>
 	/// Creates a <see cref="NativeTypeHelper"/> for <paramref name="typeSymbol"/>.
 	/// </summary>
@@ -79,8 +79,7 @@ internal static partial class GenerationExtensions
 	private static NativeTypeHelper? GetHelper(INamedTypeSymbol? typeSymbol, CancellationToken _)
 	{
 		if (typeSymbol is null) return default;
-		ImmutableHashSet<String> interfaces =
-			typeSymbol.AllInterfaces.Select(i => i.ToDisplayString()).ToImmutableHashSet();
+		ImmutableHashSet<String> interfaces = [.. typeSymbol.AllInterfaces.Select(i => i.ToDisplayString()),];
 		return interfaces.Contains("Rxmxnx.JNetInterface.Types.INativeType") ? new(typeSymbol, interfaces) : default;
 	}
 }

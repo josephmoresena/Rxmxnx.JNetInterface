@@ -12,8 +12,8 @@ public sealed partial class ExceptionHandlingTests
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		try
 		{
+			const String message = "Throwable message";
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
-			String message = "Throwable message";
 			JGlobalRef globalRef = ExceptionHandlingTests.fixture.Create<JGlobalRef>();
 			JStringLocalRef messageRef = ExceptionHandlingTests.fixture.Create<JStringLocalRef>();
 

@@ -14,9 +14,9 @@ internal sealed partial class EnvironmentCore
 	/// Retrieves the <see cref="JClassObject"/> according to <paramref name="classRef"/>.
 	/// </summary>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
-	/// <param name="keepReference">Indicates whether class reference should be assigned to created object.</param>
+	/// <param name="keepReference">Indicates whether the class reference should be assigned to the created object.</param>
 	/// <param name="runtimeInformation">Runtime known type information.</param>
-	/// <param name="deleteLocalRef">Indicates whether local class reference should be deleted.</param>
+	/// <param name="deleteLocalRef">Indicates whether the local class reference should be deleted.</param>
 	/// <returns>A <see cref="JClassObject"/> instance.</returns>
 	public JClassObject GetClass(JClassLocalRef classRef, Boolean keepReference,
 		WellKnownRuntimeTypeInformation runtimeInformation = default, Boolean deleteLocalRef = false)
@@ -40,7 +40,7 @@ internal sealed partial class EnvironmentCore
 		}
 	}
 	/// <summary>
-	/// Loads in current cache given class.
+	/// Loads in the current cache given class.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	public void LoadClass(JClassObject? jClass)
@@ -50,7 +50,7 @@ internal sealed partial class EnvironmentCore
 		this.Host.TypeManager.LoadGlobal(jClass);
 	}
 	/// <summary>
-	/// Loads in current cache given class.
+	/// Loads in the current cache given class.
 	/// </summary>
 	/// <param name="frame">A <see cref="LocalFrame"/> instance.</param>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>

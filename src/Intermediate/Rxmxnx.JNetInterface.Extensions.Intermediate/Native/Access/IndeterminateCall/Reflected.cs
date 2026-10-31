@@ -1,5 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native.Access;
 
+// ReSharper disable once ClassCannotBeInstantiated
 public abstract partial class IndeterminateCall
 {
 	/// <inheritdoc cref="IndeterminateHelper.ReflectedFunctionCall(JMethodObject, JLocalObject, ReadOnlySpan{IObject})"/>

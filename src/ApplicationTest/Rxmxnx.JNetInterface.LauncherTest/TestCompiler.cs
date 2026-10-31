@@ -20,7 +20,7 @@ public static partial class TestCompiler
 			nativeImageDir.Create();
 
 			await TestCompiler.CompileJavaClass(classDir.FullName, jdk);
-			await File.WriteAllTextAsync(jniConfigPath, TestCompiler.JniConfig, ConsoleNotifier.CancellationToken);
+			await File.WriteAllTextAsync(jniConfigPath, TestCompiler.jniConfig, ConsoleNotifier.CancellationToken);
 			await TestCompiler.CreateJar(directory.FullName, jdk, outputJavaDirectory.FullName);
 
 			File.Move(classFilePath, Path.Combine(outputDirectory.FullName, "HelloDotnet.class"), true);
@@ -45,9 +45,11 @@ public static partial class TestCompiler
 		String? appGuiProjectFile = projectDirectory.GetDirectories("*.ApplicationGuiTest", SearchOption.AllDirectories)
 		                                            .SelectMany(d => d.GetFiles("*.ApplicationGuiTest.csproj"))
 		                                            .Select(f => f.FullName).FirstOrDefault();
-		String[] appProjectFiles = projectDirectory.GetDirectories("*.*ApplicationTest", SearchOption.AllDirectories)
-		                                           .SelectMany(d => d.GetFiles("*.*proj")).Select(f => f.FullName)
-		                                           .ToArray();
+		String[] appProjectFiles =
+		[
+			.. projectDirectory.GetDirectories("*.*ApplicationTest", SearchOption.AllDirectories)
+			                   .SelectMany(d => d.GetFiles("*.*proj")).Select(f => f.FullName),
+		];
 
 		foreach (Architecture arch in architectures)
 		{

@@ -64,5 +64,7 @@ internal partial class JPrimitiveObject
 			Unsafe.As<Byte, TValue>(ref span[offset]) = this.Value;
 			offset += this.SizeOf;
 		}
+		/// <inheritdoc/>
+		public abstract void Configure<TSlot>(TSlot slot) where TSlot : IParameterSlot;
 	}
 }

@@ -14,7 +14,7 @@ public interface IInterfaceSet : IEnumerable<JInterfaceTypeMetadata>
 	/// </returns>
 	Boolean Contains(JInterfaceTypeMetadata item);
 	/// <summary>
-	/// Performs <paramref name="action"/> for each unique item in current set.
+	/// Performs <paramref name="action"/> for each unique item in the current set.
 	/// </summary>
 	/// <typeparam name="T">Type of state object</typeparam>
 	/// <param name="state">Object state.</param>

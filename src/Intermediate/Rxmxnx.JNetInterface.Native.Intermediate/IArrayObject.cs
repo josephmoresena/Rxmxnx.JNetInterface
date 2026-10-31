@@ -8,4 +8,4 @@ namespace Rxmxnx.JNetInterface;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2326,
                  Justification = CommonConstants.OnlyInternalInstantiationJustification)]
 #endif
-public interface IArrayObject<out TElement> : ILocalObject where TElement : IObject;
+public interface IArrayObject<out TElement> : ILocalObject, IWrapper<JArrayObject> where TElement : IObject;

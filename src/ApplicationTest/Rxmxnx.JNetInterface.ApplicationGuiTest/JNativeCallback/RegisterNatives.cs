@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 using Rxmxnx.JNetInterface.ApplicationTest;
+using Rxmxnx.JNetInterface.Functional;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.References;
@@ -9,6 +10,7 @@ using Rxmxnx.JNetInterface.Primitives;
 
 namespace Rxmxnx.JNetInterface;
 
+// ReSharper disable once ClassCannotBeInstantiated
 public unsafe partial class JNativeCallback
 {
 	private static void RegisterNatives(IEnvironment env)
@@ -54,18 +56,9 @@ public unsafe partial class JNativeCallback
 	{
 		try
 		{
-			JStringObject? jString = default;
-			JNativeCallAdapter callAdapter = JNativeCallAdapter.Create(environmentRef).Build();
-			try
-			{
-				jString = JStringObject.Create(callAdapter.Environment, "Invalid callback class."u8);
-			}
-			catch (Exception e)
-			{
-				if (e is JniException)
-					callAdapter.Environment.PendingException = default;
-			}
-			return callAdapter.FinalizeCall(jString);
+			GetExceptionMessageFunction function = new();
+			function.WithNativeFrame(environmentRef, out JStringLocalRef result);
+			return result;
 		}
 		catch (RunningStateException)
 		{
@@ -76,6 +69,25 @@ public unsafe partial class JNativeCallback
 			if (ex.Result is JResult.DetachedThreadError)
 				return default;
 			throw;
+		}
+	}
+
+	private readonly struct GetExceptionMessageFunction : IFrameFunction<JStringObject?>
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		JStringObject? IFrameFunction<JStringObject?>.Apply(IEnvironment env,
+			scoped ReadOnlySpan<JReferenceObject?> objects)
+		{
+			try
+			{
+				return JStringObject.Create(env, "Invalid callback class."u8);
+			}
+			catch (Exception e)
+			{
+				if (e is JniException)
+					env.PendingException = default;
+				return default;
+			}
 		}
 	}
 }

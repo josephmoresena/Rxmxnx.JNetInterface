@@ -16,7 +16,7 @@ public partial class JEnumObject : JLocalObject, IClassType<JEnumObject>, IInter
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public Int32 Ordinal => this._ordinal ??= this.Environment.FunctionSet.GetOrdinal(this);
 	/// <summary>
-	/// Name of this enum constant, exactly as declared in its enum declaration.
+	/// The name of this enum constant, exactly as declared in its enum declaration.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public String Name => this._name ??= this.GetName();

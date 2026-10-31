@@ -133,11 +133,14 @@ public sealed partial class TypeMetadataBuilderTests
 		where TReferenceType : JReferenceObject, IReferenceType<TReferenceType>
 	{
 		JReferenceTypeMetadata typeMetadata = IReferenceType.GetMetadata<TReferenceType>();
-		JTypeKind kind = typeMetadata is JEnumTypeMetadata ? JTypeKind.Enum :
-			typeMetadata is JInterfaceTypeMetadata ?
-				interfaces.Contains(IInterfaceType.GetMetadata<JAnnotationObject>()) ?
-					JTypeKind.Annotation :
-					JTypeKind.Interface : JTypeKind.Class;
+		JTypeKind kind = typeMetadata switch
+		{
+			JEnumTypeMetadata => JTypeKind.Enum,
+			JInterfaceTypeMetadata => interfaces.Contains(IInterfaceType.GetMetadata<JAnnotationObject>()) ?
+				JTypeKind.Annotation :
+				JTypeKind.Interface,
+			_ => JTypeKind.Class,
+		};
 
 		Assert.Equal(IntPtr.Size, typeMetadata.SizeOf);
 		Assert.Equal(JArrayObject<TReferenceType>.Metadata, typeMetadata.GetArrayMetadata());
@@ -152,6 +155,7 @@ public sealed partial class TypeMetadataBuilderTests
 			Assert.True(typeMetadata.Interfaces.Contains(interfaceTypeMetadata));
 	}
 
+	// ReSharper disable once ClassNeverInstantiated.Local
 	private sealed class InvalidSubClass : JLocalObject.Uninstantiable<InvalidSubClass>,
 		IUninstantiableType<InvalidSubClass>
 	{
@@ -194,7 +198,9 @@ public sealed partial class TypeMetadataBuilderTests
 	{
 		public static readonly String[] Interfaces = IInterfaceType.GetMetadata<SubInterface>().Interfaces
 		                                                           .Select(i => ClassNameHelper.GetClassName(
+			                                                                   // ReSharper disable once UseCollectionExpression
 			                                                                   i.Signature)).ToArray();
+		// ReSharper disable once MemberCanBePrivate.Local
 		public static ReadOnlySpan<Byte> Name => "fake/invalid/SubInterface"u8;
 		public static JInterfaceTypeMetadata<SubInterface> Metadata
 			=> TypeMetadataBuilder<SubInterface>.Create(SubInterface.Name).Extends<JGenericDeclarationObject>()
@@ -204,6 +210,7 @@ public sealed partial class TypeMetadataBuilderTests
 			=> new(initializer);
 	}
 
+	// ReSharper disable once ClassNeverInstantiated.Local
 	private sealed class InvalidImplementation1 : JLocalObject.Uninstantiable<InvalidImplementation1>,
 		IInterfaceObject<JGenericDeclarationObject>, IUninstantiableType<InvalidImplementation1>
 	{
@@ -218,9 +225,11 @@ public sealed partial class TypeMetadataBuilderTests
 			                                              .Implements<JGenericDeclarationObject>().Build();
 	}
 
+	// ReSharper disable once ClassNeverInstantiated.Local
 	private sealed class InvalidImplementation2 : JLocalObject.Uninstantiable<InvalidImplementation2>,
 		IUninstantiableType<InvalidImplementation2>, IInterfaceObject<SubInterface>
 	{
+		// ReSharper disable once MemberCanBePrivate.Local
 		public static ReadOnlySpan<Byte> Name => "fake/invalid/InvalidImplementation2"u8;
 
 		public static JClassTypeMetadata<InvalidImplementation2> Metadata
@@ -228,6 +237,7 @@ public sealed partial class TypeMetadataBuilderTests
 			                                              .Implements<SubInterface>().Build();
 	}
 
+	// ReSharper disable once ClassNeverInstantiated.Local
 	private sealed class InvalidImplementation3 : JLocalObject.Uninstantiable<InvalidImplementation3>,
 		IUninstantiableType<InvalidImplementation3>
 	{
@@ -260,6 +270,7 @@ public sealed partial class TypeMetadataBuilderTests
 	private sealed class InvalidExtension2 : JInterfaceObject<InvalidExtension2>, IInterfaceType<InvalidExtension2>,
 		IInterfaceObject<SubInterface>
 	{
+		// ReSharper disable once MemberCanBePrivate.Local
 		public static ReadOnlySpan<Byte> Name => "fake/invalid/InvalidExtension2"u8;
 		public static JInterfaceTypeMetadata<InvalidExtension2> Metadata
 			=> TypeMetadataBuilder<InvalidExtension2>.Create(InvalidExtension2.Name).Extends<SubInterface>().Build();

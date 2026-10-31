@@ -1,3 +1,5 @@
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+
 namespace Rxmxnx.JNetInterface;
 
 /// <summary>
@@ -9,7 +11,7 @@ namespace Rxmxnx.JNetInterface;
 public readonly ref struct AndroidJniContext
 {
 	/// <summary>
-	/// The <see cref="IEnvironment"/> instance for current context.
+	/// The <see cref="IEnvironment"/> instance for the current context.
 	/// </summary>
 	public IEnvironment Environment { get; }
 	/// <summary>

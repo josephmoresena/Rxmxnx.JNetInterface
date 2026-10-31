@@ -40,7 +40,7 @@ public partial class JLocalObject
 		/// Constructor.
 		/// </summary>
 		/// <param name="information">Internal sequence information.</param>
-		/// <param name="isVoid">Indicates if current class is <c>void</c> wrapper.</param>
+		/// <param name="isVoid">Indicates if the current class is <c>void</c> wrapper.</param>
 		/// <param name="baseMetadata">Base type of the current type metadata.</param>
 		public ClassTypeMetadata(TypeInfoSequence information, Boolean isVoid, JClassTypeMetadata? baseMetadata) :
 			base(information)

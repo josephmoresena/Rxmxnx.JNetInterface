@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Native;
 public partial class JLocalObject
 {
 	/// <summary>
-	/// This class is used for create a view of an array object.
+	/// This class is used to create a view of an array object.
 	/// </summary>
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
@@ -46,9 +46,9 @@ public partial class JLocalObject
 		/// </summary>
 		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 		/// <param name="dispose">
-		/// Optional. Indicates whether current instance should be disposed after casting.
+		/// Optional. Indicates whether the current instance should be disposed of after casting.
 		/// </param>
-		/// <returns>A <see cref="JArrayObject"/> instance from current global instance.</returns>
+		/// <returns>A <see cref="JArrayObject"/> instance from the current global instance.</returns>
 		internal static JArrayObject ParseArray<TElement>(JLocalObject jLocal, Boolean dispose = false)
 			where TElement : IDataType<TElement>
 		{

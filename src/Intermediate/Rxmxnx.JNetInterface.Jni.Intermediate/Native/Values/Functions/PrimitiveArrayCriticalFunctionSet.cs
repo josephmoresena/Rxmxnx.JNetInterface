@@ -34,13 +34,22 @@ internal readonly unsafe struct PrimitiveArrayCriticalFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public IntPtr GetPrimitiveArrayCritical(JEnvironmentRef envRef, JArrayLocalRef arrayRef, out JBoolean isCopy)
 	{
-		fixed (JBoolean* isCopyPtr = &isCopy)
+		try
 		{
+			fixed (JBoolean* isCopyPtr = &isCopy)
+			{
 #if !ANDROID
-			if (SystemInfo.IsWindows)
-				return this._windows.GetPrimitiveArrayCritical(envRef, arrayRef, isCopyPtr);
+				if (SystemInfo.IsWindows)
+					return this._windows.GetPrimitiveArrayCritical(envRef, arrayRef, isCopyPtr);
 #endif
-			return this._unix.GetPrimitiveArrayCritical(envRef, arrayRef, isCopyPtr);
+				return this._unix.GetPrimitiveArrayCritical(envRef, arrayRef, isCopyPtr);
+			}
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
 		}
 	}
 	/// <summary>
@@ -53,14 +62,23 @@ internal readonly unsafe struct PrimitiveArrayCriticalFunctionSet
 	public void ReleasePrimitiveArrayCritical(JEnvironmentRef envRef, JArrayLocalRef arrayRef, IntPtr dataPtr,
 		JReleaseMode mode)
 	{
-#if !ANDROID
-		if (SystemInfo.IsWindows)
+		try
 		{
-			this._windows.ReleasePrimitiveArrayCritical(envRef, arrayRef, dataPtr, mode);
-			return;
-		}
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+			{
+				this._windows.ReleasePrimitiveArrayCritical(envRef, arrayRef, dataPtr, mode);
+				return;
+			}
 #endif
-		this._unix.ReleasePrimitiveArrayCritical(envRef, arrayRef, dataPtr, mode);
+			this._unix.ReleasePrimitiveArrayCritical(envRef, arrayRef, dataPtr, mode);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 
 #if !ANDROID

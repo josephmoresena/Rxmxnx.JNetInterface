@@ -31,7 +31,7 @@ public partial class JLocalObject
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="dispose">
-	/// Optional. Indicates whether <paramref name="jLocal"/> should be disposed after casting.
+	/// Optional. Indicates whether <paramref name="jLocal"/> should be disposed of after casting.
 	/// </param>
 	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="jLocal"/>.</returns>
 	private TReference

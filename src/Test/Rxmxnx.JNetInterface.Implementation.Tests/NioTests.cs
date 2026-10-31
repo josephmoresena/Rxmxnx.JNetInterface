@@ -47,6 +47,7 @@ public sealed class NioTests
 				{
 					Assert.Equal(c0 + b1.Capacity, env.UsedStackBytes);
 					Assert.Equal(c0 + b1.Capacity, feature.WithDirectByteBuffer<JBufferObject, Int64, Int64>(
+						             // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
 						             512, env.UsedStackBytes, (b2, c1) =>
 						             {
 							             Assert.Equal(512, b2.Capacity);

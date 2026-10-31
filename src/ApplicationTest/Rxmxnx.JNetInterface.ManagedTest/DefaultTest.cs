@@ -269,7 +269,7 @@ public class DefaultTest
 		INativeMemoryAdapter adapter = Substitute.For<INativeMemoryAdapter>();
 		JIntArrayLocalRef arrayRef = DefaultTest.CreateNative<JIntArrayLocalRef>();
 		JObjectLocalRef localRef = DefaultTest.CreateNative<JObjectLocalRef>();
-		JInt[] values = Enumerable.Range(0, Random.Shared.Next(0, 100)).Select(i => (JInt)i).ToArray();
+		JInt[] values = [.. Enumerable.Range(0, Random.Shared.Next(0, 100)).Select(i => (JInt)i),];
 
 		using JClassObject jClass = EnvironmentProxy.CreateClassObject(envProxy); // java.lang.Class<?>
 		using JClassObject

@@ -36,11 +36,20 @@ internal readonly partial struct ReferenceFunctionSet
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public JResult PushLocalFrame(JEnvironmentRef envRef, Int32 capacity)
 		{
+			try
+			{
 #if !ANDROID
-			if (SystemInfo.IsWindows)
-				return this._windows.PushLocalFrame(envRef, capacity);
+				if (SystemInfo.IsWindows)
+					return this._windows.PushLocalFrame(envRef, capacity);
 #endif
-			return this._unix.PushLocalFrame(envRef, capacity);
+				return this._unix.PushLocalFrame(envRef, capacity);
+			}
+			finally
+			{
+#if !PACKAGE
+				JniCallBoundary.ThrowIfPending();
+#endif
+			}
 		}
 		/// <summary>
 		/// <c>PopLocalFrame</c>.
@@ -51,11 +60,20 @@ internal readonly partial struct ReferenceFunctionSet
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public JObjectLocalRef PopLocalFrame(JEnvironmentRef envRef, JObjectLocalRef localRef)
 		{
+			try
+			{
 #if !ANDROID
-			if (SystemInfo.IsWindows)
-				return this._windows.PopLocalFrame(envRef, localRef);
+				if (SystemInfo.IsWindows)
+					return this._windows.PopLocalFrame(envRef, localRef);
 #endif
-			return this._unix.PopLocalFrame(envRef, localRef);
+				return this._unix.PopLocalFrame(envRef, localRef);
+			}
+			finally
+			{
+#if !PACKAGE
+				JniCallBoundary.ThrowIfPending();
+#endif
+			}
 		}
 
 #if !ANDROID

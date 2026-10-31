@@ -24,7 +24,7 @@ internal interface INativeThread : IEnvironment, IAccessibleManager, ILocalCache
 	Boolean IsOwned { get; }
 
 	/// <summary>
-	/// Loads in current cache given class.
+	/// Loads in the current cache given class.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	void LoadClass(JClassObject jClass);

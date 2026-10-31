@@ -24,11 +24,11 @@ public partial interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	///         </item>
 	///         <item>
 	///             <term>0</term>
-	///             <description>The JVM is not Android-based, but supports Android classes.</description>
+	///             <description>The JVM is not Android-based but supports Android classes.</description>
 	///         </item>
 	///         <item>
 	///             <term>&gt; 0</term>
-	///             <description>The JVM is running on Android and the value represents the Android API level.</description>
+	///             <description>The JVM is running on Android, and the value represents the Android API level.</description>
 	///         </item>
 	///     </list>
 	/// </remarks>
@@ -60,7 +60,7 @@ public partial interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	IThread InitializeThread(CString? threadName = default, JGlobalBase? threadGroup = default,
 		Int32 version = IVirtualMachine.MinimalVersion);
 	/// <summary>
-	/// Attaches the current thread as daemon to the virtual machine.
+	/// Attaches the current thread as a daemon to the virtual machine.
 	/// </summary>
 	/// <param name="threadName">A name for the current thread.</param>
 	/// <param name="threadGroup">A <see cref="JGlobalBase"/> instance of <c>java.lang.ThreadGroup</c>.</param>

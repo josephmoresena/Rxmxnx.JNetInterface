@@ -92,6 +92,11 @@ public sealed class StringMemoryTests
 			proxyEnv.GetObjectRefType(globalRef.Value).Returns(JReferenceType.GlobalRefType);
 
 			using JNativeMemory<Char> seq = jString.GetCriticalChars(referenceKind);
+			ReadOnlyFixedContextValue<Char> fCtxValue = (ReadOnlyFixedContextValue<Char>)seq;
+			Assert.True(seq.TryCreateFixedValue(out FixedPointerValue fPointerValue));
+			Assert.Equal(seq.Values.Length, fCtxValue.Values.Length);
+			Assert.Equal(seq.Pointer, fCtxValue.Pointer);
+			Assert.Equal(seq.Pointer, fPointerValue.Pointer);
 			Assert.Equal(value.Length, seq.Values.Length);
 			Assert.Equal(fMem.Pointer, seq.Pointer);
 
@@ -162,6 +167,11 @@ public sealed class StringMemoryTests
 			});
 
 			using JNativeMemory<Char> seq = jString.GetCriticalChars(JMemoryReferenceKind.Local);
+			ReadOnlyFixedContextValue<Char> fCtxValue = (ReadOnlyFixedContextValue<Char>)seq;
+			Assert.True(seq.TryCreateFixedValue(out FixedPointerValue fPointerValue));
+			Assert.Equal(seq.Values.Length, fCtxValue.Values.Length);
+			Assert.Equal(seq.Pointer, fCtxValue.Pointer);
+			Assert.Equal(seq.Pointer, fPointerValue.Pointer);
 			Assert.Equal(value.Length, seq.Values.Length);
 			Assert.Equal(fMem.Pointer, seq.Pointer);
 			Assert.False(seq.Copy);
@@ -243,6 +253,11 @@ public sealed class StringMemoryTests
 			proxyEnv.GetObjectRefType(globalRef.Value).Returns(JReferenceType.GlobalRefType);
 
 			using JNativeMemory<Char> seq = jString.GetNativeChars(referenceKind);
+			ReadOnlyFixedContextValue<Char> fCtxValue = (ReadOnlyFixedContextValue<Char>)seq;
+			Assert.True(seq.TryCreateFixedValue(out FixedPointerValue fPointerValue));
+			Assert.Equal(seq.Values.Length, fCtxValue.Values.Length);
+			Assert.Equal(seq.Pointer, fCtxValue.Pointer);
+			Assert.Equal(seq.Pointer, fPointerValue.Pointer);
 			Assert.Equal(value.Length, seq.Values.Length);
 			Assert.Equal(fMem.Pointer, seq.Pointer);
 			Assert.Equal(isCopy, seq.Copy);
@@ -334,6 +349,11 @@ public sealed class StringMemoryTests
 			proxyEnv.GetObjectRefType(globalRef.Value).Returns(JReferenceType.GlobalRefType);
 
 			using JNativeMemory<Byte> seq = jString.GetNativeUtf8Chars(referenceKind);
+			ReadOnlyFixedContextValue<Byte> fCtxValue = (ReadOnlyFixedContextValue<Byte>)seq;
+			Assert.True(seq.TryCreateFixedValue(out FixedPointerValue fPointerValue));
+			Assert.Equal(seq.Values.Length, fCtxValue.Values.Length);
+			Assert.Equal(seq.Pointer, fCtxValue.Pointer);
+			Assert.Equal(seq.Pointer, fPointerValue.Pointer);
 			Assert.Equal(valueUtf.Length, seq.Values.Length);
 			Assert.Equal(fMem.Pointer, seq.Pointer);
 			Assert.Equal(isCopy, seq.Copy);
@@ -642,31 +662,46 @@ public sealed class StringMemoryTests
 		env.PendingException = default;
 
 		JNativeMemory<Char> seq = jString.GetNativeChars();
+		ReadOnlyFixedContextValue<Char> fCtxValue = (ReadOnlyFixedContextValue<Char>)seq;
+		Assert.True(seq.TryCreateFixedValue(out FixedPointerValue fPointerValue));
+		Assert.Equal(seq.Values.Length, fCtxValue.Values.Length);
+		Assert.Equal(seq.Pointer, fCtxValue.Pointer);
+		Assert.Equal(seq.Pointer, fPointerValue.Pointer);
 		Assert.Equal(value.Length, seq.Values.Length);
 		Assert.Equal(fMem.Pointer, seq.Pointer);
 
 		JNativeMemory<Char> seqCritical = jString.GetCriticalChars(JMemoryReferenceKind.Local);
+		ReadOnlyFixedContextValue<Char> fCtxCriticalValue = (ReadOnlyFixedContextValue<Char>)seqCritical;
+		Assert.True(seqCritical.TryCreateFixedValue(out FixedPointerValue fPointerCriticalValue));
+		Assert.Equal(seqCritical.Values.Length, fCtxCriticalValue.Values.Length);
+		Assert.Equal(seqCritical.Pointer, fCtxCriticalValue.Pointer);
+		Assert.Equal(seqCritical.Pointer, fPointerCriticalValue.Pointer);
 		Assert.Equal(value.Length, seqCritical.Values.Length);
 		Assert.Equal(fMem.Pointer, seqCritical.Pointer);
 
 		JNativeMemory<Byte> seqUtf = jString.GetNativeUtf8Chars();
+		ReadOnlyFixedContextValue<Byte> fCtxUtf8Value = (ReadOnlyFixedContextValue<Byte>)seqUtf;
+		Assert.True(seqUtf.TryCreateFixedValue(out FixedPointerValue fPointerUtf8Value));
+		Assert.Equal(seqUtf.Values.Length, fCtxUtf8Value.Values.Length);
+		Assert.Equal(seqUtf.Pointer, fCtxUtf8Value.Pointer);
+		Assert.Equal(seqUtf.Pointer, fPointerUtf8Value.Pointer);
 		Assert.Equal(utf[0].Length, seqUtf.Values.Length);
 		Assert.Equal(valUtfPtr.Pointer, seqUtf.Pointer);
 
 		proxyEnv.ExceptionCheck().Returns(true);
-		Assert.Throws<CriticalException>(() => seq.Dispose());
+		Assert.Throws<CriticalException>(seq.Dispose);
 
 		proxyEnv.ExceptionCheck().Returns(false);
 		env.PendingException = default;
 
 		proxyEnv.ExceptionCheck().Returns(true);
-		Assert.Throws<CriticalException>(() => seqCritical.Dispose());
+		Assert.Throws<CriticalException>(seqCritical.Dispose);
 
 		proxyEnv.ExceptionCheck().Returns(false);
 		env.PendingException = default;
 
 		proxyEnv.ExceptionCheck().Returns(true);
-		Assert.Throws<CriticalException>(() => seqUtf.Dispose());
+		Assert.Throws<CriticalException>(seqUtf.Dispose);
 
 		proxyEnv.ExceptionCheck().Returns(false);
 		env.PendingException = default;

@@ -294,6 +294,7 @@ public sealed class PrimitiveTypeTests
 		public UInt16 ToUInt16(IFormatProvider? provider) => throw new NotImplementedException();
 		public UInt32 ToUInt32(IFormatProvider? provider) => throw new NotImplementedException();
 		public UInt64 ToUInt64(IFormatProvider? provider) => throw new NotImplementedException();
+		public void Configure<TSlot>(TSlot slot) where TSlot : IParameterSlot => throw new NotImplementedException();
 
 		public static JNativeType GetNativeType<TPrimitive>() where TPrimitive : IPrimitiveType => TPrimitive.JniType;
 		public static Type? GetFamilyType<TPrimitive>() where TPrimitive : IPrimitiveType => TPrimitive.FamilyType;

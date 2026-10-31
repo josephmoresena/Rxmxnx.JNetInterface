@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// </summary>
 /// <param name="sequence">A <see cref="CStringSequence"/> containg class information.</param>
 /// <param name="kind">A <see cref="JTypeKind"/> value.</param>
-/// <param name="isFinal">Indicates whether current type is final.</param>
+/// <param name="isFinal">Indicates whether the current type is final.</param>
 internal sealed class TypeInformation(TypeInfoSequence sequence, JTypeKind kind = default, Boolean? isFinal = default)
 	: ITypeInformation
 {
@@ -21,9 +21,9 @@ internal sealed class TypeInformation(TypeInfoSequence sequence, JTypeKind kind 
 	public Boolean? IsFinal => isFinal ?? this.IsFinalType();
 
 	/// <summary>
-	/// Indicates whether current type is final.
+	/// Indicates whether the current type is final.
 	/// </summary>
-	/// <returns>Computed is final flag.</returns>
+	/// <returns>Computed <c>is final</c> flag.</returns>
 	private Boolean? IsFinalType()
 	{
 		if (this.Kind is JTypeKind.Primitive or JTypeKind.Enum) return true;

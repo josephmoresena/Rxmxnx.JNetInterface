@@ -144,9 +144,7 @@ public sealed class ThrowableTests
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JThrowableLocalRef throwableRef = ThrowableTests.fixture.Create<JThrowableLocalRef>();
 		String message = ThrowableTests.fixture.Create<String>();
-		StackTraceInfo[] stackTrace = emptyStackTrace ?
-			ThrowableTests.fixture.CreateMany<StackTraceInfo>().ToArray() :
-			[];
+		StackTraceInfo[] stackTrace = emptyStackTrace ? [.. ThrowableTests.fixture.CreateMany<StackTraceInfo>(),] : [];
 		using JClassObject jClass = new(env);
 		using JClassObject jThrowableClass = new(jClass, IClassType.GetMetadata<TThrowable>());
 		using JClassObject jStringClass = new(jClass, IClassType.GetMetadata<JStringObject>());
@@ -158,16 +156,17 @@ public sealed class ThrowableTests
 		using JArrayObject<JStackTraceElementObject> stackTraceElements =
 			new(jStackTraceElementClass, default, stackTrace.Length);
 		JStackTraceElementObject[] elements =
+			// ReSharper disable once UseCollectionExpression
 			stackTrace.Select(i => i.CreateStackTrace(jStackTraceElementClass)).ToArray();
 		ThrowableObjectMetadata throwableMetadata =
 			new(new(jThrowableClass)) { Message = useMessage ? message : default, };
 		env.FunctionSet.GetMessage(jThrowable).Returns(jStringMessage);
 		env.FunctionSet.GetStackTrace(jThrowable).Returns(stackTraceElements);
 		env.ArrayFeature.GetElement(stackTraceElements, Arg.Any<Int32>()).Returns(c => elements[(Int32)c[1]]);
-		env.WithFrame(Arg.Any<Int32>(), stackTraceElements,
-		              Arg.Any<Func<JArrayObject<JStackTraceElementObject>, StackTraceInfo[]>>())
-		   .Returns(c => (c[2] as Func<JArrayObject<JStackTraceElementObject>, StackTraceInfo[]>)!.Invoke(
-			            (JArrayObject<JStackTraceElementObject>)c[1]));
+		env.WithFrame(Arg.Any<Int32>(), Arg.Any<ValueTuple<IntPtr, Type>>(),
+		              Arg.Any<Func<ValueTuple<IntPtr, Type>, StackTraceInfo[]>>())
+		   .Returns(call => call.Arg<Func<ValueTuple<IntPtr, Type>, StackTraceInfo[]>>()(
+			            call.Arg<ValueTuple<IntPtr, Type>>()));
 
 		ILocalObject.ProcessMetadata(jThrowable, throwableMetadata);
 

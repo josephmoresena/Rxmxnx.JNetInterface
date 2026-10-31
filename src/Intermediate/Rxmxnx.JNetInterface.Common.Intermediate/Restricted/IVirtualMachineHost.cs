@@ -27,16 +27,16 @@ internal interface IVirtualMachineHost : IWrapper<IVirtualMachine>
 	GlobalMainClasses MainClasses { get; }
 
 	/// <summary>
-	/// Retrieves the <see cref="JEnvironmentRef"/> reference for current thread.
+	/// Retrieves the <see cref="JEnvironmentRef"/> reference for the current thread.
 	/// </summary>
 	/// <param name="envRef">Output. Current thread <see cref="JEnvironmentRef"/> reference.</param>
 	/// <param name="jniVersion">JNI version.</param>
 	/// <returns>JNI code result.</returns>
 	JResult GetEnv(out JEnvironmentRef envRef, Int32 jniVersion);
 	/// <summary>
-	/// Attach current thread to VM.
+	/// Attach the current thread to VM.
 	/// </summary>
-	/// <param name="isDaemon">Indicates current thread will be attached as daemon.</param>
+	/// <param name="isDaemon">Indicates the current thread will be attached as a daemon.</param>
 	/// <param name="arg">Attach argument.</param>
 	/// <param name="envRef">Output. Attached thread <see cref="JEnvironmentRef"/> reference.</param>
 	/// <returns>JNI code result.</returns>
@@ -53,7 +53,7 @@ internal interface IVirtualMachineHost : IWrapper<IVirtualMachine>
 	/// Indicates whether the current thread is owned by the current host instance.
 	/// </summary>
 	/// <returns>
-	/// <see langword="true"/> if the current thread is owned byt the current host instance; otherwise,
+	/// <see langword="true"/> if the current thread is owned by the current host instance; otherwise,
 	/// <see langword="false"/>.
 	/// </returns>
 	Boolean IsOwned();
@@ -63,5 +63,8 @@ internal interface IVirtualMachineHost : IWrapper<IVirtualMachine>
 	/// <param name="env">A <see cref="INativeThread"/> instance.</param>
 	/// <param name="classes">Current class cache.</param>
 	/// <returns>The initial <see cref="LocalCache"/> instance.</returns>
+#if !PACKAGE
+	[SuppressMessage("ReSharper", "UnusedParameter.Global")]
+#endif
 	LocalCache? GetInitialCache(INativeThread env, ClassCache classes) => default;
 }

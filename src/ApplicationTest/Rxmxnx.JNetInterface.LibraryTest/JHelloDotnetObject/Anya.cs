@@ -2,6 +2,7 @@ using Rxmxnx.JNetInterface.Primitives;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
+// ReSharper disable once ClassCannotBeInstantiated
 public partial class JHelloDotnetObject
 {
 	private static readonly JChar[,] anyaChars =

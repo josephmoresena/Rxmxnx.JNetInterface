@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Tests;
 [ExcludeFromCodeCoverage]
 public abstract class InvokeInterfaceProxy
 {
-	internal static InvokeInterfaceProxy Detached = InvokeInterfaceProxy.CreateDetached();
+	internal static readonly InvokeInterfaceProxy Detached = InvokeInterfaceProxy.CreateDetached();
 
 	public JGlobalRef ClassGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
 	public JGlobalRef ThrowableGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
@@ -42,6 +42,7 @@ public abstract class InvokeInterfaceProxy
 	public JMethodId SystemGetPropertyMethodId { get; } = ReferenceHelper.Fixture.Create<JMethodId>();
 
 	public JVirtualMachineRef Reference { get; private set; }
+	// ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
 	public Int32? AllowedThread { get; set; } = Environment.CurrentManagedThreadId;
 
 	public abstract JResult DestroyVirtualMachine();

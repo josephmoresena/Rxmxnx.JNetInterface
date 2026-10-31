@@ -58,7 +58,7 @@ public partial interface IReferenceType
 
 		/// <summary>
 		/// Retrieves a <see cref="InternalClassInitializer"/> instance
-		/// from current instance.
+		/// from the current instance.
 		/// </summary>
 		/// <returns>A <see cref="InternalClassInitializer"/> value.</returns>
 		internal InternalClassInitializer ToInternal() => this._instance;

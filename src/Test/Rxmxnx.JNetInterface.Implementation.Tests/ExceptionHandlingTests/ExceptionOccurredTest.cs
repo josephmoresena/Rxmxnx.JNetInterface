@@ -25,8 +25,8 @@ public partial class ExceptionHandlingTests
 			throwableMetadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameCtx);
 		try
 		{
+			const String message = "Throwable message";
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
-			String message = "Throwable message";
 			JGlobalRef globalRef = ExceptionHandlingTests.fixture.Create<JGlobalRef>();
 			JStringLocalRef classNameRef = ExceptionHandlingTests.fixture.Create<JStringLocalRef>();
 			JStringLocalRef messageRef = ExceptionHandlingTests.fixture.Create<JStringLocalRef>();

@@ -56,8 +56,20 @@ public readonly partial struct JFloat : IPrimitiveFloatingPointType, IPrimitiveN
 #if PACKAGE
 	JLocalObject IPrimitiveType.ToObject(IEnvironment env) => this.ToObject(env);
 #endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void IObject.GetValue(out JValue value)
+	{
+		Unsafe.SkipInit(out value);
+		Unsafe.As<JValue, Single>(ref value) = this._value;
+	}
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void ICallArgument.Configure<TSlot>(TSlot slot) => slot.SetParameterValue(0, this);
 
 	/// <inheritdoc/>
+#if !PACKAGE
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1244,
+	                 Justification = CommonConstants.ExactPrimitiveEqualityJustification)]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Boolean Equals(JFloat other) => this._value.Equals(other._value);
 	/// <inheritdoc/>

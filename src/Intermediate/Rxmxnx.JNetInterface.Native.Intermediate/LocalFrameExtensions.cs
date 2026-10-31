@@ -1,0 +1,104 @@
+namespace Rxmxnx.JNetInterface;
+
+/// <summary>
+/// Functional local frame extensions.
+/// </summary>
+public static class LocalFrameExtensions
+{
+	/// <summary>
+	/// Executes a provided frame action within the context of the current environment.
+	/// </summary>
+	/// <typeparam name="TAction">The <see cref="IFrameAction"/> type of the frame action to execute.</typeparam>
+	/// <param name="environment">The <see cref="IEnvironment"/> instance which the action is executed.</param>
+	/// <param name="capacity">New local reference frame capacity.</param>
+	/// <param name="action">The frame action to execute.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static void WithFrame<TAction>(this IEnvironment? environment, Int32 capacity, TAction? action)
+#if !NET9_0_OR_GREATER
+		where TAction : IFrameAction
+#else
+		where TAction : IFrameAction, allows ref struct
+#endif
+	{
+		if (environment is null || action is null)
+			return;
+		if (typeof(TAction).IsValueType)
+		{
+			environment.WithFrameExecute(ref action, capacity);
+			return;
+		}
+		NonGenericFrameAction nonGeneric = NonGenericFrameAction.Create(action);
+		environment.WithFrameExecute(ref nonGeneric, capacity);
+	}
+	/// <summary>
+	/// Executes the current frame action within the context of the specified environment.
+	/// </summary>
+	/// <typeparam name="TAction">The <see cref="IFrameAction"/> type of the frame action to execute.</typeparam>
+	/// <param name="action">The frame action to execute.</param>
+	/// <param name="environment">The <see cref="IEnvironment"/> instance which the action is executed.</param>
+	/// <param name="capacity">New local reference frame capacity.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static void WithFrame<TAction>(this ref TAction action, IEnvironment? environment, Int32 capacity)
+#if !NET9_0_OR_GREATER
+		where TAction : struct, IFrameAction
+#else
+		where TAction : struct, IFrameAction, allows ref struct
+#endif
+		=> environment?.WithFrameExecute(ref action, capacity);
+	/// <summary>
+	/// Executes a provided frame function within the context of the current environment.
+	/// </summary>
+	/// <typeparam name="TFunction">The <see cref="IFrameFunction{TOutput}"/> type of the frame function to execute.</typeparam>
+	/// <typeparam name="TResult">The type of the result returned by the frame function.</typeparam>
+	/// <param name="environment">The <see cref="IEnvironment"/> instance which the function is executed.</param>
+	/// <param name="capacity">New local reference frame capacity.</param>
+	/// <param name="func">The frame function to execute.</param>
+	/// <param name="result">Output. The result returned by the frame function.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static void WithFrame<TFunction, TResult>(this IEnvironment? environment, Int32 capacity, TFunction? func,
+		out TResult result)
+#if !NET9_0_OR_GREATER
+		where TFunction : IFrameFunction<TResult>
+#else
+		where TFunction : IFrameFunction<TResult>, allows ref struct
+#endif
+	{
+		if (environment is null || func is null)
+		{
+			Unsafe.SkipInit(out result);
+			return;
+		}
+		if (typeof(TFunction).IsValueType)
+		{
+			result = environment.WithFrameExecute<TFunction, TResult>(ref func, capacity);
+			return;
+		}
+		NonGenericFrameFunction<TResult> nonGeneric = NonGenericFrameFunction<TResult>.Create(func);
+		result = environment.WithFrameExecute<NonGenericFrameFunction<TResult>, TResult>(ref nonGeneric, capacity);
+	}
+	/// <summary>
+	/// Executes the current frame function within the context of the specified environment.
+	/// </summary>
+	/// <typeparam name="TFunction">The <see cref="IFrameFunction{TOutput}"/> type of the frame function to execute.</typeparam>
+	/// <typeparam name="TResult">The type of the result returned by the frame function.</typeparam>
+	/// <param name="func">The frame function to execute.</param>
+	/// <param name="environment">The <see cref="IEnvironment"/> instance which the function is executed.</param>
+	/// <param name="capacity">New local reference frame capacity.</param>
+	/// <param name="result">Output. The result returned by the frame function.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static void WithFrame<TFunction, TResult>(this ref TFunction func, IEnvironment? environment, Int32 capacity,
+		out TResult result)
+#if !NET9_0_OR_GREATER
+		where TFunction : struct, IFrameFunction<TResult>
+#else
+		where TFunction : struct, IFrameFunction<TResult>, allows ref struct
+#endif
+	{
+		if (environment is null)
+		{
+			Unsafe.SkipInit(out result);
+			return;
+		}
+		result = environment.WithFrameExecute<TFunction, TResult>(ref func, capacity);
+	}
+}
