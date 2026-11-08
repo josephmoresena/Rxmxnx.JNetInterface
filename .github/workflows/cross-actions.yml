@@ -55,7 +55,7 @@ jobs:
           sudo apt-get install coreutils clang llvm zlib1g-dev libkrb5-dev libssl-dev \
             qemu-user qemu-user-binfmt binfmt-support  \            
             binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu g++-aarch64-linux-gnu  \
-            binutils-arm-linux-gnueabihf gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
+            binutils-arm-linux-gnueabihf gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf \
             --assume-yes --no-install-recommends
           
            # Foreign architectures only after the host packages are in place.
