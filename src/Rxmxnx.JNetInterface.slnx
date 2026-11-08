@@ -54,6 +54,7 @@
         <File Path="..\.github\workflows\release.yml"/>
         <File Path="..\.gitignore"/>
         <File Path="..\CONTRIBUTING.md"/>
+        <File Path="..\Install-ArmSources.sh"/>
         <File Path="..\LICENSE.md"/>
         <File Path="..\README.md"/>
         <File Path="..\ZipAndClean.ps1"/>

@@ -41,78 +41,32 @@ jobs:
           key: internal-nuget-${{ github.run_id }}
           fail-on-cache-miss: true
           enableCrossOsArchive: true
-      - name: APT deb822 sources
-        if: runner.os == 'Linux'
-        run: |
-          if [[ $ImageOS == "ubuntu24" ]]; then
-           sudo bash -c 'cat > /etc/apt/sources.list.d/ubuntu.sources <<EOF
-          Types: deb
-          URIs: https://archive.ubuntu.com/ubuntu/
-          Suites: noble
-          Components: main restricted universe
-          Architectures: amd64
-          
-          Types: deb
-          URIs: https://security.ubuntu.com/ubuntu/
-          Suites: noble-security
-          Components: main restricted universe
-          Architectures: amd64
-          
-          Types: deb
-          URIs: https://archive.ubuntu.com/ubuntu/
-          Suites: noble-updates
-          Components: main restricted universe
-          Architectures: amd64
-          
-          Types: deb
-          URIs: https://azure.ports.ubuntu.com/ubuntu-ports/
-          Suites: noble
-          Components: main restricted multiverse universe
-          Architectures: arm64
-          
-          Types: deb
-          URIs: https://azure.ports.ubuntu.com/ubuntu-ports/
-          Suites: noble-updates
-          Components: main restricted multiverse universe
-          Architectures: arm64
-          
-          Types: deb
-          URIs: https://azure.ports.ubuntu.com/ubuntu-ports/
-          Suites: noble-updates
-          Components: main restricted multiverse universe
-          Architectures: armhf
-          EOF'
-          fi
       - name: Setup NativeAOT pre-requisites (Linux)
         if: runner.os == 'Linux'
         run: |
-          sudo dpkg --add-architecture arm64
-          sudo dpkg --add-architecture armhf
-          
-          sudo bash -c 'cat > /etc/apt/sources.list.d/arm64.list <<EOF
-          deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports/ noble main restricted
-          deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted
-          deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports noble-security main restricted universe multiverse
-          deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports/ noble-backports main restricted universe multiverse
-          EOF'
-          
-          sudo bash -c 'cat > /etc/apt/sources.list.d/armhf.list <<EOF
-          deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports/ noble main restricted
-          deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted
-          deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports noble-security main restricted universe multiverse
-          deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports/ noble-backports main restricted universe multiverse
-          EOF'
-          
-          sudo sed -i -e 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
-          sudo sed -i -e 's/deb mirror/deb [arch=amd64] mirror/g' /etc/apt/sources.list
-          
-          sudo apt update 
+          # libicuNN is whichever SONAME that image installed.
+          libicu="$(dpkg-query -W -f='${Package}\n' | grep -E '^libicu[0-9]+$' | sort -V | tail -1)"
+          if [[ -z "$libicu" ]]; then
+           echo "The runner has no libicu runtime package installed." >&2
+           exit 1
+          fi
+
+          # amd64 first, while the image sources are untouched.
           sudo apt-get install coreutils clang llvm zlib1g-dev libkrb5-dev libssl-dev \
-            qemu-user qemu-user-static binfmt-support libicu74:arm64 libicu74:armhf \
+            qemu-user qemu-user-binfmt binfmt-support  \            
+            binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu g++-aarch64-linux-gnu  \
+            binutils-arm-linux-gnueabihf gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
+            --assume-yes --no-install-recommends
+          
+           # Foreign architectures only after the host packages are in place.
+          bash ./Install-ArmSources.sh
+
+          sudo apt-get install \
+            "${libicu}:arm64" "${libicu}:armhf" \
             libstdc++-14-dev:arm64 libstdc++-14-dev:arm64 \
-            binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu zlib1g-dev:arm64 libssl-dev:arm64 \
-            binutils-arm-linux-gnueabihf gcc-arm-linux-gnueabihf zlib1g-dev:armhf libssl-dev:armhf \
-            --assume-yes
+            zlib1g-dev:arm64 zlib1g-dev:armhf \
+            libssl-dev:arm64 libssl-dev:armhf \
+            --assume-yes --no-install-recommends --allow-downgrades
 
           sudo mkdir -p /usr/share/dotnet
           sudo chown -R $(whoami):$(whoami) /usr/share/dotnet
