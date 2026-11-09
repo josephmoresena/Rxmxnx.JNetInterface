@@ -27,11 +27,11 @@ jobs:
       PackageVersion: ${{ inputs.package_version }}
       NoAndroid: "True"
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 1
       - name: Restore Internal NuGet Package
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         if: inputs.build_artifacts == true
         with:
           path: ./package/Nuget
@@ -40,7 +40,7 @@ jobs:
           enableCrossOsArchive: true
       - name: Restore Compiled Tests
         if: inputs.run_tests == true
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         with:
           path: |
             ./src/Test/**/bin/Release/net9.0
@@ -95,7 +95,7 @@ jobs:
 
       - name: Create Native Artifact Logs
         if: inputs.build_artifacts == true && inputs.package_version == ''
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: FreeBSD.14-Artifact-Logs
           path: |
@@ -126,7 +126,7 @@ jobs:
           rm -rf ./artifacts-java/native
       - name: Cache Java FreeBSD Libraries
         if: inputs.build_artifacts == true
-        uses: actions/cache/save@v5
+        uses: actions/cache/save@v6
         with:
           path: |
             ./artifacts-java
@@ -140,7 +140,7 @@ jobs:
 
       - name: Create Native Artifact
         if: inputs.build_artifacts == true && inputs.package_version == ''
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: FreeBSD.14-Artifact
           path: |

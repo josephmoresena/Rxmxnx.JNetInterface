@@ -30,11 +30,11 @@ jobs:
       PackageVersion: ${{ inputs.package_version }}
       NoAndroid: "True"
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 1
       - name: Restore Internal NuGet Package
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         if: inputs.build_artifacts == true
         with:
           path: ./package/Nuget
@@ -57,11 +57,11 @@ jobs:
           fi
 
           # amd64 first, while the image sources are untouched.
-          sudo apt-get install coreutils clang llvm zlib1g-dev libkrb5-dev libssl-dev \
-            qemu-user qemu-user-binfmt binfmt-support  \            
-            binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu g++-aarch64-linux-gnu  \
-            binutils-arm-linux-gnueabihf gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf  \
-            --assume-yes --no-install-recommends
+          sudo apt-get install --assume-yes --no-install-recommends \
+            coreutils clang llvm zlib1g-dev libkrb5-dev libssl-dev \
+            qemu-user qemu-user-binfmt binfmt-support \
+            binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu g++-aarch64-linux-gnu \
+            binutils-arm-linux-gnueabihf gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
           
            # Foreign architectures only after the host packages are in place.
           bash ./Install-ArmSources.sh
@@ -86,7 +86,7 @@ jobs:
           
           df -h
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         if: runner.os != 'Windows' || inputs.run_tests != true
         with:
           dotnet-version: |
@@ -235,7 +235,7 @@ jobs:
 
       - name: Create Native Artifact Logs
         if: inputs.build_artifacts == true && inputs.package_version == ''
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ runner.os }}-Artifact-Logs
           path: |
@@ -275,7 +275,7 @@ jobs:
         run: rm ./artifacts-java/*.jar
       - name: Cache Java Libraries
         if: inputs.build_artifacts == true
-        uses: actions/cache/save@v5
+        uses: actions/cache/save@v6
         with:
           path: ./artifacts-java
           key: internal-${{ runner.os }}-${{ github.run_id }}
@@ -360,7 +360,7 @@ jobs:
 
       - name: Create Native Artifact
         if: inputs.build_artifacts == true && inputs.package_version == ''
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ runner.os }}-Artifact
           path: |
