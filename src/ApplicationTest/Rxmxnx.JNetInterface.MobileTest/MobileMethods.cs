@@ -24,9 +24,9 @@ internal static class MobileMethods
 		=> $"Load: {load.GetString()}" + Environment.NewLine + $"Call: {call.GetString()}" + Environment.NewLine +
 			$"Count: {count}" + Environment.NewLine + Environment.NewLine +
 			$"Number of Cores: {Environment.ProcessorCount}" + Environment.NewLine +
-			$"Little-Endian: {BitConverter.IsLittleEndian}" + Environment.NewLine + $"Mono: {AotInfo.IsNativeAot}" +
-			Environment.NewLine + $"Native AOT: {AotInfo.IsNativeAot}" + Environment.NewLine +
-			$"OS: {RuntimeInformation.OSDescription}" + Environment.NewLine +
+			$"Little-Endian: {BitConverter.IsLittleEndian}" + Environment.NewLine +
+			$"Mono: {SystemInfo.IsMonoRuntime}" + Environment.NewLine + $"Native AOT: {AotInfo.IsNativeAot}" +
+			Environment.NewLine + $"OS: {RuntimeInformation.OSDescription}" + Environment.NewLine +
 			$"OS Arch: {RuntimeInformation.OSArchitecture.GetName()}" + Environment.NewLine +
 			$"OS Version: {Environment.OSVersion}" + Environment.NewLine + $"Computer: {Environment.MachineName}" +
 			Environment.NewLine + $"User: {Environment.UserName}" + Environment.NewLine +

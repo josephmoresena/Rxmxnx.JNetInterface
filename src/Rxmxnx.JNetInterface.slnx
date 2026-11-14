@@ -60,6 +60,8 @@
         <File Path="..\ZipAndClean.ps1"/>
     </Folder>
     <Folder Name="/Global/">
+        <File Path="..\Directory.Build.props"/>
+        <File Path="Legacy.Mobile.props"/>
         <File Path="Library.props"/>
         <File Path="Mobile.Library.props"/>
         <File Path="PInvoke.Reference.props"/>

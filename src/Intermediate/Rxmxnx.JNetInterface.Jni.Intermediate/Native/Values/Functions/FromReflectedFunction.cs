@@ -29,19 +29,14 @@ internal readonly unsafe struct FromReflectedFunction<TAccessible> : IFromReflec
 	{
 		try
 		{
-			// ReSharper disable once JoinDeclarationAndInitializer
-			IntPtr result;
 #if !ANDROID
 			if (SystemInfo.IsWindows)
 			{
-				result = this._function.Windows(envRef, localRef);
-#if !PACKAGE
-				JniCallBoundary.ThrowIfPending();
-#endif
-				TAccessible.New(result);
+				IntPtr resultW = this._function.Windows(envRef, localRef);
+				return TAccessible.New(resultW);
 			}
 #endif
-			result = this._function.Unix(envRef, localRef);
+			IntPtr result = this._function.Unix(envRef, localRef);
 			return TAccessible.New(result);
 		}
 		finally

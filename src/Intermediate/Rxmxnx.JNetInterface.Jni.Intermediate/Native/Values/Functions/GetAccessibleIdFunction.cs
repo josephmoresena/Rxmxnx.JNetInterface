@@ -29,16 +29,14 @@ internal readonly unsafe struct GetAccessibleIdFunction<TAccessible> : IGetAcces
 	{
 		try
 		{
-			// ReSharper disable once JoinDeclarationAndInitializer
-			IntPtr result;
 #if !ANDROID
 			if (SystemInfo.IsWindows)
 			{
-				result = this._function.Windows(envRef, localRef, name, descriptor);
-				return TAccessible.New(result);
+				IntPtr resultW = this._function.Windows(envRef, localRef, name, descriptor);
+				return TAccessible.New(resultW);
 			}
 #endif
-			result = this._function.Unix(envRef, localRef, name, descriptor);
+			IntPtr result = this._function.Unix(envRef, localRef, name, descriptor);
 			return TAccessible.New(result);
 		}
 		finally

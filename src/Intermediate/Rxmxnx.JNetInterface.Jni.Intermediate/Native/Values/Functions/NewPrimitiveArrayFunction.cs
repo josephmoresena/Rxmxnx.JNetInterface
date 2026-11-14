@@ -31,16 +31,14 @@ internal readonly unsafe struct NewPrimitiveArrayFunction<TArrayRef> : INewPrimi
 	{
 		try
 		{
-			// ReSharper disable once JoinDeclarationAndInitializer
-			JArrayLocalRef result;
 #if !ANDROID
 			if (SystemInfo.IsWindows)
 			{
-				result = this._function.Windows(envRef, length);
-				return Unsafe.As<JArrayLocalRef, TArrayRef>(ref result);
+				JArrayLocalRef resultW = this._function.Windows(envRef, length);
+				return Unsafe.As<JArrayLocalRef, TArrayRef>(ref resultW);
 			}
 #endif
-			result = this._function.Unix(envRef, length);
+			JArrayLocalRef result = this._function.Unix(envRef, length);
 			return Unsafe.As<JArrayLocalRef, TArrayRef>(ref result);
 		}
 		finally

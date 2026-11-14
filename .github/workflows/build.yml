@@ -15,11 +15,14 @@ jobs:
     env:
       DOTNET_CLI_USE_MSBUILD_SERVER: false
     steps:
-      - name: Set up JDK 25 and 21
+      - name: Set up JDK LTS
         uses: actions/setup-java@v6
         with:
           distribution: 'microsoft'
-          java-version: 25
+          java-version: |
+            17
+            21
+            25
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:

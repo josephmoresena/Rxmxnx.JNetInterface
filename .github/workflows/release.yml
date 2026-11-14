@@ -13,12 +13,14 @@ jobs:
       SNK_BASE64: ${{ secrets.SN_KEY }}
       PUBLIC_KEY: ${{ secrets.SN_PK }}
     steps:
-      - uses: actions/checkout@v7
-      - name: Set up JDK 25
+      - name: Set up JDK LTS
         uses: actions/setup-java@v6
         with:
           distribution: 'microsoft'
-          java-version: 25
+          java-version: |
+            17
+            21
+            25
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:

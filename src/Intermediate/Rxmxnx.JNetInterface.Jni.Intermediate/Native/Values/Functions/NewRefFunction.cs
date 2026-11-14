@@ -32,16 +32,14 @@ internal readonly unsafe struct NewRefFunction<TReference> : INewRefFunction
 	{
 		try
 		{
-			// ReSharper disable once JoinDeclarationAndInitializer
-			IntPtr result;
 #if !ANDROID
 			if (SystemInfo.IsWindows)
 			{
-				result = this._function.Windows(envRef, localRef);
-				return TReference.New(result);
+				IntPtr resultW = this._function.Windows(envRef, localRef);
+				return TReference.New(resultW);
 			}
 #endif
-			result = this._function.Unix(envRef, localRef);
+			IntPtr result = this._function.Unix(envRef, localRef);
 			return TReference.New(result);
 		}
 		finally
