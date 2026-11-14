@@ -3,21 +3,21 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal static partial class MetadataHelper
 {
 	/// <summary>
-	/// This struct stores assignation key.
+	/// This struct stores the assignation key.
 	/// </summary>
 	private readonly struct AssignationKey : IEquatable<AssignationKey>
 	{
 		/// <summary>
-		/// Hash of source type.
+		/// Hash of a source type.
 		/// </summary>
 		public String FromHash { get; init; }
 		/// <summary>
-		/// Hash of destination type.
+		/// Hash of a destination type.
 		/// </summary>
 		public String ToHash { get; init; }
 
 		/// <summary>
-		/// Indicates whether From and To hash are same.
+		/// Indicates whether From and To hash are the same.
 		/// </summary>
 		public Boolean IsSame => this.FromHash.AsSpan().SequenceEqual(this.ToHash);
 

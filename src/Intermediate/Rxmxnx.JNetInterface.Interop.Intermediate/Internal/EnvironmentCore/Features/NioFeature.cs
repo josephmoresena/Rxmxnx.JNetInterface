@@ -32,7 +32,7 @@ internal sealed partial class EnvironmentCore : INioFeature
 		Boolean useStackAlloc = this.UseStackAlloc(capacity);
 		using IFixedContext<Byte>.IDisposable memory = useStackAlloc ?
 			this.GetStackContext(stackalloc Byte[capacity]) :
-			EnvironmentCore.AllocHeapContext(capacity);
+			NativeUtilities.HeapAlloc<Byte>(capacity);
 		using TBuffer buffer = (TBuffer)this.NewDirectByteBuffer(memory);
 		action(buffer);
 	}
@@ -45,7 +45,7 @@ internal sealed partial class EnvironmentCore : INioFeature
 		Boolean useStackAlloc = this.UseStackAlloc(capacity);
 		using IFixedContext<Byte>.IDisposable memory = useStackAlloc ?
 			this.GetStackContext(stackalloc Byte[capacity]) :
-			EnvironmentCore.AllocHeapContext(capacity);
+			NativeUtilities.HeapAlloc<Byte>(capacity);
 		using TBuffer buffer = (TBuffer)this.NewDirectByteBuffer(memory);
 		action(buffer, state);
 	}
@@ -55,7 +55,7 @@ internal sealed partial class EnvironmentCore : INioFeature
 		Boolean useStackAlloc = this.UseStackAlloc(capacity);
 		using IFixedContext<Byte>.IDisposable memory = useStackAlloc ?
 			this.GetStackContext(stackalloc Byte[capacity]) :
-			EnvironmentCore.AllocHeapContext(capacity);
+			NativeUtilities.HeapAlloc<Byte>(capacity);
 		using TBuffer buffer = (TBuffer)this.NewDirectByteBuffer(memory);
 		return func(buffer);
 	}
@@ -69,7 +69,7 @@ internal sealed partial class EnvironmentCore : INioFeature
 		Boolean useStackAlloc = this.UseStackAlloc(capacity);
 		using IFixedContext<Byte>.IDisposable memory = useStackAlloc ?
 			this.GetStackContext(stackalloc Byte[capacity]) :
-			EnvironmentCore.AllocHeapContext(capacity);
+			NativeUtilities.HeapAlloc<Byte>(capacity);
 		using TBuffer buffer = (TBuffer)this.NewDirectByteBuffer(memory);
 		return func(buffer, state);
 	}

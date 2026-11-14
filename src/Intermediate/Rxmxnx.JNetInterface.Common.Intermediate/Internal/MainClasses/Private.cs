@@ -24,7 +24,7 @@ internal abstract partial class MainClasses
 			mainClasses.TryAdd(ClassNameHelper.NumberHash, typeMetadata.BaseMetadata);
 	}
 	/// <summary>
-	/// Set main class.
+	/// Set the main class.
 	/// </summary>
 	/// <param name="mainClasses">Main classes dictionary.</param>
 	/// <param name="typeMetadata">A <see cref="JDataTypeMetadata"/> instance.</param>
@@ -39,7 +39,7 @@ internal abstract partial class MainClasses
 		MainClasses.AppendMainClass(mainClasses, typeMetadata as JReferenceTypeMetadata);
 	}
 	/// <summary>
-	/// Set main class.
+	/// Set the main class.
 	/// </summary>
 	/// <param name="mainClasses">Main classes dictionary.</param>
 	/// <param name="typeMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>

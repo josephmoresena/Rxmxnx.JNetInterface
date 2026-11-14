@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang.Reflect;
 public partial class JFieldObject
 {
 	/// <summary>
-	/// Class metadata for declaring class.
+	/// Class metadata for the declaring class.
 	/// </summary>
 	private ITypeInformation? _classInformation;
 	/// <inheritdoc cref="JFieldObject.Definition"/>

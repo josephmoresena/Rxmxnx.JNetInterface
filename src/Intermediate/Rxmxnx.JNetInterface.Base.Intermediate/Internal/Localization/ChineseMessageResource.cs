@@ -45,6 +45,7 @@ internal sealed class ChineseMessageResource : IMessageResource
 	String IMessageResource.InvalidReferenceObject => "无效的 JReferenceObject。";
 	String IMessageResource.InvalidObjectMetadata => "无效的对象元数据。";
 	String IMessageResource.DisposedObject => "JReferenceObject 已被释放。";
+	String IMessageResource.InvalidParameterIndex => "参数索引无效。";
 	String IMessageResource.InvalidArrayLength => "数组长度必须为零或正数。";
 	String IMessageResource.DeadVirtualMachine => "当前 JVM 未运行。";
 	String IMessageResource.NotAttachedThread => "当前线程未附加到 JVM。";
@@ -117,6 +118,8 @@ internal sealed class ChineseMessageResource : IMessageResource
 		=> maxLevel > 0 ? $"数组维度必须在 1 到 {maxLevel} 之间。" : "数组类型的维度过多。";
 	String IMessageResource.InvalidInterfaceVersion(Int32 currentVersion, Int32 requiredVersion)
 		=> $"当前进程必须使用与 0x{requiredVersion:x8} 兼容的 JNI 版本运行，但检测到的版本是 0x{currentVersion:x8}。";
+
+	String IMessageResource.InvalidObjectAt(Int32 index) => $"索引 {index} 处的对象无效。";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

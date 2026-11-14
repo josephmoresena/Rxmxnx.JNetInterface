@@ -31,11 +31,20 @@ internal readonly unsafe struct ErrorFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult Throw(JEnvironmentRef envRef, JThrowableLocalRef throwableRef)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._windows.Throw(envRef, throwableRef);
+			if (SystemInfo.IsWindows)
+				return this._windows.Throw(envRef, throwableRef);
 #endif
-		return this._unix.Throw(envRef, throwableRef);
+			return this._unix.Throw(envRef, throwableRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 	/// <summary>
 	/// <c>ThrowNew</c>.
@@ -43,11 +52,20 @@ internal readonly unsafe struct ErrorFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult ThrowNew(JEnvironmentRef envRef, JClassLocalRef classRef, Byte* messagePtr)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._windows.ThrowNew(envRef, classRef, messagePtr);
+			if (SystemInfo.IsWindows)
+				return this._windows.ThrowNew(envRef, classRef, messagePtr);
 #endif
-		return this._unix.ThrowNew(envRef, classRef, messagePtr);
+			return this._unix.ThrowNew(envRef, classRef, messagePtr);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 	/// <summary>
 	/// <c>ExceptionOccurred</c>.
@@ -55,11 +73,20 @@ internal readonly unsafe struct ErrorFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JThrowableLocalRef ExceptionOccurred(JEnvironmentRef envRef)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._windows.ExceptionOccurred(envRef);
+			if (SystemInfo.IsWindows)
+				return this._windows.ExceptionOccurred(envRef);
 #endif
-		return this._unix.ExceptionOccurred(envRef);
+			return this._unix.ExceptionOccurred(envRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 	/// <summary>
 	/// <c>ExceptionDescribe</c>.
@@ -67,14 +94,23 @@ internal readonly unsafe struct ErrorFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void ExceptionDescribe(JEnvironmentRef envRef)
 	{
-#if !ANDROID
-		if (SystemInfo.IsWindows)
+		try
 		{
-			this._windows.ExceptionDescribe(envRef);
-			return;
-		}
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+			{
+				this._windows.ExceptionDescribe(envRef);
+				return;
+			}
 #endif
-		this._unix.ExceptionDescribe(envRef);
+			this._unix.ExceptionDescribe(envRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 	/// <summary>
 	/// <c>ExceptionClear</c>.
@@ -82,14 +118,23 @@ internal readonly unsafe struct ErrorFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void ExceptionClear(JEnvironmentRef envRef)
 	{
-#if !ANDROID
-		if (SystemInfo.IsWindows)
+		try
 		{
-			this._windows.ExceptionClear(envRef);
-			return;
-		}
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+			{
+				this._windows.ExceptionClear(envRef);
+				return;
+			}
 #endif
-		this._unix.ExceptionClear(envRef);
+			this._unix.ExceptionClear(envRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 	/// <summary>
 	/// <c>FatalError</c>.
@@ -97,14 +142,23 @@ internal readonly unsafe struct ErrorFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void FatalError(JEnvironmentRef envRef, Byte* messagePtr)
 	{
-#if !ANDROID
-		if (SystemInfo.IsWindows)
+		try
 		{
-			this._windows.FatalError(envRef, messagePtr);
-			return;
-		}
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+			{
+				this._windows.FatalError(envRef, messagePtr);
+				return;
+			}
 #endif
-		this._unix.FatalError(envRef, messagePtr);
+			this._unix.FatalError(envRef, messagePtr);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 
 #if !ANDROID

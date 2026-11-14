@@ -22,7 +22,7 @@ public sealed class JErrorObjectTests
 		JThrowableLocalRef throwableRef = JErrorObjectTests.fixture.Create<JThrowableLocalRef>();
 		String message = JErrorObjectTests.fixture.Create<String>();
 		StackTraceInfo[] stackTrace = emptyStackTrace ?
-			JErrorObjectTests.fixture.CreateMany<StackTraceInfo>().ToArray() :
+			[.. JErrorObjectTests.fixture.CreateMany<StackTraceInfo>(),] :
 			[];
 		using JClassObject jClass = new(env);
 		using JClassObject jErrorClass = new(jClass, IClassType.GetMetadata<JErrorObject>());
@@ -36,15 +36,16 @@ public sealed class JErrorObjectTests
 		using JArrayObject<JStackTraceElementObject> stackTraceElements =
 			new(jStackTraceElementArrayClass, default, stackTrace.Length);
 		JStackTraceElementObject[] elements =
+			// ReSharper disable once UseCollectionExpression
 			stackTrace.Select(i => i.CreateStackTrace(jStackTraceElementClass)).ToArray();
 		ThrowableObjectMetadata throwableMetadata = new(new(jErrorClass)) { Message = useMessage ? message : default, };
 		env.FunctionSet.GetMessage(jError).Returns(jStringMessage);
 		env.FunctionSet.GetStackTrace(jError).Returns(stackTraceElements);
 		env.ArrayFeature.GetElement(stackTraceElements, Arg.Any<Int32>()).Returns(c => elements[(Int32)c[1]]);
-		env.WithFrame(Arg.Any<Int32>(), stackTraceElements,
-		              Arg.Any<Func<JArrayObject<JStackTraceElementObject>, StackTraceInfo[]>>())
-		   .Returns(c => (c[2] as Func<JArrayObject<JStackTraceElementObject>, StackTraceInfo[]>)!.Invoke(
-			            (JArrayObject<JStackTraceElementObject>)c[1]));
+		env.WithFrame(Arg.Any<Int32>(), Arg.Any<ValueTuple<IntPtr, Type>>(),
+		              Arg.Any<Func<ValueTuple<IntPtr, Type>, StackTraceInfo[]>>())
+		   .Returns(call => call.Arg<Func<ValueTuple<IntPtr, Type>, StackTraceInfo[]>>()(
+			            call.Arg<ValueTuple<IntPtr, Type>>()));
 
 		ILocalObject.ProcessMetadata(jError, throwableMetadata);
 
@@ -196,6 +197,7 @@ public sealed class JErrorObjectTests
 			Assert.Equal(jGlobal, exception.GlobalThrowable);
 			Assert.Equal(mutableException.Value, exception);
 
+			// ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
 			exception.WithSafeInvoke(t =>
 			{
 				Assert.Equal(default, t.LocalReference);

@@ -39,9 +39,11 @@ public partial class Launcher
 	private Jdk? GetJdk(JdkVersion version, Architecture arch, DirectoryInfo jdkDirectory)
 	{
 		if (!jdkDirectory.Exists) return default;
-		List<String> excludedPath = jdkDirectory.GetDirectories("*", SearchOption.AllDirectories)
-		                                        .Where(d => !String.IsNullOrEmpty(d.LinkTarget)).Select(d => d.FullName)
-		                                        .ToList();
+		List<String> excludedPath =
+		[
+			.. jdkDirectory.GetDirectories("*", SearchOption.AllDirectories)
+			               .Where(d => !String.IsNullOrEmpty(d.LinkTarget)).Select(d => d.FullName),
+		];
 		FileInfo? javaFile = jdkDirectory.GetFiles(this.JavaExecutableName, SearchOption.AllDirectories)
 		                                 .FirstOrDefault();
 		FileInfo? javacFile =

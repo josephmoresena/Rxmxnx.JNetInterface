@@ -11,11 +11,11 @@ internal unsafe partial class TypeInfoSequence
 	/// </summary>
 	/// <param name="chr0">Pointer to UTF-8 class name.</param>
 	/// <param name="length">Class name length.</param>
-	/// <param name="isArray">Indicates whether current class is an array.</param>
+	/// <param name="isArray">Indicates whether the current class is an array.</param>
 	private readonly struct SpanState(Byte* chr0, Int32 length, Boolean isArray)
 	{
 		/// <summary>
-		/// Indicates whether current class is an array.
+		/// Indicates whether the current class is an array.
 		/// </summary>
 		public Boolean IsArray => isArray;
 		/// <summary>

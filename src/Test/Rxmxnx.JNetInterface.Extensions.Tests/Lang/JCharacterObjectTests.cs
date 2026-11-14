@@ -150,6 +150,7 @@ public sealed class JCharacterObjectTests
 			Assert.IsType<JCharacterObject>(typeMetadata.CreateInstance(jCharacterObjectClass, localRef, true)) :
 			new(jCharacterObjectClass, localRef, value);
 
+		env.ClassFeature.CharacterObject.Returns(jCharacterObjectClass);
 		env.AccessFeature.CallFunction<JChar>(jCharacterObject, jCharacterObjectClass,
 		                                      NativeFunctionSetImpl.CharValueDefinition, false, []).Returns(value);
 		if (useMetadata.GetValueOrDefault())

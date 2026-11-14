@@ -1,5 +1,6 @@
 namespace Rxmxnx.JNetInterface;
 
+// ReSharper disable once ClassCannotBeInstantiated
 public partial class JVirtualMachine
 {
 	/// <summary>
@@ -29,27 +30,18 @@ public partial class JVirtualMachine
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public static Boolean CheckRefTypeNativeCallEnabled
-	{
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get => !AppContext.TryGetSwitch("JNetInterface.DisableCheckRefTypeNativeCall", out Boolean disable) || !disable;
-	}
+	public static Boolean CheckRefTypeNativeCallEnabled => NativeCallUtilities.CheckRefTypeNativeCallEnabled;
 	/// <summary>
 	/// Indicates whether native call adapters should check parameter class object class.
 	/// </summary>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public static Boolean CheckClassRefNativeCallEnabled
-	{
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get
-			=> !AppContext.TryGetSwitch("JNetInterface.DisableCheckClassRefNativeCall", out Boolean disable) ||
-				!disable;
-	}
+	public static Boolean CheckClassRefNativeCallEnabled => NativeCallUtilities.CheckClassRefNativeCallEnabled;
 	/// <summary>
 	/// Main classes' information.
 	/// </summary>
+	// ReSharper disable once MemberCanBePrivate.Global
 	public static IEnumerable<ITypeInformation> MainClassesInformation => JVirtualMachine.userMainClasses.Values;
 
 	/// <summary>

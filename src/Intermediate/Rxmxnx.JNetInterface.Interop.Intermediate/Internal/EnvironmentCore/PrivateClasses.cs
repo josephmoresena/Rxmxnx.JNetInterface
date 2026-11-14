@@ -38,8 +38,8 @@ internal sealed partial class EnvironmentCore
 	/// Retrieves a <see cref="JStringObject"/> containing class name.
 	/// </summary>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
-	/// <param name="isReferenceType">Indicates whether class reference is from a reference type.</param>
-	/// <param name="isPrimitive">Output. Indicates whether class is primitive.</param>
+	/// <param name="isReferenceType">Indicates whether the class reference is from a reference type.</param>
+	/// <param name="isPrimitive">Output. Indicates whether the class is primitive.</param>
 	/// <returns>A <see cref="JStringObject"/> instance.</returns>
 	private JStringObject GetClassName(JClassLocalRef classRef, Boolean isReferenceType, out Boolean isPrimitive)
 	{
@@ -68,12 +68,12 @@ internal sealed partial class EnvironmentCore
 		return new(jStringClass, localRef.Transform<JObjectLocalRef, JStringLocalRef>());
 	}
 	/// <summary>
-	/// Indicates whether class is primitive.
+	/// Indicates whether the class is primitive.
 	/// </summary>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <param name="access">A <see cref="AccessCache"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if class is primitive; otherwise; <see langword="false"/>.
+	/// <see langword="true"/> if the class is primitive; otherwise; <see langword="false"/>.
 	/// </returns>
 	private unsafe Boolean IsPrimitiveClass(JClassLocalRef classRef, AccessCache access)
 	{
@@ -144,7 +144,7 @@ internal sealed partial class EnvironmentCore
 		return jClass;
 	}
 	/// <summary>
-	/// Retrieves <see cref="JClassLocalRef"/> reference for given instance.
+	/// Retrieves <see cref="JClassLocalRef"/> reference for the given instance.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
@@ -161,7 +161,7 @@ internal sealed partial class EnvironmentCore
 	/// <summary>
 	/// Retrieves a <see cref="JClassLocalRef"/> using <paramref name="namePtr"/> as class name.
 	/// </summary>
-	/// <param name="namePtr">A pointer to class name.</param>
+	/// <param name="namePtr">A pointer to the class name.</param>
 	/// <param name="withNoCheckError">Indicates whether <see cref="CheckJniError"/> should not be called.</param>
 	/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
 	private unsafe JClassLocalRef FindClass(Byte* namePtr, Boolean withNoCheckError = false)
@@ -173,7 +173,7 @@ internal sealed partial class EnvironmentCore
 		return result;
 	}
 	/// <summary>
-	/// Retrieves class from cache or loads it using JNI.
+	/// Retrieves the class from the cache or loads it using JNI.
 	/// </summary>
 	/// <param name="typeInformation">A <see cref="ITypeInformation"/> instance.</param>
 	/// <returns>A <see cref="JClassObject"/> instance.</returns>
@@ -272,7 +272,7 @@ internal sealed partial class EnvironmentCore
 	/// </summary>
 	/// <param name="typeInformation">A <see cref="ITypeInformation"/> instance.</param>
 	/// <param name="buffer">Binary span with class information.</param>
-	/// <param name="jClassLoader">The object used as class loader.</param>
+	/// <param name="jClassLoader">The object used as a class loader.</param>
 	/// <returns>Loaded <see cref="JClassObject"/> instance.</returns>
 	private JClassObject LoadClass(ITypeInformation typeInformation, ReadOnlySpan<Byte> buffer,
 		JClassLoaderObject? jClassLoader)
@@ -318,7 +318,7 @@ internal sealed partial class EnvironmentCore
 		return classRef;
 	}
 	/// <summary>
-	/// Define a existing class in metadata cache.
+	/// Defines an existing class in the metadata cache.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="jniTransaction">A <see cref="INativeTransaction"/> instance.</param>
@@ -346,7 +346,7 @@ internal sealed partial class EnvironmentCore
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
-	/// <param name="deleteLocalRef">Indicates whether local class reference should be deleted.</param>
+	/// <param name="deleteLocalRef">Indicates whether the local class reference should be deleted.</param>
 	private void LoadMainClass(JClassObject jClass, JClassLocalRef classRef, Boolean deleteLocalRef = true)
 	{
 		JGlobal jGlobal = this.Host.TypeManager.LoadGlobal(jClass);
@@ -425,7 +425,7 @@ internal sealed partial class EnvironmentCore
 	/// <paramref name="otherClass"/>.
 	/// </summary>
 	/// <param name="jClass">Java class instance.</param>
-	/// <param name="otherClass">Other java class instance.</param>
+	/// <param name="otherClass">Another java class instance.</param>
 	/// <param name="createFrame">Delegate to create <see cref="LocalFrame"/> instance.</param>
 	/// <returns>
 	/// <see langword="true"/> if an object of <paramref name="jClass"/> can be safely cast to
@@ -490,7 +490,7 @@ internal sealed partial class EnvironmentCore
 		JClassObject jClass;
 		if (currentMetadata.Modifier != JTypeModifier.Final)
 		{
-			// If the modifier is not final, we should try to obtain more approximate type metadata.
+			// If the modifier is not final, we should try to get more approximate type metadata.
 			jClass = EnvironmentCore.GetObjectClass(this, localRef, out typeMetadata);
 		}
 		else
@@ -530,7 +530,7 @@ internal sealed partial class EnvironmentCore
 	private JClassObject AsClassObject(JClassLocalRef classRef, WellKnownRuntimeTypeInformation runtimeInformation)
 		=> this.Register(this.GetClass(classRef, true, runtimeInformation));
 	/// <summary>
-	/// Retrieves class element from a interfaces class array.
+	/// Retrieves the class element from an interfaces' class array.
 	/// </summary>
 	/// <param name="arrayRef">A <see cref="JArrayLocalRef"/> reference.</param>
 	/// <param name="index">Element index.</param>
@@ -566,7 +566,7 @@ internal sealed partial class EnvironmentCore
 		CommonValidationUtilities.ThrowIfInvalidCast(elementTypeMetadata, allowedCast);
 	}
 	/// <summary>
-	/// Retrieves the array class instance for given element class.
+	/// Retrieves the array class instance for the given element class.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <returns>A <see cref="JClassObject"/> instance.</returns>
@@ -725,7 +725,7 @@ internal sealed partial class EnvironmentCore
 	private JArrayTypeMetadata GetArrayArrayTypeMetadata(ReadOnlySpan<Byte> arrayArraySignature, String arrayArrayHash,
 		ReadOnlySpan<Byte> arraySignature, String arrayHash)
 	{
-		// Is well-known array class? Primitive arrays are always well-known.
+		// Is a well-known array class? Primitive arrays are always well-known.
 		if (MetadataHelper.GetExactArrayMetadata(arrayHash) is { } elementArrayMetadata)
 			return elementArrayMetadata;
 

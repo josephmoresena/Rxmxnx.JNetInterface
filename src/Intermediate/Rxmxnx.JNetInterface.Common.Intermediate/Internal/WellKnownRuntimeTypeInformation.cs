@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
-/// Well known type runtime information.
+/// Well-known type runtime information.
 /// </summary>
 internal readonly struct WellKnownRuntimeTypeInformation
 {
@@ -10,7 +10,7 @@ internal readonly struct WellKnownRuntimeTypeInformation
 	/// </summary>
 	public JTypeKind? Kind { get; init; }
 	/// <summary>
-	/// Indicates whether current type is final.
+	/// Indicates whether the current type is final.
 	/// </summary>
 	public Boolean? IsFinal { get; init; }
 

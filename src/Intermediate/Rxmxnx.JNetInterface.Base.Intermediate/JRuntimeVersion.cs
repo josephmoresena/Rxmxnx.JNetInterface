@@ -119,6 +119,10 @@ public enum JRuntimeVersion
 	/// Java Version 26.
 	/// </summary>
 	J26 = JRuntimeVersion.SEd0 * 26,
+	/// <summary>
+	/// Java Version 27.
+	/// </summary>
+	J27 = JRuntimeVersion.SEd0 * 27,
 }
 
 /// <summary>
@@ -186,7 +190,7 @@ public static class JRuntimeVersionExtensions
 			< (Int32)JRuntimeVersion.J20 => (Int32)JRuntimeVersion.J19,
 			< (Int32)JRuntimeVersion.J21 => (Int32)JRuntimeVersion.J20,
 			< (Int32)JRuntimeVersion.J24 => (Int32)JRuntimeVersion.J21,
-			<= (Int32)JRuntimeVersion.J26 => (Int32)JRuntimeVersion.J24,
+			<= (Int32)JRuntimeVersion.J27 => (Int32)JRuntimeVersion.J24,
 			_ => default,
 		};
 }

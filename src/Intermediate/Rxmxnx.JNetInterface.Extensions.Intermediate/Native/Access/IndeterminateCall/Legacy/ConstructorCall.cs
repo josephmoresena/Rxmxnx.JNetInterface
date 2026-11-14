@@ -1,0 +1,43 @@
+namespace Rxmxnx.JNetInterface.Native.Access;
+
+// ReSharper disable once ClassCannotBeInstantiated
+public abstract partial class IndeterminateCall
+{
+	/// <summary>
+	/// Invokes a constructor on given <see cref="JClassObject"/> instance.
+	/// </summary>
+	/// <param name="jClass">Target class.</param>
+	/// <param name="args">Method arguments.</param>
+	public JLocalObject NewCall(JClassObject jClass,
+#if NET9_0_OR_GREATER
+		params ReadOnlySpan<IObject?> args
+#else
+		ReadOnlySpan<IObject?> args = default
+#endif
+	)
+	{
+		JConstructorDefinition definition = NativeValidationUtilities.ThrowIfNotConstructor(this.Definition);
+		return IndeterminateCall.NewCall<JLocalObject>(definition, jClass, args);
+	}
+
+	/// <summary>
+	/// Invokes a constructor on given <see cref="JClassObject"/> instance.
+	/// </summary>
+	/// <typeparam name="TObject">A <see cref="IClassType{TObject}"/> type.</typeparam>
+	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+	/// <param name="args">Method arguments.</param>
+	[UnconditionalSuppressMessage("Trimming", "IL2091")]
+	public TObject NewCall<TObject>(IEnvironment env,
+#if NET9_0_OR_GREATER
+		params ReadOnlySpan<IObject?> args
+#else
+		ReadOnlySpan<IObject?> args = default
+#endif
+	) where TObject : JLocalObject, IClassType<TObject>
+	{
+		NativeValidationUtilities.ThrowIfAbstractClass(IClassType.GetMetadata<TObject>());
+		JConstructorDefinition definition = NativeValidationUtilities.ThrowIfNotConstructor(this.Definition);
+		JClassObject jClass = JClassObject.GetClass<TObject>(env);
+		return IndeterminateCall.NewCall<TObject>(definition, jClass, args);
+	}
+}

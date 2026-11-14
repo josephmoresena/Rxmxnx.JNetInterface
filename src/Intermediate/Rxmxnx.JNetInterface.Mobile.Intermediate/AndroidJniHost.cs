@@ -8,6 +8,7 @@ namespace Rxmxnx.JNetInterface;
 #if !PACKAGE
 [ExcludeFromCodeCoverage]
 #endif
+// ReSharper disable once ClassCannotBeInstantiated
 public sealed partial class AndroidJniHost
 {
 	/// <summary>

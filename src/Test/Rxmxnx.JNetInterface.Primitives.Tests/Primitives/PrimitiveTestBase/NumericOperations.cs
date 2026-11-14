@@ -266,6 +266,7 @@ public partial class PrimitiveTestBase
 		Assert.Equal(TValue.CreateSaturating(T.MinValue), TPrimitive.CreateSaturating(T.MinValue).Value);
 		Assert.Equal(TValue.CreateTruncating(T.MinValue), TPrimitive.CreateTruncating(T.MinValue).Value);
 	}
+	// ReSharper disable once UnusedMember.Local
 	private static void CreationTest<TPrimitive, TValue>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
 		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IBinaryNumber<TPrimitive>,

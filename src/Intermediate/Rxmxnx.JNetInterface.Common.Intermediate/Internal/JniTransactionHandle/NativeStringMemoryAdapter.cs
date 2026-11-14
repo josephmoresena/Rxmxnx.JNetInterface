@@ -8,7 +8,7 @@ internal partial struct JniTransactionHandle
 	private sealed class NativeStringMemoryAdapter : NativeMemoryAdapter
 	{
 		/// <summary>
-		/// Indicates whether current adapter is for UTF-8 chars.
+		/// Indicates whether the current adapter is for UTF-8 chars.
 		/// </summary>
 		private readonly Boolean _utf8Chars;
 

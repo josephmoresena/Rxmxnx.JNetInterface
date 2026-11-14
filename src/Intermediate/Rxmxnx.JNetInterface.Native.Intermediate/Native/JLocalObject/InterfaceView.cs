@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Native;
 public partial class JLocalObject
 {
 	/// <summary>
-	/// This class is used for create an interface view of an object.
+	/// This class is used to create an interface view of an object.
 	/// </summary>
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]

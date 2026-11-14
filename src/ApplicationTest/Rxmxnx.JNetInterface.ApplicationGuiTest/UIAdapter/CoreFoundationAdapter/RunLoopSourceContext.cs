@@ -2,6 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
+// ReSharper disable once InconsistentNaming
 internal partial class UIAdapter
 {
 	private sealed unsafe partial class CoreFoundationAdapter

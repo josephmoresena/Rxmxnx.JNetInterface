@@ -57,9 +57,9 @@ public sealed class JMainMethodDefinitionTests
 		env.StringFeature.Create(Arg.Any<String>()).Returns(c => jStrings?[(c[0] as String)!]);
 
 		JMainMethodDefinition.Instance.Invoke(jClass, args!);
-		env.AccessFeature.Received(1).CallStaticMethod(jClass, JMainMethodDefinition.Instance,
-		                                               args is not null ?
+		env.AccessFeature.Received(1).CallStaticMethod(jClass, JMainMethodDefinition.Instance, args is not null ?
 			                                               Arg.Is<IObject?[]>(i => i.Length == 1 &&
+				                                                                  // ReSharper disable once AccessToDisposedClosure
 				                                                                  Object.ReferenceEquals(i[0], jArgs)) :
 			                                               Arg.Is<IObject?[]>(i => i.Length == 1 && i[0] == null));
 		for (Int32 i = 0; i < (args?.Length ?? default); i++)

@@ -99,7 +99,7 @@ internal partial class InterfaceSet
 	/// Defines an explicit conversion of a given <see cref="ImmutableHashSet{JInterfaceTypeMetadata}"/> to
 	/// <see cref="InterfaceSet"/>.
 	/// </summary>
-	/// <param name="interfaces">A <see cref="ImmutableHashSet{JInterfaceTypeMetadata}"/> to implicitly convert.</param>
+	/// <param name="interfaces">A <see cref="ImmutableHashSet{JInterfaceTypeMetadata}"/> to explicitly convert.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator InterfaceSet(ImmutableHashSet<JInterfaceTypeMetadata> interfaces)
 		=> new(interfaces);

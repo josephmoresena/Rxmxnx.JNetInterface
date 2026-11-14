@@ -69,11 +69,20 @@ internal readonly unsafe partial struct ClassFunctionSet
 	public JClassLocalRef DefineClass(JEnvironmentRef envRef, Byte* className, JObjectLocalRef localRef, Byte* buffPtr,
 		Int32 buffSize)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._defineClass.Windows(envRef, className, localRef, buffPtr, buffSize);
+			if (SystemInfo.IsWindows)
+				return this._defineClass.Windows(envRef, className, localRef, buffPtr, buffSize);
 #endif
-		return this._defineClass.Unix(envRef, className, localRef, buffPtr, buffSize);
+			return this._defineClass.Unix(envRef, className, localRef, buffPtr, buffSize);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 	/// <summary>
 	/// <c>FindClass</c>.
@@ -84,11 +93,20 @@ internal readonly unsafe partial struct ClassFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JClassLocalRef FindClass(JEnvironmentRef envRef, Byte* className)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._findClass.Windows(envRef, className);
+			if (SystemInfo.IsWindows)
+				return this._findClass.Windows(envRef, className);
 #endif
-		return this._findClass.Unix(envRef, className);
+			return this._findClass.Unix(envRef, className);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 	/// <summary>
 	/// <c>GetSuperClass</c>.
@@ -99,11 +117,20 @@ internal readonly unsafe partial struct ClassFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JClassLocalRef GetSuperclass(JEnvironmentRef envRef, JClassLocalRef classRef)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._getSuperclass.Windows(envRef, classRef);
+			if (SystemInfo.IsWindows)
+				return this._getSuperclass.Windows(envRef, classRef);
 #endif
-		return this._getSuperclass.Unix(envRef, classRef);
+			return this._getSuperclass.Unix(envRef, classRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 	/// <summary>
 	/// <c>GetSuperClass</c>.
@@ -114,10 +141,19 @@ internal readonly unsafe partial struct ClassFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JBoolean IsAssignableFrom(JEnvironmentRef envRef, JClassLocalRef classRef0, JClassLocalRef classRef1)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._isAssignableFrom.Windows(envRef, classRef0, classRef1);
+			if (SystemInfo.IsWindows)
+				return this._isAssignableFrom.Windows(envRef, classRef0, classRef1);
 #endif
-		return this._isAssignableFrom.Unix(envRef, classRef0, classRef1);
+			return this._isAssignableFrom.Unix(envRef, classRef0, classRef1);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 }

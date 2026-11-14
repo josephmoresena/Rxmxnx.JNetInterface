@@ -3,7 +3,7 @@
 /// <summary>
 /// <c>JNIEnv</c> pointer. Represents a pointer to a <c>JNIEnv</c> object.
 /// </summary>
-/// <remarks>This reference is valid only for the thread who owns the reference.</remarks>
+/// <remarks>This reference is valid only for the thread that owns the reference.</remarks>
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]

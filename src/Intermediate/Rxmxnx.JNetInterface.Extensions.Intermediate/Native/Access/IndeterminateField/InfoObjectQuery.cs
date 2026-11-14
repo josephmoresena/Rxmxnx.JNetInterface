@@ -1,16 +1,16 @@
 namespace Rxmxnx.JNetInterface.Native.Access;
 
+// ReSharper disable once ClassCannotBeInstantiated
 public partial class IndeterminateField
 {
 	/// <summary>
-	/// This struct stores query for Object to Primitive validation.
+	/// This struct stores the query for Object to Primitive validation.
 	/// </summary>
 #if !PACKAGE
-	internal
+	internal readonly struct InfoObjectQuery
 #else
-		private
+	private readonly struct InfoObjectQuery
 #endif
-		readonly struct InfoObjectQuery
 	{
 		/// <summary>
 		/// JNI primitive signature.

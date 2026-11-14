@@ -27,15 +27,28 @@ internal readonly unsafe struct FromReflectedFunction<TAccessible> : IFromReflec
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TAccessible FromReflected(JEnvironmentRef envRef, JObjectLocalRef localRef)
 	{
-		IntPtr result;
-#if !ANDROID
-		if (SystemInfo.IsWindows)
+		try
 		{
-			result = this._function.Windows(envRef, localRef);
-			TAccessible.New(result);
-		}
+			// ReSharper disable once JoinDeclarationAndInitializer
+			IntPtr result;
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+			{
+				result = this._function.Windows(envRef, localRef);
+#if !PACKAGE
+				JniCallBoundary.ThrowIfPending();
 #endif
-		result = this._function.Unix(envRef, localRef);
-		return TAccessible.New(result);
+				TAccessible.New(result);
+			}
+#endif
+			result = this._function.Unix(envRef, localRef);
+			return TAccessible.New(result);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 }

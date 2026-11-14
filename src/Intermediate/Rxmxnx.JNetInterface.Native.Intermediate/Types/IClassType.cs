@@ -11,10 +11,10 @@ public interface IClassType : IReferenceType
 	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd0;
 
 	/// <summary>
-	/// Retrieves the metadata for given class type.
+	/// Retrieves the metadata for a given class type.
 	/// </summary>
 	/// <typeparam name="TClass">Type of the current java class datatype.</typeparam>
-	/// <returns>The <see cref="JClassTypeMetadata"/> instance for given type.</returns>
+	/// <returns>The <see cref="JClassTypeMetadata"/> instance for a given type.</returns>
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public new static JClassTypeMetadata GetMetadata<TClass>() where TClass : JLocalObject, IClassType<TClass>

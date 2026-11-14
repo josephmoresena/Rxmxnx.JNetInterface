@@ -37,7 +37,7 @@ public abstract partial class JCallDefinition : JAccessibleObjectDefinition
 	/// <summary>
 	/// Creates the argument array for the current call.
 	/// </summary>
-	/// <returns>A new array to be used as argument for the current call.</returns>
+	/// <returns>A new array to be used as an argument for the current call.</returns>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif

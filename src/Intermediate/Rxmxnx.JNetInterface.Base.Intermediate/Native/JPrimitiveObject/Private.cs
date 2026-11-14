@@ -3,17 +3,17 @@ namespace Rxmxnx.JNetInterface.Native;
 internal partial class JPrimitiveObject
 {
 	/// <summary>
-	/// Converts current instance in a read-only binary span.
+	/// Converts the current instance to a read-only binary span.
 	/// </summary>
 	/// <returns>A <see cref="ReadOnlySpan{Byte}"/> instance.</returns>
 	private protected abstract ReadOnlySpan<Byte> AsSpan();
 
 	/// <summary>
-	/// Retrieves a <typeparamref name="TValue"/> value from current instance.
+	/// Retrieves a <typeparamref name="TValue"/> value from the current instance.
 	/// </summary>
 	/// <typeparam name="TValue"><see cref="ValueType"/> type.</typeparam>
 	/// <returns>
-	/// The equivalent <typeparamref name="TValue"/> value to current instance.
+	/// The equivalent <typeparamref name="TValue"/> value to the current instance.
 	/// </returns>
 	/// <exception cref="InvalidCastException"/>
 	private TValue AsValue<TValue>()

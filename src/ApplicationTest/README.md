@@ -294,4 +294,6 @@ is used to build an APK and verify the correct functionality of `Rxmxnx.JNetInte
 
 Additionally, the solution includes the `Rxmxnx.JNetInterface.MobileTest` project, which is a .NET for Android project
 that uses `Rxmxnx.JNetInterface.Mobile`. This project demonstrates how the APIs provided by
-`Rxmxnx.JNetInterface.Mobile` can coexist and interoperate with `Java.Interop`.
+`Rxmxnx.JNetInterface.Mobile` can coexist and interoperate with `Java.Interop`. `MainActivity` implements
+`IAndroidNativeFunction<TOutput>` and runs it through `Invoke`. `ToastRequest` implements `IAndroidNativeAction` and is
+posted with `Post`.

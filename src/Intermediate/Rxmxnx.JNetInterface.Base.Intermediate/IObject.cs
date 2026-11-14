@@ -15,6 +15,19 @@ public interface IObject
 	CString ObjectSignature { get; }
 
 	/// <summary>
+	/// Retrieves the value of the current instance as a <see cref="JValue"/>.
+	/// </summary>
+	/// <param name="value">Output. The value of the current instance.</param>
+	/// <remarks>This method should be implemented on primitive value types.</remarks>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	internal void GetValue(out JValue value)
+	{
+		Unsafe.SkipInit(out value);
+		this.CopyTo(value.AsBytes());
+	}
+	/// <summary>
 	/// Copies the sequence of bytes of the current instance to <paramref name="span"/>.
 	/// </summary>
 	/// <param name="span">Binary span.</param>
@@ -37,10 +50,10 @@ public interface IObject
 	/// <paramref name="index"/>.
 	/// </summary>
 	/// <param name="span">Binary span.</param>
-	/// <param name="index">Index to copy current value.</param>
+	/// <param name="index">Index to copy the current value.</param>
 	internal void CopyTo(Span<JValue> span, Int32 index);
 	/// <summary>
-	/// Indicates current instance is default value.
+	/// Indicates the current instance is the default value.
 	/// </summary>
 	/// <returns><see langword="true"/> if current instance is default; otherwise, <see langword="false"/>.</returns>
 	internal sealed Boolean IsDefault()

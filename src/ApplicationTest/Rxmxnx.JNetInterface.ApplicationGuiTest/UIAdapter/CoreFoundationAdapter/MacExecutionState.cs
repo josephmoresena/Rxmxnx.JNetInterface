@@ -1,5 +1,6 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
+// ReSharper disable once InconsistentNaming
 internal partial class UIAdapter
 {
 	private sealed partial class CoreFoundationAdapter

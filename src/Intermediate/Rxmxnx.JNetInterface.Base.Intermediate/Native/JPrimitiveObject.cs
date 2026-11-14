@@ -16,7 +16,7 @@ internal abstract partial class JPrimitiveObject : JObject
 	protected JPrimitiveObject() { }
 
 	/// <summary>
-	/// Interprets current instance as byte.
+	/// Interprets the current instance as byte.
 	/// </summary>
 	/// <returns>Current instance as <see cref="Byte"/> value.</returns>
 	public abstract Byte ToByte();
@@ -28,12 +28,12 @@ internal abstract partial class JPrimitiveObject : JObject
 	public override Int32 GetHashCode() => HashCode.Combine(Convert.ToHexString(this.AsSpan()), this.SizeOf);
 
 	/// <summary>
-	/// Retrieves a <typeparamref name="TPrimitive"/> value from current instance.
+	/// Retrieves a <typeparamref name="TPrimitive"/> value from the current instance.
 	/// </summary>
 	/// <typeparam name="TPrimitive"><see cref="IPrimitiveType"/> type.</typeparam>
 	/// <typeparam name="TValue"><see cref="ValueType"/> type.</typeparam>
 	/// <returns>
-	/// The equivalent <typeparamref name="TPrimitive"/> value to current instance.
+	/// The equivalent <typeparamref name="TPrimitive"/> value to the current instance.
 	/// </returns>
 	/// <exception cref="InvalidCastException"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -84,4 +84,9 @@ internal sealed unsafe partial class JPrimitiveObject<TPrimitive> : JPrimitiveOb
 	[ExcludeFromCodeCoverage]
 #endif
 	public override String ToTraceText() => $"{nameof(JObject)} {this.ObjectSignature}: {this.Value}";
+	/// <inheritdoc/>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
+	public override void Configure<TSlot>(TSlot slot) => this.Value.Configure(slot);
 }

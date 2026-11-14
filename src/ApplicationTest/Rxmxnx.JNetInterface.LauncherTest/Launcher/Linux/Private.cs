@@ -12,10 +12,12 @@ public partial class Launcher
 		private Linux(DirectoryInfo outputDirectory, out Task initialize) : base(outputDirectory)
 		{
 			this._isArmHf = Linux.IsArmHf(this.CurrentArch);
-			this.Architectures = Enum.GetValues<Architecture>()
-			                         .Where(a => this.IsCurrentArch(a) || Linux.IsArmHf(a) ||
-				                                (a is Architecture.X64 or Architecture.Arm64 &&
-					                                !Linux.IsArmHf(this.CurrentArch))).ToArray();
+			this.Architectures =
+			[
+				.. Enum.GetValues<Architecture>().Where(a => this.IsCurrentArch(a) || Linux.IsArmHf(a) ||
+					                                        (a is Architecture.X64 or Architecture.Arm64 &&
+						                                        !Linux.IsArmHf(this.CurrentArch))),
+			];
 			initialize = this.Initialize();
 		}
 		private async Task Initialize()
@@ -69,6 +71,7 @@ public partial class Launcher
 				ExecutablePath = tempFileName,
 				AppendArgs = _ => { },
 				WorkingDirectory = jdkPath,
+				Notifier = ConsoleNotifier.Notifier,
 			};
 			await Utilities.QemuExecute(state, ConsoleNotifier.CancellationToken);
 		}

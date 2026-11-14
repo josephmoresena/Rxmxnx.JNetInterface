@@ -124,77 +124,88 @@ public sealed class MethodTests : IndeterminateAccessTestsBase
 
 		call.MethodCall(instance, parameters);
 		env.AccessFeature.Received(1).CallMethod(instance, instance.Class, (JMethodDefinition)call.Definition, false,
-		                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		                                         Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a).SequenceEqual(
+			                                                           parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		call.MethodCall(instance, jClassClass, false, parameters);
 		env.AccessFeature.Received(1).CallMethod(instance, jClassClass, (JMethodDefinition)call.Definition, false,
-		                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		                                         Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a).SequenceEqual(
+			                                                           parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		call.MethodCall(instance, instance.Class, true, parameters);
 		env.AccessFeature.Received(1).CallMethod(instance, instance.Class, (JMethodDefinition)call.Definition, true,
-		                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		                                         Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a).SequenceEqual(
+			                                                           parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		call.StaticMethodCall(jMethodClass, parameters);
 		env.AccessFeature.Received(1).CallStaticMethod(jMethodClass, (JMethodDefinition)call.Definition,
-		                                               Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		                                               Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a).SequenceEqual(
+			                                                                 parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		IndeterminateCall.ReflectedMethodCall(jMethod, instance, parameters);
 		env.AccessFeature.Received(1).CallMethod(jMethod, instance, (JMethodDefinition)jMethod.Definition, false,
-		                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		                                         Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a).SequenceEqual(
+			                                                           parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		IndeterminateCall.ReflectedMethodCall(jMethod, instance, true, parameters);
 		env.AccessFeature.Received(1).CallMethod(jMethod, instance, (JMethodDefinition)jMethod.Definition, true,
-		                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		                                         Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a).SequenceEqual(
+			                                                           parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		IndeterminateCall.ReflectedStaticMethodCall(jMethod, parameters);
 		env.AccessFeature.Received(1).CallStaticMethod(jMethod, (JMethodDefinition)jMethod.Definition,
-		                                               Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		                                               Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a).SequenceEqual(
+			                                                                 parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		IndeterminateAccessTestsBase.EmptyCompare(call.FunctionCall(instance, parameters));
 		env.AccessFeature.Received(1).CallMethod(instance, instance.Class, (JMethodDefinition)call.Definition, false,
-		                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		                                         Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a).SequenceEqual(
+			                                                           parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		IndeterminateAccessTestsBase.EmptyCompare(call.FunctionCall(instance, jClassClass, false, parameters));
 		env.AccessFeature.Received(1).CallMethod(instance, jClassClass, (JMethodDefinition)call.Definition, false,
-		                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		                                         Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a).SequenceEqual(
+			                                                           parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		IndeterminateAccessTestsBase.EmptyCompare(call.FunctionCall(instance, instance.Class, true, parameters));
 		env.AccessFeature.Received(1).CallMethod(instance, instance.Class, (JMethodDefinition)call.Definition, true,
-		                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		                                         Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a).SequenceEqual(
+			                                                           parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		IndeterminateAccessTestsBase.EmptyCompare(call.StaticFunctionCall(jMethodClass, parameters));
 		env.AccessFeature.Received(1).CallStaticMethod(jMethodClass, (JMethodDefinition)call.Definition,
-		                                               Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		                                               Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a).SequenceEqual(
+			                                                                 parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
@@ -202,7 +213,8 @@ public sealed class MethodTests : IndeterminateAccessTestsBase
 		IndeterminateAccessTestsBase.EmptyCompare(
 			IndeterminateCall.ReflectedFunctionCall(jMethod, instance, parameters));
 		env.AccessFeature.Received(1).CallMethod(jMethod, instance, (JMethodDefinition)jMethod.Definition, false,
-		                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		                                         Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a).SequenceEqual(
+			                                                           parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
@@ -210,13 +222,15 @@ public sealed class MethodTests : IndeterminateAccessTestsBase
 		IndeterminateAccessTestsBase.EmptyCompare(
 			IndeterminateCall.ReflectedFunctionCall(jMethod, instance, true, parameters));
 		env.AccessFeature.Received(1).CallMethod(jMethod, instance, (JMethodDefinition)jMethod.Definition, true,
-		                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		                                         Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a).SequenceEqual(
+			                                                           parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
 		IndeterminateAccessTestsBase.EmptyCompare(IndeterminateCall.ReflectedStaticFunctionCall(jMethod, parameters));
 		env.AccessFeature.Received(1).CallStaticMethod(jMethod, (JMethodDefinition)jMethod.Definition,
-		                                               Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		                                               Arg.Is<IObject[]>(a => ((IEnumerable<IObject>)a).SequenceEqual(
+			                                                                 parameters)));
 	}
 }

@@ -26,7 +26,7 @@ public partial class JEnumObject
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		/// <param name="enumTypeName">Enum name of the current type.</param>
+		/// <param name="enumTypeName">The name of the current enum type.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
 		private TypeMetadataBuilder(ReadOnlySpan<Byte> enumTypeName, IReadOnlySet<Type> interfaceTypes)
 		{
@@ -35,7 +35,7 @@ public partial class JEnumObject
 		}
 
 		/// <summary>
-		/// Appends an interface to current type definition.
+		/// Appends an interface to the current type definition.
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <returns>Current instance.</returns>
@@ -47,7 +47,7 @@ public partial class JEnumObject
 			return this;
 		}
 		/// <summary>
-		/// Appends an enum value to current type definition.
+		/// Appends an enum value to the current type definition.
 		/// </summary>
 		/// <param name="ordinal">Enum value ordinal.</param>
 		/// <param name="name">Enum value name.</param>

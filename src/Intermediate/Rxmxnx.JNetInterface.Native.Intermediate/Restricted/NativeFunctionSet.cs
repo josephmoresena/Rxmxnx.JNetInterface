@@ -98,7 +98,7 @@ public abstract partial class NativeFunctionSet
 	/// <returns>A <see cref="JStringObject"/> instance.</returns>
 	public abstract JStringObject GetClassName(JClassObject jClass);
 	/// <summary>
-	/// Indicates whether current class object is primitive.
+	/// Indicates whether the current class object is primitive.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <returns>
@@ -107,7 +107,7 @@ public abstract partial class NativeFunctionSet
 	/// </returns>
 	public abstract Boolean IsPrimitiveClass(JClassObject jClass);
 	/// <summary>
-	/// Indicates whether current class object is final.
+	/// Indicates whether the current class object is final.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="modifiers">Output. Current class modifiers.</param>
@@ -126,7 +126,7 @@ public abstract partial class NativeFunctionSet
 	public abstract JArrayObject<JClassObject> GetInterfaces(JClassObject jClass);
 
 	/// <summary>
-	/// Indicates whether current buffer object is direct.
+	/// Indicates whether the current buffer object is direct.
 	/// </summary>
 	/// <param name="jBuffer">A <see cref="JBufferObject"/> instance.</param>
 	/// <returns>

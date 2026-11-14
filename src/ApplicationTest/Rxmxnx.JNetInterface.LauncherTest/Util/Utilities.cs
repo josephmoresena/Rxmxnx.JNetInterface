@@ -2,7 +2,8 @@ namespace Rxmxnx.JNetInterface.ApplicationTest.Util;
 
 public static class Utilities
 {
-	private static readonly ConcurrentDictionary<Guid, Process> _processes = [];
+	private static readonly ConcurrentDictionary<Guid, Process> processes = [];
+	private static readonly HttpClient httpClient = new() { Timeout = TimeSpan.FromMinutes(5), };
 
 	public static Boolean ShowDiagnostics
 		=> Boolean.TryParse(Environment.GetEnvironmentVariable("SHOW_DIAGNOSTICS"), out Boolean showDiagnostics) &&
@@ -18,12 +19,8 @@ public static class Utilities
 	public static Boolean IsReflectionFreeModeSupported(NetVersion netVersion) => netVersion < NetVersion.Net90;
 	public static async Task DownloadFileAsync(DownloadGetState state, CancellationToken cancellationToken = default)
 	{
-		using HttpClient httpClient = new();
-
-		httpClient.Timeout = TimeSpan.FromMinutes(5);
-
 		using HttpResponseMessage response =
-			await httpClient.GetAsync(state.Url, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+			await Utilities.httpClient.GetAsync(state.Url, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
 		try
 		{
@@ -65,6 +62,7 @@ public static class Utilities
 			throw;
 		}
 	}
+	// ReSharper disable once UnusedMethodReturnValue.Global
 	public static async Task<Int32> Execute(ExecuteState state, CancellationToken cancellationToken = default)
 	{
 		ProcessStartInfo info = new(state.ExecutablePath)
@@ -76,7 +74,7 @@ public static class Utilities
 		state.Notifier?.Begin(info);
 		Guid processId = Guid.CreateVersion7();
 		using Process prog = Process.Start(info)!;
-		Utilities._processes.TryAdd(processId, prog);
+		Utilities.processes.TryAdd(processId, prog);
 		try
 		{
 			await prog.WaitForExitAsync(cancellationToken);
@@ -85,7 +83,7 @@ public static class Utilities
 		}
 		finally
 		{
-			Utilities._processes.TryRemove(processId, out _);
+			Utilities.processes.TryRemove(processId, out _);
 		}
 	}
 	public static async Task<Int32> Execute<TState>(ExecuteState<TState> state,
@@ -100,7 +98,7 @@ public static class Utilities
 		state.Notifier?.Begin(info);
 		Guid processId = Guid.CreateVersion7();
 		using Process prog = Process.Start(info)!;
-		Utilities._processes.TryAdd(processId, prog);
+		Utilities.processes.TryAdd(processId, prog);
 		try
 		{
 			await prog.WaitForExitAsync(cancellationToken);
@@ -109,9 +107,10 @@ public static class Utilities
 		}
 		finally
 		{
-			Utilities._processes.TryRemove(processId, out _);
+			Utilities.processes.TryRemove(processId, out _);
 		}
 	}
+	// ReSharper disable once UnusedMethodReturnValue.Global
 	public static async Task<Int32> QemuExecute(QemuExecuteState state, CancellationToken cancellationToken = default)
 	{
 		ProcessStartInfo info = new(state.QemuExecutable)
@@ -126,7 +125,7 @@ public static class Utilities
 		state.Notifier?.Begin(info);
 		Guid processId = Guid.CreateVersion7();
 		using Process prog = Process.Start(info)!;
-		Utilities._processes.TryAdd(processId, prog);
+		Utilities.processes.TryAdd(processId, prog);
 		try
 		{
 			await prog.WaitForExitAsync(cancellationToken);
@@ -135,7 +134,7 @@ public static class Utilities
 		}
 		finally
 		{
-			Utilities._processes.TryRemove(processId, out _);
+			Utilities.processes.TryRemove(processId, out _);
 		}
 	}
 	public static async Task<Int32> QemuExecute<TState>(QemuExecuteState<TState> state,
@@ -153,7 +152,7 @@ public static class Utilities
 		state.Notifier?.Begin(info);
 		Guid processId = Guid.CreateVersion7();
 		using Process prog = Process.Start(info)!;
-		Utilities._processes.TryAdd(processId, prog);
+		Utilities.processes.TryAdd(processId, prog);
 		try
 		{
 			await prog.WaitForExitAsync(cancellationToken);
@@ -162,7 +161,7 @@ public static class Utilities
 		}
 		finally
 		{
-			Utilities._processes.TryRemove(processId, out _);
+			Utilities.processes.TryRemove(processId, out _);
 		}
 	}
 	public static async Task<String> ExecuteWithOutput(ExecuteState state,
@@ -177,7 +176,7 @@ public static class Utilities
 		state.Notifier?.Begin(info);
 		Guid processId = Guid.CreateVersion7();
 		using Process prog = Process.Start(info)!;
-		Utilities._processes.TryAdd(processId, prog);
+		Utilities.processes.TryAdd(processId, prog);
 		try
 		{
 			String result = await Utilities.ReadOutput(prog, cancellationToken);
@@ -187,14 +186,14 @@ public static class Utilities
 		}
 		finally
 		{
-			Utilities._processes.TryRemove(processId, out _);
+			Utilities.processes.TryRemove(processId, out _);
 		}
 	}
 	public static void KillRunningProcesses()
 	{
-		foreach (Guid processId in Utilities._processes.Keys.ToArray())
+		foreach (Guid processId in Utilities.processes.Keys.ToArray())
 		{
-			if (Utilities._processes.TryRemove(processId, out Process? process))
+			if (Utilities.processes.TryRemove(processId, out Process? process))
 				process.Kill(true);
 		}
 	}

@@ -32,7 +32,7 @@ public abstract partial class JReferenceTypeMetadata : JDataTypeMetadata
 		=> jObject is null || this.IsInstance(jObject) || env.ClassFeature.IsInstanceOf(jObject, this.GetClass(env));
 
 	/// <summary>
-	/// Indicates whether an instance of the current type is instance of the type of
+	/// Indicates whether an instance of the current type is an instance of the type of
 	/// <paramref name="otherMetadata"/>.
 	/// </summary>
 	/// <param name="otherMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>

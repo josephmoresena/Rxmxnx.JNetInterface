@@ -27,7 +27,7 @@ internal sealed partial class EnvironmentCore
 		this._objects.Capacity = capacity;
 	}
 	/// <summary>
-	/// Sets current object cache.
+	/// Sets the current object cache.
 	/// </summary>
 	/// <param name="localCache">A <see cref="LocalCache"/> instance.</param>
 	public void SetObjectCache(LocalCache localCache) => this._objects = localCache;
@@ -45,6 +45,7 @@ internal sealed partial class EnvironmentCore
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 	/// <param name="withNoCheckError">Indicates whether <see cref="CheckJniError"/> should not be called.</param>
 	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
+	// ReSharper disable once MemberCanBePrivate.Global
 	public JGlobalRef CreateGlobalRef(JObjectLocalRef localRef, Boolean withNoCheckError = false)
 	{
 		ref readonly NativeInterface nativeInterface =

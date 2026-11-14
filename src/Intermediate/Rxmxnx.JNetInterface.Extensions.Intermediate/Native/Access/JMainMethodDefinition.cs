@@ -46,7 +46,7 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 	/// Invokes method defined in <paramref name="mainClass"/>.
 	/// </summary>
 	/// <param name="mainClass">A Java main class.</param>
-	/// <param name="args">Arguments read-only span.</param>
+	/// <param name="args">Argument read-only span.</param>
 	public void Invoke(JClassObject mainClass, params ReadOnlySpan<String?> args)
 	{
 		IEnvironment env = mainClass.Environment;
@@ -56,7 +56,7 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 #endif
 
 	/// <summary>
-	/// Invokes current definition as static method in <paramref name="mainClass"/>.
+	/// Invokes current definition as a static method in <paramref name="mainClass"/>.
 	/// </summary>
 	/// <param name="mainClass">A Java main class.</param>
 	/// <param name="args">Java arguments array.</param>

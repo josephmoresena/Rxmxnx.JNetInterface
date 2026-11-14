@@ -51,6 +51,14 @@ public readonly partial struct JChar : IPrimitiveIntegerType, IPrimitiveNumericT
 #if PACKAGE
 	JLocalObject IPrimitiveType.ToObject(IEnvironment env) => this.ToObject(env);
 #endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void IObject.GetValue(out JValue value)
+	{
+		Unsafe.SkipInit(out value);
+		Unsafe.As<JValue, UInt16>(ref value) = this._value;
+	}
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void ICallArgument.Configure<TSlot>(TSlot slot) => slot.SetParameterValue(0, this);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

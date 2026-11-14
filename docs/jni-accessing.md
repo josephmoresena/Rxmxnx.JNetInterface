@@ -81,6 +81,10 @@ new instances. `Rxmxnx.JNetInterface.Core` provides this functionality through `
 
 - `JMethodDefinition`, `JFunctionDefinition<..>`, and `JConstructorDefinition` expose these APIs as protected.
 - `Parameterless` variants do not accept arguments.
+- `ICallArgument` is useful when the call includes primitives, alone or together with references. A single primitive
+  uses its wrapper. Several values use a custom struct, and the `ref` overload passes that struct when copying it would
+  be expensive. See [Call Arguments](functional-interfaces.md#call-arguments).
+- When every argument is a reference, prefer `ReadOnlySpan<IObject?>`.
 - Starting with .NET 9.0, `ReadOnlySpan<IObject?>` supports `params`.
 - The methods that take `ReadOnlySpan<IObject?>` also have an overload in .NET 8.0 that takes `IObject?[]`. In .NET 8.0
   or earlier, use the `params` keyword.
@@ -166,6 +170,9 @@ to be dynamically executed.
 - **`ReflectedStaticFunctionCall(JExecutableObject, ReadOnlySpan<IObject?>)`**: Calls a reflected static function with
   the encapsulated definition.
 
+The same calls also accept an `ICallArgument`. Follow the notes under
+[Method and Function Invocation APIs](#method-and-function-invocation-apis).
+
 ## Indeterminate Result Handling
 
 `IndeterminateResult` securely stores the result of indeterminate Java value access.
@@ -173,8 +180,8 @@ to be dynamically executed.
 ### Properties of `IndeterminateResult`
 
 - **`Signature`**: UTF-8 signature name.
-- **`BooleanValue`**, **`ByteValue`**, **`CharValue`**, **`DoubleValue`**, **`FloatValue`**, **`IntValue`**,
-  **`LongValue`**, **`ShortValue`**: Retrieve primitive values.
+- **`BooleanValue`**, **`ByteValue`**, **`CharValue`**, **`DoubleValue`**, **`FloatValue`**, **`IntValue`**, **
+  `LongValue`**, **`ShortValue`**: Retrieve primitive values.
 - **`Object`**: Retrieves the object value if applicable.
 
 ##### Note

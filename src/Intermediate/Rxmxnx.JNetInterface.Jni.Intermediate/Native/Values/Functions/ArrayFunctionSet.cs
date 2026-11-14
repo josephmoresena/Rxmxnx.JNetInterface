@@ -70,10 +70,19 @@ internal readonly unsafe partial struct ArrayFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Int32 GetArrayLength(JEnvironmentRef envRef, JArrayLocalRef arrayRef)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._getArrayLength.Windows(envRef, arrayRef);
+			if (SystemInfo.IsWindows)
+				return this._getArrayLength.Windows(envRef, arrayRef);
 #endif
-		return this._getArrayLength.Unix(envRef, arrayRef);
+			return this._getArrayLength.Unix(envRef, arrayRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 }

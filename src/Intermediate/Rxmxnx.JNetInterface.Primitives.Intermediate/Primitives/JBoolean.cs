@@ -7,7 +7,7 @@ using IPrimitiveValueType = IPrimitiveType<JBoolean, Boolean>;
 /// Primitive <c>boolean</c>. Represents a Boolean (<see langword="true"/> or <see langword="false"/>) value.
 /// </summary>
 [StructLayout(LayoutKind.Explicit, Size = sizeof(Byte), Pack = 0)]
-[DebuggerDisplay(nameof(JChar.Value))]
+[DebuggerDisplay(nameof(JBoolean.Value))]
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1210,
                  Justification = CommonConstants.NoBooleanComparisonOperatorsJustification)]
@@ -78,6 +78,14 @@ public readonly partial struct JBoolean : IComparable<JBoolean>, IEquatable<JBoo
 #if PACKAGE
 	JLocalObject IPrimitiveType.ToObject(IEnvironment env) => this.ToObject(env);
 #endif
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void IObject.GetValue(out JValue value)
+	{
+		Unsafe.SkipInit(out value);
+		Unsafe.As<JValue, Byte>(ref value) = this._value;
+	}
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void ICallArgument.Configure<TSlot>(TSlot slot) => slot.SetParameterValue(0, this);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

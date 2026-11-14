@@ -158,7 +158,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <summary>
 	/// Retrieves a <see cref="JStringObject"/> containing class name.
 	/// </summary>
-	/// <param name="isPrimitive">Indicates whether current class is primitive.</param>
+	/// <param name="isPrimitive">Indicates whether the current class is primitive.</param>
 	/// <returns>A <see cref="JStringObject"/> instance.</returns>
 	public JStringObject GetClassName(out Boolean isPrimitive)
 	{
@@ -176,7 +176,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 		return env.ClassFeature.GetSuperClass(this);
 	}
 	/// <summary>
-	/// Retrieves an array with interfaces implemented by current type.
+	/// Retrieves an array with interfaces implemented by the current type.
 	/// </summary>
 	/// <returns>A <see cref="JArrayObject{JClassObject}"/> instance.</returns>
 	public JArrayObject<JClassObject> GetInterfaces()
@@ -185,7 +185,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 		return env.FunctionSet.GetInterfaces(this);
 	}
 	/// <summary>
-	/// Retrieves the <see cref="JModuleObject"/> instance from current class.
+	/// Retrieves the <see cref="JModuleObject"/> instance from the current class.
 	/// </summary>
 	/// <returns>A <see cref="JModuleObject"/> instance.</returns>
 	public JModuleObject? GetModule()
@@ -244,22 +244,22 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// Retrieves the java class for <c>void</c>.
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <returns>The class instance with given class name.</returns>
+	/// <returns>The class instance with the given class name.</returns>
 	public static JClassObject GetVoidClass(IEnvironment env) => env.ClassFeature.VoidPrimitive;
 	/// <summary>
 	/// Retrieves the java class named <paramref name="className"/>.
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="className">Class name.</param>
-	/// <returns>The class instance with given class name.</returns>
+	/// <returns>The class instance with the given class name.</returns>
 	public static JClassObject GetClass(IEnvironment env, ReadOnlySpan<Byte> className)
 		=> env.ClassFeature.GetClass(className);
 	/// <summary>
-	/// Retrieves the java class for given type.
+	/// Retrieves the java class for a given type.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <returns>The class instance for given type.</returns>
+	/// <returns>The class instance for a given type.</returns>
 	public static JClassObject GetClass<TDataType>(IEnvironment env) where TDataType : IDataType<TDataType>
 		=> env.ClassFeature.GetClass<TDataType>();
 	/// <summary>
@@ -268,7 +268,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="className">Name of class to load.</param>
 	/// <param name="rawClassBytes">Binary span with class information.</param>
-	/// <param name="jClassLoader">Optional. The object used as class loader.</param>
+	/// <param name="jClassLoader">Optional. An object used as the class loader.</param>
 	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
 	public static JClassObject LoadClass(IEnvironment env, ReadOnlySpan<Byte> className,
 		ReadOnlySpan<Byte> rawClassBytes, JClassLoaderObject? jClassLoader = default)
@@ -279,7 +279,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <typeparam name="TDataType">The type with class definition.</typeparam>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="rawClassBytes">Binary span with class information.</param>
-	/// <param name="jClassLoader">Optional. The object used as class loader.</param>
+	/// <param name="jClassLoader">Optional. An object used as the class loader.</param>
 	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
 	public static JClassObject
 		LoadClass<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TDataType>(IEnvironment env,

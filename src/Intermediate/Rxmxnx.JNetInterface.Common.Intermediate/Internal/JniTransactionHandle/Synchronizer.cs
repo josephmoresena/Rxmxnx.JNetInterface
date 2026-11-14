@@ -13,7 +13,7 @@ internal partial struct JniTransactionHandle
 		private readonly IVirtualMachine _vm;
 
 		/// <summary>
-		/// Indicates whether current monitor is active.
+		/// Indicates whether the current monitor is active.
 		/// </summary>
 		private Boolean _active;
 

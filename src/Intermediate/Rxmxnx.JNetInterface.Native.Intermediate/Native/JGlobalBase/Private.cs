@@ -39,7 +39,7 @@ public partial class JGlobalBase
 	/// Indicates whether JNI execution is secure.
 	/// </summary>
 	/// <returns>
-	/// <see langword="true"/> if is secure execute JNI calls; otherwise, <see langword="false"/>.
+	/// <see langword="true"/> if is secure, execute JNI calls; otherwise, <see langword="false"/>.
 	/// </returns>
 	private Boolean JniSecure() => this.VirtualMachine.GetEnvironment() is { } env && env.JniSecure();
 	/// <inheritdoc cref="IDisposable.Dispose()"/>

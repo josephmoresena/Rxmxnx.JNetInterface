@@ -8,7 +8,7 @@ internal interface IRecursiveInterfaceSet : IInterfaceSet
 	void IInterfaceSet.ForEach<T>(T state, Action<T, JInterfaceTypeMetadata> action)
 		=> this.ForEach(RecursiveState<T>.CreateNonRecursive(state, action));
 	/// <summary>
-	/// Performs <paramref name="state"/> action for each unique item in current set.
+	/// Performs <paramref name="state"/> action for each unique item in the current set.
 	/// </summary>
 	/// <typeparam name="T">Type of state object</typeparam>
 	/// <param name="state">Object state.</param>

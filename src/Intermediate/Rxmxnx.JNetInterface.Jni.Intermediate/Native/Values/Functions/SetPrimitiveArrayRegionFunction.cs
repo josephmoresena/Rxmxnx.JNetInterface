@@ -31,13 +31,22 @@ internal readonly unsafe struct
 	public void Set(JEnvironmentRef envRef, TArrayRef arrayRef, Int32 start, Int32 length,
 		ReadOnlyValPtr<TPrimitiveType> buffer)
 	{
-#if !ANDROID
-		if (SystemInfo.IsWindows)
+		try
 		{
-			this._function.Windows(envRef, arrayRef.ArrayValue, start, length, buffer);
-			return;
-		}
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+			{
+				this._function.Windows(envRef, arrayRef.ArrayValue, start, length, buffer);
+				return;
+			}
 #endif
-		this._function.Unix(envRef, arrayRef.ArrayValue, start, length, buffer);
+			this._function.Unix(envRef, arrayRef.ArrayValue, start, length, buffer);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 }

@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
-/// Exposes invocation function set.
+/// Exposes an invocation function set.
 /// </summary>
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,

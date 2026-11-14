@@ -5,7 +5,7 @@
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface IPrimitiveType : IDataType, IComparable, IConvertible
+public interface IPrimitiveType : IDataType, IComparable, IConvertible, ICallArgument
 {
 	/// <summary>
 	/// Native primitive type.
@@ -27,10 +27,10 @@ public interface IPrimitiveType : IDataType, IComparable, IConvertible
 #endif
 
 	/// <summary>
-	/// Retrieves the metadata for given primitive type.
+	/// Retrieves the metadata for a given primitive type.
 	/// </summary>
 	/// <typeparam name="TPrimitive">Type of the current java primitive datatype.</typeparam>
-	/// <returns>The <see cref="JPrimitiveTypeMetadata"/> instance for given type.</returns>
+	/// <returns>The <see cref="JPrimitiveTypeMetadata"/> instance for a given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public new static JPrimitiveTypeMetadata GetMetadata<TPrimitive>()
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>

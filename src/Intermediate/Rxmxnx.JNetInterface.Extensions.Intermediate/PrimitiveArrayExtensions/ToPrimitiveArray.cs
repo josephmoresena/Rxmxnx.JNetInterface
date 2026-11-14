@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface;
 public static partial class PrimitiveArrayExtensions
 {
 	/// <summary>
-	/// Creates a multi-dimensional java array of primitive values.
+	/// Creates a multidimensional java array of primitive values.
 	/// </summary>
 	/// <typeparam name="TPrimitive">The primitive type of the array elements.</typeparam>
 	/// <param name="values">
@@ -30,7 +30,7 @@ public static partial class PrimitiveArrayExtensions
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> values.ToPrimitiveArray(env, lengths.AsReadOnlySpan());
 	/// <summary>
-	/// Creates a multi-dimensional java array of primitive values.
+	/// Creates a multidimensional java array of primitive values.
 	/// </summary>
 	/// <typeparam name="TPrimitive">The primitive type of the array elements.</typeparam>
 	/// <param name="values">

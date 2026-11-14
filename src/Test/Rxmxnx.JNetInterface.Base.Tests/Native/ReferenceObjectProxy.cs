@@ -23,12 +23,15 @@ public sealed class ReferenceObjectProxy : JReferenceObject
 	public event Action<Type, JReferenceObject> SetAssignableToEvent = default!;
 
 	private protected override Boolean IsInstanceOf<TDataType>()
+		// ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
 		=> this.InstanceOfEvent?.Invoke(typeof(TDataType), this) ?? false;
 	private protected override ReadOnlySpan<Byte> AsSpan()
 	{
+		// ReSharper disable once NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract
 		ReadOnlySpanFunc<Byte> asSpanEvent = this.AsSpanEvent ?? (() => ReadOnlySpan<Byte>.Empty);
 		return asSpanEvent();
 	}
+	// ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
 	private protected override IDisposable GetSynchronizer() => this.GetSynchronizerEvent?.Invoke()!;
 
 	internal override void ClearValue()
@@ -37,6 +40,7 @@ public sealed class ReferenceObjectProxy : JReferenceObject
 			Unsafe.AsRef(in value) = default;
 	}
 	internal override void SetAssignableTo<TDataType>(Boolean isAssignable)
+		// ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
 		=> this.SetAssignableToEvent?.Invoke(typeof(TDataType), this);
 	public override String ToTraceText() => this.ToString()!;
 }

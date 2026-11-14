@@ -30,89 +30,48 @@ jobs:
       PackageVersion: ${{ inputs.package_version }}
       NoAndroid: "True"
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 1
       - name: Restore Internal NuGet Package
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         if: inputs.build_artifacts == true
         with:
           path: ./package/Nuget
           key: internal-nuget-${{ github.run_id }}
           fail-on-cache-miss: true
           enableCrossOsArchive: true
-      - name: APT deb822 sources
-        if: runner.os == 'Linux'
-        run: |
-          if [[ $ImageOS == "ubuntu24" ]]; then
-           sudo bash -c 'cat > /etc/apt/sources.list.d/ubuntu.sources <<EOF
-          Types: deb
-          URIs: https://archive.ubuntu.com/ubuntu/
-          Suites: noble
-          Components: main restricted universe
-          Architectures: amd64
-          
-          Types: deb
-          URIs: https://security.ubuntu.com/ubuntu/
-          Suites: noble-security
-          Components: main restricted universe
-          Architectures: amd64
-          
-          Types: deb
-          URIs: https://archive.ubuntu.com/ubuntu/
-          Suites: noble-updates
-          Components: main restricted universe
-          Architectures: amd64
-          
-          Types: deb
-          URIs: https://azure.ports.ubuntu.com/ubuntu-ports/
-          Suites: noble
-          Components: main restricted multiverse universe
-          Architectures: arm64
-          
-          Types: deb
-          URIs: https://azure.ports.ubuntu.com/ubuntu-ports/
-          Suites: noble-updates
-          Components: main restricted multiverse universe
-          Architectures: arm64
-          
-          Types: deb
-          URIs: https://azure.ports.ubuntu.com/ubuntu-ports/
-          Suites: noble-updates
-          Components: main restricted multiverse universe
-          Architectures: armhf
-          EOF'
-          fi
       - name: Setup NativeAOT pre-requisites (Linux)
         if: runner.os == 'Linux'
         run: |
-          sudo dpkg --add-architecture arm64
-          sudo dpkg --add-architecture armhf
+          # libicuNN is whichever SONAME that image installed.
+          libicu="$(dpkg-query -W -f='${Package}\n' | grep -E '^libicu[0-9]+$' | sort -V | tail -1)"
+          if [[ -z "$libicu" ]]; then
+           echo "The runner has no libicu runtime package installed." >&2
+           exit 1
+          fi
+          libstdcpp="$(dpkg-query -W -f='${Package}\n' | grep -E '^libstdc\+\+-[0-9]+-dev$' | sort -V | tail -1)"
+          if [[ -z "$libstdcpp" ]]; then
+            echo "The runner has no libstdc++ development package installed." >&2
+            exit 1
+          fi
+
+          # amd64 first, while the image sources are untouched.
+          sudo apt-get install --assume-yes --no-install-recommends \
+            coreutils clang llvm zlib1g-dev libkrb5-dev libssl-dev \
+            qemu-user qemu-user-binfmt binfmt-support \
+            binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu g++-aarch64-linux-gnu \
+            binutils-arm-linux-gnueabihf gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
           
-          sudo bash -c 'cat > /etc/apt/sources.list.d/arm64.list <<EOF
-          deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports/ noble main restricted
-          deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted
-          deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports noble-security main restricted universe multiverse
-          deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports/ noble-backports main restricted universe multiverse
-          EOF'
-          
-          sudo bash -c 'cat > /etc/apt/sources.list.d/armhf.list <<EOF
-          deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports/ noble main restricted
-          deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted
-          deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports noble-security main restricted universe multiverse
-          deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports/ noble-backports main restricted universe multiverse
-          EOF'
-          
-          sudo sed -i -e 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
-          sudo sed -i -e 's/deb mirror/deb [arch=amd64] mirror/g' /etc/apt/sources.list
-          
-          sudo apt update 
-          sudo apt-get install coreutils clang llvm zlib1g-dev libkrb5-dev libssl-dev \
-            qemu-user qemu-user-static binfmt-support libicu74:arm64 libicu74:armhf \
-            libstdc++-14-dev:arm64 libstdc++-14-dev:arm64 \
-            binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu zlib1g-dev:arm64 libssl-dev:arm64 \
-            binutils-arm-linux-gnueabihf gcc-arm-linux-gnueabihf zlib1g-dev:armhf libssl-dev:armhf \
-            --assume-yes
+           # Foreign architectures only after the host packages are in place.
+          bash ./Install-ArmSources.sh
+
+          sudo apt-get install \
+            "${libicu}:arm64" "${libicu}:armhf" \
+            "${libstdcpp}:arm64" "${libstdcpp}:armhf" \
+            zlib1g-dev:arm64 zlib1g-dev:armhf \
+            libssl-dev:arm64 libssl-dev:armhf \
+            --assume-yes --no-install-recommends --allow-downgrades
 
           sudo mkdir -p /usr/share/dotnet
           sudo chown -R $(whoami):$(whoami) /usr/share/dotnet
@@ -127,7 +86,7 @@ jobs:
           
           df -h
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         if: runner.os != 'Windows' || inputs.run_tests != true
         with:
           dotnet-version: |
@@ -135,21 +94,25 @@ jobs:
             8.0.x
             9.0.x
             10.0.x
+            11.0.x
       - name: Setup .NET (Windows)
         if: runner.os == 'Windows' && inputs.run_tests == true
         shell: pwsh
         run: |
-          $versions = 7..10
+          winget install "Microsoft.DotNet.SDK.11" `
+            --architecture x64 `
+            --silent --force --disable-interactivity `
+            --accept-source-agreements --accept-package-agreements
+          
+          $versions = 7..11
           $archs = @("x86", "x64")
           foreach ($v in $versions) {
             foreach ($a in $archs) {
-              winget install "Microsoft.DotNet.SDK.$v" `
+              if ($v -eq 11 -and $a -eq "x64") { continue }
+              winget install "Microsoft.DotNet.Runtime.$v" `
               --architecture $a `
-              --silent `
-              --force `
-              --disable-interactivity `
-              --accept-source-agreements `
-              --accept-package-agreements
+              --silent --force --disable-interactivity `
+              --accept-source-agreements --accept-package-agreements
             }
           }
           dotnet workload update
@@ -201,12 +164,8 @@ jobs:
         shell: pwsh
         run: |
           $versions = 7..10
-          $latestVersion = ($versions | Measure-Object -Maximum).Maximum
           foreach ($v in $versions) {
-            if ($v -eq $latestVersion) {
-                continue
-            }
-            winget uninstall "Microsoft.DotNet.SDK.$v" `
+            winget uninstall "Microsoft.DotNet.Runtime.$v" `
                 --force `
                 --purge `
                 --silent `
@@ -229,6 +188,9 @@ jobs:
         if: inputs.build_artifacts == true
         shell: pwsh
         run: |
+          dotnet build-server shutdown
+          dotnet nuget locals all --clear
+          
           Remove-Item -Recurse -Force "src/Test"
           Remove-Item -Recurse -Force "src/Intermediate"
           Remove-Item -Recurse -Force "src/SourceGenerator"
@@ -276,7 +238,7 @@ jobs:
 
       - name: Create Native Artifact Logs
         if: inputs.build_artifacts == true && inputs.package_version == ''
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ runner.os }}-Artifact-Logs
           path: |
@@ -316,7 +278,7 @@ jobs:
         run: rm ./artifacts-java/*.jar
       - name: Cache Java Libraries
         if: inputs.build_artifacts == true
-        uses: actions/cache/save@v5
+        uses: actions/cache/save@v6
         with:
           path: ./artifacts-java
           key: internal-${{ runner.os }}-${{ github.run_id }}
@@ -401,7 +363,7 @@ jobs:
 
       - name: Create Native Artifact
         if: inputs.build_artifacts == true && inputs.package_version == ''
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ runner.os }}-Artifact
           path: |

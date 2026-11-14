@@ -12,9 +12,9 @@ public sealed class ObjectTests
 	internal void CopyTest(Int32 length)
 	{
 		ObjectProxy jObject = Substitute.For<ObjectProxy>();
-		Byte[] array = ObjectTests.fixture.CreateMany<Byte>(length).ToArray();
+		Byte[] array = [.. ObjectTests.fixture.CreateMany<Byte>(length),];
 		(jObject as IObject).CopyTo(array);
-		jObject.Received(1).CopyTo(Arg.Is<Byte[]>(a => a.SequenceEqual(array)),
+		jObject.Received(1).CopyTo(Arg.Is<Byte[]>(a => ((IEnumerable<Byte>)a).SequenceEqual(array)),
 		                           Arg.Is<IMutableReference<Int32>>(r => r.Value == 0));
 	}
 	[Theory]
@@ -26,10 +26,10 @@ public sealed class ObjectTests
 	{
 		ObjectProxy jObject = Substitute.For<ObjectProxy>();
 		IViewObject view = new ViewObjectProxy(jObject);
-		Byte[] array = ObjectTests.fixture.CreateMany<Byte>(length).ToArray();
+		Byte[] array = [.. ObjectTests.fixture.CreateMany<Byte>(length),];
 		Int32 offset = Random.Shared.Next(0, array.Length);
 		view.CopyTo(array, ref offset);
-		jObject.Received(1).CopyTo(Arg.Is<Byte[]>(a => a.SequenceEqual(array)),
+		jObject.Received(1).CopyTo(Arg.Is<Byte[]>(a => ((IEnumerable<Byte>)a).SequenceEqual(array)),
 		                           Arg.Is<IMutableReference<Int32>>(r => r.Value == offset));
 	}
 	[Theory]
@@ -40,8 +40,12 @@ public sealed class ObjectTests
 	{
 		ObjectProxy jObject = Substitute.For<ObjectProxy>();
 		IViewObject view = new ViewObjectProxy(jObject);
-		ValueProxy[] array = MemoryMarshal.Cast<Byte, ValueProxy>(
-			ObjectTests.fixture.CreateMany<Byte>(length * JValue.Size).ToArray()).ToArray();
+		ValueProxy[] array =
+		[
+			.. MemoryMarshal.Cast<Byte, ValueProxy>(
+				// ReSharper disable once UseCollectionExpression
+				ObjectTests.fixture.CreateMany<Byte>(length * JValue.Size).ToArray()),
+		];
 		Int32 index = Random.Shared.Next(0, array.Length);
 		view.CopyTo(MemoryMarshal.Cast<ValueProxy, JValue>(array.AsSpan()), index);
 		jObject.Received(1).CopyTo(Arg.Is<ValueProxy[]>(a => ((IEnumerable<ValueProxy>)a).SequenceEqual(array)), index);

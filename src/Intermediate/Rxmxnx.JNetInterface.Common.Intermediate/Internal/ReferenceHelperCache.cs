@@ -36,7 +36,7 @@ internal abstract class ReferenceHelperCache<TObject, TReference, TCreationArg>
 	/// </summary>
 	/// <param name="reference">A reference pointer to <typeparamref name="TObject"/> instance.</param>
 	/// <param name="arg">Creation argument.</param>
-	/// <param name="isNew">Indicates whether current object is new in cache.</param>
+	/// <param name="isNew">Indicates whether the current object is new in the cache.</param>
 	/// <returns>A <typeparamref name="TObject"/> instance.</returns>
 	public virtual TObject Get(TReference reference, out Boolean isNew, TCreationArg? arg = default)
 	{

@@ -5,6 +5,9 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 
+using AndroidInterface;
+
+using Rxmxnx.JNetInterface.Functional;
 using Rxmxnx.JNetInterface.Native;
 
 using Activity = Android.App.Activity;
@@ -18,20 +21,23 @@ using Environment = System.Environment;
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 [Activity(Label = "@string/app_name", MainLauncher = true)]
-public class MainActivity : Activity, View.IOnClickListener
+public class MainActivity : Activity, View.IOnClickListener, IAndroidNativeFunction<MainActivity.MobileState>
 {
 	private static readonly DateTime load = DateTime.Now;
 
-	private readonly JGlobal? _androidContext;
-	private readonly JGlobal? _toastClass;
+	private readonly MobileState _mobileState;
 
 	private Task _backgroundThread = Task.CompletedTask;
 	private Int32 _count;
 	private Boolean _disposed;
 
-	public MainActivity()
-		=> (this._androidContext, this._toastClass) =
-			AndroidJniHost.CreateSyncContext().With(this).Invoke(MobileMethods.InitializeClasses);
+	public MainActivity() => AndroidJniHost.CreateSyncContext().With(this).Invoke(this, out this._mobileState);
+
+	MobileState IAndroidNativeFunction<MobileState>.Apply(AndroidJniContext jctx)
+	{
+		using JClassObject androidToastClass = JClassObject.GetClass<AndroidToast>(jctx.Environment);
+		return new(jctx.Objects[0]!.Global, androidToastClass.Global);
+	}
 
 	public void OnClick(View? v)
 	{
@@ -77,8 +83,8 @@ public class MainActivity : Activity, View.IOnClickListener
 	{
 		if (this._disposed) return;
 		this._disposed = true;
-		this._toastClass?.Dispose(); // Removes global class instance.
-		this._androidContext?.Dispose();
+		this._mobileState.ToastClass?.Dispose(); // Removes global class instance.
+		this._mobileState.AndroidContext?.Dispose();
 	}
 	private async Task ToastBackground()
 	{
@@ -87,10 +93,15 @@ public class MainActivity : Activity, View.IOnClickListener
 		{
 			String textToToast = $"Random {i}: {Random.Shared.Next()}";
 			await AndroidJniHost.CreateAsyncContext().Post(Application.SynchronizationContext,
-			                                               (this._androidContext, textToToast),
-			                                               MobileMethods.ToastBackground);
+			                                               new ToastRequest
+			                                               {
+				                                               AndroidContext = this._mobileState.AndroidContext,
+				                                               Text = textToToast,
+			                                               });
 			await Task.Delay(1000);
 			i++;
 		}
 	}
+
+	private readonly record struct MobileState(JGlobal AndroidContext, JGlobal ToastClass);
 }

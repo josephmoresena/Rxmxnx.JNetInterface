@@ -3,6 +3,7 @@ using Rxmxnx.JNetInterface.Native.References;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
+// ReSharper disable once InconsistentNaming
 internal partial class UIAdapter
 {
 	private class ConsoleAdapter : UIAdapter

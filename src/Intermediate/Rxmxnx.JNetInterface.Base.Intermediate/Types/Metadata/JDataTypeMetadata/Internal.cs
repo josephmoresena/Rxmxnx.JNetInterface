@@ -8,10 +8,10 @@ public partial class JDataTypeMetadata
 	internal TypeInfoSequence Information => this._info;
 
 	/// <summary>
-	/// Indicates current instance is valid for current datatype.
+	/// Indicates the current instance is valid for the current datatype.
 	/// </summary>
 	/// <returns>
-	/// <see langword="true"/> if current instance is valid for current type; otherwise, <see langword="false"/>.
+	/// <see langword="true"/> if current instance is valid for the current type; otherwise, <see langword="false"/>.
 	/// </returns>
 	internal Boolean IsValidForType(Type type) => this.Type == type;
 }

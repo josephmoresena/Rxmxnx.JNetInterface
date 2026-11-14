@@ -5,7 +5,7 @@ public partial class JExecutableObject
 	/// <inheritdoc cref="JExecutableObject.Definition"/>
 	private JCallDefinition? _callDefinition;
 	/// <summary>
-	/// Class information for declaring class.
+	/// Class information for the declaring class.
 	/// </summary>
 	private ITypeInformation? _classInformation;
 	/// <inheritdoc cref="JExecutableObject.MethodId"/>
@@ -27,7 +27,9 @@ public partial class JExecutableObject
 	private JCallDefinition GetCallDefinition()
 	{
 		IEnvironment env = this.Environment;
-		return env.WithFrame(IVirtualMachine.GetCallDefinitionCapacity, this, JExecutableObject.GetCallDefinition);
+		CallDefinitionFunction callDefinition = new(this);
+		callDefinition.WithFrame(env, IVirtualMachine.GetCallDefinitionCapacity, out JCallDefinition result);
+		return result;
 	}
 	/// <summary>
 	/// Retrieves the <see cref="JMethodId"/> identifier for the current instance.
@@ -57,16 +59,18 @@ public partial class JExecutableObject
 	}
 
 	/// <summary>
-	/// Retrieves the <see cref="JCallDefinition"/> instance for the current instance.
+	/// Frame function that reads the call definition of an executable.
 	/// </summary>
-	/// <param name="jExecutable">A <see cref="JExecutableObject"/> instance.</param>
-	/// <returns>A <see cref="JCallDefinition"/> instance.</returns>
-	private static JCallDefinition GetCallDefinition(JExecutableObject jExecutable)
+	/// <param name="executable">A <see cref="JExecutableObject"/> instance.</param>
+	private readonly struct CallDefinitionFunction(JExecutableObject executable) : IFrameFunction<JCallDefinition>
 	{
-		IEnvironment env = jExecutable.Environment;
-		using JStringObject memberName = env.FunctionSet.GetName(jExecutable);
-		using JArrayObject<JClassObject> parameterTypes = env.FunctionSet.GetParameterTypes(jExecutable);
-		using JClassObject? returnType = env.FunctionSet.GetReturnType(jExecutable);
-		return env.AccessFeature.GetDefinition(memberName, parameterTypes, returnType);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		JCallDefinition IFrameFunction<JCallDefinition>.Apply(IEnvironment env, ReadOnlySpan<JReferenceObject?> objects)
+		{
+			using JStringObject memberName = env.FunctionSet.GetName(executable);
+			using JArrayObject<JClassObject> parameterTypes = env.FunctionSet.GetParameterTypes(executable);
+			using JClassObject? returnType = env.FunctionSet.GetReturnType(executable);
+			return env.AccessFeature.GetDefinition(memberName, parameterTypes, returnType);
+		}
 	}
 }

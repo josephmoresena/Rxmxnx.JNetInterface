@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.Native;
 /// <summary>
 /// Java native call entry.
 /// </summary>
+// ReSharper disable once ClassCannotBeInstantiated
 public partial class JNativeCallEntry : IFixedPointer
 {
 	/// <summary>

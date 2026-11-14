@@ -18,9 +18,9 @@ public interface IDirectBufferObject : IInterfaceObject<JDirectBufferObject>
 	internal JBufferObject InternalBuffer { get; }
 
 	/// <summary>
-	/// Creates a <see cref="IFixedMemory"/> instance from current direct buffer.
+	/// Creates a <see cref="IFixedMemory"/> instance from the current direct buffer.
 	/// </summary>
-	/// <returns>A <see cref="IFixedMemory"/> instance from current direct buffer.</returns>
+	/// <returns>A <see cref="IFixedMemory"/> instance from the current direct buffer.</returns>
 	IFixedMemory AsFixedMemory();
 }
 
@@ -34,9 +34,9 @@ public interface IDirectBufferObject<TPrimitive> : IDirectBufferObject
 	IFixedMemory IDirectBufferObject.AsFixedMemory() => this.GetFixedContext();
 
 	/// <summary>
-	/// Creates a <see cref="IFixedContext{TPrimitive}"/> instance from current direct buffer.
+	/// Creates a <see cref="IFixedContext{TPrimitive}"/> instance from the current direct buffer.
 	/// </summary>
-	/// <returns>A <see cref="IFixedContext{TPrimitive}"/> instance from current direct buffer.</returns>
+	/// <returns>A <see cref="IFixedContext{TPrimitive}"/> instance from the current direct buffer.</returns>
 	IFixedContext<TPrimitive> GetFixedContext()
 		=> ((ValPtr<TPrimitive>)this.Address).GetUnsafeFixedContext((Int32)this.Capacity);
 }

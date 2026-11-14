@@ -62,7 +62,7 @@ internal partial class GlobalMainClasses
 	private JRuntimeVersion? _version;
 
 	/// <summary>
-	/// Appends main global class to dictionary.
+	/// Appends a main global class to the dictionary.
 	/// </summary>
 	/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
 	/// <param name="classMetadata">A <see cref="_classMetadata"/> instance.</param>
@@ -103,8 +103,8 @@ internal partial class GlobalMainClasses
 	/// Indicates whether the current main class is loadable.
 	/// </summary>
 	/// <param name="loader">A <see cref="IMainClassLoader"/> instance.</param>
-	/// <param name="sinceVersion">Class main's since version.</param>
-	/// <param name="apiLevel">Class main's Android API level.</param>
+	/// <param name="sinceVersion">The main class' since version.</param>
+	/// <param name="apiLevel">The main class' Android API level.</param>
 	/// <returns>
 	/// <see langword="true"/> if the since value is lower to the current JRE version; otherwise
 	/// <see langword="false"/>.
@@ -117,12 +117,12 @@ internal partial class GlobalMainClasses
 		// If running on Android, checks the API level.
 		if (AndroidHelper.IsZygote)
 			return apiLevel >= 0 && AndroidHelper.ApiLevel >= apiLevel;
-		// The JNI version is checked to avoid check the JRE version.
+		// The JNI version is checked to avoid checking the JRE version.
 		if ((Int32)sinceVersion < loader.Version) return true;
-		// If no running on Android, avoid to load classes with undefined version.
+		// If no running on Android, avoid loading classes with undefined version.
 		if (sinceVersion is JRuntimeVersion.Undefined) return false;
 #if !ANDROID
-		// If fixed JRE version, avoid to check the JRE version.
+		// If fixed JRE version, avoid checking the JRE version.
 		if (JavaStandardFeature.GetRuntimeVersion() is { } jreVersion && jreVersion >= sinceVersion)
 			return true;
 #endif

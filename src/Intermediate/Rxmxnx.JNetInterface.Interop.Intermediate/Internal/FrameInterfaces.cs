@@ -1,0 +1,58 @@
+namespace Rxmxnx.JNetInterface.Internal;
+
+/// <summary>
+/// Defines a specific operation or behavior to be executed within the context of a JNI local frame.
+/// </summary>
+internal readonly struct LocalFrameAction(Action action) : IFrameAction
+{
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void IFrameAction.Accept(IEnvironment env, ReadOnlySpan<JReferenceObject?> objects) => action();
+}
+
+/// <summary>
+/// Defines a specific operation or behavior to be executed within the context of a JNI local frame.
+/// </summary>
+#if !NET9_0_OR_GREATER
+internal readonly struct LocalFrameAction<TState>(TState state, Action<TState> action) : IFrameAction
+{
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void IFrameAction.Accept(IEnvironment env, ReadOnlySpan<JReferenceObject?> objects) => action(state);
+#else
+internal readonly ref struct LocalFrameAction<TState>(TState state, Action<TState> action)
+	: IFrameAction where TState : allows ref struct
+{
+	private readonly TState _state = state;
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void IFrameAction.Accept(IEnvironment env, ReadOnlySpan<JReferenceObject?> objects) => action(this._state);
+#endif
+}
+
+/// <summary>
+/// Defines a specific operation or behavior to be executed within the context of a JNI local frame.
+/// </summary>
+internal readonly struct LocalFrameFunction<TResult>(Func<TResult> func) : IFrameFunction<TResult>
+{
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	TResult IFrameFunction<TResult>.Apply(IEnvironment env, ReadOnlySpan<JReferenceObject?> objects) => func();
+}
+
+/// <summary>
+/// Defines a specific operation or behavior to be executed within the context of a JNI local frame.
+/// </summary>
+#if !NET9_0_OR_GREATER
+internal readonly struct LocalFrameFunction<TResult, TState>(TState state, Func<TState, TResult> func)
+	: IFrameFunction<TResult>
+{
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	TResult IFrameFunction<TResult>.Apply(IEnvironment env, ReadOnlySpan<JReferenceObject?> objects) => func(state);
+#else
+internal readonly ref struct LocalFrameFunction<TResult, TState>(TState state, Func<TState, TResult> func)
+	: IFrameFunction<TResult> where TState : allows ref struct
+{
+	private readonly TState _state = state;
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	TResult IFrameFunction<TResult>.Apply(IEnvironment env, ReadOnlySpan<JReferenceObject?> objects) => func(this._state);
+#endif
+}

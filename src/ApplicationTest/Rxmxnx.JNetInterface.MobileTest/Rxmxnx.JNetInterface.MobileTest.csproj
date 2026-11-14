@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>$(DefaultFramework)-android</TargetFramework>
-        <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
+        <TargetFramework Condition="'$(RequiredFramework)' == ''">$(DefaultFramework)-android</TargetFramework>
+        <TargetFramework Condition="'$(RequiredFramework)' != ''">$(RequiredFramework)-android</TargetFramework>
+        <SupportedOSPlatformVersion>24</SupportedOSPlatformVersion>
         <RuntimeIdentifiers>android-x64;android-arm64</RuntimeIdentifiers>
         <OutputType>Exe</OutputType>
         <ApplicationId>com.rxmxnx.jnetinterface.mobiletest</ApplicationId>
@@ -9,14 +10,21 @@
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
         <TrimMode>full</TrimMode>
         <GenerateAotLog>true</GenerateAotLog>
+        <UseMonoRuntime Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net11.0'))">false</UseMonoRuntime>
     </PropertyGroup>
     <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net9.0')) And '$(NativeAOT)' != 'True'">
         <RuntimeIdentifiers>$(RuntimeIdentifiers);android-arm</RuntimeIdentifiers>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Release' And '$(NativeAOT)' != 'True'">
         <PublishAot>false</PublishAot>
-        <RunAOTCompilation>true</RunAOTCompilation>
         <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Release' And '$(NativeAOT)' != 'True' And !$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net11.0'))">
+        <RunAOTCompilation>true</RunAOTCompilation>
+        <MauiEnableFullReadyToRun>false</MauiEnableFullReadyToRun>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Release' And '$(NativeAOT)' != 'True' And $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net11.0'))">
+        <MauiEnableFullReadyToRun>true</MauiEnableFullReadyToRun>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Release' And '$(NativeAOT)' == 'True'">
         <EnablePreviewFeatures>true</EnablePreviewFeatures>
@@ -29,4 +37,7 @@
     <Import Project="..\JNetInterface-PackageReference.props"/>
     <Import Project="..\JNetInterface-Config.props"/>
     <Import Project="..\..\PInvoke.Reference.props"/>
+    <ItemGroup>
+        <Using Remove="Android.OS.Bundle"/>
+    </ItemGroup>
 </Project>

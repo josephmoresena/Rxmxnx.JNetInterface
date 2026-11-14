@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<linker>
+    <!-- Call Bypass Features -->
+    <assembly fullname="Rxmxnx.JNetInterface.Interop.Intermediate">
+        <type fullname="Rxmxnx.JNetInterface.Internal.NativeCallUtilities"
+              feature="JNetInterface.DisableCheckRefTypeNativeCall"
+              featurevalue="false">
+            <method signature="System.Boolean get_CheckRefTypeNativeCallEnabled()" body="stub" value="false"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.Internal.NativeCallUtilities"
+              feature="JNetInterface.DisableCheckClassRefNativeCall"
+              featurevalue="false">
+            <method signature="System.Boolean get_CheckClassRefNativeCallEnabled()" body="stub" value="false"/>
+        </type>
+    </assembly>
+</linker>

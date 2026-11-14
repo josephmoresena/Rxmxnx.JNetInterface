@@ -36,6 +36,10 @@ internal static class CommonConstants
 	public const String CheckIdS6670 = "S6670:\"Trace.Write\" and \"Trace.WriteLine\" should not be used";
 	public const String CheckIdS107 = "S107:Methods should not have too many parameters";
 	public const String CheckIdS6640 = "S6640:Using unsafe code blocks is security-sensitive";
+	public const String CheckIdS1244 = "S1244:Floating point numbers should not be tested for equality";
+	public const String CheckIdS2696 = "S2696:Instance methods should not write to \"static\" fields";
+	public const String ExactPrimitiveEqualityJustification = "Exact equality defines primitive value equality.";
+	public const String ThreadStaticClosureJustification = "Thread-static storage avoids allocating a closure.";
 	public const String CheckIdS2376 = "S2376:Write-only properties should not be used";
 	public const String CheckIdS2326 = "S2326:Unused type parameters should be removed";
 	public const String CheckIdS4487 = "S4487:Unread \"private\" fields should be removed";

@@ -47,6 +47,7 @@ internal sealed class FrenchMessageResource : IMessageResource
 	String IMessageResource.InvalidReferenceObject => "JReferenceObject invalide.";
 	String IMessageResource.InvalidObjectMetadata => "Métadonnées d'objet invalides.";
 	String IMessageResource.DisposedObject => "JReferenceObject a été libéré.";
+	String IMessageResource.InvalidParameterIndex => "Index de paramètre non valide.";
 	String IMessageResource.InvalidArrayLength => "La longueur du tableau doit être zéro ou positive.";
 	String IMessageResource.DeadVirtualMachine => "La JVM actuelle n'est pas en cours d'exécution.";
 	String IMessageResource.NotAttachedThread => "Le thread actuel n'est pas attaché à la JVM.";
@@ -135,6 +136,8 @@ internal sealed class FrenchMessageResource : IMessageResource
 			"Le type de tableau possède trop de dimensions.";
 	String IMessageResource.InvalidInterfaceVersion(Int32 currentVersion, Int32 requiredVersion)
 		=> $"Le processus actuel doit s’exécuter avec une version de JNI compatible avec 0x{requiredVersion:x8}, mais la version détectée est 0x{currentVersion:x8}.";
+
+	String IMessageResource.InvalidObjectAt(Int32 index) => $"Objet non valide à l'index {index}.";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

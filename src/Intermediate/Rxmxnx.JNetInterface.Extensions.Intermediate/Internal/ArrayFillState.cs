@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// State structure for multidimensional array fill.
 /// </summary>
-/// <typeparam name="TElement">The type of array element.</typeparam>
+/// <typeparam name="TElement">The type of the array element.</typeparam>
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
@@ -54,7 +54,8 @@ internal unsafe struct ArrayFillState<TElement>
 	[ExcludeFromCodeCoverage]
 #endif
 #pragma warning disable CS8500
-	public ArrayFillState(Int32* dimensionPtr, Int32 dimensions, TElement* memoryPtr, Int32 count)
+	public ArrayFillState(ReadOnlyValPtr<Int32> dimensionPtr, Int32 dimensions, ReadOnlyValPtr<TElement> memoryPtr,
+		Int32 count)
 #pragma warning restore CS8500
 #if !NET9_0_OR_GREATER
 	{
@@ -102,7 +103,7 @@ internal unsafe struct ArrayFillState<TElement>
 	/// <inheritdoc cref="Array.GetLength(Int32)"/>
 	public Int32 GetLength(Int32 dimension)
 #if NET9_0_OR_GREATER
-		=> this._dimensions.Length >= dimension ? this._dimensions[dimension] : -1;
+		=> this._dimensions.Length > dimension ? this._dimensions[dimension] : -1;
 #else
 		=> this._dimensionCount > dimension ? (this._dimensionPtr + dimension).Reference : -1;
 #endif

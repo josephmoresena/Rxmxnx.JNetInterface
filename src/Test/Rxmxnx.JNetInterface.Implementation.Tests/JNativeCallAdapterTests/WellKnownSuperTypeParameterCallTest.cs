@@ -43,7 +43,7 @@ public partial class JNativeCallAdapterTests
 		proxyEnv.ClearReceivedCalls();
 		proxyEnv.VirtualMachine.ClearReceivedCalls();
 
-		JModifierObject.Modifiers modifiers = JModifierObject.Modifiers.Public | JModifierObject.Modifiers.Final;
+		const JModifierObject.Modifiers modifiers = JModifierObject.Modifiers.Public | JModifierObject.Modifiers.Final;
 		JObjectLocalRef localRef = JNativeCallAdapterTests.fixture.Create<JObjectLocalRef>();
 		JClassLocalRef classRef = JNativeCallAdapterTests.fixture.Create<JClassLocalRef>();
 		JClassLocalRef superClassRef = JNativeCallAdapterTests.fixture.Create<JClassLocalRef>();
@@ -116,7 +116,7 @@ public partial class JNativeCallAdapterTests
 		proxyEnv.ClearReceivedCalls();
 		proxyEnv.VirtualMachine.ClearReceivedCalls();
 
-		JModifierObject.Modifiers modifiers = JModifierObject.Modifiers.Public | JModifierObject.Modifiers.Final;
+		const JModifierObject.Modifiers modifiers = JModifierObject.Modifiers.Public | JModifierObject.Modifiers.Final;
 		JObjectLocalRef localRef = JNativeCallAdapterTests.fixture.Create<JObjectLocalRef>();
 		JClassLocalRef classRef = JNativeCallAdapterTests.fixture.Create<JClassLocalRef>();
 		JClassLocalRef superClassRef = JNativeCallAdapterTests.fixture.Create<JClassLocalRef>();
@@ -216,9 +216,10 @@ public partial class JNativeCallAdapterTests
 		proxyEnv.ClearReceivedCalls();
 		proxyEnv.VirtualMachine.ClearReceivedCalls();
 
-		JModifierObject.Modifiers arrayModifier = JModifierObject.Modifiers.Public | JModifierObject.Modifiers.Final |
-			JModifierObject.Modifiers.Abstract;
-		JModifierObject.Modifiers elementModifier = JModifierObject.Modifiers.Public | JModifierObject.Modifiers.Final;
+		const JModifierObject.Modifiers arrayModifier = JModifierObject.Modifiers.Public |
+			JModifierObject.Modifiers.Final | JModifierObject.Modifiers.Abstract;
+		const JModifierObject.Modifiers elementModifier =
+			JModifierObject.Modifiers.Public | JModifierObject.Modifiers.Final;
 		JObjectLocalRef localRef = JNativeCallAdapterTests.fixture.Create<JObjectLocalRef>();
 		JClassLocalRef classRef = JNativeCallAdapterTests.fixture.Create<JClassLocalRef>();
 		JClassLocalRef elementClassRef = JNativeCallAdapterTests.fixture.Create<JClassLocalRef>();
@@ -313,9 +314,9 @@ public partial class JNativeCallAdapterTests
 		proxyEnv.ClearReceivedCalls();
 		proxyEnv.VirtualMachine.ClearReceivedCalls();
 
-		JModifierObject.Modifiers arrayModifier = JModifierObject.Modifiers.Public | JModifierObject.Modifiers.Final |
-			JModifierObject.Modifiers.Abstract;
-		JModifierObject.Modifiers elementModifier = JModifierObject.Modifiers.Public |
+		const JModifierObject.Modifiers arrayModifier = JModifierObject.Modifiers.Public |
+			JModifierObject.Modifiers.Final | JModifierObject.Modifiers.Abstract;
+		const JModifierObject.Modifiers elementModifier = JModifierObject.Modifiers.Public |
 			JModifierObject.Modifiers.Interface | JModifierObject.Modifiers.Abstract;
 		JObjectLocalRef localRef = JNativeCallAdapterTests.fixture.Create<JObjectLocalRef>();
 		JClassLocalRef classRef = JNativeCallAdapterTests.fixture.Create<JClassLocalRef>();
@@ -420,9 +421,10 @@ public partial class JNativeCallAdapterTests
 		proxyEnv.ClearReceivedCalls();
 		proxyEnv.VirtualMachine.ClearReceivedCalls();
 
-		JModifierObject.Modifiers arrayModifier = JModifierObject.Modifiers.Public | JModifierObject.Modifiers.Final |
-			JModifierObject.Modifiers.Abstract;
-		JModifierObject.Modifiers elementModifier = JModifierObject.Modifiers.Public | JModifierObject.Modifiers.Final;
+		const JModifierObject.Modifiers arrayModifier = JModifierObject.Modifiers.Public |
+			JModifierObject.Modifiers.Final | JModifierObject.Modifiers.Abstract;
+		const JModifierObject.Modifiers elementModifier =
+			JModifierObject.Modifiers.Public | JModifierObject.Modifiers.Final;
 		JObjectLocalRef localRef = JNativeCallAdapterTests.fixture.Create<JObjectLocalRef>();
 		JClassLocalRef classRef = JNativeCallAdapterTests.fixture.Create<JClassLocalRef>();
 		JClassLocalRef elementClassRef = JNativeCallAdapterTests.fixture.Create<JClassLocalRef>();

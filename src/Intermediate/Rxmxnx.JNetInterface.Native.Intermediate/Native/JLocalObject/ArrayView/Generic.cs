@@ -26,7 +26,7 @@ public partial class JLocalObject
 			/// </summary>
 			/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 			/// <param name="localRef">Local reference.</param>
-			/// <param name="realClass">Indicates whether current class is real class.</param>
+			/// <param name="realClass">Indicates whether the current class is a real class.</param>
 			internal Generic(JClassObject jClass, JObjectLocalRef localRef, Boolean realClass = false) : base(
 				new() { Class = jClass, RealClass = realClass, LocalReference = localRef, }) { }
 			/// <inheritdoc/>
@@ -36,6 +36,8 @@ public partial class JLocalObject
 			internal Generic(JLocalObject jLocal, JClassObject? jClass) : base(jLocal, jClass) { }
 			/// <inheritdoc/>
 			internal Generic(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+
+			JArrayObject IWrapper<JArrayObject>.Value => this;
 			/// <inheritdoc/>
 			internal override void ValidateObjectElement(JReferenceObject? jObject)
 			{

@@ -33,13 +33,22 @@ internal readonly unsafe struct CallNonVirtualMethodFunction : ICallNonvirtualMe
 	public void Call(JEnvironmentRef envRef, JObjectLocalRef localRef, JClassLocalRef classRef, JMethodId methodId,
 		JValue* args)
 	{
-#if !ANDROID
-		if (SystemInfo.IsWindows)
+		try
 		{
-			this._function.Windows.Void(envRef, localRef, classRef, methodId, args);
-			return;
-		}
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+			{
+				this._function.Windows.Void(envRef, localRef, classRef, methodId, args);
+				return;
+			}
 #endif
-		this._function.Unix.Void(envRef, localRef, classRef, methodId, args);
+			this._function.Unix.Void(envRef, localRef, classRef, methodId, args);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 }

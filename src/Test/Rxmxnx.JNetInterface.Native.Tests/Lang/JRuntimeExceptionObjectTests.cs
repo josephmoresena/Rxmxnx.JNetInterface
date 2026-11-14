@@ -24,7 +24,7 @@ public sealed class JRuntimeExceptionObjectTests
 		JThrowableLocalRef throwableRef = JRuntimeExceptionObjectTests.fixture.Create<JThrowableLocalRef>();
 		String message = JRuntimeExceptionObjectTests.fixture.Create<String>();
 		StackTraceInfo[] stackTrace = emptyStackTrace ?
-			JRuntimeExceptionObjectTests.fixture.CreateMany<StackTraceInfo>().ToArray() :
+			[.. JRuntimeExceptionObjectTests.fixture.CreateMany<StackTraceInfo>(),] :
 			[];
 		using JClassObject jClass = new(env);
 		using JClassObject jRuntimeExceptionClass = new(jClass, IClassType.GetMetadata<JRuntimeExceptionObject>());
@@ -38,16 +38,17 @@ public sealed class JRuntimeExceptionObjectTests
 		using JArrayObject<JStackTraceElementObject> stackTraceElements =
 			new(jStackTraceElementArrayClass, default, stackTrace.Length);
 		JStackTraceElementObject[] elements =
+			// ReSharper disable once UseCollectionExpression
 			stackTrace.Select(i => i.CreateStackTrace(jStackTraceElementClass)).ToArray();
 		ThrowableObjectMetadata throwableMetadata =
 			new(new(jRuntimeExceptionClass)) { Message = useMessage ? message : default, };
 		env.FunctionSet.GetMessage(jRuntimeException).Returns(jStringMessage);
 		env.FunctionSet.GetStackTrace(jRuntimeException).Returns(stackTraceElements);
 		env.ArrayFeature.GetElement(stackTraceElements, Arg.Any<Int32>()).Returns(c => elements[(Int32)c[1]]);
-		env.WithFrame(Arg.Any<Int32>(), stackTraceElements,
-		              Arg.Any<Func<JArrayObject<JStackTraceElementObject>, StackTraceInfo[]>>())
-		   .Returns(c => (c[2] as Func<JArrayObject<JStackTraceElementObject>, StackTraceInfo[]>)!.Invoke(
-			            (JArrayObject<JStackTraceElementObject>)c[1]));
+		env.WithFrame(Arg.Any<Int32>(), Arg.Any<ValueTuple<IntPtr, Type>>(),
+		              Arg.Any<Func<ValueTuple<IntPtr, Type>, StackTraceInfo[]>>())
+		   .Returns(call => call.Arg<Func<ValueTuple<IntPtr, Type>, StackTraceInfo[]>>()(
+			            call.Arg<ValueTuple<IntPtr, Type>>()));
 
 		ILocalObject.ProcessMetadata(jRuntimeException, throwableMetadata);
 
@@ -208,6 +209,7 @@ public sealed class JRuntimeExceptionObjectTests
 			Assert.Equal(jGlobal, exception.GlobalThrowable);
 			Assert.Equal(mutableException.Value, exception);
 
+			// ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
 			exception.WithSafeInvoke(t =>
 			{
 				Assert.Equal(default, t.LocalReference);

@@ -19,7 +19,7 @@ public abstract class JInterfaceTypeMetadata : JReferenceTypeMetadata
 	/// Constructor.
 	/// </summary>
 	/// <param name="interfaceName">Interface name of the current type.</param>
-	/// <param name="isAnnotation">Indicates whether current type is an annotation.</param>
+	/// <param name="isAnnotation">Indicates whether the current type is an annotation.</param>
 	private protected JInterfaceTypeMetadata(ReadOnlySpan<Byte> interfaceName, Boolean isAnnotation) :
 		base(interfaceName)
 		=> this.Kind = !isAnnotation ? JTypeKind.Interface : JTypeKind.Annotation;
@@ -27,7 +27,7 @@ public abstract class JInterfaceTypeMetadata : JReferenceTypeMetadata
 	/// Constructor.
 	/// </summary>
 	/// <param name="information">Internal sequence information.</param>
-	/// <param name="isAnnotation">Indicates whether current type is an annotation.</param>
+	/// <param name="isAnnotation">Indicates whether the current type is an annotation.</param>
 	private protected JInterfaceTypeMetadata(TypeInfoSequence information, Boolean isAnnotation) : base(information)
 		=> this.Kind = !isAnnotation ? JTypeKind.Interface : JTypeKind.Annotation;
 
@@ -38,7 +38,7 @@ public abstract class JInterfaceTypeMetadata : JReferenceTypeMetadata
 			base.ToString();
 
 	/// <summary>
-	/// Sets <paramref name="proxy"/> instance as assignable to current type.
+	/// Sets <paramref name="proxy"/> instance as assignable to the current type.
 	/// </summary>
 	/// <param name="proxy">A <see cref="JProxyObject"/> instance.</param>
 	internal abstract void SetAssignable(JProxyObject proxy);

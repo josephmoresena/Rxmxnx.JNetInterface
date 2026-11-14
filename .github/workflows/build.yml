@@ -15,30 +15,31 @@ jobs:
     env:
       DOTNET_CLI_USE_MSBUILD_SERVER: false
     steps:
-      - name: Set up JDK 21
-        uses: actions/setup-java@v5
+      - name: Set up JDK 25 and 21
+        uses: actions/setup-java@v6
         with:
-          java-version: 21
-          distribution: 'zulu'
+          distribution: 'microsoft'
+          java-version: 25
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
             7.0.x
             8.0.x
             9.0.x
             10.0.x
+            11.0.x
       - name: Install Android Workload
         shell: bash
         run: |
           dotnet workload install android
           dotnet workload update
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Cache SonarCloud packages
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/sonar/cache
           key: ${{ runner.os }}-sonar
@@ -46,7 +47,7 @@ jobs:
 
       - name: Cache SonarCloud scanner
         id: cache-sonar-scanner
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ./.sonar/scanner
           key: ${{ runner.os }}-sonar-scanner
@@ -74,13 +75,126 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: pwsh
         run: |
-          ./.sonar/scanner/dotnet-sonarscanner begin /k:"josephmoresena_Rxmxnx.JNetInterface" /o:"josephmoresena" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.scanAll=false /d:sonar.coverage.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs" /d:sonar.cpd.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs,**/AndroidJniHost/**.cs,**/ContextBuilder/**.cs" /d:sonar.cs.vstest.reportsPaths=TestResults/*.trx /d:sonar.cs.opencover.reportsPaths=TestResults/*/coverage.opencover.xml 
-          dotnet build-server shutdown
-          dotnet restore src --ignore-failed-sources
-          dotnet restore src/Test/Proxies/Native/JvmProxy.NativeProxy.slnx
-          dotnet build src /p:MultipleFrameworkTest=true --no-restore --configuration Release --disable-build-servers /nr:false /maxcpucount:1
-          dotnet test src /p:MultipleFrameworkTest=true --no-build --no-restore --configuration release --verbosity normal --collect:"XPlat Code Coverage" --results-directory TestResults/ --logger "trx;verbosity=detailed" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
-          ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          $sonarStarted = $false
+          $failure = $null
+
+          try {
+            # ----------------------------------------
+            # SonarQube - Begin
+            # ----------------------------------------
+            Write-Host "Starting SonarScanner..."
+
+            if ([string]::IsNullOrWhiteSpace($env:SONAR_TOKEN)) {
+              Write-Warning "SONAR_TOKEN is not available. SonarQube analysis will be skipped."
+            }
+            else {
+              ./.sonar/scanner/dotnet-sonarscanner begin `
+                /k:"josephmoresena_Rxmxnx.JNetInterface" `
+                /o:"josephmoresena" `
+                /d:sonar.token="$env:SONAR_TOKEN" `
+                /d:sonar.host.url="https://sonarcloud.io" `
+                /d:sonar.scanner.scanAll=false `
+                /d:sonar.coverage.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs" `
+                /d:sonar.cpd.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs,**/AndroidJniHost/**.cs,**/ContextBuilder/**.cs" `
+                /d:sonar.cs.vstest.reportsPaths="TestResults/*.trx" `
+                /d:sonar.cs.opencover.reportsPaths="TestResults/*/coverage.opencover.xml"
+
+              if ($LASTEXITCODE -eq 0 -and (Test-Path ".sonarqube/conf/SonarQubeAnalysisConfig.xml")) {
+                $sonarStarted = $true
+                Write-Host "SonarScanner started successfully."
+              }
+              else {
+                Write-Warning "SonarScanner begin failed. Continuing with build and tests."
+              }
+            }
+
+            # ----------------------------------------
+            # Restore
+            # ----------------------------------------
+            Write-Host "Restoring..."
+
+            dotnet build-server shutdown
+            dotnet restore src --ignore-failed-sources
+
+            if ($LASTEXITCODE -ne 0) {
+              throw "dotnet restore failed with exit code $LASTEXITCODE"
+            }
+
+            dotnet restore src/Test/Proxies/Native/JvmProxy.NativeProxy.slnx
+
+            if ($LASTEXITCODE -ne 0) {
+              throw "dotnet restore failed with exit code $LASTEXITCODE"
+            }
+
+            # ----------------------------------------
+            # Build
+            # ----------------------------------------
+            Write-Host "Building..."
+
+            dotnet build src `
+              /p:MultipleFrameworkTest=true `
+              --no-restore `
+              --configuration Release `
+              --disable-build-servers `
+              /nr:false `
+              /maxcpucount:1
+
+            if ($LASTEXITCODE -ne 0) {
+              throw "dotnet build failed with exit code $LASTEXITCODE"
+            }
+
+            # ----------------------------------------
+            # Tests
+            # ----------------------------------------
+            Write-Host "Testing..."
+
+            dotnet test src `
+              /p:MultipleFrameworkTest=true `
+              --no-build `
+              --no-restore `
+              --configuration release `
+              --verbosity normal `
+              --collect:"XPlat Code Coverage" `
+              --results-directory TestResults/ `
+              --logger "trx;verbosity=detailed" `
+              -- `
+              DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+
+            if ($LASTEXITCODE -ne 0) {
+              throw "dotnet test failed with exit code $LASTEXITCODE"
+            }
+          }
+          catch {
+            $failure = $_
+          }
+          finally {
+            # ----------------------------------------
+            # SonarQube - End
+            # ----------------------------------------
+            if ($sonarStarted) {
+              Write-Host "Finishing SonarScanner..."
+
+              ./.sonar/scanner/dotnet-sonarscanner end `
+                /d:sonar.token="$env:SONAR_TOKEN"
+
+              if ($LASTEXITCODE -ne 0) {
+                Write-Warning "SonarScanner end failed."
+              }
+              elseif ($null -eq $failure) {
+                Write-Host "SonarQube analysis completed successfully."
+              }
+              else {
+                Write-Warning "SonarScanner finished after a build or test failure."
+              }
+            }
+            elseif ($null -eq $failure) {
+              Write-Warning "SonarQube analysis was skipped."
+            }
+          }
+
+          if ($null -ne $failure) {
+            throw $failure
+          }
       - name: Pack core assembly
         working-directory: ./package/Rxmxnx.JNetInterface.Core
         run: |
@@ -124,13 +238,13 @@ jobs:
           mv bin/Release/*.*nupkg ../Nuget
 
       - name: Cache NuGet Packages
-        uses: actions/cache/save@v5
+        uses: actions/cache/save@v6
         with:
           path: ./package/Nuget
           key: internal-nuget-${{ github.run_id }}
           enableCrossOsArchive: true
       - name: Cache Compiled Tests
-        uses: actions/cache/save@v5
+        uses: actions/cache/save@v6
         with:
           path: |
             ./src/Test/**/bin/Release/net9.0
@@ -167,7 +281,7 @@ jobs:
     if: always()
     steps:
       - name: Java FreeBSD Libraries
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         if: needs.freebsd-actions.result == 'success'
         with:
           path: ./artifacts-java
@@ -175,7 +289,7 @@ jobs:
           fail-on-cache-miss: false
           enableCrossOsArchive: true
       - name: Java FreeBSD arm64 Libraries
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         if: needs.freebsd-arm64-actions.result == 'success'
         with:
           path: ./artifacts-java
@@ -183,7 +297,7 @@ jobs:
           fail-on-cache-miss: false
           enableCrossOsArchive: true
       - name: Java MacOS Libraries
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         if: needs.cross-actions.result == 'success'
         with:
           path: ./artifacts-java
@@ -191,7 +305,7 @@ jobs:
           fail-on-cache-miss: false
           enableCrossOsArchive: true
       - name: Java Linux Libraries
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         if: needs.cross-actions.result == 'success'
         with:
           path: ./artifacts-java
@@ -199,7 +313,7 @@ jobs:
           fail-on-cache-miss: false
           enableCrossOsArchive: true
       - name: Java Windows Libraries
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         if: needs.cross-actions.result == 'success'
         with:
           path: ./artifacts-java
@@ -208,7 +322,7 @@ jobs:
           enableCrossOsArchive: true
       - name: Create Java Artifact
         if: needs.freebsd-actions.result == 'success' || needs.freebsd-arm64-actions.result == 'success' || needs.cross-actions.result == 'success'
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: Java-Artifact
           path: ./artifacts-java/*

@@ -35,9 +35,20 @@ internal readonly unsafe struct NativeInterface24 : INativeInterface<NativeInter
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Int64 GetStringUtfLengthAsLong(JEnvironmentRef envRef, JStringLocalRef stringRef)
-		=> SystemInfo.IsWindows ?
-			this._windows.GetStringUtfLongLength(envRef, stringRef) :
-			this._unix.GetStringUtfLongLength(envRef, stringRef);
+	{
+		try
+		{
+			return SystemInfo.IsWindows ?
+				this._windows.GetStringUtfLongLength(envRef, stringRef) :
+				this._unix.GetStringUtfLongLength(envRef, stringRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
+	}
 
 	/// <summary>
 	/// Information of <see cref="GetStringUtfLengthAsLong"/>
@@ -61,7 +72,7 @@ internal readonly unsafe struct NativeInterface24 : INativeInterface<NativeInter
 #pragma warning restore CS0169
 		/// <summary>
 		/// Pointer to <c>GetStringUTFLengthAsLong</c> function.
-		/// Retrieves the UTF string length as long value.
+		/// Retrieves the UTF string length as a long value.
 		/// </summary>
 		public readonly delegate* unmanaged[Stdcall]<JEnvironmentRef, JStringLocalRef, Int64> GetStringUtfLongLength;
 	}
@@ -80,7 +91,7 @@ internal readonly unsafe struct NativeInterface24 : INativeInterface<NativeInter
 #pragma warning restore CS0169
 		/// <summary>
 		/// Pointer to <c>GetStringUTFLengthAsLong</c> function.
-		/// Retrieves the UTF string length as long value.
+		/// Retrieves the UTF string length as a long value.
 		/// </summary>
 		public readonly delegate* unmanaged[Cdecl]<JEnvironmentRef, JStringLocalRef, Int64> GetStringUtfLongLength;
 	}

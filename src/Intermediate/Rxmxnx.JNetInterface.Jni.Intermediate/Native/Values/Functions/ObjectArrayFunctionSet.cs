@@ -35,11 +35,20 @@ internal readonly unsafe struct ObjectArrayFunctionSet
 	public JObjectArrayLocalRef NewObjectArray(JEnvironmentRef envRef, Int32 length, JClassLocalRef classRef,
 		JObjectLocalRef localRef)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._windows.NewObjectArray(envRef, length, classRef, localRef);
+			if (SystemInfo.IsWindows)
+				return this._windows.NewObjectArray(envRef, length, classRef, localRef);
 #endif
-		return this._unix.NewObjectArray(envRef, length, classRef, localRef);
+			return this._unix.NewObjectArray(envRef, length, classRef, localRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 	/// <summary>
 	/// <c>GetObjectArrayElement</c>.
@@ -50,11 +59,20 @@ internal readonly unsafe struct ObjectArrayFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JObjectLocalRef GetObjectArrayElement(JEnvironmentRef envRef, JObjectArrayLocalRef arrayRef, Int32 index)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._windows.GetObjectArrayElement(envRef, arrayRef, index);
+			if (SystemInfo.IsWindows)
+				return this._windows.GetObjectArrayElement(envRef, arrayRef, index);
 #endif
-		return this._unix.GetObjectArrayElement(envRef, arrayRef, index);
+			return this._unix.GetObjectArrayElement(envRef, arrayRef, index);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 	/// <summary>
 	/// <c>SetObjectArrayElement</c>.
@@ -66,14 +84,23 @@ internal readonly unsafe struct ObjectArrayFunctionSet
 	public void SetObjectArrayElement(JEnvironmentRef envRef, JObjectArrayLocalRef arrayRef, Int32 index,
 		JObjectLocalRef localRef)
 	{
-#if !ANDROID
-		if (SystemInfo.IsWindows)
+		try
 		{
-			this._windows.SetObjectArrayElement(envRef, arrayRef, index, localRef);
-			return;
-		}
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+			{
+				this._windows.SetObjectArrayElement(envRef, arrayRef, index, localRef);
+				return;
+			}
 #endif
-		this._unix.SetObjectArrayElement(envRef, arrayRef, index, localRef);
+			this._unix.SetObjectArrayElement(envRef, arrayRef, index, localRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 
 #if !ANDROID

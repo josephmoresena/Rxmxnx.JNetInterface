@@ -89,7 +89,7 @@ internal partial class AndroidEnvironment
 #else
 			=> AndroidThread.SetEnvironmentPointer(IntPtr.Zero);
 		/// <summary>
-		/// Sets the current <c>JNIEnv*</c> value for current thread.
+		/// Sets the current <c>JNIEnv*</c> value for the current thread.
 		/// </summary>
 		/// <param name="env">A <c>JNIEnv*</c> pointer.</param>
 		[UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "SetEnvironmentPointer")]

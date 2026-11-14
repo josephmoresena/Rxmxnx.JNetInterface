@@ -1,5 +1,6 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
+// ReSharper disable once ClassCannotBeInstantiated
 public partial class Launcher
 {
 	private sealed partial class Linux : Launcher, ILauncher<Linux>
@@ -10,8 +11,7 @@ public partial class Launcher
 		public override IEnumerable<Jdk> this[Architecture arch]
 			=> arch switch
 			{
-				Architecture.Arm => this._armhf.Values,
-				Architecture.Armv6 => this._armhf.Values,
+				Architecture.Arm or Architecture.Armv6 => this._armhf.Values,
 				Architecture.X64 => this._amd64.Values,
 				Architecture.Arm64 => this._arm64.Values,
 				_ => base[arch],
@@ -31,8 +31,10 @@ public partial class Launcher
 			String jdkPath = $"jdk_{arch}_{version}";
 			if (this.GetJdk(version, arch, jdkPath) is { } result) return result;
 
+#pragma warning disable CA1859
 			IReadOnlyDictionary<JdkVersion, String> urls = arch is Architecture.X64 ? Linux.amd64Url :
 				Linux.IsArmHf(arch) ? Linux.armhfUrl : Linux.arm64Url;
+#pragma warning restore CA1859
 			String tempFileName = Path.GetTempFileName();
 			try
 			{

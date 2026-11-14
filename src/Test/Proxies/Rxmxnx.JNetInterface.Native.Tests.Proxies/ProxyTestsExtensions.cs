@@ -60,6 +60,7 @@ public static class ProxyTestsExtensions
 		while ((valPtr + length).Reference != default && length < maxLength) length++;
 		return valPtr.Pointer.GetUnsafeReadOnlySpan<Byte>(length);
 	}
+	// ReSharper disable once ConvertToExtensionBlock
 	public static TPrimitive CreatePrimitive<TPrimitive>(this IFixture fixture)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{

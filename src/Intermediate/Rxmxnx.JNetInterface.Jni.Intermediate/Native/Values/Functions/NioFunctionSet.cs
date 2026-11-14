@@ -34,11 +34,20 @@ internal readonly unsafe struct NioFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JObjectLocalRef NewDirectByteBuffer(JEnvironmentRef envRef, IntPtr buffPtr, Int64 buffSize)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._windows.NewDirectByteBuffer(envRef, buffPtr, buffSize);
+			if (SystemInfo.IsWindows)
+				return this._windows.NewDirectByteBuffer(envRef, buffPtr, buffSize);
 #endif
-		return this._unix.NewDirectByteBuffer(envRef, buffPtr, buffSize);
+			return this._unix.NewDirectByteBuffer(envRef, buffPtr, buffSize);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 	/// <summary>
 	/// <c>GetDirectBufferAddress</c>.
@@ -49,11 +58,20 @@ internal readonly unsafe struct NioFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public IntPtr GetDirectBufferAddress(JEnvironmentRef envRef, JObjectLocalRef localRef)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._windows.GetDirectBufferAddress(envRef, localRef);
+			if (SystemInfo.IsWindows)
+				return this._windows.GetDirectBufferAddress(envRef, localRef);
 #endif
-		return this._unix.GetDirectBufferAddress(envRef, localRef);
+			return this._unix.GetDirectBufferAddress(envRef, localRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 	/// <summary>
 	/// <c>GetDirectBufferCapacity</c>.
@@ -64,11 +82,20 @@ internal readonly unsafe struct NioFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Int64 GetDirectBufferCapacity(JEnvironmentRef envRef, JObjectLocalRef localRef)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._windows.GetDirectBufferCapacity(envRef, localRef);
+			if (SystemInfo.IsWindows)
+				return this._windows.GetDirectBufferCapacity(envRef, localRef);
 #endif
-		return this._unix.GetDirectBufferCapacity(envRef, localRef);
+			return this._unix.GetDirectBufferCapacity(envRef, localRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 
 #if !ANDROID

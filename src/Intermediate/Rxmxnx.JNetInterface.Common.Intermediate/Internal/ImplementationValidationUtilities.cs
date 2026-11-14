@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
-/// Utility class for argument validation in current implementation.
+/// Utility class for argument validation in the current implementation.
 /// </summary>
 internal static class ImplementationValidationUtilities
 {
@@ -67,12 +67,22 @@ internal static class ImplementationValidationUtilities
 	/// Throws an exception if <paramref name="jObject"/> is default.
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-	/// <param name="message">Exception message.</param>
 	/// <exception cref="InvalidOperationException">Throws an exception if <paramref name="jObject"/> is default.</exception>
-	public static void ThrowIfDefault(JReferenceObject jObject, String? message = default)
+	public static void ThrowIfDefault(JReferenceObject jObject)
 	{
 		if (!jObject.IsDefault || !JObject.IsNullOrDefault(jObject)) return;
-		throw new ArgumentException(message ?? IMessageResource.GetInstance().DisposedObject);
+		throw new ArgumentException(IMessageResource.GetInstance().DisposedObject);
+	}
+	/// <summary>
+	/// Throws an exception if <paramref name="jObject"/> is default.
+	/// </summary>
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+	/// <param name="index">Parameter index.</param>
+	/// <exception cref="InvalidOperationException">Throws an exception if <paramref name="jObject"/> is default.</exception>
+	public static void ThrowIfDefault(JReferenceObject jObject, Byte index)
+	{
+		if (!jObject.IsDefault || !JObject.IsNullOrDefault(jObject)) return;
+		throw new ArgumentException(IMessageResource.GetInstance().InvalidObjectAt(index));
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="localRef"/> is default.
@@ -85,13 +95,12 @@ internal static class ImplementationValidationUtilities
 			throw new ArgumentException(IMessageResource.GetInstance().InvalidReferenceType("null"));
 	}
 	/// <summary>
-	/// Throws an exception if <paramref name="thread"/> is different to current thread.
+	/// Throws an exception if <paramref name="thread"/> is different to the current thread.
 	/// </summary>
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 	/// <param name="thread">A <see cref="Thread"/> instance.</param>
 	/// <exception cref="InvalidOperationException">
-	/// Throws an exception if <paramref name="thread"/> is different to current
-	/// thread.
+	/// Throws an exception if <paramref name="thread"/> is different to the current thread.
 	/// </exception>
 	public static void ThrowIfDifferentThread(JEnvironmentRef envRef, Thread thread)
 	{
@@ -125,10 +134,10 @@ internal static class ImplementationValidationUtilities
 		throw new RunningStateException(resource.DeadVirtualMachine);
 	}
 	/// <summary>
-	/// Throws an exception if current thread is not attached to JVM.
+	/// Throws an exception if the current thread is not attached to JVM.
 	/// </summary>
-	/// <param name="isAttached">Indicates whether current thread is attached to a JVM.</param>
-	/// <exception cref="InvalidOperationException">Throws an exception if current thread is not attached to JVM</exception>
+	/// <param name="isAttached">Indicates whether the current thread is attached to a JVM.</param>
+	/// <exception cref="InvalidOperationException">Throws an exception if the current thread is not attached to JVM</exception>
 	public static void ThrowIfNotAttached(Boolean isAttached)
 	{
 		if (isAttached) return;
@@ -151,13 +160,13 @@ internal static class ImplementationValidationUtilities
 		throw new UnsafeStateException(message);
 	}
 	/// <summary>
-	/// Throws an exception if JNI execution is not avaliable in current version.
+	/// Throws an exception if JNI execution is not available in the current version.
 	/// </summary>
 	/// <param name="functionName">Name of JNI function.</param>
 	/// <param name="requiredVersion">Required version to execute JNI function.</param>
 	/// <param name="currentVersion">Current version of JNI.</param>
 	/// <exception cref="NotImplementedException">
-	/// Throws an exception if JNI execution is not avaliable in current version.
+	/// Throws an exception if JNI execution is not available in the current version.
 	/// </exception>
 	public static void ThrowIfInvalidVersion(String functionName, Int32 requiredVersion, Int32 currentVersion)
 	{
@@ -181,5 +190,18 @@ internal static class ImplementationValidationUtilities
 		if (version > 0) return version;
 		IMessageResource resource = IMessageResource.GetInstance();
 		throw new JavaVersionException(resource.IncompatibleLibrary);
+	}
+	/// <summary>
+	/// Throws an exception if <paramref name="index"/> is invalid.
+	/// </summary>
+	/// <param name="index">Index of value.</param>
+	/// <param name="count">Total count of values.</param>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception if <paramref name="index"/> is invalid.
+	/// </exception>
+	public static void ThrowIfInvalidIndex(Int32 index, Int32 count)
+	{
+		if (index < count) return;
+		throw new InvalidOperationException(IMessageResource.GetInstance().InvalidParameterIndex);
 	}
 }

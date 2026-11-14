@@ -2,10 +2,10 @@
 
 /// <summary>
 /// JNI local handle for array objects (<c>jshortArray</c>). Represents a native-signed integer
-/// which serves as opaque identifier for a primitive array object (<c>short[]</c>).
-/// This handle is valid only for the thread who owns the reference.
+/// which serves as an opaque identifier for a primitive array object (<c>short[]</c>).
+/// This handle is valid only for the thread that owns the reference.
 /// </summary>
-/// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
+/// <remarks>This handle is valid only for the thread that owns the reference.</remarks>
 [StructLayout(LayoutKind.Explicit)]
 public readonly partial struct JShortArrayLocalRef : IArrayReferenceType, INativePointerType<JShortArrayLocalRef>
 {

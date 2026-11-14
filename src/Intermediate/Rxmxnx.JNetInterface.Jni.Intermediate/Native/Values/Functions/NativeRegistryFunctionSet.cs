@@ -35,11 +35,20 @@ internal readonly unsafe struct NativeRegistryFunctionSet
 	public JResult RegisterNatives(JEnvironmentRef envRef, JClassLocalRef classRef, NativeMethodValue* methodsPtr,
 		Int32 methodsCount)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._windows.RegisterNatives(envRef, classRef, methodsPtr, methodsCount);
+			if (SystemInfo.IsWindows)
+				return this._windows.RegisterNatives(envRef, classRef, methodsPtr, methodsCount);
 #endif
-		return this._unix.RegisterNatives(envRef, classRef, methodsPtr, methodsCount);
+			return this._unix.RegisterNatives(envRef, classRef, methodsPtr, methodsCount);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 	/// <summary>
 	/// <c>UnregisterNatives</c>.
@@ -50,11 +59,20 @@ internal readonly unsafe struct NativeRegistryFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult UnregisterNatives(JEnvironmentRef envRef, JClassLocalRef classRef)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._windows.UnregisterNatives(envRef, classRef);
+			if (SystemInfo.IsWindows)
+				return this._windows.UnregisterNatives(envRef, classRef);
 #endif
-		return this._unix.UnregisterNatives(envRef, classRef);
+			return this._unix.UnregisterNatives(envRef, classRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 
 #if !ANDROID

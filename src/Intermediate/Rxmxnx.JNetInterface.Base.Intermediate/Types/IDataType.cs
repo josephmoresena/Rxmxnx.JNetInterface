@@ -25,18 +25,18 @@ public interface IDataType : IObject
 	static virtual Int32 AndroidApiLevel => 0;
 
 	/// <summary>
-	/// Retrieves the metadata for given type.
+	/// Retrieves the metadata for a given type.
 	/// </summary>
 	/// <typeparam name="TDataType">Type of the current java datatype.</typeparam>
-	/// <returns>The <see cref="JDataTypeMetadata"/> instance for given type.</returns>
+	/// <returns>The <see cref="JDataTypeMetadata"/> instance for a given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static JDataTypeMetadata GetMetadata<TDataType>() where TDataType : IDataType<TDataType>
 		=> IDataType<TDataType>.GetMetadata();
 	/// <summary>
-	/// Retrieves the hash for given type.
+	/// Retrieves the hash for a given type.
 	/// </summary>
 	/// <typeparam name="TDataType">Type of the current java datatype.</typeparam>
-	/// <returns>The hash string for given type.</returns>
+	/// <returns>The hash string for a given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static String GetHash<TDataType>() where TDataType : IDataType<TDataType>
 		=> IDataType.GetMetadata<TDataType>().Hash;

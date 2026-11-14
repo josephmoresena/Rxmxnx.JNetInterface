@@ -43,7 +43,7 @@ public sealed class MonitorTests
 			proxyEnv.MonitorEnter(jLocal.LocalReference).Returns(JResult.Error);
 			proxyEnv.MonitorExit(jLocal.LocalReference).Returns(JResult.Error);
 
-			Assert.Equal(JResult.Error, Assert.Throws<JniException>(() => jLocal.Synchronize()).Result);
+			Assert.Equal(JResult.Error, Assert.Throws<JniException>(jLocal.Synchronize).Result);
 
 			proxyEnv.Received(1).MonitorEnter(jLocal.LocalReference);
 			proxyEnv.Received(0).MonitorExit(jLocal.LocalReference);
@@ -76,7 +76,7 @@ public sealed class MonitorTests
 			IDisposable? disposable = jLocal.Synchronize();
 
 			Assert.NotNull(disposable);
-			Assert.Equal(JResult.Error, Assert.Throws<JniException>(() => disposable.Dispose()).Result);
+			Assert.Equal(JResult.Error, Assert.Throws<JniException>(disposable.Dispose).Result);
 
 			proxyEnv.Received(1).MonitorEnter(jLocal.LocalReference);
 			proxyEnv.Received(1).MonitorExit(jLocal.LocalReference);

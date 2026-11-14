@@ -1,11 +1,11 @@
 ﻿namespace Rxmxnx.JNetInterface.Native.References;
 
 /// <summary>
-/// JNI local handle for fully-qualified-class objects (<c>jobject</c>).
-/// Represents a native-signed integer which serves as opaque identifier for any
+/// JNI local handle for fully qualified-class objects (<c>jobject</c>).
+/// Represents a native-signed integer which serves as an opaque identifier for any
 /// object.
 /// </summary>
-/// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
+/// <remarks>This handle is valid only for the thread that owns the reference.</remarks>
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]

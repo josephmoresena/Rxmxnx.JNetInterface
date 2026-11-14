@@ -51,8 +51,8 @@ public partial interface IVirtualMachine
 	/// <summary>
 	/// Attaches the current thread to the virtual machine for <paramref name="purpose"/>.
 	/// </summary>
-	/// <param name="purpose">The purpose of requested thread.</param>
-	/// <returns>A <see cref="IThread"/> instance for given purpose.</returns>
+	/// <param name="purpose">The purpose of the requested thread.</param>
+	/// <returns>A <see cref="IThread"/> instance for a given purpose.</returns>
 	internal IThread CreateThread(ThreadPurpose purpose)
 	{
 		ThreadCreationArgs args = ThreadCreationArgs.Create(purpose);

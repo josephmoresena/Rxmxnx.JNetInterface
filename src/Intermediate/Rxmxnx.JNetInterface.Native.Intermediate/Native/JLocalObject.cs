@@ -46,11 +46,11 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 	public JObjectLocalRef LocalReference => base.To<JObjectLocalRef>();
 
 	/// <summary>
-	/// Retrieves a <typeparamref name="TReference"/> instance from current instance.
+	/// Retrieves a <typeparamref name="TReference"/> instance from the current instance.
 	/// </summary>
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
 	/// <param name="dispose">
-	/// Optional. Indicates whether current instance should be disposed after casting.
+	/// Optional. Indicates whether the current instance should be disposed of after casting.
 	/// </param>
 	/// <returns>A <typeparamref name="TReference"/> instance from the current instance.</returns>
 	public TReference
@@ -67,7 +67,7 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 	public override String ToTraceText() => JObject.GetObjectIdentifier(this.Class.ClassSignature, this.Reference);
 
 	/// <summary>
-	/// Indicates whether current instance is an instance of <paramref name="jClass"/>.
+	/// Indicates whether the current instance is an instance of <paramref name="jClass"/>.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <returns>

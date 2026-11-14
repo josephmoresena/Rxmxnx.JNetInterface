@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Restricted;
 
 /// <summary>
-/// This interface exposes JNI classing feature.
+/// This interface exposes the JNI classing feature.
 /// </summary>
 internal partial interface IClassFeature
 {
@@ -18,10 +18,10 @@ internal partial interface IClassFeature
 	/// <returns>A <see cref="JClassObject"/> instance.</returns>
 	JClassObject AsClassObject(JReferenceObject jObject);
 	/// <summary>
-	/// Retrieves the java class for given type.
+	/// Retrieves the java class for a given type.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
-	/// <returns>The class instance for given type.</returns>
+	/// <returns>The class instance for a given type.</returns>
 	JClassObject GetClass<TDataType>() where TDataType : IDataType<TDataType>;
 	/// <summary>
 	/// Retrieves the java class for <paramref name="typeInformation"/>
@@ -42,17 +42,17 @@ internal partial interface IClassFeature
 	/// <returns>The class instance of <paramref name="objectMetadata"/>.</returns>
 	JClassObject GetObjectClass(ObjectMetadata objectMetadata);
 	/// <summary>
-	/// Retrieves the java super class of given class instance.
+	/// Retrieves the java super class of a given class instance.
 	/// </summary>
 	/// <param name="jClass">Java class instance.</param>
-	/// <returns>The class instance of the super class of given class.</returns>
+	/// <returns>The class instance of the super class of a given class.</returns>
 	JClassObject? GetSuperClass(JClassObject jClass);
 	/// <summary>
 	/// Determines whether an object of <paramref name="jClass"/> can be safely cast to
 	/// <paramref name="otherClass"/>.
 	/// </summary>
 	/// <param name="jClass">Java class instance.</param>
-	/// <param name="otherClass">Other java class instance.</param>
+	/// <param name="otherClass">Another java class instance.</param>
 	/// <returns>
 	/// <see langword="true"/> if an object of <paramref name="jClass"/> can be safely cast to
 	/// <paramref name="otherClass"/>; otherwise, <see langword="false"/>.
@@ -92,7 +92,7 @@ internal partial interface IClassFeature
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <returns>A <see cref="JModuleObject"/> instance.</returns>
 	/// <exception cref="InvalidOperationException">
-	/// Throws if JNI version doesn't support modules.
+	/// Throws if the JNI version doesn't support modules.
 	/// </exception>
 	JModuleObject? GetModule(JClassObject jClass);
 	/// <summary>
@@ -100,14 +100,14 @@ internal partial interface IClassFeature
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="message">The message used to construct the <c>java.lang.Throwable</c> instance.</param>
-	/// <param name="throwException">Indicates whether exception should be thrown in managed code.</param>
+	/// <param name="throwException">Indicates whether an exception should be thrown in managed code.</param>
 	void ThrowNew(JClassObject jClass, String? message, Boolean throwException);
 	/// <summary>
 	/// Throws an exception from <paramref name="jClass"/> class.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="message">The message used to construct the <c>java.lang.Throwable</c> instance.</param>
-	/// <param name="throwException">Indicates whether exception should be thrown in managed code.</param>
+	/// <param name="throwException">Indicates whether an exception should be thrown in managed code.</param>
 	void ThrowNew(JClassObject jClass, CString? message, Boolean throwException);
 	/// <summary>
 	/// Throws an exception from <typeparamref name="TThrowable"/> type.
@@ -118,7 +118,7 @@ internal partial interface IClassFeature
 	/// The string is encoded in modified UTF-8.
 	/// </param>
 	/// <param name="throwException">
-	/// Indicates whether exception should be thrown in managed code.
+	/// Indicates whether an exception should be thrown in managed code.
 	/// </param>
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 	void ThrowNew<TThrowable>(CString? message, Boolean throwException)
@@ -131,7 +131,7 @@ internal partial interface IClassFeature
 	/// The message used to construct the <c>java.lang.Throwable</c> instance.
 	/// </param>
 	/// <param name="throwException">
-	/// Indicates whether exception should be thrown in managed code.
+	/// Indicates whether an exception should be thrown in managed code.
 	/// </param>
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 	void ThrowNew<TThrowable>(String? message, Boolean throwException)

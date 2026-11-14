@@ -59,13 +59,7 @@ public class JFrameObjectSwing : JFrameObjectAwt, IClassType<JFrameObjectSwing>,
 	{
 		IEnvironment env = this.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JFrameObjectSwing>(env);
-		JFrameObjectSwing.setDefaultCloseOperationDef.MethodCall(this, jClass, false,
-#if !NET9_0_OR_GREATER
-		                                                         [(JInt)(Int32)operation,]
-#else
-		                                                         (JInt)(Int32)operation
-#endif
-		);
+		JFrameObjectSwing.setDefaultCloseOperationDef.MethodCall(this, jClass, false, (JInt)(Int32)operation);
 	}
 	public void SetContentPane(JContainerObject contentPane)
 	{

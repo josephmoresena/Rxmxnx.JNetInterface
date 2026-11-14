@@ -31,9 +31,9 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 	ObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 
 	/// <summary>
-	/// Throws an exception from current instance.
+	/// Throws an exception from the current instance.
 	/// </summary>
-	/// <param name="throwException">Indicates whether exception should be thrown in managed code.</param>
+	/// <param name="throwException">Indicates whether an exception should be thrown in managed code.</param>
 	/// <exception cref="ThrowableException">Throws an exception if <paramref name="throwException"/> is true.</exception>
 	public void Throw(Boolean throwException = true)
 	{
@@ -97,7 +97,7 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="message">The message used to construct the <c>java.lang.Throwable</c> instance.</param>
-	/// <param name="throwException">Indicates whether exception should be thrown in managed code.</param>
+	/// <param name="throwException">Indicates whether an exception should be thrown in managed code.</param>
 	public static void ThrowNew(JClassObject jClass, CString message, Boolean throwException = false)
 		=> jClass.Environment.ClassFeature.ThrowNew(jClass, message, throwException);
 	/// <summary>
@@ -105,7 +105,7 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="message">The message used to construct the <c>java.lang.Throwable</c> instance.</param>
-	/// <param name="throwException">Indicates whether exception should be thrown in managed code.</param>
+	/// <param name="throwException">Indicates whether an exception should be thrown in managed code.</param>
 	public static void ThrowNew(JClassObject jClass, String message, Boolean throwException = false)
 		=> jClass.Environment.ClassFeature.ThrowNew(jClass, message, throwException);
 
@@ -115,7 +115,7 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 	/// <typeparam name="TThrowable">A <see cref="JThrowableObject"/> type.</typeparam>
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	/// <param name="message">The message used to construct the <c>java.lang.Throwable</c> instance.</param>
-	/// <param name="throwException">Indicates whether exception should be thrown in managed code.</param>
+	/// <param name="throwException">Indicates whether an exception should be thrown in managed code.</param>
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 	public static void ThrowNew<TThrowable>(IEnvironment env, CString message, Boolean throwException = false)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
@@ -126,7 +126,7 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 	/// <typeparam name="TThrowable">A <see cref="JThrowableObject"/> type.</typeparam>
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	/// <param name="message">The message used to construct the <c>java.lang.Throwable</c> instance.</param>
-	/// <param name="throwException">Indicates whether exception should be thrown in managed code.</param>
+	/// <param name="throwException">Indicates whether an exception should be thrown in managed code.</param>
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 	public static void ThrowNew<TThrowable>(IEnvironment env, String message, Boolean throwException = false)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>

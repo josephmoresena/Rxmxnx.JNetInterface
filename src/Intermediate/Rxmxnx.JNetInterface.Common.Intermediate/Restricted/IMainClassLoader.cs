@@ -26,14 +26,14 @@ internal interface IMainClassLoader
 	/// <returns>Current JRE version.</returns>
 	JRuntimeVersion GetVersion(JClassLocalRef systemClassRef, Boolean initializing);
 	/// <summary>
-	/// Retrieves a global reference for given class name.
+	/// Retrieves a global reference for the given class metadata.
 	/// </summary>
 	/// <param name="classMetadata">Class metadata.</param>
 	/// <param name="wClassGlobal">Wrapper class global instance.</param>
 	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
 	JGlobalRef GetPrimitiveMainClassGlobalRef(ClassObjectMetadata classMetadata, JGlobalBase? wClassGlobal = default);
 	/// <summary>
-	/// Retrieves a global reference for given class name.
+	/// Retrieves a global reference for the given type information.
 	/// </summary>
 	/// <param name="typeInformation">Type information.</param>
 	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>

@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Native;
 
 /// <summary>
-/// Exposes an P/Invoke type implementing the <c>jvm</c> library.
+/// Exposes a P/Invoke type implementing the <c>jvm</c> library.
 /// </summary>
 public interface IVirtualMachineLibraryType
 {

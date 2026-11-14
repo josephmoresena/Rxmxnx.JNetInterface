@@ -45,6 +45,7 @@ internal sealed class JapaneseMessageResource : IMessageResource
 	String IMessageResource.InvalidReferenceObject => "無効な JReferenceObject です。";
 	String IMessageResource.InvalidObjectMetadata => "無効な ObjectMetadata です。";
 	String IMessageResource.DisposedObject => "JReferenceObject は破棄されました。";
+	String IMessageResource.InvalidParameterIndex => "パラメータのインデックスが無効です。";
 	String IMessageResource.InvalidArrayLength => "配列の長さは 0 以上である必要があります。";
 	String IMessageResource.DeadVirtualMachine => "現在の JVM は実行されていません。";
 	String IMessageResource.NotAttachedThread => "現在のスレッドは JVM にアタッチされていません。";
@@ -122,6 +123,8 @@ internal sealed class JapaneseMessageResource : IMessageResource
 		=> maxLevel > 0 ? $"配列の次元は 1 から {maxLevel} の範囲でなければなりません。" : "配列型の次元が多すぎます。";
 	String IMessageResource.InvalidInterfaceVersion(Int32 currentVersion, Int32 requiredVersion)
 		=> $"現在のプロセスは 0x{requiredVersion:x8} と互換性のある JNI バージョンで実行する必要がありますが、検出されたバージョンは 0x{currentVersion:x8} です。";
+
+	String IMessageResource.InvalidObjectAt(Int32 index) => $"インデックス {index} のオブジェクトが無効です。";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

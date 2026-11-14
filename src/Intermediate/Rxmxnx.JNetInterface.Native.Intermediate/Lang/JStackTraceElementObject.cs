@@ -5,6 +5,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.StackTraceElement</c> instance.
 /// </summary>
+// ReSharper disable once ClassCannotBeInstantiated
 public sealed partial class JStackTraceElementObject : JLocalObject, IClassType<JStackTraceElementObject>,
 	IInterfaceObject<JSerializableObject>
 {

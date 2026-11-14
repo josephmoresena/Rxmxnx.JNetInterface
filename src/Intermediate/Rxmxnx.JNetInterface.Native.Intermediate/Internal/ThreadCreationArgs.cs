@@ -14,7 +14,7 @@ internal readonly struct ThreadCreationArgs
 	/// </summary>
 	public JGlobalBase? ThreadGroup { get; init; }
 	/// <summary>
-	/// Indicates whether created thread is a daemon.
+	/// Indicates whether the created thread is a daemon.
 	/// </summary>
 	public Boolean IsDaemon { get; init; }
 	/// <summary>
@@ -31,7 +31,7 @@ internal readonly struct ThreadCreationArgs
 		=> new() { Name = ThreadCreationArgs.GetThreadName(purpose), Version = IVirtualMachine.MinimalVersion, };
 
 	/// <summary>
-	/// Retrieves the name for purposed thread.
+	/// Retrieves the name for the purposed thread.
 	/// </summary>
 	/// <param name="purpose">A <see cref="ThreadPurpose"/> value.</param>
 	/// <returns>A <see cref="CString"/> containing thread name.</returns>

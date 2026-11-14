@@ -43,13 +43,7 @@ public class JCountDownLatchObject : JLocalObject, IClassType<JCountDownLatchObj
 	public static JCountDownLatchObject Create(IEnvironment env, Int32 value)
 	{
 		using JClassObject jClass = JClassObject.GetClass<JCountDownLatchObject>(env);
-		return JCountDownLatchObject.constructorDef.NewCall<JCountDownLatchObject>(env,
-#if !NET9_0_OR_GREATER
-				[(JInt)value,]
-#else
-				(JInt)value
-#endif
-		);
+		return JCountDownLatchObject.constructorDef.NewCall<JCountDownLatchObject, JInt>(env, value);
 	}
 
 	static JCountDownLatchObject IClassType<JCountDownLatchObject>.Create(IReferenceType.ClassInitializer initializer)

@@ -94,7 +94,7 @@ public sealed class PrimitiveBufferTests
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JObjectLocalRef localRef = PrimitiveBufferTests.fixture.Create<JObjectLocalRef>();
 		Int32 count = Random.Shared.Next(0, 10);
-		TMemory[] values = PrimitiveBufferTests.fixture.CreateMany<TMemory>(count).ToArray();
+		TMemory[] values = [.. PrimitiveBufferTests.fixture.CreateMany<TMemory>(count),];
 		using IFixedMemory.IDisposable mem = values.AsMemory().GetFixedContext();
 		using JClassObject jClass = new(env);
 		using JClassObject jBufferClass = new(jClass, typeMetadata);
@@ -233,7 +233,7 @@ public sealed class PrimitiveBufferTests
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JDirectByteBufferObject>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JObjectLocalRef localRef = PrimitiveBufferTests.fixture.Create<JObjectLocalRef>();
-		Byte[] bytes = PrimitiveBufferTests.fixture.CreateMany<Byte>(Random.Shared.Next(0, 10)).ToArray();
+		Byte[] bytes = [.. PrimitiveBufferTests.fixture.CreateMany<Byte>(Random.Shared.Next(0, 10)),];
 		using IFixedMemory.IDisposable mem = bytes.AsMemory().GetFixedContext();
 		Int64 capacity = mem.Bytes.Length;
 		IntPtr address = mem.Pointer;

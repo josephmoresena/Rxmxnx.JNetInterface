@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface;
 
 /// <summary>
-/// Represents error that occur during JNI calls.
+/// Represents an error that occurs during JNI calls.
 /// </summary>
 /// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
 #if !NET8_0_OR_GREATER

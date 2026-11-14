@@ -1,8 +1,7 @@
 namespace Rxmxnx.JNetInterface.Native;
 
 /// <summary>
-/// This record stores the metadata of a Java Primitive Object in order to create a
-/// <see cref="JGlobalBase"/> instance.
+/// This record stores the metadata of a Java Primitive Object to create a <see cref="JGlobalBase"/> instance.
 /// </summary>
 public abstract record PrimitiveWrapperObjectMetadata : ObjectMetadata
 {
@@ -17,7 +16,7 @@ public abstract record PrimitiveWrapperObjectMetadata : ObjectMetadata
 		=> this.PrimitiveSignature = signature;
 
 	/// <summary>
-	/// Retrieves the value of current primitive as a <typeparamref name="T"/> value.
+	/// Retrieves the value of the current primitive as a <typeparamref name="T"/> value.
 	/// </summary>
 	/// <typeparam name="T">A <see cref="IPrimitiveType{T}"/> type.</typeparam>
 	/// <returns>A <see cref="IPrimitiveType{T}"/> value.</returns>

@@ -5,6 +5,9 @@
         <AssemblyName>$(AssemblyName).$(TargetFramework)</AssemblyName>
         <USE_JTRACE Condition="'$(USE_JTRACE)' == ''">false</USE_JTRACE>
     </PropertyGroup>
+    <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net11.0'))">
+        <Features>$(Features);runtime-async=on</Features>
+    </PropertyGroup>
 
     <ItemGroup>
         <!--<RuntimeHostConfigurationOption Include="JNetInterface.DisableTypeMetadataToString" Value="true" Trim="true"/>-->

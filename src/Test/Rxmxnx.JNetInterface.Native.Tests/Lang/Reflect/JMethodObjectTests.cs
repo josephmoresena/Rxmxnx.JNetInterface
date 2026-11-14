@@ -40,13 +40,10 @@ public class JMethodObjectTests
 		env.ClassFeature.GetClass(jClass.GetInformation()).Returns(jClass);
 		env.AccessFeature.GetDefinition(jStringMethodName, jArrayParameters, default).Returns(methodDefinition);
 		env.AccessFeature.GetMethodId(jMethod).Returns(methodId);
-		env.WithFrame(Arg.Any<Int32>(), Arg.Any<JExecutableObject>(),
-		              Arg.Any<Func<JExecutableObject, JCallDefinition>>()).Returns(c =>
-		{
-			JExecutableObject instance = (JExecutableObject)c[1];
-			Func<JExecutableObject, JCallDefinition> func = (Func<JExecutableObject, JCallDefinition>)c[2];
-			return func(instance);
-		});
+		env.WithFrame(Arg.Any<Int32>(), Arg.Any<ValueTuple<IntPtr, Type>>(),
+		              Arg.Any<Func<ValueTuple<IntPtr, Type>, JCallDefinition>>())
+		   .Returns(call => call.Arg<Func<ValueTuple<IntPtr, Type>, JCallDefinition>>()(
+			            call.Arg<ValueTuple<IntPtr, Type>>()));
 
 		Assert.Equal(methodDefinition, jMethod.Definition);
 		Assert.Equal(jClass, jMethod.DeclaringClass);
@@ -100,13 +97,10 @@ public class JMethodObjectTests
 					Definition = methodDefinition, MethodId = methodId, ClassInformation = jClass.GetInformation(),
 				} :
 				new ObjectMetadata(jMethodClass));
-		env.WithFrame(Arg.Any<Int32>(), Arg.Any<JExecutableObject>(),
-		              Arg.Any<Func<JExecutableObject, JCallDefinition>>()).Returns(c =>
-		{
-			JExecutableObject instance = (JExecutableObject)c[1];
-			Func<JExecutableObject, JCallDefinition> func = (Func<JExecutableObject, JCallDefinition>)c[2];
-			return func(instance);
-		});
+		env.WithFrame(Arg.Any<Int32>(), Arg.Any<ValueTuple<IntPtr, Type>>(),
+		              Arg.Any<Func<ValueTuple<IntPtr, Type>, JCallDefinition>>())
+		   .Returns(call => call.Arg<Func<ValueTuple<IntPtr, Type>, JCallDefinition>>()(
+			            call.Arg<ValueTuple<IntPtr, Type>>()));
 
 		ExecutableObjectMetadata objectMetadata =
 			Assert.IsType<ExecutableObjectMetadata>(ILocalObject.CreateMetadata(jMethod));

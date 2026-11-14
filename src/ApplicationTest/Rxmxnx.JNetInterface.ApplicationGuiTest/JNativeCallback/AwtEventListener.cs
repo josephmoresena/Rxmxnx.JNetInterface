@@ -4,10 +4,12 @@ using System.Runtime.InteropServices;
 using Rxmxnx.JNetInterface.ApplicationTest;
 using Rxmxnx.JNetInterface.Awt;
 using Rxmxnx.JNetInterface.Awt.Event;
+using Rxmxnx.JNetInterface.Functional;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
 using Rxmxnx.JNetInterface.Native.References;
+using Rxmxnx.JNetInterface.Native.Values;
 using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
@@ -72,19 +74,12 @@ public partial class JNativeCallback
 
 			try
 			{
-				JNativeCallAdapter callAdapter = JNativeCallAdapter.Create(environmentRef)
-				                                                   .WithParameter(
-					                                                   localRef, out JAwtEventObject? awtEvent).Build();
-
-				try
-				{
-					if (awtEvent is not null)
-						ws.Value.EventDispatched(awtEvent);
-				}
-				finally
-				{
-					callAdapter.FinalizeCall();
-				}
+				EventDispatchedAction action = new(ws.Value);
+#if !NET9_0_OR_GREATER
+				action.WithNativeFrame(environmentRef, [JReferenceTypeToken.Create<JAwtEventObject>(localRef),]);
+#else
+				action.WithNativeFrame(environmentRef, JReferenceTypeToken.Create<JAwtEventObject>(localRef));
+#endif
 			}
 			catch (RunningStateException) { }
 		}
@@ -95,5 +90,15 @@ public partial class JNativeCallback
 			=> new(initializer);
 		static AwtEventListener IClassType<AwtEventListener>.Create(IReferenceType.GlobalInitializer initializer)
 			=> new(initializer);
+
+		private readonly struct EventDispatchedAction(AwtEventListenerState state) : IFrameAction
+		{
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			void IFrameAction.Accept(IEnvironment env, scoped ReadOnlySpan<JReferenceObject?> objects)
+			{
+				if (objects.Length < 1 || objects[0] is not JAwtEventObject awtEvent) return;
+				state.EventDispatched(awtEvent);
+			}
+		}
 	}
 }

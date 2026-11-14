@@ -20,7 +20,7 @@ public partial record ClassObjectMetadata
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="kind">Class kind.</param>
-	/// <param name="isFinal">Indicates whether class type is final.</param>
+	/// <param name="isFinal">Indicates whether the class type is final.</param>
 	internal ClassObjectMetadata(JClassObject jClass, JTypeKind kind = JTypeKind.Undefined, Boolean? isFinal = default)
 		: base(jClass.Class)
 	{
@@ -60,7 +60,7 @@ public partial record ClassObjectMetadata
 	/// <param name="classHash">Class hash.</param>
 	/// <param name="classNameLength">JNI class name length.</param>
 	/// <param name="signatureLength">JNI signature length.</param>
-	/// <param name="isArray">Indicates whether className is for array class.</param>
+	/// <param name="isArray">Indicates whether className is for an array class.</param>
 	internal ClassObjectMetadata(String classHash, Int32 classNameLength, Int32 signatureLength, Boolean isArray) :
 		base(IClassType.GetMetadata<JClassObject>(), false)
 	{
