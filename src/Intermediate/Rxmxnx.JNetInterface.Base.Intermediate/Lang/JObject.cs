@@ -11,6 +11,8 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// </summary>
 	public const String CompilationFramework =
 #if NET10_0_OR_GREATER
+			".NET 11.0"
+#elif NET10_0_OR_GREATER
 			".NET 10.0"
 #elif NET9_0_OR_GREATER
 			".NET 9.0"

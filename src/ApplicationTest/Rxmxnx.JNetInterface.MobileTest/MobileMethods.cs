@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -23,8 +24,8 @@ internal static class MobileMethods
 		=> $"Load: {load.GetString()}" + Environment.NewLine + $"Call: {call.GetString()}" + Environment.NewLine +
 			$"Count: {count}" + Environment.NewLine + Environment.NewLine +
 			$"Number of Cores: {Environment.ProcessorCount}" + Environment.NewLine +
-			$"Little-Endian: {BitConverter.IsLittleEndian}" + Environment.NewLine +
-			$"Native AOT: {AotInfo.IsNativeAot}" + Environment.NewLine +
+			$"Little-Endian: {BitConverter.IsLittleEndian}" + Environment.NewLine + $"Mono: {AotInfo.IsNativeAot}" +
+			Environment.NewLine + $"Native AOT: {AotInfo.IsNativeAot}" + Environment.NewLine +
 			$"OS: {RuntimeInformation.OSDescription}" + Environment.NewLine +
 			$"OS Arch: {RuntimeInformation.OSArchitecture.GetName()}" + Environment.NewLine +
 			$"OS Version: {Environment.OSVersion}" + Environment.NewLine + $"Computer: {Environment.MachineName}" +
@@ -55,13 +56,13 @@ internal static class MobileMethods
 		};
 	private static String GetString(this DateTime date) => ((DateTime?)date).GetString();
 	private static String GetString(this DateTime? date)
-		=> date is not null ? date.Value.ToString("yyyy-MM-dd HH:mm:ss.fff") : "null";
+		=> date is not null ? date.Value.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) : "null";
 	private static String GetIp()
 	{
 		try
 		{
 			using HttpRequestMessage request = new(HttpMethod.Get, "https://api64.ipify.org/?format=text");
-			using HttpResponseMessage response = MobileMethods.httpClient.Send(request);
+			using HttpResponseMessage response = MobileMethods.httpClient.SendAsync(request).Result;
 			return response.Content.ReadAsStringAsync().Result;
 		}
 		catch (Exception e)

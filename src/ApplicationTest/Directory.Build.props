@@ -4,8 +4,8 @@
         <DefaultFrameworks>net9.0</DefaultFrameworks>
     </PropertyGroup>
     <PropertyGroup Condition="!$([MSBuild]::IsOSPlatform('FREEBSD'))">
-        <DefaultFramework>net10.0</DefaultFramework>
-        <DefaultFrameworks>net10.0;net9.0</DefaultFrameworks>
+        <DefaultFramework>net11.0</DefaultFramework>
+        <DefaultFrameworks>net11.0;net10.0;net9.0</DefaultFrameworks>
     </PropertyGroup>
     <PropertyGroup Condition="'$(TargetPlatformIdentifier)' != 'android'">
         <TargetFramework Condition="'$(RequiredFramework)' != ''">$(RequiredFramework)</TargetFramework>

@@ -9,7 +9,7 @@
         <CoverletColectorVersion>6.0.4</CoverletColectorVersion>
     </PropertyGroup>
     <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">
-        <TestSdkVersion>18.11.0</TestSdkVersion>
+        <TestSdkVersion>18.12.0</TestSdkVersion>
         <VisualStudioRunnerVersion>4.0.1</VisualStudioRunnerVersion>
         <CoverletColectorVersion>10.1.0</CoverletColectorVersion>
     </PropertyGroup>
