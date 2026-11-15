@@ -53,6 +53,7 @@ internal readonly ref struct LocalFrameFunction<TResult, TState>(TState state, F
 	private readonly TState _state = state;
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	TResult IFrameFunction<TResult>.Apply(IEnvironment env, ReadOnlySpan<JReferenceObject?> objects) => func(this._state);
+	TResult IFrameFunction<TResult>.Apply(IEnvironment env, ReadOnlySpan<JReferenceObject?> objects)
+		=> func(this._state);
 #endif
 }

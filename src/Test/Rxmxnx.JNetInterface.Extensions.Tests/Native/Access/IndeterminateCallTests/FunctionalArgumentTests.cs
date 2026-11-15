@@ -23,7 +23,7 @@ public sealed class FunctionalArgumentTests
 				                                                instance, jClass, true, ref args));
 			FunctionalArgumentTests.AssertValueAndReference(args => call.StaticMethodCall(jClass, args),
 			                                                (ref args) => call.StaticMethodCall(jClass, ref args));
-			call.MethodCall(instance, (ClassArgument?)null);
+			call.MethodCall<ClassArgument>(instance, null);
 			env.AccessFeature.Received().CallMethod(instance, instance.Class, (JMethodDefinition)call.Definition, false,
 			                                        Arg.Any<IObject?[]>());
 		});

@@ -55,7 +55,7 @@ public static partial class TestCompiler
 		{
 			if (!TestCompiler.ArchSupported(arch)) continue;
 
-			String rid = $"{os}-{Enum.GetName(arch)!.ToLower()}";
+			String rid = $"{os}-{Enum.GetName(arch)!.ToLowerInvariant()}";
 			foreach (NetVersion netVersion in netVersions)
 			{
 				if (!String.IsNullOrEmpty(libProjectFile))

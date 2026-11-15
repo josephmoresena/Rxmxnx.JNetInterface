@@ -132,7 +132,7 @@ including reference tokens and return types, is described in
 Example Java native call signatures and corresponding JNI parameters:
 
 | Java Signature                                        | JNI Parameter Types                                                       |  
-|-------------------------------------------------------|---------------------------------------------------------------------------|  
+|-------------------------------------------------------|---------------------------------------------------------------------------|
 | `call()`                                              | `()` (no parameters)                                                      |  
 | `call(String a)`                                      | `JStringLocalRef`                                                         |  
 | `call(boolean a)`                                     | `JBoolean`                                                                |  

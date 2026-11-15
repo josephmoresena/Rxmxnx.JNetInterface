@@ -16,7 +16,7 @@ public sealed class FunctionalCallTests
 			JClassObject jClass = JClassObject.GetClass<JThrowableObject>(jLocal.Environment);
 			OpenMethod method = FunctionalCallTests.OpenVoid(JArgumentMetadata.Get<JInt>());
 			JInt value = 7;
-			ClassArgument? classArgument = new();
+			ClassArgument classArgument = new();
 
 			FunctionalCallTests.StubVoid(proxyEnv);
 			method.InvokeValue(jLocal, value);
@@ -223,11 +223,9 @@ public sealed class FunctionalCallTests
 	private static OpenIntFunction OpenInt(params JArgumentMetadata[] metadata)
 		=> new((CString)FunctionalCallTests.fixture.Create<String>(), metadata);
 
-	private sealed class OpenMethod : JMethodDefinition
+	private sealed class OpenMethod(ReadOnlySpan<Byte> methodName, params JArgumentMetadata[] metadata)
+		: JMethodDefinition(methodName, metadata)
 	{
-		public OpenMethod(ReadOnlySpan<Byte> methodName, params JArgumentMetadata[] metadata) : base(
-			methodName, metadata) { }
-
 		public void InvokeValue(JLocalObject jLocal, JInt args) => this.Invoke(jLocal, args);
 		public void InvokeValue(JLocalObject jLocal, JClassObject jClass, JInt args)
 			=> this.Invoke(jLocal, jClass, args);
@@ -248,11 +246,9 @@ public sealed class FunctionalCallTests
 			=> this.InvokeReflected(jMethod, jLocal, args);
 	}
 
-	private sealed class OpenIntFunction : JFunctionDefinition<JInt>
+	private sealed class OpenIntFunction(ReadOnlySpan<Byte> functionName, params JArgumentMetadata[] metadata)
+		: JFunctionDefinition<JInt>(functionName, metadata)
 	{
-		public OpenIntFunction(ReadOnlySpan<Byte> functionName, params JArgumentMetadata[] metadata) : base(
-			functionName, metadata) { }
-
 		public JInt? InvokeValue(JLocalObject jLocal, JInt args) => this.Invoke(jLocal, args);
 		public JInt? InvokeValue(JLocalObject jLocal, JClassObject jClass, JInt args)
 			=> this.Invoke(jLocal, jClass, args);
@@ -263,17 +259,14 @@ public sealed class FunctionalCallTests
 		public JInt? InvokeClass(JLocalObject jLocal, ClassArgument? args) => this.Invoke(jLocal, args);
 	}
 
-	private sealed class OpenObjectFunction : JFunctionDefinition<JThrowableObject>
+	private sealed class OpenObjectFunction(ReadOnlySpan<Byte> functionName)
+		: JFunctionDefinition<JThrowableObject>(functionName)
 	{
-		public OpenObjectFunction(ReadOnlySpan<Byte> functionName) : base(functionName) { }
-
 		public JThrowableObject? InvokeClass(JLocalObject jLocal, ClassArgument? args) => this.Invoke(jLocal, args);
 	}
 
-	private sealed class OpenConstructor : JConstructorDefinition
+	private sealed class OpenConstructor(params JArgumentMetadata[] metadata) : JConstructorDefinition(metadata)
 	{
-		public OpenConstructor(params JArgumentMetadata[] metadata) : base(metadata) { }
-
 		public JLocalObject NewValue(JClassObject jClass, JInt args) => this.New(jClass, args);
 		public JThrowableObject NewTyped(IEnvironment env, JInt args) => this.New<JThrowableObject, JInt>(env, args);
 		public JLocalObject NewClass(JClassObject jClass, ClassArgument? args) => this.New(jClass, args);

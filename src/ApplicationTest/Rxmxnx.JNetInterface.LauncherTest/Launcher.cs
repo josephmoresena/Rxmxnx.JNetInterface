@@ -34,7 +34,7 @@ public abstract partial class Launcher
 				a => a,
 				a => this.OutputDirectory
 				         .GetFiles(
-					         $"ApplicationTest.*.{this.RuntimeIdentifierPrefix}-{Enum.GetName(a)!.ToLower()}.net*.0{pattern}{exeExtension}")
+					         $"ApplicationTest.*.{this.RuntimeIdentifierPrefix}-{Enum.GetName(a)!.ToLowerInvariant()}.net*.0{pattern}{exeExtension}")
 				         .OrderBy(f => NetVersionParser.GetNetVersion(f.FullName)).ToArray());
 			Jdk[] jdks =
 			[

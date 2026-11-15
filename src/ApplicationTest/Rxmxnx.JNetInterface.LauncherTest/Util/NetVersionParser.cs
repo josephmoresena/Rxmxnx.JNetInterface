@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Rxmxnx.JNetInterface.ApplicationTest.Util;
 
 public static partial class NetVersionParser
@@ -12,6 +14,8 @@ public static partial class NetVersionParser
 		Match match = NetVersionParser.NetVersionRegex().Match(input);
 		if (!match.Success) return default;
 
-		return Decimal.TryParse(match.Groups[1].Value, out Decimal result) ? result : default(Decimal?);
+		return Decimal.TryParse(match.Groups[1].Value, CultureInfo.InvariantCulture, out Decimal result) ?
+			result :
+			default(Decimal?);
 	}
 }

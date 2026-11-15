@@ -1,3 +1,5 @@
+// ReSharper disable ParameterOnlyUsedForPreconditionCheck.Local
+
 namespace Rxmxnx.JNetInterface.Tests.Native.Values;
 
 /// <summary>

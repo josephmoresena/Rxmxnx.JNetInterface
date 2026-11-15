@@ -88,6 +88,7 @@ public partial struct AsyncContextBuilder
 		/// <param name="disposing">
 		/// <see langword="true"/> when called from <see cref="Dispose()"/>; otherwise, <see langword="false"/>.
 		/// </param>
+		// ReSharper disable once VirtualMemberNeverOverridden.Global
 		protected virtual void Dispose(Boolean disposing)
 		{
 			if (!disposing || this._disposed) return;

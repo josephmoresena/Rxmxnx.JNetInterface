@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Rxmxnx.JNetInterface.Internal;
 
 #if !PACKAGE
@@ -74,23 +76,24 @@ internal static partial class JTrace
 		StringBuilder strBuilder = new();
 		if (jLocal is null)
 			if (CommonNames.Constructor.SequenceEqual(definition.Name))
-				strBuilder.AppendLine(
-					$"thread: {Environment.CurrentManagedThreadId} {jClass.Name} {definition.ToTraceText()}");
+				strBuilder.AppendLine(CultureInfo.InvariantCulture,
+				                      $"thread: {Environment.CurrentManagedThreadId} {jClass.Name} {definition.ToTraceText()}");
 			else
-				strBuilder.AppendLine(
-					$"thread: {Environment.CurrentManagedThreadId} {jClass.Name} static {definition.ToTraceText()}");
+				strBuilder.AppendLine(CultureInfo.InvariantCulture,
+				                      $"thread: {Environment.CurrentManagedThreadId} {jClass.Name} static {definition.ToTraceText()}");
 		else if (nonVirtual)
-			strBuilder.AppendLine(
-				$"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {jClass.Name} non-virtual {definition.ToTraceText()}");
+			strBuilder.AppendLine(CultureInfo.InvariantCulture,
+			                      $"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {jClass.Name} non-virtual {definition.ToTraceText()}");
 		else
-			strBuilder.AppendLine(
-				$"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {definition.ToTraceText()}");
+			strBuilder.AppendLine(CultureInfo.InvariantCulture,
+			                      $"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {definition.ToTraceText()}");
 		for (Int32 i = 0; i < args.Length; i++)
 		{
 			switch (args[i])
 			{
 				case IPrimitiveType jPrimitive:
-					strBuilder.AppendLine($"{i}: {jPrimitive.ObjectSignature} {jPrimitive}");
+					strBuilder.AppendLine(CultureInfo.InvariantCulture,
+					                      $"{i}: {jPrimitive.ObjectSignature} {jPrimitive}");
 					break;
 				case JReferenceObject jObject:
 					strBuilder.AppendLine($"{i}: {jObject.ToTraceText()}");
@@ -124,17 +127,17 @@ internal static partial class JTrace
 		StringBuilder strBuilder = new();
 		if (jLocal is null)
 			if (CommonNames.Constructor.SequenceEqual(definition.Name))
-				strBuilder.AppendLine(
-					$"thread: {Environment.CurrentManagedThreadId} {jClass.Name} {definition.ToTraceText()}");
+				strBuilder.AppendLine(CultureInfo.InvariantCulture,
+				                      $"thread: {Environment.CurrentManagedThreadId} {jClass.Name} {definition.ToTraceText()}");
 			else
-				strBuilder.AppendLine(
-					$"thread: {Environment.CurrentManagedThreadId} {jClass.Name} static {definition.ToTraceText()}");
+				strBuilder.AppendLine(CultureInfo.InvariantCulture,
+				                      $"thread: {Environment.CurrentManagedThreadId} {jClass.Name} static {definition.ToTraceText()}");
 		else if (nonVirtual)
-			strBuilder.AppendLine(
-				$"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {jClass.Name} non-virtual {definition.ToTraceText()}");
+			strBuilder.AppendLine(CultureInfo.InvariantCulture,
+			                      $"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {jClass.Name} non-virtual {definition.ToTraceText()}");
 		else
-			strBuilder.AppendLine(
-				$"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {definition.ToTraceText()}");
+			strBuilder.AppendLine(CultureInfo.InvariantCulture,
+			                      $"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {definition.ToTraceText()}");
 		String? traceArgs = args.ToTraceText();
 		if (!String.IsNullOrWhiteSpace(traceArgs))
 			strBuilder.AppendLine(traceArgs);

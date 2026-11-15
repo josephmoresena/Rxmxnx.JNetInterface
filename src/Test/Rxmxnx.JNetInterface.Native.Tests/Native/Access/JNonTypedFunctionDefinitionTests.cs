@@ -59,26 +59,26 @@ public sealed class JNonTypedFunctionDefinitionTests
 			(ref args) => definition.InvokeStaticReflected(jMethod, ref args), instance);
 
 		JNonTypedFunctionDefinitionTests.AssertClassAndNull(classArgument => definition.Invoke(instance, classArgument),
-		                                                    () => definition.Invoke(instance, (ClassArgument?)null),
+		                                                    () => definition.Invoke<ClassArgument>(instance, null),
 		                                                    instance);
 		JNonTypedFunctionDefinitionTests.AssertClassAndNull(
 			classArgument => definition.Invoke(instance, jClass, classArgument),
-			() => definition.Invoke(instance, jClass, (ClassArgument?)null), instance);
+			() => definition.Invoke<ClassArgument>(instance, jClass, null), instance);
 		JNonTypedFunctionDefinitionTests.AssertClassAndNull(
 			classArgument => definition.InvokeNonVirtual(instance, jClass, classArgument),
-			() => definition.InvokeNonVirtual(instance, jClass, (ClassArgument?)null), instance);
+			() => definition.InvokeNonVirtual<ClassArgument>(instance, jClass, null), instance);
 		JNonTypedFunctionDefinitionTests.AssertClassAndNull(
 			classArgument => definition.StaticInvoke(jClass, classArgument),
-			() => definition.StaticInvoke(jClass, (ClassArgument?)null), instance);
+			() => definition.StaticInvoke<ClassArgument>(jClass, null), instance);
 		JNonTypedFunctionDefinitionTests.AssertClassAndNull(
 			classArgument => definition.InvokeReflected(jMethod, instance, classArgument),
-			() => definition.InvokeReflected(jMethod, instance, (ClassArgument?)null), instance);
+			() => definition.InvokeReflected<ClassArgument>(jMethod, instance, null), instance);
 		JNonTypedFunctionDefinitionTests.AssertClassAndNull(
 			classArgument => definition.InvokeNonVirtualReflected(jMethod, instance, classArgument),
-			() => definition.InvokeNonVirtualReflected(jMethod, instance, (ClassArgument?)null), instance);
+			() => definition.InvokeNonVirtualReflected<ClassArgument>(jMethod, instance, null), instance);
 		JNonTypedFunctionDefinitionTests.AssertClassAndNull(
 			classArgument => definition.InvokeStaticReflected(jMethod, classArgument),
-			() => definition.InvokeStaticReflected(jMethod, (ClassArgument?)null), instance);
+			() => definition.InvokeStaticReflected<ClassArgument>(jMethod, null), instance);
 	}
 
 	private static void AssertValueAndReference(Func<CountingArgument, JLocalObject?> byValue, ByReference byReference,

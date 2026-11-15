@@ -43,11 +43,11 @@ internal static partial class JTrace
 		String memoryText = isCritical ? "Critical memory" : "Memory";
 		if (!isAttached)
 			Trace.WriteLine(
-				$"thread: {Environment.CurrentManagedThreadId} Unable to release {memoryText.ToLower()} 0x{pointer:0x8} {objectRefText}. Thread is not attached.",
+				$"thread: {Environment.CurrentManagedThreadId} Unable to release {memoryText.ToLowerInvariant()} 0x{pointer:0x8} {objectRefText}. Thread is not attached.",
 				callerMethod);
 		else if (!isAlive)
 			Trace.WriteLine(
-				$"thread: {Environment.CurrentManagedThreadId} Unable to release {memoryText.ToLower()} 0x{pointer:0x8} {objectRefText}. JVM is not alive.",
+				$"thread: {Environment.CurrentManagedThreadId} Unable to release {memoryText.ToLowerInvariant()} 0x{pointer:0x8} {objectRefText}. JVM is not alive.",
 				callerMethod);
 		else if (!released)
 			Trace.WriteLine(

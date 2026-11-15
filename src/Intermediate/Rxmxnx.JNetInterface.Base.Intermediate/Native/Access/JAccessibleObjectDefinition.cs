@@ -60,7 +60,8 @@ public abstract partial class JAccessibleObjectDefinition : IEquatable<JAccessib
 	public sealed override Boolean Equals(Object? obj) => this.Equals(obj as JAccessibleObjectDefinition);
 	/// <inheritdoc/>
 	public sealed override String ToString()
-		=> String.Format(this.ToStringFormat, this.Information.Name, this.Information.Descriptor);
+		=> String.Format(CultureInfo.InvariantCulture, this.ToStringFormat, this.Information.Name,
+		                 this.Information.Descriptor);
 	/// <inheritdoc/>
 	public sealed override Int32 GetHashCode() => this.Information.GetHashCode();
 

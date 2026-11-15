@@ -65,7 +65,7 @@ internal sealed partial class EnvironmentCore
 				switch (values[i])
 				{
 					case IPrimitiveType jPrimitive:
-						sb.AppendLine($"{i}: {jPrimitive.ObjectSignature} {jPrimitive}");
+						sb.AppendLine(CultureInfo.InvariantCulture, $"{i}: {jPrimitive.ObjectSignature} {jPrimitive}");
 						break;
 					case JReferenceObject jObject:
 						sb.AppendLine($"{i}: {jObject.ToTraceText()}");

@@ -93,6 +93,7 @@ public abstract partial class PrimitiveTestBase
 		ISpanParsable<TValue>
 	{
 		TValue value = PrimitiveTestBase.Fixture.Create<TValue>();
+		// ReSharper disable once InvocationIsCultureSensitive
 		PrimitiveTestBase.SpanParseableTest<TPrimitive, TValue>(value);
 		PrimitiveTestBase.SpanParseableTest<TPrimitive, TValue>(value, CultureInfo.CurrentCulture);
 		PrimitiveTestBase.SpanParseableTest<TPrimitive, TValue>(value, CultureInfo.InvariantCulture);

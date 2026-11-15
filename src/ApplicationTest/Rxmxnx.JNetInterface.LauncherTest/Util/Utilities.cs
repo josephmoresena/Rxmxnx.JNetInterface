@@ -83,7 +83,9 @@ public static class Utilities
 		}
 		finally
 		{
+#pragma warning disable CS8601
 			Utilities.processes.TryRemove(processId, out _);
+#pragma warning restore CS8601
 		}
 	}
 	public static async Task<Int32> Execute<TState>(ExecuteState<TState> state,
@@ -107,7 +109,9 @@ public static class Utilities
 		}
 		finally
 		{
+#pragma warning disable CS8601
 			Utilities.processes.TryRemove(processId, out _);
+#pragma warning restore CS8601
 		}
 	}
 	// ReSharper disable once UnusedMethodReturnValue.Global
@@ -134,7 +138,9 @@ public static class Utilities
 		}
 		finally
 		{
+#pragma warning disable CS8601
 			Utilities.processes.TryRemove(processId, out _);
+#pragma warning restore CS8601
 		}
 	}
 	public static async Task<Int32> QemuExecute<TState>(QemuExecuteState<TState> state,
@@ -161,7 +167,9 @@ public static class Utilities
 		}
 		finally
 		{
+#pragma warning disable CS8601
 			Utilities.processes.TryRemove(processId, out _);
+#pragma warning restore CS8601
 		}
 	}
 	public static async Task<String> ExecuteWithOutput(ExecuteState state,
@@ -186,7 +194,9 @@ public static class Utilities
 		}
 		finally
 		{
+#pragma warning disable CS8601
 			Utilities.processes.TryRemove(processId, out _);
+#pragma warning restore CS8601
 		}
 	}
 	public static void KillRunningProcesses()
