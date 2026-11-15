@@ -22,6 +22,7 @@ jobs:
     env:
       PackageVersion: ${{ inputs.package_version }}
       BIONIC_ANDROID_SCENARIOS: |
+        net11.0|net11.0|false|linux-bionic-arm64:arm64-v8a linux-bionic-arm:armeabi-v7a linux-bionic-x64:x86_64
         net10.0|net10.0|false|linux-bionic-arm64:arm64-v8a linux-bionic-arm:armeabi-v7a linux-bionic-x64:x86_64
         net9.0|net9.0|false|linux-bionic-arm64:arm64-v8a linux-bionic-arm:armeabi-v7a linux-bionic-x64:x86_64
         net9.0-RFM|net9.0|true|linux-bionic-arm64:arm64-v8a linux-bionic-arm:armeabi-v7a linux-bionic-x64:x86_64
