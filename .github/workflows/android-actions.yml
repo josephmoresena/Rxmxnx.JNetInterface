@@ -99,25 +99,50 @@ jobs:
       - name: Build Mobile Test
         shell: bash
         working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.MobileTest
+        env:
+          DOTNET_VERSIONS: "10 11"
         run: |
-          shopt -s globstar
-          
-          dotnet publish -c Release -p:AndroidPackageFormats=apk -p:AndroidKeyStore=true \
-            -p:UsePackage=true -p:AndroidSigningKeyStore=./../../../jnetinterface-apk.keystore \
-            -p:AndroidSigningKeyAlias=$APK_KEY_ALIAS -p:AndroidSigningKeyPass=$APK_KEY_PASS \
-            -p:AndroidSigningStorePass=$APK_KEY_PASS -p:NativeAOT=false -p:RequiredFramework=net10.0
-          
-          mv ./bin/Release/**/publish/com.rxmxnx.jnetinterface.mobiletest-Signed.apk \
-            ./../../../com.rxmxnx.jnetinterface.mobiletest-MonoAot.apk
-          rm -rf ./bin ./obj
-          
-          dotnet publish -c Release -p:AndroidPackageFormats=apk -p:AndroidKeyStore=true \
-            -p:UsePackage=true -p:AndroidSigningKeyStore=./../../../jnetinterface-apk.keystore \
-            -p:AndroidSigningKeyAlias=$APK_KEY_ALIAS -p:AndroidSigningKeyPass=$APK_KEY_PASS \
-            -p:AndroidSigningStorePass=$APK_KEY_PASS -p:NativeAOT=true -r android-arm64
-          
-          mv ./bin/Release/**/publish/com.rxmxnx.jnetinterface.mobiletest-Signed.apk \
-            ./../../../com.rxmxnx.jnetinterface.mobiletest-NativeAot.apk
+          shopt -s globstar nullglob
+
+          apk_name=com.rxmxnx.jnetinterface.mobiletest
+
+          publish_apk() {
+            local version="$1"
+            local mode="$2"
+            shift 2
+
+            rm -rf ./bin ./obj
+
+            dotnet publish -c Release \
+              -p:AndroidPackageFormats=apk \
+              -p:AndroidKeyStore=true \
+              -p:UsePackage=true \
+              -p:AndroidSigningKeyStore=./../../../jnetinterface-apk.keystore \
+              "-p:AndroidSigningKeyAlias=$APK_KEY_ALIAS" \
+              "-p:AndroidSigningKeyPass=$APK_KEY_PASS" \
+              "-p:AndroidSigningStorePass=$APK_KEY_PASS" \
+              "-p:RequiredFramework=net${version}.0" \
+              "$@"
+
+            local apks=(./bin/Release/**/publish/"${apk_name}-Signed.apk")
+            if (( ${#apks[@]} != 1 )); then
+              printf 'Expected one signed APK for %s on .NET %s, found %s.\n' \
+                "$mode" "$version" "${#apks[@]}" >&2
+              exit 1
+            fi
+
+            mv -- "${apks[0]}" "../../../${apk_name}-${mode}_${version}.apk"
+          }
+
+          read -r -a versions <<< "$DOTNET_VERSIONS"
+
+          for version in "${versions[@]}"; do
+            if (( version <= 10 )); then
+              publish_apk "$version" MonoAot -p:NativeAOT=false
+            fi
+
+            publish_apk "$version" NativeAot -p:NativeAOT=true -r android-arm64
+          done
 
       - name: Clone NativeAOT-AndroidHelloJniLib
         run: |
