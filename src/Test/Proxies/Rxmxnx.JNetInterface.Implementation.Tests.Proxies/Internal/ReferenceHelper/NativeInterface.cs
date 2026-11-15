@@ -515,8 +515,9 @@ internal unsafe partial class ReferenceHelper
 		{
 			return ReferenceHelper.GetProxy(envRef).ExceptionOccurred();
 		}
-		catch (Exception)
+		catch (Exception ex)
 		{
+			JniUnmanagedFailure.Capture(ex);
 			return default;
 		}
 	}
@@ -2666,8 +2667,9 @@ internal unsafe partial class ReferenceHelper
 		{
 			return ReferenceHelper.GetProxy(envRef).ExceptionCheck();
 		}
-		catch (Exception)
+		catch (Exception ex)
 		{
+			JniUnmanagedFailure.Capture(ex);
 			return false;
 		}
 	}

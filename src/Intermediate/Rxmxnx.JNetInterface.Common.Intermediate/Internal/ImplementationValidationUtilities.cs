@@ -107,6 +107,9 @@ internal static class ImplementationValidationUtilities
 		if (thread == Thread.CurrentThread) return;
 		IMessageResource resource = IMessageResource.GetInstance();
 		String message = resource.DifferentThread(envRef, thread.ManagedThreadId);
+#if !PACKAGE
+		message += $" [{JObject.CompilationFramework}]{Environment.NewLine}{Environment.StackTrace}";
+#endif
 		throw new DifferentThreadException(message);
 	}
 	/// <summary>

@@ -63,6 +63,26 @@ internal static partial class JTrace
 		                callerMethod);
 	}
 	/// <summary>
+	/// Writes a category name and the call of method to the trace listeners.
+	/// </summary>
+	/// <param name="localRef"><see cref="JObjectLocalRef"/> reference.</param>
+	/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
+	/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void CallMethod(JObjectLocalRef localRef, JClassLocalRef classRef, JMethodId methodId,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!JTrace.TraceEnabled) return;
+
+		if (localRef == default) //Static
+			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {classRef} {methodId}", callerMethod);
+		else if (classRef == default) //Instance
+			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {localRef} {methodId}", callerMethod);
+		else //Non-Virtual
+			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {localRef} {classRef} {methodId}",
+			                callerMethod);
+	}
+	/// <summary>
 	/// Writes a category name and the call of a method to the trace listeners.
 	/// </summary>
 	/// <param name="jLocal">Call instance object.</param>
@@ -71,7 +91,7 @@ internal static partial class JTrace
 	/// <param name="nonVirtual">Indicates call is non-virtual.</param>
 	/// <param name="args">Call parameters.</param>
 	/// <param name="callerMethod">Caller member name.</param>
-	internal static void CallMethod(JLocalObject? jLocal, JClassObject jClass, JCallDefinition definition,
+	public static void CallMethod(JLocalObject? jLocal, JClassObject jClass, JCallDefinition definition,
 		Boolean nonVirtual, ReadOnlySpan<IObject?> args = default, [CallerMemberName] String callerMethod = "")
 	{
 		if (!JTrace.TraceEnabled) return;
@@ -270,26 +290,6 @@ internal static partial class JTrace
 			Trace.WriteLine(
 				$"thread: {Environment.CurrentManagedThreadId} {localRef} {classRef} {methodId} Result {result}",
 				callerMethod);
-	}
-	/// <summary>
-	/// Writes a category name and the call of method to the trace listeners.
-	/// </summary>
-	/// <param name="localRef"><see cref="JObjectLocalRef"/> reference.</param>
-	/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
-	/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
-	/// <param name="callerMethod">Caller member name.</param>
-	public static void CallMethod(JObjectLocalRef localRef, JClassLocalRef classRef, JMethodId methodId,
-		[CallerMemberName] String callerMethod = "")
-	{
-		if (!JTrace.TraceEnabled) return;
-
-		if (localRef == default) //Static
-			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {classRef} {methodId}", callerMethod);
-		else if (classRef == default) //Instance
-			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {localRef} {methodId}", callerMethod);
-		else //Non-Virtual
-			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {localRef} {classRef} {methodId}",
-			                callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the retrieving accessible identifier to the trace listeners.
