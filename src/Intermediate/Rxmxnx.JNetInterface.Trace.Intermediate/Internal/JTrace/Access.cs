@@ -32,6 +32,7 @@ internal static partial class JTrace
 	/// <param name="definition">Call definition.</param>
 	/// <param name="value">Value to set.</param>
 	/// <param name="callerMethod">Caller member name.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void SetField<TDataType>(JLocalObject? jLocal, JClassObject jClass, JFieldDefinition definition,
 		TDataType? value, [CallerMemberName] String callerMethod = "") where TDataType : IObject
 	{
@@ -52,6 +53,7 @@ internal static partial class JTrace
 	/// <param name="definition">Call definition.</param>
 	/// <param name="bytes">Binary span containing value to set to.</param>
 	/// <param name="callerMethod">Caller member name.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void SetField<TPrimitive>(JLocalObject? jLocal, JClassObject jClass, JFieldDefinition definition,
 		ReadOnlySpan<Byte> bytes, [CallerMemberName] String callerMethod = "")
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
@@ -115,7 +117,8 @@ internal static partial class JTrace
 	/// <param name="nonVirtual">Indicates call is non-virtual.</param>
 	/// <param name="args">Call parameters.</param>
 	/// <param name="callerMethod">Caller member name.</param>
-	internal static void CallMethod<TArgs>(JLocalObject? jLocal, JClassObject jClass, JCallDefinition definition,
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static void CallMethod<TArgs>(JLocalObject? jLocal, JClassObject jClass, JCallDefinition definition,
 		Boolean nonVirtual, ref TArgs args, [CallerMemberName] String callerMethod = "")
 #if !NET9_0_OR_GREATER
 		where TArgs : ICallArgument
@@ -152,6 +155,7 @@ internal static partial class JTrace
 	/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
 	/// <param name="value">Value to set to.</param>
 	/// <param name="callerMethod">Caller member name.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void SetPrimitiveField<TValue>(JObjectLocalRef localRef, JClassLocalRef classRef, Byte signature,
 		JFieldId fieldId, TValue value, [CallerMemberName] String callerMethod = "") where TValue : unmanaged
 	{
@@ -186,6 +190,7 @@ internal static partial class JTrace
 	/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
 	/// <param name="result">Current value.</param>
 	/// <param name="callerMethod">Caller member name.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void GetPrimitiveField<TValue>(JObjectLocalRef localRef, JClassLocalRef classRef, Byte signature,
 		JFieldId fieldId, TValue result, [CallerMemberName] String callerMethod = "") where TValue : unmanaged
 	{
@@ -221,6 +226,7 @@ internal static partial class JTrace
 	/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
 	/// <param name="result">Current value.</param>
 	/// <param name="callerMethod">Caller member name.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void CallPrimitiveFunction<TValue>(JObjectLocalRef localRef, JClassLocalRef classRef, Byte signature,
 		JMethodId methodId, TValue result, [CallerMemberName] String callerMethod = "") where TValue : unmanaged
 	{
@@ -305,6 +311,7 @@ internal static partial class JTrace
 	/// <param name="definition">A <see cref="JAccessibleObjectDefinition"/> instance.</param>
 	/// <param name="accessibleId">Accessible object identifier.</param>
 	/// <param name="callerMethod">Caller member name.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void GetAccessibleId<TAccessible>(JClassLocalRef classRef, JAccessibleObjectDefinition definition,
 		TAccessible accessibleId, [CallerMemberName] String callerMethod = "")
 		where TAccessible : unmanaged, IAccessibleIdentifierType, INativePointerType<TAccessible>,
