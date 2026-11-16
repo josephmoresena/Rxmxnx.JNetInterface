@@ -59,12 +59,9 @@ jobs:
           # amd64 first, while the image sources are untouched.
           sudo apt-get install --assume-yes --no-install-recommends \
             coreutils clang llvm zlib1g-dev libkrb5-dev libssl-dev \
-            qemu-user qemu-user-binfmt binfmt-support \
+            qemu-user qemu-user-binfmt binfmt-support execstack \
             binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu g++-aarch64-linux-gnu \
             binutils-arm-linux-gnueabihf gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
-          
-          # JDK 6.0 dependencies
-          sudo apt install -y libxext6 libxrender1 libxtst6 libxi6 libfreetype6 libasound2t64 libstdc++6 zlib1g
           
            # Foreign architectures only after the host packages are in place.
           bash ./Install-ArmSources.sh

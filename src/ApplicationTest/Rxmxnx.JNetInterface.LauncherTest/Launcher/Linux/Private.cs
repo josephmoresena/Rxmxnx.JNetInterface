@@ -53,6 +53,20 @@ public partial class Launcher
 				Linux.RunSelfExtractQemu(tempFileName, jdkPath);
 			await task;
 		}
+		private async Task RunExecstack(String jvmLibraryPath)
+		{
+			ExecuteState<String> state = new()
+			{
+				ExecutablePath = "/usr/bin/execstack",
+				AppendArgs = (s, a) =>
+				{
+					a.Add("-c");
+					a.Add(jvmLibraryPath);
+				},
+				Notifier = ConsoleNotifier.Notifier,
+			};
+			await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
+		}
 		private static async Task RunSelfExtract(String tempFileName, String jdkPath)
 		{
 			ExecuteState state = new()

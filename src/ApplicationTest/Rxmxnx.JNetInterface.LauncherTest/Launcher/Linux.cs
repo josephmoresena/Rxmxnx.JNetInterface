@@ -57,6 +57,7 @@ public partial class Launcher
 
 			result = this.GetJdk(version, arch, jdkPath, out DirectoryInfo jdkDirectory);
 			ConsoleNotifier.PlatformNotifier.JdkDownload(version, arch, jdkDirectory.FullName);
+			if (result?.JavaVersion is JdkVersion.Jdk6) await this.RunExecstack(result.JavaLibrary);
 			return result;
 		}
 		protected override Task<Int32> RunAppFile(FileInfo appFile, Jdk jdk, String executionName,
