@@ -53,14 +53,14 @@ public partial class Launcher
 				Linux.RunSelfExtractQemu(tempFileName, jdkPath);
 			await task;
 		}
-		private async Task RunExecstack(String jvmLibraryPath)
+		private static async Task PatchJvmLibrary(String jvmLibraryPath)
 		{
 			ExecuteState<String> state = new()
 			{
-				ExecutablePath = "/usr/bin/execstack",
+				ExecutablePath = "/usr/bin/patchelf",
 				AppendArgs = (s, a) =>
 				{
-					a.Add("-c");
+					a.Add("--clear-execstack");
 					a.Add(jvmLibraryPath);
 				},
 				Notifier = ConsoleNotifier.Notifier,
