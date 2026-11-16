@@ -48,7 +48,10 @@ public partial class Launcher
 				if (version is not JdkVersion.Jdk6)
 					await Launcher.ExtractTarGz(tempFileName, jdkPath, ConsoleNotifier.CancellationToken);
 				else
+				{
 					await this.SelfExtractBinary(tempFileName, jdkPath);
+					await Linux.PatchJvmLibrary(jdkPath);
+				}
 			}
 			finally
 			{
@@ -57,7 +60,6 @@ public partial class Launcher
 
 			result = this.GetJdk(version, arch, jdkPath, out DirectoryInfo jdkDirectory);
 			ConsoleNotifier.PlatformNotifier.JdkDownload(version, arch, jdkDirectory.FullName);
-			if (result?.JavaVersion is JdkVersion.Jdk6) await Linux.PatchJvmLibrary(result.JavaLibrary);
 			return result;
 		}
 		protected override Task<Int32> RunAppFile(FileInfo appFile, Jdk jdk, String executionName,

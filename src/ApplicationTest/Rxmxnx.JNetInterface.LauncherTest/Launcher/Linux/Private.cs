@@ -53,20 +53,23 @@ public partial class Launcher
 				Linux.RunSelfExtractQemu(tempFileName, jdkPath);
 			await task;
 		}
-		private static async Task PatchJvmLibrary(String jvmLibraryPath)
+		private static async Task PatchJvmLibrary(String jdkPath)
 		{
-			ExecuteState<String> state = new()
+			foreach (FileInfo file in new DirectoryInfo(jdkPath).GetFiles("*.so", Linux.searchOptions))
 			{
-				ExecutablePath = "/usr/bin/patchelf",
-				ArgState = jvmLibraryPath,
-				AppendArgs = (s, a) =>
+				ExecuteState<String> state = new()
 				{
-					a.Add("--clear-execstack");
-					a.Add(s);
-				},
-				Notifier = ConsoleNotifier.Notifier,
-			};
-			await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
+					ExecutablePath = "/usr/bin/patchelf",
+					ArgState = file.Name,
+					AppendArgs = (s, a) =>
+					{
+						a.Add("--clear-execstack");
+						a.Add(s);
+					},
+					Notifier = ConsoleNotifier.Notifier,
+				};
+				await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
+			}
 		}
 		private static async Task RunSelfExtract(String tempFileName, String jdkPath)
 		{
@@ -128,5 +131,10 @@ public partial class Launcher
 			=> arch == this.CurrentArch || (this._isArmHf && Linux.IsArmHf(arch));
 
 		private static Boolean IsArmHf(Architecture arch) => arch is Architecture.Arm or Architecture.Armv6;
+
+		private static readonly EnumerationOptions searchOptions = new()
+		{
+			IgnoreInaccessible = true, RecurseSubdirectories = true, MaxRecursionDepth = 10,
+		};
 	}
 }
