@@ -58,6 +58,7 @@ public partial class Launcher
 			ExecuteState<String> state = new()
 			{
 				ExecutablePath = "/usr/bin/patchelf",
+				ArgState = jvmLibraryPath,
 				AppendArgs = (s, a) =>
 				{
 					a.Add("--clear-execstack");
