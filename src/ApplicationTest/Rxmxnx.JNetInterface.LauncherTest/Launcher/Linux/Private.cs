@@ -61,7 +61,7 @@ public partial class Launcher
 				AppendArgs = (s, a) =>
 				{
 					a.Add("--clear-execstack");
-					a.Add(jvmLibraryPath);
+					a.Add(s);
 				},
 				Notifier = ConsoleNotifier.Notifier,
 			};
