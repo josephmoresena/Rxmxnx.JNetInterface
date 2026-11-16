@@ -60,7 +60,7 @@ public partial class Launcher
 				ExecuteState<String> state = new()
 				{
 					ExecutablePath = "/usr/bin/patchelf",
-					ArgState = file.Name,
+					ArgState = file.FullName,
 					AppendArgs = (s, a) =>
 					{
 						a.Add("--clear-execstack");
