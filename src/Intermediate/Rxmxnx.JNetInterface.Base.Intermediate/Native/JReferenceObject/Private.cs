@@ -26,7 +26,7 @@ public partial class JReferenceObject
 	private readonly Boolean _isProxy;
 
 	/// <summary>
-	/// Indicates whether current instance is blank,
+	/// Indicates whether the current instance is blank.
 	/// </summary>
 	private Boolean IsBlankSpan()
 	{
@@ -39,7 +39,7 @@ public partial class JReferenceObject
 	}
 
 	/// <summary>
-	/// Retrieves the identifier for given instance.
+	/// Retrieves the identifier for a given instance.
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
 	/// <param name="jOther">A <see cref="JReferenceObject"/> instance.</param>

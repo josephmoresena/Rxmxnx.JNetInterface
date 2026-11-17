@@ -8,6 +8,7 @@ internal abstract partial class GlobalMainClasses : MainClasses<JGlobal>
 	/// <summary>
 	/// Global cache.
 	/// </summary>
+	// ReSharper disable once MemberCanBeProtected.Global
 	public readonly ClassCache<JGlobal> GlobalClassCache = new(JReferenceType.GlobalRefType);
 	/// <inheritdoc/>
 	public override JGlobal ClassObject => this.GlobalClassCache[ClassNameHelper.ClassHash];

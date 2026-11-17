@@ -9,12 +9,13 @@ internal sealed class CallFrame(INativeThread env) : AlienLocalCache(env)
 	public override String Name => "call";
 
 	/// <summary>
-	/// Sets current instance as current object cache.
+	/// Sets the current instance as the current object cache.
 	/// </summary>
 	/// <param name="previous">Previous <see cref="LocalCache"/> instance.</param>
 	public void Activate(out LocalCache previous)
 	{
 		previous = this.Environment.LocalCache;
+		Debug.Assert(previous != this);
 		this.SetPrevious(previous);
 		this.Environment.LocalCache = this;
 	}

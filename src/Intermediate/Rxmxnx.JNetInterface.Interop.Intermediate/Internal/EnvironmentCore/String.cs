@@ -12,7 +12,7 @@ internal sealed partial class EnvironmentCore
 	/// <param name="jString">A <see cref="JStringObject"/> instance.</param>
 	/// <param name="charsPtr">Buffer memory address.</param>
 	/// <param name="startIndex">Region start index.</param>
-	/// <param name="length">Number of characters in region.</param>
+	/// <param name="length">Number of characters in the region.</param>
 	private void GetStringRegion(JStringObject jString, IntPtr charsPtr, Int32 startIndex, Int32 length)
 	{
 		ref readonly NativeInterface nativeInterface =
@@ -28,7 +28,7 @@ internal sealed partial class EnvironmentCore
 	/// <param name="jString">A <see cref="JStringObject"/> instance.</param>
 	/// <param name="unitsPtr">UTF-8 buffer memory address.</param>
 	/// <param name="startIndex">Region start index.</param>
-	/// <param name="length">Number of UTF-8 characters in region.</param>
+	/// <param name="length">Number of UTF-8 characters in the region.</param>
 	private void GetStringUtf8Region(JStringObject jString, IntPtr unitsPtr, Int32 startIndex, Int32 length)
 	{
 		ref readonly NativeInterface nativeInterface =

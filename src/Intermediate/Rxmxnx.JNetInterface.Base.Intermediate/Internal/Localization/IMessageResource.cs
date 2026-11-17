@@ -119,6 +119,10 @@ internal partial interface IMessageResource
 	/// </summary>
 	String DisposedObject { get; }
 	/// <summary>
+	/// Message for an invalid parameter index.
+	/// </summary>
+	String InvalidParameterIndex { get; }
+	/// <summary>
 	/// Message for invalid array exception.
 	/// </summary>
 	String InvalidArrayLength { get; }
@@ -306,4 +310,9 @@ internal partial interface IMessageResource
 	/// Message for interface version.
 	/// </summary>
 	String InvalidInterfaceVersion(Int32 currentVersion, Int32 requiredVersion);
+	/// <summary>
+	/// Message for an invalid object at a parameter index.
+	/// </summary>
+	/// <param name="index">Parameter index.</param>
+	String InvalidObjectAt(Int32 index);
 }

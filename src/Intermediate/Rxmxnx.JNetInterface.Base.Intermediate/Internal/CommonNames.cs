@@ -24,11 +24,11 @@ internal static class CommonNames
 	public const String JInvokeInterfaceName = "JNIInvokeInterface_";
 
 	/// <summary>
-	/// JNI name of method Id (<c>jmethodID</c>).
+	/// JNI name of method ID (<c>jmethodID</c>).
 	/// </summary>
 	public const String JMethodIdName = "jmethodID";
 	/// <summary>
-	/// JNI name of field Id (<c>jfieldID</c>).
+	/// JNI name of field ID (<c>jfieldID</c>).
 	/// </summary>
 	public const String JFieldIdName = "jfieldID";
 
@@ -146,7 +146,7 @@ internal static class CommonNames
 	///         <description><c>jlongArray</c>.</description>
 	///     </item>
 	///     <item>
-	///         <term>Any fully-qualified-class type.</term><description><c>jobjectArray</c>.</description>
+	///         <term>Any fully qualified-class type.</term><description><c>jobjectArray</c>.</description>
 	///     </item>
 	///     <item>
 	///         <term>
@@ -245,19 +245,19 @@ internal static class CommonNames
 	/// </summary>
 	public const String ShortPrimitive = "short";
 	/// <summary>
-	/// Prefix for the parameters declaration in the JNI signature for methods.
+	/// Prefix for the parameter declaration in the JNI signature for methods.
 	/// </summary>
 	public const Byte MethodParameterPrefixChar = (Byte)'(';
 	/// <summary>
-	/// Suffix for the parameters declaration in the JNI signature for methods.
+	/// Suffix for the parameter declaration in the JNI signature for methods.
 	/// </summary>
 	public const Byte MethodParameterSuffixChar = (Byte)')';
 	/// <summary>
-	/// Prefix for fully-qualified-class type declaration in the JNI signature for methods and properties.
+	/// Prefix for fully qualified-class type declaration in the JNI signature for methods and properties.
 	/// </summary>
 	public const Byte ObjectSignaturePrefixChar = (Byte)'L';
 	/// <summary>
-	/// Suffix for fully-qualified-class type declaration in the JNI signature for methods and properties.
+	/// Suffix for fully qualified-class type declaration in the JNI signature for methods and properties.
 	/// </summary>
 	public const Byte ObjectSignatureSuffixChar = (Byte)';';
 	/// <summary>

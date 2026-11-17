@@ -1,11 +1,9 @@
-// ReSharper disable ClassNeverInstantiated.Local
-
 namespace Rxmxnx.JNetInterface.Internal;
 
 internal partial struct JniTransactionHandle
 {
 	/// <summary>
-	/// Represents a JNI transaction with single reference.
+	/// Represents a JNI transaction with a single reference.
 	/// </summary>
 	private class UnaryTransaction : FixedTransaction
 	{

@@ -3,10 +3,8 @@ namespace Rxmxnx.JNetInterface.Tests.Internal;
 internal static partial class ReferenceHelper
 {
 #if NET9_0_OR_GREATER
-	private static readonly Lock invokeLock = new();
 	private static readonly Lock nativeLock = new();
 #else
-	private static readonly Object invokeLock = new();
 	private static readonly Object nativeLock = new();
 #endif
 

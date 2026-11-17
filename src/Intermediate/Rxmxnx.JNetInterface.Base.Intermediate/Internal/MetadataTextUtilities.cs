@@ -7,7 +7,7 @@ internal static class MetadataTextUtilities
 {
 #if !PACKAGE
 	/// <summary>
-	/// Indicates whether detailed a ToString() is available for type metadata instances.
+	/// Indicates whether a detailed ToString() is available for type metadata instances.
 	/// </summary>
 	[ExcludeFromCodeCoverage]
 	public static Boolean TypeMetadataToStringEnabled
@@ -109,7 +109,7 @@ internal static class MetadataTextUtilities
 	/// </summary>
 	/// <param name="strBuild">A <see cref="StringBuilder"/> instance.</param>
 	/// <param name="value">Textual item value.</param>
-	/// <param name="first">Indicates current item is the first one.</param>
+	/// <param name="first">Indicates the current item is the first one.</param>
 	public static void AppendItem(StringBuilder strBuild, String value, Boolean first)
 	{
 		MetadataTextUtilities.AppendSeparator(strBuild, !first);
@@ -122,7 +122,7 @@ internal static class MetadataTextUtilities
 	/// <param name="strBuild">A <see cref="StringBuilder"/> instance.</param>
 	/// <param name="index">Numeric item value.</param>
 	/// <param name="value">Text item value.</param>
-	/// <param name="first">Indicates current item is the first one.</param>
+	/// <param name="first">Indicates the current item is the first one.</param>
 	public static void AppendItem(StringBuilder strBuild, Int32 index, String value, Boolean first)
 	{
 		MetadataTextUtilities.AppendSeparator(strBuild, !first);
@@ -142,7 +142,7 @@ internal static class MetadataTextUtilities
 	/// Appends to <paramref name="strBuild"/> the end of an array.
 	/// </summary>
 	/// <param name="strBuild">A <see cref="StringBuilder"/> instance.</param>
-	/// <param name="empty">Indicates whether closing array is empty.</param>
+	/// <param name="empty">Indicates whether the closing array is empty.</param>
 	public static void AppendArrayEnd(StringBuilder strBuild, Boolean empty)
 	{
 		if (empty)
@@ -168,7 +168,7 @@ internal static class MetadataTextUtilities
 	/// <param name="propertyName">Property name.</param>
 	/// <param name="value">Property value.</param>
 	/// <param name="withSeparator">
-	/// Indicates whether after to append property the separator should be appended.
+	/// Indicates whether, after to append property, the separator should be appended.
 	/// </param>
 	private static void AppendProperty(StringBuilder strBuild, String propertyName, String value,
 		Boolean withSeparator = true)
@@ -197,7 +197,7 @@ internal static class MetadataTextUtilities
 	/// <param name="strBuild">A <see cref="StringBuilder"/> instance.</param>
 	/// <param name="property">Property instance.</param>
 	/// <param name="withSeparator">
-	/// Indicates whether after to append property the separator should be appended.
+	/// Indicates whether, after to append property, the separator should be appended.
 	/// </param>
 	private static void AppendProperty(StringBuilder strBuild, JArgumentMetadata property, Boolean withSeparator = true)
 	{

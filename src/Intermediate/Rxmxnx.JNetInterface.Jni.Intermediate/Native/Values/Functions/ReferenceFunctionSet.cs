@@ -75,11 +75,20 @@ internal readonly unsafe partial struct ReferenceFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JBoolean IsSameObject(JEnvironmentRef envRef, JObjectLocalRef localRef0, JObjectLocalRef localRef1)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._isSameObject.Windows(envRef, localRef0, localRef1);
+			if (SystemInfo.IsWindows)
+				return this._isSameObject.Windows(envRef, localRef0, localRef1);
 #endif
-		return this._isSameObject.Unix(envRef, localRef0, localRef1);
+			return this._isSameObject.Unix(envRef, localRef0, localRef1);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 	/// <summary>
 	/// <c>EnsureLocalCapacity</c>.
@@ -90,10 +99,19 @@ internal readonly unsafe partial struct ReferenceFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult EnsureLocalCapacity(JEnvironmentRef envRef, Int32 capacity)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._ensureLocalCapacity.Windows(envRef, capacity);
+			if (SystemInfo.IsWindows)
+				return this._ensureLocalCapacity.Windows(envRef, capacity);
 #endif
-		return this._ensureLocalCapacity.Unix(envRef, capacity);
+			return this._ensureLocalCapacity.Unix(envRef, capacity);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 }

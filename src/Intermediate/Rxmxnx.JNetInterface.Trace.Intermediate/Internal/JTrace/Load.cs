@@ -133,6 +133,7 @@ internal static partial class JTrace
 	/// <param name="jniVersion">JNI version.</param>
 	/// <param name="specificationVersion">java.specification.version property value.</param>
 	/// <param name="callerMethod">Caller member name.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void GetRuntimeVersion<TChar>(JEnvironmentRef envRef, Int32 jniVersion,
 		ReadOnlySpan<TChar> specificationVersion, [CallerMemberName] String callerMethod = "")
 		where TChar : unmanaged, IUnsignedNumber<TChar>

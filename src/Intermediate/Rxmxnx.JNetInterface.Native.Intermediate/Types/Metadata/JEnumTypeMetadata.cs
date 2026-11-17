@@ -18,7 +18,7 @@ public abstract class JEnumTypeMetadata : JClassTypeMetadata
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="className">Enum name of the current type.</param>
+	/// <param name="className">The name of the current enum type.</param>
 	private protected JEnumTypeMetadata(ReadOnlySpan<Byte> className) : base(className) { }
 	/// <inheritdoc/>
 	private protected JEnumTypeMetadata(TypeInfoSequence information) : base(information) { }

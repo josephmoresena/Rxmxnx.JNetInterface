@@ -47,6 +47,7 @@ internal sealed class RussianMessageResource : IMessageResource
 	String IMessageResource.InvalidReferenceObject => "Недопустимый JReferenceObject.";
 	String IMessageResource.InvalidObjectMetadata => "Недопустимый ObjectMetadata.";
 	String IMessageResource.DisposedObject => "JReferenceObject был удален.";
+	String IMessageResource.InvalidParameterIndex => "Недопустимый индекс параметра.";
 	String IMessageResource.InvalidArrayLength => "Длина массива должна быть нулевой или положительной.";
 	String IMessageResource.DeadVirtualMachine => "Текущая JVM не запущена.";
 	String IMessageResource.NotAttachedThread => "Текущий поток не подключен к JVM.";
@@ -133,6 +134,8 @@ internal sealed class RussianMessageResource : IMessageResource
 			"Тип массива имеет слишком много измерений.";
 	String IMessageResource.InvalidInterfaceVersion(Int32 currentVersion, Int32 requiredVersion)
 		=> $"Текущий процесс должен выполняться с версией JNI, совместимой с 0x{requiredVersion:x8}, однако обнаруженная версия — 0x{currentVersion:x8}.";
+
+	String IMessageResource.InvalidObjectAt(Int32 index) => $"Недопустимый объект по индексу {index}.";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

@@ -6,31 +6,31 @@ namespace Rxmxnx.JNetInterface.Types;
 public enum JTypeKind : Byte
 {
 	/// <summary>
-	/// Indicates current type is undefined.
+	/// Indicates the current type is undefined.
 	/// </summary>
 	Undefined = 0,
 	/// <summary>
-	/// Indicates current type is a java primitive value.
+	/// Indicates the current type is a java primitive value.
 	/// </summary>
 	Primitive = 1,
 	/// <summary>
-	/// Indicates current type is a java class.
+	/// Indicates the current type is a java class.
 	/// </summary>
 	Class = 2,
 	/// <summary>
-	/// Indicates current type is a java array.
+	/// Indicates the current type is a java array.
 	/// </summary>
 	Array = 3,
 	/// <summary>
-	/// Indicates current type is a java interface.
+	/// Indicates the current type is a java interface.
 	/// </summary>
 	Interface = 4,
 	/// <summary>
-	/// Indicates current type is a java enumeration.
+	/// Indicates the current type is a java enumeration.
 	/// </summary>
 	Enum = 5,
 	/// <summary>
-	/// Indicates current type is a java annotation.
+	/// Indicates the current type is a java annotation.
 	/// </summary>
 	Annotation = 6,
 }

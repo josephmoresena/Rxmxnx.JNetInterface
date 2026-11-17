@@ -11,11 +11,11 @@ internal partial class ObjectLifetime
 	/// </summary>
 	private readonly IMutableWrapper<Int32> _classCounter = IMutableWrapper<Int32>.Create();
 	/// <summary>
-	/// Indicates whether current instance is not disposable.
+	/// Indicates whether the current instance is not disposable.
 	/// </summary>
 	private readonly Boolean _isDisposable = isDisposable;
 	/// <summary>
-	/// Indicates whether the this instance is disposed.
+	/// Indicates whether this instance is disposed.
 	/// </summary>
 	private readonly IMutableWrapper<Boolean> _isDisposed = IMutableWrapper.Create<Boolean>();
 	/// <summary>
@@ -63,7 +63,7 @@ internal partial class ObjectLifetime
 		else other._weak ??= this._weak;
 	}
 	/// <summary>
-	/// Indicates whether current instance is assignable to <typeparamref name="TDataType"/> type.
+	/// Indicates whether the current instance is assignable to <typeparamref name="TDataType"/> type.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
 	/// <returns>
@@ -112,7 +112,7 @@ internal partial class ObjectLifetime
 	/// Unloads the given object from the current instance.
 	/// </summary>
 	/// <param name="id">Object identifier.</param>
-	/// <param name="isClass">Indicates whether object instance is a class.</param>
+	/// <param name="isClass">Indicates whether the object instance is a class.</param>
 	/// <returns>
 	/// <see langword="true"/> if the given instance was the only instance in the lifetime;
 	/// otherwise, <see langword="false"/>.

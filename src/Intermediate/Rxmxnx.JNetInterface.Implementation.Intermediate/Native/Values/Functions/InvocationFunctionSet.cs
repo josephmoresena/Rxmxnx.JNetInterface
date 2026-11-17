@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 
 /// <summary>
-/// Set of function pointers to use Java library through Invocation API.
+/// Set of function pointers to use a Java library through Invocation API.
 /// </summary>
 [StructLayout(LayoutKind.Explicit)]
 #if !PACKAGE
@@ -25,11 +25,20 @@ internal readonly unsafe struct InvocationFunctionSet : IInvocationFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult GetDefaultVirtualMachineInitArgs(ref VirtualMachineInitArgumentValue initArg)
 	{
-		fixed (VirtualMachineInitArgumentValue* initArgPtr = &initArg)
+		try
 		{
-			return SystemInfo.IsWindows ?
-				this._windows.GetDefaultVirtualMachineInitArgs(initArgPtr) :
-				this._unix.GetDefaultVirtualMachineInitArgs(initArgPtr);
+			fixed (VirtualMachineInitArgumentValue* initArgPtr = &initArg)
+			{
+				return SystemInfo.IsWindows ?
+					this._windows.GetDefaultVirtualMachineInitArgs(initArgPtr) :
+					this._unix.GetDefaultVirtualMachineInitArgs(initArgPtr);
+			}
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
 		}
 	}
 	/// <inheritdoc/>
@@ -37,24 +46,42 @@ internal readonly unsafe struct InvocationFunctionSet : IInvocationFunctionSet
 	public JResult CreateVirtualMachine(out JVirtualMachineRef vmRef, out JEnvironmentRef envRef,
 		in VirtualMachineInitArgumentValue initArg)
 	{
-		fixed (JVirtualMachineRef* vmRefPtr = &vmRef)
-		fixed (JEnvironmentRef* envRefPtr = &envRef)
-		fixed (VirtualMachineInitArgumentValue* initArgPtr = &initArg)
+		try
 		{
-			return SystemInfo.IsWindows ?
-				this._windows.CreateVirtualMachine(vmRefPtr, envRefPtr, initArgPtr) :
-				this._unix.CreateVirtualMachine(vmRefPtr, envRefPtr, initArgPtr);
+			fixed (JVirtualMachineRef* vmRefPtr = &vmRef)
+			fixed (JEnvironmentRef* envRefPtr = &envRef)
+			fixed (VirtualMachineInitArgumentValue* initArgPtr = &initArg)
+			{
+				return SystemInfo.IsWindows ?
+					this._windows.CreateVirtualMachine(vmRefPtr, envRefPtr, initArgPtr) :
+					this._unix.CreateVirtualMachine(vmRefPtr, envRefPtr, initArgPtr);
+			}
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
 		}
 	}
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JResult GetCreatedVirtualMachines(JVirtualMachineRef* arr, Int32 arrSize, out Int32 count)
 	{
-		fixed (Int32* countPtr = &count)
+		try
 		{
-			return SystemInfo.IsWindows ?
-				this._windows.GetCreatedVirtualMachines(arr, arrSize, countPtr) :
-				this._unix.GetCreatedVirtualMachines(arr, arrSize, countPtr);
+			fixed (Int32* countPtr = &count)
+			{
+				return SystemInfo.IsWindows ?
+					this._windows.GetCreatedVirtualMachines(arr, arrSize, countPtr) :
+					this._unix.GetCreatedVirtualMachines(arr, arrSize, countPtr);
+			}
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
 		}
 	}
 

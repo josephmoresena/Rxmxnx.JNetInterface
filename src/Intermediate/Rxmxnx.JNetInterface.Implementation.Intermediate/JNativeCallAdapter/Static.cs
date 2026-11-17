@@ -140,28 +140,8 @@ public readonly ref partial struct JNativeCallAdapter
 			JClassLocalRef classRef = new(localRef);
 			return JNativeCallAdapter.Create(vm, envRef, classRef, out Unsafe.As<TObject, JClassObject>(ref jLocal));
 		}
-		ImplementationValidationUtilities.ThrowIfDefault(localRef);
 		Builder result = JNativeCallAdapter.Create(vm, envRef);
 		jLocal = result.CreateInitialObject<TObject>(localRef)!;
 		return result;
-	}
-
-	public readonly ref partial struct Builder
-	{
-		/// <summary>
-		/// Throws an exception if <paramref name="localRef"/> is not a local reference.
-		/// </summary>
-		/// <param name="env">A <see cref="INativeThread"/> instance.</param>
-		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
-		/// <exception cref="ArgumentException">
-		/// Throws an exception if <paramref name="localRef"/> is not a local reference.
-		/// </exception>
-		private static void ThrowIfNotLocalReference(INativeThread env, JObjectLocalRef localRef)
-		{
-			if (env.Version < IVirtualMachine.MinimalVersion || !JVirtualMachine.CheckRefTypeNativeCallEnabled) return;
-			if (env.GetReferenceType(localRef) == JReferenceType.LocalRefType) return;
-			IMessageResource resource = IMessageResource.GetInstance();
-			throw new ArgumentException(resource.OnlyLocalReferencesAllowed);
-		}
 	}
 }

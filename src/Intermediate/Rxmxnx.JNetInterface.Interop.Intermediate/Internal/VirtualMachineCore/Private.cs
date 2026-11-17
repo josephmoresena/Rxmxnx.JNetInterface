@@ -3,11 +3,6 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal abstract partial class VirtualMachineCore
 {
 	/// <summary>
-	/// JNI transaction dictionary.
-	/// </summary>
-	private readonly ConcurrentDictionary<Guid, INativeTransaction> _transactions = new();
-
-	/// <summary>
 	/// Global object dictionary.
 	/// </summary>
 	private protected readonly ConcurrentDictionary<JGlobalRef, WeakReference<JGlobal>> GlobalObjects = new();
@@ -23,6 +18,10 @@ internal abstract partial class VirtualMachineCore
 	/// Weak global object dictionary.
 	/// </summary>
 	private protected readonly ConcurrentDictionary<JWeakRef, WeakReference<JWeak>> WeakObjects = new();
+	/// <summary>
+	/// JNI transaction dictionary.
+	/// </summary>
+	private readonly ConcurrentDictionary<Guid, INativeTransaction> _transactions = new();
 
 	/// <summary>
 	/// Removes <see cref="JGlobalRef"/> from current cache.
@@ -81,7 +80,7 @@ internal abstract partial class VirtualMachineCore
 	}
 
 	/// <summary>
-	/// Detaches current thread from <see cref="IVirtualMachine"/> referenced by <paramref name="core"/>.
+	/// Detaches the current thread from <see cref="IVirtualMachine"/> referenced by <paramref name="core"/>.
 	/// </summary>
 	/// <param name="core">A <see cref="VirtualMachineCore"/> reference.</param>
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>

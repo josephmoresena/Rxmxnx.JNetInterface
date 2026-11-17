@@ -1,5 +1,6 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
+// ReSharper disable once ClassCannotBeInstantiated
 public partial class Launcher
 {
 	public static async Task<Launcher> Create(DirectoryInfo outputDirectory)
@@ -51,14 +52,15 @@ public partial class Launcher
 		};
 		await Utilities.Execute(state, cancellationToken);
 	}
+#pragma warning disable CA1859
 	private static IReadOnlyDictionary<JdkVersion, String> GetEnvironmentVariables(Architecture arch)
+#pragma warning restore CA1859
 		=> arch switch
 		{
 			Architecture.Arm64 => Launcher.javaHomeArm64,
 			Architecture.X64 => Launcher.javaHomeX64,
 			Architecture.X86 => Launcher.javaHomeX86,
-			Architecture.Arm => Launcher.javaHomeArm,
-			Architecture.Armv6 => Launcher.javaHomeArm,
+			Architecture.Arm or Architecture.Armv6 => Launcher.javaHomeArm,
 			_ => throw new ArgumentOutOfRangeException(nameof(arch)),
 		};
 	private static void ExtractZip(String zipFile, String destinationPath)

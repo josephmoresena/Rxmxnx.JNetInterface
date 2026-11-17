@@ -5,12 +5,14 @@
     <ItemGroup>
         <Using Include="System.Collections.Concurrent"/>
         <Using Include="System.ComponentModel"/>
+        <Using Include="System.Diagnostics"/>
         <Using Include="System.Diagnostics.CodeAnalysis"/>
         <Using Include="System.Numerics"/>
         <Using Include="System.Runtime.CompilerServices"/>
         <Using Include="System.Runtime.InteropServices"/>
         <Using Include="System.Runtime.Versioning"/>
         <Using Include="Rxmxnx.PInvoke"/>
+        <Using Include="Rxmxnx.JNetInterface.Functional"/>
         <Using Include="Rxmxnx.JNetInterface.Internal"/>
         <Using Include="Rxmxnx.JNetInterface.Internal.Localization"/>
         <Using Include="Rxmxnx.JNetInterface.Lang"/>
@@ -28,12 +30,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Rxmxnx.JNetInterface.Interop.Intermediate\Rxmxnx.JNetInterface.Interop.Intermediate.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <EmbeddedResource Include="ILLink\ILLink.Substitutions.xml">
-            <LogicalName>ILLink.Substitutions.xml</LogicalName>
-        </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>

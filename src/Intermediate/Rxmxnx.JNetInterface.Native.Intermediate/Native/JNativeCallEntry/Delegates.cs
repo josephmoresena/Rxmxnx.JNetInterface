@@ -1,5 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native;
 
+// ReSharper disable once ClassCannotBeInstantiated
 public partial class JNativeCallEntry
 {
 	/// <summary>

@@ -2,6 +2,7 @@ using Rxmxnx.PInvoke;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
+// ReSharper disable once InconsistentNaming
 internal partial class UIAdapter
 {
 	private protected class ExecutionState<TState>(in TState state, in Action<TState> action)

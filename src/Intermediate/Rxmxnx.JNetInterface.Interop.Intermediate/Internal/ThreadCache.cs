@@ -41,9 +41,9 @@ internal sealed class ThreadCache<TThread> : ReferenceHelperCache<TThread, JEnvi
 		return result;
 	}
 	/// <summary>
-	/// Retrieves the <typeparamref name="TThread"/> instance associated with current thread.
+	/// Retrieves the <typeparamref name="TThread"/> instance associated with the current thread.
 	/// </summary>
-	/// <returns>The <typeparamref name="TThread"/> instance associated with current thread.</returns>
+	/// <returns>The <typeparamref name="TThread"/> instance associated with the current thread.</returns>
 	public TThread? GetAttachedThread()
 	{
 		JResult result = this._host.GetEnv(out JEnvironmentRef envRef, (Int32)JRuntimeVersion.SEd2);
@@ -95,7 +95,7 @@ internal sealed class ThreadCache<TThread> : ReferenceHelperCache<TThread, JEnvi
 	/// <param name="reference">A reference pointer to <typeparamref name="TThread"/> instance.</param>
 	/// <param name="safeRequest">Indicates whether the current request is from a safe JNI call.</param>
 	/// <param name="arg">Creation argument.</param>
-	/// <param name="isNew">Indicates whether current object is new in cache.</param>
+	/// <param name="isNew">Indicates whether the current object is new in the cache.</param>
 	/// <returns>A <typeparamref name="TThread"/> instance.</returns>
 	private TThread GetInstance(JEnvironmentRef reference, Boolean safeRequest, out Boolean isNew,
 		ThreadCreationArgs? arg)
@@ -112,7 +112,7 @@ internal sealed class ThreadCache<TThread> : ReferenceHelperCache<TThread, JEnvi
 		return result;
 	}
 	/// <summary>
-	/// Initializes a new <see cref="IThread"/> instance for current thread.
+	/// Initializes a new <see cref="IThread"/> instance for the current thread.
 	/// </summary>
 	/// <param name="args">A <see cref="ThreadCreationArgs"/> instance.</param>
 	/// <returns>A new <see cref="IThread"/> instance.</returns>

@@ -6,15 +6,15 @@ namespace Rxmxnx.JNetInterface.Types;
 public enum JMemoryReferenceKind : Byte
 {
 	/// <summary>
-	/// The memory is only usable in current thread using a local reference.
+	/// The memory is only usable in the current thread using a local reference.
 	/// </summary>
 	Local = 0,
 	/// <summary>
-	/// The memory is usable in another threads using a global weak reference.
+	/// The memory is usable in other threads using a global weak reference.
 	/// </summary>
 	ThreadIndependent = 1,
 	/// <summary>
-	/// The memory is usable in another threads using a global reference.
+	/// The memory is usable in other threads using a global reference.
 	/// </summary>
 	ThreadUnrestricted = 2,
 }

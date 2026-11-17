@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 public partial class JClassObject
 {
 	/// <summary>
-	/// Retrieves array dimension for given class signature.
+	/// Retrieves array dimension for the given class signature.
 	/// </summary>
 	/// <param name="classSignature">JNI class signature.</param>
 	/// <returns>Array dimension for <paramref name="classSignature"/>.</returns>

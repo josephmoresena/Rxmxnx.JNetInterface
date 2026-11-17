@@ -47,6 +47,7 @@ internal sealed class DefaultMessageResource : IMessageResource
 	String IMessageResource.InvalidReferenceObject => "Invalid JReferenceObject.";
 	String IMessageResource.InvalidObjectMetadata => "Invalid ObjectMetadata.";
 	String IMessageResource.DisposedObject => "JReferenceObject has been disposed.";
+	String IMessageResource.InvalidParameterIndex => "Invalid parameter index.";
 	String IMessageResource.InvalidArrayLength => "Array length must be zero or positive.";
 	String IMessageResource.DeadVirtualMachine => "The current JVM is not running.";
 	String IMessageResource.NotAttachedThread => "The current thread is not attached to the JVM.";
@@ -130,6 +131,8 @@ internal sealed class DefaultMessageResource : IMessageResource
 		=> maxLevel > 0 ? $"Array dimensions must be between 1 and {maxLevel}." : "Array type has too many dimensions";
 	String IMessageResource.InvalidInterfaceVersion(Int32 currentVersion, Int32 requiredVersion)
 		=> $"The current process must run with a JNI version compatible with 0x{requiredVersion:x8}, but the detected version is 0x{currentVersion:x8}.";
+
+	String IMessageResource.InvalidObjectAt(Int32 index) => $"Invalid object at {index}.";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

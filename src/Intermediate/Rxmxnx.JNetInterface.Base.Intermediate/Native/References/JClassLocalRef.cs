@@ -2,9 +2,9 @@
 
 /// <summary>
 /// JNI local handle for class objects (<c>jclass</c>). Represents a native-signed integer
-/// which serves as opaque identifier for a class object (<c>java.lang.Class&lt;?&gt;</c>).
+/// which serves as an opaque identifier for a class object (<c>java.lang.Class&lt;?&gt;</c>).
 /// </summary>
-/// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
+/// <remarks>This handle is valid only for the thread that owns the reference.</remarks>
 [StructLayout(LayoutKind.Explicit)]
 public readonly partial struct JClassLocalRef : IObjectReferenceType, INativePointerType<JClassLocalRef>
 {

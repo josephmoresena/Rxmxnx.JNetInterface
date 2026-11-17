@@ -4,6 +4,7 @@ namespace Rxmxnx.JNetInterface;
 /// This class implements the <see cref="IVirtualMachine"/> interface.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Advanced)]
+// ReSharper disable once ClassCannotBeInstantiated
 public partial class JEnvironment : IEqualityOperators<JEnvironment, JEnvironment, Boolean>
 {
 	/// <summary>
@@ -11,17 +12,17 @@ public partial class JEnvironment : IEqualityOperators<JEnvironment, JEnvironmen
 	/// </summary>
 	public virtual CString Name => CString.Zero;
 	/// <summary>
-	/// Indicates whether current instance is disposable.
+	/// Indicates whether the current instance is disposable.
 	/// </summary>
 	public virtual Boolean IsDisposable => false;
 	/// <summary>
-	/// Indicates whether current thread is daemon.
+	/// Indicates whether the current thread is a daemon.
 	/// </summary>
 	public virtual Boolean IsDaemon => false;
 	/// <inheritdoc cref="IEnvironment.Version"/>
 	public Int32 Version => this._m.Core.Version;
 	/// <summary>
-	/// Indicates whether current thread is attached to a JVM.
+	/// Indicates whether the current thread is attached to a JVM.
 	/// </summary>
 	public virtual Boolean IsAttached => this._m.Core.Host.IsRunning;
 
@@ -55,9 +56,9 @@ public partial class JEnvironment : IEqualityOperators<JEnvironment, JEnvironmen
 		}
 	}
 
-	void IEnvironment.WithFrame(Int32 capacity, Action action) => this._m.WithFrame(this, capacity, action);
+	void IEnvironment.WithFrame(Int32 capacity, Action action) => EnvironmentValue.WithFrame(this, capacity, action);
 	void IEnvironment.WithFrame<TState>(Int32 capacity, TState state, Action<TState> action)
-		=> this._m.WithFrame(this, capacity, state, action);
+		=> EnvironmentValue.WithFrame(this, capacity, state, action);
 
 	Boolean? IEnvironment.IsVirtual(JThreadObject jThread)
 	{

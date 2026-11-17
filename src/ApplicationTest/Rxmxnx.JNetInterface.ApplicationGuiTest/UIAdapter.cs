@@ -4,6 +4,7 @@ using Rxmxnx.PInvoke;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
+// ReSharper disable once InconsistentNaming
 internal abstract partial class UIAdapter
 {
 	public static readonly UIAdapter Instance = SystemInfo.IsWindows ? new MessageBoxAdapter() :

@@ -452,13 +452,15 @@ public sealed class JClassObjectTests
 		JClassTypeMetadata stringTypeMetadata = IClassType.GetMetadata<JStringObject>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JClassLocalRef classRef = JClassObjectTests.fixture.Create<JClassLocalRef>();
-		Byte[] rawByte = JClassObjectTests.fixture.CreateMany<Byte>().ToArray();
+		Byte[] rawByte = [.. JClassObjectTests.fixture.CreateMany<Byte>(),];
 		using JClassObject jClass = new(env);
 		using JClassObject jClassResult = new(jClass, classRef);
 
-		env.ClassFeature.LoadClass(stringTypeMetadata.ClassName, Arg.Is<Byte[]>(a => a.SequenceEqual(rawByte)))
+		env.ClassFeature
+		   .LoadClass(stringTypeMetadata.ClassName, Arg.Is<Byte[]>(a => ((IEnumerable<Byte>)a).SequenceEqual(rawByte)))
 		   .Returns(jClassResult);
-		env.ClassFeature.LoadClass<JStringObject>(Arg.Is<Byte[]>(a => a.SequenceEqual(rawByte))).Returns(jClassResult);
+		env.ClassFeature.LoadClass<JStringObject>(Arg.Is<Byte[]>(a => ((IEnumerable<Byte>)a).SequenceEqual(rawByte)))
+		   .Returns(jClassResult);
 
 		Assert.Equal(jClassResult, JClassObject.LoadClass(env, stringTypeMetadata.ClassName, rawByte));
 		Assert.Equal(jClassResult, JClassObject.LoadClass<JStringObject>(env, rawByte));

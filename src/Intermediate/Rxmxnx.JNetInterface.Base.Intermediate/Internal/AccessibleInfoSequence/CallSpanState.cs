@@ -13,7 +13,7 @@ internal sealed unsafe partial class AccessibleInfoSequence
 	/// <param name="nameLength">Name length.</param>
 	/// <param name="returnTypeChr0">Pointer to UTF-8 return type.</param>
 	/// <param name="returnTypeLength">Return type length.</param>
-	/// <param name="argsPtr">Pointer to call argument list.</param>
+	/// <param name="argsPtr">Pointer to the call argument list.</param>
 	/// <param name="argsCount">Call argument list length.</param>
 	private readonly struct CallSpanState(
 		Byte* nameChr0,

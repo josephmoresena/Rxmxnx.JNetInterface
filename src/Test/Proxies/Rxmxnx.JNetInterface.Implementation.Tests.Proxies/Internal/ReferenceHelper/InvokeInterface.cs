@@ -24,31 +24,76 @@ internal static unsafe partial class ReferenceHelper
 
 	[UnmanagedCallersOnly]
 	private static JResult DestroyVirtualMachine(JVirtualMachineRef vmRef)
-		=> ReferenceHelper.GetProxy(vmRef).DestroyVirtualMachine();
+	{
+		try
+		{
+			return ReferenceHelper.GetProxy(vmRef).DestroyVirtualMachine();
+		}
+		catch (Exception ex)
+		{
+			JniUnmanagedFailure.Capture(ex);
+			return default;
+		}
+	}
 	[UnmanagedCallersOnly]
 	private static JResult GetEnv(JVirtualMachineRef vmRef, JEnvironmentRef* envRefPtr, Int32 version)
 	{
-		ref JEnvironmentRef envRef = ref Unsafe.AsRef<JEnvironmentRef>(envRefPtr);
-		return ReferenceHelper.GetProxy(vmRef).GetEnv(envRef.GetUnsafeValPtr(), version);
+		try
+		{
+			ref JEnvironmentRef envRef = ref Unsafe.AsRef<JEnvironmentRef>(envRefPtr);
+			return ReferenceHelper.GetProxy(vmRef).GetEnv(envRef.GetUnsafeValPtr(), version);
+		}
+		catch (Exception ex)
+		{
+			JniUnmanagedFailure.Capture(ex);
+			return default;
+		}
 	}
 	[UnmanagedCallersOnly]
 	private static JResult AttachCurrentThread(JVirtualMachineRef vmRef, JEnvironmentRef* envRefPtr,
 		VirtualMachineArgumentValue* argPtr)
 	{
-		ref JEnvironmentRef envRef = ref Unsafe.AsRef<JEnvironmentRef>(envRefPtr);
-		ref VirtualMachineArgumentValue argRef = ref Unsafe.AsRef<VirtualMachineArgumentValue>(argPtr);
-		return ReferenceHelper.GetProxy(vmRef).AttachCurrentThread(envRef.GetUnsafeValPtr(), argRef.GetUnsafeValPtr());
+		try
+		{
+			ref JEnvironmentRef envRef = ref Unsafe.AsRef<JEnvironmentRef>(envRefPtr);
+			ref VirtualMachineArgumentValue argRef = ref Unsafe.AsRef<VirtualMachineArgumentValue>(argPtr);
+			return ReferenceHelper.GetProxy(vmRef)
+			                      .AttachCurrentThread(envRef.GetUnsafeValPtr(), argRef.GetUnsafeValPtr());
+		}
+		catch (Exception ex)
+		{
+			JniUnmanagedFailure.Capture(ex);
+			return default;
+		}
 	}
 	[UnmanagedCallersOnly]
 	private static JResult AttachCurrentThreadAsDaemon(JVirtualMachineRef vmRef, JEnvironmentRef* envRefPtr,
 		VirtualMachineArgumentValue* argPtr)
 	{
-		ref JEnvironmentRef envRef = ref Unsafe.AsRef<JEnvironmentRef>(envRefPtr);
-		ref VirtualMachineArgumentValue argRef = ref Unsafe.AsRef<VirtualMachineArgumentValue>(argPtr);
-		return ReferenceHelper.GetProxy(vmRef)
-		                      .AttachCurrentThreadAsDaemon(envRef.GetUnsafeValPtr(), argRef.GetUnsafeValPtr());
+		try
+		{
+			ref JEnvironmentRef envRef = ref Unsafe.AsRef<JEnvironmentRef>(envRefPtr);
+			ref VirtualMachineArgumentValue argRef = ref Unsafe.AsRef<VirtualMachineArgumentValue>(argPtr);
+			return ReferenceHelper.GetProxy(vmRef)
+			                      .AttachCurrentThreadAsDaemon(envRef.GetUnsafeValPtr(), argRef.GetUnsafeValPtr());
+		}
+		catch (Exception ex)
+		{
+			JniUnmanagedFailure.Capture(ex);
+			return default;
+		}
 	}
 	[UnmanagedCallersOnly]
 	private static JResult DetachCurrentThread(JVirtualMachineRef vmRef)
-		=> ReferenceHelper.GetProxy(vmRef).DetachCurrentThread();
+	{
+		try
+		{
+			return ReferenceHelper.GetProxy(vmRef).DetachCurrentThread();
+		}
+		catch (Exception ex)
+		{
+			JniUnmanagedFailure.Capture(ex);
+			return default;
+		}
+	}
 }

@@ -23,7 +23,8 @@ public readonly ref partial struct JNativeCallAdapter
 			this._callAdapter._cache.Activate(out LocalCache previous);
 			try
 			{
-				JClassObject jClass = this.GetObjectClass(localRef, out JReferenceTypeMetadata metadata, true);
+				JClassObject jClass =
+					NativeCallUtilities.GetObjectClass(env, localRef, out JReferenceTypeMetadata metadata, true);
 				if (!jClass.Name.AsSpan().SequenceEqual(env.ClassFeature.ClassObject.Name))
 				{
 					JLocalObject result = metadata.CreateInstance(jClass, localRef, true);
@@ -33,6 +34,7 @@ public readonly ref partial struct JNativeCallAdapter
 			}
 			finally
 			{
+				// Revert cache activation.
 				env.LocalCache = previous;
 			}
 			JClassLocalRef classRef = new(localRef);
@@ -54,7 +56,9 @@ public readonly ref partial struct JNativeCallAdapter
 
 			JReferenceTypeMetadata typeMetadata = (JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TObject>();
 			if (typeMetadata.Modifier == JTypeModifier.Final) return this.CreateFinalObject<TObject>(localRef);
-			JClassObject jClass = this.GetObjectClass(localRef, out JReferenceTypeMetadata classMetadata, true);
+			INativeThread env = this._callAdapter._env;
+			JClassObject jClass =
+				NativeCallUtilities.GetObjectClass(env, localRef, out JReferenceTypeMetadata classMetadata, true);
 			return (TObject)this.CreateObject(jClass, localRef, classMetadata, typeMetadata);
 		}
 		/// <summary>
@@ -63,20 +67,12 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 		/// <param name="validateReference">Indicates whether <paramref name="classRef"/> should be validated.</param>
 		/// <returns>Initial <see cref="JClassObject"/> instance for <paramref name="classRef"/>.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		internal JClassObject? CreateInitialClass(JClassLocalRef classRef, Boolean validateReference = false)
 		{
-			if (classRef == default) return default;
-
 			INativeThread env = this._callAdapter._env;
-			if (validateReference) this.ThrowIfNotClassObject(classRef.Value);
-			JClassObject result = env.GetReferenceTypeClass(classRef, true);
-			if (classRef.Value == result.LocalReference)
-				// Class is owned by this call.
-				this._callAdapter._cache.RegisterAlien(classRef, result);
-			else
-				// Class is not owned by this call. A ClassView is registered instead.
-				this._callAdapter._cache.RegisterAlien(classRef, new ClassView(classRef, result));
-			return result;
+			AlienLocalCache cache = this._callAdapter._cache;
+			return NativeCallUtilities.CreateAlienClass(env, cache, classRef, validateReference);
 		}
 	}
 }

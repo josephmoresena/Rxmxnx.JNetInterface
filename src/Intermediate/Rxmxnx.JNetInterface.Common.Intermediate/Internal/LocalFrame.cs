@@ -64,7 +64,7 @@ internal sealed class LocalFrame : LocalCache, IDisposable
 		this.FinalizeFrame(this._owner);
 	}
 	/// <summary>
-	/// Sets result for local frame.
+	/// Sets result for the local frame.
 	/// </summary>
 	/// <typeparam name="TResult">Result type.</typeparam>
 	/// <param name="result">A <typeparamref name="TResult"/> result.</param>

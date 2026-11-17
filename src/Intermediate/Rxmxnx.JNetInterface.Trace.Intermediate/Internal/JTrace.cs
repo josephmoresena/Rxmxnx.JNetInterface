@@ -146,6 +146,7 @@ internal static partial class JTrace
 	/// <param name="isAlive">Indicates whether current VM is alive.</param>
 	/// <param name="globalRef">A global object reference.</param>
 	/// <param name="callerMethod">Caller member name.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void UnloadGlobal<TGlobalRef>(Boolean isAttached, Boolean isAlive, TGlobalRef globalRef,
 		[CallerMemberName] String callerMethod = "")
 		where TGlobalRef : unmanaged, IObjectGlobalReferenceType, INativeType,
@@ -165,6 +166,7 @@ internal static partial class JTrace
 	/// <param name="objectRef">Object reference.</param>
 	/// <param name="pointer">Pointer to memory.</param>
 	/// <param name="callerMethod">Caller member name.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void ReleaseMemory<TObjectRef>(Boolean isCritical, Boolean isAttached, Boolean isAlive,
 		Boolean released, TObjectRef objectRef, IntPtr pointer, [CallerMemberName] String callerMethod = "")
 		where TObjectRef : unmanaged, IObjectReferenceType, INativePointerType<TObjectRef>
@@ -278,6 +280,7 @@ internal static partial class JTrace
 	/// <param name="objectRef">A JNI object reference.</param>
 	/// <param name="localRef">Local JNI object reference.</param>
 	/// <param name="callerMethod">Caller member name.</param>
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static void CreateLocalRef<TObjectRef>(TObjectRef objectRef, JObjectLocalRef localRef,
 		[CallerMemberName] String callerMethod = "")
 		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>
@@ -291,6 +294,7 @@ internal static partial class JTrace
 	/// <param name="localRef">Local JNI object reference.</param>
 	/// <param name="globalRef">A JNI global object reference.</param>
 	/// <param name="callerMethod">Caller member name.</param>
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static void CreateGlobalRef<TObjectRef>(JObjectLocalRef localRef, TObjectRef globalRef,
 		[CallerMemberName] String callerMethod = "")
 		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>, IObjectGlobalReferenceType,
@@ -322,7 +326,8 @@ internal static partial class JTrace
 	{
 		if (!JTrace.TraceEnabled) return;
 		Trace.WriteLine(
-			$"thread: {Environment.CurrentManagedThreadId} {count} java.interop object{(count != 1 ? "s" : "")} will be registered.");
+			$"thread: {Environment.CurrentManagedThreadId} {environment.Reference} {count} java.interop object{(count != 1 ? "s" : "")} will be registered.",
+			callerMethod);
 	}
 #endif
 	/// <summary>

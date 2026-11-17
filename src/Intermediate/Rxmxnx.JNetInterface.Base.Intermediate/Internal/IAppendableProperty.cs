@@ -11,7 +11,7 @@ internal interface IAppendableProperty
 	String PropertyName { get; }
 
 	/// <summary>
-	/// Appends to <paramref name="stringBuilder"/> the value of current instance.
+	/// Appends to <paramref name="stringBuilder"/> the value of the current instance.
 	/// </summary>
 	/// <param name="stringBuilder">A <see cref="StringBuilder"/> instance.</param>
 	void AppendValue(StringBuilder stringBuilder);

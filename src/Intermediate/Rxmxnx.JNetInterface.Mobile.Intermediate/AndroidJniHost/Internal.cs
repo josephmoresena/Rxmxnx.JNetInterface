@@ -18,4 +18,18 @@ public sealed partial class AndroidJniHost
 		Unsafe.As<JVirtualMachineRef, IntPtr>(ref vmRef) = JniRuntime.CurrentRuntime.InvocationPointer;
 		return AndroidJniHost.instance = new(vmRef);
 	}
+	/// <summary>
+	/// Retrieves the <see cref="IEnvironment"/> instance that <paramref name="envRef"/>
+	/// references to.
+	/// </summary>
+	/// <param name="envRef"><see cref="JEnvironmentRef"/> reference to JNI interface.</param>
+	/// <returns>
+	/// The <see cref="IEnvironment"/> instance referenced by <paramref name="envRef"/>.
+	/// </returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal static AndroidEnvironment GetEnvironment(JEnvironmentRef envRef)
+	{
+		AndroidJniHost host = (AndroidJniHost)AndroidJniHost.GetAndroidHost();
+		return host._core.ThreadCache.GetUnsafe(envRef);
+	}
 }

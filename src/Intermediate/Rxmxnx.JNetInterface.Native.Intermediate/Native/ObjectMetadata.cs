@@ -12,7 +12,7 @@ public record ObjectMetadata
 	public CString ObjectSignature { get; }
 
 	/// <summary>
-	/// Indicates whether current instance is proxy.
+	/// Indicates whether the current instance is a proxy.
 	/// </summary>
 	internal Boolean? FromProxy { get; }
 	/// <summary>

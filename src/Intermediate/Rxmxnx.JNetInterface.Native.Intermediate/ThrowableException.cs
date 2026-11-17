@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface;
 
 /// <summary>
-/// Represents error that occur during JNI calls.
+/// Represents an error that occurs during JNI calls.
 /// </summary>
 public abstract partial class ThrowableException : JniException, IThrowableException<JThrowableObject>
 {
@@ -73,7 +73,7 @@ public abstract partial class ThrowableException : JniException, IThrowableExcep
 	private protected abstract TResult WithSafeInvokeBase<TResult>(Func<JThrowableObject, TResult> func);
 
 	/// <summary>
-	/// Performs an action using current global throwable instance.
+	/// Performs an action using the current global throwable instance.
 	/// </summary>
 	/// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
 	/// <param name="call">A <see cref="JThrowableCall"/> containing action to perform.</param>
@@ -82,7 +82,7 @@ public abstract partial class ThrowableException : JniException, IThrowableExcep
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		=> (call as JThrowableCall)?.Invoke<TThrowable>();
 	/// <summary>
-	/// Executes an function using current global throwable instance and returns its result.
+	/// Executes a function using the current global throwable instance and returns its result.
 	/// </summary>
 	/// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
 	/// <typeparam name="TResult">The type of function result.</typeparam>
@@ -95,7 +95,7 @@ public abstract partial class ThrowableException : JniException, IThrowableExcep
 }
 
 /// <summary>
-/// Represents error that occur during JNI calls.
+/// Represents an error that occurs during JNI calls.
 /// </summary>
 /// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
 internal sealed class

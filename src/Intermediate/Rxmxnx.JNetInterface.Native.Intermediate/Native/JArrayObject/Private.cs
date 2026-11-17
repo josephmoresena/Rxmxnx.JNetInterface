@@ -16,6 +16,7 @@ public partial class JArrayObject<TElement> : IArrayType, IReferenceType<JArrayO
 {
 	static JDataTypeMetadata IDataType<JArrayObject<TElement>>.Metadata => JArrayObject<TElement>.Metadata;
 
+	JArrayObject IWrapper<JArrayObject>.Value => this.Object;
 	TElement? IEnumerableSequence<TElement?>.GetItem(Int32 index) => this[index];
 	Int32 IEnumerableSequence<TElement?>.GetSize() => this.Length;
 

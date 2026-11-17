@@ -28,7 +28,7 @@ public partial class JReferenceObject
 		offset += IntPtr.Size;
 	}
 	/// <summary>
-	/// Indicates whether the current instance is default value.
+	/// Indicates whether the current instance is the default value.
 	/// </summary>
 	internal virtual Boolean IsDefaultInstance() => this.IsBlankSpan();
 
@@ -47,12 +47,12 @@ public partial class JReferenceObject
 	/// </summary>
 	internal abstract void ClearValue();
 	/// <summary>
-	/// Retrieves synchronizer instance for the current object.
+	/// Retrieves a synchronizer instance for the current object.
 	/// </summary>
 	/// <returns>A <see cref="IDisposable"/> synchronizer.</returns>
 	private protected abstract IDisposable GetSynchronizer();
 	/// <summary>
-	/// Indicates whether the current instance is same of <paramref name="jObject"/>.
+	/// Indicates whether the current instance is the same of <paramref name="jObject"/>.
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
 	/// <returns>
@@ -64,7 +64,7 @@ public partial class JReferenceObject
 			this.AsSpan().SequenceEqual(jObject.AsSpan());
 
 	/// <summary>
-	/// Sets current instance as assignable to <typeparamref name="TDataType"/> type.
+	/// Sets the current instance as assignable to <typeparamref name="TDataType"/> type.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
 	/// <param name="isAssignable">

@@ -1,0 +1,59 @@
+<Project>
+    <PropertyGroup>
+        <TargetPlatformVersion Condition="$(TargetFramework.StartsWith('net7.0-android'))">33.0</TargetPlatformVersion>
+        <TargetPlatformVersion Condition="$(TargetFramework.StartsWith('net8.0-android'))">34.0</TargetPlatformVersion>
+        <TargetPlatformVersion Condition="$(TargetFramework.StartsWith('net9.0-android'))">35.0</TargetPlatformVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition="$(TargetFramework.EndsWith('android'))">
+        <LegacyAndroidImported Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net10.0'))">true</LegacyAndroidImported>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(LegacyAndroidImported)' == 'true'">
+        <EffectiveTargetPlatformVersion>$(TargetPlatformVersion)</EffectiveTargetPlatformVersion>
+        <TargetPlatformMoniker>Android,Version=$(TargetPlatformVersion)</TargetPlatformMoniker>
+        <TargetPlatformSupported>true</TargetPlatformSupported>
+        <LegacyAndroidImported>true</LegacyAndroidImported>
+        <GenerateTargetPlatformAttribute>false</GenerateTargetPlatformAttribute>
+        <GenerateSupportedOSPlatformAttribute>false</GenerateSupportedOSPlatformAttribute>
+    </PropertyGroup>
+    <ItemGroup Condition="'$(LegacyAndroidImported)' == 'true'">
+        <AssemblyAttribute Include="System.Runtime.Versioning.TargetPlatformAttribute">
+            <_Parameter1>Android$(EffectiveTargetPlatformVersion)</_Parameter1>
+        </AssemblyAttribute>
+        <AssemblyAttribute Include="System.Runtime.Versioning.SupportedOSPlatformAttribute">
+            <_Parameter1>Android$(SupportedOSPlatformVersion)</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+    <ItemGroup Condition="$(TargetFramework.StartsWith('net7.0-android'))">
+        <SdkSupportedTargetPlatformVersion Include="33.0"/>
+        <PackageReference Include="Microsoft.Android.Ref.33" Version="33.0.95" GeneratePathProperty="true">
+            <PrivateAssets>all</PrivateAssets>
+            <ExcludeAssets>all</ExcludeAssets>
+        </PackageReference>
+        <Reference Condition="$(TargetFramework.StartsWith('net7.0-android')) And '$(PkgMicrosoft_Android_Ref_33)' != ''" Include="Java.Interop">
+            <HintPath>$(PkgMicrosoft_Android_Ref_33)/ref/net7.0/Java.Interop.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup Condition="$(TargetFramework.StartsWith('net8.0-android'))">
+        <SdkSupportedTargetPlatformVersion Include="34.0"/>
+        <PackageReference Include="Microsoft.Android.Ref.34" Version="34.0.154" GeneratePathProperty="true">
+            <PrivateAssets>all</PrivateAssets>
+            <ExcludeAssets>all</ExcludeAssets>
+        </PackageReference>
+        <Reference Condition="$(TargetFramework.StartsWith('net8.0-android')) And '$(PkgMicrosoft_Android_Ref_34)' != ''" Include="Java.Interop">
+            <HintPath>$(PkgMicrosoft_Android_Ref_34)/ref/net8.0/Java.Interop.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup Condition="$(TargetFramework.StartsWith('net9.0-android'))">
+        <SdkSupportedTargetPlatformVersion Include="35.0"/>
+        <PackageReference Include="Microsoft.Android.Ref.35" Version="35.0.105" GeneratePathProperty="true">
+            <PrivateAssets>all</PrivateAssets>
+            <ExcludeAssets>all</ExcludeAssets>
+        </PackageReference>
+        <Reference Condition="$(TargetFramework.StartsWith('net9.0-android')) And '$(PkgMicrosoft_Android_Ref_35)' != ''" Include="Java.Interop">
+            <HintPath>$(PkgMicrosoft_Android_Ref_35)/ref/net9.0/Java.Interop.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+    </ItemGroup>
+</Project>

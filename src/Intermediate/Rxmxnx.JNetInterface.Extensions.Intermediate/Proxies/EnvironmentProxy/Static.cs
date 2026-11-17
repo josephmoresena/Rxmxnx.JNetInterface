@@ -12,7 +12,7 @@ public abstract partial class EnvironmentProxy
 	/// </summary>
 	/// <param name="className">JNI or Java class name.</param>
 	/// <param name="kind">A <see cref="JTypeKind"/> value.</param>
-	/// <param name="isFinal">Indicates whether current type is final.</param>
+	/// <param name="isFinal">Indicates whether the current type is final.</param>
 	/// <returns>A <see cref="ITypeInformation"/> instance.</returns>
 	public static ITypeInformation CreateTypeInformation(ReadOnlySpan<Byte> className, JTypeKind kind,
 		Boolean? isFinal = default)

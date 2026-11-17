@@ -35,13 +35,22 @@ internal readonly unsafe struct StringCriticalFunctionSet
 	public ReadOnlyValPtr<Char> GetStringCritical(JEnvironmentRef envRef, JStringLocalRef stringRef,
 		out JBoolean isCopy)
 	{
-		fixed (JBoolean* isCopyPtr = &isCopy)
+		try
 		{
+			fixed (JBoolean* isCopyPtr = &isCopy)
+			{
 #if !ANDROID
-			if (SystemInfo.IsWindows)
-				return this._windows.GetStringCritical(envRef, stringRef, isCopyPtr);
+				if (SystemInfo.IsWindows)
+					return this._windows.GetStringCritical(envRef, stringRef, isCopyPtr);
 #endif
-			return this._unix.GetStringCritical(envRef, stringRef, isCopyPtr);
+				return this._unix.GetStringCritical(envRef, stringRef, isCopyPtr);
+			}
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
 		}
 	}
 	/// <summary>
@@ -53,14 +62,23 @@ internal readonly unsafe struct StringCriticalFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void ReleaseStringCritical(JEnvironmentRef envRef, JStringLocalRef stringRef, ReadOnlyValPtr<Char> chars)
 	{
-#if !ANDROID
-		if (SystemInfo.IsWindows)
+		try
 		{
-			this._windows.ReleaseStringCritical(envRef, stringRef, chars);
-			return;
-		}
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+			{
+				this._windows.ReleaseStringCritical(envRef, stringRef, chars);
+				return;
+			}
 #endif
-		this._unix.ReleaseStringCritical(envRef, stringRef, chars);
+			this._unix.ReleaseStringCritical(envRef, stringRef, chars);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 
 #if !ANDROID

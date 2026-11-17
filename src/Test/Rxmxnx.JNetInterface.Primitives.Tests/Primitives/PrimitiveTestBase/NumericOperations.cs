@@ -11,6 +11,7 @@ public partial class PrimitiveTestBase
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
 	{
 		Double dValue = (Double)primitive;
+		// ReSharper disable once InvocationIsCultureSensitive
 		Assert.Equal(typeof(TValue) == typeof(Char) ? (Char)(Object)primitive.Value : primitive.Value.ToDouble(default),
 		             dValue);
 		// For unknown reasons, an explicit operator is required at runtime.
@@ -119,9 +120,11 @@ public partial class PrimitiveTestBase
 		Char cValue = PrimitiveTestBase.Convert(primitive.Value, c => c.ToChar(default));
 		Double dValue = typeof(TValue) == typeof(Char) ?
 			(Char)(Object)primitive.Value :
+			// ReSharper disable once InvocationIsCultureSensitive
 			primitive.Value.ToDouble(default);
 		Single fValue = typeof(TValue) == typeof(Char) ?
 			(Char)(Object)primitive.Value :
+			// ReSharper disable once InvocationIsCultureSensitive
 			primitive.Value.ToSingle(default);
 		Int32 iValue = PrimitiveTestBase.Convert(primitive.Value, c => c.ToInt32(default));
 		Int64 lValue = PrimitiveTestBase.Convert(primitive.Value, c => c.ToInt64(default));
@@ -266,6 +269,7 @@ public partial class PrimitiveTestBase
 		Assert.Equal(TValue.CreateSaturating(T.MinValue), TPrimitive.CreateSaturating(T.MinValue).Value);
 		Assert.Equal(TValue.CreateTruncating(T.MinValue), TPrimitive.CreateTruncating(T.MinValue).Value);
 	}
+	// ReSharper disable once UnusedMember.Local
 	private static void CreationTest<TPrimitive, TValue>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
 		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IBinaryNumber<TPrimitive>,

@@ -34,7 +34,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 	///     </item>
 	/// </list>
 	/// </returns>
-	/// <exception cref="ArgumentException"><paramref name="obj"/> is not the same type as this instance.</exception>
+	/// <exception cref="ArgumentException"><paramref name="obj"/> is different type as this instance.</exception>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private protected static Int32 Compare(TPrimitive primitive, Object? obj)
 		=> obj switch
@@ -71,6 +71,10 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 	/// <returns>
 	/// <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.
 	/// </returns>
+#if !PACKAGE
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1244,
+	                 Justification = CommonConstants.ExactPrimitiveEqualityJustification)]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private protected static Boolean Equals(TPrimitive primitive, Object? obj)
 	{

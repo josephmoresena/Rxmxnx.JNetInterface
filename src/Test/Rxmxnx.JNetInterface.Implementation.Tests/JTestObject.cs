@@ -3,7 +3,9 @@ namespace Rxmxnx.JNetInterface.Tests;
 [ExcludeFromCodeCoverage]
 public sealed class JTestObject : JLocalObject, IClassType<JTestObject>
 {
+	// ReSharper disable once MemberCanBePrivate.Global
 	public const String ClassNamePrefix = "rxmxnx/jnetinterface/test/Test";
+
 	private static readonly ConcurrentDictionary<Int32, JClassTypeMetadata> metadatas = new();
 
 	[ThreadStatic]

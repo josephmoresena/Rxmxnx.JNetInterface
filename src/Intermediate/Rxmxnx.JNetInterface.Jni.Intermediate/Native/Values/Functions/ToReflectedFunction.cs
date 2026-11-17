@@ -31,10 +31,19 @@ internal readonly unsafe struct ToReflectedFunction<TAccessible> : IToReflectedF
 	public JObjectLocalRef ToReflected(JEnvironmentRef envRef, JClassLocalRef classRef, TAccessible accessibleId,
 		JBoolean isStatic)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._function.Windows(envRef, classRef, accessibleId.Pointer, isStatic);
+			if (SystemInfo.IsWindows)
+				return this._function.Windows(envRef, classRef, accessibleId.Pointer, isStatic);
 #endif
-		return this._function.Unix(envRef, classRef, accessibleId.Pointer, isStatic);
+			return this._function.Unix(envRef, classRef, accessibleId.Pointer, isStatic);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 }

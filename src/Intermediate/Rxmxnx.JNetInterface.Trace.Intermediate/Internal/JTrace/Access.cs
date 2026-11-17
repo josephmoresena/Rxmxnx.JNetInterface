@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Rxmxnx.JNetInterface.Internal;
 
 #if !PACKAGE
@@ -9,7 +11,7 @@ internal static partial class JTrace
 	/// <summary>
 	/// Writes a category name and the retrieval of a field to the trace listeners.
 	/// </summary>
-	/// <param name="jLocal">Field instance object class.</param>
+	/// <param name="jLocal">Field instance object.</param>
 	/// <param name="jClass">Field declaring class.</param>
 	/// <param name="definition">Call definition.</param>
 	/// <param name="callerMethod">Caller member name.</param>
@@ -25,11 +27,12 @@ internal static partial class JTrace
 	/// <summary>
 	/// Writes a category name and the assignment of a value to a field to the trace listeners.
 	/// </summary>
-	/// <param name="jLocal">Field instance object class.</param>
+	/// <param name="jLocal">Field instance object.</param>
 	/// <param name="jClass">Field declaring class.</param>
 	/// <param name="definition">Call definition.</param>
 	/// <param name="value">Value to set.</param>
 	/// <param name="callerMethod">Caller member name.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void SetField<TDataType>(JLocalObject? jLocal, JClassObject jClass, JFieldDefinition definition,
 		TDataType? value, [CallerMemberName] String callerMethod = "") where TDataType : IObject
 	{
@@ -45,11 +48,12 @@ internal static partial class JTrace
 	/// <summary>
 	/// Writes a category name and the assignment of a value to a primitive field to the trace listeners.
 	/// </summary>
-	/// <param name="jLocal">Field instance object class.</param>
+	/// <param name="jLocal">Field instance object.</param>
 	/// <param name="jClass">Field declaring class.</param>
 	/// <param name="definition">Call definition.</param>
 	/// <param name="bytes">Binary span containing value to set to.</param>
 	/// <param name="callerMethod">Caller member name.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void SetField<TPrimitive>(JLocalObject? jLocal, JClassObject jClass, JFieldDefinition definition,
 		ReadOnlySpan<Byte> bytes, [CallerMemberName] String callerMethod = "")
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
@@ -59,38 +63,59 @@ internal static partial class JTrace
 		                callerMethod);
 	}
 	/// <summary>
+	/// Writes a category name and the call of method to the trace listeners.
+	/// </summary>
+	/// <param name="localRef"><see cref="JObjectLocalRef"/> reference.</param>
+	/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
+	/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void CallMethod(JObjectLocalRef localRef, JClassLocalRef classRef, JMethodId methodId,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!JTrace.TraceEnabled) return;
+
+		if (localRef == default) //Static
+			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {classRef} {methodId}", callerMethod);
+		else if (classRef == default) //Instance
+			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {localRef} {methodId}", callerMethod);
+		else //Non-Virtual
+			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {localRef} {classRef} {methodId}",
+			                callerMethod);
+	}
+	/// <summary>
 	/// Writes a category name and the call of a method to the trace listeners.
 	/// </summary>
-	/// <param name="jLocal">Call instance object class.</param>
+	/// <param name="jLocal">Call instance object.</param>
 	/// <param name="jClass">Method declaring class.</param>
 	/// <param name="definition">Call definition.</param>
 	/// <param name="nonVirtual">Indicates call is non-virtual.</param>
 	/// <param name="args">Call parameters.</param>
 	/// <param name="callerMethod">Caller member name.</param>
-	internal static void CallMethod(JLocalObject? jLocal, JClassObject jClass, JCallDefinition definition,
+	public static void CallMethod(JLocalObject? jLocal, JClassObject jClass, JCallDefinition definition,
 		Boolean nonVirtual, ReadOnlySpan<IObject?> args = default, [CallerMemberName] String callerMethod = "")
 	{
 		if (!JTrace.TraceEnabled) return;
 		StringBuilder strBuilder = new();
 		if (jLocal is null)
 			if (CommonNames.Constructor.SequenceEqual(definition.Name))
-				strBuilder.AppendLine(
-					$"thread: {Environment.CurrentManagedThreadId} {jClass.Name} {definition.ToTraceText()}");
+				strBuilder.AppendLine(CultureInfo.InvariantCulture,
+				                      $"thread: {Environment.CurrentManagedThreadId} {jClass.Name} {definition.ToTraceText()}");
 			else
-				strBuilder.AppendLine(
-					$"thread: {Environment.CurrentManagedThreadId} {jClass.Name} static {definition.ToTraceText()}");
+				strBuilder.AppendLine(CultureInfo.InvariantCulture,
+				                      $"thread: {Environment.CurrentManagedThreadId} {jClass.Name} static {definition.ToTraceText()}");
 		else if (nonVirtual)
-			strBuilder.AppendLine(
-				$"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {jClass.Name} non-virtual {definition.ToTraceText()}");
+			strBuilder.AppendLine(CultureInfo.InvariantCulture,
+			                      $"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {jClass.Name} non-virtual {definition.ToTraceText()}");
 		else
-			strBuilder.AppendLine(
-				$"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {definition.ToTraceText()}");
+			strBuilder.AppendLine(CultureInfo.InvariantCulture,
+			                      $"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {definition.ToTraceText()}");
 		for (Int32 i = 0; i < args.Length; i++)
 		{
 			switch (args[i])
 			{
 				case IPrimitiveType jPrimitive:
-					strBuilder.AppendLine($"{i}: {jPrimitive.ObjectSignature} {jPrimitive}");
+					strBuilder.AppendLine(CultureInfo.InvariantCulture,
+					                      $"{i}: {jPrimitive.ObjectSignature} {jPrimitive}");
 					break;
 				case JReferenceObject jObject:
 					strBuilder.AppendLine($"{i}: {jObject.ToTraceText()}");
@@ -103,6 +128,45 @@ internal static partial class JTrace
 		Trace.WriteLine(strBuilder, callerMethod);
 	}
 	/// <summary>
+	/// Writes a category name and the call of a method to the trace listeners.
+	/// </summary>
+	/// <typeparam name="TArgs">The <see cref="ICallArgument"/> type of the arguments to pass to the constructor.</typeparam>
+	/// <param name="jLocal">Call instance object.</param>
+	/// <param name="jClass">Method declaring class.</param>
+	/// <param name="definition">Call definition.</param>
+	/// <param name="nonVirtual">Indicates call is non-virtual.</param>
+	/// <param name="args">Call parameters.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static void CallMethod<TArgs>(JLocalObject? jLocal, JClassObject jClass, JCallDefinition definition,
+		Boolean nonVirtual, ref TArgs args, [CallerMemberName] String callerMethod = "")
+#if !NET9_0_OR_GREATER
+		where TArgs : ICallArgument
+#else
+		where TArgs : ICallArgument, allows ref struct
+#endif
+	{
+		if (!JTrace.TraceEnabled) return;
+		StringBuilder strBuilder = new();
+		if (jLocal is null)
+			if (CommonNames.Constructor.SequenceEqual(definition.Name))
+				strBuilder.AppendLine(CultureInfo.InvariantCulture,
+				                      $"thread: {Environment.CurrentManagedThreadId} {jClass.Name} {definition.ToTraceText()}");
+			else
+				strBuilder.AppendLine(CultureInfo.InvariantCulture,
+				                      $"thread: {Environment.CurrentManagedThreadId} {jClass.Name} static {definition.ToTraceText()}");
+		else if (nonVirtual)
+			strBuilder.AppendLine(CultureInfo.InvariantCulture,
+			                      $"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {jClass.Name} non-virtual {definition.ToTraceText()}");
+		else
+			strBuilder.AppendLine(CultureInfo.InvariantCulture,
+			                      $"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {definition.ToTraceText()}");
+		String? traceArgs = args.ToTraceText();
+		if (!String.IsNullOrWhiteSpace(traceArgs))
+			strBuilder.AppendLine(traceArgs);
+		Trace.WriteLine(strBuilder, callerMethod);
+	}
+	/// <summary>
 	/// Writes a category name and the assignment of a value to a primitive field to the trace listeners.
 	/// </summary>
 	/// <param name="localRef"><see cref="JObjectLocalRef"/> reference.</param>
@@ -111,6 +175,7 @@ internal static partial class JTrace
 	/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
 	/// <param name="value">Value to set to.</param>
 	/// <param name="callerMethod">Caller member name.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void SetPrimitiveField<TValue>(JObjectLocalRef localRef, JClassLocalRef classRef, Byte signature,
 		JFieldId fieldId, TValue value, [CallerMemberName] String callerMethod = "") where TValue : unmanaged
 	{
@@ -145,6 +210,7 @@ internal static partial class JTrace
 	/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
 	/// <param name="result">Current value.</param>
 	/// <param name="callerMethod">Caller member name.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void GetPrimitiveField<TValue>(JObjectLocalRef localRef, JClassLocalRef classRef, Byte signature,
 		JFieldId fieldId, TValue result, [CallerMemberName] String callerMethod = "") where TValue : unmanaged
 	{
@@ -180,6 +246,7 @@ internal static partial class JTrace
 	/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
 	/// <param name="result">Current value.</param>
 	/// <param name="callerMethod">Caller member name.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void CallPrimitiveFunction<TValue>(JObjectLocalRef localRef, JClassLocalRef classRef, Byte signature,
 		JMethodId methodId, TValue result, [CallerMemberName] String callerMethod = "") where TValue : unmanaged
 	{
@@ -225,26 +292,6 @@ internal static partial class JTrace
 				callerMethod);
 	}
 	/// <summary>
-	/// Writes a category name and the call of method to the trace listeners.
-	/// </summary>
-	/// <param name="localRef"><see cref="JObjectLocalRef"/> reference.</param>
-	/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
-	/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
-	/// <param name="callerMethod">Caller member name.</param>
-	public static void CallMethod(JObjectLocalRef localRef, JClassLocalRef classRef, JMethodId methodId,
-		[CallerMemberName] String callerMethod = "")
-	{
-		if (!JTrace.TraceEnabled) return;
-
-		if (localRef == default) //Static
-			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {classRef} {methodId}", callerMethod);
-		else if (classRef == default) //Instance
-			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {localRef} {methodId}", callerMethod);
-		else //Non-Virtual
-			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {localRef} {classRef} {methodId}",
-			                callerMethod);
-	}
-	/// <summary>
 	/// Writes a category name and the retrieving accessible identifier to the trace listeners.
 	/// </summary>
 	/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
@@ -264,6 +311,7 @@ internal static partial class JTrace
 	/// <param name="definition">A <see cref="JAccessibleObjectDefinition"/> instance.</param>
 	/// <param name="accessibleId">Accessible object identifier.</param>
 	/// <param name="callerMethod">Caller member name.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void GetAccessibleId<TAccessible>(JClassLocalRef classRef, JAccessibleObjectDefinition definition,
 		TAccessible accessibleId, [CallerMemberName] String callerMethod = "")
 		where TAccessible : unmanaged, IAccessibleIdentifierType, INativePointerType<TAccessible>,

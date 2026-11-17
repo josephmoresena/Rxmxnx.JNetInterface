@@ -6,6 +6,7 @@ using Rxmxnx.JNetInterface.Types.Metadata;
 
 namespace Rxmxnx.JNetInterface.Swing;
 
+// ReSharper disable once ClassNeverInstantiated.Global
 public sealed class JSwingUtilitiesObject : JLocalObject.Uninstantiable<JSwingUtilitiesObject>,
 	IUninstantiableType<JSwingUtilitiesObject>
 {

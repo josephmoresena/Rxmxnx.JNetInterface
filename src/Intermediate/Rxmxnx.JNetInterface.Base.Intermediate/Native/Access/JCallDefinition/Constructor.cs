@@ -13,7 +13,7 @@ public abstract partial class JCallDefinition
 	/// Internal constructor.
 	/// </summary>
 	/// <param name="name">Call defined name.</param>
-	/// <param name="returnTypeSignature">Method return type defined signature.</param>
+	/// <param name="returnTypeSignature">Method return type-defined signature.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private protected JCallDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> returnTypeSignature,

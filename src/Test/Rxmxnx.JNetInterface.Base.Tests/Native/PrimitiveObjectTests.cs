@@ -1,3 +1,5 @@
+// ReSharper disable InvocationIsCultureSensitive
+
 namespace Rxmxnx.JNetInterface.Tests.Native;
 
 [ExcludeFromCodeCoverage]

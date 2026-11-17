@@ -47,6 +47,7 @@ internal sealed class ItalianMessageResource : IMessageResource
 	String IMessageResource.InvalidReferenceObject => "JReferenceObject non valido.";
 	String IMessageResource.InvalidObjectMetadata => "Metadati dell'oggetto non validi.";
 	String IMessageResource.DisposedObject => "JReferenceObject è stato eliminato.";
+	String IMessageResource.InvalidParameterIndex => "Indice del parametro non valido.";
 	String IMessageResource.InvalidArrayLength => "La lunghezza dell'array deve essere zero o positiva.";
 	String IMessageResource.DeadVirtualMachine => "La JVM corrente non è in esecuzione.";
 	String IMessageResource.NotAttachedThread => "Il thread corrente non è collegato alla JVM.";
@@ -135,6 +136,8 @@ internal sealed class ItalianMessageResource : IMessageResource
 			"Il tipo di array ha troppe dimensioni.";
 	String IMessageResource.InvalidInterfaceVersion(Int32 currentVersion, Int32 requiredVersion)
 		=> $"Il processo corrente deve essere eseguito con una versione JNI compatibile con 0x{requiredVersion:x8}, ma la versione rilevata è 0x{currentVersion:x8}.";
+
+	String IMessageResource.InvalidObjectAt(Int32 index) => $"Oggetto non valido all'indice {index}.";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

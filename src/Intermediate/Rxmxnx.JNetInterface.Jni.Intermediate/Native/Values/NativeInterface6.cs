@@ -44,11 +44,20 @@ internal readonly unsafe struct NativeInterface6 : INativeInterface<NativeInterf
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JReferenceType GetObjectRefType(JEnvironmentRef envRef, JObjectLocalRef localRef)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._windows.GetObjectRefType(envRef, localRef);
+			if (SystemInfo.IsWindows)
+				return this._windows.GetObjectRefType(envRef, localRef);
 #endif
-		return this._unix.GetObjectRefType(envRef, localRef);
+			return this._unix.GetObjectRefType(envRef, localRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 
 	/// <summary>

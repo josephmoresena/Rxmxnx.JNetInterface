@@ -26,7 +26,7 @@ public partial class JVirtualMachineLibrary
 		/// <param name="handle">Library handle.</param>
 		/// <param name="functions">A <see cref="InvocationFunctionSet"/> value.</param>
 		/// <param name="hasCreatedVm">
-		/// Indicates whether the function <c>JNI_GetCreatedJavaVMs</c> is available on the current library.
+		/// Indicates whether the function <c>JNI_GetCreatedJavaVMs</c> is available in the current library.
 		/// </param>
 		public Impl(IntPtr handle, TFunctionSet functions, Boolean hasCreatedVm = true) : base(handle)
 		{

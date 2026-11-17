@@ -135,7 +135,7 @@ internal sealed partial class EnvironmentCore
 	/// Unloads <paramref name="localRef"/>.
 	/// </summary>
 	/// <param name="isRegistered">
-	/// Indicates whether <paramref name="localRef"/> is registered in current thread.
+	/// Indicates whether <paramref name="localRef"/> is registered in the current thread.
 	/// </param>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference to unload.</param>
 	private void Unload(Boolean isRegistered, JObjectLocalRef localRef)
@@ -169,7 +169,7 @@ internal sealed partial class EnvironmentCore
 	/// Removes <paramref name="jLocal"/>.
 	/// </summary>
 	/// <param name="isRegistered">
-	/// Indicates whether <paramref name="jLocal"/> is registered in current thread.
+	/// Indicates whether <paramref name="jLocal"/> is registered in the current thread.
 	/// </param>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	private void Remove(Boolean isRegistered, JLocalObject? jLocal)

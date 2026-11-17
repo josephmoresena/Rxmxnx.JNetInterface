@@ -118,6 +118,19 @@ Each execution model supports the following delegate families:
 The values returned by delegates producing `JReferenceObject` instances are automatically converted into equivalent
 objects managed by `Java.Interop` before being returned to the original execution context.
 
+`SyncContextBuilder` also accepts `IAndroidNativeAction` and `IAndroidNativeFunction<TOutput>`:
+
+| Interface                         | `Invoke` signature                                   | `Send` signature                                                             | Description                                                                |
+|-----------------------------------|------------------------------------------------------|------------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| `IAndroidNativeAction`            | `Invoke<TAction>(TAction)`                           | `Send<TAction>(SynchronizationContext, TAction?)`                            | Class or struct. The `ref` overload passes a struct.                       |
+| `IAndroidNativeFunction<TOutput>` | `Invoke<TResult, TFunction>(TFunction, out TResult)` | `Send<TResult, TFunction>(SynchronizationContext, TFunction?, out TResult?)` | Result through `out`. Class or struct. The `ref` overload passes a struct. |
+
+Synchronous calls and `Send` accept a struct passed by `ref`. On .NET 9.0 those overloads also allow `ref struct`.
+
+In the mobile test, `MainActivity` implements `IAndroidNativeFunction<TOutput>` and passes itself to `Invoke`.
+`ToastRequest` implements `IAndroidNativeAction` and is posted with `Post`. See
+[Functional Interfaces](functional-interfaces.md#net-for-android).
+
 ### `AsyncContextBuilder` Structure
 
 `AsyncContextBuilder` is a `struct` that creates a JNI execution context for asynchronous execution on a thread managed
@@ -168,6 +181,13 @@ Each execution model supports the following delegate families:
 Delegates returning `JReferenceObject` automatically convert the resulting JNI object into the corresponding
 `Java.Interop`-managed object before returning it to the original execution context.
 
+`AsyncContextBuilder` accepts the same functional interfaces:
+
+| Interface                         | `InvokeAsync` signature                               | `Run` signature                   | `Post` signature                                                       | Description      |
+|-----------------------------------|-------------------------------------------------------|-----------------------------------|------------------------------------------------------------------------|------------------|
+| `IAndroidNativeAction`            | `InvokeAsync<TAction>(TAction, Boolean)`              | `Run<TAction>(TAction, out Task)` | `Post<TAction>(SynchronizationContext, TAction, Boolean)`              | Class or struct. |
+| `IAndroidNativeFunction<TOutput>` | `InvokeAsync<TResult, TFunction>(TFunction, Boolean)` | —                                 | `Post<TResult, TFunction>(SynchronizationContext, TFunction, Boolean)` | Class or struct. |
+
 The final optional boolean parameter of `InvokeAsync` and `Post` determines whether the JNI references passed to the
 created context are weak global references. By default, this parameter is `true`.
 
@@ -196,7 +216,8 @@ execution context.
 The `AndroidJniExtensions` class provides extension methods that further integrate `Rxmxnx.JNetInterface.Mobile` with
 `Java.Interop`.
 
-| Extension method                | Description                                                                                                                                                                                                                |
-|---------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `IsValid(this JGlobalBase)`     | Determines whether a `JGlobalBase` instance from `Rxmxnx.JNetInterface.Mobile` is still valid from a pure `.NET for Android` execution context.                                                                            |
-| `ToJniObject(this JGlobalBase)` | Creates a `Java.Interop`-managed object from a `JGlobalBase` instance. The created object owns its own local JNI reference managed by `Java.Interop` and is completely independent of the original `JGlobalBase` instance. |
+| Extension method                | Description                                                                                                                                                                                                                                                                                                                          |
+|---------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `IsValid(this JGlobalBase)`     | Determines whether a `JGlobalBase` instance from `Rxmxnx.JNetInterface.Mobile` is still valid from a pure `.NET for Android` execution context.                                                                                                                                                                                      |
+| `ToJniObject(this JGlobalBase)` | Creates a `Java.Interop`-managed object from a `JGlobalBase` instance. The created object owns its own local JNI reference managed by `Java.Interop` and is completely independent of the original `JGlobalBase` instance.                                                                                                           |
+| `WithNativeFrame(...)`          | Enters the JNI call frame of a Java native method and runs an `IFrameAction` or `IFrameFunction<TOutput>`. Overloads start from `JEnvironmentRef` or from the functional value. `Rxmxnx.JNetInterface` also provides overloads that start from `IVirtualMachine`. See [JNI Native Calls](functional-interfaces.md#jni-native-calls). |

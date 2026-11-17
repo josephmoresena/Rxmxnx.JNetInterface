@@ -8,6 +8,7 @@ using Rxmxnx.JNetInterface.Types;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
+// ReSharper disable once ClassCannotBeInstantiated
 public partial class JHelloDotnetObject
 {
 #if !NET8_0_OR_GREATER

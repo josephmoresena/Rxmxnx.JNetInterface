@@ -35,7 +35,20 @@ internal readonly unsafe struct NativeInterface9 : INativeInterface<NativeInterf
 #endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JObjectLocalRef GetModule(JEnvironmentRef envRef, JClassLocalRef classRef)
-		=> SystemInfo.IsWindows ? this._windows.GetModule(envRef, classRef) : this._unix.GetModule(envRef, classRef);
+	{
+		try
+		{
+			return SystemInfo.IsWindows ?
+				this._windows.GetModule(envRef, classRef) :
+				this._unix.GetModule(envRef, classRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
+	}
 
 	/// <summary>
 	/// Information of <see cref="NativeInterface9.GetModule"/>

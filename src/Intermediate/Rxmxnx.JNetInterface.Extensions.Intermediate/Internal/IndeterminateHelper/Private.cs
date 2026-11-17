@@ -82,7 +82,7 @@ internal static partial class IndeterminateHelper
 	/// <summary>
 	/// Copies the primitive value of a reflected field instance to <paramref name="bytes"/>.
 	/// </summary>
-	/// <param name="bytes">Buffer to hold primitive result.</param>
+	/// <param name="bytes">Buffer to hold the primitive result.</param>
 	/// <param name="jField">Reflected field object.</param>
 	/// <param name="jLocal">Target object.</param>
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
@@ -148,7 +148,7 @@ internal static partial class IndeterminateHelper
 	/// <param name="definition">A <see cref="JFunctionDefinition"/> instance.</param>
 	/// <param name="jFunction">Reflected function instance.</param>
 	/// <param name="jLocal">Target object.</param>
-	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call must be non-virtual.</param>
 	/// <param name="args">Function arguments.</param>
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
 	private static IndeterminateResult ReflectedFunctionCall(JFunctionDefinition definition, JMethodObject jFunction,
@@ -276,7 +276,7 @@ internal static partial class IndeterminateHelper
 	/// <param name="definition">A <see cref="JMethodDefinition"/> instance.</param>
 	/// <param name="jMethod">Reflected method instance.</param>
 	/// <param name="jLocal">Target object.</param>
-	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call must be non-virtual.</param>
 	/// <param name="args">Method arguments.</param>
 	private static void ReflectedMethodCall(JMethodDefinition definition, JMethodObject jMethod, JLocalObject jLocal,
 		Boolean nonVirtual, ReadOnlySpan<IObject?> args)
@@ -314,11 +314,11 @@ internal static partial class IndeterminateHelper
 	/// Invokes a primitive function on given <see cref="JLocalObject"/> instance and copies its result to
 	/// <paramref name="bytes"/>.
 	/// </summary>
-	/// <param name="bytes">Buffer to hold primitive result.</param>
+	/// <param name="bytes">Buffer to hold the primitive result.</param>
 	/// <param name="definition">A <see cref="JFunctionDefinition"/> instance.</param>
 	/// <param name="jMethod">Reflected function object.</param>
 	/// <param name="jLocal">Target object.</param>
-	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
+	/// <param name="nonVirtual">Indicates whether the current call must be non-virtual.</param>
 	/// <param name="args">Function arguments.</param>
 	private static void ReflectedPrimitiveFunctionCall<TPrimitive>(Span<Byte> bytes, JFunctionDefinition definition,
 		JMethodObject jMethod, JLocalObject jLocal, Boolean nonVirtual, ReadOnlySpan<IObject?> args)
@@ -332,7 +332,7 @@ internal static partial class IndeterminateHelper
 	/// Invokes a primitive static function on the declaring class of given <see cref="JMethodObject"/> instance and copies its
 	/// result to <paramref name="bytes"/>.
 	/// </summary>
-	/// <param name="bytes">Buffer to hold primitive result.</param>
+	/// <param name="bytes">Buffer to hold the primitive result.</param>
 	/// <param name="definition">A <see cref="JFunctionDefinition"/> instance.</param>
 	/// <param name="jMethod">Reflected function object.</param>
 	/// <param name="args">Function arguments.</param>

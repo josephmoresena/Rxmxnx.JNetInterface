@@ -43,11 +43,20 @@ internal readonly unsafe partial struct ObjectFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JObjectLocalRef AllocObject(JEnvironmentRef envRef, JClassLocalRef classRef)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._allocObject.Windows(envRef, classRef);
+			if (SystemInfo.IsWindows)
+				return this._allocObject.Windows(envRef, classRef);
 #endif
-		return this._allocObject.Unix(envRef, classRef);
+			return this._allocObject.Unix(envRef, classRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 	/// <summary>
 	/// <c>GetObjectClass</c>.
@@ -58,11 +67,20 @@ internal readonly unsafe partial struct ObjectFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JClassLocalRef GetObjectClass(JEnvironmentRef envRef, JObjectLocalRef localRef)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._getObjectClass.Windows(envRef, localRef);
+			if (SystemInfo.IsWindows)
+				return this._getObjectClass.Windows(envRef, localRef);
 #endif
-		return this._getObjectClass.Unix(envRef, localRef);
+			return this._getObjectClass.Unix(envRef, localRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 	/// <summary>
 	/// <c>IsInstanceOf</c>.
@@ -73,10 +91,19 @@ internal readonly unsafe partial struct ObjectFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JBoolean IsInstanceOf(JEnvironmentRef envRef, JObjectLocalRef localRef, JClassLocalRef classRef)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._instanceOf.Windows(envRef, localRef, classRef);
+			if (SystemInfo.IsWindows)
+				return this._instanceOf.Windows(envRef, localRef, classRef);
 #endif
-		return this._instanceOf.Unix(envRef, localRef, classRef);
+			return this._instanceOf.Unix(envRef, localRef, classRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 }

@@ -6,6 +6,7 @@
     <ItemGroup>
         <Using Include="System.Buffers"/>
         <Using Include="System.Collections.Concurrent"/>
+        <Using Include="System.Diagnostics"/>
         <Using Include="System.Diagnostics.CodeAnalysis"/>
         <Using Include="System.Globalization"/>
         <Using Include="System.Numerics"/>
@@ -14,6 +15,7 @@
 
         <Using Include="Rxmxnx.PInvoke"/>
 
+        <Using Include="Rxmxnx.JNetInterface.Functional"/>
         <Using Include="Rxmxnx.JNetInterface.Internal"/>
         <Using Include="Rxmxnx.JNetInterface.Internal.Localization"/>
         <Using Include="Rxmxnx.JNetInterface.Lang"/>
@@ -52,6 +54,9 @@
     </ItemGroup>
     <ItemGroup Condition="'$(TargetPlatformIdentifier)' != 'android'">
         <ProjectReference Include="..\Rxmxnx.JNetInterface.ModernJni.Intermediate\Rxmxnx.JNetInterface.ModernJni.Intermediate.csproj"/>
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="ILLink\ILLink.Substitutions.xml"/>
     </ItemGroup>
 
 </Project>

@@ -12,10 +12,12 @@ public partial class Launcher
 		private Linux(DirectoryInfo outputDirectory, out Task initialize) : base(outputDirectory)
 		{
 			this._isArmHf = Linux.IsArmHf(this.CurrentArch);
-			this.Architectures = Enum.GetValues<Architecture>()
-			                         .Where(a => this.IsCurrentArch(a) || Linux.IsArmHf(a) ||
-				                                (a is Architecture.X64 or Architecture.Arm64 &&
-					                                !Linux.IsArmHf(this.CurrentArch))).ToArray();
+			this.Architectures =
+			[
+				.. Enum.GetValues<Architecture>().Where(a => this.IsCurrentArch(a) || Linux.IsArmHf(a) ||
+					                                        (a is Architecture.X64 or Architecture.Arm64 &&
+						                                        !Linux.IsArmHf(this.CurrentArch))),
+			];
 			initialize = this.Initialize();
 		}
 		private async Task Initialize()
@@ -51,6 +53,24 @@ public partial class Launcher
 				Linux.RunSelfExtractQemu(tempFileName, jdkPath);
 			await task;
 		}
+		private static async Task PatchJvmLibrary(String jdkPath)
+		{
+			foreach (FileInfo file in new DirectoryInfo(jdkPath).GetFiles("*.so", Linux.searchOptions))
+			{
+				ExecuteState<String> state = new()
+				{
+					ExecutablePath = "/usr/bin/patchelf",
+					ArgState = file.FullName,
+					AppendArgs = (s, a) =>
+					{
+						a.Add("--clear-execstack");
+						a.Add(s);
+					},
+					Notifier = ConsoleNotifier.Notifier,
+				};
+				await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
+			}
+		}
 		private static async Task RunSelfExtract(String tempFileName, String jdkPath)
 		{
 			ExecuteState state = new()
@@ -69,6 +89,7 @@ public partial class Launcher
 				ExecutablePath = tempFileName,
 				AppendArgs = _ => { },
 				WorkingDirectory = jdkPath,
+				Notifier = ConsoleNotifier.Notifier,
 			};
 			await Utilities.QemuExecute(state, ConsoleNotifier.CancellationToken);
 		}
@@ -110,5 +131,10 @@ public partial class Launcher
 			=> arch == this.CurrentArch || (this._isArmHf && Linux.IsArmHf(arch));
 
 		private static Boolean IsArmHf(Architecture arch) => arch is Architecture.Arm or Architecture.Armv6;
+
+		private static readonly EnumerationOptions searchOptions = new()
+		{
+			IgnoreInaccessible = true, RecurseSubdirectories = true, MaxRecursionDepth = 10,
+		};
 	}
 }

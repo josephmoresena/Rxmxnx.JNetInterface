@@ -51,13 +51,10 @@ public class JExecutableObjectTests
 				                             ClassInformation = jClass.GetInformation(),
 			                             } :
 			                             new ObjectMetadata(jExecutableClass));
-		env.WithFrame(Arg.Any<Int32>(), Arg.Any<JExecutableObject>(),
-		              Arg.Any<Func<JExecutableObject, JCallDefinition>>()).Returns(c =>
-		{
-			JExecutableObject instance = (JExecutableObject)c[1];
-			Func<JExecutableObject, JCallDefinition> func = (Func<JExecutableObject, JCallDefinition>)c[2];
-			return func(instance);
-		});
+		env.WithFrame(Arg.Any<Int32>(), Arg.Any<ValueTuple<IntPtr, Type>>(),
+		              Arg.Any<Func<ValueTuple<IntPtr, Type>, JCallDefinition>>())
+		   .Returns(call => call.Arg<Func<ValueTuple<IntPtr, Type>, JCallDefinition>>()(
+			            call.Arg<ValueTuple<IntPtr, Type>>()));
 
 		ExecutableObjectMetadata objectMetadata =
 			Assert.IsType<ExecutableObjectMetadata>(ILocalObject.CreateMetadata(jExecutable));

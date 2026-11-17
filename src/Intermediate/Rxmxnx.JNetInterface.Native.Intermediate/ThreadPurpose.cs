@@ -15,7 +15,7 @@ public enum ThreadPurpose : Byte
 	/// </summary>
 	ReleaseSequence = 2,
 	/// <summary>
-	/// Indicates the purpose of the thread is executing JNI calls under exception state.
+	/// Indicates the purpose of the thread is executing JNI calls under the exception state.
 	/// </summary>
 	ExceptionExecution = 3,
 	/// <summary>
@@ -39,7 +39,7 @@ public enum ThreadPurpose : Byte
 	/// </summary>
 	FatalError = 8,
 	/// <summary>
-	/// Indicates the purpose of the thread retrieving runtime version from VM.
+	/// Indicates the purpose of the thread retrieving a runtime version from VM.
 	/// </summary>
 	GetRuntimeVersion = 9,
 }

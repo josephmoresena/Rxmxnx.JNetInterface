@@ -1,8 +1,8 @@
 ﻿namespace Rxmxnx.JNetInterface.Native.References;
 
 /// <summary>
-/// JNI global handle for fully-qualified-class objects (<c>jobject</c>).
-/// Represents a native-signed integer which serves as opaque identifier for any
+/// JNI global handle for fully qualified-class objects (<c>jobject</c>).
+/// Represents a native-signed integer which serves as an opaque identifier for any
 /// object.
 /// </summary>
 /// <remarks>This identifier will be valid until it is explicitly unloaded.</remarks>

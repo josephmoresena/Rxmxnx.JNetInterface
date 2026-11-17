@@ -83,9 +83,11 @@ is `AndroidJniHost`.
 - **`FinalUserTypeRuntimeEnabled`**: Indicates whether `JNetInterface.EnableFinalUserTypeRuntime` is active.
     - This allows assuming final mapped data types without verifying their actual class.
 - **`CheckRefTypeNativeCallEnabled`**: Indicates whether `JNetInterface.DisableCheckRefTypeNativeCall` is inactive.
-    - This allows skipping reference type verification in native Java calls.
+    - This allows skipping reference type verification in native Java calls. The switch also covers `WithNativeFrame` in
+      `Rxmxnx.JNetInterface` and `Rxmxnx.JNetInterface.Mobile`.
 - **`CheckClassRefNativeCallEnabled`**: Indicates whether `JNetInterface.DisableCheckClassRefNativeCall` is inactive.
     - This allows skipping verification that an object used as a class parameter is actually a `java.lang.Class<?>`.
+      The switch also covers `WithNativeFrame` in `Rxmxnx.JNetInterface` and `Rxmxnx.JNetInterface.Mobile`.
 - **`MainClassesInformation`**: Provides metadata for main-class types.
 - **`Register<TReference>()`**: Registers the metadata of a mapped reference type at runtime.
 - **`GetVirtualMachine(JVirtualMachineRef)`**: Retrieves the `IVirtualMachine` instance managing a given reference.

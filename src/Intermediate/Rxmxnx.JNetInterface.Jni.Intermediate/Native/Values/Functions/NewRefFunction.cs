@@ -30,15 +30,23 @@ internal readonly unsafe struct NewRefFunction<TReference> : INewRefFunction
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TReference NewRef(JEnvironmentRef envRef, JObjectLocalRef localRef)
 	{
-		IntPtr result;
-#if !ANDROID
-		if (SystemInfo.IsWindows)
+		try
 		{
-			result = this._function.Windows(envRef, localRef);
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+			{
+				IntPtr resultW = this._function.Windows(envRef, localRef);
+				return TReference.New(resultW);
+			}
+#endif
+			IntPtr result = this._function.Unix(envRef, localRef);
 			return TReference.New(result);
 		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
 #endif
-		result = this._function.Unix(envRef, localRef);
-		return TReference.New(result);
+		}
 	}
 }

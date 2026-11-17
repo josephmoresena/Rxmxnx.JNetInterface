@@ -19,7 +19,7 @@ public partial interface IVirtualMachine
 		get => !AppContext.TryGetSwitch("JNetInterface.DisableMetadataValidation", out Boolean disable) || !disable;
 	}
 	/// <summary>
-	/// Indicates whether detailed a ToString() is available for type metadata instances.
+	/// Indicates whether a detailed ToString() is available for type metadata instances.
 	/// </summary>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]

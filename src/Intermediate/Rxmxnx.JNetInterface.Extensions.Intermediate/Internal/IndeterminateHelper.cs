@@ -86,7 +86,9 @@ internal static partial class IndeterminateHelper
 	/// </summary>
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	/// <param name="value">A <see cref="IndeterminateResult"/> instance.</param>
-	/// <param name="newObject">Output. Indicates whether resulting instance is created from primitive value.</param>
+	/// <param name="newObject">
+	/// Output. Indicates whether the resulting instance is created from a primitive value.
+	/// </param>
 	/// <returns>A <see cref="JLocalObject"/> instance.</returns>
 	public static JLocalObject? GetObjectValue(IEnvironment env, IndeterminateResult value, out Boolean newObject)
 	{

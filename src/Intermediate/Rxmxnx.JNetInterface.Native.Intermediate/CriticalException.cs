@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface;
 
 /// <summary>
-/// Represents an error that occur during JNI calls into a critical block.
+/// Represents an error that occurs during JNI calls into a critical block.
 /// </summary>
 public sealed class CriticalException : JniException
 {
@@ -37,7 +37,7 @@ public sealed class CriticalException : JniException
 	private CriticalException(String message) : base(message: message) { }
 
 	/// <summary>
-	/// Refresh current instance.
+	/// Refresh the current instance.
 	/// </summary>
 	/// <param name="message">Current UI message.</param>
 	/// <param name="exception">A <see cref="CriticalException"/> reference.</param>

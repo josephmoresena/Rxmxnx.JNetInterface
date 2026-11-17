@@ -12,7 +12,7 @@ public partial class JVirtualMachine
 	private sealed class Invoked : JVirtualMachine, IInvokedVirtualMachine
 	{
 		/// <summary>
-		/// Indicates whether current instance is disposed.
+		/// Indicates whether the current instance is disposed.
 		/// </summary>
 		private readonly IMutableWrapper<Boolean> _isDisposed;
 

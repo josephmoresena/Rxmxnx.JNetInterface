@@ -15,7 +15,7 @@ internal partial struct JniTransactionHandle
 		/// <inheritdoc cref="INativeMemoryAdapter.Copy"/>
 		protected Boolean IsCopy;
 		/// <summary>
-		/// Pointer to beginning element in current sequence.
+		/// Pointer to the beginning element in the current sequence.
 		/// </summary>
 		protected IntPtr Pointer;
 
@@ -77,13 +77,14 @@ internal partial struct JniTransactionHandle
 		/// <inheritdoc/>
 		protected override void Dispose(Boolean disposing)
 		{
+			Boolean disposed = this.Disposed;
 			base.Dispose(disposing);
-			if (disposing && !this.Disposed && this._source is JGlobalBase jGlobal)
+			if (disposing && !disposed && this._source is JGlobalBase jGlobal)
 				jGlobal.Dispose(); // Release exclusive global references
 		}
 
 		/// <summary>
-		/// Retrieves the <see cref="JReferenceObject"/> instance which serves as source of the current
+		/// Retrieves the <see cref="JReferenceObject"/> instance which serves as the source of the current
 		/// native memory.
 		/// </summary>
 		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>

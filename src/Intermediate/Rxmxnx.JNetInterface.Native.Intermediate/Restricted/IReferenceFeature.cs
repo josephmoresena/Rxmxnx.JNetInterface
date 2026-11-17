@@ -39,7 +39,7 @@ internal partial interface IReferenceFeature
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
 	Boolean Unload(JGlobalBase jGlobal);
 	/// <summary>
-	/// Indicates whether current instance is a parameter.
+	/// Indicates whether the current instance is a parameter.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <returns>

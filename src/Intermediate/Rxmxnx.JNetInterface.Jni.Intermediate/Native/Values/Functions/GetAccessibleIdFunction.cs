@@ -27,15 +27,23 @@ internal readonly unsafe struct GetAccessibleIdFunction<TAccessible> : IGetAcces
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TAccessible GetId(JEnvironmentRef envRef, JClassLocalRef localRef, Byte* name, Byte* descriptor)
 	{
-		IntPtr result;
-#if !ANDROID
-		if (SystemInfo.IsWindows)
+		try
 		{
-			result = this._function.Windows(envRef, localRef, name, descriptor);
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+			{
+				IntPtr resultW = this._function.Windows(envRef, localRef, name, descriptor);
+				return TAccessible.New(resultW);
+			}
+#endif
+			IntPtr result = this._function.Unix(envRef, localRef, name, descriptor);
 			return TAccessible.New(result);
 		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
 #endif
-		result = this._function.Unix(envRef, localRef, name, descriptor);
-		return TAccessible.New(result);
+		}
 	}
 }

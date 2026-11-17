@@ -42,11 +42,20 @@ internal readonly unsafe partial struct StringFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JStringLocalRef NewString(JEnvironmentRef envRef, Char* textPtr, Int32 textLength)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._newString.Windows(envRef, textPtr, textLength);
+			if (SystemInfo.IsWindows)
+				return this._newString.Windows(envRef, textPtr, textLength);
 #endif
-		return this._newString.Unix(envRef, textPtr, textLength);
+			return this._newString.Unix(envRef, textPtr, textLength);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 	/// <summary>
 	/// <c>NewString</c>.
@@ -57,11 +66,20 @@ internal readonly unsafe partial struct StringFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JStringLocalRef NewStringUtf(JEnvironmentRef envRef, Byte* textPtr)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._newStringUtf.Windows(envRef, textPtr);
+			if (SystemInfo.IsWindows)
+				return this._newStringUtf.Windows(envRef, textPtr);
 #endif
-		return this._newStringUtf.Unix(envRef, textPtr);
+			return this._newStringUtf.Unix(envRef, textPtr);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 }
 
@@ -91,11 +109,20 @@ internal readonly unsafe struct StringFunctionSet<TChar> : IStringFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Int32 GetStringLength(JEnvironmentRef envRef, JStringLocalRef stringRef)
 	{
+		try
+		{
 #if !ANDROID
-		if (SystemInfo.IsWindows)
-			return this._functions.Windows.GetLength(envRef, stringRef);
+			if (SystemInfo.IsWindows)
+				return this._functions.Windows.GetLength(envRef, stringRef);
 #endif
-		return this._functions.Unix.GetLength(envRef, stringRef);
+			return this._functions.Unix.GetLength(envRef, stringRef);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 	/// <summary>
 	/// <c>GetStringChars</c>.
@@ -106,13 +133,22 @@ internal readonly unsafe struct StringFunctionSet<TChar> : IStringFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public ReadOnlyValPtr<TChar> GetStringChars(JEnvironmentRef envRef, JStringLocalRef stringRef, out JBoolean isCopy)
 	{
-		fixed (JBoolean* isCopyPtr = &isCopy)
+		try
 		{
+			fixed (JBoolean* isCopyPtr = &isCopy)
+			{
 #if !ANDROID
-			if (SystemInfo.IsWindows)
-				return (ReadOnlyValPtr<TChar>)this._functions.Windows.GetChars(envRef, stringRef, isCopyPtr);
+				if (SystemInfo.IsWindows)
+					return (ReadOnlyValPtr<TChar>)this._functions.Windows.GetChars(envRef, stringRef, isCopyPtr);
 #endif
-			return (ReadOnlyValPtr<TChar>)this._functions.Unix.GetChars(envRef, stringRef, isCopyPtr);
+				return (ReadOnlyValPtr<TChar>)this._functions.Unix.GetChars(envRef, stringRef, isCopyPtr);
+			}
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
 		}
 	}
 	/// <summary>
@@ -124,13 +160,22 @@ internal readonly unsafe struct StringFunctionSet<TChar> : IStringFunctionSet
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void ReleaseStringChars(JEnvironmentRef envRef, JStringLocalRef stringRef, ReadOnlyValPtr<TChar> chars)
 	{
-#if !ANDROID
-		if (SystemInfo.IsWindows)
+		try
 		{
-			this._functions.Windows.ReleaseChars(envRef, stringRef, chars);
-			return;
-		}
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+			{
+				this._functions.Windows.ReleaseChars(envRef, stringRef, chars);
+				return;
+			}
 #endif
-		this._functions.Unix.ReleaseChars(envRef, stringRef, chars);
+			this._functions.Unix.ReleaseChars(envRef, stringRef, chars);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 }

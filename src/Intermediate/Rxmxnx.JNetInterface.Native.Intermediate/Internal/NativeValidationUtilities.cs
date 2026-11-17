@@ -24,8 +24,8 @@ internal static class NativeValidationUtilities
 	/// Throws an exception if <paramref name="interfaceName"/> can't extend an interface whose super-interfaces are
 	/// <paramref name="superInterfacesSet"/>.
 	/// </summary>
-	/// <param name="interfaceName">Name of implementing type.</param>
-	/// <param name="interfaceType">Type of implementing type.</param>
+	/// <param name="interfaceName">Name of the implementing type.</param>
+	/// <param name="interfaceType">CLR type of the implementing type.</param>
 	/// <param name="superInterfacesSet">Super-interfaces type set of super interface.</param>
 	/// <exception cref="ArgumentException">
 	/// Throws an exception if <paramref name="interfaceName"/> can't extend an interface whose super-interfaces are
@@ -49,7 +49,7 @@ internal static class NativeValidationUtilities
 	/// <param name="typeName">Class name.</param>
 	/// <param name="baseType">Class type.</param>
 	/// <param name="baseClassType">Super class type.</param>
-	/// <param name="isInterface">Indicates whether current type is an interface.</param>
+	/// <param name="isInterface">Indicates whether the current type is an interface.</param>
 	/// <exception cref="InvalidOperationException">
 	/// Throws an exception if <paramref name="baseType"/> and <paramref name="typeName"/> are the same type.
 	/// </exception>
@@ -65,13 +65,13 @@ internal static class NativeValidationUtilities
 		throw new InvalidOperationException(message);
 	}
 	/// <summary>
-	/// Throws an exception if current data type is annotation.
+	/// Throws an exception if the current data type is annotation.
 	/// </summary>
 	/// <param name="typeName">Data type name.</param>
 	/// <param name="interfaceMetadata">Super interface type metadata.</param>
-	/// <param name="isAnnotation">Indicates whether current data type is an annotation.</param>
+	/// <param name="isAnnotation">Indicates whether the current data type is an annotation.</param>
 	/// <exception cref="InvalidOperationException">
-	/// Throws an exception if current data type is annotation.
+	/// Throws an exception if the current data type is annotation.
 	/// </exception>
 	public static void ThrowIfAnnotation(ReadOnlySpan<Byte> typeName, JInterfaceTypeMetadata interfaceMetadata,
 		Boolean isAnnotation)
@@ -86,9 +86,9 @@ internal static class NativeValidationUtilities
 	/// Throws a <see cref="NotImplementedException"/> indicating current datatype is not implementing
 	/// <paramref name="interfaceMetadata"/>.
 	/// </summary>
-	/// <param name="typeName">Name of implementing type.</param>
+	/// <param name="typeName">Name of the implementing type.</param>
 	/// <param name="interfaceMetadata">A <see cref="JInterfaceTypeMetadata"/> instance.</param>
-	/// <param name="isClass">Indicates whether implementing type is a class.</param>
+	/// <param name="isClass">Indicates whether the implementing type is a class.</param>
 	/// <exception cref="NotImplementedException">Always thrown.</exception>
 	public static void ThrowInvalidImplementation(ReadOnlySpan<Byte> typeName, JInterfaceTypeMetadata interfaceMetadata,
 		Boolean isClass)
@@ -105,10 +105,10 @@ internal static class NativeValidationUtilities
 	/// Throws a <see cref="NotImplementedException"/> if current datatype is not implementing
 	/// some superinterfaces of <paramref name="interfaceMetadata"/>.
 	/// </summary>
-	/// <param name="typeName">Name of implementing type.</param>
+	/// <param name="typeName">Name of the implementing type.</param>
 	/// <param name="interfaceMetadata">A <see cref="JInterfaceTypeMetadata"/> instance.</param>
 	/// <param name="notContained">Names of not contained superinterfaces.</param>
-	/// <param name="isClass">Indicates whether implementing type is a class.</param>
+	/// <param name="isClass">Indicates whether the implementing type is a class.</param>
 	/// <exception cref="NotImplementedException">
 	/// Throws a <see cref="NotImplementedException"/> if current datatype is not implementing
 	/// some superinterfaces of <paramref name="interfaceMetadata"/>.

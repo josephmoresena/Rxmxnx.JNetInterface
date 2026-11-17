@@ -25,6 +25,7 @@ public sealed class MetadataTypeTests
 		Assert.Equal(InvalidType.Metadata, IClassType.GetMetadata<InvalidType>());
 	}
 
+	// ReSharper disable once ClassNeverInstantiated.Local
 	private sealed class InvalidType : JLocalObject.Uninstantiable<InvalidType>, IUninstantiableType<InvalidType>
 	{
 		public static JDataTypeMetadata? Metadata { get; set; }

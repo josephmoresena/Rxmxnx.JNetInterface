@@ -3,6 +3,7 @@
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+// ReSharper disable once DefaultStructEqualityIsUsed.Global
 public unsafe partial struct JValue
 #else
 internal unsafe partial struct JValue

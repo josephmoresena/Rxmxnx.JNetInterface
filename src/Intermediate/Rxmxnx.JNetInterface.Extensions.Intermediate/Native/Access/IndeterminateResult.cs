@@ -6,7 +6,7 @@ namespace Rxmxnx.JNetInterface.Native.Access;
 public readonly ref struct IndeterminateResult
 {
 	/// <summary>
-	/// Empty result.
+	/// DefaultCallArgument result.
 	/// </summary>
 	public static IndeterminateResult Empty => default;
 
@@ -20,7 +20,7 @@ public readonly ref struct IndeterminateResult
 	private readonly ref PrimitiveWrapperObjectMetadata? _objectMetadata;
 
 	/// <summary>
-	/// Signature of function result data type.
+	/// Signature of the function result data type.
 	/// </summary>
 	public ReadOnlySpan<Byte> Signature { get; }
 	/// <summary>
@@ -103,7 +103,9 @@ public readonly ref struct IndeterminateResult
 	internal IndeterminateResult(JLocalObject? jObject, ReadOnlySpan<Byte> signature)
 	{
 		this._primitive = default;
-		this._objectMetadata = ref IMutableReference.CreateObject<PrimitiveWrapperObjectMetadata>(default!).Reference!;
+#pragma warning disable CS8619
+		this._objectMetadata = ref IMutableReference.CreateObject<PrimitiveWrapperObjectMetadata>(default!).Reference;
+#pragma warning restore CS8619
 		this.Object = jObject;
 		this.Signature = signature;
 	}

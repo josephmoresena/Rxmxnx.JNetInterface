@@ -4,11 +4,13 @@
 
 # Description
 
-`Rxmxnx.JNetInterface.Mobile` provides a seamless implementation of the Java Native Interface (JNI) a top of Java.Interop used on .NET for Android. This enabled the use of `Rxmxnx.JNetInterface` APIs on android applications.
+`Rxmxnx.JNetInterface.Mobile` provides a seamless implementation of the Java Native Interface (JNI) a top of
+Java.Interop used on .NET for Android. This enabled the use of `Rxmxnx.JNetInterface` APIs on android applications.
 
 ## Usage
 
-This package integrates the `Rxmxnx.JNetInterface.Core` APIs on .NET for Android without the intrinsic `Rxmxnx.JNetInterface` package incompatibilities.
+This package integrates the `Rxmxnx.JNetInterface.Core` APIs on .NET for Android without the intrinsic
+`Rxmxnx.JNetInterface` package incompatibilities.
 
 ---
 

@@ -29,15 +29,23 @@ internal readonly unsafe struct NewPrimitiveArrayFunction<TArrayRef> : INewPrimi
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TArrayRef NewArray(JEnvironmentRef envRef, Int32 length)
 	{
-		JArrayLocalRef result;
-#if !ANDROID
-		if (SystemInfo.IsWindows)
+		try
 		{
-			result = this._function.Windows(envRef, length);
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+			{
+				JArrayLocalRef resultW = this._function.Windows(envRef, length);
+				return Unsafe.As<JArrayLocalRef, TArrayRef>(ref resultW);
+			}
+#endif
+			JArrayLocalRef result = this._function.Unix(envRef, length);
 			return Unsafe.As<JArrayLocalRef, TArrayRef>(ref result);
 		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
 #endif
-		result = this._function.Unix(envRef, length);
-		return Unsafe.As<JArrayLocalRef, TArrayRef>(ref result);
+		}
 	}
 }

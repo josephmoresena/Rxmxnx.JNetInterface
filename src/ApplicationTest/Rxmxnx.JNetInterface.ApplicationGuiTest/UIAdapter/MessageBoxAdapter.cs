@@ -8,12 +8,15 @@ using Rxmxnx.PInvoke;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
+// ReSharper disable once InconsistentNaming
 internal partial class UIAdapter
 {
 	private sealed class MessageBoxAdapter : UIAdapter
 	{
 		[DllImport("user32.dll", EntryPoint = "MessageBoxW")]
+#pragma warning disable SYSLIB1054
 		private static extern Int32 MessageBox(IntPtr hwnd, ReadOnlyValPtr<Char> text, ReadOnlyValPtr<Char> caption,
+#pragma warning restore SYSLIB1054
 			UInt32 type);
 
 		public override void ShowError(String errorMessage)

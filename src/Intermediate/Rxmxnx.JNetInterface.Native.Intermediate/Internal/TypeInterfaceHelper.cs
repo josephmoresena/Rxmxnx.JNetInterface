@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
-/// Set of interfaces for given type.
+/// Set of interfaces for a given type.
 /// </summary>
 internal sealed class TypeInterfaceHelper<
 	[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TReference>
@@ -34,5 +34,9 @@ internal sealed class TypeInterfaceHelper<
 	/// <summary>
 	/// Constructor.
 	/// </summary>
+#if !NET8_0_OR_GREATER
 	private TypeInterfaceHelper() => this._set = typeof(TReference).GetInterfaces().ToImmutableHashSet();
+#else
+	private TypeInterfaceHelper() => this._set = [.. typeof(TReference).GetInterfaces(),];
+#endif
 }

@@ -7,6 +7,7 @@
 #if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+// ReSharper disable once DefaultStructEqualityIsUsed.Global
 public readonly unsafe partial struct JValue : INativeType
 #else
 internal readonly unsafe partial struct JValue : INativeType

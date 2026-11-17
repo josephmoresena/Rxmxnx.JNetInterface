@@ -39,7 +39,7 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 	static TypeMetadata IClassType<JDirectByteBufferObject>.Metadata => JDirectByteBufferObject.typeMetadata;
 	// .NET 7.0 has issues inheriting static abstract members in non-generic interfaces from base classes.
 	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd4;
-	// In Android, this type doesn't exist, but is used as backend type for NIO direct buffers.
+	// In Android, this type doesn't exist but is used as backend type for NIO direct buffers.
 	static Int32 IDataType.AndroidApiLevel => 3;
 
 	/// <summary>

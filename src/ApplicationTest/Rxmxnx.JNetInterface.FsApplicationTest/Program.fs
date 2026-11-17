@@ -13,7 +13,11 @@ open Rxmxnx.JNetInterface.Native.Access
 open Rxmxnx.PInvoke
 
 let PrintException (env: IEnvironment, ex: ThrowableException) =
+#if !NET8_0_OR_GREATER
     Console.WriteLine(ex.WithSafeInvoke(fun t -> t.ToString()))
+#else
+    Console.WriteLine(ex.WithSafeInvoke(_.ToString()))
+#endif
     env.PendingException <- null
 
 let Execute (jvmLib: JVirtualMachineLibrary, classByteCode: byte[], args: string[]) =

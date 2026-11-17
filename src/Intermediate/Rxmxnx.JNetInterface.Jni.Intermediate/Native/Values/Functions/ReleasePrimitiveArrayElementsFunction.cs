@@ -31,13 +31,22 @@ internal readonly unsafe struct
 	public void Release(JEnvironmentRef envRef, TArrayRef arrayRef, ReadOnlyValPtr<TPrimitiveType> elements,
 		JReleaseMode mode)
 	{
-#if !ANDROID
-		if (SystemInfo.IsWindows)
+		try
 		{
-			this._function.Windows(envRef, arrayRef.ArrayValue, elements, mode);
-			return;
-		}
+#if !ANDROID
+			if (SystemInfo.IsWindows)
+			{
+				this._function.Windows(envRef, arrayRef.ArrayValue, elements, mode);
+				return;
+			}
 #endif
-		this._function.Unix(envRef, arrayRef.ArrayValue, elements, mode);
+			this._function.Unix(envRef, arrayRef.ArrayValue, elements, mode);
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
+		}
 	}
 }

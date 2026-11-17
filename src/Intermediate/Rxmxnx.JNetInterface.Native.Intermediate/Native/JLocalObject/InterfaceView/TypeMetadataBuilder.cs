@@ -41,7 +41,7 @@ public partial class JLocalObject
 			}
 
 			/// <summary>
-			/// Appends an interface to current type definition.
+			/// Appends an interface to the current type definition.
 			/// </summary>
 			/// <typeparam name="TOtherInterface"><see cref="IDataType"/> interface type.</typeparam>
 			/// <returns>Current instance.</returns>

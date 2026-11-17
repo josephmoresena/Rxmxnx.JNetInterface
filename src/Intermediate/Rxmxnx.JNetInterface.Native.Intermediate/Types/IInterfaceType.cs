@@ -12,10 +12,10 @@ public interface IInterfaceType : IReferenceType
 	static JRuntimeVersion IDataType.Since => JRuntimeVersion.SEd0;
 
 	/// <summary>
-	/// Retrieves the metadata for given interface type.
+	/// Retrieves the metadata for a given interface type.
 	/// </summary>
 	/// <typeparam name="TInterface">Type of the current java interface datatype.</typeparam>
-	/// <returns>The <see cref="JInterfaceTypeMetadata"/> instance for given type.</returns>
+	/// <returns>The <see cref="JInterfaceTypeMetadata"/> instance for a given type.</returns>
 	[UnconditionalSuppressMessage("Trimming", "IL2091")]
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public new static JInterfaceTypeMetadata GetMetadata<TInterface>()

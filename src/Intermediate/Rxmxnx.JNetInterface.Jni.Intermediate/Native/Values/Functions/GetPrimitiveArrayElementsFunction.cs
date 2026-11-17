@@ -32,13 +32,22 @@ internal readonly unsafe struct
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public ValPtr<TPrimitiveType> Get(JEnvironmentRef envRef, TArrayRef arrayRef, out JBoolean isCopy)
 	{
-		fixed (JBoolean* isCopyPtr = &isCopy)
+		try
 		{
+			fixed (JBoolean* isCopyPtr = &isCopy)
+			{
 #if !ANDROID
-			if (SystemInfo.IsWindows)
-				return (ValPtr<TPrimitiveType>)this._function.Windows(envRef, arrayRef.ArrayValue, isCopyPtr);
+				if (SystemInfo.IsWindows)
+					return (ValPtr<TPrimitiveType>)this._function.Windows(envRef, arrayRef.ArrayValue, isCopyPtr);
 #endif
-			return (ValPtr<TPrimitiveType>)this._function.Unix(envRef, arrayRef.ArrayValue, isCopyPtr);
+				return (ValPtr<TPrimitiveType>)this._function.Unix(envRef, arrayRef.ArrayValue, isCopyPtr);
+			}
+		}
+		finally
+		{
+#if !PACKAGE
+			JniCallBoundary.ThrowIfPending();
+#endif
 		}
 	}
 }

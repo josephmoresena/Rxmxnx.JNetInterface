@@ -1,0 +1,7 @@
+<Project>
+    <PropertyGroup>
+        <BeforeTargetFrameworkInferenceTargets>
+            $(MSBuildThisFileDirectory)src/Legacy.Mobile.props
+        </BeforeTargetFrameworkInferenceTargets>
+    </PropertyGroup>
+</Project>

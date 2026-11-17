@@ -55,7 +55,7 @@ internal static partial class MetadataHelper
 		}
 
 		/// <summary>
-		/// Initialize built-in type.
+		/// Initialize the built-in type.
 		/// </summary>
 		/// <param name="hash">Type hash.</param>
 		public void InitializeBuiltIn(String hash)
@@ -79,7 +79,7 @@ internal static partial class MetadataHelper
 			this._builtInTypes[hash] = true;
 		}
 		/// <summary>
-		/// Indicates current hash is for a final built-in type.
+		/// Indicates the current hash is for a final built-in type.
 		/// </summary>
 		/// <param name="hash">A type hash.</param>
 		/// <returns>
@@ -92,7 +92,7 @@ internal static partial class MetadataHelper
 			return this._runtimeMetadata[hash].Modifier is JTypeModifier.Final;
 		}
 		/// <summary>
-		/// Indicates whether current type is registered.
+		/// Indicates whether the current type is registered.
 		/// </summary>
 		/// <param name="hash">Type hash.</param>
 		/// <returns>
@@ -101,7 +101,7 @@ internal static partial class MetadataHelper
 		/// </returns>
 		public Boolean IsRegistered(String hash) => this._runtimeMetadata.ContainsKey(hash);
 		/// <summary>
-		/// Indicates whether current assignation is registered.
+		/// Indicates whether the current assignation is registered.
 		/// </summary>
 		/// <param name="key">Assignation key.</param>
 		/// <returns>
@@ -114,29 +114,30 @@ internal static partial class MetadataHelper
 		/// </summary>
 		/// <param name="typeMetadata">A <see cref="JReferenceTypeMetadata"/> instance,</param>
 		/// <returns>
-		/// <see langword="true"/> if <paramref name="typeMetadata"/> was added to current instance successfully;
+		/// <see langword="true"/> if <paramref name="typeMetadata"/> was added to the current instance successfully;
 		/// otherwise, <see langword="false"/>.
 		/// </returns>
 		public Boolean TryAdd(JReferenceTypeMetadata typeMetadata)
 			=> this._runtimeMetadata.TryAdd(typeMetadata.Hash, typeMetadata);
 		/// <summary>
-		/// Attempts to get the <see cref="JReferenceTypeMetadata"/> associated with the specified hash from current instance.
+		/// Attempts to get the <see cref="JReferenceTypeMetadata"/> associated with the specified hash from the
+		/// current instance.
 		/// </summary>
 		/// <param name="hash">Type hash.</param>
 		/// <param name="typeMetadata">Output. A <see cref="JReferenceTypeMetadata"/> instance.</param>
 		/// <returns>
-		/// <see langword="true"/> if <paramref name="hash"/> was found into the current instance;
-		/// otherwise, <see langword="false"/>.
+		/// <see langword="true"/> if <paramref name="hash"/> was found in the current instance; otherwise,
+		/// <see langword="false"/>.
 		/// </returns>
 		public Boolean TryGetValue(String hash, [NotNullWhen(true)] out JReferenceTypeMetadata? typeMetadata)
 			=> this._runtimeMetadata.TryGetValue(hash, out typeMetadata);
 		/// <summary>
-		/// Attempts to get the assignation associated with the specified key from current instance.
+		/// Attempts to get the assignation associated with the specified key from the current instance.
 		/// </summary>
 		/// <param name="key">Assignation key.</param>
-		/// <param name="assignable">Output. Indicates whether key is assignable.</param>
+		/// <param name="assignable">Output. Indicates whether a key is assignable.</param>
 		/// <returns>
-		/// <see langword="true"/> if <paramref name="key"/> was found into the current instance;
+		/// <see langword="true"/> if <paramref name="key"/> was found in the current instance;
 		/// otherwise, <see langword="false"/>.
 		/// </returns>
 		public Boolean TryGetValue(in AssignationKey key, out Boolean assignable)
@@ -180,7 +181,7 @@ internal static partial class MetadataHelper
 		/// Retrieves the super view set associated to <paramref name="hash"/> type.
 		/// </summary>
 		/// <param name="hash">Type hash.</param>
-		/// <returns>Found super view set.</returns>
+		/// <returns>The found super view set.</returns>
 		public HashesSet? GetHashesSet(String hash) => this._viewTree.GetValueOrDefault(hash);
 	}
 }

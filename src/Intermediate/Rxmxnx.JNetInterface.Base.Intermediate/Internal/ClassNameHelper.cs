@@ -72,7 +72,7 @@ internal readonly partial struct ClassNameHelper
 		}
 	}
 	/// <summary>
-	/// Retrieves class name from primitive signature.
+	/// Retrieves the class name from the primitive signature.
 	/// </summary>
 	/// <param name="primitiveSignature">JNI primitive signature.</param>
 	/// <returns>Class name.</returns>
@@ -105,7 +105,7 @@ internal readonly partial struct ClassNameHelper
 		=> helper._classSignature.AsSpan()[helper._offset..^helper._padding];
 
 	/// <summary>
-	/// Wirtes in <paramref name="buffer"/> array object element name.
+	/// Writes in <paramref name="buffer"/> array object element name.
 	/// </summary>
 	/// <param name="buffer">UTF-16 buffer.</param>
 	/// <param name="helper">Helper object.</param>
@@ -120,12 +120,12 @@ internal readonly partial struct ClassNameHelper
 #endif
 	}
 	/// <summary>
-	/// Retrieves offset for current class name.
+	/// Retrieves offset for the current class name.
 	/// </summary>
 	/// <param name="classSignature">Class signature.</param>
 	/// <param name="arrayDimension">Array dimension.</param>
-	/// <param name="isObjectClass">Output. Indicates whether current class is a object class.</param>
-	/// <returns>Offset of current class name.</returns>
+	/// <param name="isObjectClass">Output. Indicates whether the current class is an object class.</param>
+	/// <returns>Offset of the current class name.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private static Int32 GetOffset(CString classSignature, Int32 arrayDimension, out Boolean isObjectClass)
 	{
@@ -133,11 +133,11 @@ internal readonly partial struct ClassNameHelper
 		return arrayDimension + (isObjectClass ? 1 : 0);
 	}
 	/// <summary>
-	/// Retrieves padding for current class name.
+	/// Retrieves padding for the current class name.
 	/// </summary>
 	/// <param name="classSignature">Class signature.</param>
-	/// <param name="isObjectClass">Indicates whether current class is a object class.</param>
-	/// <returns>Padding of current class name.</returns>
+	/// <param name="isObjectClass">Indicates whether the current class is an object class.</param>
+	/// <returns>Padding of the current class name.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private static Int32 GetPadding(CString classSignature, Boolean isObjectClass)
 		=> classSignature[^1] == CommonNames.ObjectSignatureSuffixChar && isObjectClass ? 1 : 0;

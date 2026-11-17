@@ -26,7 +26,7 @@ public abstract partial class JArrayTypeMetadata : JClassTypeMetadata
 	/// Constructor.
 	/// </summary>
 	/// <param name="signature">JNI signature for the current array type.</param>
-	/// <param name="final">Indicates whether element type is final.</param>
+	/// <param name="final">Indicates whether the element type is final.</param>
 	/// <param name="dimension">Array dimension.</param>
 	private protected JArrayTypeMetadata(ReadOnlySpan<Byte> signature, Boolean final, Int32 dimension) : base(signature)
 	{
@@ -36,7 +36,7 @@ public abstract partial class JArrayTypeMetadata : JClassTypeMetadata
 	}
 
 	/// <summary>
-	/// Creates a <see cref="JArrayObject"/> instance for current type.
+	/// Creates a <see cref="JArrayObject"/> instance for the current type.
 	/// </summary>
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	/// <param name="length">Array length.</param>
@@ -44,12 +44,12 @@ public abstract partial class JArrayTypeMetadata : JClassTypeMetadata
 	public abstract JArrayObject CreateInstance(IEnvironment env, Int32 length);
 
 	/// <summary>
-	/// Indicates whether an instance of the current array type is instance of the current type of
+	/// Indicates whether an instance of the current array type is an instance of the current type of
 	/// <paramref name="otherMetadata"/>.
 	/// </summary>
 	/// <param name="otherMetadata">A <see cref="JArrayTypeMetadata"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if an instance of the current type is instance of
+	/// <see langword="true"/> if an instance of the current type is an instance of
 	/// the current type of <paramref name="otherMetadata"/>; otherwise, <see langword="false"/>.
 	/// </returns>
 	public Boolean TypeOf(JArrayTypeMetadata otherMetadata)
