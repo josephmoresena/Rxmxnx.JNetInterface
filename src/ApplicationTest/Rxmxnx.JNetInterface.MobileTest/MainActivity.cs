@@ -12,9 +12,9 @@ using Rxmxnx.JNetInterface.Native;
 
 using Activity = Android.App.Activity;
 
-#if !RELEASE_PACKAGE
 using Rxmxnx.JNetInterface.Lang;
 
+#if !RELEASE_PACKAGE
 using Environment = System.Environment;
 #endif
 
