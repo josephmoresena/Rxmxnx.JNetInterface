@@ -23,7 +23,8 @@ public sealed partial class JVirtualMachineTests
 		                                 JVirtualMachineTests.RegisterTestObject(),
 		                                 JVirtualMachineTests.RegisterTestObject(),
 		                                 JVirtualMachineTests.RegisterTestObject());
-		await Task.WhenAny(registerTask, Task.Delay(500)); // Set timeout
+		Task delay = Task.Delay(500);
+		await Task.WhenAny(registerTask, delay); // Set timeout
 	}
 	[Fact]
 	internal void GetVirtualMachineErrorTest()

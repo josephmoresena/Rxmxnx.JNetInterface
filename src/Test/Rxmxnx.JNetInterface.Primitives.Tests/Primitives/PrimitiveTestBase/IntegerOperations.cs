@@ -67,7 +67,8 @@ public partial class PrimitiveTestBase
 		Assert.True(bytes0.SequenceEqual(bytes1));
 		PrimitiveTestBase.IntegerReadBigEndianTest<TPrimitive, TValue>(bytes0, bytes1);
 	}
-	private static void IntegerReadBigEndianTest<TPrimitive, TValue>(Span<Byte> bytes0, Span<Byte> bytes1)
+	private static void
+		IntegerReadBigEndianTest<TPrimitive, TValue>(ReadOnlySpan<Byte> bytes0, ReadOnlySpan<Byte> bytes1)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
 		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IBinaryInteger<TPrimitive>,
 		IShiftOperators<TPrimitive, Int32, TPrimitive>
@@ -94,7 +95,8 @@ public partial class PrimitiveTestBase
 		Assert.True(bytes0.SequenceEqual(bytes1));
 		PrimitiveTestBase.IntegerReadLittleEndianTest<TPrimitive, TValue>(bytes0, bytes1);
 	}
-	private static void IntegerReadLittleEndianTest<TPrimitive, TValue>(Span<Byte> bytes0, Span<Byte> bytes1)
+	private static void
+		IntegerReadLittleEndianTest<TPrimitive, TValue>(ReadOnlySpan<Byte> bytes0, ReadOnlySpan<Byte> bytes1)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
 		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive>, IPrimitiveEquatable, IBinaryInteger<TPrimitive>,
 		IShiftOperators<TPrimitive, Int32, TPrimitive>
