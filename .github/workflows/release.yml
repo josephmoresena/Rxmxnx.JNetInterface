@@ -21,6 +21,7 @@ jobs:
             17
             21
             25
+      - uses: actions/checkout@v7
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
